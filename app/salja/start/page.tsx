@@ -120,7 +120,7 @@ export default function Step1StartPage() {
               min: { value: 1900, message: 'Ogiltigt årtal' },
               max: { value: new Date().getFullYear(), message: 'Kan inte vara i framtiden' }
             })}
-            error={errors.foundedYear?.message}
+            error={(errors as any).foundedYear?.message as string | undefined}
           />
 
           {/* Number of Employees */}
@@ -141,7 +141,7 @@ export default function Step1StartPage() {
               <option value="100+">Över 100 anställda</option>
             </select>
             {errors.employees && (
-              <p className="text-sm text-error mt-1">{errors.employees.message}</p>
+              <p className="text-sm text-error mt-1">{String((errors as any).employees?.message ?? '')}</p>
             )}
           </div>
 
@@ -150,7 +150,7 @@ export default function Step1StartPage() {
             label="Huvudort"
             placeholder="Stockholm"
             {...register('location', { required: 'Ort krävs' })}
-            error={errors.location?.message}
+            error={(errors as any).location?.message as string | undefined}
           />
 
           {/* Description */}
@@ -173,7 +173,7 @@ export default function Step1StartPage() {
                 {formData.description?.length || 0} / 500 tecken
               </span>
               {errors.description && (
-                <span className="text-error">{errors.description.message}</span>
+                <span className="text-error">{String((errors as any).description?.message ?? '')}</span>
               )}
             </div>
           </div>
