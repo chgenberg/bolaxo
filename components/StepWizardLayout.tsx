@@ -14,6 +14,8 @@ interface StepWizardLayoutProps {
   lastSaved?: Date | null
   nextLabel?: string
   nextDisabled?: boolean
+  title?: string
+  subtitle?: string
 }
 
 export default function StepWizardLayout({
@@ -24,7 +26,9 @@ export default function StepWizardLayout({
   onNext,
   lastSaved,
   nextLabel,
-  nextDisabled
+  nextDisabled,
+  title,
+  subtitle
 }: StepWizardLayoutProps) {
   const formatLastSaved = (date: Date | null | undefined) => {
     if (!date) return null
@@ -51,6 +55,16 @@ export default function StepWizardLayout({
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8 pb-24 lg:pb-8">
         <div className="card-static">
+          {(title || subtitle) && (
+            <header className="mb-6">
+              {title && (
+                <h1 className="text-2xl md:text-3xl font-semibold text-text-dark">{title}</h1>
+              )}
+              {subtitle && (
+                <p className="text-text-gray mt-1">{subtitle}</p>
+              )}
+            </header>
+          )}
           {/* Auto-save indicator */}
           {savedText && (
             <div className="absolute top-6 right-6 flex items-center text-sm text-text-gray">
