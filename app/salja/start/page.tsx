@@ -15,7 +15,7 @@ export default function Step1StartPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<Record<string, any>>({
     defaultValues: formData,
   })
 
