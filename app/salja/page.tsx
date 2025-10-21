@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { CheckCircle } from 'lucide-react'
 
 export default function SaljaInfoPage() {
   return (
@@ -153,36 +154,151 @@ export default function SaljaInfoPage() {
         </div>
 
         {/* Pricing Overview */}
-        <div className="card mb-16">
-          <h2 className="text-2xl font-bold text-text-dark mb-6 text-center">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-text-dark mb-3 text-center">
             Prisöversikt
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-6 bg-gray-50 rounded-xl border-2 border-gray-200">
-              <div className="text-3xl font-bold text-text-dark mb-2">0 kr</div>
-              <div className="font-semibold mb-1">Free</div>
-              <div className="text-sm text-text-gray">Skapa utkast</div>
+          <p className="text-center text-text-gray mb-12 max-w-2xl mx-auto">
+            Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {/* Free */}
+            <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 hover:border-gray-300 transition-all">
+              <div className="text-center mb-6">
+                <div className="text-sm text-text-gray mb-2">Utkast</div>
+                <div className="text-5xl font-bold text-text-dark mb-2">0 kr</div>
+                <div className="text-sm text-text-gray">Gratis</div>
+              </div>
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Skapa annons (utkast)</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>AI-copy & KPI-mallar</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Spara utkast</span>
+                </div>
+              </div>
+              <button className="w-full btn-ghost text-sm">
+                Skapa utkast
+              </button>
             </div>
-            <div className="text-center p-6 bg-light-blue rounded-xl border-2 border-primary-blue/30">
-              <div className="text-3xl font-bold text-primary-blue mb-2">495 kr</div>
-              <div className="font-semibold mb-1">Basic</div>
-              <div className="text-sm text-text-gray">/ mån</div>
+
+            {/* Basic */}
+            <div className="bg-white rounded-2xl border-2 border-primary-blue/30 p-8 hover:border-primary-blue/50 transition-all hover:shadow-md">
+              <div className="text-center mb-6">
+                <div className="text-sm text-primary-blue font-semibold mb-2">Basic</div>
+                <div className="text-5xl font-bold text-primary-blue mb-1">495</div>
+                <div className="text-sm text-text-gray">kr / mån</div>
+              </div>
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Publicering i marknadsplats</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Standardexponering</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Köparchatt & 1 tagg</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>KPI-PDF</span>
+                </div>
+              </div>
+              <Link href="/salja/start" className="w-full btn-secondary text-sm block text-center">
+                Publicera
+              </Link>
             </div>
-            <div className="text-center p-6 bg-primary-blue text-white rounded-xl shadow-md">
-              <div className="text-xs bg-white/20 px-2 py-1 rounded-full mb-2 inline-block">Populärast</div>
-              <div className="text-3xl font-bold mb-2">895 kr</div>
-              <div className="font-semibold mb-1">Pro</div>
-              <div className="text-sm opacity-90">/ mån</div>
+
+            {/* Pro (Highlighted) */}
+            <div className="relative bg-gradient-to-br from-primary-blue to-blue-700 rounded-2xl border-2 border-primary-blue p-8 shadow-xl transform md:scale-105">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span className="bg-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-md">
+                  POPULÄRAST
+                </span>
+              </div>
+              <div className="text-center mb-6">
+                <div className="text-sm text-white/90 font-semibold mb-2">Pro</div>
+                <div className="text-5xl font-bold text-white mb-1">895</div>
+                <div className="text-sm text-white/80">kr / mån</div>
+              </div>
+              <div className="space-y-3 mb-8 text-white">
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Prioriterad listplacering</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Anonym kontaktväxel</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>E-sign för NDA/LOI</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>3 bevakningstaggar</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>1 Featured boost / 30d</span>
+                </div>
+              </div>
+              <Link href="/salja/start" className="w-full bg-white text-primary-blue py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all text-sm block text-center">
+                Välj Pro
+              </Link>
             </div>
-            <div className="text-center p-6 bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl shadow-lg">
-              <div className="text-3xl font-bold mb-2">1 495 kr</div>
-              <div className="font-semibold mb-1">Pro+ Featured</div>
-              <div className="text-sm opacity-90">/ mån</div>
+
+            {/* Pro+ Featured */}
+            <div className="bg-white rounded-2xl border-2 border-blue-600/40 p-8 hover:border-blue-600 transition-all hover:shadow-md">
+              <div className="text-center mb-6">
+                <div className="text-sm text-blue-700 font-semibold mb-2">Pro+ Featured</div>
+                <div className="text-5xl font-bold text-blue-700 mb-1">1 495</div>
+                <div className="text-sm text-text-gray">kr / mån</div>
+              </div>
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Topp-placering</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Rotation på startsida</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Obegränsade boosts</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Nyhetsbrevs-spot</span>
+                </div>
+                <div className="flex items-start text-sm">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                  <span>Analytics dashboard</span>
+                </div>
+              </div>
+              <Link href="/salja/start" className="w-full btn-primary text-sm block text-center">
+                Välj Pro+
+              </Link>
             </div>
           </div>
-          <div className="text-center mt-6">
-            <Link href="/priser" className="text-primary-blue hover:underline font-semibold">
-              Se full prislista & funktioner →
+
+          <div className="text-center mt-8">
+            <Link href="/priser" className="inline-flex items-center text-primary-blue hover:underline font-semibold text-lg">
+              Se detaljerad jämförelse av alla funktioner
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
             </Link>
           </div>
         </div>

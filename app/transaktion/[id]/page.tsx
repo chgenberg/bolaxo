@@ -87,6 +87,60 @@ export default function TransactionPage() {
     }
   }
 
+  const handleGenerateSPA = async () => {
+    try {
+      const response = await fetch(`/api/transactions/${transactionId}/generate-spa`, {
+        method: 'POST'
+      })
+      if (response.ok) {
+        const data = await response.json()
+        
+        // Ladda ner SPA-text
+        const blob = new Blob([data.content], { type: 'text/plain' })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = data.document.fileName
+        link.click()
+        URL.revokeObjectURL(url)
+        
+        alert('SPA genererat! Granska dokumentet och skicka för signering.')
+        fetchTransaction() // Refresh för att visa nytt dokument
+      }
+    } catch (error) {
+      console.error('Generate SPA error:', error)
+      alert('Kunde inte generera SPA')
+    }
+  }
+
+  const handleSendForSignature = async (documentId: string) => {
+    try {
+      const response = await fetch(`/api/transactions/${transactionId}/send-for-signature`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentId })
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        alert(data.message || 'Dokument skickat för signering!')
+        
+        // I dev-mode: visa Scrive URL
+        if (data.signingUrl && process.env.NODE_ENV === 'development') {
+          console.log('Scrive signing URL:', data.signingUrl)
+        }
+        
+        fetchTransaction() // Refresh
+      } else {
+        const error = await response.json()
+        alert(error.error || 'Kunde inte skicka för signering')
+      }
+    } catch (error) {
+      console.error('Send for signature error:', error)
+      alert('Ett fel uppstod')
+    }
+  }
+
   if (loading || loadingTx) {
     return (
       <div className="min-h-screen bg-background-off-white flex items-center justify-center">
@@ -287,10 +341,19 @@ export default function TransactionPage() {
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="font-semibold text-lg">Dokument</h3>
-                  <button className="btn-primary flex items-center">
-                    <Upload className="w-5 h-5 mr-2" />
-                    Ladda upp dokument
-                  </button>
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={handleGenerateSPA}
+                      className="btn-secondary flex items-center text-sm"
+                    >
+                      <FileText className="w-4 h-4 mr-2" />
+                      Generera SPA
+                    </button>
+                    <button className="btn-primary flex items-center text-sm">
+                      <Upload className="w-5 h-5 mr-2" />
+                      Ladda upp
+                    </button>
+                  </div>
                 </div>
 
                 {transaction.documents.length === 0 ? (
@@ -307,16 +370,37 @@ export default function TransactionPage() {
                     {transaction.documents.map((doc) => (
                       <div key={doc.id} className="border border-gray-200 p-4 rounded-xl hover:border-primary-blue transition-all">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center">
+                          <div className="flex items-center flex-1">
                             <FileText className="w-6 h-6 text-primary-blue mr-3" />
-                            <div>
-                              <h4 className="font-semibold">{doc.title}</h4>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-semibold">{doc.title}</h4>
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+                                  doc.status === 'SIGNED' ? 'bg-green-100 text-green-800' :
+                                  doc.status === 'PENDING_SIGNATURE' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {doc.status === 'SIGNED' ? 'Signerad' : 
+                                   doc.status === 'PENDING_SIGNATURE' ? 'Väntar signatur' : 
+                                   'Utkast'}
+                                </span>
+                              </div>
                               <p className="text-sm text-text-gray">
-                                Uppladdad: {new Date(doc.createdAt).toLocaleDateString('sv-SE')} av {doc.uploadedByName}
+                                {new Date(doc.createdAt).toLocaleDateString('sv-SE')} • {doc.uploadedByName}
                               </p>
                             </div>
                           </div>
-                          <button className="btn-ghost text-sm">Visa</button>
+                          <div className="flex gap-2">
+                            {doc.status === 'DRAFT' && doc.type === 'SPA' && (
+                              <button 
+                                onClick={() => handleSendForSignature(doc.id)}
+                                className="btn-primary text-sm"
+                              >
+                                Skicka för signering
+                              </button>
+                            )}
+                            <button className="btn-ghost text-sm">Ladda ner</button>
+                          </div>
                         </div>
                       </div>
                     ))}
