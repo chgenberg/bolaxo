@@ -267,7 +267,7 @@ async function main() {
             title: 'Transaktion skapad',
             description: 'LOI godkänd för 14.0 MSEK',
             actorId: demoBuyer.id,
-            actorName: demoBuyer.name,
+            actorName: demoBuyer.name || demoBuyer.email,
             actorRole: 'buyer'
           },
           {
@@ -275,21 +275,21 @@ async function main() {
             title: 'Dokument uppladdat',
             description: 'LOI signerad och uppladdad',
             actorId: demoBuyer.id,
-            actorName: demoBuyer.name,
+            actorName: demoBuyer.name || demoBuyer.email,
             actorRole: 'buyer'
           },
           {
             type: 'MILESTONE_COMPLETED',
             title: 'Milstolpe klar: LOI signerad',
             actorId: demoBuyer.id,
-            actorName: demoBuyer.name,
+            actorName: demoBuyer.name || demoBuyer.email,
             actorRole: 'buyer'
           },
           {
             type: 'MILESTONE_COMPLETED',
             title: 'Milstolpe klar: NDA i kraft',
             actorId: demoBuyer.id,
-            actorName: demoBuyer.name,
+            actorName: demoBuyer.name || demoBuyer.email,
             actorRole: 'buyer'
           },
           {
@@ -297,7 +297,7 @@ async function main() {
             title: 'Handpenning betald',
             description: '1.4 MSEK deposition mottagen i escrow',
             actorId: demoBuyer.id,
-            actorName: demoBuyer.name,
+            actorName: demoBuyer.name || demoBuyer.email,
             actorRole: 'buyer'
           },
           {
@@ -305,7 +305,7 @@ async function main() {
             title: 'Stage uppdaterad: Due Diligence',
             description: 'Transaktion flyttad till DD-fas',
             actorId: demoAdvisor.id,
-            actorName: demoAdvisor.name,
+            actorName: demoAdvisor.name || demoAdvisor.email,
             actorRole: 'advisor'
           }
         ]
