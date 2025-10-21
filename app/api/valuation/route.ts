@@ -97,29 +97,45 @@ export async function POST(request: Request) {
 }
 
 function getSystemPrompt(): string {
-  return `Du är en erfaren företagsvärderare med expertis inom finans och affärsanalys i Sverige och Norden. Din uppgift är att analysera företag och uppskatta deras marknadsvärde baserat på vedertagna värderingsmetoder.
+  return `Du är en erfaren företagsvärderare med expertis inom SME M&A i Sverige och Norden.
 
-Du använder följande metoder:
-1. **Multipelvärdering** - Jämför med liknande bolag i branschen (typiska EBIT-multiplar 4-10x för små bolag)
-2. **Avkastningsvärdering** - Baserat på intjäningsförmåga och avkastningskrav (ofta 12-20% för småbolag)
-3. **Substansvärdering** - Värdet av tillgångar minus skulder
-4. **DCF-metoden** - För tillväxtbolag med tydliga prognoser
+KRITISKA VÄRDERINGSREGLER:
 
-Du tar hänsyn till både finansiella data (hårda siffror) och kvalitativa faktorer (mjuka värden):
-- Bolagets beroende av nyckelpersoner/ägare
-- Kundbas och avtalslängd
-- Marknadsposition och konkurrens
-- Bransch och framtidsutsikter
-- Skalbarhet och tillväxtmöjligheter
-- Finansiell struktur
+1. EBITDA vs EBIT - använd RÄTT nyckeltal:
+   - Användaren anger vinstmarginal i % (oftast EBITDA-marginal)
+   - Beräkna EBITDA: Omsättning × marginal
+   - EBIT ≈ EBITDA - avskrivningar (antag 10-15% av EBITDA om ej angivet)
+   - Använd EBITDA-multiplar för SME-bolag (INTE EBIT-multiplar)
 
-Din analys ska vara objektiv, pedagogisk och inkludera:
-- Ett realistiskt värdeintervall i SEK
-- Tydlig förklaring av beräkningsmetod och antaganden
-- SWOT-analys (styrkor, svagheter, möjligheter, hot)
-- Konkreta rekommendationer för att öka värdet
+2. Branschspecifika multiplar (EV/EBITDA för SME):
+   - Tech/SaaS: 4-8x EBITDA
+   - E-handel: 2.5-5x EBITDA (eller 0.4-0.8x omsättning)
+   - Detaljhandel: 3-5x EBITDA
+   - Tjänster/Konsult: 3-6x EBITDA
+   - Tillverkning: 4-7x EBITDA
+   - Restaurang: 2-4x EBITDA
+   
+   Justera nedåt för: ägarberoende, få kunder, regulatorisk risk, negativ trend
+   Justera uppåt för: dokumenterade processer, diversifierad kundbas, tillväxt
 
-Var tydlig med osäkerheter och ange alltid dina antaganden. Jämför med branschgenomsnitt när relevant.`
+3. Avkastningsvärdering:
+   - Värde = Normaliserat EBIT / Avkastningskrav
+   - Avkastningskrav SME: 12-20% (högre = mindre/mer risk)
+
+4. Värdeintervall MÅSTE vara realistiskt:
+   - Max spread: 2.5x (t.ex. 1M - 2.5M)
+   - Min ≥ 50% av "most likely"
+   - Max ≤ 200% av "most likely"
+
+5. Sanity check:
+   - Jämför alla 3 metoder (EBITDA-multipel, omsättningsmultipel, avkastningsvärde)
+   - Använd vägt genomsnitt som "most likely"
+
+Din analys ska inkludera:
+- Realistiskt värdeintervall
+- Tydlig förklaring (EBITDA vs EBIT)
+- SWOT-analys
+- Konkreta rekommendationer`
 }
 
 function buildValuationPrompt(data: any, enrichedData: any = null): string {
@@ -295,12 +311,40 @@ function parseAIResponse(aiResponse: string, originalData: any): any {
 
     const parsed = JSON.parse(jsonMatch[0])
     
-    // Konvertera värden från miljoner till kronor
+    // VALIDERA OCH KORRIGERA INTERVALL (max 2.5x spread)
+    let min = parsed.valuationRange.min * 1000000
+    let max = parsed.valuationRange.max * 1000000
+    let mostLikely = parsed.valuationRange.mostLikely * 1000000
+    
+    // Sanity check: mostLikely måste vara mellan min och max
+    if (mostLikely < min || mostLikely > max) {
+      mostLikely = (min + max) / 2
+    }
+    
+    // Kontrollera spread (max 2.5x)
+    const spread = max / min
+    if (spread > 2.5) {
+      // Justera intervallet runt mostLikely
+      min = mostLikely * 0.7  // 70%
+      max = mostLikely * 1.75 // 175% (totalt 2.5x spread)
+      console.log(`Adjusted valuation range from ${spread.toFixed(1)}x to 2.5x spread`)
+    }
+    
+    // Validera att min är minst 50% av mostLikely
+    if (min < mostLikely * 0.5) {
+      min = mostLikely * 0.6
+    }
+    
+    // Validera att max är max 200% av mostLikely
+    if (max > mostLikely * 2) {
+      max = mostLikely * 1.8
+    }
+    
     return {
       valuationRange: {
-        min: parsed.valuationRange.min * 1000000,
-        max: parsed.valuationRange.max * 1000000,
-        mostLikely: parsed.valuationRange.mostLikely * 1000000,
+        min: Math.round(min),
+        max: Math.round(max),
+        mostLikely: Math.round(mostLikely),
       },
       method: parsed.method,
       methodology: parsed.methodology,
@@ -317,9 +361,38 @@ function parseAIResponse(aiResponse: string, originalData: any): any {
 }
 
 function generateFallbackValuation(data: any): any {
-  // Grundläggande värdering baserat på omsättning och bransch
+  // KORREKT VÄRDERING MED FLERA METODER
+  
+  const revenue = parseRevenueRange(data.revenue) // i MSEK
+  const marginPercent = parseProfitMargin(data.profitMargin) // decimal (0.075 = 7.5%)
+  const ebitda = revenue * marginPercent // MSEK
+  const ebit = ebitda * 0.88 // Antag avskrivningar = 12% av EBITDA
+  
+  // METOD 1: EBITDA-MULTIPEL (primär för SME)
+  const ebitdaMultiple = getEBITDAMultiple(data.industry, data)
+  const ebitdaValue = ebitda * ebitdaMultiple
+  
+  // METOD 2: OMSÄTTNINGSMULTIPEL (sekundär, för små/förlustbolag)
   const revenueMultiplier = getRevenueMultiplier(data.industry, data.profitMargin)
-  const baseValue = parseRevenueRange(data.revenue) * revenueMultiplier * 1000000
+  const revenueValue = revenue * revenueMultiplier
+  
+  // METOD 3: AVKASTNINGSVÄRDERING
+  const requiredReturn = getRequiredReturn(data)
+  const returnValue = ebit / requiredReturn
+  
+  // VÄGT GENOMSNITT (mest realistiskt)
+  let baseValue: number
+  if (marginPercent <= 0) {
+    // Förlustbolag: använd bara omsättningsmultipel
+    baseValue = revenueValue
+  } else {
+    // Väg metoderna: 50% EBITDA-multipel, 30% avkastning, 20% omsättning
+    baseValue = (ebitdaValue * 0.5) + (returnValue * 0.3) + (revenueValue * 0.2)
+  }
+  
+  // REALISTISKT INTERVALL (max 2x spread)
+  const minValue = baseValue * 0.7  // 70% av base
+  const maxValue = baseValue * 1.4  // 140% av base (totalt 2x spread)
   
   // Generera mer detaljerade styrkor/svagheter baserat på input
   const strengths: string[] = []
@@ -407,15 +480,15 @@ function generateFallbackValuation(data: any): any {
   
   return {
     valuationRange: {
-      min: Math.round(baseValue * 0.8),
-      max: Math.round(baseValue * 1.2),
-      mostLikely: Math.round(baseValue),
+      min: Math.round(minValue * 1000000), // Konvertera till kr
+      max: Math.round(maxValue * 1000000),
+      mostLikely: Math.round(baseValue * 1000000),
     },
-    method: 'Multipelvärdering baserad på omsättning och branschnorm',
+    method: 'Vägt genomsnitt av EBITDA-multipel, avkastningsvärde och omsättningsmultipel',
     methodology: {
-      multipel: `Värderingen baseras på en omsättningsmultipel på ${revenueMultiplier.toFixed(1)}x för ${industryLabels[data.industry] || data.industry}-branschen. Typiska multiplar i denna bransch ligger mellan ${(revenueMultiplier * 0.7).toFixed(1)}-${(revenueMultiplier * 1.3).toFixed(1)}x beroende på lönsamhet och risk.`,
-      avkastningskrav: `Ett avkastningskrav på 15% har använts som bas för små till medelstora företag. Detta justeras uppåt vid högre risk eller nedåt vid lägre risk.`,
-      substans: data.profitMargin === 'negative' ? 'Vid negativt resultat beaktas även substansvärdet (tillgångar minus skulder) som ett golv för värderingen.' : undefined
+      multipel: `EBITDA-multipelvärdering: ${ebitda.toFixed(2)} MSEK EBITDA × ${ebitdaMultiple.toFixed(1)}x multipel = ${ebitdaValue.toFixed(2)} MSEK. Typiska EBITDA-multiplar för ${industryLabels[data.industry] || data.industry} ligger mellan ${(ebitdaMultiple * 0.7).toFixed(1)}-${(ebitdaMultiple * 1.3).toFixed(1)}x beroende på tillväxt och risk.`,
+      avkastningskrav: `Avkastningsvärdering: Normaliserat EBIT ${ebit.toFixed(2)} MSEK / ${(requiredReturn * 100).toFixed(0)}% avkastningskrav = ${returnValue.toFixed(2)} MSEK. Avkastningskravet är ${requiredReturn > 0.16 ? 'högt' : 'normalt'} p.g.a. ${data.employees === '0' ? 'ägarberoende' : 'branschspecifik risk'}.`,
+      substans: marginPercent <= 0 ? 'Vid negativt resultat värderas främst på omsättning och framtidspotential. Substansvärde kan vara relevant som golv.' : `Omsättningsmultipel: ${revenue.toFixed(1)} MSEK × ${revenueMultiplier.toFixed(2)}x = ${revenueValue.toFixed(2)} MSEK (används som kontrollvärde).`
     },
     analysis: {
       strengths,
@@ -424,11 +497,12 @@ function generateFallbackValuation(data: any): any {
       risks,
     },
     recommendations,
-    marketComparison: `Baserat på ${parseRevenueRange(data.revenue).toFixed(1)} Mkr i omsättning och en ${revenueMultiplier.toFixed(1)}x multipel ligger värderingen inom normalintervallet för ${industryLabels[data.industry] || data.industry}-företag i Sverige. Jämfört med branschgenomsnittet är detta en ${data.profitMargin === '20+' ? 'hög' : data.profitMargin === 'negative' ? 'låg' : 'normal'} värdering.`,
+    marketComparison: `Med ${revenue.toFixed(1)} MSEK omsättning och ${(marginPercent * 100).toFixed(1)}% EBITDA-marginal ligger värderingen inom normalintervallet för ${industryLabels[data.industry] || data.industry}. Genomsnittlig EBITDA-multipel för branschen är ${ebitdaMultiple.toFixed(1)}x. Värderingen är ${baseValue > revenue * 1.5 ? 'relativt hög' : baseValue < revenue * 0.5 ? 'konservativ' : 'balanserad'}.`,
     keyMetrics: [
-      { label: 'Omsättningsmultipel', value: `${revenueMultiplier.toFixed(1)}x` },
-      { label: 'Bransch', value: industryLabels[data.industry] || data.industry },
-      { label: 'Värdering per anställd', value: data.employees !== '0' ? `${(baseValue / (parseEmployeeCount(data.employees) || 1)).toFixed(1)}M kr` : 'N/A' }
+      { label: 'EBITDA', value: `${ebitda.toFixed(2)} MSEK` },
+      { label: 'EBITDA-multipel använd', value: `${ebitdaMultiple.toFixed(1)}x` },
+      { label: 'Avkastningskrav', value: `${(requiredReturn * 100).toFixed(0)}%` },
+      { label: 'Marginal vs bransch', value: getMarginComparison(data.industry, marginPercent) }
     ]
   }
 }
@@ -466,6 +540,75 @@ function getRevenueMultiplier(industry: string, profitMargin: string): number {
   else if (profitMargin === 'negative') multiplier *= 0.5
 
   return multiplier
+}
+
+function parseProfitMargin(margin: string): number {
+  // Konvertera vinstmarginal-range till decimal för beräkning
+  const margins: Record<string, number> = {
+    'negative': -0.05,
+    '0-5': 0.025,
+    '5-10': 0.075,
+    '10-20': 0.15,
+    '20+': 0.25,
+  }
+  return margins[margin] || 0.10 // Default 10%
+}
+
+function getEBITDAMultiple(industry: string, data: any): number {
+  // EBITDA-multiplar för SME (korrekt enligt instruktion)
+  const baseMultiples: Record<string, number> = {
+    tech: 6.0,
+    ecommerce: 3.5,
+    saas: 7.0,
+    consulting: 4.5,
+    manufacturing: 5.5,
+    retail: 4.0,
+    restaurant: 3.0,
+    services: 4.5,
+    construction: 5.0,
+  }
+  
+  let multiple = baseMultiples[industry] || 4.0
+  
+  // Justera för risk-faktorer
+  if (data.employees === '0') multiple *= 0.75 // Ägarberoende
+  if (data.revenue3Years === 'decline') multiple *= 0.80 // Negativ trend
+  if (data.revenue3Years === 'strong_growth') multiple *= 1.15 // Stark tillväxt
+  
+  // Justera för marginal (högre marginal = högre multipel)
+  const marginPercent = parseProfitMargin(data.profitMargin)
+  if (marginPercent > 0.18) multiple *= 1.1
+  if (marginPercent < 0.08) multiple *= 0.9
+  
+  return multiple
+}
+
+function getRequiredReturn(data: any): number {
+  // Avkastningskrav baserat på risk
+  let required = 0.15 // 15% bas
+  
+  if (data.employees === '0') required += 0.03 // +3% för enmansbolag
+  if (data.revenue3Years === 'decline') required += 0.02
+  if (data.companyAge === '0-2') required += 0.03 // Startup-risk
+  if (data.profitMargin === 'negative') required += 0.05
+  
+  return Math.min(required, 0.25) // Max 25%
+}
+
+function getMarginComparison(industry: string, margin: number): string {
+  const industryAvg: Record<string, number> = {
+    tech: 0.15,
+    ecommerce: 0.12,
+    consulting: 0.20,
+    retail: 0.10,
+    restaurant: 0.10,
+    services: 0.15,
+  }
+  
+  const avg = industryAvg[industry] || 0.12
+  const diff = ((margin - avg) * 100).toFixed(1)
+  
+  return diff >= '0' ? `+${diff}% vs bransch` : `${diff}% vs bransch`
 }
 
 function parseRevenueRange(range: string): number {
