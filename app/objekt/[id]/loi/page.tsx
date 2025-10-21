@@ -219,7 +219,7 @@ export default function LOIPage() {
               type="textarea"
               placeholder="Ex. Förbehåll för godkänd DD, styrelsebesked, finansiering..."
               value={loiData.conditions}
-              onChange={(value) => setLoiData({ ...loiData, conditions: value })}
+              onValueChange={(value) => setLoiData({ ...loiData, conditions: value })}
             />
 
             {/* Timeline */}
@@ -229,7 +229,7 @@ export default function LOIPage() {
               type="textarea"
               placeholder="Ex. LOI-signering: nu, DD: vecka 1-4, SPA: vecka 6, Tillträde: vecka 8"
               value={loiData.timeline}
-              onChange={(value) => setLoiData({ ...loiData, timeline: value })}
+              onValueChange={(value) => setLoiData({ ...loiData, timeline: value })}
             />
 
             {/* Advisory */}
