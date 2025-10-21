@@ -11,6 +11,7 @@ export default function ReceiptPage() {
   
   const invoiceId = params.id as string
   const invoice = invoices.find(inv => inv.id === invoiceId) || invoices[0]
+  const price = subscription?.price ?? 0
 
   const handlePrint = () => {
     window.print()
@@ -98,8 +99,8 @@ export default function ReceiptPage() {
                   </div>
                 </td>
                 <td className="text-right">1</td>
-                <td className="text-right">{subscription?.price.toLocaleString('sv-SE')} kr</td>
-                <td className="text-right font-semibold">{subscription?.price.toLocaleString('sv-SE')} kr</td>
+                <td className="text-right">{price.toLocaleString('sv-SE')} kr</td>
+                <td className="text-right font-semibold">{price.toLocaleString('sv-SE')} kr</td>
               </tr>
             </tbody>
           </table>
@@ -109,17 +110,17 @@ export default function ReceiptPage() {
             <div className="w-64">
               <div className="flex justify-between mb-2 text-sm">
                 <span className="text-text-gray">Summa exkl. moms:</span>
-                <span className="font-semibold">{subscription?.price.toLocaleString('sv-SE')} kr</span>
+                <span className="font-semibold">{price.toLocaleString('sv-SE')} kr</span>
               </div>
               <div className="flex justify-between mb-4 text-sm">
                 <span className="text-text-gray">Moms (25%):</span>
-                <span className="font-semibold">{Math.round(subscription?.price * 0.25).toLocaleString('sv-SE')} kr</span>
+                <span className="font-semibold">{Math.round(price * 0.25).toLocaleString('sv-SE')} kr</span>
               </div>
               <div className="border-t-2 border-gray-300 pt-3">
                 <div className="flex justify-between">
                   <span className="font-bold text-lg">Totalt:</span>
                   <span className="font-bold text-2xl text-primary-blue">
-                    {Math.round(subscription?.price * 1.25).toLocaleString('sv-SE')} kr
+                    {Math.round(price * 1.25).toLocaleString('sv-SE')} kr
                   </span>
                 </div>
               </div>
