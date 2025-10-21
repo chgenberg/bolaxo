@@ -1,9 +1,33 @@
 import { NextResponse } from 'next/server'
 import * as cheerio from 'cheerio'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
   try {
-    const { website, orgNumber, companyName } = await request.json()
+    const { website, orgNumber, companyName, industry } = await request.json()
+
+    // 1. CHECK CACHE FIRST
+    const cacheKey = orgNumber || website
+    if (cacheKey) {
+      const cached = await prisma.companyCache.findFirst({
+        where: {
+          OR: [
+            { orgNumber: orgNumber || undefined },
+            { websiteUrl: website || undefined }
+          ],
+          expiresAt: { gte: new Date() } // Endast giltiga cache-poster
+        }
+      })
+
+      if (cached) {
+        console.log('Cache hit for:', cacheKey)
+        return NextResponse.json(cached.enrichedData)
+      }
+    }
+
+    console.log('Cache miss, fetching fresh data for:', cacheKey)
 
     const enrichedData: any = {
       autoFill: {},
@@ -14,44 +38,71 @@ export async function POST(request: Request) {
       },
     }
 
-    // 1. BOLAGSVERKET DATA
-    if (orgNumber) {
-      try {
-        const bolagsverketData = await fetchBolagsverketData(orgNumber)
-        enrichedData.rawData.bolagsverketData = bolagsverketData
+    // 2. PARALLEL DATA FETCHING (3x snabbare)
+    const startTime = Date.now()
+    
+    const [bolagsverketResult, scrapingResult, scbResult] = await Promise.allSettled([
+      orgNumber ? fetchBolagsverketData(orgNumber) : Promise.resolve(null),
+      website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
+      fetchSCBIndustryData(industry)
+    ])
 
-        // Auto-fill från Bolagsverket
-        if (bolagsverketData) {
-          enrichedData.autoFill.companyAge = calculateCompanyAge(bolagsverketData.registrationDate)
-          // Lägg till mer auto-fill baserat på tillgänglig data
+    console.log(`Parallel fetch completed in ${Date.now() - startTime}ms`)
+
+    // 3. PROCESS RESULTS
+    if (bolagsverketResult.status === 'fulfilled' && bolagsverketResult.value) {
+      enrichedData.rawData.bolagsverketData = bolagsverketResult.value
+      if (bolagsverketResult.value.registrationDate) {
+        enrichedData.autoFill.companyAge = calculateCompanyAge(bolagsverketResult.value.registrationDate)
+      }
+      if (bolagsverketResult.value.employees) {
+        enrichedData.autoFill.employees = mapEmployeeCount(bolagsverketResult.value.employees)
+      }
+    }
+
+    if (scrapingResult.status === 'fulfilled' && scrapingResult.value) {
+      enrichedData.rawData.websiteContent = scrapingResult.value
+      
+      // AI-driven extraction om OpenAI-nyckel finns
+      if (process.env.OPENAI_API_KEY && scrapingResult.value.length > 100) {
+        try {
+          const aiExtracted = await extractWithAI(scrapingResult.value, companyName)
+          Object.assign(enrichedData.autoFill, aiExtracted)
+        } catch (error) {
+          console.log('AI extraction failed, using regex fallback')
+          const regexExtracted = extractKeyInfoFromContent(scrapingResult.value)
+          Object.assign(enrichedData.autoFill, regexExtracted)
         }
-      } catch (error) {
-        console.error('Bolagsverket fetch error:', error)
+      } else {
+        const regexExtracted = extractKeyInfoFromContent(scrapingResult.value)
+        Object.assign(enrichedData.autoFill, regexExtracted)
       }
     }
 
-    // 2. WEB SCRAPING (upp till 40 sidor)
-    if (website) {
+    if (scbResult.status === 'fulfilled' && scbResult.value) {
+      enrichedData.rawData.scbData = scbResult.value
+    }
+
+    // 4. SAVE TO CACHE (30 dagars TTL)
+    if (cacheKey) {
       try {
-        const scrapedContent = await scrapeWebsite(website, companyName)
-        enrichedData.rawData.websiteContent = scrapedContent
+        const expiresAt = new Date()
+        expiresAt.setDate(expiresAt.getDate() + 30)
 
-        // Extrahera nyckelinformation från innehållet
-        const extractedInfo = extractKeyInfoFromContent(scrapedContent)
-        Object.assign(enrichedData.autoFill, extractedInfo)
+        await prisma.companyCache.create({
+          data: {
+            orgNumber: orgNumber || null,
+            websiteUrl: website || null,
+            enrichedData: enrichedData,
+            scrapedPages: enrichedData.rawData.websiteContent ? 
+              (enrichedData.rawData.websiteContent.match(/--- /g) || []).length : 0,
+            expiresAt
+          }
+        })
+        console.log('Saved to cache:', cacheKey)
       } catch (error) {
-        console.error('Web scraping error:', error)
+        console.log('Cache save failed (may already exist):', error)
       }
-    }
-
-    // 3. SCB BRANSCHSTATISTIK
-    try {
-      // SCB API är mer komplex - här är en förenklad version
-      // I produktion skulle vi göra riktiga API-calls till SCB
-      const scbData = await fetchSCBIndustryData(enrichedData.autoFill.industry)
-      enrichedData.rawData.scbData = scbData
-    } catch (error) {
-      console.error('SCB fetch error:', error)
     }
 
     return NextResponse.json(enrichedData)
@@ -309,6 +360,63 @@ function calculateCompanyAge(registrationDate: string): string {
   if (years <= 10) return '6-10'
   if (years <= 20) return '11-20'
   return '20+'
+}
+
+// AI-DRIVEN EXTRACTION
+async function extractWithAI(websiteContent: string, companyName: string): Promise<any> {
+  try {
+    const prompt = `Analysera denna företagshemsida och extrahera strukturerad information.
+
+Företagsnamn: ${companyName}
+
+Hemsideinnehåll (första 8000 tecken):
+${websiteContent.slice(0, 8000)}
+
+Extrahera och returnera JSON med följande fält (lämna tomt om inte hittas):
+{
+  "employees": "intervall som 1-5, 6-10, 11-25, 25+ eller null",
+  "services": "lista huvudsakliga tjänster/produkter (max 3 punkter)",
+  "competitiveAdvantage": "unika konkurrensfördelar (1-2 meningar)",
+  "customerBase": "beskriv målgrupp/kunder (1 mening)",
+  "locations": "geografisk närvaro (städer/regioner)",
+  "certifications": "certifieringar, awards eller utmärkelser om nämnt",
+  "yearsInBusiness": "antal år i verksamhet om nämnt"
+}
+
+Returnera ENDAST giltig JSON, ingen annan text.`
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-5-mini',
+        messages: [{ role: 'user', content: prompt }],
+        max_completion_tokens: 800,
+      }),
+      signal: AbortSignal.timeout(30000) // 30s timeout
+    })
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API error: ${response.status}`)
+    }
+
+    const aiResponse = await response.json()
+    const content = aiResponse?.choices?.[0]?.message?.content || '{}'
+    
+    // Parse JSON (robust)
+    const cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+    const extracted = JSON.parse(cleaned)
+    
+    console.log('AI extraction successful:', Object.keys(extracted))
+    return extracted
+
+  } catch (error) {
+    console.error('AI extraction error:', error)
+    throw error // Let caller handle fallback
+  }
 }
 
 // SCB BRANSCHSTATISTIK

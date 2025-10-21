@@ -25,3 +25,13 @@ model Valuation {
   minValue     Int
   maxValue     Int
 }
+
+model CompanyCache {
+  id              String   @id @default(cuid())
+  orgNumber       String?  @unique
+  websiteUrl      String?  @unique
+  enrichedData    Json
+  scrapedPages    Int      @default(0)
+  createdAt       DateTime @default(now())
+  expiresAt       DateTime
+}
