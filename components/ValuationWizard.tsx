@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
 import FormField from './FormField'
 import FormSelect from './FormSelect'
 import FormTextarea from './FormTextarea'
@@ -151,9 +152,10 @@ const qualitativeQuestions = [
 
 export default function ValuationWizard({ onClose }: WizardProps) {
   const router = useRouter()
+  const { user, login } = useAuth()
   const [step, setStep] = useState(1)
   const [data, setData] = useState<ValuationData>({
-    email: '',
+    email: user?.email || '',
     companyName: '',
     website: '',
     orgNumber: '',
@@ -167,6 +169,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isEnriching, setIsEnriching] = useState(false)
   const [enrichmentStatus, setEnrichmentStatus] = useState('')
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
+  const [autoAccountCreated, setAutoAccountCreated] = useState(false)
 
   const totalSteps = 5
   const progress = (step / totalSteps) * 100
@@ -240,6 +244,20 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     
+    // AUTO-SKAPA KONTO om användaren inte är inloggad
+    if (!user && data.email && acceptedPrivacy) {
+      try {
+        const accountResult = await login(data.email, 'seller', acceptedPrivacy)
+        if (accountResult.success) {
+          setAutoAccountCreated(true)
+          console.log('Auto-created account for:', data.email)
+        }
+      } catch (error) {
+        console.error('Auto account creation failed:', error)
+        // Fortsätt ändå med värderingen
+      }
+    }
+    
     // Spara data i localStorage för att skicka till resultat-sidan
     localStorage.setItem('valuationData', JSON.stringify(data))
     
@@ -255,9 +273,11 @@ export default function ValuationWizard({ onClose }: WizardProps) {
       case 1:
         // Grundläggande fält krävs, URL/org.nr är valfritt
         const hasBasics = data.email && data.companyName && data.industry
+        // Om användaren inte är inloggad, kräv privacy-godkännande
+        const hasPrivacy = user ? true : acceptedPrivacy
         // Om enrichment pågår, vänta
         if (isEnriching) return false
-        return hasBasics
+        return hasBasics && hasPrivacy
       case 2:
         return data.companyAge && data.revenue && data.employees
       case 3:
@@ -367,6 +387,28 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 placeholder="Välj bransch"
                 required
               />
+
+              {/* Privacy Policy - endast om ej inloggad */}
+              {!user && (
+                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">
+                  <div className="flex items-start">
+                    <input
+                      type="checkbox"
+                      id="privacy-wizard"
+                      checked={acceptedPrivacy}
+                      onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                      className="mt-1 w-4 h-4 text-primary-blue border-gray-300 rounded focus:ring-primary-blue"
+                    />
+                    <label htmlFor="privacy-wizard" className="ml-3 text-sm text-gray-700">
+                      Jag godkänner{' '}
+                      <a href="/juridiskt/integritetspolicy" className="text-primary-blue hover:underline" target="_blank">
+                        integritetspolicyn
+                      </a>{' '}
+                      och skapar ett konto för att spara min värdering
+                    </label>
+                  </div>
+                </div>
+              )}
 
               {/* Enrichment Status */}
               {isEnriching && (

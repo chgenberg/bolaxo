@@ -13,9 +13,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String?
+  role            String    // seller, buyer, broker
+  verified        Boolean   @default(false)
+  bankIdVerified  Boolean   @default(false)
+  
+  // Profile data
+  phone           String?
+  companyName     String?
+  orgNumber       String?
+  region          String?
+  
+  // Magic link tokens
+  magicLinkToken  String?   @unique
+  tokenExpiresAt  DateTime?
+  
+  // Timestamps
+  createdAt       DateTime  @default(now())
+  lastLoginAt     DateTime?
+  
+  // Relations
+  valuations      Valuation[]
+  listings        Listing[]
+  
+  @@index([email])
+  @@index([magicLinkToken])
+}
+
 model Valuation {
   id           String   @id @default(cuid())
   createdAt    DateTime @default(now())
+  
+  // User relation
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id])
+  
   email        String?
   companyName  String?
   industry     String?
@@ -24,6 +59,32 @@ model Valuation {
   mostLikely   Int
   minValue     Int
   maxValue     Int
+  
+  @@index([userId])
+  @@index([email])
+}
+
+model Listing {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  
+  companyName     String?
+  anonymousTitle  String
+  industry        String
+  revenue         String
+  employees       String
+  location        String
+  
+  status          String   @default("draft") // draft, active, sold, paused
+  packageType     String   // basic, featured, premium
+  
+  createdAt       DateTime @default(now())
+  publishedAt     DateTime?
+  expiresAt       DateTime?
+  
+  @@index([userId])
+  @@index([status])
 }
 
 model CompanyCache {

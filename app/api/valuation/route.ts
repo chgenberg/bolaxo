@@ -5,8 +5,19 @@ const prisma = new PrismaClient()
 
 async function saveValuationSafely(input: any, result: any) {
   try {
+    // Försök hitta användare baserat på email
+    let userId: string | null = null
+    
+    if (input?.email) {
+      const user = await prisma.user.findUnique({
+        where: { email: input.email }
+      })
+      userId = user?.id || null
+    }
+
     await prisma.valuation.create({
       data: {
+        userId, // Koppla till user om de finns
         email: input?.email ?? null,
         companyName: input?.companyName ?? null,
         industry: input?.industry ?? null,
@@ -17,6 +28,8 @@ async function saveValuationSafely(input: any, result: any) {
         maxValue: result?.valuationRange?.max ?? 0,
       }
     })
+    
+    console.log(`Valuation saved${userId ? ' and linked to user' : ' (no user found)'}`)
   } catch (err) {
     console.error('Prisma save error:', err)
   }
