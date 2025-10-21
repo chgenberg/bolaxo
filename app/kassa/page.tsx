@@ -182,7 +182,7 @@ export default function CheckoutPage() {
                     name="companyName"
                     placeholder="Ex. Nordic Consulting AB"
                     value={companyName}
-                    onChange={setCompanyName}
+                    onValueChange={setCompanyName}
                     required
                   />
 
@@ -191,7 +191,7 @@ export default function CheckoutPage() {
                     name="orgNumber"
                     placeholder="556123-4567"
                     value={orgNumber}
-                    onChange={setOrgNumber}
+                    onValueChange={setOrgNumber}
                     required
                     tooltip="Används för fakturering och kvitto"
                   />
@@ -202,7 +202,7 @@ export default function CheckoutPage() {
                     type="textarea"
                     placeholder="Gatuadress&#10;Postnummer Ort"
                     value={address}
-                    onChange={setAddress}
+                    onValueChange={setAddress}
                     required
                   />
 
@@ -211,7 +211,7 @@ export default function CheckoutPage() {
                     name="reference"
                     placeholder="Ex. Projektkod, Avdelning"
                     value={reference}
-                    onChange={setReference}
+                    onValueChange={setReference}
                   />
 
                   <FormField
@@ -219,7 +219,7 @@ export default function CheckoutPage() {
                     name="peppolId"
                     placeholder="Ex. 0007:5567123456"
                     value={peppolId}
-                    onChange={setPeppolId}
+                    onValueChange={setPeppolId}
                     tooltip="För automatisk e-faktura via Peppol-nätverket"
                   />
 
@@ -229,7 +229,7 @@ export default function CheckoutPage() {
                     type="email"
                     placeholder="din@epost.se"
                     value={billingEmail}
-                    onChange={setBillingEmail}
+                    onValueChange={setBillingEmail}
                     required
                   />
                 </div>
