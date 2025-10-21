@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { checkRateLimit } from '@/lib/ratelimit'
+import { validateAndSanitize } from '@/lib/sanitize'
 
 const prisma = new PrismaClient()
 
@@ -36,8 +38,31 @@ async function saveValuationSafely(input: any, result: any) {
 }
 
 export async function POST(request: Request) {
+  // Rate limit: 3 värderingar per timme per IP
+  const ip = request.headers.get('x-forwarded-for') || 'unknown'
+  const { success } = await checkRateLimit(ip, 'valuation')
+  
+  if (!success) {
+    return NextResponse.json(
+      { error: 'För många värderingar. Max 3 per timme.' },
+      { status: 429 }
+    )
+  }
+
   try {
-    const data = await request.json()
+    const rawData = await request.json()
+    
+    // Sanitize and validate input
+    const { valid, errors, sanitized } = validateAndSanitize(rawData)
+    
+    if (!valid) {
+      return NextResponse.json(
+        { error: 'Ogiltig input', details: errors },
+        { status: 400 }
+      )
+    }
+    
+    const data = sanitized
 
     // Hämta berikad data om den finns
     let enrichedData = null

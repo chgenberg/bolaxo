@@ -23,10 +23,22 @@ export default function PrivacyPolicyPage() {
           <div className="prose prose-lg max-w-none space-y-8">
             <section>
               <h2 className="text-2xl font-bold text-text-dark mb-4">1. Introduktion</h2>
-              <p className="text-text-gray leading-relaxed">
+              <p className="text-text-gray leading-relaxed mb-4">
                 Bolaxo AB ("BOLAXO", "vi", "oss") värnar om din integritet. Denna policy förklarar hur vi 
                 samlar in, använder och skyddar dina personuppgifter i enlighet med GDPR och svensk dataskyddslag.
               </p>
+              <div className="bg-green-50 border border-green-200 p-4 rounded-xl">
+                <h3 className="font-semibold text-green-800 mb-2">✓ GDPR-kompatibel</h3>
+                <p className="text-sm text-green-700 mb-3">
+                  Vi följer EU:s dataskyddsförordning (GDPR). Du har rätt att:
+                </p>
+                <ul className="text-sm text-green-700 space-y-1">
+                  <li>• <Link href="/api/user/export-data" className="underline font-semibold">Exportera din data</Link> (Article 15 & 20)</li>
+                  <li>• Radera ditt konto (Article 17) - kontakta privacy@bolaxo.se</li>
+                  <li>• Rätta felaktig information</li>
+                  <li>• Invända mot behandling</li>
+                </ul>
+              </div>
             </section>
 
             <section>

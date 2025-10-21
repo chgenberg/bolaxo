@@ -1,10 +1,21 @@
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
+import { checkRateLimit } from '@/lib/ratelimit'
 
 const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
+  // Rate limit: 5 requests per 15 min per IP
+  const ip = request.headers.get('x-forwarded-for') || 'unknown'
+  const { success, remaining } = await checkRateLimit(ip, 'auth')
+  
+  if (!success) {
+    return NextResponse.json(
+      { error: 'För många försök. Försök igen om 15 minuter.' },
+      { status: 429, headers: { 'X-RateLimit-Remaining': '0' } }
+    )
+  }
   try {
     const { email, role, acceptedPrivacy } = await request.json()
 
