@@ -78,20 +78,14 @@ export async function GET(request: Request) {
     } else if (user.role === 'broker') {
       redirectPath = '/for-maklare'
     }
-
-    // Använd rätt base URL - detektera från request headers eller env var
-    const protocol = request.headers.get('x-forwarded-proto') || 'https'
-    const host = request.headers.get('host') || 'bolaxo-production.up.railway.app'
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
     
     return NextResponse.redirect(new URL(redirectPath, baseUrl))
 
   } catch (error) {
     console.error('Magic link verify error:', error)
-    const protocol = request.headers.get('x-forwarded-proto') || 'https'
-    const host = request.headers.get('host') || 'bolaxo-production.up.railway.app'
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
-    return NextResponse.redirect(new URL('/login?error=server_error', baseUrl))
+    // Fallback till production URL vid error
+    const errorBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo-production.up.railway.app'
+    return NextResponse.redirect(new URL('/login?error=server_error', errorBaseUrl))
   }
 }
 
