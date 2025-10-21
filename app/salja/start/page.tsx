@@ -60,7 +60,7 @@ export default function Step1StartPage() {
             placeholder="AB Exempel"
             tooltip="Detta visas inte publikt om du väljer att vara anonym"
             {...register('companyName', { required: 'Företagsnamn krävs' })}
-            error={errors.companyName?.message}
+            error={(errors as any).companyName?.message as string | undefined}
           />
 
           {/* Category */}
