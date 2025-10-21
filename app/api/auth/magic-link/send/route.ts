@@ -48,8 +48,10 @@ export async function POST(request: Request) {
       }
     })
 
-    // Skapa magic link URL
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    // Skapa magic link URL - detektera automatiskt från request
+    const protocol = request.headers.get('x-forwarded-proto') || 'http'
+    const host = request.headers.get('host') || 'localhost:3000'
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
     const magicLink = `${baseUrl}/api/auth/magic-link/verify?token=${token}`
 
     // I produktion: skicka email via Resend/SendGrid
