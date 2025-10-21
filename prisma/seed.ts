@@ -211,7 +211,7 @@ async function main() {
             mimeType: 'application/pdf',
             status: 'SIGNED',
             uploadedBy: demoBuyer.id,
-            uploadedByName: demoBuyer.name,
+            uploadedByName: demoBuyer.name || demoBuyer.email,
             signedAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
           },
           {
@@ -223,7 +223,7 @@ async function main() {
             mimeType: 'application/pdf',
             status: 'SIGNED',
             uploadedBy: demoSeller.id,
-            uploadedByName: demoSeller.name,
+            uploadedByName: demoSeller.name || demoSeller.email,
             signedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
           },
           {
@@ -235,7 +235,7 @@ async function main() {
             mimeType: 'application/pdf',
             status: 'DRAFT',
             uploadedBy: demoBuyer.id,
-            uploadedByName: demoBuyer.name
+            uploadedByName: demoBuyer.name || demoBuyer.email
           }
         ]
       },
