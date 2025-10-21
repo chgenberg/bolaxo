@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useFormStore } from '@/store/formStore'
 import StepWizardLayout from '@/components/StepWizardLayout'
 import FormField from '@/components/FormField'
+import FormSelect from '@/components/FormSelect'
 import StickyBottomNav from '@/components/StickyBottomNav'
 import { Lightbulb } from 'lucide-react'
 
@@ -104,12 +105,10 @@ export default function Step2AffarsDataPage() {
           />
         </div>
 
-        <FormField
+        <FormSelect
           label="Vad ingår i försäljningen?"
-          name="vadIngår"
-          type="select"
           value={formData.vadIngår}
-          onChange={(value) => updateField('vadIngår', value)}
+          onChange={(e) => updateField('vadIngår', e.target.value)}
           options={[
             { value: 'aktier', label: 'Aktier i bolaget' },
             { value: 'inkram', label: 'Inkråm (rörelse utan bolag)' },

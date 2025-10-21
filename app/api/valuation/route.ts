@@ -1,4 +1,26 @@
 import { NextResponse } from 'next/server'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+async function saveValuationSafely(input: any, result: any) {
+  try {
+    await prisma.valuation.create({
+      data: {
+        email: input?.email ?? null,
+        companyName: input?.companyName ?? null,
+        industry: input?.industry ?? null,
+        inputJson: input,
+        resultJson: result,
+        mostLikely: result?.valuationRange?.mostLikely ?? 0,
+        minValue: result?.valuationRange?.min ?? 0,
+        maxValue: result?.valuationRange?.max ?? 0,
+      }
+    })
+  } catch (err) {
+    console.error('Prisma save error:', err)
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -19,6 +41,7 @@ export async function POST(request: Request) {
     if (!process.env.OPENAI_API_KEY) {
       console.log('OpenAI API key not set, using fallback valuation')
       const result = generateFallbackValuation(data)
+      await saveValuationSafely(data, result)
       return NextResponse.json({ result })
     }
 
@@ -47,6 +70,7 @@ export async function POST(request: Request) {
     if (!response.ok) {
       console.log('OpenAI API request failed, using fallback')
       const result = generateFallbackValuation(data)
+      await saveValuationSafely(data, result)
       return NextResponse.json({ result })
     }
 
@@ -61,6 +85,7 @@ export async function POST(request: Request) {
     // Parse AI-svaret och strukturera resultatet
     const result = parseAIResponse(cleaned || rawContent, data)
 
+    await saveValuationSafely(data, result)
     return NextResponse.json({ result })
   } catch (error) {
     console.error('Valuation API error:', error)
