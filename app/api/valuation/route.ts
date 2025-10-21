@@ -12,6 +12,8 @@ export async function POST(request: Request) {
 
     // Konstruera prompt baserad på användarens data + berikad data
     const prompt = buildValuationPrompt(data, enrichedData)
+    // Kombinera system + user till en samlad prompt för GPT-5 (o1)
+    const combinedPrompt = `${getSystemPrompt()}\n\n${prompt}`
 
     // Kolla om OpenAI API-nyckel finns
     if (!process.env.OPENAI_API_KEY) {
@@ -20,7 +22,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ result })
     }
 
-    // Anropa OpenAI GPT-4o-mini
+    // Anropa GPT-5-mini enligt migrationsguiden (utan temperature/response_format, med max_completion_tokens)
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -28,21 +30,18 @@ export async function POST(request: Request) {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Byt till 'gpt-4o' för bättre kvalitet eller 'o1-mini' för reasoning
+        model: 'gpt-5-mini',
         messages: [
-          {
-            role: 'system',
-            content: getSystemPrompt()
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
+          { role: 'user', content: combinedPrompt }
         ],
-        temperature: 0.7, // 0.0-1.0, högre = mer kreativ, lägre = mer deterministisk
-        max_tokens: 4000, // Ökat från 3000 för längre svar
-        response_format: { type: "json_object" }, // Tvingar JSON-svar (kräver mention i prompt)
+        // GPT-5(o1) stödjer inte temperature och använder egen sampling
+        // Använd ny tokens-parameter
+        max_completion_tokens: 16000
       }),
+      // Öka timeout för GPT-5 enligt riktlinjer (5 min för premiumkvalitet)
+      signal: (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal)
+        ? AbortSignal.timeout(300000)
+        : undefined
     })
 
     if (!response.ok) {
@@ -52,10 +51,15 @@ export async function POST(request: Request) {
     }
 
     const aiResponse = await response.json()
-    const analysis = aiResponse.choices[0].message.content
+    const rawContent = aiResponse?.choices?.[0]?.message?.content ?? ''
+
+    // Robust JSON-parsing: ta bort ev. kodblock och extrahera första JSON-objektet
+    const cleaned = String(rawContent)
+      .replace(/```json[\s\S]*?```/g, (m) => m.replace(/```json|```/g, ''))
+      .replace(/```[\s\S]*?```/g, (m) => m.replace(/```/g, ''))
 
     // Parse AI-svaret och strukturera resultatet
-    const result = parseAIResponse(analysis, data)
+    const result = parseAIResponse(cleaned || rawContent, data)
 
     return NextResponse.json({ result })
   } catch (error) {
