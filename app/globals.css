@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply antialiased;
+  }
+  
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-background-white text-text-dark;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply bg-primary-blue text-white px-6 py-3 rounded-button font-semibold 
+           shadow-soft hover:shadow-card-hover hover:bg-blue-800 
+           transition-all duration-300 transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-primary-blue px-6 py-3 rounded-button font-semibold 
+           border border-primary-blue/20 shadow-soft hover:shadow-card 
+           hover:bg-light-blue/30 transition-all duration-300;
+  }
+  
+  .btn-ghost {
+    @apply text-primary-blue px-4 py-2 rounded-button font-medium 
+           hover:bg-light-blue/20 transition-all duration-300;
+  }
+  
+  /* Cards */
+  .card {
+    @apply bg-white rounded-card shadow-card p-6 
+           hover:shadow-card-hover transition-all duration-300;
+  }
+  
+  .card-interactive {
+    @apply card cursor-pointer transform hover:-translate-y-1;
+  }
+  
+  .card-static {
+    @apply bg-white rounded-card shadow-card p-6;
+  }
+  
+  /* Form Elements */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-input border border-gray-200 
+           focus:border-primary-blue focus:ring-2 focus:ring-primary-blue/10 
+           focus:outline-none transition-all duration-200;
+  }
+  
+  .select-field {
+    @apply input-field appearance-none bg-white cursor-pointer;
+  }
+  
+  /* Navigation */
+  .nav-link {
+    @apply text-text-dark font-medium hover:text-primary-blue 
+           transition-colors duration-200 relative;
+  }
+  
+  .nav-link::after {
+    @apply content-[''] absolute bottom-0 left-0 w-0 h-0.5 
+           bg-primary-blue transition-all duration-300;
+  }
+  
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+  
+  /* Dropdowns */
+  .dropdown {
+    @apply absolute top-full mt-2 bg-white rounded-card shadow-dropdown 
+           border border-gray-100 overflow-hidden opacity-0 invisible 
+           transform scale-95 transition-all duration-200;
+  }
+  
+  .dropdown.open {
+    @apply opacity-100 visible scale-100;
+  }
+  
+  .dropdown-item {
+    @apply block px-4 py-3 text-text-dark hover:bg-light-blue/20 
+           transition-colors duration-200;
+  }
+  
+  /* Utilities */
+  .sticky-nav-shadow {
+    box-shadow: 0 -2px 20px rgba(0, 51, 102, 0.1);
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-lg bg-white/95;
+  }
+  
+  /* Typography */
+  .heading-1 {
+    @apply text-4xl md:text-5xl font-bold text-text-dark leading-tight;
+  }
+  
+  .heading-2 {
+    @apply text-3xl md:text-4xl font-bold text-text-dark leading-tight;
+  }
+  
+  .heading-3 {
+    @apply text-2xl md:text-3xl font-semibold text-text-dark;
+  }
+  
+  .text-muted {
+    @apply text-text-gray text-sm;
+  }
+  
+  /* Animations */
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .animate-slide-down {
+    animation: slide-down 0.3s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+}
