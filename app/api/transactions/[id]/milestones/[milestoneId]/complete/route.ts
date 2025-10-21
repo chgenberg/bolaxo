@@ -6,8 +6,9 @@ const prisma = new PrismaClient()
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string; milestoneId: string } }
+  context: { params: Promise<{ id: string; milestoneId: string }> }
 ) {
+  const params = await context.params
   try {
     const cookieStore = await cookies()
     const userId = cookieStore.get('bolaxo_user_id')?.value
