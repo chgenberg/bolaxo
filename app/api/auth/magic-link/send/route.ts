@@ -64,8 +64,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ 
       success: true,
       message: 'Magic link skickad! Kolla din inkorg.',
-      // I dev: returnera länken så vi kan testa
-      ...(process.env.NODE_ENV === 'development' && { magicLink })
+      // I dev ELLER om ingen email-service: visa länken direkt (för demo)
+      ...((process.env.NODE_ENV === 'development' || !process.env.RESEND_API_KEY) && { magicLink })
     })
 
   } catch (error) {
