@@ -51,12 +51,12 @@ async function main() {
     update: {},
     create: {
       email: 'advisor@bolaxo.se',
-      name: 'Maria Berg',
-      role: 'broker',
+      name: 'Maria Svensson',
+      role: 'advisor',
       verified: true,
       bankIdVerified: true,
       phone: '070-555 55 55',
-      companyName: 'Nordic M&A Partners AB'
+      companyName: 'Svensson Corporate Finance'
     }
   })
 

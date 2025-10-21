@@ -3,10 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, FileText, Building, LogOut, Mail, BarChart3, Sparkles } from 'lucide-react'
+import { TrendingUp, FileText, Building, LogOut, Mail, BarChart3, Sparkles, Briefcase, Users, Target } from 'lucide-react'
 import Link from 'next/link'
 import AnalyticsCharts from '@/components/AnalyticsCharts'
 import SmartMatches from '@/components/SmartMatches'
+import AdvisorStats from '@/components/AdvisorStats'
+import AdvisorDeals from '@/components/AdvisorDeals'
+import AdvisorPipeline from '@/components/AdvisorPipeline'
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth()
@@ -95,6 +98,22 @@ export default function DashboardPage() {
             </Link>
           )}
 
+          {user.role === 'advisor' && (
+            <>
+              <Link href="/sok" className="card hover:shadow-card-hover transition-all group">
+                <Target className="w-12 h-12 text-primary-blue mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="font-semibold text-lg mb-2">Hitta affärer</h3>
+                <p className="text-sm text-text-gray">Sök potentiella transaktioner</p>
+              </Link>
+
+              <Link href="/network" className="card hover:shadow-card-hover transition-all group">
+                <Users className="w-12 h-12 text-primary-blue mb-4 group-hover:scale-110 transition-transform" />
+                <h3 className="font-semibold text-lg mb-2">Mitt nätverk</h3>
+                <p className="text-sm text-text-gray">Hantera kunder och kontakter</p>
+              </Link>
+            </>
+          )}
+
           <Link href="/kontakt" className="card hover:shadow-card-hover transition-all group">
             <Mail className="w-12 h-12 text-primary-blue mb-4 group-hover:scale-110 transition-transform" />
             <h3 className="font-semibold text-lg mb-2">Support</h3>
@@ -128,6 +147,32 @@ export default function DashboardPage() {
             </div>
             <SmartMatches />
           </div>
+        )}
+
+        {/* Advisor Dashboard - Only for advisors */}
+        {user.role === 'advisor' && (
+          <>
+            {/* Stats Overview */}
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="heading-2 flex items-center">
+                  <Briefcase className="w-8 h-8 mr-3 text-primary-blue" />
+                  Min affärsöversikt
+                </h2>
+              </div>
+              <AdvisorStats />
+            </div>
+
+            {/* Deals Management */}
+            <div className="mb-12">
+              <AdvisorDeals />
+            </div>
+
+            {/* Pipeline Overview */}
+            <div className="mb-12">
+              <AdvisorPipeline />
+            </div>
+          </>
         )}
 
         {/* Valuations History */}

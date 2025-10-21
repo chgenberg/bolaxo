@@ -37,6 +37,20 @@ async function seedDatabase() {
     })
     console.log('✅ Demo buyer created:', demoBuyer.email)
 
+    const demoAdvisor = await prisma.user.upsert({
+      where: { email: 'advisor@bolaxo.se' },
+      update: {},
+      create: {
+        email: 'advisor@bolaxo.se',
+        name: 'Maria Svensson',
+        companyName: 'Svensson Corporate Finance',
+        role: 'advisor',
+        verified: true,
+        bankIdVerified: true,
+      },
+    })
+    console.log('✅ Demo advisor created:', demoAdvisor.email)
+
     // 2. Skapa demo listing först
     const demoListing = await prisma.listing.upsert({
       where: { id: 'demo-listing-001' },
@@ -66,6 +80,7 @@ async function seedDatabase() {
         listingId: demoListing.id,
         sellerId: demoSeller.id,
         buyerId: demoBuyer.id,
+        advisorId: demoAdvisor.id,
         stage: 'DD_IN_PROGRESS',
         agreedPrice: 14500000,
         closingDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 dagar framåt
@@ -130,6 +145,7 @@ async function seedDatabase() {
       data: {
         seller: demoSeller.email,
         buyer: demoBuyer.email,
+        advisor: demoAdvisor.email,
         transaction: demoTransaction.id,
         transactionUrl: `/transaktion/${demoTransaction.id}`,
       },
