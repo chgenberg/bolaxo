@@ -28,6 +28,10 @@ export default function Step2AffarsDataPage() {
   return (
     <StepWizardLayout
       currentStep={2}
+      totalSteps={7}
+      onBack={handleBack}
+      onNext={handleNext}
+      lastSaved={lastSaved}
       title="Nyckeltal & prisidé"
       subtitle="Osäker på priset? Vi visar branschens typiska multiplar."
     >
@@ -116,12 +120,7 @@ export default function Step2AffarsDataPage() {
         />
       </div>
 
-      <StickyBottomNav
-        onBack={handleBack}
-        onNext={handleNext}
-        onSave={handleSave}
-        lastSaved={lastSaved}
-      />
+      {/* Navigering hanteras av StepWizardLayout */}
     </StepWizardLayout>
   )
 }
