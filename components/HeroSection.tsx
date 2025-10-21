@@ -121,22 +121,21 @@ function SellerHero() {
 
         {/* Right Content - Visual */}
         <div className="relative hidden lg:block">
-          <div className="relative">
-            {/* Main Card */}
-            <div className="card-static transform rotate-2 hover:rotate-0 transition-transform duration-500">
-              <div className="space-y-4">
-                <div className="h-4 bg-light-blue/20 rounded-full w-3/4" />
-                <div className="h-4 bg-light-blue/20 rounded-full w-full" />
-                <div className="h-4 bg-light-blue/20 rounded-full w-2/3" />
-                <div className="mt-8 grid grid-cols-2 gap-4">
-                  <div className="h-20 bg-primary-blue/10 rounded-button" />
-                  <div className="h-20 bg-primary-blue/10 rounded-button" />
-                </div>
-              </div>
+          <div className="relative w-80 h-80 mx-auto">
+            {/* Hero Image with Pulsating Shadow */}
+            <div className="relative w-full h-full">
+              {/* Pulsating shadow */}
+              <div className="absolute inset-0 bg-gray-400/30 rounded-[30%_70%_70%_30%/60%_40%_60%_40%] blur-xl animate-pulse-shadow" />
+              {/* Image container */}
+              <img 
+                src="/bolaxo_hero.png" 
+                alt="BOLAXO Platform" 
+                className="relative z-10 w-full h-full object-cover rounded-[30%_70%_70%_30%/60%_40%_60%_40%] shadow-2xl"
+              />
             </div>
             
-            {/* Floating Cards */}
-            <div className="absolute -top-6 -right-6 bg-white rounded-card shadow-card p-4 animate-pulse-soft">
+            {/* Floating Cards - närmare bilden */}
+            <div className="absolute top-8 -right-4 bg-white rounded-card shadow-card p-4 animate-pulse-soft z-20">
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-success/20 rounded-full flex items-center justify-center">
                   <CheckCircle className="w-4 h-4 text-success" />
@@ -145,24 +144,10 @@ function SellerHero() {
               </div>
             </div>
             
-            <div className="absolute -bottom-6 -left-6 bg-white rounded-card shadow-card p-4">
+            <div className="absolute bottom-8 -left-4 bg-white rounded-card shadow-card p-4 z-20">
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-primary-blue" />
                 <span className="text-sm font-medium">NDA-skyddad</span>
-              </div>
-            </div>
-            
-            {/* Hero Image with Pulsating Shadow */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64">
-              <div className="relative w-full h-full">
-                {/* Pulsating shadow */}
-                <div className="absolute inset-0 bg-gray-400/30 rounded-[30%_70%_70%_30%/60%_40%_60%_40%] blur-xl animate-pulse-shadow" />
-                {/* Image container */}
-                <img 
-                  src="/bolaxo_hero.png" 
-                  alt="BOLAXO Platform" 
-                  className="relative z-10 w-full h-full object-cover rounded-[30%_70%_70%_30%/60%_40%_60%_40%] shadow-2xl"
-                />
               </div>
             </div>
           </div>
