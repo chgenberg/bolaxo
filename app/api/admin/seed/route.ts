@@ -4,16 +4,8 @@ import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
-export async function POST(request: NextRequest) {
+async function seedDatabase() {
   try {
-    // Simple auth check - endast i development eller med secret
-    const authHeader = request.headers.get('authorization')
-    const isDev = process.env.NODE_ENV === 'development'
-    const validSecret = authHeader === `Bearer ${process.env.ADMIN_SECRET || 'demo-secret-2024'}`
-    
-    if (!isDev && !validSecret) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
 
     console.log('🌱 Seeding database...')
 
@@ -109,7 +101,7 @@ export async function POST(request: NextRequest) {
     }
     console.log('✅ Milestones created')
 
-    return NextResponse.json({
+    return {
       success: true,
       message: '✨ Database seeded successfully!',
       data: {
@@ -118,20 +110,28 @@ export async function POST(request: NextRequest) {
         transaction: demoTransaction.id,
         transactionUrl: `/transaktion/${demoTransaction.id}`,
       },
-    })
+    }
 
   } catch (error) {
     console.error('❌ Seed error:', error)
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: 'Seed failed', 
-        details: error instanceof Error ? error.message : 'Unknown error' 
-      },
-      { status: 500 }
-    )
+    return {
+      success: false,
+      error: 'Seed failed',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }
   } finally {
     await prisma.$disconnect()
   }
+}
+
+// Support both GET and POST for easy browser access
+export async function GET(request: NextRequest) {
+  const result = await seedDatabase()
+  return NextResponse.json(result, { status: result.success ? 200 : 500 })
+}
+
+export async function POST(request: NextRequest) {
+  const result = await seedDatabase()
+  return NextResponse.json(result, { status: result.success ? 200 : 500 })
 }
 
