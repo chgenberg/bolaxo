@@ -106,7 +106,7 @@ export default function Step1StartPage() {
               })}
             </div>
             {errors.category && (
-              <p className="text-sm text-error mt-1">{errors.category.message}</p>
+              <p className="text-sm text-error mt-1">{String((errors as any).category?.message ?? '')}</p>
             )}
           </div>
 
