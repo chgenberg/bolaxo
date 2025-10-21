@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, FileText, Building, LogOut, Mail } from 'lucide-react'
+import { TrendingUp, FileText, Building, LogOut, Mail, BarChart3, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+import AnalyticsCharts from '@/components/AnalyticsCharts'
+import SmartMatches from '@/components/SmartMatches'
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth()
@@ -99,6 +101,34 @@ export default function DashboardPage() {
             <p className="text-sm text-text-gray">Kontakta oss för hjälp</p>
           </Link>
         </div>
+
+        {/* Analytics Section - Only for sellers */}
+        {user.role === 'seller' && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="heading-2 flex items-center">
+                <BarChart3 className="w-8 h-8 mr-3 text-primary-blue" />
+                Analysöversikt
+              </h2>
+              <span className="text-sm text-text-gray">Senaste 7 dagarna</span>
+            </div>
+            <AnalyticsCharts />
+          </div>
+        )}
+
+        {/* Smart Matches - Only for buyers */}
+        {user.role === 'buyer' && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="heading-2 flex items-center">
+                <Sparkles className="w-8 h-8 mr-3 text-primary-blue" />
+                Rekommenderade för dig
+              </h2>
+              <span className="text-sm text-text-gray">AI-driven matchning</span>
+            </div>
+            <SmartMatches />
+          </div>
+        )}
 
         {/* Valuations History */}
         <div className="bg-white p-8 rounded-2xl shadow-card">

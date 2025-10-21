@@ -218,3 +218,24 @@ model Activity {
   @@index([transactionId])
   @@index([createdAt])
 }
+
+model TeamMember {
+  id              String      @id @default(cuid())
+  transactionId   String
+  
+  userId          String?     // Om registrerad användare
+  email           String
+  name            String
+  role            String      // advisor, accountant, lawyer, other
+  permissions     Json        // { canViewDocuments: true, canEditMilestones: false, ... }
+  
+  invitedBy       String
+  invitedAt       DateTime    @default(now())
+  acceptedAt      DateTime?
+  
+  status          String      @default("PENDING") // PENDING, ACCEPTED, DECLINED
+  
+  @@index([transactionId])
+  @@index([email])
+  @@index([status])
+}

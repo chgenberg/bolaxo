@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { CheckCircle, Clock, Upload, FileText, DollarSign, Activity as ActivityIcon, Users, AlertCircle } from 'lucide-react'
+import TeamCollaboration from '@/components/TeamCollaboration'
 
 interface Transaction {
   id: string
@@ -41,7 +42,7 @@ export default function TransactionPage() {
   const { user, loading } = useAuth()
   const [transaction, setTransaction] = useState<Transaction | null>(null)
   const [loadingTx, setLoadingTx] = useState(true)
-  const [activeTab, setActiveTab] = useState<'overview' | 'milestones' | 'documents' | 'payments' | 'timeline'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'milestones' | 'documents' | 'payments' | 'timeline' | 'team'>('overview')
 
   const transactionId = params.id as string
 
@@ -161,6 +162,7 @@ export default function TransactionPage() {
                 { id: 'milestones', label: 'Milstolpar', icon: CheckCircle },
                 { id: 'documents', label: 'Dokument', icon: FileText },
                 { id: 'payments', label: 'Betalningar', icon: DollarSign },
+                { id: 'team', label: 'Team', icon: Users },
                 { id: 'timeline', label: 'Aktivitetslogg', icon: Clock },
               ].map((tab) => {
                 const Icon = tab.icon
@@ -359,6 +361,11 @@ export default function TransactionPage() {
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* Team Tab */}
+            {activeTab === 'team' && (
+              <TeamCollaboration transactionId={transactionId} />
             )}
 
             {/* Timeline Tab */}
