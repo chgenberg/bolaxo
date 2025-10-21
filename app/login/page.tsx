@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from '@/components/FormField'
 import { Mail, CheckCircle, AlertCircle, Building, Search, Handshake } from 'lucide-react'
 import Link from 'next/link'
 
-export default function LoginPage() {
+function LoginForm() {
   const searchParams = useSearchParams()
   const { login } = useAuth()
   
@@ -243,6 +243,18 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
 
