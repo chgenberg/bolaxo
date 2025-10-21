@@ -1,20 +1,24 @@
 'use client'
 
 import { useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
+import { useAuth } from '@/contexts/AuthContext'
 import FormField from '@/components/FormField'
-import { Handshake, Download, Send, Lightbulb } from 'lucide-react'
+import { Handshake, Download, Send, Lightbulb, ArrowRight } from 'lucide-react'
 
 export default function LOIPage() {
   const params = useParams()
+  const router = useRouter()
   const { ndaSignedObjects } = useBuyerStore()
+  const { user } = useAuth()
   
   const objectId = params.id as string
   const object = getObjectById(objectId)
   const hasNDA = ndaSignedObjects.includes(objectId)
+  const [isCreatingTransaction, setIsCreatingTransaction] = useState(false)
 
   const [loiData, setLoiData] = useState({
     priceMin: '',
@@ -60,6 +64,47 @@ export default function LOIPage() {
 
   const handleSendLOI = () => {
     alert('LOI skickat till säljaren!')
+  }
+
+  const handleStartTransaction = async () => {
+    if (!user) {
+      router.push('/login')
+      return
+    }
+
+    setIsCreatingTransaction(true)
+
+    try {
+      // Beräkna agreed price (använd max om angivet, annars object max)
+      const agreedPrice = loiData.priceMax 
+        ? parseFloat(loiData.priceMax) * 1000000 
+        : object.priceMax
+
+      const response = await fetch('/api/transactions/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listingId: objectId,
+          buyerId: user.id,
+          sellerId: 'MOCK_SELLER_ID', // I produktion: hämta från listing
+          agreedPrice,
+          buyerName: user.name || user.email,
+          sellerName: 'Säljare' // I produktion: hämta från listing
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        router.push(`/transaktion/${data.transaction.id}`)
+      } else {
+        alert('Kunde inte starta transaktion')
+      }
+    } catch (error) {
+      console.error('Start transaction error:', error)
+      alert('Ett fel uppstod')
+    } finally {
+      setIsCreatingTransaction(false)
+    }
   }
 
   return (
@@ -253,9 +298,45 @@ export default function LOIPage() {
               <Download className="w-5 h-5 mr-2" />
               Ladda ner utkast (PDF)
             </button>
-            <button onClick={handleSendLOI} className="btn-primary flex-1 flex items-center justify-center">
+            <button onClick={handleSendLOI} className="btn-ghost flex-1 flex items-center justify-center">
               <Send className="w-5 h-5 mr-2" />
               Skicka LOI till säljaren
+            </button>
+          </div>
+
+          {/* Start Transaction (Primary CTA) */}
+          <div className="mt-6 bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl border-2 border-primary-blue">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h3 className="font-bold text-lg text-text-dark mb-2 flex items-center">
+                  <Handshake className="w-6 h-6 text-primary-blue mr-2" />
+                  Redo att gå vidare?
+                </h3>
+                <p className="text-sm text-text-gray mb-4">
+                  Starta en formell transaktion med automatisk processhantering, milstolpar, 
+                  dokumentflöde och betalningsspårning. Helt gratis – vi tar endast provision vid avslut.
+                </p>
+                <ul className="text-sm text-text-gray space-y-1 mb-4">
+                  <li>✓ Automatiska milstolpar och deadlines</li>
+                  <li>✓ Säkert datarum för dokument</li>
+                  <li>✓ Betalnings- och escrow-hantering</li>
+                  <li>✓ Aktivitetslogg och transparens</li>
+                </ul>
+              </div>
+            </div>
+            <button
+              onClick={handleStartTransaction}
+              disabled={isCreatingTransaction || !loiData.priceMin}
+              className="btn-primary w-full flex items-center justify-center disabled:opacity-50"
+            >
+              {isCreatingTransaction ? (
+                'Startar transaktion...'
+              ) : (
+                <>
+                  Starta Transaktion & Deal Management
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </>
+              )}
             </button>
           </div>
 

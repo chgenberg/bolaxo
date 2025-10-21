@@ -96,3 +96,125 @@ model CompanyCache {
   createdAt       DateTime @default(now())
   expiresAt       DateTime
 }
+
+model Transaction {
+  id              String    @id @default(cuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  listingId       String
+  buyerId         String
+  sellerId        String
+  advisorId       String?
+  
+  // Deal data
+  stage           String    @default("LOI_SIGNED") // LOI_SIGNED, DD_IN_PROGRESS, SPA_NEGOTIATION, CLOSING, COMPLETED, CANCELLED
+  agreedPrice     Int       // i SEK
+  closingDate     DateTime?
+  
+  // Metadata
+  notes           String?
+  
+  // Sub-relations
+  documents       Document[]
+  milestones      Milestone[]
+  payments        Payment[]
+  activities      Activity[]
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([stage])
+}
+
+model Document {
+  id              String      @id @default(cuid())
+  transactionId   String
+  transaction     Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  
+  type            String      // SPA, LOI, DD_REPORT, FINANCIALS, INVOICE, CONTRACT, OTHER
+  title           String
+  fileName        String?
+  fileUrl         String?
+  fileSize        Int?
+  mimeType        String?
+  
+  status          String      @default("DRAFT") // DRAFT, PENDING_SIGNATURE, SIGNED, ARCHIVED
+  
+  uploadedBy      String
+  uploadedByName  String
+  
+  createdAt       DateTime    @default(now())
+  signedAt        DateTime?
+  
+  @@index([transactionId])
+  @@index([type])
+}
+
+model Milestone {
+  id              String      @id @default(cuid())
+  transactionId   String
+  transaction     Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  
+  title           String
+  description     String?
+  dueDate         DateTime
+  
+  completed       Boolean     @default(false)
+  completedAt     DateTime?
+  completedBy     String?
+  
+  assignedTo      String?
+  assignedToName  String?
+  
+  order           Int         // För sortering
+  isRequired      Boolean     @default(true)
+  
+  createdAt       DateTime    @default(now())
+  
+  @@index([transactionId])
+  @@index([completed])
+}
+
+model Payment {
+  id              String      @id @default(cuid())
+  transactionId   String
+  transaction     Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  
+  amount          Int         // i SEK
+  type            String      // DEPOSIT, MAIN_PAYMENT, EARN_OUT, FEE
+  description     String?
+  
+  status          String      @default("PENDING") // PENDING, ESCROWED, RELEASED, REFUNDED
+  
+  dueDate         DateTime?
+  paidAt          DateTime?
+  releasedAt      DateTime?
+  
+  createdAt       DateTime    @default(now())
+  
+  @@index([transactionId])
+  @@index([status])
+}
+
+model Activity {
+  id              String      @id @default(cuid())
+  transactionId   String
+  transaction     Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  
+  type            String      // STAGE_CHANGE, DOCUMENT_UPLOADED, MILESTONE_COMPLETED, NOTE_ADDED, PAYMENT_MADE
+  title           String
+  description     String?
+  
+  actorId         String
+  actorName       String
+  actorRole       String      // buyer, seller, advisor
+  
+  metadata        Json?       // Extra data om behövs
+  
+  createdAt       DateTime    @default(now())
+  
+  @@index([transactionId])
+  @@index([createdAt])
+}
