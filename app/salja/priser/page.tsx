@@ -51,7 +51,7 @@ export default function Step6PriserPage() {
       <div className="space-y-6">
         <PackageCards
           selectedPackage={formData.selectedPackage}
-          onSelect={(pkg) => updateField('selectedPackage', pkg)}
+          onPackageSelect={(pkg) => updateField('selectedPackage', pkg)}
         />
 
         {/* Info boxes */}
