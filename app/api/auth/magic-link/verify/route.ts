@@ -6,11 +6,16 @@ const prisma = new PrismaClient()
 
 export async function GET(request: Request) {
   try {
+    // Detektera rätt base URL tidigt
+    const protocol = request.headers.get('x-forwarded-proto') || 'https'
+    const host = request.headers.get('host') || 'bolaxo-production.up.railway.app'
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')
 
     if (!token) {
-      return NextResponse.redirect(new URL('/login?error=invalid_token', request.url))
+      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl))
     }
 
     // Hitta användare med token
@@ -19,12 +24,12 @@ export async function GET(request: Request) {
     })
 
     if (!user) {
-      return NextResponse.redirect(new URL('/login?error=invalid_token', request.url))
+      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl))
     }
 
     // Kolla om token har gått ut
     if (!user.tokenExpiresAt || user.tokenExpiresAt < new Date()) {
-      return NextResponse.redirect(new URL('/login?error=expired_token', request.url))
+      return NextResponse.redirect(new URL('/login?error=expired_token', baseUrl))
     }
 
     // Uppdatera användare
@@ -65,20 +70,28 @@ export async function GET(request: Request) {
     })
 
     // Redirect baserat på roll
-    let redirectUrl = '/dashboard'
+    let redirectPath = '/dashboard'
     if (user.role === 'seller') {
-      redirectUrl = '/salja'
+      redirectPath = '/salja'
     } else if (user.role === 'buyer') {
-      redirectUrl = '/sok'
+      redirectPath = '/sok'
     } else if (user.role === 'broker') {
-      redirectUrl = '/for-maklare'
+      redirectPath = '/for-maklare'
     }
 
-    return NextResponse.redirect(new URL(redirectUrl, request.url))
+    // Använd rätt base URL - detektera från request headers eller env var
+    const protocol = request.headers.get('x-forwarded-proto') || 'https'
+    const host = request.headers.get('host') || 'bolaxo-production.up.railway.app'
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    
+    return NextResponse.redirect(new URL(redirectPath, baseUrl))
 
   } catch (error) {
     console.error('Magic link verify error:', error)
-    return NextResponse.redirect(new URL('/login?error=server_error', request.url))
+    const protocol = request.headers.get('x-forwarded-proto') || 'https'
+    const host = request.headers.get('host') || 'bolaxo-production.up.railway.app'
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    return NextResponse.redirect(new URL('/login?error=server_error', baseUrl))
   }
 }
 
