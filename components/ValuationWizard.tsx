@@ -11,8 +11,8 @@ interface ValuationData {
   // Step 1: Grunduppgifter
   email: string
   companyName: string
-  website?: string
-  orgNumber?: string
+  website: string
+  orgNumber: string
   industry: string
   
   // Step 2: Företagsdata (Allmänt)
@@ -313,7 +313,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 label="E-postadress"
                 type="email"
                 value={data.email}
-                onChange={(value) => setData({ ...data, email: value })}
+                onValueChange={(value) => setData({ ...data, email: value })}
                 placeholder="din@email.se"
                 required
               />
@@ -321,7 +321,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <FormField
                 label="Företagsnamn"
                 value={data.companyName}
-                onChange={(value) => setData({ ...data, companyName: value })}
+                onValueChange={(value) => setData({ ...data, companyName: value })}
                 placeholder="Ditt Företag AB"
                 required
               />
@@ -334,7 +334,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 <FormField
                   label="Hemsida (URL)"
                   value={data.website || ''}
-                  onChange={(value) => setData({ ...data, website: value })}
+                  onValueChange={(value) => setData({ ...data, website: value })}
                   placeholder="https://dittforetag.se"
                   tooltip="Vi skrapar upp till 40 sidor för att förstå verksamheten"
                 />
@@ -342,7 +342,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 <FormField
                   label="Organisationsnummer"
                   value={data.orgNumber || ''}
-                  onChange={(value) => setData({ ...data, orgNumber: value })}
+                  onValueChange={(value) => setData({ ...data, orgNumber: value })}
                   placeholder="556123-4567"
                   tooltip="Hämtar officiell data från Bolagsverket och SCB"
                   className="mt-4"
@@ -515,7 +515,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       key={question.key}
                       label={question.label}
                       value={data[question.key] as string || ''}
-                      onChange={(value) => setData({ ...data, [question.key]: value })}
+                      onValueChange={(value) => setData({ ...data, [question.key]: value })}
                       placeholder="Ange värde"
                       tooltip={question.tooltip}
                       required
