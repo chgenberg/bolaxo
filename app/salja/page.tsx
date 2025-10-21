@@ -157,26 +157,32 @@ export default function SaljaInfoPage() {
           <h2 className="text-2xl font-bold text-text-dark mb-6 text-center">
             Prisöversikt
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-light-blue rounded-xl">
-              <div className="text-3xl font-bold text-primary-blue mb-2">4 995 kr</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-6 bg-gray-50 rounded-xl border-2 border-gray-200">
+              <div className="text-3xl font-bold text-text-dark mb-2">0 kr</div>
+              <div className="font-semibold mb-1">Free</div>
+              <div className="text-sm text-text-gray">Skapa utkast</div>
+            </div>
+            <div className="text-center p-6 bg-light-blue rounded-xl border-2 border-primary-blue/30">
+              <div className="text-3xl font-bold text-primary-blue mb-2">495 kr</div>
               <div className="font-semibold mb-1">Basic</div>
-              <div className="text-sm text-text-gray">Snabb start</div>
+              <div className="text-sm text-text-gray">/ mån</div>
             </div>
-            <div className="text-center p-6 bg-primary-blue text-white rounded-xl">
-              <div className="text-3xl font-bold mb-2">9 995 kr</div>
-              <div className="font-semibold mb-1">Featured</div>
-              <div className="text-sm">Rekommenderas</div>
+            <div className="text-center p-6 bg-primary-blue text-white rounded-xl shadow-md">
+              <div className="text-xs bg-white/20 px-2 py-1 rounded-full mb-2 inline-block">Populärast</div>
+              <div className="text-3xl font-bold mb-2">895 kr</div>
+              <div className="font-semibold mb-1">Pro</div>
+              <div className="text-sm opacity-90">/ mån</div>
             </div>
-            <div className="text-center p-6 bg-light-blue rounded-xl">
-              <div className="text-3xl font-bold text-primary-blue mb-2">19 995 kr</div>
-              <div className="font-semibold mb-1">Premium</div>
-              <div className="text-sm text-text-gray">Fullservice</div>
+            <div className="text-center p-6 bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl shadow-lg">
+              <div className="text-3xl font-bold mb-2">1 495 kr</div>
+              <div className="font-semibold mb-1">Pro+ Featured</div>
+              <div className="text-sm opacity-90">/ mån</div>
             </div>
           </div>
           <div className="text-center mt-6">
-            <Link href="/salja/priser" className="text-primary-blue hover:underline font-semibold">
-              Se full prislista →
+            <Link href="/priser" className="text-primary-blue hover:underline font-semibold">
+              Se full prislista & funktioner →
             </Link>
           </div>
         </div>
