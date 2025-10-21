@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import { CheckCircle, Clock, Upload, FileText, DollarSign, Activity as ActivityIcon, Users, AlertCircle } from 'lucide-react'
+import { CheckCircle, Circle, FileText, CreditCard, Users, Activity, Upload, Send, Download, X, Plus } from 'lucide-react'
 import TeamCollaboration from '@/components/TeamCollaboration'
 
 interface Transaction {
@@ -20,20 +20,11 @@ interface Transaction {
 
 const STAGE_LABELS: Record<string, string> = {
   LOI_SIGNED: 'LOI Signerad',
-  DD_IN_PROGRESS: 'Due Diligence Pågår',
+  DD_IN_PROGRESS: 'Due Diligence',
   SPA_NEGOTIATION: 'SPA-Förhandling',
   CLOSING: 'Avslutande',
   COMPLETED: 'Genomförd',
   CANCELLED: 'Avbruten'
-}
-
-const STAGE_COLORS: Record<string, string> = {
-  LOI_SIGNED: 'bg-blue-100 text-blue-800',
-  DD_IN_PROGRESS: 'bg-yellow-100 text-yellow-800',
-  SPA_NEGOTIATION: 'bg-purple-100 text-purple-800',
-  CLOSING: 'bg-orange-100 text-orange-800',
-  COMPLETED: 'bg-green-100 text-green-800',
-  CANCELLED: 'bg-red-100 text-red-800'
 }
 
 export default function TransactionPage() {
@@ -80,7 +71,7 @@ export default function TransactionPage() {
         method: 'POST'
       })
       if (response.ok) {
-        fetchTransaction() // Refresh
+        fetchTransaction()
       }
     } catch (error) {
       console.error('Complete milestone error:', error)
@@ -95,7 +86,6 @@ export default function TransactionPage() {
       if (response.ok) {
         const data = await response.json()
         
-        // Ladda ner SPA-text
         const blob = new Blob([data.content], { type: 'text/plain' })
         const url = URL.createObjectURL(blob)
         const link = document.createElement('a')
@@ -105,7 +95,7 @@ export default function TransactionPage() {
         URL.revokeObjectURL(url)
         
         alert('SPA genererat! Granska dokumentet och skicka för signering.')
-        fetchTransaction() // Refresh för att visa nytt dokument
+        fetchTransaction()
       }
     } catch (error) {
       console.error('Generate SPA error:', error)
@@ -125,12 +115,11 @@ export default function TransactionPage() {
         const data = await response.json()
         alert(data.message || 'Dokument skickat för signering!')
         
-        // I dev-mode: visa Scrive URL
         if (data.signingUrl && process.env.NODE_ENV === 'development') {
           console.log('Scrive signing URL:', data.signingUrl)
         }
         
-        fetchTransaction() // Refresh
+        fetchTransaction()
       } else {
         const error = await response.json()
         alert(error.error || 'Kunde inte skicka för signering')
@@ -143,19 +132,22 @@ export default function TransactionPage() {
 
   if (loading || loadingTx) {
     return (
-      <div className="min-h-screen bg-background-off-white flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="relative w-20 h-20">
+          <div className="absolute inset-0 border-4 border-light-blue rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-primary-blue border-t-transparent rounded-full animate-spin"></div>
+        </div>
       </div>
     )
   }
 
   if (!transaction) {
     return (
-      <div className="min-h-screen bg-background-off-white flex items-center justify-center p-4">
-        <div className="bg-white p-8 rounded-2xl shadow-card max-w-md text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="heading-3 mb-2">Transaktion ej hittad</h2>
-          <button onClick={() => router.push('/dashboard')} className="btn-primary mt-4">
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="text-center">
+          <X className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-text-dark mb-2">Transaktion ej hittad</h2>
+          <button onClick={() => router.push('/dashboard')} className="text-primary-blue hover:underline font-medium">
             Tillbaka till dashboard
           </button>
         </div>
@@ -168,326 +160,318 @@ export default function TransactionPage() {
   const progress = (completedMilestones / totalMilestones) * 100
 
   return (
-    <main className="min-h-screen bg-background-off-white py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="bg-white p-6 rounded-2xl shadow-card mb-6">
-          <div className="flex items-start justify-between mb-4">
+    <main className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="heading-2 mb-2">Transaktion #{transaction.id.slice(0, 8)}</h1>
-              <div className="flex items-center gap-3">
-                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${STAGE_COLORS[transaction.stage]}`}>
+              <h1 className="text-2xl font-bold text-text-dark">
+                Transaktion {transaction.id.slice(-8)}
+              </h1>
+              <div className="flex items-center gap-4 mt-2">
+                <span className="text-primary-blue font-medium">
                   {STAGE_LABELS[transaction.stage]}
                 </span>
                 <span className="text-text-gray text-sm">
-                  Startad: {new Date(transaction.createdAt).toLocaleDateString('sv-SE')}
+                  {new Date(transaction.createdAt).toLocaleDateString('sv-SE')}
                 </span>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-sm text-text-gray mb-1">Överenskommet pris</div>
-              <div className="text-3xl font-bold text-primary-blue">
+              <div className="text-sm text-text-gray">Överenskommet pris</div>
+              <div className="text-3xl font-bold text-text-dark">
                 {(transaction.agreedPrice / 1000000).toFixed(1)} MSEK
               </div>
             </div>
           </div>
 
-          {/* Progress Bar */}
-          <div className="mt-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-semibold text-text-dark">Framsteg</span>
-              <span className="text-sm text-text-gray">{completedMilestones} / {totalMilestones} milstolpar</span>
+          {/* Progress */}
+          <div className="mt-8">
+            <div className="flex justify-between text-sm mb-2">
+              <span className="text-text-gray">Framsteg</span>
+              <span className="font-medium">{completedMilestones}/{totalMilestones}</span>
             </div>
-            <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-primary-blue to-green-500 transition-all duration-500"
+                className="h-full bg-primary-blue transition-all duration-700 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-card mb-6">
-          <div className="border-b border-gray-200">
-            <nav className="flex overflow-x-auto">
-              {[
-                { id: 'overview', label: 'Översikt', icon: ActivityIcon },
-                { id: 'milestones', label: 'Milstolpar', icon: CheckCircle },
-                { id: 'documents', label: 'Dokument', icon: FileText },
-                { id: 'payments', label: 'Betalningar', icon: DollarSign },
-                { id: 'team', label: 'Team', icon: Users },
-                { id: 'timeline', label: 'Aktivitetslogg', icon: Clock },
-              ].map((tab) => {
-                const Icon = tab.icon
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center px-6 py-4 border-b-2 font-semibold transition-colors whitespace-nowrap ${
-                      activeTab === tab.id
-                        ? 'border-primary-blue text-primary-blue'
-                        : 'border-transparent text-text-gray hover:text-text-dark'
-                    }`}
-                  >
-                    <Icon className="w-5 h-5 mr-2" />
-                    {tab.label}
-                  </button>
+      {/* Tabs */}
+      <div className="border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <nav className="flex space-x-8 overflow-x-auto">
+            {[
+              { id: 'overview', label: 'Översikt', icon: Activity },
+              { id: 'milestones', label: 'Milstolpar', icon: CheckCircle },
+              { id: 'documents', label: 'Dokument', icon: FileText },
+              { id: 'payments', label: 'Betalningar', icon: CreditCard },
+              { id: 'team', label: 'Team', icon: Users },
+              { id: 'timeline', label: 'Aktivitet', icon: Activity },
+            ].map((tab) => {
+              const Icon = tab.icon
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`flex items-center py-4 border-b-2 transition-all whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'border-primary-blue text-primary-blue'
+                      : 'border-transparent text-text-gray hover:text-text-dark'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 mr-2" />
+                  <span className="font-medium">{tab.label}</span>
+                </button>
+              )
+            })}
+          </nav>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Overview */}
+        {activeTab === 'overview' && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-light-blue/30 p-6 rounded-2xl">
+              <CheckCircle className="w-6 h-6 text-primary-blue mb-4" />
+              <div className="text-3xl font-bold text-text-dark mb-1">
+                {completedMilestones}/{totalMilestones}
+              </div>
+              <div className="text-sm text-text-gray">Milstolpar klara</div>
+            </div>
+
+            <div className="bg-light-blue/30 p-6 rounded-2xl">
+              <FileText className="w-6 h-6 text-primary-blue mb-4" />
+              <div className="text-3xl font-bold text-text-dark mb-1">
+                {transaction.documents.length}
+              </div>
+              <div className="text-sm text-text-gray">Dokument</div>
+            </div>
+
+            <div className="bg-light-blue/30 p-6 rounded-2xl">
+              <CreditCard className="w-6 h-6 text-primary-blue mb-4" />
+              <div className="text-3xl font-bold text-text-dark mb-1">
+                {transaction.payments.filter(p => p.status === 'RELEASED').length}/{transaction.payments.length}
+              </div>
+              <div className="text-sm text-text-gray">Betalningar klara</div>
+            </div>
+
+            <div className="md:col-span-3 bg-yellow-50 border border-yellow-200 p-6 rounded-2xl">
+              <h3 className="font-bold text-text-dark mb-2">Nästa steg</h3>
+              {(() => {
+                const nextMilestone = transaction.milestones.find(m => !m.completed)
+                return nextMilestone ? (
+                  <div>
+                    <p className="text-text-dark font-medium">{nextMilestone.title}</p>
+                    <p className="text-sm text-text-gray mt-1">
+                      Deadline: {new Date(nextMilestone.dueDate).toLocaleDateString('sv-SE')}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-text-gray">Alla milstolpar slutförda</p>
                 )
-              })}
-            </nav>
+              })()}
+            </div>
           </div>
+        )}
 
-          <div className="p-6">
-            {/* Overview Tab */}
-            {activeTab === 'overview' && (
-              <div className="space-y-6">
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="bg-light-blue p-6 rounded-xl">
-                    <CheckCircle className="w-8 h-8 text-primary-blue mb-3" />
-                    <div className="text-sm text-text-gray mb-1">Milstolpar klara</div>
-                    <div className="text-3xl font-bold text-primary-blue">{completedMilestones}/{totalMilestones}</div>
-                  </div>
-
-                  <div className="bg-light-blue p-6 rounded-xl">
-                    <FileText className="w-8 h-8 text-primary-blue mb-3" />
-                    <div className="text-sm text-text-gray mb-1">Dokument uppladdade</div>
-                    <div className="text-3xl font-bold text-primary-blue">{transaction.documents.length}</div>
-                  </div>
-
-                  <div className="bg-light-blue p-6 rounded-xl">
-                    <DollarSign className="w-8 h-8 text-primary-blue mb-3" />
-                    <div className="text-sm text-text-gray mb-1">Betalningar</div>
-                    <div className="text-3xl font-bold text-primary-blue">
-                      {transaction.payments.filter(p => p.status === 'RELEASED').length}/{transaction.payments.length}
+        {/* Milestones */}
+        {activeTab === 'milestones' && (
+          <div className="space-y-4">
+            {transaction.milestones.map((milestone, index) => (
+              <div
+                key={milestone.id}
+                className={`p-6 rounded-2xl border-2 transition-all ${
+                  milestone.completed
+                    ? 'border-green-200 bg-green-50/50'
+                    : 'border-gray-100 bg-white hover:border-gray-200'
+                }`}
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0">
+                      {milestone.completed ? (
+                        <CheckCircle className="w-6 h-6 text-green-500" />
+                      ) : (
+                        <Circle className="w-6 h-6 text-gray-300" />
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-text-dark">{milestone.title}</h3>
+                      <p className="text-text-gray mt-1">{milestone.description}</p>
+                      <div className="flex items-center gap-4 mt-3 text-sm text-text-gray">
+                        <span>{new Date(milestone.dueDate).toLocaleDateString('sv-SE')}</span>
+                        {milestone.assignedToName && (
+                          <span>• {milestone.assignedToName}</span>
+                        )}
+                        {milestone.completed && milestone.completedAt && (
+                          <span className="text-green-600">
+                            • Klar {new Date(milestone.completedAt).toLocaleDateString('sv-SE')}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">
-                  <h3 className="font-semibold text-yellow-800 mb-2">Nästa steg:</h3>
-                  {(() => {
-                    const nextMilestone = transaction.milestones.find(m => !m.completed)
-                    return nextMilestone ? (
-                      <p className="text-sm text-yellow-700">
-                        {nextMilestone.title} - Deadline: {new Date(nextMilestone.dueDate).toLocaleDateString('sv-SE')}
-                      </p>
-                    ) : (
-                      <p className="text-sm text-yellow-700">Alla milstolpar klara! 🎉</p>
-                    )
-                  })()}
+                  {!milestone.completed && (
+                    <button
+                      onClick={() => handleMilestoneComplete(milestone.id)}
+                      className="px-4 py-2 bg-primary-blue text-white rounded-xl hover:bg-blue-800 transition-colors"
+                    >
+                      Markera klar
+                    </button>
+                  )}
                 </div>
               </div>
-            )}
+            ))}
+          </div>
+        )}
 
-            {/* Milestones Tab */}
-            {activeTab === 'milestones' && (
-              <div className="space-y-4">
-                <h3 className="font-semibold text-lg mb-4">Milstolpar</h3>
-                {transaction.milestones.map((milestone, index) => (
-                  <div
-                    key={milestone.id}
-                    className={`p-4 border-2 rounded-xl transition-all ${
-                      milestone.completed
-                        ? 'border-green-200 bg-green-50'
-                        : 'border-gray-200 hover:border-primary-blue'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start flex-1">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mr-4 ${
-                          milestone.completed ? 'bg-green-500' : 'bg-gray-200'
-                        }`}>
-                          {milestone.completed ? (
-                            <CheckCircle className="w-5 h-5 text-white" />
-                          ) : (
-                            <span className="text-sm font-semibold text-text-gray">{index + 1}</span>
-                          )}
+        {/* Documents */}
+        {activeTab === 'documents' && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-text-dark">Dokument</h2>
+              <div className="flex gap-3">
+                <button 
+                  onClick={handleGenerateSPA}
+                  className="flex items-center px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Generera SPA
+                </button>
+                <button className="flex items-center px-4 py-2 bg-primary-blue text-white rounded-xl hover:bg-blue-800 transition-colors">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Ladda upp
+                </button>
+              </div>
+            </div>
+
+            {transaction.documents.length === 0 ? (
+              <div className="text-center py-16 border-2 border-dashed border-gray-200 rounded-2xl">
+                <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-text-gray mb-4">Inga dokument än</p>
+                <button className="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                  <Upload className="w-4 h-4 mr-2 inline" />
+                  Ladda upp första dokumentet
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {transaction.documents.map((doc) => (
+                  <div key={doc.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-gray-200 transition-all">
+                    <div className="flex items-center space-x-4">
+                      <FileText className="w-5 h-5 text-primary-blue" />
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <h4 className="font-medium text-text-dark">{doc.title}</h4>
+                          <span className={`px-2 py-1 text-xs rounded-full font-medium ${
+                            doc.status === 'SIGNED' ? 'bg-green-100 text-green-700' :
+                            doc.status === 'PENDING_SIGNATURE' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-gray-100 text-gray-700'
+                          }`}>
+                            {doc.status === 'SIGNED' ? 'Signerad' : 
+                             doc.status === 'PENDING_SIGNATURE' ? 'Väntar signatur' : 
+                             'Utkast'}
+                          </span>
                         </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-text-dark mb-1">{milestone.title}</h4>
-                          <p className="text-sm text-text-gray mb-2">{milestone.description}</p>
-                          <div className="flex items-center gap-4 text-xs text-text-gray">
-                            <span>
-                              Deadline: {new Date(milestone.dueDate).toLocaleDateString('sv-SE')}
-                            </span>
-                            {milestone.assignedToName && (
-                              <span>Ansvarig: {milestone.assignedToName}</span>
-                            )}
-                          </div>
-                          {milestone.completed && milestone.completedAt && (
-                            <div className="text-xs text-green-700 mt-2">
-                              ✓ Klar: {new Date(milestone.completedAt).toLocaleDateString('sv-SE')}
-                            </div>
-                          )}
-                        </div>
+                        <p className="text-sm text-text-gray mt-1">
+                          {new Date(doc.createdAt).toLocaleDateString('sv-SE')} • {doc.uploadedByName}
+                        </p>
                       </div>
-                      {!milestone.completed && (
-                        <button
-                          onClick={() => handleMilestoneComplete(milestone.id)}
-                          className="btn-secondary text-sm"
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {doc.status === 'DRAFT' && doc.type === 'SPA' && (
+                        <button 
+                          onClick={() => handleSendForSignature(doc.id)}
+                          className="flex items-center px-3 py-1.5 bg-primary-blue text-white text-sm rounded-lg hover:bg-blue-800 transition-colors"
                         >
-                          Markera klar
+                          <Send className="w-3.5 h-3.5 mr-1.5" />
+                          Skicka för signering
                         </button>
                       )}
+                      <button className="p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                        <Download className="w-4 h-4 text-text-gray" />
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
             )}
+          </div>
+        )}
 
-            {/* Documents Tab */}
-            {activeTab === 'documents' && (
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-semibold text-lg">Dokument</h3>
-                  <div className="flex gap-3">
-                    <button 
-                      onClick={handleGenerateSPA}
-                      className="btn-secondary flex items-center text-sm"
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      Generera SPA
-                    </button>
-                    <button className="btn-primary flex items-center text-sm">
-                      <Upload className="w-5 h-5 mr-2" />
-                      Ladda upp
-                    </button>
+        {/* Payments */}
+        {activeTab === 'payments' && (
+          <div className="space-y-4">
+            {transaction.payments.map((payment) => (
+              <div key={payment.id} className="p-6 border border-gray-100 rounded-2xl">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-bold text-text-dark">
+                      {payment.type === 'DEPOSIT' ? 'Handpenning' : 
+                       payment.type === 'MAIN_PAYMENT' ? 'Huvudbetalning' : payment.type}
+                    </h3>
+                    <p className="text-text-gray mt-1">{payment.description}</p>
+                    <p className="text-sm text-text-gray mt-2">
+                      Förfaller: {payment.dueDate ? new Date(payment.dueDate).toLocaleDateString('sv-SE') : 'Ej satt'}
+                    </p>
                   </div>
-                </div>
-
-                {transaction.documents.length === 0 ? (
-                  <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-xl">
-                    <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-text-gray mb-4">Inga dokument uppladdade än</p>
-                    <button className="btn-secondary">
-                      <Upload className="w-5 h-5 mr-2 inline" />
-                      Ladda upp första dokumentet
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {transaction.documents.map((doc) => (
-                      <div key={doc.id} className="border border-gray-200 p-4 rounded-xl hover:border-primary-blue transition-all">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center flex-1">
-                            <FileText className="w-6 h-6 text-primary-blue mr-3" />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-semibold">{doc.title}</h4>
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                                  doc.status === 'SIGNED' ? 'bg-green-100 text-green-800' :
-                                  doc.status === 'PENDING_SIGNATURE' ? 'bg-yellow-100 text-yellow-800' :
-                                  'bg-gray-100 text-gray-800'
-                                }`}>
-                                  {doc.status === 'SIGNED' ? 'Signerad' : 
-                                   doc.status === 'PENDING_SIGNATURE' ? 'Väntar signatur' : 
-                                   'Utkast'}
-                                </span>
-                              </div>
-                              <p className="text-sm text-text-gray">
-                                {new Date(doc.createdAt).toLocaleDateString('sv-SE')} • {doc.uploadedByName}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex gap-2">
-                            {doc.status === 'DRAFT' && doc.type === 'SPA' && (
-                              <button 
-                                onClick={() => handleSendForSignature(doc.id)}
-                                className="btn-primary text-sm"
-                              >
-                                Skicka för signering
-                              </button>
-                            )}
-                            <button className="btn-ghost text-sm">Ladda ner</button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Payments Tab */}
-            {activeTab === 'payments' && (
-              <div>
-                <h3 className="font-semibold text-lg mb-6">Betalningar</h3>
-                <div className="space-y-4">
-                  {transaction.payments.map((payment) => (
-                    <div key={payment.id} className="border border-gray-200 p-6 rounded-xl">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h4 className="font-semibold text-lg mb-1">
-                            {payment.type === 'DEPOSIT' ? 'Handpenning' : payment.type === 'MAIN_PAYMENT' ? 'Huvudbetalning' : payment.type}
-                          </h4>
-                          <p className="text-text-gray text-sm mb-3">{payment.description}</p>
-                          <div className="text-sm text-text-gray">
-                            Förfaller: {payment.dueDate ? new Date(payment.dueDate).toLocaleDateString('sv-SE') : 'Ej satt'}
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-primary-blue mb-2">
-                            {(payment.amount / 1000000).toFixed(2)} MSEK
-                          </div>
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            payment.status === 'RELEASED' ? 'bg-green-100 text-green-800' :
-                            payment.status === 'ESCROWED' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
-                            {payment.status === 'PENDING' ? 'Väntar' : 
-                             payment.status === 'ESCROWED' ? 'I deposition' :
-                             payment.status === 'RELEASED' ? 'Frigiven' : payment.status}
-                          </span>
-                        </div>
-                      </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-text-dark mb-2">
+                      {(payment.amount / 1000000).toFixed(2)} MSEK
                     </div>
-                  ))}
+                    <span className={`px-3 py-1 text-xs rounded-full font-medium ${
+                      payment.status === 'RELEASED' ? 'bg-green-100 text-green-700' :
+                      payment.status === 'ESCROWED' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-700'
+                    }`}>
+                      {payment.status === 'PENDING' ? 'Väntar' : 
+                       payment.status === 'ESCROWED' ? 'I deposition' :
+                       payment.status === 'RELEASED' ? 'Frigiven' : payment.status}
+                    </span>
+                  </div>
                 </div>
               </div>
-            )}
+            ))}
+          </div>
+        )}
 
-            {/* Team Tab */}
-            {activeTab === 'team' && (
-              <TeamCollaboration transactionId={transactionId} />
-            )}
+        {/* Team */}
+        {activeTab === 'team' && (
+          <TeamCollaboration transactionId={transactionId} />
+        )}
 
-            {/* Timeline Tab */}
-            {activeTab === 'timeline' && (
-              <div>
-                <h3 className="font-semibold text-lg mb-6">Aktivitetslogg</h3>
-                <div className="space-y-4">
-                  {transaction.activities.length === 0 ? (
-                    <p className="text-text-gray text-center py-8">Ingen aktivitet än</p>
-                  ) : (
-                    transaction.activities.map((activity, index) => (
-                      <div key={activity.id} className="flex items-start">
-                        <div className="w-10 h-10 rounded-full bg-light-blue flex items-center justify-center flex-shrink-0 mr-4">
-                          <ActivityIcon className="w-5 h-5 text-primary-blue" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-text-dark">{activity.title}</h4>
-                          <p className="text-sm text-text-gray mb-1">{activity.description}</p>
-                          <div className="text-xs text-text-gray">
-                            {activity.actorName} • {new Date(activity.createdAt).toLocaleDateString('sv-SE', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
+        {/* Timeline */}
+        {activeTab === 'timeline' && (
+          <div className="space-y-4">
+            {transaction.activities.length === 0 ? (
+              <div className="text-center py-16 text-text-gray">
+                Ingen aktivitet registrerad än
               </div>
+            ) : (
+              transaction.activities.map((activity) => (
+                <div key={activity.id} className="flex items-start space-x-4">
+                  <div className="w-2 h-2 bg-primary-blue rounded-full mt-2"></div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-text-dark">{activity.title}</h4>
+                    <p className="text-text-gray text-sm mt-1">{activity.description}</p>
+                    <p className="text-xs text-text-gray mt-2">
+                      {activity.actorName} • {new Date(activity.createdAt).toLocaleString('sv-SE')}
+                    </p>
+                  </div>
+                </div>
+              ))
             )}
           </div>
-        </div>
+        )}
       </div>
     </main>
   )
 }
-
