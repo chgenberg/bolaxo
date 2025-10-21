@@ -1,9 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { 
   Building2, 
   Calendar, 
@@ -15,7 +12,6 @@ import {
   Clock
 } from 'lucide-react';
 import Link from 'next/link';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Deal {
   id: string;
@@ -125,102 +121,116 @@ export default function AdvisorDeals() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Mina Transaktioner</CardTitle>
-            <CardDescription>Översikt över alla dina pågående och avslutade affärer</CardDescription>
-          </div>
-          <Button variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-2" />
-            Filtrera
-          </Button>
+    <div className="bg-white p-8 rounded-2xl shadow-card">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="heading-2 mb-2">Mina Transaktioner</h2>
+          <p className="text-sm text-gray-600">Översikt över alla dina pågående och avslutade affärer</p>
         </div>
-      </CardHeader>
-      <CardContent>
-        <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all">Alla ({deals.length})</TabsTrigger>
-            <TabsTrigger value="active">Aktiva ({deals.filter(d => d.status === 'active').length})</TabsTrigger>
-            <TabsTrigger value="completed">Avslutade ({deals.filter(d => d.status === 'completed').length})</TabsTrigger>
-            <TabsTrigger value="on-hold">Pausade ({deals.filter(d => d.status === 'on-hold').length})</TabsTrigger>
-          </TabsList>
+        <button className="btn-ghost flex items-center">
+          <Filter className="h-4 w-4 mr-2" />
+          Filtrera
+        </button>
+      </div>
 
-          <TabsContent value={filter} className="space-y-4 mt-6">
-            {filteredDeals.map((deal) => (
-              <div 
-                key={deal.id} 
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex-1">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <Building2 className="h-5 w-5 text-gray-400" />
-                        <h4 className="font-semibold">{deal.companyName}</h4>
-                        <Badge 
-                          variant="outline" 
-                          className={`${getStatusColor(deal.status)} border-0 flex items-center gap-1`}
-                        >
-                          {getStatusIcon(deal.status)}
-                          {deal.status === 'active' ? 'Aktiv' : 
-                           deal.status === 'completed' ? 'Avslutad' : 'Pausad'}
-                        </Badge>
-                        {deal.requiresAction && (
-                          <Badge variant="destructive" className="animate-pulse">
-                            Kräver åtgärd
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="mt-2 space-y-1">
-                        <p className="text-sm text-gray-600">
-                          <span className="font-medium">Köpare:</span> {deal.buyer} | 
-                          <span className="font-medium ml-2">Säljare:</span> {deal.seller}
-                        </p>
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <TrendingUp className="h-3 w-3" />
-                            {deal.dealSize}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            Stängning: {new Date(deal.closingDate).toLocaleDateString('sv-SE')}
-                          </span>
-                          <span>{deal.stage}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right ml-4">
-                      <div className="text-sm text-gray-500 mb-2">
-                        Senast uppdaterad: {deal.lastActivity}
-                      </div>
-                      <div className="w-32">
-                        <div className="flex justify-between text-xs text-gray-600 mb-1">
-                          <span>Progress</span>
-                          <span>{deal.completionRate}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className="bg-green-600 h-2 rounded-full transition-all"
-                            style={{ width: `${deal.completionRate}%` }}
-                          />
-                        </div>
-                      </div>
+      {/* Tabs */}
+      <div className="flex space-x-2 mb-6 border-b">
+        <button 
+          onClick={() => setFilter('all')}
+          className={`px-4 py-2 -mb-px border-b-2 transition-colors ${filter === 'all' ? 'border-primary-blue text-primary-blue font-medium' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+        >
+          Alla ({deals.length})
+        </button>
+        <button 
+          onClick={() => setFilter('active')}
+          className={`px-4 py-2 -mb-px border-b-2 transition-colors ${filter === 'active' ? 'border-primary-blue text-primary-blue font-medium' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+        >
+          Aktiva ({deals.filter(d => d.status === 'active').length})
+        </button>
+        <button 
+          onClick={() => setFilter('completed')}
+          className={`px-4 py-2 -mb-px border-b-2 transition-colors ${filter === 'completed' ? 'border-primary-blue text-primary-blue font-medium' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+        >
+          Avslutade ({deals.filter(d => d.status === 'completed').length})
+        </button>
+        <button 
+          onClick={() => setFilter('on-hold')}
+          className={`px-4 py-2 -mb-px border-b-2 transition-colors ${filter === 'on-hold' ? 'border-primary-blue text-primary-blue font-medium' : 'border-transparent text-gray-600 hover:text-gray-900'}`}
+        >
+          Pausade ({deals.filter(d => d.status === 'on-hold').length})
+        </button>
+      </div>
+
+      {/* Deals List */}
+      <div className="space-y-4">
+        {filteredDeals.map((deal) => (
+          <div 
+            key={deal.id} 
+            className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex-1">
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <Building2 className="h-5 w-5 text-gray-400" />
+                    <h4 className="font-semibold">{deal.companyName}</h4>
+                    <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(deal.status)} flex items-center gap-1`}>
+                      {getStatusIcon(deal.status)}
+                      {deal.status === 'active' ? 'Aktiv' : 
+                       deal.status === 'completed' ? 'Avslutad' : 'Pausad'}
+                    </span>
+                    {deal.requiresAction && (
+                      <span className="px-2 py-1 bg-red-100 text-red-600 rounded-full text-xs animate-pulse">
+                        Kräver åtgärd
+                      </span>
+                    )}
+                  </div>
+                  <div className="mt-2 space-y-1">
+                    <p className="text-sm text-gray-600">
+                      <span className="font-medium">Köpare:</span> {deal.buyer} | 
+                      <span className="font-medium ml-2">Säljare:</span> {deal.seller}
+                    </p>
+                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <TrendingUp className="h-3 w-3" />
+                        {deal.dealSize}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-3 w-3" />
+                        Stängning: {new Date(deal.closingDate).toLocaleDateString('sv-SE')}
+                      </span>
+                      <span>{deal.stage}</span>
                     </div>
                   </div>
                 </div>
-                <Link href={`/transaktion/${deal.id}`}>
-                  <Button variant="ghost" size="sm" className="ml-4">
-                    Visa detaljer
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
-                </Link>
+                <div className="text-right ml-4">
+                  <div className="text-sm text-gray-500 mb-2">
+                    Senast uppdaterad: {deal.lastActivity}
+                  </div>
+                  <div className="w-32">
+                    <div className="flex justify-between text-xs text-gray-600 mb-1">
+                      <span>Progress</span>
+                      <span>{deal.completionRate}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-green-600 h-2 rounded-full transition-all"
+                        style={{ width: `${deal.completionRate}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+            </div>
+            <Link href={`/transaktion/${deal.id}`}>
+              <button className="btn-ghost ml-4 flex items-center">
+                Visa detaljer
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </button>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

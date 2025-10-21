@@ -1,6 +1,5 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   TrendingUp, 
   DollarSign, 
@@ -38,14 +37,14 @@ export default function AdvisorStats() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {/* Total affärer */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Totala affärer</CardTitle>
-          <Users className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
+      <div className="bg-white p-6 rounded-2xl shadow-card">
+        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="text-sm font-medium">Totala affärer</h3>
+          <Users className="h-4 w-4 text-gray-400" />
+        </div>
+        <div className="mt-4">
           <div className="text-2xl font-bold">{stats.totalDeals}</div>
-          <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+          <div className="flex items-center space-x-2 text-xs text-gray-600 mt-2">
             <span className="text-green-600 flex items-center">
               <CheckCircle className="h-3 w-3 mr-1" />
               {stats.completedDeals} avslutade
@@ -55,51 +54,51 @@ export default function AdvisorStats() {
               {stats.activeDeals} aktiva
             </span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Total volym */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total volym</CardTitle>
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
+      <div className="bg-white p-6 rounded-2xl shadow-card">
+        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="text-sm font-medium">Total volym</h3>
+          <DollarSign className="h-4 w-4 text-gray-400" />
+        </div>
+        <div className="mt-4">
           <div className="text-2xl font-bold">{stats.totalVolume}</div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-600 mt-2">
             Genomsnitt: {stats.avgDealSize}
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Success rate */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Genomförandegrad</CardTitle>
-          <TrendingUp className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
+      <div className="bg-white p-6 rounded-2xl shadow-card">
+        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="text-sm font-medium">Genomförandegrad</h3>
+          <TrendingUp className="h-4 w-4 text-gray-400" />
+        </div>
+        <div className="mt-4">
           <div className="text-2xl font-bold">{stats.successRate}%</div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-600 mt-2">
             {stats.avgClosingTime} dagar i snitt
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Current pipeline */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Aktiv pipeline</CardTitle>
-          <Activity className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
+      <div className="bg-white p-6 rounded-2xl shadow-card">
+        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <h3 className="text-sm font-medium">Aktiv pipeline</h3>
+          <Activity className="h-4 w-4 text-gray-400" />
+        </div>
+        <div className="mt-4">
           <div className="text-2xl font-bold">{stats.currentPipeline}</div>
-          <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+          <div className="flex items-center space-x-2 text-xs text-gray-600 mt-2">
             <AlertCircle className="h-3 w-3 text-yellow-600" />
             <span>2 kräver åtgärd</span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
