@@ -162,15 +162,15 @@ export default function SaljaInfoPage() {
             Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {/* Free */}
-            <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 hover:border-gray-300 transition-all">
+            <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 hover:border-gray-300 transition-all h-full flex flex-col">
               <div className="text-center mb-6">
                 <div className="text-sm text-text-gray mb-2">Utkast</div>
                 <div className="text-5xl font-bold text-text-dark mb-2">0 kr</div>
                 <div className="text-sm text-text-gray">Gratis</div>
               </div>
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8 flex-grow">
                 <div className="flex items-start text-sm">
                   <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                   <span>Skapa annons (utkast)</span>
@@ -190,13 +190,13 @@ export default function SaljaInfoPage() {
             </div>
 
             {/* Basic */}
-            <div className="bg-white rounded-2xl border-2 border-primary-blue/30 p-8 hover:border-primary-blue/50 transition-all hover:shadow-md">
+            <div className="bg-white rounded-2xl border-2 border-primary-blue/30 p-8 hover:border-primary-blue/50 transition-all hover:shadow-md h-full flex flex-col">
               <div className="text-center mb-6">
                 <div className="text-sm text-primary-blue font-semibold mb-2">Basic</div>
                 <div className="text-5xl font-bold text-primary-blue mb-1">495</div>
                 <div className="text-sm text-text-gray">kr / mån</div>
               </div>
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8 flex-grow">
                 <div className="flex items-start text-sm">
                   <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                   <span>Publicering i marknadsplats</span>
@@ -220,7 +220,7 @@ export default function SaljaInfoPage() {
             </div>
 
             {/* Pro (Highlighted) */}
-            <div className="relative bg-gradient-to-br from-primary-blue to-blue-700 rounded-2xl border-2 border-primary-blue p-8 shadow-xl transform md:scale-105">
+            <div className="relative bg-gradient-to-br from-primary-blue to-blue-700 rounded-2xl border-2 border-primary-blue p-8 shadow-xl h-full flex flex-col">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="bg-green-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-md">
                   POPULÄRAST
@@ -231,7 +231,7 @@ export default function SaljaInfoPage() {
                 <div className="text-5xl font-bold text-white mb-1">895</div>
                 <div className="text-sm text-white/80">kr / mån</div>
               </div>
-              <div className="space-y-3 mb-8 text-white">
+              <div className="space-y-3 mb-8 text-white flex-grow">
                 <div className="flex items-start text-sm">
                   <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
                   <span>Prioriterad listplacering</span>
@@ -259,13 +259,13 @@ export default function SaljaInfoPage() {
             </div>
 
             {/* Pro+ Featured */}
-            <div className="bg-white rounded-2xl border-2 border-blue-600/40 p-8 hover:border-blue-600 transition-all hover:shadow-md">
+            <div className="bg-white rounded-2xl border-2 border-blue-600/40 p-8 hover:border-blue-600 transition-all hover:shadow-md h-full flex flex-col">
               <div className="text-center mb-6">
                 <div className="text-sm text-blue-700 font-semibold mb-2">Pro+ Featured</div>
                 <div className="text-5xl font-bold text-blue-700 mb-1">1 495</div>
                 <div className="text-sm text-text-gray">kr / mån</div>
               </div>
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8 flex-grow">
                 <div className="flex items-start text-sm">
                   <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
                   <span>Topp-placering</span>
