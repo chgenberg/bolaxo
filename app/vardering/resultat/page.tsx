@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import WhatIfScenarios from '@/components/WhatIfScenarios'
+import { pdf } from '@react-pdf/renderer'
+import ValuationPDF from '@/components/ValuationPDF'
 
 interface ValuationResult {
   valuationRange: {
@@ -119,6 +121,32 @@ export default function ValuationResultPage() {
     return `${value.toLocaleString('sv-SE')} kr`
   }
 
+  const handleDownloadPDF = async () => {
+    try {
+      const blob = await pdf(
+        <ValuationPDF 
+          companyName={valuationData?.companyName || 'Ditt företag'}
+          result={result!}
+          generatedAt={new Date().toLocaleDateString('sv-SE', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })}
+        />
+      ).toBlob()
+      
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `Foretagsvardering_${valuationData?.companyName?.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`
+      link.click()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('PDF generation error:', error)
+      alert('Kunde inte generera PDF. Försök igen.')
+    }
+  }
+
   return (
     <main className="min-h-screen bg-background-off-white py-12">
       <div className="max-w-6xl mx-auto px-4">
@@ -148,6 +176,17 @@ export default function ValuationResultPage() {
             <div className="mt-6 bg-white/20 p-4 rounded-xl inline-block">
               <p className="text-sm mb-1">Metod använd</p>
               <p className="font-semibold">{result.method}</p>
+            </div>
+            
+            {/* PDF Download Button */}
+            <div className="mt-8">
+              <button
+                onClick={handleDownloadPDF}
+                className="bg-white text-primary-blue px-8 py-4 rounded-button font-semibold hover:bg-gray-100 transition-all shadow-md inline-flex items-center"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                Ladda ner som PDF
+              </button>
             </div>
           </div>
         </div>

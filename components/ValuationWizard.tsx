@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import FormField from './FormField'
 import FormSelect from './FormSelect'
 import FormTextarea from './FormTextarea'
+import { calculateQuickValuation, getValuationColor } from '@/utils/quickValuation'
 
 interface ValuationData {
   // Step 1: Grunduppgifter
@@ -468,6 +469,26 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 placeholder="Välj antal"
                 required
               />
+
+              {/* LIVE VALUATION PREVIEW */}
+              {data.revenue && data.profitMargin && data.industry && (
+                <div className="bg-gradient-to-r from-primary-blue to-blue-700 text-white p-6 rounded-2xl shadow-lg animate-fade-in mt-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center">
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      <span className="text-sm opacity-90">Preliminär värdering</span>
+                    </div>
+                    <span className="text-xs bg-white/20 px-3 py-1 rounded-full">Live-uppdatering</span>
+                  </div>
+                  <div className="text-4xl font-bold mb-2">
+                    {calculateQuickValuation(data.revenue, data.profitMargin, data.industry)}
+                  </div>
+                  <p className="text-xs opacity-75">
+                    Baserat på {data.revenue} Mkr omsättning och {data.profitMargin}% marginal i {data.industry === 'ecommerce' ? 'e-handel' : data.industry}.
+                    Värdet uppdateras när du fyller i mer information.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
