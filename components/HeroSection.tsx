@@ -151,6 +151,20 @@ function SellerHero() {
                 <span className="text-sm font-medium">NDA-skyddad</span>
               </div>
             </div>
+            
+            {/* Hero Image with Pulsating Shadow */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64">
+              <div className="relative w-full h-full">
+                {/* Pulsating shadow */}
+                <div className="absolute inset-0 bg-gray-400/30 rounded-[30%_70%_70%_30%/60%_40%_60%_40%] blur-xl animate-pulse-shadow" />
+                {/* Image container */}
+                <img 
+                  src="/bolaxo_hero.png" 
+                  alt="BOLAXO Platform" 
+                  className="relative z-10 w-full h-full object-cover rounded-[30%_70%_70%_30%/60%_40%_60%_40%] shadow-2xl"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
