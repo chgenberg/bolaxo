@@ -186,7 +186,7 @@ export default function RegisterPage() {
                   type="email"
                   placeholder="din@epost.se"
                   value={email}
-                  onChange={setEmail}
+                  onValueChange={setEmail}
                   required
                 />
 
@@ -196,7 +196,7 @@ export default function RegisterPage() {
                   type="text"
                   placeholder="Minst 8 tecken"
                   value={password}
-                  onChange={setPassword}
+                  onValueChange={setPassword}
                   required
                 />
 
@@ -249,7 +249,7 @@ export default function RegisterPage() {
                 name="name"
                 placeholder="För- och efternamn"
                 value={name}
-                onChange={setName}
+                onValueChange={setName}
                 required
               />
 
@@ -258,7 +258,7 @@ export default function RegisterPage() {
                 name="phone"
                 placeholder="070-123 45 67"
                 value={phone}
-                onChange={setPhone}
+                onValueChange={setPhone}
                 required
               />
 
@@ -269,7 +269,7 @@ export default function RegisterPage() {
                     name="companyName"
                     placeholder="Ex. Nordic Consulting AB"
                     value={companyName}
-                    onChange={setCompanyName}
+                    onValueChange={setCompanyName}
                     tooltip="Kan lämnas tomt om du vill vara helt anonym tills NDA"
                   />
 
@@ -278,7 +278,7 @@ export default function RegisterPage() {
                     name="orgNumber"
                     placeholder="556123-4567"
                     value={orgNumber}
-                    onChange={setOrgNumber}
+                    onValueChange={setOrgNumber}
                     tooltip="Valfritt - visas endast efter NDA om du väljer det"
                   />
 
@@ -287,7 +287,7 @@ export default function RegisterPage() {
                     name="region"
                     placeholder="Ex. Stockholm, Göteborg"
                     value={region}
-                    onChange={setRegion}
+                    onValueChange={setRegion}
                   />
                 </>
               )}
@@ -299,7 +299,7 @@ export default function RegisterPage() {
                     name="companyName"
                     placeholder="Ex. Stockholm Business Advisors AB"
                     value={companyName}
-                    onChange={setCompanyName}
+                    onValueChange={setCompanyName}
                     required
                   />
 
@@ -308,7 +308,7 @@ export default function RegisterPage() {
                     name="orgNumber"
                     placeholder="556123-4567"
                     value={orgNumber}
-                    onChange={setOrgNumber}
+                    onValueChange={setOrgNumber}
                     required
                   />
 
@@ -317,7 +317,7 @@ export default function RegisterPage() {
                     name="brokerWebsite"
                     placeholder="https://dinmäklare.se"
                     value={brokerWebsite}
-                    onChange={setBrokerWebsite}
+                    onValueChange={setBrokerWebsite}
                   />
 
                   <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">
