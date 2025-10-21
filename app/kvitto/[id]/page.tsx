@@ -160,16 +160,6 @@ export default function ReceiptPage() {
 
         {/* Next Actions */}
         <div className="flex gap-3 mt-8 print:hidden">
-          {user?.role === 'seller' && (
-            <Link href="/salja/klart" className="btn-primary flex-1 text-center">
-              Till din annons →
-            </Link>
-          )}
-          {user?.role === 'broker' && (
-            <Link href="/for-maklare" className="btn-primary flex-1 text-center">
-              Till mäklarportalen →
-            </Link>
-          )}
           <Link href="/dashboard" className="btn-secondary flex-1 text-center">
             Till översikten
           </Link>
