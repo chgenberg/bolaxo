@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { ChevronDown, Menu, X, User, LogOut } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface DropdownItem {
   label: string
@@ -54,6 +55,7 @@ const navigation: NavItem[] = [
 ]
 
 export default function Header() {
+  const { user, logout } = useAuth()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -149,12 +151,27 @@ export default function Header() {
 
             {/* CTA Buttons */}
             <div className="hidden lg:flex items-center space-x-3">
-              <Link href="#" className="btn-ghost">
-                Logga in
-              </Link>
-              <Link href="/registrera" className="btn-secondary">
-                Skapa konto
-              </Link>
+              {user ? (
+                <>
+                  <Link href="/dashboard" className="btn-ghost flex items-center">
+                    <User className="w-4 h-4 mr-2" />
+                    {user.name || user.email.split('@')[0]}
+                  </Link>
+                  <button onClick={logout} className="btn-secondary flex items-center">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logga ut
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="btn-ghost">
+                    Logga in
+                  </Link>
+                  <Link href="/login" className="btn-secondary">
+                    Skapa konto
+                  </Link>
+                </>
+              )}
               <Link href="/salja/start" className="btn-primary">
                 Sälj företag
               </Link>
