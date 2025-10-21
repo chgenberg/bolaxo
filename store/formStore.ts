@@ -43,7 +43,7 @@ interface FormStore {
   formData: FormData
   currentStep: number
   lastSaved: Date | null
-  updateField: (field: keyof FormData, value: any) => void
+  updateField: (field: string, value: any) => void
   updateMultipleFields: (fields: Partial<FormData>) => void
   setCurrentStep: (step: number) => void
   resetForm: () => void
