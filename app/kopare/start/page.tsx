@@ -110,7 +110,7 @@ export default function BuyerStartPage() {
                   type="number"
                   placeholder="Ex. 5"
                   value={preferences.revenueMin}
-                  onChange={(value) => updatePreferences({ revenueMin: value })}
+                  onValueChange={(value) => updatePreferences({ revenueMin: value })}
                 />
                 <FormField
                   label="Omsättning max (MSEK)"
@@ -118,7 +118,7 @@ export default function BuyerStartPage() {
                   type="number"
                   placeholder="Ex. 50"
                   value={preferences.revenueMax}
-                  onChange={(value) => updatePreferences({ revenueMax: value })}
+                  onValueChange={(value) => updatePreferences({ revenueMax: value })}
                 />
               </div>
             </div>

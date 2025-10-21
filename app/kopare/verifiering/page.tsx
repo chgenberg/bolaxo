@@ -82,7 +82,7 @@ export default function BuyerVerificationPage() {
               type="text"
               placeholder="https://linkedin.com/in/ditt-namn"
               value={profile.linkedInUrl}
-              onChange={(value) => updateProfile({ linkedInUrl: value })}
+              onValueChange={(value) => updateProfile({ linkedInUrl: value })}
               tooltip="Länka din LinkedIn för att visa din bakgrund och erfarenhet"
             />
           </div>
@@ -95,7 +95,7 @@ export default function BuyerVerificationPage() {
               type="textarea"
               placeholder="Ex. Investerar via Nordic Capital AB (org.nr 556123-4567). Specialiserar oss på tech-företag i Norden."
               value={profile.companyInfo}
-              onChange={(value) => updateProfile({ companyInfo: value })}
+              onValueChange={(value) => updateProfile({ companyInfo: value })}
               tooltip="Om du investerar via holdingbolag, beskriv kort verksamheten"
             />
           </div>

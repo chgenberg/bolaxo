@@ -53,7 +53,7 @@ export default function Step2AffarsDataPage() {
           type="number"
           placeholder="Ex. 5000000"
           value={formData.omsattningAr1}
-          onChange={(value) => updateField('omsattningAr1', value)}
+          onValueChange={(value) => updateField('omsattningAr1', value)}
           tooltip="Ange i kronor, ex: 5000000 för 5 MSEK"
         />
 
@@ -63,7 +63,7 @@ export default function Step2AffarsDataPage() {
           type="number"
           placeholder="Ex. 4500000"
           value={formData.omsattningAr2}
-          onChange={(value) => updateField('omsattningAr2', value)}
+          onValueChange={(value) => updateField('omsattningAr2', value)}
         />
 
         <FormField
@@ -72,7 +72,7 @@ export default function Step2AffarsDataPage() {
           type="number"
           placeholder="Ex. 4000000"
           value={formData.omsattningAr3}
-          onChange={(value) => updateField('omsattningAr3', value)}
+          onValueChange={(value) => updateField('omsattningAr3', value)}
         />
 
         <FormField
@@ -81,7 +81,7 @@ export default function Step2AffarsDataPage() {
           type="number"
           placeholder="Ex. 1200000"
           value={formData.ebitda}
-          onChange={(value) => updateField('ebitda', value)}
+          onValueChange={(value) => updateField('ebitda', value)}
           tooltip="EBITDA visar företagets lönsamhet. Detta kan låsas bakom NDA."
         />
 
@@ -92,7 +92,7 @@ export default function Step2AffarsDataPage() {
             type="number"
             placeholder="Ex. 5000000"
             value={formData.prisideMin}
-            onChange={(value) => updateField('prisideMin', value)}
+            onValueChange={(value) => updateField('prisideMin', value)}
           />
 
           <FormField
@@ -101,7 +101,7 @@ export default function Step2AffarsDataPage() {
             type="number"
             placeholder="Ex. 7000000"
             value={formData.prisideMax}
-            onChange={(value) => updateField('prisideMax', value)}
+            onValueChange={(value) => updateField('prisideMax', value)}
           />
         </div>
 

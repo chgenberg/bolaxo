@@ -98,7 +98,7 @@ export default function LOIPage() {
                   type="number"
                   placeholder={`Föreslagen: ${(object.priceMin / 1000000).toFixed(1)}`}
                   value={loiData.priceMin}
-                  onChange={(value) => setLoiData({ ...loiData, priceMin: value })}
+                  onValueChange={(value) => setLoiData({ ...loiData, priceMin: value })}
                 />
                 <FormField
                   label="Maximum (MSEK)"
@@ -106,7 +106,7 @@ export default function LOIPage() {
                   type="number"
                   placeholder={`Föreslagen: ${(object.priceMax / 1000000).toFixed(1)}`}
                   value={loiData.priceMax}
-                  onChange={(value) => setLoiData({ ...loiData, priceMax: value })}
+                  onValueChange={(value) => setLoiData({ ...loiData, priceMax: value })}
                 />
               </div>
               <p className="text-xs text-text-gray mt-2">
@@ -175,7 +175,7 @@ export default function LOIPage() {
               type="text"
               placeholder="Ex. Q2 2025 eller 2025-06-01"
               value={loiData.closingDate}
-              onChange={(value) => setLoiData({ ...loiData, closingDate: value })}
+              onValueChange={(value) => setLoiData({ ...loiData, closingDate: value })}
               tooltip="När vill du genomföra överlåtelsen?"
             />
 

@@ -100,7 +100,7 @@ export default function CardPaymentPage() {
               name="cardNumber"
               placeholder="1234 5678 9012 3456"
               value={cardNumber}
-              onChange={(value) => setCardNumber(formatCardNumber(value))}
+              onValueChange={(value) => setCardNumber(formatCardNumber(value))}
               required
             />
 
@@ -110,7 +110,7 @@ export default function CardPaymentPage() {
                 name="expiry"
                 placeholder="MM/ÅÅ"
                 value={expiry}
-                onChange={(value) => setExpiry(formatExpiry(value))}
+                onValueChange={(value) => setExpiry(formatExpiry(value))}
                 required
               />
 
@@ -119,7 +119,7 @@ export default function CardPaymentPage() {
                 name="cvc"
                 placeholder="123"
                 value={cvc}
-                onChange={setCvc}
+                onValueChange={setCvc}
                 required
                 tooltip="3-siffrig kod på kortets baksida"
               />

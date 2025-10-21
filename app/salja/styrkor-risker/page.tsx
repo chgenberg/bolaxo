@@ -49,7 +49,7 @@ export default function Step3StyrorRiskerPage() {
             name="styrka1"
             placeholder="Ex. Långa kundkontrakt med 95% retention"
             value={formData.styrka1}
-            onChange={(value) => updateField('styrka1', value)}
+            onValueChange={(value) => updateField('styrka1', value)}
             required
           />
 
@@ -58,7 +58,7 @@ export default function Step3StyrorRiskerPage() {
             name="styrka2"
             placeholder="Ex. Välkänt varumärke med stark närvaro"
             value={formData.styrka2}
-            onChange={(value) => updateField('styrka2', value)}
+            onValueChange={(value) => updateField('styrka2', value)}
           />
 
           <FormField
@@ -66,7 +66,7 @@ export default function Step3StyrorRiskerPage() {
             name="styrka3"
             placeholder="Ex. Erfaret team med låg personalomsättning"
             value={formData.styrka3}
-            onChange={(value) => updateField('styrka3', value)}
+            onValueChange={(value) => updateField('styrka3', value)}
           />
         </div>
 

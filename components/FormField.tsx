@@ -4,19 +4,24 @@ import { forwardRef } from 'react'
 import { Info } from 'lucide-react'
 import Tooltip from './Tooltip'
 
-interface FormFieldProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
   error?: string
   tooltip?: string
   suffix?: string
-  onChange?: (value: string) => void
+  onValueChange?: (value: string) => void
 }
 
 const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
-  ({ label, error, tooltip, suffix, onChange, className = '', ...props }, ref) => {
+  ({ label, error, tooltip, suffix, onValueChange, className = '', ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (onChange) {
-        onChange(e.target.value)
+      // Pass through native onChange (e.g., react-hook-form)
+      if (props.onChange) {
+        props.onChange(e)
+      }
+      // Fire value-only callback when provided
+      if (onValueChange) {
+        onValueChange(e.target.value)
       }
     }
 

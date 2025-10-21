@@ -150,7 +150,7 @@ export default function ContactPage() {
                 <FormField
                   label="Namn"
                   value={formData.name}
-                  onChange={(value) => setFormData({ ...formData, name: value })}
+                  onValueChange={(value) => setFormData({ ...formData, name: value })}
                   required
                 />
                 
@@ -158,7 +158,7 @@ export default function ContactPage() {
                   label="E-post"
                   type="email"
                   value={formData.email}
-                  onChange={(value) => setFormData({ ...formData, email: value })}
+                  onValueChange={(value) => setFormData({ ...formData, email: value })}
                   required
                 />
               </div>
@@ -168,7 +168,7 @@ export default function ContactPage() {
                   label="Telefon (valfritt)"
                   type="tel"
                   value={formData.phone || ''}
-                  onChange={(value) => setFormData({ ...formData, phone: value })}
+                  onValueChange={(value) => setFormData({ ...formData, phone: value })}
                 />
                 
                 <div>
@@ -191,7 +191,7 @@ export default function ContactPage() {
               <FormField
                 label="Ämne"
                 value={formData.subject}
-                onChange={(value) => setFormData({ ...formData, subject: value })}
+                onValueChange={(value) => setFormData({ ...formData, subject: value })}
                 placeholder="Vad gäller ditt ärende?"
                 required
                 className="mb-6"
