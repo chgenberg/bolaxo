@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -9,14 +8,13 @@ async function seedDatabase() {
 
     console.log('🌱 Seeding database...')
 
-    // 1. Skapa demo-users
+    // 1. Skapa demo-users (passwordless - använder magic links)
     const demoSeller = await prisma.user.upsert({
       where: { email: 'demo@seller.com' },
       update: {},
       create: {
         email: 'demo@seller.com',
         name: 'Demo Säljare AB',
-        password: await hash('demo123', 12),
         role: 'seller',
         emailVerified: new Date(),
       },
@@ -29,7 +27,6 @@ async function seedDatabase() {
       create: {
         email: 'demo@buyer.com',
         name: 'Demo Köpare',
-        password: await hash('demo123', 12),
         role: 'buyer',
         emailVerified: new Date(),
       },
