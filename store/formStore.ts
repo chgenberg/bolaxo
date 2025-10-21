@@ -2,6 +2,12 @@ import { create } from 'zustand'
 
 export interface FormData {
   // Step 1 - Grundinfo
+  companyName: string
+  category: string
+  foundedYear: string
+  employees: string
+  location: string
+  description: string
   foretagestyp: string
   ort: string
   omsattningIntervall: string
@@ -52,6 +58,12 @@ interface FormStore {
 }
 
 const initialFormData: FormData = {
+  companyName: '',
+  category: '',
+  foundedYear: '',
+  employees: '',
+  location: '',
+  description: '',
   foretagestyp: '',
   ort: '',
   omsattningIntervall: '',
