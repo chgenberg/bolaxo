@@ -10,36 +10,42 @@ export default function SaljaInfoPage() {
             Så funkar det för säljare
           </h1>
           <p className="text-lg text-text-gray max-w-2xl mx-auto">
-            Ett transparent och strukturerat sätt att sälja ditt företag till rätt köpare
+            Från AI-driven värdering till fullständig deal management – vi följer dig hela vägen
           </p>
         </div>
 
-        {/* 4 Steps */}
+        {/* Steps */}
         <div className="space-y-8 mb-16">
           {[
             {
               step: 1,
-              title: 'Skapa annons',
-              description: 'Berätta om ditt företag, nyckeltal och vad som gör det unikt. Du bestämmer själv hur mycket som ska vara synligt före och efter NDA.',
-              time: '8-12 min',
+              title: 'Gratis AI-värdering',
+              description: 'Börja med vår AI-driven företagsvärdering (GPT-5-mini). Får värdering, PDF-rapport och konkreta tips på 5 minuter. Automatisk datainsamling från Bolagsverket, SCB och din hemsida. Konto skapas automatiskt när du godkänner integritetspolicyn.',
+              time: '5 min',
             },
             {
               step: 2,
-              title: 'Godkänn NDA-flöde',
-              description: 'Välj vilka uppgifter som kräver sekretessavtal. Köpare signerar digitalt med BankID innan känsliga detaljer visas.',
-              time: '2-3 min',
+              title: 'Skapa annons',
+              description: '7-stegs wizard guidar dig. Bestäm själv vad som ska vara synligt före och efter NDA. Auto-sparning så du kan fortsätta när du vill. Se live-analys av ditt företagsvärde medan du fyller i.',
+              time: '8-12 min',
             },
             {
               step: 3,
-              title: 'Få förfrågningar',
-              description: 'Kvalificerade köpare kontaktar dig. Du får notiser via mail och kan följa intresse i realtid.',
+              title: 'Få förfrågningar & följ analytics',
+              description: 'Kvalificerade köpare kontaktar dig. Se visningar, NDA-förfrågningar och konvertering i realtid via charts. Geografisk fördelning av intressenter. Mail-notiser när någon vill signera NDA.',
               time: 'Löpande',
             },
             {
               step: 4,
-              title: 'Datarum & Q&A',
-              description: 'Dela dokument säkert i vårt digitala datarum. Svara på frågor och för dialogen vidare mot en affär.',
+              title: 'NDA, Datarum & LOI',
+              description: 'Köpare signerar NDA digitalt (BankID). Dela dokument säkert i datarum. Ta emot indikativa bud (LOI) med strukturerat formulär.',
               time: 'Efter behov',
+            },
+            {
+              step: 5,
+              title: 'Deal Management & Closing',
+              description: 'Starta formell transaktion med automatiska milestolpar (9 steg, 90-dagarsprocess). Spåra betalningar (deposition + huvudbetalning). Bjud in rådgivare, revisorer och jurister med rollbaserade behörigheter. Full aktivitetslogg och transparens.',
+              time: '60-90 dagar',
             },
           ].map((item) => (
             <div key={item.step} className="card-hover flex items-start">
@@ -184,20 +190,28 @@ export default function SaljaInfoPage() {
           <div className="space-y-6">
             {[
               {
-                q: 'Kan jag vara helt anonym?',
-                a: 'Ja, du väljer själv vad som ska synas före NDA. Många väljer att endast visa bransch, region och ungefärlig omsättning tills köparen signerat sekretessavtal.',
+                q: 'Vad är AI-värderingen och hur funkar den?',
+                a: 'Vår AI (GPT-5-mini) analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar automatiskt data från Bolagsverket, SCB och din hemsida (upp till 10 sidor). Får ett realistiskt värdeintervall, 2-sidors PDF-rapport och konkreta tips för att öka värdet. Helt gratis, tar 5 minuter.',
               },
               {
-                q: 'Hur lång tid tar det?',
-                a: 'Att skapa en annons tar 8-12 minuter. Sedan är annonsen live och du börjar få förfrågningar direkt. Själva försäljningsprocessen varierar mellan 2-12 månader.',
+                q: 'Kan jag vara helt anonym?',
+                a: 'Ja! Du väljer själv vad som ska synas före NDA. Många väljer att endast visa bransch, region och ungefärlig omsättning tills köparen signerat sekretessavtal med BankID.',
+              },
+              {
+                q: 'Vad är Deal Management-plattformen?',
+                a: 'När köpare lämnat LOI kan ni starta en formell transaktion med automatiska milestolpar (LOI → DD → SPA → Closing), dokumenthantering, betalningsspårning och aktivitetslogg. Bjud in rådgivare, revisorer och jurister med olika behörighetsnivåer. Helt transparent process, tar typiskt 60-90 dagar.',
+              },
+              {
+                q: 'Vilka analytics får jag se?',
+                a: 'Som säljare ser du: visningar över tid (line chart), NDA-förfrågningar, konverteringstratt (visningar → NDA → LOI), geografisk fördelning av intressenter (pie chart), och +% tillväxt per vecka. Uppdateras i realtid på din dashboard.',
               },
               {
                 q: 'Hur säkerställer ni att köparna är seriösa?',
-                a: 'Alla köpare verifieras med BankID och måste signera NDA innan de får tillgång till känslig information. Vi filtrerar också bort oseriösa förfrågningar.',
+                a: 'Alla köpare verifieras med BankID och måste signera NDA innan de får tillgång till känslig information. Vi har AI-driven smart matching som hjälper rätt köpare hitta rätt företag (match score 87-94%). Verified buyer badge syns i profilen.',
               },
               {
-                q: 'Vad händer om jag inte får köpare?',
-                a: 'Du kan när som helst uppdatera din annons, byta paket eller pausa publiceringen. Vårt Premium-paket inkluderar även rådgivning för att optimera annonsen.',
+                q: 'Tar ni provision vid försäljning?',
+                a: 'Nej provision på annonspaket (engångsavgift 5-20k). För vår Deal Management-tjänst (optional): 1-3% av transaktionsvärde, delat mellan köpare och säljare. Traditionella mäklare tar 8-15%.',
               },
             ].map((faq, index) => (
               <div key={index} className="border-b border-gray-200 pb-6 last:border-0">

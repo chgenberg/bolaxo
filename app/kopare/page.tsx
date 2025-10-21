@@ -10,7 +10,7 @@ export default function KopareInfoPage() {
             Så funkar det för köpare
           </h1>
           <p className="text-lg text-text-gray max-w-2xl mx-auto">
-            En transparent och strukturerad process från första sökning till LOI
+            AI-driven matchning, verifiering och deal management från första sökning till closing
           </p>
         </div>
 
@@ -19,45 +19,45 @@ export default function KopareInfoPage() {
           {[
             {
               step: 1,
-              title: 'Skapa konto & sätt preferenser',
-              description: 'Berätta vad du letar efter: bransch, region, storlek. Aktivera bevakningar för att få förslag via e-post.',
+              title: 'Skapa konto & AI Smart Matching',
+              description: 'Passwordless login (magic link). Sätt preferenser: bransch, region, storlek. Vår AI (GPT-5-mini) analyserar din profil och rekommenderar 3 bästa matchningar med 87-94% match score. Aktivera bevakningar för nya objekt.',
               time: '2 min',
             },
             {
               step: 2,
-              title: 'Verifiera dig (rekommenderas)',
-              description: 'BankID-verifiering ökar din trovärdighet och ger snabbare svar från säljare. Du kan också koppla LinkedIn och bolagsinfo.',
+              title: 'Verifiera dig med BankID',
+              description: 'BankID-verifiering ger "Verified Buyer"-badge. Säljare prioriterar verifierade köpare → 3x snabbare svar på NDA-förfrågningar. Koppla LinkedIn och bolagsinfo för extra trovärdighet.',
               time: '3 min',
             },
             {
               step: 3,
-              title: 'Sök & filtrera objekt',
-              description: 'Använd filter för bransch, region, omsättning och EBITDA. Se vilka objekt som har verifierade siffror.',
+              title: 'Sök, filtrera & få AI-rekommendationer',
+              description: 'Smart sök med filter (bransch, region, omsättning, EBITDA). Dashboard visar rekommenderade företag baserat på dina preferenser med match-reasons från AI. Spara favoriter och jämför.',
               time: 'Löpande',
             },
             {
               step: 4,
               title: 'Be om NDA & få tillgång',
-              description: 'Signera NDA digitalt med BankID. Efter godkännande ser du företagsnamn, detaljerad ekonomi och får tillgång till datarum.',
+              description: 'Signera NDA digitalt med BankID. Säljare får notis och godkänner. Direkt efter: företagsnamn, org.nr, detaljerad ekonomi och datarum låses upp.',
               time: '1-2 dagar',
             },
             {
               step: 5,
-              title: 'Q&A & datarum',
-              description: 'Ställ frågor, granska dokument och för dialog med säljaren eller mäklaren. Allt på ett ställe.',
-              time: 'Efter behov',
+              title: 'Due Diligence & Datarum',
+              description: 'Granska dokument (årsredovisningar, kontrakt, kundlistor). Ställ frågor i Q&A-trådar. Allt loggas och organiserat.',
+              time: '2-6 veckor',
             },
             {
               step: 6,
-              title: 'Jämför & shortlist',
-              description: 'Jämför 2-4 objekt sida vid sida. Spara favoriter och dela med ditt team.',
-              time: 'Löpande',
+              title: 'Skapa LOI & starta transaktion',
+              description: 'Strukturerat LOI-formulär (pris, villkor, timeline, finansiering). Ladda ner som PDF. När godkänt: starta formell transaktion med 9 automatiska milestolpar.',
+              time: '30 min',
             },
             {
               step: 7,
-              title: 'Indikativt bud (LOI)',
-              description: 'Skapa ett LOI-utkast direkt i plattformen. Ladda ner som PDF eller boka juridisk rådgivning.',
-              time: '30 min',
+              title: 'Deal Management till Closing',
+              description: 'Transaktionsplattform guidar er genom DD → SPA → Betalning → Closing. Bjud in dina revisorer och jurister. Spåra betalningar (deposition + huvudbetalning). Full transparens med aktivitetslogg. Typiskt 60-90 dagar till avslut.',
+              time: '60-90 dagar',
             },
           ].map((item) => (
             <div key={item.step} className="card-hover flex items-start">
