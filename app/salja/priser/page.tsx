@@ -5,7 +5,7 @@ import { useFormStore } from '@/store/formStore'
 import { usePaymentStore } from '@/store/paymentStore'
 import StepWizardLayout from '@/components/StepWizardLayout'
 import PackageCards from '@/components/PackageCards'
-import StickyBottomNav from '@/components/StickyBottomNav'
+// Removed StickyBottomNav; navigation handled by StepWizardLayout
 import { ArrowRight } from 'lucide-react'
 
 export default function Step6PriserPage() {
@@ -41,6 +41,10 @@ export default function Step6PriserPage() {
   return (
     <StepWizardLayout
       currentStep={6}
+      totalSteps={7}
+      onBack={handleBack}
+      onNext={handleNext}
+      lastSaved={lastSaved}
       title="Välj synlighet"
       subtitle="Basic passar dig som vill komma igång snabbt. Uppgradera när som helst."
     >
@@ -108,13 +112,7 @@ export default function Step6PriserPage() {
         </div>
       </div>
 
-      <StickyBottomNav
-        onBack={handleBack}
-        onNext={handleNext}
-        onSave={handleSave}
-        lastSaved={lastSaved}
-        nextLabel="Förhandsgranska"
-      />
+      {/* Navigering hanteras av StepWizardLayout */}
     </StepWizardLayout>
   )
 }

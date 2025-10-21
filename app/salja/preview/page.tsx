@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useFormStore } from '@/store/formStore'
 import StepWizardLayout from '@/components/StepWizardLayout'
 import PreviewCard from '@/components/PreviewCard'
-import StickyBottomNav from '@/components/StickyBottomNav'
+// Removed StickyBottomNav; navigation handled by StepWizardLayout
 import { validateRequired } from '@/utils/validation'
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 
@@ -57,6 +57,10 @@ export default function Step7PreviewPage() {
   return (
     <StepWizardLayout
       currentStep={7}
+      totalSteps={7}
+      onBack={handleBack}
+      onNext={handlePublish}
+      lastSaved={lastSaved}
       title="Förhandsgranska & checklista"
       subtitle="Se hur din annons kommer att se ut för köpare före och efter NDA."
     >
@@ -143,12 +147,7 @@ export default function Step7PreviewPage() {
         </div>
       </div>
 
-      <StickyBottomNav
-        onBack={handleBack}
-        onNext={handlePublish}
-        lastSaved={lastSaved}
-        nextLabel="Gå till betalning"
-      />
+      {/* Navigering hanteras av StepWizardLayout */}
     </StepWizardLayout>
   )
 }

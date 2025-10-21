@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useFormStore } from '@/store/formStore'
 import StepWizardLayout from '@/components/StepWizardLayout'
 import FormField from '@/components/FormField'
-import StickyBottomNav from '@/components/StickyBottomNav'
+// Removed StickyBottomNav; navigation handled by StepWizardLayout
 
 export default function Step3StyrorRiskerPage() {
   const router = useRouter()
@@ -27,6 +27,10 @@ export default function Step3StyrorRiskerPage() {
   return (
     <StepWizardLayout
       currentStep={3}
+      totalSteps={7}
+      onBack={handleBack}
+      onNext={handleNext}
+      lastSaved={lastSaved}
       title="Sälj det som är unikt – och var transparent"
       subtitle="Köpare uppskattar ärlighet. Korta, raka punkter fungerar bäst."
     >
@@ -114,12 +118,7 @@ export default function Step3StyrorRiskerPage() {
         </div>
       </div>
 
-      <StickyBottomNav
-        onBack={handleBack}
-        onNext={handleNext}
-        onSave={handleSave}
-        lastSaved={lastSaved}
-      />
+      {/* Navigering hanteras av StepWizardLayout */}
     </StepWizardLayout>
   )
 }

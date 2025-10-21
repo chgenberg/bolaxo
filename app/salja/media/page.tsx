@@ -27,6 +27,10 @@ export default function Step4MediaPage() {
   return (
     <StepWizardLayout
       currentStep={4}
+      totalSteps={7}
+      onBack={handleBack}
+      onNext={handleNext}
+      lastSaved={lastSaved}
       title="Media & anonymitet"
       subtitle="Ersätt företagsnamn med 'Etablerat konsultbolag i Göteborg' tills NDA."
     >
@@ -108,12 +112,7 @@ export default function Step4MediaPage() {
         </div>
       </div>
 
-      <StickyBottomNav
-        onBack={handleBack}
-        onNext={handleNext}
-        onSave={handleSave}
-        lastSaved={lastSaved}
-      />
+      {/* Navigering hanteras av StepWizardLayout */}
     </StepWizardLayout>
   )
 }

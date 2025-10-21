@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useFormStore } from '@/store/formStore'
 import StepWizardLayout from '@/components/StepWizardLayout'
-import StickyBottomNav from '@/components/StickyBottomNav'
+// Removed StickyBottomNav; navigation handled by StepWizardLayout
 
 export default function Step5NDAPage() {
   const router = useRouter()
@@ -26,6 +26,10 @@ export default function Step5NDAPage() {
   return (
     <StepWizardLayout
       currentStep={5}
+      totalSteps={7}
+      onBack={handleBack}
+      onNext={handleNext}
+      lastSaved={lastSaved}
       title="Vem får se detaljer?"
       subtitle="Köpare signerar digitalt. Du bestämmer vad som låses upp."
     >
@@ -147,12 +151,7 @@ export default function Step5NDAPage() {
         </div>
       </div>
 
-      <StickyBottomNav
-        onBack={handleBack}
-        onNext={handleNext}
-        onSave={handleSave}
-        lastSaved={lastSaved}
-      />
+      {/* Navigering hanteras av StepWizardLayout */}
     </StepWizardLayout>
   )
 }
