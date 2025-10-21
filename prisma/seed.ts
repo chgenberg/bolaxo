@@ -5,6 +5,16 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Seeding database...')
 
+  // Ta bort gamla demo-transaction om den finns
+  try {
+    await prisma.transaction.delete({
+      where: { id: 'demo-transaction-001' }
+    })
+    console.log('✓ Removed old demo transaction')
+  } catch (e) {
+    // Finns inte, fortsätt
+  }
+
   // 1. Skapa demo-users
   const demoSeller = await prisma.user.upsert({
     where: { email: 'demo.seller@bolaxo.se' },
@@ -122,9 +132,10 @@ async function main() {
 
   console.log('✓ Created 3 demo valuations')
 
-  // 3. Skapa demo-transaction
+  // 3. Skapa demo-transaction med känt ID
   const transaction = await prisma.transaction.create({
     data: {
+      id: 'demo-transaction-001', // Känt ID för direkt access
       listingId: 'obj-001',
       buyerId: demoBuyer.id,
       sellerId: demoSeller.id,
@@ -339,6 +350,9 @@ async function main() {
   console.log('   Säljare: demo.seller@bolaxo.se')
   console.log('   Köpare:  demo.buyer@bolaxo.se')
   console.log('   Advisor: advisor@bolaxo.se')
+  console.log('\n🔗 Direct URLs för investor demo:')
+  console.log('   Transaction: /transaktion/demo-transaction-001')
+  console.log('   Full URL: https://bolaxo-production.up.railway.app/transaktion/demo-transaction-001')
   console.log('\n💡 Logga in via /login för att se dashboards med data!')
 }
 
