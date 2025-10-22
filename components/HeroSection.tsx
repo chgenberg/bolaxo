@@ -152,9 +152,9 @@ function BuyerHero({ showMap, setShowMap }: { showMap: boolean; setShowMap: (sho
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       {/* Centered Heading */}
-      <div className="text-center mt-6">
+      <div className="text-center mt-12">
         <h1 className="heading-1">
           Köp ditt nästa företag –{' '}
           <span className="text-primary-blue relative inline-block">
