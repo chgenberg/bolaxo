@@ -289,9 +289,10 @@ interface ValuationPDFProps {
     industry?: string
     employees?: string
   }
+  hasExactFinancials?: boolean
 }
 
-export default function ValuationPDF({ companyName, result, generatedAt, companyInfo }: ValuationPDFProps) {
+export default function ValuationPDF({ companyName, result, generatedAt, companyInfo, hasExactFinancials = false }: ValuationPDFProps) {
   // Funktion för att få rätt stil för impact badge
   const getImpactStyle = (impact: string) => {
     switch(impact) {
@@ -326,6 +327,34 @@ export default function ValuationPDF({ companyName, result, generatedAt, company
           </Text>
           <Text style={styles.valuationRange}>
             Värderingsintervall: {(result.valuationRange.min / 1000000).toFixed(1)} - {(result.valuationRange.max / 1000000).toFixed(1)} MSEK
+          </Text>
+        </View>
+
+        {/* Data quality indicator */}
+        <View style={{
+          backgroundColor: hasExactFinancials ? '#f0fdf4' : '#fef3c7',
+          padding: 12,
+          borderRadius: 6,
+          marginBottom: 20,
+          borderLeft: hasExactFinancials ? '3 solid #10b981' : '3 solid #f59e0b'
+        }}>
+          <Text style={{
+            fontSize: 10,
+            color: hasExactFinancials ? '#166534' : '#92400e',
+            fontWeight: 600,
+            marginBottom: 3
+          }}>
+            {hasExactFinancials ? '✓ Baserat på exakta finansiella siffror' : '⚠ Baserat på uppskattningar'}
+          </Text>
+          <Text style={{
+            fontSize: 9,
+            color: hasExactFinancials ? '#15803d' : '#b45309',
+            lineHeight: 1.4
+          }}>
+            {hasExactFinancials 
+              ? 'Värderingen baseras på faktisk omsättning och rörelsekostnader, vilket ger högre precision.'
+              : 'Värderingen baseras på intervalluppskattningar. För mer exakt värdering, ange exakta finansiella siffror.'
+            }
           </Text>
         </View>
 

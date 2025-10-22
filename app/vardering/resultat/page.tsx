@@ -127,6 +127,9 @@ export default function ValuationResultPage() {
       const enrichedDataStr = localStorage.getItem('enrichedCompanyData')
       const enrichedData = enrichedDataStr ? JSON.parse(enrichedDataStr) : null
       
+      // Kolla om vi har exakta finansiella siffror
+      const hasExactFinancials = !!(valuationData?.exactRevenue && valuationData?.operatingCosts)
+      
       const blob = await pdf(
         <ValuationPDF 
           companyName={valuationData?.companyName || 'Ditt företag'}
@@ -145,6 +148,7 @@ export default function ValuationResultPage() {
             industry: enrichedData.industry,
             employees: enrichedData.employees
           } : undefined}
+          hasExactFinancials={hasExactFinancials}
         />
       ).toBlob()
       
