@@ -17,7 +17,7 @@ export default function HeroSection() {
 
   return (
     <section className="relative bg-white overflow-hidden">
-      <div className="relative pt-6 md:pt-12 pb-0">
+      <div className="relative pt-0 md:pt-0 pb-0">
         {/* Tab Toggle */}
         <div className="max-w-md mx-auto px-4 mb-0 relative z-20">
           <div className="flex bg-white rounded-card shadow-soft p-1.5">
@@ -89,7 +89,7 @@ interface SellerHeroProps {
 
 function SellerHero({ setShowValuation }: SellerHeroProps) {
   return (
-    <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center seller-hero-bg bg-cover bg-center bg-no-repeat -mt-6 md:-mt-12">
+    <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center seller-hero-bg bg-cover bg-center bg-no-repeat -mt-12 md:-mt-20">
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
         <div className="space-y-6">
