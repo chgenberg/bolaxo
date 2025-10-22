@@ -31,7 +31,7 @@ const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>(
             ref={ref}
             className={`w-full px-4 py-3 pr-10 border border-gray-200 rounded-xl 
               focus:ring-2 focus:ring-primary-blue focus:border-transparent 
-              transition-all appearance-none bg-white
+              transition-all bg-white cursor-pointer
               ${error ? 'border-error focus:border-error focus:ring-error/10' : ''}
               ${!props.value ? 'text-text-gray' : 'text-text-dark'}
               ${className}`}
