@@ -197,7 +197,10 @@ export async function POST(request: Request) {
       })
     }
 
-    // RATSIT DATA - Kreditbetyg och riskbedömning
+    // RATSIT DATA - Kreditbetyg och riskbedömning (SILENT BEST-EFFORT)
+    // Note: Ratsit often blocks (403), so this is best-effort only
+    // Success rate ~20-30% but valuable when it works
+    // Cache gives us 30 days of data when successful
     if (ratsitResult.status === 'fulfilled' && ratsitResult.value) {
       enrichedData.rawData.ratsitData = ratsitResult.value
       
@@ -206,6 +209,8 @@ export async function POST(request: Request) {
         riskLevel: ratsitResult.value.creditRating?.riskLevel,
         paymentRemarks: ratsitResult.value.paymentRemarks?.count || 0,
       })
+    } else if (ratsitResult.status === 'rejected') {
+      console.log('⚠ Ratsit scraping failed (likely 403) - continuing without credit data')
     }
 
     // PROFF DATA - Kompletterande finansiell data + ledning

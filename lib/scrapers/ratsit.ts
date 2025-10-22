@@ -62,15 +62,13 @@ export async function scrapeRatsit(orgNumber: string): Promise<RatsitData | null
             'Connection': 'keep-alive',
             'Upgrade-Insecure-Requests': '1',
           },
-          signal: AbortSignal.timeout(10000),
+          signal: AbortSignal.timeout(5000), // Reduced to 5 seconds
         })
         
         if (response.ok) break
         
-        // If 403, try next user agent
+        // If 403, try next user agent immediately (no delay)
         if (response.status === 403) {
-          console.log(`Ratsit 403 with UA ${ua.slice(0, 30)}... trying next`)
-          await new Promise(r => setTimeout(r, 500))
           continue
         }
       } catch (err) {
