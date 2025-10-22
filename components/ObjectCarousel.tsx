@@ -196,7 +196,7 @@ export default function ObjectCarousel({ onMapClick }: ObjectCarouselProps) {
             <div className="absolute inset-0 bg-primary-blue/30 rounded-full blur-lg opacity-60 animate-pulse"></div>
             <Link
               href="/sok"
-              className="relative inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary-blue to-blue-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              className="relative inline-flex items-center justify-center px-6 py-3 bg-primary-blue text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
             >
               Se alla {mockObjects.length} objekt
               <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
