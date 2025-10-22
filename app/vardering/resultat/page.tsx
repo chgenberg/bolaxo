@@ -123,6 +123,10 @@ export default function ValuationResultPage() {
 
   const handleDownloadPDF = async () => {
     try {
+      // Hämta berikad data om den finns
+      const enrichedDataStr = localStorage.getItem('enrichedCompanyData')
+      const enrichedData = enrichedDataStr ? JSON.parse(enrichedDataStr) : null
+      
       const blob = await pdf(
         <ValuationPDF 
           companyName={valuationData?.companyName || 'Ditt företag'}
@@ -132,6 +136,15 @@ export default function ValuationResultPage() {
             month: 'long', 
             day: 'numeric' 
           })}
+          companyInfo={enrichedData ? {
+            orgNumber: valuationData?.orgNumber,
+            website: enrichedData.website,
+            email: enrichedData.email,
+            phone: enrichedData.phone,
+            address: enrichedData.address,
+            industry: enrichedData.industry,
+            employees: enrichedData.employees
+          } : undefined}
         />
       ).toBlob()
       
