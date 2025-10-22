@@ -259,6 +259,96 @@ ${ebitdaMargin && Number(ebitdaMargin) > 40 ? `⚠️ FLAGGA: ${ebitdaMargin}% E
 
   // Lägg till berikad data om den finns
   if (enrichedData) {
+    // ALLABOLAG DATA - Officiella årsredovisningar!
+    if (enrichedData.allabolagData) {
+      const ab = enrichedData.allabolagData
+      prompt += `\n\n**ALLABOLAG.SE - OFFICIELLA ÅRSREDOVISNINGAR:**`
+      
+      if (ab.financials) {
+        prompt += `\nSenaste rapporterade år: ${ab.financials.latestYear || 'Okänt'}`
+        
+        if (ab.financials.revenue) {
+          prompt += `\n- Omsättning: ${ab.financials.revenue.toLocaleString('sv-SE')} kr (${(ab.financials.revenue / 1000000).toFixed(2)} MSEK)`
+        }
+        
+        if (ab.financials.profit !== undefined) {
+          prompt += `\n- Resultat: ${ab.financials.profit.toLocaleString('sv-SE')} kr`
+        }
+        
+        if (ab.financials.profitMargin) {
+          prompt += `\n- Vinstmarginal: ${ab.financials.profitMargin.toFixed(2)}%`
+        }
+        
+        if (ab.financials.equity) {
+          prompt += `\n- Eget kapital: ${(ab.financials.equity / 1000000).toFixed(2)} MSEK`
+        }
+        
+        if (ab.financials.employees) {
+          prompt += `\n- Antal anställda: ${ab.financials.employees}`
+        }
+        
+        if (ab.financials.revenueGrowth !== undefined) {
+          prompt += `\n- Omsättningstillväxt: ${ab.financials.revenueGrowth.toFixed(1)}%`
+        }
+      }
+      
+      // Historisk data
+      if (ab.history && ab.history.length > 0) {
+        prompt += `\n\nHistorisk utveckling (${ab.history.length} år):`
+        ab.history.slice(0, 3).forEach((h: any) => {
+          prompt += `\n${h.year}: Oms ${h.revenue ? (h.revenue / 1000000).toFixed(1) + ' MSEK' : 'N/A'}`
+          if (h.profit !== undefined) prompt += `, Resultat ${(h.profit / 1000000).toFixed(1)} MSEK`
+          if (h.employees) prompt += `, ${h.employees} anställda`
+        })
+      }
+      
+      prompt += `\n\n⚠️ VIKTIGT: Dessa är OFFICIELLA siffror från årsredovisning. Använd dessa som huvudsaklig källa!`
+    }
+    
+    // RATSIT DATA - Kreditbetyg och risk
+    if (enrichedData.ratsitData) {
+      const rt = enrichedData.ratsitData
+      prompt += `\n\n**RATSIT.SE - KREDITUPPLYSNING:**`
+      
+      if (rt.creditRating) {
+        prompt += `\n- Kreditbetyg: ${rt.creditRating.rating} (${rt.creditRating.description})`
+        prompt += `\n- Risknivå: ${rt.creditRating.riskLevel}`
+        
+        if (rt.creditRating.score) {
+          prompt += `\n- Kreditpoäng: ${rt.creditRating.score}/100`
+        }
+      }
+      
+      if (rt.paymentRemarks) {
+        prompt += `\n- Betalningsanmärkningar: ${rt.paymentRemarks.count}`
+        if (rt.paymentRemarks.totalAmount) {
+          prompt += ` (totalt ${rt.paymentRemarks.totalAmount.toLocaleString('sv-SE')} kr)`
+        }
+        
+        if (rt.paymentRemarks.hasActive) {
+          prompt += `\n  ⚠️ VARNING: Aktiva betalningsanmärkningar - HÖJD RISK!`
+        }
+      }
+      
+      if (rt.bankruptcyRisk) {
+        prompt += `\n- Konkursrisk: ${rt.bankruptcyRisk.level}`
+        if (rt.bankruptcyRisk.probability) {
+          prompt += ` (${rt.bankruptcyRisk.probability.toFixed(1)}%)`
+        }
+      }
+      
+      if (rt.financialHealth) {
+        if (rt.financialHealth.soliditet) {
+          prompt += `\n- Soliditet: ${rt.financialHealth.soliditet.toFixed(1)}%`
+        }
+        if (rt.financialHealth.kasslighet) {
+          prompt += `\n- Kasslighet: ${rt.financialHealth.kasslighet.toFixed(1)}%`
+        }
+      }
+      
+      prompt += `\n\n⚠️ Justera värderingen baserat på kreditrisken - högre risk = lägre multipel!`
+    }
+    
     if (enrichedData.bolagsverketData) {
       prompt += `\n\nBolagsverket (Officiell data):
 - Registreringsdatum: ${enrichedData.bolagsverketData.registrationDate || 'Ej tillgängligt'}

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import * as cheerio from 'cheerio'
 import { PrismaClient } from '@prisma/client'
+import { scrapeAllabolag } from '@/lib/scrapers/allabolag'
+import { scrapeRatsit } from '@/lib/scrapers/ratsit'
 
 const prisma = new PrismaClient()
 
@@ -35,16 +37,20 @@ export async function POST(request: Request) {
         websiteContent: '',
         bolagsverketData: null,
         scbData: null,
+        allabolagData: null,
+        ratsitData: null,
       },
     }
 
-    // 2. PARALLEL DATA FETCHING (3x snabbare)
+    // 2. PARALLEL DATA FETCHING (5x snabbare med Allabolag + Ratsit)
     const startTime = Date.now()
     
-    const [bolagsverketResult, scrapingResult, scbResult] = await Promise.allSettled([
+    const [bolagsverketResult, scrapingResult, scbResult, allabolagResult, ratsitResult] = await Promise.allSettled([
       orgNumber ? fetchBolagsverketData(orgNumber) : Promise.resolve(null),
       website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
-      fetchSCBIndustryData(industry)
+      fetchSCBIndustryData(industry),
+      orgNumber ? scrapeAllabolag(orgNumber) : Promise.resolve(null),
+      orgNumber ? scrapeRatsit(orgNumber) : Promise.resolve(null),
     ])
 
     console.log(`Parallel fetch completed in ${Date.now() - startTime}ms`)
@@ -81,6 +87,60 @@ export async function POST(request: Request) {
 
     if (scbResult.status === 'fulfilled' && scbResult.value) {
       enrichedData.rawData.scbData = scbResult.value
+    }
+
+    // ALLABOLAG DATA - Auto-fill finansiella siffror!
+    if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
+      const allabolagData = allabolagResult.value
+      enrichedData.rawData.allabolagData = allabolagData
+      
+      // Auto-fill exakta finansiella siffror
+      if (allabolagData.financials.revenue) {
+        enrichedData.autoFill.exactRevenue = allabolagData.financials.revenue.toString()
+      }
+      
+      if (allabolagData.financials.revenue && allabolagData.financials.profit) {
+        const operatingCosts = allabolagData.financials.revenue - allabolagData.financials.profit
+        enrichedData.autoFill.operatingCosts = operatingCosts.toString()
+      }
+      
+      if (allabolagData.financials.employees) {
+        enrichedData.autoFill.employees = mapEmployeeCount(allabolagData.financials.employees)
+      }
+      
+      if (allabolagData.registrationDate) {
+        enrichedData.autoFill.companyAge = calculateCompanyAge(allabolagData.registrationDate)
+      }
+      
+      // Trend-data
+      if (allabolagData.financials.revenueGrowth !== undefined) {
+        if (allabolagData.financials.revenueGrowth > 20) {
+          enrichedData.autoFill.revenue3Years = 'strong_growth'
+        } else if (allabolagData.financials.revenueGrowth > 10) {
+          enrichedData.autoFill.revenue3Years = 'growth'
+        } else if (allabolagData.financials.revenueGrowth > -10) {
+          enrichedData.autoFill.revenue3Years = 'stable'
+        } else {
+          enrichedData.autoFill.revenue3Years = 'decline'
+        }
+      }
+      
+      console.log('✓ Allabolag auto-filled:', {
+        revenue: enrichedData.autoFill.exactRevenue,
+        employees: enrichedData.autoFill.employees,
+        trend: enrichedData.autoFill.revenue3Years,
+      })
+    }
+
+    // RATSIT DATA - Kreditbetyg och riskbedömning
+    if (ratsitResult.status === 'fulfilled' && ratsitResult.value) {
+      enrichedData.rawData.ratsitData = ratsitResult.value
+      
+      console.log('✓ Ratsit data:', {
+        creditRating: ratsitResult.value.creditRating?.rating,
+        riskLevel: ratsitResult.value.creditRating?.riskLevel,
+        paymentRemarks: ratsitResult.value.paymentRemarks?.count || 0,
+      })
     }
 
     // 4. SAVE TO CACHE (30 dagars TTL)
