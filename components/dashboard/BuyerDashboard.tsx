@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye } from 'lucide-react'
+import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle } from 'lucide-react'
 
 interface BuyerDashboardProps {
   userId: string
