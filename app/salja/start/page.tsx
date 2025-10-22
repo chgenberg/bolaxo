@@ -153,6 +153,33 @@ export default function Step1StartPage() {
             error={(errors as any).location?.message as string | undefined}
           />
 
+          {/* Additional company info (optional but recommended) */}
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-4">
+            <h4 className="text-sm font-semibold text-primary-blue">Ytterligare information (valfritt men rekommenderat)</h4>
+            
+            <FormField
+              label="Hemsida (URL)"
+              placeholder="https://dittforetag.se"
+              {...register('website')}
+              error={(errors as any).website?.message as string | undefined}
+            />
+
+            <FormField
+              label="Organisationsnummer"
+              placeholder="556123-4567"
+              tooltip="Används för automatisk datahämtning från Allabolag, Ratsit m.fl."
+              {...register('orgNumber')}
+              error={(errors as any).orgNumber?.message as string | undefined}
+            />
+
+            <FormField
+              label="Adress (visas endast efter godkänd NDA)"
+              placeholder="Exempelgatan 123, 111 22 Stockholm"
+              {...register('address')}
+              error={(errors as any).address?.message as string | undefined}
+            />
+          </div>
+
           {/* Description */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-text-dark">

@@ -57,6 +57,23 @@ export default function Step4MediaPage() {
           </div>
         </div>
 
+        {/* Anonymous Title */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-text-dark">
+            Annonstitel <span className="text-error">*</span>
+          </label>
+          <input
+            type="text"
+            value={formData.anonymousTitle || `${formData.category || 'Företag'} i ${formData.location || 'Sverige'}`}
+            onChange={(e) => updateField('anonymousTitle', e.target.value)}
+            className="input-field"
+            placeholder="Etablerat tech-bolag i Stockholm"
+          />
+          <p className="text-xs text-text-gray">
+            Detta är titeln som köpare ser. Undvik att ange specifika namn som avslöjar identitet.
+          </p>
+        </div>
+
         {/* Main listing image */}
         <ImageSelector
           selectedImage={(formData.images && formData.images[0]) || null}

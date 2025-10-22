@@ -77,7 +77,7 @@ model Listing {
   
   // Company Info
   companyName     String?
-  anonymousTitle  String
+  anonymousTitle  String   // User-editable anonymous title
   type            String   // Restaurang, E-handel, etc
   category        String?  // More specific category
   industry        String
@@ -98,8 +98,12 @@ model Listing {
   employees       Int      // Number of employees
   foundedYear     Int?
   
-  // Description
+  // Description & Qualitative
   description     String   @db.Text
+  strengths       String[] // Array of 3 strengths
+  risks           String[] // Array of 3 risks
+  whySelling      String?  @db.Text // Why selling
+  whatIncluded    String?  @db.Text // What's included in sale
   
   // Media
   image           String?  // Path to main image

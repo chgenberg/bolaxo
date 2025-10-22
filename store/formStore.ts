@@ -13,6 +13,9 @@ export interface FormData {
   omsattningIntervall: string
   antalAnstallda: string
   agarensRoll: string
+  website: string
+  orgNumber: string
+  address: string
   
   // Step 2 - Affärsdata
   omsattningAr1: string
@@ -34,6 +37,7 @@ export interface FormData {
   
   // Step 4 - Media
   anonymVisning: boolean
+  anonymousTitle: string
   logoUrl: string
   images: string[]
   
@@ -69,6 +73,9 @@ const initialFormData: FormData = {
   omsattningIntervall: '',
   antalAnstallda: '',
   agarensRoll: '',
+  website: '',
+  orgNumber: '',
+  address: '',
   omsattningAr1: '',
   omsattningAr2: '',
   omsattningAr3: '',
@@ -84,6 +91,7 @@ const initialFormData: FormData = {
   risk3: '',
   varforSalja: '',
   anonymVisning: true,
+  anonymousTitle: '',
   logoUrl: '',
   images: [],
   ndaTemplate: 'standard',
