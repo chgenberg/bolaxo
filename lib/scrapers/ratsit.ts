@@ -192,7 +192,7 @@ function extractByPattern($: cheerio.CheerioAPI, patterns: RegExp[]): string | n
   return null
 }
 
-function getRiskLevelFromRating(rating: string): RatsitData['creditRating']['riskLevel'] {
+function getRiskLevelFromRating(rating: string): 'very_low' | 'low' | 'medium' | 'high' | 'very_high' {
   const r = rating.toUpperCase()
   
   if (r === 'AAA' || r === 'AA') return 'very_low'
@@ -208,7 +208,7 @@ function getCreditRatingDescription(rating: string): string {
     'AA': 'Mycket god kreditvärdighet - låg risk',
     'A': 'God kreditvärdighet - låg till måttlig risk',
     'BBB': 'Tillfredsställande kreditvärdighet - måttlig risk',
-    'BB': 'Spe kulativ - ökad risk',
+    'BB': 'Spekulativ - ökad risk',
     'B': 'Hög risk - begränsad kreditvärdighet',
     'CCC': 'Mycket hög risk - dålig kreditvärdighet',
     'CC': 'Extremt hög risk',
