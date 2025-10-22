@@ -100,7 +100,7 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
         <div className="space-y-6">
           {/* Main heading */}
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg uppercase">
             Sälj ditt företag – tryggt, digitalt och klart.
           </h1>
           

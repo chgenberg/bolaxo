@@ -93,7 +93,7 @@ export default function PricingPage() {
       <section className="bg-white py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold text-text-dark mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-text-dark mb-6 uppercase">
               Transparent prissättning för alla behov
             </h1>
             <p className="text-xl text-text-gray max-w-3xl mx-auto">

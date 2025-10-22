@@ -9,7 +9,7 @@ export default function KopareInfoPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/20"></div>
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg uppercase">
             Så funkar det för köpare
           </h1>
           <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto drop-shadow-md">

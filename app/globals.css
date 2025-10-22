@@ -102,15 +102,15 @@
   
   /* Typography */
   .heading-1 {
-    @apply text-4xl md:text-5xl font-bold text-text-dark leading-tight;
+    @apply text-4xl md:text-5xl font-bold text-text-dark leading-tight uppercase;
   }
   
   .heading-2 {
-    @apply text-3xl md:text-4xl font-bold text-text-dark leading-tight;
+    @apply text-3xl md:text-4xl font-bold text-text-dark leading-tight uppercase;
   }
   
   .heading-3 {
-    @apply text-2xl md:text-3xl font-semibold text-text-dark;
+    @apply text-2xl md:text-3xl font-semibold text-text-dark uppercase;
   }
   
   .text-muted {
