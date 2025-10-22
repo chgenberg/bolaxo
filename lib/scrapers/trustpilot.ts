@@ -151,7 +151,13 @@ function parseTrustpilotPage(html: string, companyName: string): TrustpilotData 
   }
   
   // Extract review distribution (1-5 stars breakdown)
-  const distribution: TrustpilotData['trustScore']['reviewDistribution'] = {
+  const distribution: {
+    5: number
+    4: number
+    3: number
+    2: number
+    1: number
+  } = {
     5: 0,
     4: 0,
     3: 0,
