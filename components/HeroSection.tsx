@@ -89,7 +89,7 @@ interface SellerHeroProps {
 
 function SellerHero({ setShowValuation }: SellerHeroProps) {
   return (
-    <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center seller-hero-bg bg-cover bg-center bg-no-repeat">
+    <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center seller-hero-bg bg-cover bg-center bg-no-repeat -mt-6 md:-mt-12">
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
         <div className="space-y-6">
