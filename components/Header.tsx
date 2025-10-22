@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown, Menu, X, User, LogOut } from 'lucide-react'
+import { ChevronDown, Menu, X, User, LogOut, Calendar } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface DropdownItem {
@@ -172,6 +172,15 @@ export default function Header() {
                   </Link>
                 </>
               )}
+              <Link 
+                href="https://cal.com/bolaxo/demo" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary flex items-center"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                Boka demo
+              </Link>
               <Link href="/salja/start" className="btn-primary">
                 Sälj företag
               </Link>
@@ -231,19 +240,49 @@ export default function Header() {
             ))}
             
             <div className="pt-4 border-t border-gray-100 space-y-3">
+              {user ? (
+                <>
+                  <Link 
+                    href="/dashboard" 
+                    className="block btn-ghost text-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <button 
+                    onClick={() => { logout(); setMobileMenuOpen(false); }}
+                    className="w-full btn-secondary text-center"
+                  >
+                    Logga ut
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link 
+                    href="/login" 
+                    className="block btn-ghost text-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Logga in
+                  </Link>
+                  <Link 
+                    href="/login" 
+                    className="block btn-secondary text-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Skapa konto
+                  </Link>
+                </>
+              )}
               <Link 
-                href="#" 
-                className="block btn-ghost text-center"
+                href="https://cal.com/bolaxo/demo" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block btn-secondary text-center flex items-center justify-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Logga in
-              </Link>
-              <Link 
-                href="/registrera" 
-                className="block btn-secondary text-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Skapa konto
+                <Calendar className="w-4 h-4 mr-2" />
+                Boka demo
               </Link>
               <Link 
                 href="/salja/start" 

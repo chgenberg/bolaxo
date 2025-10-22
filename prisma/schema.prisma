@@ -27,6 +27,10 @@ model User {
   orgNumber       String?
   region          String?
   
+  // Referral system
+  referralCode    String?   @unique
+  referredBy      String?
+  
   // Magic link tokens
   magicLinkToken  String?   @unique
   tokenExpiresAt  DateTime?
@@ -41,6 +45,7 @@ model User {
   
   @@index([email])
   @@index([magicLinkToken])
+  @@index([referralCode])
 }
 
 model Valuation {

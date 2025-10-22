@@ -21,6 +21,9 @@ function LoginForm() {
 
   // Hantera error från URL (t.ex. invalid/expired token)
   const urlError = searchParams?.get('error')
+  
+  // Hantera referral code från URL
+  const referralCode = searchParams?.get('ref')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,7 +36,7 @@ function LoginForm() {
     setIsSubmitting(true)
     setError(null)
 
-    const result = await login(email, selectedRole, acceptedPrivacy)
+    const result = await login(email, selectedRole, acceptedPrivacy, referralCode || undefined)
 
     if (result.success) {
       setLinkSent(true)

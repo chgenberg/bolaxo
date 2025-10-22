@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Facebook, Linkedin, Twitter, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Linkedin, Twitter, Mail, Phone, MapPin, Calendar } from 'lucide-react'
 
 const footerLinks = {
   sellers: {
@@ -118,23 +118,39 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Newsletter */}
+        {/* CTA Section */}
         <div className="mt-12 pt-12 border-t border-gray-100">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="font-semibold text-text-dark mb-2">Prenumerera på vårt nyhetsbrev</h3>
-              <p className="text-text-gray">Få tips och nyheter om företagsförsäljning direkt i inkorgen.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Boka demo CTA */}
+            <div className="bg-gradient-to-r from-primary-blue to-blue-600 rounded-2xl p-8 text-white">
+              <h3 className="font-semibold text-2xl mb-2">Vill du veta mer?</h3>
+              <p className="mb-6 opacity-90">Boka en gratis demo och se hur BOLAXO kan hjälpa dig sälja eller köpa företag.</p>
+              <Link
+                href="https://cal.com/bolaxo/demo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-6 py-3 bg-white text-primary-blue rounded-button font-medium hover:shadow-lg transition-all"
+              >
+                <Calendar className="w-5 h-5 mr-2" />
+                Boka en demo
+              </Link>
             </div>
-            <form className="flex gap-3">
-              <input
-                type="email"
-                placeholder="Din e-postadress"
-                className="input-field flex-1"
-              />
-              <button type="submit" className="btn-primary">
-                Prenumerera
-              </button>
-            </form>
+            
+            {/* Newsletter */}
+            <div className="bg-gray-50 rounded-2xl p-8">
+              <h3 className="font-semibold text-text-dark mb-2">Prenumerera på vårt nyhetsbrev</h3>
+              <p className="text-text-gray mb-6">Få tips och nyheter om företagsförsäljning direkt i inkorgen.</p>
+              <form className="flex gap-3">
+                <input
+                  type="email"
+                  placeholder="Din e-postadress"
+                  className="input-field flex-1"
+                />
+                <button type="submit" className="btn-primary whitespace-nowrap">
+                  Prenumerera
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

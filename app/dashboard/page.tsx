@@ -10,6 +10,7 @@ import SmartMatches from '@/components/SmartMatches'
 import AdvisorStats from '@/components/AdvisorStats'
 import AdvisorDeals from '@/components/AdvisorDeals'
 import AdvisorPipeline from '@/components/AdvisorPipeline'
+import ReferralCard from '@/components/ReferralCard'
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth()
@@ -120,6 +121,13 @@ export default function DashboardPage() {
             <p className="text-sm text-text-gray">Kontakta oss för hjälp</p>
           </Link>
         </div>
+
+        {/* Referral Card - For all users */}
+        {user.referralCode && (
+          <div className="mb-12">
+            <ReferralCard referralCode={user.referralCode} />
+          </div>
+        )}
 
         {/* Analytics Section - Only for sellers */}
         {user.role === 'seller' && (

@@ -26,6 +26,8 @@ export async function GET(request: Request) {
         companyName: true,
         orgNumber: true,
         region: true,
+        referralCode: true,
+        referredBy: true,
         createdAt: true,
         lastLoginAt: true,
       }

@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     )
   }
   try {
-    const { email, role, acceptedPrivacy } = await request.json()
+    const { email, role, acceptedPrivacy, referralCode } = await request.json()
 
     if (!email || !role || !acceptedPrivacy) {
       return NextResponse.json(
@@ -45,6 +45,7 @@ export async function POST(request: Request) {
         magicLinkToken: token,
         tokenExpiresAt: expiresAt,
         verified: false,
+        referredBy: referralCode ? referralCode.toUpperCase() : null,
       }
     })
 

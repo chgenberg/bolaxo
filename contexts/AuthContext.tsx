@@ -13,6 +13,8 @@ interface User {
   companyName: string | null
   orgNumber: string | null
   region: string | null
+  referralCode: string | null
+  referredBy: string | null
   createdAt: string
   lastLoginAt: string | null
 }
@@ -20,7 +22,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   loading: boolean
-  login: (email: string, role: string, acceptedPrivacy: boolean) => Promise<{ success: boolean; message?: string; magicLink?: string }>
+  login: (email: string, role: string, acceptedPrivacy: boolean, referralCode?: string) => Promise<{ success: boolean; message?: string; magicLink?: string }>
   logout: () => Promise<void>
   refreshUser: () => Promise<void>
 }
@@ -48,12 +50,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchUser()
   }, [])
 
-  const login = async (email: string, role: string, acceptedPrivacy: boolean) => {
+  const login = async (email: string, role: string, acceptedPrivacy: boolean, referralCode?: string) => {
     try {
       const response = await fetch('/api/auth/magic-link/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, role, acceptedPrivacy })
+        body: JSON.stringify({ email, role, acceptedPrivacy, referralCode })
       })
 
       const data = await response.json()

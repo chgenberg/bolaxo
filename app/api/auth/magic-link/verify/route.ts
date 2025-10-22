@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
+import { generateReferralCode } from '@/lib/referral'
 
 const prisma = new PrismaClient()
 
@@ -32,6 +33,12 @@ export async function GET(request: Request) {
       return NextResponse.redirect(new URL('/login?error=expired_token', baseUrl))
     }
 
+    // Generera referral code om användaren inte redan har en
+    let referralCode = user.referralCode
+    if (!referralCode) {
+      referralCode = await generateReferralCode()
+    }
+
     // Uppdatera användare
     await prisma.user.update({
       where: { id: user.id },
@@ -40,6 +47,7 @@ export async function GET(request: Request) {
         lastLoginAt: new Date(),
         magicLinkToken: null, // Rensa token efter användning (one-time use)
         tokenExpiresAt: null,
+        referralCode: referralCode,
       }
     })
 
