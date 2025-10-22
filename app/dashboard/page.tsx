@@ -77,7 +77,7 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {user.role === 'seller' && (
+          {user?.role === 'seller' && (
             <>
               <Link href="/vardering" className="card hover:shadow-card-hover transition-all group">
                 <TrendingUp className="w-12 h-12 text-primary-blue mb-4 group-hover:scale-110 transition-transform" />
@@ -93,7 +93,7 @@ export default function DashboardPage() {
             </>
           )}
 
-          {user.role === 'buyer' && (
+          {user?.role === 'buyer' && (
             <Link href="/sok" className="card hover:shadow-card-hover transition-all group">
               <Building className="w-12 h-12 text-primary-blue mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="font-semibold text-lg mb-2">Sök företag</h3>
@@ -101,7 +101,7 @@ export default function DashboardPage() {
             </Link>
           )}
 
-          {user.role === 'advisor' && (
+          {user?.role === 'advisor' && (
             <>
               <Link href="/sok" className="card hover:shadow-card-hover transition-all group">
                 <Target className="w-12 h-12 text-primary-blue mb-4 group-hover:scale-110 transition-transform" />
@@ -132,7 +132,7 @@ export default function DashboardPage() {
         )}
 
         {/* Analytics Section - Only for sellers */}
-        {user.role === 'seller' && (
+        {user?.role === 'seller' && (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <h2 className="heading-2 flex items-center">
@@ -146,7 +146,7 @@ export default function DashboardPage() {
         )}
 
         {/* Smart Matches - Only for buyers */}
-        {user.role === 'buyer' && (
+        {user?.role === 'buyer' && (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <h2 className="heading-2 flex items-center">
@@ -160,7 +160,7 @@ export default function DashboardPage() {
         )}
 
         {/* Advisor Dashboard - Only for advisors */}
-        {user.role === 'advisor' && (
+        {user?.role === 'advisor' && (
           <>
             {/* Stats Overview */}
             <div className="mb-12">
