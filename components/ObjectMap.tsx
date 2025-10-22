@@ -82,14 +82,39 @@ export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
         </button>
 
         {/* Map Container */}
-        <div className="relative w-full h-full bg-gradient-to-b from-blue-50 to-blue-100">
+        <div className="relative w-full h-full bg-gradient-to-b from-blue-50 via-blue-100 to-blue-50">
           {/* Simplified Sweden Map */}
           <div className="relative w-full h-full">
-            {/* SVG Map Background */}
-            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <text x="50" y="50" textAnchor="middle" fontSize="20" fill="#dbeafe" opacity="0.3">
-                SVERIGE
-              </text>
+            {/* SVG Sweden Outline */}
+            <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 200 500" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <linearGradient id="swedenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#93c5fd', stopOpacity: 0.3 }} />
+                  <stop offset="100%" style={{ stopColor: '#60a5fa', stopOpacity: 0.5 }} />
+                </linearGradient>
+              </defs>
+              {/* Simplified Sweden shape */}
+              <path
+                d="M 100 50 
+                   Q 90 80, 95 120
+                   Q 85 160, 90 200
+                   Q 80 240, 85 280
+                   Q 75 320, 80 360
+                   Q 70 400, 75 440
+                   L 80 460
+                   Q 90 470, 100 465
+                   Q 110 470, 120 460
+                   L 125 440
+                   Q 130 400, 120 360
+                   Q 125 320, 115 280
+                   Q 120 240, 110 200
+                   Q 115 160, 105 120
+                   Q 110 80, 100 50
+                   Z"
+                fill="url(#swedenGradient)"
+                stroke="#3b82f6"
+                strokeWidth="1"
+              />
             </svg>
 
             {/* City Markers */}
