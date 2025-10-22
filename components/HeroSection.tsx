@@ -53,9 +53,9 @@ export default function HeroSection() {
       </div>
 
       {/* Metrics Section */}
-      <div className="relative bg-white py-20">
+      <div className="relative bg-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <h2 className="heading-2 mb-4">En marknadsplats som ger dig tiden tillbaka</h2>
             <p className="text-muted text-lg">Automatisering sparar veckor av manuellt arbete – följ med i realtid</p>
           </div>
@@ -97,7 +97,7 @@ function SellerHero() {
             </p>
             
             {/* Centered CTA Button with pulsing effect */}
-            <div className="relative mb-8">
+            <div className="relative mb-6">
               <div className="flex justify-center">
                 <div className="relative">
                   {/* Pulsing background effect */}
@@ -114,11 +114,22 @@ function SellerHero() {
               <p className="mt-4 text-sm text-text-gray text-center">
                 Få din företagsvärdering på 2 minuter – helt kostnadsfritt
               </p>
+              
+              {/* Secondary CTA - Smaller and under text */}
+              <div className="flex justify-center mt-4">
+                <Link
+                  href="/salja"
+                  className="text-sm text-primary-blue hover:text-blue-700 inline-flex items-center justify-center font-medium transition-colors"
+                >
+                  Så fungerar det
+                  <ArrowRight className="ml-1 w-4 h-4" />
+                </Link>
+              </div>
             </div>
           </div>
 
           {/* Benefits */}
-          <div className="space-y-4 mb-8">
+          <div className="space-y-4">
             {benefits.map((benefit, index) => (
               <div key={index} className="flex items-center space-x-3 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
                 <div className="flex-shrink-0 w-10 h-10 bg-light-blue/30 rounded-full flex items-center justify-center">
@@ -127,33 +138,6 @@ function SellerHero() {
                 <span className="text-text-dark font-medium">{benefit.text}</span>
               </div>
             ))}
-          </div>
-
-          {/* Secondary CTA */}
-          <div className="flex justify-center">
-            <Link
-              href="/salja"
-              className="btn-secondary inline-flex items-center justify-center"
-            >
-              Så fungerar det
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
-          </div>
-
-          {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center gap-6 pt-4">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">Gratis värdering på 5 min</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">NDA-skyddad process</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">Verifierade köpare</span>
-            </div>
           </div>
         </div>
 
