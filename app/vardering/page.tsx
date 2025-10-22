@@ -76,10 +76,10 @@ export default function ValuationPage() {
     <>
       <main className="min-h-screen bg-background-off-white">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-primary-blue via-blue-700 to-blue-900 text-white py-20 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#1e293b] text-white py-20 overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
-            <div className="absolute bottom-10 right-20 w-96 h-96 bg-light-blue rounded-full blur-3xl"></div>
+            <div className="absolute bottom-10 right-20 w-96 h-96 bg-blue-400 rounded-full blur-3xl"></div>
           </div>
           
           <div className="relative max-w-5xl mx-auto px-4 text-center">
