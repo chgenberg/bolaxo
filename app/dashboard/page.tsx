@@ -62,15 +62,17 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <div>
-            <h1 className="heading-1 mb-2">Välkommen, {user.name || user.email}!</h1>
+            <h1 className="heading-1 mb-2">Välkommen, {user?.name || user?.email || 'Gäst'}!</h1>
             <p className="text-text-gray">
-              Roll: {user.role === 'seller' ? 'Säljare' : user.role === 'buyer' ? 'Köpare' : 'Mäklare'}
+              Roll: {user?.role === 'seller' ? 'Säljare' : user?.role === 'buyer' ? 'Köpare' : user?.role === 'advisor' ? 'Mäklare' : 'Gäst'}
             </p>
           </div>
-          <button onClick={logout} className="btn-ghost flex items-center">
-            <LogOut className="w-5 h-5 mr-2" />
-            Logga ut
-          </button>
+          {user && (
+            <button onClick={logout} className="btn-ghost flex items-center">
+              <LogOut className="w-5 h-5 mr-2" />
+              Logga ut
+            </button>
+          )}
         </div>
 
         {/* Quick Actions */}
@@ -123,7 +125,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Referral Card - For all users */}
-        {user.referralCode && (
+        {user?.referralCode && (
           <div className="mb-12">
             <ReferralCard referralCode={user.referralCode} />
           </div>
