@@ -82,31 +82,34 @@ export default function DocumentsPage() {
   ]
 
   const getFileIcon = (type: string) => {
-    const colors = {
+    const colors: Record<string, string> = {
       pdf: 'text-red-600',
       excel: 'text-green-600',
       word: 'text-blue-600',
-      powerpoint: 'text-orange-600'
+      powerpoint: 'text-orange-600',
     }
-    return <FileText className={`w-5 h-5 ${colors[type] || 'text-gray-600'}`} />
+    const colorClass = colors[type] ?? 'text-gray-600'
+    return <FileText className={`w-5 h-5 ${colorClass}`} />
   }
 
   const getStatusBadge = (status: string) => {
-    const styles = {
+    const styles: Record<string, string> = {
       signed: 'bg-green-100 text-green-700',
       shared: 'bg-blue-100 text-blue-700',
       draft: 'bg-gray-100 text-gray-700',
-      final: 'bg-purple-100 text-purple-700'
+      final: 'bg-purple-100 text-purple-700',
     }
-    const labels = {
+    const labels: Record<string, string> = {
       signed: 'Signerad',
       shared: 'Delad',
       draft: 'Utkast',
-      final: 'Slutgiltig'
+      final: 'Slutgiltig',
     }
+    const styleClass = styles[status] ?? 'bg-gray-100 text-gray-700'
+    const label = labels[status] ?? status
     return (
-      <span className={`px-2 py-0.5 text-xs rounded-full ${styles[status]}`}>
-        {labels[status]}
+      <span className={`px-2 py-0.5 text-xs rounded-full ${styleClass}`}>
+        {label}
       </span>
     )
   }
