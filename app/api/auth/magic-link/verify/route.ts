@@ -77,17 +77,8 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    // Redirect baserat på roll
-    let redirectPath = '/dashboard'
-    if (user.role === 'seller') {
-      redirectPath = '/salja'
-    } else if (user.role === 'buyer') {
-      redirectPath = '/sok'
-    } else if (user.role === 'broker') {
-      redirectPath = '/for-maklare'
-    }
-    
-    return NextResponse.redirect(new URL(redirectPath, baseUrl))
+    // Redirect all to dashboard (role-specific content shown there)
+    return NextResponse.redirect(new URL('/dashboard', baseUrl))
 
   } catch (error) {
     console.error('Magic link verify error:', error)
