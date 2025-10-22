@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { X, MapPin, TrendingUp, Users } from 'lucide-react'
+import { useState } from 'react'
+import { X, TrendingUp, Users } from 'lucide-react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { mockObjects } from '@/data/mockObjects'
 
 interface ObjectMapProps {
@@ -10,23 +11,18 @@ interface ObjectMapProps {
   onClose: () => void
 }
 
-// Real coordinates for Swedish cities
-const cityCoordinates: Record<string, [number, number]> = {
-  'Stockholm': [59.3293, 18.0686],
-  'Göteborg': [57.7089, 11.9746],
-  'Malmö': [55.6050, 13.0038],
-  'Uppsala': [59.8586, 17.6389],
-  'Linköping': [58.4108, 15.6214],
-  'Västerås': [59.6099, 16.5448],
-  'Örebro': [59.2741, 15.2066],
-  'Helsingborg': [56.0465, 12.6945],
-  'Norrköping': [58.5942, 16.1826],
-  'Jönköping': [57.7826, 14.1618],
-}
+// Dynamically import map component (client-side only)
+const MapView = dynamic(() => import('./MapView'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-gradient-to-b from-blue-50 via-blue-100 to-blue-50 flex items-center justify-center">
+      <div className="text-text-gray">Laddar karta...</div>
+    </div>
+  )
+})
 
 export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
   const [selectedCity, setSelectedCity] = useState<string | null>(null)
-  const [isMapLoaded, setIsMapLoaded] = useState(false)
   
   // Group objects by city
   const objectsByCity = mockObjects.reduce((acc, obj) => {
@@ -41,23 +37,6 @@ export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
       return `${(amount / 1000000).toFixed(1)} MSEK`
     }
     return `${(amount / 1000).toFixed(0)} KSEK`
-  }
-
-  useEffect(() => {
-    if (isOpen && !isMapLoaded) {
-      // Simple timeout to ensure DOM is ready, then show placeholder map
-      setTimeout(() => {
-        setIsMapLoaded(true)
-      }, 100)
-    }
-  }, [isOpen, isMapLoaded])
-
-  // Convert coordinates to SVG percentages for simplified map
-  const coordsToPercent = (lat: number, lon: number): { x: string; y: string } => {
-    // Sweden bounds: lat 55-69, lon 11-24
-    const x = ((lon - 11) / (24 - 11)) * 100
-    const y = ((69 - lat) / (69 - 55)) * 100
-    return { x: `${x}%`, y: `${y}%` }
   }
 
   if (!isOpen) return null
@@ -75,80 +54,19 @@ export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-all"
+          className="absolute top-4 right-4 z-[1000] p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-all"
           aria-label="Stäng"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Map Container */}
-        <div className="relative w-full h-full bg-gradient-to-b from-blue-50 via-blue-100 to-blue-50">
-          {/* Simplified Sweden Map */}
-          <div className="relative w-full h-full">
-            {/* SVG Sweden Outline */}
-            <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 200 500" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <linearGradient id="swedenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" style={{ stopColor: '#93c5fd', stopOpacity: 0.3 }} />
-                  <stop offset="100%" style={{ stopColor: '#60a5fa', stopOpacity: 0.5 }} />
-                </linearGradient>
-              </defs>
-              {/* Simplified Sweden shape */}
-              <path
-                d="M 100 50 
-                   Q 90 80, 95 120
-                   Q 85 160, 90 200
-                   Q 80 240, 85 280
-                   Q 75 320, 80 360
-                   Q 70 400, 75 440
-                   L 80 460
-                   Q 90 470, 100 465
-                   Q 110 470, 120 460
-                   L 125 440
-                   Q 130 400, 120 360
-                   Q 125 320, 115 280
-                   Q 120 240, 110 200
-                   Q 115 160, 105 120
-                   Q 110 80, 100 50
-                   Z"
-                fill="url(#swedenGradient)"
-                stroke="#3b82f6"
-                strokeWidth="1"
-              />
-            </svg>
-
-            {/* City Markers */}
-            {Object.entries(objectsByCity).map(([city, objects]) => {
-              const coords = cityCoordinates[city]
-              if (!coords) return null
-              
-              const pos = coordsToPercent(coords[0], coords[1])
-
-              return (
-                <div
-                  key={city}
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
-                  style={{ left: pos.x, top: pos.y }}
-                  onClick={() => setSelectedCity(city === selectedCity ? null : city)}
-                >
-                  {/* Marker */}
-                  <div className="relative">
-                    <div className="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform">
-                      {objects.length}
-                    </div>
-                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-primary-blue"></div>
-                  </div>
-                  
-                  {/* City Name */}
-                  <div className="absolute top-14 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-text-dark bg-white px-2 py-1 rounded shadow">
-                      {city}
-                    </span>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+        <div className="relative w-full h-full">
+          <MapView 
+            objectsByCity={objectsByCity}
+            selectedCity={selectedCity}
+            setSelectedCity={setSelectedCity}
+          />
 
           {/* Selected City Popup */}
           {selectedCity && (
@@ -207,7 +125,6 @@ export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
           )}
         </div>
       </div>
-
     </div>
   )
 }
