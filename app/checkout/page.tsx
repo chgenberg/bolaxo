@@ -1,7 +1,5 @@
 import { Suspense } from 'react'
-import dynamic from 'next/dynamic'
-
-const CheckoutClient = dynamic(() => import('./CheckoutClient'), { ssr: false })
+import CheckoutClient from './CheckoutClient'
 
 export default function CheckoutPage() {
   return (
