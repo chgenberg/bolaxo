@@ -3,83 +3,88 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-// GET - fetch messages for a user
+// GET /api/messages?userId=&listingId=&peerId=
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const userId = searchParams.get('userId')
-    const listingId = searchParams.get('listingId')
-    
+    const listingId = searchParams.get('listingId') || undefined
+    const peerId = searchParams.get('peerId') || undefined
+
     if (!userId) {
-      return NextResponse.json({ error: 'userId required' }, { status: 400 })
+      return NextResponse.json({ error: 'userId krävs' }, { status: 400 })
     }
-    
-    const where: any = {
-      OR: [
-        { senderId: userId },
-        { recipientId: userId }
-      ]
-    }
-    
-    if (listingId) {
-      where.listingId = listingId
-    }
-    
+
     const messages = await prisma.message.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
-      take: 100
+      where: {
+        listingId,
+        OR: [
+          { senderId: userId },
+          { recipientId: userId }
+        ],
+        ...(peerId ? {
+          AND: [
+            { OR: [{ senderId: userId }, { recipientId: userId }] },
+            { OR: [{ senderId: peerId }, { recipientId: peerId }] }
+          ]
+        } : {})
+      },
+      orderBy: { createdAt: 'asc' }
     })
-    
+
     return NextResponse.json({ messages })
   } catch (error) {
-    console.error('Error fetching messages:', error)
+    console.error('Fetch messages error:', error)
     return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 })
   }
 }
 
-// POST - send message
+// POST /api/messages -> send message
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { listingId, senderId, recipientId, subject, content } = body
-    
+
     if (!listingId || !senderId || !recipientId || !content) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      return NextResponse.json({ error: 'listingId, senderId, recipientId, content krävs' }, { status: 400 })
     }
-    
-    const message = await prisma.message.create({
+
+    const created = await prisma.message.create({
       data: {
         listingId,
         senderId,
         recipientId,
-        subject,
-        content
+        subject: subject || null,
+        content,
       }
     })
-    
-    return NextResponse.json(message, { status: 201 })
+
+    return NextResponse.json({ message: created }, { status: 201 })
   } catch (error) {
-    console.error('Error sending message:', error)
+    console.error('Send message error:', error)
     return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })
   }
 }
 
-// PATCH - mark as read
+// PATCH /api/messages -> mark as read
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json()
-    const { id } = body
-    
-    const message = await prisma.message.update({
-      where: { id },
+    const { ids } = body as { ids: string[] }
+
+    if (!ids || ids.length === 0) {
+      return NextResponse.json({ error: 'ids krävs' }, { status: 400 })
+    }
+
+    await prisma.message.updateMany({
+      where: { id: { in: ids } },
       data: { read: true }
     })
-    
-    return NextResponse.json(message)
+
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error updating message:', error)
-    return NextResponse.json({ error: 'Failed to update message' }, { status: 500 })
+    console.error('Mark read error:', error)
+    return NextResponse.json({ error: 'Failed to mark as read' }, { status: 500 })
   }
 }
 

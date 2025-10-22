@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
@@ -9,29 +9,26 @@ export async function GET(
 ) {
   try {
     const params = await context.params
+
     const listing = await prisma.listing.findUnique({
       where: { id: params.id },
       include: {
         user: {
-          select: {
-            name: true,
-            verified: true,
-            email: true
-          }
+          select: { id: true, name: true, verified: true }
         }
       }
     })
-    
+
     if (!listing) {
       return NextResponse.json({ error: 'Listing not found' }, { status: 404 })
     }
-    
-    // Increment view count
-    await prisma.listing.update({
+
+    // Increment views asynchronously (non-blocking)
+    prisma.listing.update({
       where: { id: params.id },
       data: { views: { increment: 1 } }
-    })
-    
+    }).catch(() => {})
+
     return NextResponse.json(listing)
   } catch (error) {
     console.error('Error fetching listing:', error)
@@ -45,15 +42,14 @@ export async function PUT(
 ) {
   try {
     const params = await context.params
-    const body = await request.json()
-    const { status, ...updateData } = body
-    
-    const listing = await prisma.listing.update({
+    const data = await request.json()
+
+    const updated = await prisma.listing.update({
       where: { id: params.id },
-      data: updateData
+      data
     })
-    
-    return NextResponse.json(listing)
+
+    return NextResponse.json(updated)
   } catch (error) {
     console.error('Error updating listing:', error)
     return NextResponse.json({ error: 'Failed to update listing' }, { status: 500 })

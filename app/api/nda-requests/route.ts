@@ -3,97 +3,83 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-// GET - fetch NDA requests for a user
+// GET /api/nda-requests?listingId=&buyerId=&sellerId=&status=
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const userId = searchParams.get('userId')
-    const role = searchParams.get('role') // seller, buyer
-    
-    if (!userId) {
-      return NextResponse.json({ error: 'userId required' }, { status: 400 })
-    }
-    
+    const listingId = searchParams.get('listingId') || undefined
+    const buyerId = searchParams.get('buyerId') || undefined
+    const sellerId = searchParams.get('sellerId') || undefined
+    const status = searchParams.get('status') || undefined
+
     const where: any = {}
-    if (role === 'seller') {
-      where.sellerId = userId
-    } else if (role === 'buyer') {
-      where.buyerId = userId
-    } else {
-      // Return both sent and received
-      where.OR = [
-        { buyerId: userId },
-        { sellerId: userId }
-      ]
-    }
-    
+    if (listingId) where.listingId = listingId
+    if (buyerId) where.buyerId = buyerId
+    if (sellerId) where.sellerId = sellerId
+    if (status) where.status = status
+
     const requests = await prisma.nDARequest.findMany({
       where,
-      orderBy: { createdAt: 'desc' },
-      take: 50
+      orderBy: { createdAt: 'desc' }
     })
-    
+
     return NextResponse.json({ requests })
   } catch (error) {
-    console.error('Error fetching NDA requests:', error)
+    console.error('Fetch NDA requests error:', error)
     return NextResponse.json({ error: 'Failed to fetch NDA requests' }, { status: 500 })
   }
 }
 
-// POST - create new NDA request
+// POST /api/nda-requests -> create NDA request
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { listingId, buyerId, sellerId, message, buyerProfile } = body
-    
+
     if (!listingId || !buyerId || !sellerId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      return NextResponse.json({ error: 'listingId, buyerId och sellerId krävs' }, { status: 400 })
     }
-    
-    const ndaRequest = await prisma.nDARequest.create({
+
+    const created = await prisma.nDARequest.create({
       data: {
         listingId,
         buyerId,
         sellerId,
-        message,
+        message: message || null,
         buyerProfile: buyerProfile || null,
         status: 'pending'
       }
     })
-    
-    return NextResponse.json(ndaRequest, { status: 201 })
+
+    return NextResponse.json({ request: created }, { status: 201 })
   } catch (error) {
-    console.error('Error creating NDA request:', error)
+    console.error('Create NDA request error:', error)
     return NextResponse.json({ error: 'Failed to create NDA request' }, { status: 500 })
   }
 }
 
-// PATCH - update NDA request status
+// PATCH /api/nda-requests -> update status
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json()
     const { id, status } = body
-    
+
     if (!id || !status) {
-      return NextResponse.json({ error: 'id and status required' }, { status: 400 })
+      return NextResponse.json({ error: 'id och status krävs' }, { status: 400 })
     }
-    
-    const updateData: any = { status }
-    
-    if (status === 'approved') {
-      updateData.approvedAt = new Date()
-    } else if (status === 'rejected') {
-      updateData.rejectedAt = new Date()
-    }
-    
-    const ndaRequest = await prisma.nDARequest.update({
+
+    const data: any = { status }
+    if (status === 'approved') data.approvedAt = new Date()
+    if (status === 'rejected') data.rejectedAt = new Date()
+
+    const updated = await prisma.nDARequest.update({
       where: { id },
-      data: updateData
+      data
     })
-    
-    return NextResponse.json(ndaRequest)
+
+    return NextResponse.json({ request: updated })
   } catch (error) {
-    console.error('Error updating NDA request:', error)
+    console.error('Update NDA request error:', error)
     return NextResponse.json({ error: 'Failed to update NDA request' }, { status: 500 })
   }
 }
