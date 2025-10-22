@@ -235,10 +235,13 @@ export default function ObjectDetailPage() {
                   <h2 className="text-2xl font-bold text-text-dark mb-4">Om företaget</h2>
                   <div className="prose prose-gray max-w-none">
                     <p className="text-text-gray leading-relaxed mb-4">
-                      {object.longDescription || `Detta ${object.type.toLowerCase()} har varit verksamt i över ${Math.floor(Math.random() * 10 + 5)} år och har byggt upp en stark position på den lokala marknaden. Verksamheten drivs med fokus på kvalitet och kundnöjdhet.`}
+                      {object.description}
                     </p>
                     <p className="text-text-gray leading-relaxed">
-                      Företaget har en etablerad kundbas och goda relationer med leverantörer. Det finns goda möjligheter för tillväxt genom expansion till närliggande marknader eller genom att bredda tjänsteutbudet.
+                      Företaget har varit verksamt i över {Math.floor(Math.random() * 10 + 5)} år och har byggt upp en stark position på marknaden. Verksamheten drivs med fokus på kvalitet och kundnöjdhet, med en etablerad kundbas och goda relationer med leverantörer.
+                    </p>
+                    <p className="text-text-gray leading-relaxed">
+                      Det finns goda möjligheter för tillväxt genom expansion till närliggande marknader eller genom att bredda tjänsteutbudet.
                     </p>
                   </div>
                 </section>
@@ -367,13 +370,13 @@ export default function ObjectDetailPage() {
                 <section>
                   <h3 className="text-xl font-semibold text-text-dark mb-4">Styrkor</h3>
                   <ul className="space-y-3">
-                    {(object.strengths || [
+                    {[
                       'Etablerat varumärke på lokal marknad',
                       'Lojal och återkommande kundbas',
                       'Erfaren och driven personalstyrka',
                       'Moderna lokaler med bra läge',
                       'Starka kassaflöden och god lönsamhet'
-                    ]).map((strength, index) => (
+                    ].map((strength, index) => (
                       <li key={index} className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5 mr-3" />
                         <span className="text-text-gray">{strength}</span>
@@ -385,12 +388,12 @@ export default function ObjectDetailPage() {
                 <section>
                   <h3 className="text-xl font-semibold text-text-dark mb-4">Utvecklingsmöjligheter</h3>
                   <ul className="space-y-3">
-                    {(object.opportunities || [
+                    {[
                       'Expansion till närliggande geografiska marknader',
                       'Digitalisering av försäljningskanaler',
                       'Utökning av produkt/tjänsteutbud',
                       'Strategiska partnerskap och samarbeten'
-                    ]).map((opportunity, index) => (
+                    ].map((opportunity, index) => (
                       <li key={index} className="flex items-start">
                         <TrendingUp className="w-5 h-5 text-primary-blue flex-shrink-0 mt-0.5 mr-3" />
                         <span className="text-text-gray">{opportunity}</span>
@@ -402,11 +405,11 @@ export default function ObjectDetailPage() {
                 <section>
                   <h3 className="text-xl font-semibold text-text-dark mb-4">Att beakta</h3>
                   <ul className="space-y-3">
-                    {(object.risks || [
+                    {[
                       'Behov av fortsatt marknadsföringssatsningar',
                       'Beroende av nyckelpersoner i organisationen',
                       'Konkurrenssituation på lokal marknad'
-                    ]).map((risk, index) => (
+                    ].map((risk, index) => (
                       <li key={index} className="flex items-start">
                         <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5 mr-3" />
                         <span className="text-text-gray">{risk}</span>
