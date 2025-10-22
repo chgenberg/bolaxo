@@ -1,18 +1,63 @@
 'use client'
 
-import { useState } from 'react'
-import { MapPin, Building2, TrendingUp, Plus, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { MapPin, Building2, TrendingUp, Plus, X, User, Mail, Phone, Briefcase } from 'lucide-react'
 
 interface BuyerPreferencesProps {
   onSave?: (preferences: any) => void
+  userId?: string
+  userEmail?: string
 }
 
-export default function BuyerPreferences({ onSave }: BuyerPreferencesProps) {
+export default function BuyerPreferences({ onSave, userId, userEmail }: BuyerPreferencesProps) {
+  // User info
+  const [email, setEmail] = useState(userEmail || '')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  
+  // Preferences
   const [selectedRegions, setSelectedRegions] = useState<string[]>([])
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([])
   const [customIndustry, setCustomIndustry] = useState('')
   const [showCustomIndustry, setShowCustomIndustry] = useState(false)
   const [revenueRange, setRevenueRange] = useState({ min: '', max: '' })
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  
+  // Load existing profile
+  useEffect(() => {
+    if (userId || userEmail) {
+      loadProfile()
+    }
+  }, [userId, userEmail])
+  
+  const loadProfile = async () => {
+    try {
+      const params = new URLSearchParams()
+      if (userId) params.append('userId', userId)
+      else if (userEmail) params.append('email', userEmail)
+      
+      const response = await fetch(`/api/buyer-profile?${params}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data.profile) {
+          setSelectedRegions(data.profile.preferredRegions || [])
+          setSelectedIndustries(data.profile.preferredIndustries || [])
+          setRevenueRange({
+            min: data.profile.revenueMin ? String(data.profile.revenueMin / 1000000) : '',
+            max: data.profile.revenueMax ? String(data.profile.revenueMax / 1000000) : ''
+          })
+        }
+        if (data.user) {
+          setEmail(data.user.email || '')
+          setName(data.user.name || '')
+        }
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error)
+    }
+  }
   
   const regions = [
     'Stockholm', 'Göteborg', 'Malmö', 'Uppsala', 'Västra Götaland',
@@ -57,13 +102,44 @@ export default function BuyerPreferences({ onSave }: BuyerPreferencesProps) {
     setSelectedIndustries(prev => prev.filter(i => i !== industry))
   }
 
-  const handleSave = () => {
-    const preferences = {
-      regions: selectedRegions,
-      industries: selectedIndustries,
-      revenueRange
+  const handleSave = async () => {
+    setSaving(true)
+    setError(null)
+    
+    try {
+      const preferences = {
+        userId,
+        email: email || userEmail,
+        name,
+        phone,
+        companyName,
+        preferredRegions: selectedRegions,
+        preferredIndustries: selectedIndustries,
+        revenueMin: revenueRange.min ? parseFloat(revenueRange.min) : null,
+        revenueMax: revenueRange.max ? parseFloat(revenueRange.max) : null
+      }
+      
+      const response = await fetch('/api/buyer-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(preferences)
+      })
+      
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Kunde inte spara preferenser')
+      }
+      
+      const data = await response.json()
+      onSave?.(data)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ett fel uppstod')
+      console.error('Error saving preferences:', err)
+    } finally {
+      setSaving(false)
     }
-    onSave?.(preferences)
   }
 
   return (
@@ -72,6 +148,65 @@ export default function BuyerPreferences({ onSave }: BuyerPreferencesProps) {
       <p className="text-text-gray mb-8">
         Vi använder dina preferenser för att föreslå relevanta objekt och skicka bevakningar.
       </p>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+          {error}
+        </div>
+      )}
+
+      {/* User Information */}
+      {!userId && !userEmail && (
+        <div className="mb-8 p-6 bg-blue-50 rounded-xl">
+          <h3 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
+            <User className="w-5 h-5" />
+            Din information
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-text-gray mb-2">E-post *</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="din@email.se"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-blue focus:outline-none"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-text-gray mb-2">Namn</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ditt namn"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-blue focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-text-gray mb-2">Telefon</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="070-123 45 67"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-blue focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-text-gray mb-2">Företag (om relevant)</label>
+              <input
+                type="text"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                placeholder="Ditt företag"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-blue focus:outline-none"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Region Selection */}
       <div className="mb-8">
@@ -236,19 +371,36 @@ export default function BuyerPreferences({ onSave }: BuyerPreferencesProps) {
       </div>
 
       {/* Save Button */}
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3">
         <button
           onClick={handleSave}
-          disabled={selectedRegions.length === 0 || selectedIndustries.length === 0}
+          disabled={
+            saving || 
+            (!userId && !userEmail && !email) || 
+            selectedRegions.length === 0 || 
+            selectedIndustries.length === 0
+          }
           className={`px-8 py-3 rounded-xl font-semibold transition-all duration-200 ${
-            selectedRegions.length > 0 && selectedIndustries.length > 0
+            !saving && ((userId || userEmail || email) && selectedRegions.length > 0 && selectedIndustries.length > 0)
               ? 'bg-primary-blue text-white hover:bg-blue-700'
               : 'bg-gray-200 text-gray-400 cursor-not-allowed'
           }`}
         >
-          Spara preferenser
+          {saving ? 'Sparar...' : 'Spara preferenser'}
         </button>
       </div>
+
+      {/* Validation hint */}
+      {(!userId && !userEmail && !email) && (
+        <p className="text-sm text-text-gray mt-4 text-right">
+          * E-post, region och bransch krävs
+        </p>
+      )}
+      {(userId || userEmail || email) && (selectedRegions.length === 0 || selectedIndustries.length === 0) && (
+        <p className="text-sm text-text-gray mt-4 text-right">
+          * Region och bransch krävs
+        </p>
+      )}
     </div>
   )
 }

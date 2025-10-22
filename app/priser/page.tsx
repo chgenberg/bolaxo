@@ -165,9 +165,9 @@ export default function PricingPage() {
                           <span className={`text-sm ${feature.included === false ? 'text-gray-400' : 'text-text-gray'}`}>
                             {feature.text}
                           </span>
-                          {feature.value && (
+                          {'value' in feature && feature.value && (
                             <span className={`text-sm font-medium ml-1 ${
-                              feature.highlight ? 'text-primary-blue' : 'text-text-dark'
+                              'highlight' in feature && feature.highlight ? 'text-primary-blue' : 'text-text-dark'
                             }`}>
                               - {feature.value}
                             </span>

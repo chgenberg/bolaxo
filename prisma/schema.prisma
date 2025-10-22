@@ -42,6 +42,7 @@ model User {
   // Relations
   valuations      Valuation[]
   listings        Listing[]
+  buyerProfile    BuyerProfile?
   
   @@index([email])
   @@index([magicLinkToken])
@@ -243,4 +244,56 @@ model TeamMember {
   @@index([transactionId])
   @@index([email])
   @@index([status])
+}
+
+model BuyerProfile {
+  id                    String    @id @default(cuid())
+  userId                String    @unique
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Region preferences
+  preferredRegions      String[]  // Array of regions: Stockholm, Göteborg, etc or "Hela Sverige"
+  
+  // Industry preferences  
+  preferredIndustries   String[]  // Array of industries including custom ones
+  
+  // Financial criteria
+  revenueMin            Int?      // Min omsättning i SEK
+  revenueMax            Int?      // Max omsättning i SEK
+  ebitdaMin             Int?      // Min EBITDA i SEK
+  ebitdaMax             Int?      // Max EBITDA i SEK
+  priceMin              Int?      // Min pris i SEK
+  priceMax              Int?      // Max pris i SEK
+  
+  // Investment type
+  investmentType        String?   // full_acquisition, partnership, equity_stake, turnaround
+  profitabilityPreference String? // profitable, turnaround, either
+  
+  // Buyer information
+  buyerType             String?   // individual, company, private_equity, strategic
+  investmentExperience  String?   // first_time, experienced, professional
+  financingReady        Boolean   @default(false)
+  timeframe             String?   // immediate, 3_months, 6_months, 12_months
+  
+  // Additional preferences
+  employeeCountMin      Int?      // Min antal anställda
+  employeeCountMax      Int?      // Max antal anställda
+  companyAgeMin         Int?      // Min företagsålder i år
+  ownerInvolvement      String?   // active, passive, either
+  
+  // Free text preferences
+  additionalCriteria    String?   // Fri text för extra kriterier
+  dealBreakers          String?   // Vad är absoluta nej
+  
+  // Notification preferences
+  emailAlerts           Boolean   @default(true)
+  smsAlerts             Boolean   @default(false)
+  alertFrequency        String    @default("daily") // instant, daily, weekly
+  
+  // Timestamps
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  lastSearchAt          DateTime?
+  
+  @@index([userId])
 }
