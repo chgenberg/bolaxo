@@ -7,11 +7,13 @@ import MetricsDashboard from './MetricsDashboard'
 import ObjectCarousel from './ObjectCarousel'
 import ObjectMap from './ObjectMap'
 import BuyerPreferences from './BuyerPreferences'
+import ValuationWizard from './ValuationWizard'
 
 export default function HeroSection() {
   const [activeTab, setActiveTab] = useState<'sell' | 'buy'>('sell')
   const [showMap, setShowMap] = useState(false)
   const [showPreferences, setShowPreferences] = useState(false)
+  const [showValuation, setShowValuation] = useState(false)
 
   return (
     <section className="relative bg-gradient-to-b from-white to-light-blue/10 overflow-hidden">
@@ -49,7 +51,7 @@ export default function HeroSection() {
         </div>
 
         {/* Content */}
-        {activeTab === 'sell' ? <SellerHero /> : <BuyerHero showMap={showMap} setShowMap={setShowMap} />}
+        {activeTab === 'sell' ? <SellerHero setShowValuation={setShowValuation} /> : <BuyerHero showMap={showMap} setShowMap={setShowMap} />}
       </div>
 
       {/* Metrics Section */}
@@ -65,11 +67,33 @@ export default function HeroSection() {
 
       {/* Map Modal */}
       <ObjectMap isOpen={showMap} onClose={() => setShowMap(false)} />
+      
+      {/* Valuation Wizard Modal */}
+      {showValuation && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen p-4">
+            {/* Backdrop */}
+            <div 
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setShowValuation(false)}
+            />
+            
+            {/* Modal Content */}
+            <div className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <ValuationWizard onClose={() => setShowValuation(false)} />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
 
-function SellerHero() {
+interface SellerHeroProps {
+  setShowValuation: (show: boolean) => void
+}
+
+function SellerHero({ setShowValuation }: SellerHeroProps) {
   const benefits = [
     { icon: TrendingUp, text: 'Vi hittar de mest relevanta köparna åt dig' },
     { icon: Shield, text: 'Full insyn från första NDA till signerat avtal' },
@@ -102,13 +126,13 @@ function SellerHero() {
                 <div className="relative">
                   {/* Pulsing background effect */}
                   <div className="absolute inset-0 bg-primary-blue rounded-full blur-xl opacity-50 animate-pulse"></div>
-                  <Link
-                    href="/vardering"
+                  <button
+                    onClick={() => setShowValuation(true)}
                     className="relative inline-flex items-center justify-center px-8 py-4 bg-primary-blue text-white font-semibold text-lg rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
                   >
                     Starta Gratis Värdering
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                  </button>
                 </div>
               </div>
               <p className="mt-4 text-sm text-text-gray text-center">
