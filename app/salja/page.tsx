@@ -3,17 +3,23 @@ import { CheckCircle } from 'lucide-react'
 
 export default function SaljaInfoPage() {
   return (
-    <main className="bg-gradient-to-b from-white to-light-blue/20 py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-text-dark mb-6">
+    <main className="bg-background-off-white">
+      {/* Hero Section */}
+      <section className="relative galaxy-hero-bg bg-cover bg-center bg-no-repeat py-20">
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/20"></div>
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg">
             Så funkar det för säljare
           </h1>
-          <p className="text-lg text-text-gray max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto drop-shadow-md">
             Ditt livsverk förtjänar en värderad process. Vi automatiserar det komplexa och ger dig full kontroll – från första värderingen till signerad affär.
           </p>
         </div>
+      </section>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
         {/* Steps */}
         <div className="space-y-8 mb-16">

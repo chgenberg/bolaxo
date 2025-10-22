@@ -171,4 +171,15 @@
       background-image: url('/hero-undersokning.png');
     }
   }
+  
+  /* Galaxy Hero Background (Sellers & Buyers) */
+  .galaxy-hero-bg {
+    background-image: url('/galax_mobile.png');
+  }
+  
+  @media (min-width: 768px) {
+    .galaxy-hero-bg {
+      background-image: url('/galax.png');
+    }
+  }
 }
