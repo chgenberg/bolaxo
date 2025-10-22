@@ -151,7 +151,7 @@ export default function CheckoutClient() {
                     <h3 className="text-lg font-semibold mb-4">Kontoinformation</h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-text-dark mb-1">E-post *</nlabel>
+                        <label htmlFor="email" className="block text-sm font-medium text-text-dark mb-1">E-post *</label>
                         <input type="email" id="email" name="email" value={formData.email} onChange={handleInputChange} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent ${errors.email ? 'border-red-500' : 'border-gray-300'}`} placeholder="din@email.se" />
                         {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                       </div>
