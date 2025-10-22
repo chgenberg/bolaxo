@@ -18,11 +18,13 @@ export default function DashboardPage() {
   const [valuations, setValuations] = useState<any[]>([])
   const [loadingValuations, setLoadingValuations] = useState(true)
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login')
-    }
-  }, [user, loading, router])
+  // Demo-läge: tillåt visning utan inloggning
+  // (Ta bort denna block om vi vill kräva login igen)
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     router.push('/login')
+  //   }
+  // }, [user, loading, router])
 
   useEffect(() => {
     if (user) {
@@ -52,9 +54,7 @@ export default function DashboardPage() {
     )
   }
 
-  if (!user) {
-    return null
-  }
+  // I demo-läge visar vi generiska widgets när user saknas
 
   return (
     <main className="min-h-screen bg-background-off-white py-16">
