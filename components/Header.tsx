@@ -154,7 +154,7 @@ export default function Header() {
                 <>
                   <Link href="/dashboard" className="btn-ghost flex items-center">
                     <User className="w-4 h-4 mr-2" />
-                    {user.name || user.email.split('@')[0]}
+                    Min sida
                   </Link>
                   <button onClick={logout} className="btn-secondary flex items-center">
                     <LogOut className="w-4 h-4 mr-2" />
@@ -237,7 +237,7 @@ export default function Header() {
                     className="block btn-ghost text-center"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Dashboard
+                    Min sida
                   </Link>
                   <button 
                     onClick={() => { logout(); setMobileMenuOpen(false); }}
