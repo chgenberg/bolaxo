@@ -59,9 +59,10 @@ export default function Step4MediaPage() {
 
         {/* Main listing image */}
         <ImageSelector
-          selectedImage={formData.image || null}
+          selectedImage={(formData.images && formData.images[0]) || null}
           onImageSelect={(imagePath) => {
-            updateField('image', imagePath)
+            updateField('images', [imagePath])
+            updateField('logoUrl', imagePath)
             saveToLocalStorage()
           }}
         />
