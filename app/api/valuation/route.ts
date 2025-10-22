@@ -470,6 +470,88 @@ ${ebitdaMargin && Number(ebitdaMargin) > 40 ? `⚠️ FLAGGA: ${ebitdaMargin}% E
       prompt += `\n\n⚠️ Använd varumärkesstyrka för att justera multiplar - starkt brand = högre värdering!`
     }
     
+    // TRUSTPILOT DATA - E-handels TrustScore
+    if (enrichedData.trustpilotData) {
+      const tp = enrichedData.trustpilotData
+      prompt += `\n\n**TRUSTPILOT - E-HANDELS TRUST SCORE:**`
+      
+      if (tp.trustScore) {
+        prompt += `\n- TrustScore: ${tp.trustScore.score.toFixed(1)}/5.0`
+        prompt += `\n- Antal recensioner: ${tp.trustScore.totalReviews.toLocaleString()}`
+        
+        // Interpret TrustScore
+        if (tp.trustScore.score >= 4.5 && tp.trustScore.totalReviews >= 100) {
+          prompt += `\n  ✓ EXCELLENT: Mycket hög kundnöjdhet för e-handel - starkt förtroende!`
+        } else if (tp.trustScore.score >= 4.0 && tp.trustScore.totalReviews >= 50) {
+          prompt += `\n  ✓ GOOD: Bra TrustScore - stabilt förtroende`
+        } else if (tp.trustScore.score >= 3.5) {
+          prompt += `\n  ℹ️ AVERAGE: Genomsnittlig TrustScore`
+        } else {
+          prompt += `\n  ⚠️ VARNING: Låg TrustScore kan indikera kundproblem`
+        }
+        
+        // Show distribution if available
+        if (tp.trustScore.reviewDistribution) {
+          const dist = tp.trustScore.reviewDistribution
+          const total = dist[5] + dist[4] + dist[3] + dist[2] + dist[1]
+          if (total > 0) {
+            prompt += `\n- Fördelning: ${dist[5]}% fem-stjärniga, ${dist[1]}% en-stjärniga`
+            
+            if (dist[5] > 70) {
+              prompt += `\n  ✓ Övervägande positiva recensioner`
+            } else if (dist[1] > 30) {
+              prompt += `\n  ⚠️ Många negativa recensioner - undersök orsaker`
+            }
+          }
+        }
+      }
+      
+      // Trend analysis
+      if (tp.trend) {
+        prompt += `\n- Trend: ${tp.trend.direction}`
+        
+        if (tp.trend.direction === 'improving') {
+          prompt += ` ⬆️ (förbättras)`
+          prompt += `\n  ✓ POSITIVT: Kundnöjdheten ökar - bra tecken!`
+        } else if (tp.trend.direction === 'declining') {
+          prompt += ` ⬇️ (försämras)`
+          prompt += `\n  ⚠️ VARNING: Kundnöjdheten minskar - undersök orsaker`
+        }
+      }
+      
+      // Business info
+      if (tp.businessInfo?.claimedProfile) {
+        prompt += `\n- Status: ✓ Claimed profile (visar professionalism)`
+      }
+      
+      if (tp.responseRate !== undefined) {
+        prompt += `\n- Svarsfrekvens: ${tp.responseRate}%`
+        
+        if (tp.responseRate >= 80) {
+          prompt += `\n  ✓ Hög svarsfrekvens - aktivt kundengagemang`
+        }
+      }
+      
+      if (tp.responseTime) {
+        prompt += `\n- Svarstid: ${tp.responseTime}`
+      }
+      
+      // E-commerce Trust Score (combined with Google)
+      if (tp.ecommerceTrust) {
+        prompt += `\n\nKombinerad E-handels Trust Score: ${tp.ecommerceTrust.score}/100 (${tp.ecommerceTrust.level})`
+        
+        if (tp.ecommerceTrust.level === 'excellent') {
+          prompt += `\n  ✓ EXCELLENT: Mycket starkt e-handelsförtroende - kan motivera +15-20% högre multipel`
+        } else if (tp.ecommerceTrust.level === 'good') {
+          prompt += `\n  ✓ GOOD: Starkt förtroende - kan motivera +5-10% högre multipel`
+        } else if (tp.ecommerceTrust.level === 'poor') {
+          prompt += `\n  ⚠️ WARNING: Lågt förtroende kan minska värdet med 10-20%`
+        }
+      }
+      
+      prompt += `\n\n⚠️ För e-handel är TrustScore KRITISKT - använd detta som primär varumärkesindikator!`
+    }
+    
     if (enrichedData.bolagsverketData) {
       prompt += `\n\nBolagsverket (Officiell data):
 - Registreringsdatum: ${enrichedData.bolagsverketData.registrationDate || 'Ej tillgängligt'}

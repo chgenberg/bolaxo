@@ -6,6 +6,7 @@ import { scrapeRatsit } from '@/lib/scrapers/ratsit'
 import { scrapeProff } from '@/lib/scrapers/proff'
 import { scrapeLinkedIn, estimateEmployeeGrowth } from '@/lib/scrapers/linkedin'
 import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/google-mybusiness'
+import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
 
 const prisma = new PrismaClient()
 
@@ -45,10 +46,11 @@ export async function POST(request: Request) {
         proffData: null,
         linkedinData: null,
         googleMyBusinessData: null,
+        trustpilotData: null,
       },
     }
 
-    // 2. PARALLEL DATA FETCHING (8x källor samtidigt!)
+    // 2. PARALLEL DATA FETCHING (9x källor samtidigt!)
     const startTime = Date.now()
     
     const [
@@ -59,7 +61,8 @@ export async function POST(request: Request) {
       ratsitResult,
       proffResult,
       linkedinResult,
-      googleResult
+      googleResult,
+      trustpilotResult
     ] = await Promise.allSettled([
       orgNumber ? fetchBolagsverketData(orgNumber) : Promise.resolve(null),
       website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
@@ -69,6 +72,7 @@ export async function POST(request: Request) {
       orgNumber ? scrapeProff(orgNumber) : Promise.resolve(null),
       companyName ? scrapeLinkedIn(companyName, website) : Promise.resolve(null),
       companyName ? scrapeGoogleMyBusiness(companyName, enrichedData.rawData.bolagsverketData?.address) : Promise.resolve(null),
+      companyName && website ? scrapeTrustpilot(companyName, website) : Promise.resolve(null),
     ])
 
     console.log(`Parallel fetch completed in ${Date.now() - startTime}ms`)
@@ -240,6 +244,32 @@ export async function POST(request: Request) {
         reviews: googleData.rating?.totalReviews,
         brandScore: googleData.brandStrength?.score,
         claimed: googleData.claimed,
+      })
+    }
+
+    // TRUSTPILOT DATA - E-handelsrecensioner
+    if (trustpilotResult.status === 'fulfilled' && trustpilotResult.value) {
+      const trustpilotData = trustpilotResult.value
+      enrichedData.rawData.trustpilotData = trustpilotData
+      
+      // Calculate combined e-commerce trust score
+      const googleRating = enrichedData.rawData.googleMyBusinessData?.rating?.average
+      const googleReviews = enrichedData.rawData.googleMyBusinessData?.rating?.totalReviews
+      
+      if (trustpilotData.trustScore || googleRating) {
+        const ecommerceTrust = calculateEcommerceTrust(
+          trustpilotData,
+          googleRating,
+          googleReviews
+        )
+        trustpilotData.ecommerceTrust = ecommerceTrust
+      }
+      
+      console.log('✓ Trustpilot data:', {
+        score: trustpilotData.trustScore?.score,
+        reviews: trustpilotData.trustScore?.totalReviews,
+        trend: trustpilotData.trend?.direction,
+        ecommerceTrust: trustpilotData.ecommerceTrust?.score,
       })
     }
 
