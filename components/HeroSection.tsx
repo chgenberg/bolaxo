@@ -51,8 +51,8 @@ export default function HeroSection() {
       <div className="relative bg-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="heading-2 mb-4">Sveriges största marknadsplats för företagsförsäljning</h2>
-            <p className="text-muted text-lg">Live statistik från plattformen</p>
+            <h2 className="heading-2 mb-4">AI-driven marknadsplats som ger dig tiden tillbaka</h2>
+            <p className="text-muted text-lg">Automatisering sparar veckor av manuellt arbete – följ med i realtid</p>
           </div>
           <MetricsDashboard />
         </div>
@@ -63,9 +63,9 @@ export default function HeroSection() {
 
 function SellerHero() {
   const benefits = [
-    { icon: TrendingUp, text: 'Nå 50,000+ kvalificerade köpare' },
-    { icon: Shield, text: 'Säker process med NDA-skydd' },
-    { icon: Users, text: 'Personlig rådgivning ingår' },
+    { icon: TrendingUp, text: 'AI-driven värdering på 5 minuter – helt gratis' },
+    { icon: Shield, text: 'Fullständig kontroll med NDA & anonymitet' },
+    { icon: Users, text: 'Följ hela affären i din egen dashboard' },
   ]
 
   return (
@@ -75,7 +75,7 @@ function SellerHero() {
         <div className="space-y-8">
           <div>
             <h1 className="heading-1 mb-6">
-              Sälj ditt företag till{' '}
+              Ditt livsverk förtjänar{' '}
               <span className="text-primary-blue relative">
                 rätt köpare
                 <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
@@ -84,8 +84,8 @@ function SellerHero() {
               </span>
             </h1>
             <p className="text-xl text-text-gray leading-relaxed">
-              Få ditt företag värderat, skapa en professionell annons och 
-              nå tusentals kvalificerade köpare. Helt anonymt tills du väljer annat.
+              Från AI-värdering till signerad affär – allt i en plattform. 
+              Vi automatiserar det komplexa så du kan fokusera på det viktiga: rätt köpare, rätt pris, rätt timing.
             </p>
           </div>
 
@@ -115,7 +115,7 @@ function SellerHero() {
           {/* Trust Badge */}
           <div className="flex items-center space-x-2 text-sm text-text-gray">
             <CheckCircle className="w-5 h-5 text-success" />
-            <span>Över 2,000 företag har sålt via BOLAXO</span>
+            <span>Fridfull process med full transparens – från värdering till signering</span>
           </div>
         </div>
 
@@ -159,9 +159,9 @@ function SellerHero() {
 
 function BuyerHero() {
   const features = [
-    { icon: Shield, text: 'Förhandsgranskning innan NDA' },
-    { icon: TrendingUp, text: 'Detaljerad finansiell data' },
-    { icon: Users, text: 'Direktkontakt med säljare' },
+    { icon: Shield, text: 'AI matchar perfekta affärer till dig – automatiskt' },
+    { icon: TrendingUp, text: 'Full insyn från NDA till signering' },
+    { icon: Users, text: 'Hantera alla dina deals i en dashboard' },
   ]
 
   return (
@@ -171,17 +171,17 @@ function BuyerHero() {
         <div className="space-y-8">
           <div>
             <h1 className="heading-1 mb-6">
-              Hitta ditt nästa{' '}
+              Låt AI:n hitta din{' '}
               <span className="text-primary-blue relative">
-                förvärv
+                nästa affär
                 <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
                   <path d="M0 4 Q50 0 100 4 T200 4" stroke="#003366" strokeWidth="2" fill="none" opacity="0.3"/>
                 </svg>
               </span>
             </h1>
             <p className="text-xl text-text-gray leading-relaxed">
-              Upptäck kvalitetskontrollerade företag till salu. 
-              Få tillgång till detaljerad information och kontakt med säljare.
+              Ingen mer gissning. Smart matching ger dig de bästa affärerna baserat på din profil. 
+              Från första kontakt till signerad affär – allt i en plattform.
             </p>
           </div>
 
@@ -211,16 +211,16 @@ function BuyerHero() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-6">
             <div>
-              <div className="text-2xl font-bold text-primary-blue">500+</div>
-              <div className="text-sm text-text-gray">Aktiva annonser</div>
+              <div className="text-2xl font-bold text-primary-blue">87-94%</div>
+              <div className="text-sm text-text-gray">AI match score</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-primary-blue">24h</div>
-              <div className="text-sm text-text-gray">Svarstid</div>
+              <div className="text-2xl font-bold text-primary-blue">5 min</div>
+              <div className="text-sm text-text-gray">Till första match</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-primary-blue">98%</div>
-              <div className="text-sm text-text-gray">Nöjda köpare</div>
+              <div className="text-2xl font-bold text-primary-blue">100%</div>
+              <div className="text-sm text-text-gray">Transparent process</div>
             </div>
           </div>
         </div>

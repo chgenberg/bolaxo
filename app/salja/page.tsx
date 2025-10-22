@@ -11,7 +11,7 @@ export default function SaljaInfoPage() {
             Så funkar det för säljare
           </h1>
           <p className="text-lg text-text-gray max-w-2xl mx-auto">
-            Från AI-driven värdering till fullständig deal management – vi följer dig hela vägen
+            Ditt livsverk förtjänar en värderad process. Vi automatiserar det komplexa och ger dig full kontroll – från första värderingen till signerad affär.
           </p>
         </div>
 

@@ -10,7 +10,7 @@ export default function KopareInfoPage() {
             Så funkar det för köpare
           </h1>
           <p className="text-lg text-text-gray max-w-2xl mx-auto">
-            AI-driven matchning, verifiering och deal management från första sökning till closing
+            Slipp gissa. AI:n hittar perfekta affärer åt dig – från första match till signerad affär. Ingen mer ineffektiv letande, bara rätt företag i rätt tid.
           </p>
         </div>
 

@@ -74,8 +74,8 @@ export default function Footer() {
               />
             </Link>
             <p className="text-text-gray leading-relaxed">
-              Sveriges ledande marknadsplats för företagsförsäljning. 
-              Vi hjälper dig att sälja eller köpa företag tryggt och effektivt.
+              AI-driven marknadsplats som förenklar hela affärsprocessen. 
+              Från värdering till signering – vi automatiserar det komplexa så du kan fokusera på det viktiga.
             </p>
             
             {/* Contact Info */}

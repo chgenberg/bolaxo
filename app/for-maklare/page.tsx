@@ -22,7 +22,7 @@ export default function ForMaklarePage() {
             För företagsmäklare
           </h1>
           <p className="text-lg text-text-gray max-w-2xl mx-auto">
-            Hantera flera annonser samtidigt. BankID-verifierad legitimitet. Personliga licenser.
+            Pipeline-översikt, automatisk deal tracking och fullständig statistik – allt du behöver för att driva dina affärer framåt, snabbare.
           </p>
         </div>
 
@@ -34,9 +34,9 @@ export default function ForMaklarePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
             </div>
-            <h3 className="font-bold text-lg mb-2">Hantera flera kunder</h3>
+            <h3 className="font-bold text-lg mb-2">Pipeline & Deal Tracking</h3>
             <p className="text-sm text-text-gray">
-              Skapa och hantera annonser åt dina kunder från en central portal
+              Se alla dina affärer i pipeline med AI-driven konverteringsanalys och riskbedömning
             </p>
           </div>
 
@@ -58,9 +58,9 @@ export default function ForMaklarePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
-            <h3 className="font-bold text-lg mb-2">Analytics & rapporter</h3>
+            <h3 className="font-bold text-lg mb-2">Realtids Analytics</h3>
             <p className="text-sm text-text-gray">
-              Se statistik för alla dina annonser. Exportera rapporter till kunder
+              Volym, genomförandegrad, pipeline-värde och konvertering – allt i din egen dashboard
             </p>
           </div>
         </div>
@@ -98,15 +98,15 @@ export default function ForMaklarePage() {
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="w-5 h-5 text-success mr-3 flex-shrink-0 mt-0.5" />
-                  <span className="text-text-dark">Central dashboard för alla objekt</span>
+                  <span className="text-text-dark">Pipeline-dashboard med konverteringsmetrik</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="w-5 h-5 text-success mr-3 flex-shrink-0 mt-0.5" />
-                  <span className="text-text-dark">NDA-hantering åt kunder</span>
+                  <span className="text-text-dark">Deal tracking från LOI till closing</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="w-5 h-5 text-success mr-3 flex-shrink-0 mt-0.5" />
-                  <span className="text-text-dark">Statistik & rapporter</span>
+                  <span className="text-text-dark">Realtids statistik & analytics</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="w-5 h-5 text-success mr-3 flex-shrink-0 mt-0.5" />
@@ -169,7 +169,11 @@ export default function ForMaklarePage() {
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="w-5 h-5 text-primary-blue mr-3 flex-shrink-0 mt-0.5" />
-                  <span className="text-text-dark">Advanced analytics & export</span>
+                  <span className="text-text-dark">Advanced analytics med custom rapporter</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-primary-blue mr-3 flex-shrink-0 mt-0.5" />
+                  <span className="text-text-dark">Team collaboration för större transaktioner</span>
                 </li>
               </ul>
             </div>

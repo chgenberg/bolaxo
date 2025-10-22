@@ -5,19 +5,19 @@ import Link from 'next/link'
 export default function HomePage() {
   const features = [
     {
-      icon: Shield,
-      title: 'Säker process',
-      description: 'NDA-skydd och verifierade köpare garanterar trygg affärsprocess.',
+      icon: TrendingUp,
+      title: 'AI-driven värdering & matching',
+      description: 'Få värdering på 5 minuter. AI:n hittar rätt köpare åt dig automatiskt med 87-94% match score.',
     },
     {
-      icon: TrendingUp,
-      title: 'Maximal synlighet',
-      description: 'Nå över 50,000 kvalificerade köpare aktivt sökande investeringar.',
+      icon: Shield,
+      title: 'Full transparens från start till mål',
+      description: 'Följ varje steg i realtid. Analytics, milestolpar och aktivitetslogg – du har alltid koll.',
     },
     {
       icon: Users,
-      title: 'Personlig rådgivning',
-      description: 'Dedikerade experter guidar dig genom hela försäljningsprocessen.',
+      title: 'Automation som förenklar din vardag',
+      description: 'Vi automatiserar det komplexa. NDA-signering, dokument, betalningar – allt i en plattform.',
     },
   ]
 
@@ -25,21 +25,21 @@ export default function HomePage() {
     {
       name: 'Anna Lindgren',
       role: 'VD, TechStart AB',
-      content: 'BOLAXO gjorde hela processen smidig. Vi hittade rätt köpare på bara 3 månader och fick bra rådgivning hela vägen.',
+      content: 'AI-värderingen gav oss direkt klarhet och dashboarden gjorde hela processen transparent. Följde varje steg i realtid – otroligt lugnande när man säljer sitt livsverk.',
       rating: 5,
       image: '/testimonial-1.jpg',
     },
     {
       name: 'Marcus Holm',
       role: 'Grundare, E-handel Sverige',
-      content: 'Professionell hantering från start till mål. NDA-processen gav oss trygghet att dela känslig information.',
+      content: 'Smart matching hittade perfekta köpare automatiskt. Från första match till signerad affär tog det 65 dagar – otroligt smidigt med allt på ett ställe.',
       rating: 5,
       image: '/testimonial-2.jpg',
     },
     {
       name: 'Sara Nilsson',
       role: 'Ägare, Konsultbolaget',
-      content: 'Fantastisk plattform! Vi fick över 20 seriösa intressenter och sålde till över förväntan.',
+      content: 'Att se analytics i realtid var game-changing. Visste exakt hur många som tittade, NDA-förfrågningar och intresse – gav oss förhandlingsstyrka.',
       rating: 5,
       image: '/testimonial-3.jpg',
     },
@@ -60,9 +60,9 @@ export default function HomePage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="heading-2 mb-4">Därför väljer företagare BOLAXO</h2>
+            <h2 className="heading-2 mb-4">Mer tid till det som betyder något</h2>
             <p className="text-lg text-text-gray max-w-2xl mx-auto">
-              Vi kombinerar teknik med personlig service för att skapa Sveriges mest effektiva marknadsplats för företagsförsäljning
+              Automatisering sparar veckor av arbete. AI hanterar matchning, analytics och rapporter – du fokuserar på rätt beslut vid rätt tid.
             </p>
           </div>
 
