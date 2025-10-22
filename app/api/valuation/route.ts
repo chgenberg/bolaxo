@@ -652,7 +652,7 @@ ${data.paymentTerms ? `- Betaltider från kunder: ${data.paymentTerms} dagar` : 
       // Top search results
       if (gs.results.length > 0) {
         prompt += `\n\nTOP SÖKRESULTAT:`
-        gs.results.slice(0, 3).forEach((result, i) => {
+        gs.results.slice(0, 3).forEach((result: { title: string; snippet: string }, i: number) => {
           prompt += `\n${i + 1}. ${result.title}`
           prompt += `\n   ${result.snippet.slice(0, 150)}...`
         })
