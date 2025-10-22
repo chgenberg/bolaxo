@@ -172,6 +172,17 @@
     }
   }
   
+  /* Seller Hero Background */
+  .seller-hero-bg {
+    background-image: url('/hero_background_mobile.png');
+  }
+  
+  @media (min-width: 768px) {
+    .seller-hero-bg {
+      background-image: url('/hero_background_desktop.png');
+    }
+  }
+  
   /* Galaxy Hero Background (Sellers & Buyers) */
   .galaxy-hero-bg {
     background-image: url('/galax_mobile.png');

@@ -94,99 +94,52 @@ interface SellerHeroProps {
 }
 
 function SellerHero({ setShowValuation }: SellerHeroProps) {
-  const benefits = [
-    { icon: TrendingUp, text: 'Vi hittar de mest relevanta köparna åt dig' },
-    { icon: Shield, text: 'Full insyn från första NDA till signerat avtal' },
-    { icon: Users, text: 'Hantera hela försäljningen smidigt i din dashboard' },
-  ]
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
-        <div className="space-y-8">
-          <div>
-            <h1 className="heading-1 mb-6">
-              Sälj ditt företag –{' '}
-              <span className="text-primary-blue relative">
-                enklare än någonsin
-                <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
-                  <path d="M0 4 Q50 0 100 4 T200 4" stroke="#003366" strokeWidth="2" fill="none" opacity="0.3"/>
-                </svg>
+    <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center">
+      {/* Background with overlay */}
+      <div className="absolute inset-0 seller-hero-bg bg-cover bg-center bg-no-repeat">
+        <div className="absolute inset-0 bg-gradient-to-br from-black/50 to-black/30"></div>
+      </div>
+      
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="space-y-6">
+          {/* Main heading */}
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+            Sälj ditt företag – tryggt, digitalt och klart.
+          </h1>
+          
+          {/* Subheading */}
+          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+            Från första värdering till signerad affär.
+            <br />
+            Allt sker säkert och smidigt på ett ställe.
+          </p>
+          
+          {/* CTA Button */}
+          <div className="pt-4">
+            <button
+              onClick={() => setShowValuation(true)}
+              className="inline-flex flex-col items-center px-8 py-4 bg-white text-primary-blue font-semibold text-lg rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+            >
+              <span className="flex items-center">
+                Starta Gratis Värdering
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
-            </h1>
-            <p className="text-xl text-text-gray leading-relaxed mb-8">
-              Vi hjälper dig hitta rätt köpare utan gissningar och krångel. 
-              Du får relevanta matchningar baserat på ditt företags profil – från gratis värdering till genomförd affär, samlat på ett ställe.
-            </p>
+              <span className="text-sm font-normal text-text-gray mt-1">
+                Tar 2 minuter – helt kostnadsfritt
+              </span>
+            </button>
             
-            {/* Centered CTA Button with pulsing effect */}
-            <div className="relative mb-6">
-              <div className="flex justify-center">
-                <div className="relative">
-                  {/* Pulsing background effect */}
-                  <div className="absolute inset-0 bg-primary-blue rounded-full blur-xl opacity-50 animate-pulse"></div>
-                  <button
-                    onClick={() => setShowValuation(true)}
-                    className="relative inline-flex items-center justify-center px-8 py-4 bg-primary-blue text-white font-semibold text-lg rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
-                  >
-                    Starta Gratis Värdering
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </div>
-              <p className="mt-4 text-sm text-text-gray text-center">
-                Få din företagsvärdering på 2 minuter – helt kostnadsfritt
-              </p>
-              
-              {/* Secondary CTA - Smaller and under text */}
-              <div className="flex justify-center mt-4">
-                <Link
-                  href="/salja"
-                  className="text-sm text-primary-blue hover:text-blue-700 inline-flex items-center justify-center font-medium transition-colors"
-                >
-                  Så fungerar det
-                  <ArrowRight className="ml-1 w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Benefits */}
-          <div className="space-y-4">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center space-x-3 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
-                <div className="flex-shrink-0 w-10 h-10 bg-light-blue/30 rounded-full flex items-center justify-center">
-                  <benefit.icon className="w-5 h-5 text-primary-blue" />
-                </div>
-                <span className="text-text-dark font-medium">{benefit.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right Content - Hero Image */}
-        <div className="relative lg:ml-auto">
-          <div className="relative max-w-xl mx-auto">
-            <img
-              src="/bolaxo_hero.png"
-              alt="Bolaxo Platform"
-              className="w-full h-auto rounded-2xl shadow-2xl animate-pulse-shadow"
-            />
-            
-            {/* Floating Badges */}
-            <div className="absolute -bottom-4 -left-4 bg-white px-6 py-3 rounded-xl shadow-card animate-float-slow">
-              <div className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-green-600" />
-                <span className="font-semibold text-text-dark">Verifierad köpare</span>
-              </div>
-            </div>
-            
-            <div className="absolute -top-4 -right-4 bg-white px-6 py-3 rounded-xl shadow-card animate-float-delayed">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-5 h-5 text-primary-blue" />
-                <span className="font-semibold text-text-dark">NDA-skyddad</span>
-              </div>
+            {/* Secondary link */}
+            <div className="mt-6">
+              <Link
+                href="/salja"
+                className="text-white/90 hover:text-white inline-flex items-center text-sm font-medium transition-colors"
+              >
+                Så fungerar det
+                <ArrowRight className="ml-1 w-4 h-4" />
+              </Link>
             </div>
           </div>
         </div>
