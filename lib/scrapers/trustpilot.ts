@@ -26,6 +26,15 @@ interface TrustpilotData {
   responseRate?: number // 0-100
   responseTime?: string
   verifiedReviews?: number
+  ecommerceTrust?: {
+    score: number
+    level: 'excellent' | 'good' | 'fair' | 'poor'
+    factors: {
+      trustpilot: number
+      google: number
+      volume: number
+    }
+  }
   source: 'trustpilot'
 }
 

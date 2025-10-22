@@ -29,6 +29,15 @@ interface GoogleMyBusinessData {
   claimed?: boolean
   responseRate?: string
   responseTime?: string
+  brandStrength?: {
+    score: number
+    factors: {
+      rating: number
+      reviews: number
+      claimed: number
+      engagement: number
+    }
+  }
   source: 'google_mybusiness'
 }
 
