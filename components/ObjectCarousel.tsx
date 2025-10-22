@@ -53,21 +53,13 @@ export default function ObjectCarousel({ onMapClick }: ObjectCarouselProps) {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-text-dark">Utvalda företag till salu</h2>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/sok"
-              className="text-primary-blue hover:underline text-sm font-medium"
-            >
-              Se alla {mockObjects.length} objekt →
-            </Link>
-            <button
-              onClick={onMapClick}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <Map className="w-4 h-4" />
-              <span className="text-sm font-medium">Karta</span>
-            </button>
-          </div>
+          <button
+            onClick={onMapClick}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <Map className="w-4 h-4" />
+            <span className="text-sm font-medium">Visa på karta</span>
+          </button>
         </div>
 
         {/* Carousel Content */}
@@ -195,6 +187,21 @@ export default function ObjectCarousel({ onMapClick }: ObjectCarouselProps) {
               aria-label={`Gå till objekt ${index + 1}`}
             />
           ))}
+        </div>
+
+        {/* View All Button - Centered with pulsing effect */}
+        <div className="flex justify-center mt-8">
+          <div className="relative">
+            {/* Pulsing background effect */}
+            <div className="absolute inset-0 bg-primary-blue/30 rounded-full blur-lg opacity-60 animate-pulse"></div>
+            <Link
+              href="/sok"
+              className="relative inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary-blue to-blue-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+            >
+              Se alla {mockObjects.length} objekt
+              <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
