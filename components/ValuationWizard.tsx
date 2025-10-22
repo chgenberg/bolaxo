@@ -279,7 +279,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
         if (isEnriching) return false
         return hasBasics && hasPrivacy
       case 2:
-        return data.companyAge && data.revenue && data.employees
+        // Kräv EXAKTA finansiella siffror
+        return data.exactRevenue && data.operatingCosts && data.companyAge && data.revenue3Years && data.employees
       case 3:
         // Check if industry-specific questions are answered
         const questions = industryQuestions[data.industry] || []
@@ -433,10 +434,105 @@ export default function ValuationWizard({ onClose }: WizardProps) {
             <div className="space-y-6">
               <div className="text-center mb-8">
                 <Building className="w-12 h-12 text-primary-blue mx-auto mb-4" />
-                <h3 className="heading-3 mb-2">Företagsdata</h3>
-                <p className="text-text-gray">Grundläggande information om verksamheten</p>
+                <h3 className="heading-3 mb-2">Finansiell Information</h3>
+                <p className="text-text-gray">Exakta siffror ger bäst värdering - var så specifik som möjligt</p>
               </div>
 
+              {/* OBLIGATORISKA EXAKTA SIFFROR */}
+              <div className="bg-blue-50 border-2 border-primary-blue p-4 rounded-xl mb-6">
+                <h4 className="font-semibold text-primary-blue mb-3 flex items-center">
+                  <span className="text-lg mr-2">💰</span>
+                  Faktiska siffror (senaste 12 månader)
+                </h4>
+                
+                <FormField
+                  label="Årsomsättning (SEK)"
+                  type="number"
+                  value={data.exactRevenue || ''}
+                  onValueChange={(value) => setData({ ...data, exactRevenue: value })}
+                  placeholder="7500000"
+                  tooltip="Ange exakt omsättning i kronor för mest exakt värdering"
+                  required
+                />
+
+                <div className="mt-4">
+                  <FormField
+                    label="Rörelsekostnader totalt (SEK/år)"
+                    type="number"
+                    value={data.operatingCosts || ''}
+                    onValueChange={(value) => setData({ ...data, operatingCosts: value })}
+                    placeholder="6500000"
+                    tooltip="Alla kostnader: COGS + löner + marknadsföring + lokaler + etc"
+                    required
+                  />
+                </div>
+
+                <div className="mt-4 p-3 bg-white rounded-lg">
+                  <div className="text-sm text-text-gray mb-1">Beräknad EBITDA (automatisk)</div>
+                  <div className="text-2xl font-bold text-primary-blue">
+                    {data.exactRevenue && data.operatingCosts 
+                      ? `${(Number(data.exactRevenue) - Number(data.operatingCosts)).toLocaleString('sv-SE')} kr`
+                      : '---'
+                    }
+                  </div>
+                  {data.exactRevenue && data.operatingCosts && (
+                    <div className="text-sm text-text-gray mt-1">
+                      Marginal: {((Number(data.exactRevenue) - Number(data.operatingCosts)) / Number(data.exactRevenue) * 100).toFixed(1)}%
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* KOSTNADSUPPDELNING FÖR BÄTTRE ANALYS */}
+              <div className="bg-gray-50 p-4 rounded-xl">
+                <h4 className="font-semibold text-text-dark mb-3">
+                  📊 Kostnadsuppdelning (valfritt men rekommenderat)
+                </h4>
+                
+                <FormField
+                  label="COGS - Kostnad sålda varor (SEK/år)"
+                  type="number"
+                  value={data.cogs || ''}
+                  onValueChange={(value) => setData({ ...data, cogs: value })}
+                  placeholder="3000000"
+                  tooltip="Direkta kostnader för produkter/tjänster du säljer"
+                />
+
+                <div className="mt-3">
+                  <FormField
+                    label="Lönekostnader inkl. arbetsgivaravgifter (SEK/år)"
+                    type="number"
+                    value={data.salaries || ''}
+                    onValueChange={(value) => setData({ ...data, salaries: value })}
+                    placeholder="1500000"
+                    tooltip="Totala personalkostnader"
+                  />
+                </div>
+
+                <div className="mt-3">
+                  <FormField
+                    label="Marknadsföringskostnader (SEK/år)"
+                    type="number"
+                    value={data.marketingCosts || ''}
+                    onValueChange={(value) => setData({ ...data, marketingCosts: value })}
+                    placeholder="800000"
+                    tooltip="Totala utgifter för marknadsföring och försäljning"
+                  />
+                </div>
+
+                <div className="mt-3">
+                  <FormField
+                    label="Lokalhyra/fastighet (SEK/år)"
+                    type="number"
+                    value={data.rentCosts || ''}
+                    onValueChange={(value) => setData({ ...data, rentCosts: value })}
+                    placeholder="240000"
+                    tooltip="Årlig hyra eller fastighetskostnader"
+                  />
+                </div>
+              </div>
+
+              {/* ÖVRIG VIKTIG INFO */}
               <FormSelect
                 label="Hur gammalt är företaget?"
                 value={data.companyAge}
@@ -449,22 +545,6 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   { value: '20+', label: 'Över 20 år' },
                 ]}
                 placeholder="Välj ålder"
-                required
-              />
-
-              <FormSelect
-                label="Årsomsättning (senaste året)"
-                value={data.revenue}
-                onChange={(e) => setData({ ...data, revenue: e.target.value })}
-                options={[
-                  { value: '0-1', label: 'Under 1 Mkr' },
-                  { value: '1-5', label: '1-5 Mkr' },
-                  { value: '5-10', label: '5-10 Mkr' },
-                  { value: '10-20', label: '10-20 Mkr' },
-                  { value: '20-50', label: '20-50 Mkr' },
-                  { value: '50+', label: 'Över 50 Mkr' },
-                ]}
-                placeholder="Välj omsättning"
                 required
               />
 
@@ -483,21 +563,6 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               />
 
               <FormSelect
-                label="Vinstmarginal (EBITDA/EBIT)"
-                value={data.profitMargin}
-                onChange={(e) => setData({ ...data, profitMargin: e.target.value })}
-                options={[
-                  { value: 'negative', label: 'Negativt resultat' },
-                  { value: '0-5', label: '0-5%' },
-                  { value: '5-10', label: '5-10%' },
-                  { value: '10-20', label: '10-20%' },
-                  { value: '20+', label: 'Över 20%' },
-                ]}
-                placeholder="Välj marginal"
-                required
-              />
-
-              <FormSelect
                 label="Antal anställda"
                 value={data.employees}
                 onChange={(e) => setData({ ...data, employees: e.target.value })}
@@ -512,22 +577,28 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 required
               />
 
-              {/* LIVE VALUATION PREVIEW */}
-              {data.revenue && data.profitMargin && data.industry && (
+              {/* LIVE VALUATION PREVIEW MED EXAKTA SIFFROR */}
+              {data.exactRevenue && data.operatingCosts && data.industry && (
                 <div className="bg-gradient-to-r from-primary-blue to-blue-700 text-white p-6 rounded-2xl shadow-lg animate-fade-in mt-6">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center">
                       <Sparkles className="w-5 h-5 mr-2" />
-                      <span className="text-sm opacity-90">Preliminär värdering</span>
+                      <span className="text-sm opacity-90">Preliminär värdering baserad på EXAKTA siffror</span>
                     </div>
                     <span className="text-xs bg-white/20 px-3 py-1 rounded-full">Live-uppdatering</span>
                   </div>
                   <div className="text-4xl font-bold mb-2">
-                    {calculateQuickValuation(data.revenue, data.profitMargin, data.industry)}
+                    {(() => {
+                      const revenue = Number(data.exactRevenue) / 1000000
+                      const ebitda = (Number(data.exactRevenue) - Number(data.operatingCosts)) / Number(data.exactRevenue) * 100
+                      const profitMargin = ebitda > 20 ? '20+' : ebitda > 10 ? '10-20' : ebitda > 5 ? '5-10' : '0-5'
+                      const revenueRange = revenue > 50 ? '50+' : revenue > 20 ? '20-50' : revenue > 10 ? '10-20' : revenue > 5 ? '5-10' : revenue > 1 ? '1-5' : '0-1'
+                      return calculateQuickValuation(revenueRange, profitMargin, data.industry)
+                    })()}
                   </div>
                   <p className="text-xs opacity-75">
-                    Baserat på {data.revenue} Mkr omsättning och {data.profitMargin}% marginal i {data.industry === 'ecommerce' ? 'e-handel' : data.industry}.
-                    Värdet uppdateras när du fyller i mer information.
+                    Baserat på {(Number(data.exactRevenue) / 1000000).toFixed(1)} MSEK omsättning och {((Number(data.exactRevenue) - Number(data.operatingCosts)) / Number(data.exactRevenue) * 100).toFixed(1)}% EBITDA-marginal.
+                    Den exakta AI-värderingen kommer när du fyllt i all information.
                   </p>
                 </div>
               )}
@@ -634,13 +705,35 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-text-gray">Omsättning</div>
-                  <div className="font-semibold">{data.revenue} Mkr</div>
+                  <div className="text-sm text-text-gray">Årsomsättning</div>
+                  <div className="font-semibold">
+                    {data.exactRevenue ? `${(Number(data.exactRevenue) / 1000000).toFixed(2)} MSEK` : 'Ej angiven'}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm text-text-gray">EBITDA</div>
+                  <div className="font-semibold">
+                    {data.exactRevenue && data.operatingCosts 
+                      ? `${((Number(data.exactRevenue) - Number(data.operatingCosts)) / 1000000).toFixed(2)} MSEK (${((Number(data.exactRevenue) - Number(data.operatingCosts)) / Number(data.exactRevenue) * 100).toFixed(1)}%)`
+                      : 'Ej angiven'}
+                  </div>
                 </div>
                 <div>
                   <div className="text-sm text-text-gray">Anställda</div>
                   <div className="font-semibold">{data.employees}</div>
                 </div>
+                {data.cogs && (
+                  <div>
+                    <div className="text-sm text-text-gray">COGS (varor/tjänster)</div>
+                    <div className="font-semibold">{(Number(data.cogs) / 1000000).toFixed(2)} MSEK</div>
+                  </div>
+                )}
+                {data.salaries && (
+                  <div>
+                    <div className="text-sm text-text-gray">Lönekostnader</div>
+                    <div className="font-semibold">{(Number(data.salaries) / 1000000).toFixed(2)} MSEK</div>
+                  </div>
+                )}
               </div>
 
               <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">

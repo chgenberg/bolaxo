@@ -136,42 +136,55 @@ export async function POST(request: Request) {
 
 function getSystemPrompt(): string {
   return `Du är en erfaren företagsvärderare med expertis inom SME M&A i Sverige och Norden.
+Du är KRITISK och DATADRIVEN - du ifrågasätter siffror som verkar orimliga.
 
 KRITISKA VÄRDERINGSREGLER:
 
-1. EBITDA vs EBIT - använd RÄTT nyckeltal:
-   - Användaren anger vinstmarginal i % (oftast EBITDA-marginal)
-   - Beräkna EBITDA: Omsättning × marginal
+1. ANVÄND EXAKTA SIFFROR NÄR TILLGÄNGLIGA:
+   - Användaren anger nu EXAKT omsättning (kr) och rörelsekostnader (kr)
+   - Beräkna EBITDA: Omsättning - Rörelsekostnader
    - EBIT ≈ EBITDA - avskrivningar (antag 10-15% av EBITDA om ej angivet)
    - Använd EBITDA-multiplar för SME-bolag (INTE EBIT-multiplar)
+   - Om exakta siffror SAKNAS: FLAGGA detta tydligt och förklara osäkerheten
 
-2. Branschspecifika multiplar (EV/EBITDA för SME):
-   - Tech/SaaS: 4-8x EBITDA
+2. VAR KRITISK TILL MARGINALERNA:
+   - E-handel: Typiska EBITDA-marginaler 10-30% (högt för nisch/premium, lågt för volym)
+   - Om marginal < 5%: IFRÅGASÄTT om siffrorna stämmer
+   - Om marginal > 40%: IFRÅGASÄTT om detta är hållbart
+   - Jämför ALLTID med branschnormer och förklara avvikelser
+
+3. Branschspecifika multiplar (EV/EBITDA för SME):
+   - Tech/SaaS: 4-8x EBITDA (högre för SaaS med recurring revenue)
    - E-handel: 2.5-5x EBITDA (eller 0.4-0.8x omsättning)
+     * CBD/supplement: 2.5-4x (regulatorisk risk)
+     * Mode/lifestyle: 3-5x
+     * Premium nisch: 4-6x (högre marginal, lojalitet)
    - Detaljhandel: 3-5x EBITDA
    - Tjänster/Konsult: 3-6x EBITDA
    - Tillverkning: 4-7x EBITDA
    - Restaurang: 2-4x EBITDA
    
-   Justera nedåt för: ägarberoende, få kunder, regulatorisk risk, negativ trend
+   Justera nedåt för: ågarberoende, få kunder, regulatorisk risk, negativ trend
    Justera uppåt för: dokumenterade processer, diversifierad kundbas, tillväxt
 
-3. Avkastningsvärdering:
+4. Avkastningsvärdering:
    - Värde = Normaliserat EBIT / Avkastningskrav
    - Avkastningskrav SME: 12-20% (högre = mindre/mer risk)
 
-4. Värdeintervall MÅSTE vara realistiskt:
+5. Värdeintervall MÅSTE vara realistiskt:
    - Max spread: 2.5x (t.ex. 1M - 2.5M)
    - Min ≥ 50% av "most likely"
    - Max ≤ 200% av "most likely"
 
-5. Sanity check:
-   - Jämför alla 3 metoder (EBITDA-multipel, omsättningsmultipel, avkastningsvärde)
-   - Använd vägt genomsnitt som "most likely"
+6. KRITISK GRANSKNING:
+   - Om marginal verkar för låg för branschen: FLAGGA och förklara
+   - Om marginal verkar osannolikt hög: FLAGGA och förklara
+   - Om EBITDA är negativ eller mycket låg jämfört med omsättning: förklara värderingen tydligt
 
 Din analys ska inkludera:
-- Realistiskt värdeintervall
-- Tydlig förklaring (EBITDA vs EBIT)
+- Realistiskt värdeintervall baserat på EXAKTA siffror
+- Tydlig förklaring och beräkningar
+- FLAGGA om siffror verkar orimliga eller saknas
 - SWOT-analys
 - Konkreta rekommendationer`
 }
@@ -190,6 +203,12 @@ function buildValuationPrompt(data: any, enrichedData: any = null): string {
     other: 'Övrigt'
   }
 
+  // Beräkna exakta siffror om tillgängliga
+  const exactRevenue = data.exactRevenue ? Number(data.exactRevenue) : null
+  const operatingCosts = data.operatingCosts ? Number(data.operatingCosts) : null
+  const ebitda = exactRevenue && operatingCosts ? exactRevenue - operatingCosts : null
+  const ebitdaMargin = exactRevenue && ebitda ? (ebitda / exactRevenue * 100).toFixed(2) : null
+
   let prompt = `Värdera följande företag:
 
 **FÖRETAGSINFORMATION:**
@@ -198,17 +217,32 @@ function buildValuationPrompt(data: any, enrichedData: any = null): string {
 - Ålder: ${data.companyAge} år
 - Antal anställda: ${data.employees}
 
-**FINANSIELL DATA:**
-- Årsomsättning (senaste året): ${data.revenue} Mkr
+**EXAKTA FINANSIELLA SIFFROR (senaste 12 månader):**
+${exactRevenue ? `- Årsomsättning: ${exactRevenue.toLocaleString('sv-SE')} kr (${(exactRevenue/1000000).toFixed(2)} MSEK)` : '- Årsomsättning: EJ ANGIVEN'}
+${operatingCosts ? `- Rörelsekostnader totalt: ${operatingCosts.toLocaleString('sv-SE')} kr` : '- Rörelsekostnader: EJ ANGIVEN'}
+${ebitda !== null ? `- EBITDA (beräknad): ${ebitda.toLocaleString('sv-SE')} kr (${(ebitda/1000000).toFixed(2)} MSEK)` : '- EBITDA: KAN EJ BERÄKNAS'}
+${ebitdaMargin ? `- EBITDA-marginal: ${ebitdaMargin}%` : ''}
 - Omsättningstrend senaste 3 år: ${data.revenue3Years}
-- Vinstmarginal (EBITDA/EBIT): ${data.profitMargin}%
+
+**KOSTNADSUPPDELNING (om tillgänglig):**
+${data.cogs ? `- COGS (kostnad sålda varor): ${Number(data.cogs).toLocaleString('sv-SE')} kr` : '- COGS: Ej angiven'}
+${data.salaries ? `- Lönekostnader (inkl. arbetsgivaravgifter): ${Number(data.salaries).toLocaleString('sv-SE')} kr` : '- Lönekostnader: Ej angiven'}
+${data.marketingCosts ? `- Marknadsföringskostnader: ${Number(data.marketingCosts).toLocaleString('sv-SE')} kr` : '- Marknadsföring: Ej angiven'}
+${data.rentCosts ? `- Lokalhyra/fastighet: ${Number(data.rentCosts).toLocaleString('sv-SE')} kr` : '- Lokalkostnader: Ej angiven'}
+
+**VIKTIGT - KRITISK GRANSKNING:**
+${!exactRevenue || !operatingCosts ? '⚠️ VARNING: Exakta finansiella siffror saknas delvis. Din värdering MÅSTE flagga detta och förklara osäkerheten.' : ''}
+${ebitdaMargin && Number(ebitdaMargin) < 5 ? `⚠️ FLAGGA: ${ebitdaMargin}% EBITDA-marginal verkar LÅG för ${industryLabels[data.industry]}. Är detta realistiskt? Kontrollera branschnormer.` : ''}
+${ebitdaMargin && Number(ebitdaMargin) > 40 ? `⚠️ FLAGGA: ${ebitdaMargin}% EBITDA-marginal verkar MYCKET HÖG för ${industryLabels[data.industry]}. Verifiera om detta är hållbart.` : ''}
 
 **BRANSCHSPECIFIK INFORMATION:**
 `
 
   // Lägg till branschspecifika detaljer
+  const excludedKeys = ['email', 'companyName', 'industry', 'companyAge', 'revenue', 'revenue3Years', 'profitMargin', 'employees', 'customerBase', 'competitiveAdvantage', 'futureGrowth', 'challenges', 'whySelling', 'exactRevenue', 'operatingCosts', 'cogs', 'salaries', 'marketingCosts', 'rentCosts', 'website', 'orgNumber', 'enrichedCompanyData']
+  
   Object.keys(data).forEach(key => {
-    if (!['email', 'companyName', 'industry', 'companyAge', 'revenue', 'revenue3Years', 'profitMargin', 'employees', 'customerBase', 'competitiveAdvantage', 'futureGrowth', 'challenges', 'whySelling'].includes(key)) {
+    if (!excludedKeys.includes(key)) {
       if (data[key]) {
         prompt += `- ${formatKey(key)}: ${data[key]}\n`
       }
@@ -401,9 +435,23 @@ function parseAIResponse(aiResponse: string, originalData: any): any {
 function generateFallbackValuation(data: any): any {
   // KORREKT VÄRDERING MED FLERA METODER
   
-  const revenue = parseRevenueRange(data.revenue) // i MSEK
-  const marginPercent = parseProfitMargin(data.profitMargin) // decimal (0.075 = 7.5%)
-  const ebitda = revenue * marginPercent // MSEK
+  // Använd exakta siffror om tillgängliga, annars fallback till ranges
+  let revenue: number // i MSEK
+  let ebitda: number // i MSEK
+  let marginPercent: number
+  
+  if (data.exactRevenue && data.operatingCosts) {
+    // EXAKTA SIFFROR - använd dessa!
+    revenue = Number(data.exactRevenue) / 1000000
+    ebitda = (Number(data.exactRevenue) - Number(data.operatingCosts)) / 1000000
+    marginPercent = ebitda / revenue
+  } else {
+    // FALLBACK till ranges (gamla systemet)
+    revenue = parseRevenueRange(data.revenue)
+    marginPercent = parseProfitMargin(data.profitMargin)
+    ebitda = revenue * marginPercent
+  }
+  
   const ebit = ebitda * 0.88 // Antag avskrivningar = 12% av EBITDA
   
   // METOD 1: EBITDA-MULTIPEL (primär för SME)
