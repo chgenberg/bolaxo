@@ -16,7 +16,7 @@ export default function HeroSection() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-light-blue/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative pt-12 md:pt-20 pb-20 md:pb-32">
+      <div className="relative pt-6 md:pt-12 pb-20 md:pb-32">
         {/* Tab Toggle */}
         <div className="max-w-md mx-auto px-4 mb-12">
           <div className="flex bg-white rounded-card shadow-soft p-1.5">
