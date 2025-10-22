@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles } from 'lucide-react'
+import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles, AlertCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from './FormField'
@@ -231,7 +231,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [autoAccountCreated, setAutoAccountCreated] = useState(false)
 
-  const totalSteps = 5
+  const totalSteps = 6
   const progress = (step / totalSteps) * 100
 
   const handleEnrichData = async () => {
@@ -338,20 +338,23 @@ export default function ValuationWizard({ onClose }: WizardProps) {
         if (isEnriching) return false
         return hasBasics && hasPrivacy
       case 2:
-        // Kräv EXAKTA finansiella siffror + universella riskfrågor
+        // Steg 2: Universella riskfrågor
+        return data.grossMargin &&
+               data.customerConcentrationRisk &&
+               data.regulatoryLicenses
+      case 3:
+        // Steg 3: Finansiella frågor
         return data.exactRevenue && 
                data.operatingCosts && 
                data.companyAge && 
                data.revenue3Years && 
-               data.employees &&
-               data.grossMargin &&
-               data.customerConcentrationRisk &&
-               data.regulatoryLicenses
-      case 3:
-        // Check if industry-specific questions are answered
+               data.employees
+      case 4:
+        // Steg 4: Branschspecifika frågor
         const questions = industryQuestions[data.industry] || []
         return questions.every(q => data[q.key])
-      case 4:
+      case 5:
+        // Steg 5: Kvalitativa frågor
         return qualitativeQuestions.every(q => data[q.key])
       default:
         return true
@@ -495,8 +498,91 @@ export default function ValuationWizard({ onClose }: WizardProps) {
             </div>
           )}
 
-          {/* Step 2: Företagsdata */}
+          {/* Step 2: Riskbedömning */}
           {step === 2 && (
+            <div className="space-y-6">
+              <div className="text-center mb-8">
+                <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
+                <h3 className="heading-3 mb-2">Riskbedömning</h3>
+                <p className="text-text-gray">Kritiska faktorer för värdering - påverkar multiplar med 20-50%</p>
+              </div>
+
+              {/* UNIVERSELLA RISKFRÅGOR */}
+              <div className="bg-red-50 border-2 border-red-300 p-4 rounded-xl">
+                <h4 className="font-semibold text-red-800 mb-3 flex items-center">
+                  <span className="text-lg mr-2">⚠️</span>
+                  Kritiska riskfaktorer
+                </h4>
+                
+                <FormField
+                  label="Bruttovinstmarginal / Gross Margin (%)"
+                  type="number"
+                  value={data.grossMargin || ''}
+                  onValueChange={(value) => setData({ ...data, grossMargin: value })}
+                  placeholder="45"
+                  tooltip="(Försäljning - COGS) / Försäljning × 100. Visar pricing power och konkurrenskraft."
+                  required
+                />
+
+                <div className="mt-4">
+                  <FormSelect
+                    label="Står största kunden för mer än 30% av omsättningen?"
+                    value={data.customerConcentrationRisk || ''}
+                    onChange={(e) => setData({ ...data, customerConcentrationRisk: e.target.value })}
+                    options={[
+                      { value: 'high', label: 'Ja, >50% från en kund (hög risk)' },
+                      { value: 'medium', label: 'Ja, 30-50% från en kund (medel risk)' },
+                      { value: 'low', label: 'Nej, diversifierad kundbas' },
+                    ]}
+                    placeholder="Välj"
+                    tooltip="Kundkoncentration är en av de största riskfaktorerna i M&A"
+                    required
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <FormField
+                    label="Externa lån/skulder totalt (SEK)"
+                    type="number"
+                    value={data.totalDebt || ''}
+                    onValueChange={(value) => setData({ ...data, totalDebt: value })}
+                    placeholder="0"
+                    tooltip="Banklån, företagsobligationer, andra skulder. Ange 0 om inga skulder."
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <FormSelect
+                    label="Kräver verksamheten speciella tillstånd/licenser?"
+                    value={data.regulatoryLicenses || ''}
+                    onChange={(e) => setData({ ...data, regulatoryLicenses: e.target.value })}
+                    options={[
+                      { value: 'none', label: 'Nej, inga speciella tillstånd' },
+                      { value: 'standard', label: 'Ja, standard branschlicenser (har alla)' },
+                      { value: 'complex', label: 'Ja, komplexa tillstånd (t.ex. läkemedel, finans)' },
+                      { value: 'at_risk', label: 'Ja, och risk för att förlora licens' },
+                    ]}
+                    placeholder="Välj"
+                    required
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <FormField
+                    label="Genomsnittlig betaltid från kunder (dagar)"
+                    type="number"
+                    value={data.paymentTerms || ''}
+                    onValueChange={(value) => setData({ ...data, paymentTerms: value })}
+                    placeholder="30"
+                    tooltip="Hur många dagar tar det innan kunder betalar? Påverkar kassaflöde."
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Finansiell Information */}
+          {step === 3 && (
             <div className="space-y-6">
               <div className="text-center mb-8">
                 <Building className="w-12 h-12 text-primary-blue mx-auto mb-4" />
@@ -643,78 +729,6 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 required
               />
 
-              {/* UNIVERSELLA RISKFRÅGOR - Alla branscher */}
-              <div className="bg-red-50 border-2 border-red-300 p-4 rounded-xl mt-6">
-                <h4 className="font-semibold text-red-800 mb-3 flex items-center">
-                  <span className="text-lg mr-2">⚠️</span>
-                  Riskbedömning (kritiskt för värdering)
-                </h4>
-                
-                <FormField
-                  label="Bruttovinstmarginal / Gross Margin (%)"
-                  type="number"
-                  value={data.grossMargin || ''}
-                  onValueChange={(value) => setData({ ...data, grossMargin: value })}
-                  placeholder="45"
-                  tooltip="(Försäljning - COGS) / Försäljning × 100. Visar pricing power och konkurrenskraft."
-                  required
-                />
-
-                <div className="mt-4">
-                  <FormSelect
-                    label="Står största kunden för mer än 30% av omsättningen?"
-                    value={data.customerConcentrationRisk || ''}
-                    onChange={(e) => setData({ ...data, customerConcentrationRisk: e.target.value })}
-                    options={[
-                      { value: 'high', label: 'Ja, >50% från en kund (hög risk)' },
-                      { value: 'medium', label: 'Ja, 30-50% från en kund (medel risk)' },
-                      { value: 'low', label: 'Nej, diversifierad kundbas' },
-                    ]}
-                    placeholder="Välj"
-                    tooltip="Kundkoncentration är en av de största riskfaktorerna i M&A"
-                    required
-                  />
-                </div>
-
-                <div className="mt-4">
-                  <FormField
-                    label="Externa lån/skulder totalt (SEK)"
-                    type="number"
-                    value={data.totalDebt || ''}
-                    onValueChange={(value) => setData({ ...data, totalDebt: value })}
-                    placeholder="0"
-                    tooltip="Banklån, företagsobligationer, andra skulder. Ange 0 om inga skulder."
-                  />
-                </div>
-
-                <div className="mt-4">
-                  <FormSelect
-                    label="Kräver verksamheten speciella tillstånd/licenser?"
-                    value={data.regulatoryLicenses || ''}
-                    onChange={(e) => setData({ ...data, regulatoryLicenses: e.target.value })}
-                    options={[
-                      { value: 'none', label: 'Nej, inga speciella tillstånd' },
-                      { value: 'standard', label: 'Ja, standard branschlicenser (har alla)' },
-                      { value: 'complex', label: 'Ja, komplexa tillstånd (t.ex. läkemedel, finans)' },
-                      { value: 'at_risk', label: 'Ja, och risk för att förlora licens' },
-                    ]}
-                    placeholder="Välj"
-                    required
-                  />
-                </div>
-
-                <div className="mt-4">
-                  <FormField
-                    label="Genomsnittlig betaltid från kunder (dagar)"
-                    type="number"
-                    value={data.paymentTerms || ''}
-                    onValueChange={(value) => setData({ ...data, paymentTerms: value })}
-                    placeholder="30"
-                    tooltip="Hur många dagar tar det innan kunder betalar? Påverkar kassaflöde."
-                  />
-                </div>
-              </div>
-
               {/* LIVE VALUATION PREVIEW MED EXAKTA SIFFROR */}
               {data.exactRevenue && data.operatingCosts && data.industry && (
                 <div className="bg-gradient-to-r from-primary-blue to-blue-700 text-white p-6 rounded-2xl shadow-lg animate-fade-in mt-6">
@@ -743,8 +757,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
             </div>
           )}
 
-          {/* Step 3: Branschspecifika frågor */}
-          {step === 3 && data.industry && (
+          {/* Step 4: Branschspecifika frågor */}
+          {step === 4 && data.industry && (
             <div className="space-y-6">
               <div className="text-center mb-8">
                 <Target className="w-12 h-12 text-primary-blue mx-auto mb-4" />
@@ -798,8 +812,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
             </div>
           )}
 
-          {/* Step 4: Kvalitativa frågor */}
-          {step === 4 && (
+          {/* Step 5: Kvalitativa frågor */}
+          {step === 5 && (
             <div className="space-y-6">
               <div className="text-center mb-8">
                 <Lightbulb className="w-12 h-12 text-primary-blue mx-auto mb-4" />
@@ -822,8 +836,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
             </div>
           )}
 
-          {/* Step 5: Sammanfattning & Submit */}
-          {step === 5 && (
+          {/* Step 6: Sammanfattning & Submit */}
+          {step === 6 && (
             <div className="space-y-6">
               <div className="text-center mb-8">
                 <FileText className="w-12 h-12 text-primary-blue mx-auto mb-4" />
