@@ -31,7 +31,7 @@ const faqData: FAQItem[] = [
   {
     category: 'sellers',
     question: 'Hur får jag en gratis värdering av mitt företag?',
-    answer: 'Klicka på "Gratis företagsvärdering" och fyll i vårt smarta formulär. Vår AI analyserar ditt företag med 9 datakällor (Allabolag, Proff, LinkedIn, etc) och ger dig en M&A-professionell värdering på 5 minuter. Du får en snygg PDF-rapport med värdering, SWOT-analys och konkreta rekommendationer – helt gratis!'
+    answer: 'Klicka på "Gratis företagsvärdering" och fyll i vårt smarta formulär. Vår AI analyserar ditt företag med 10 datakällor (Allabolag, Proff, LinkedIn, Google Search för nyheter & sentiment, etc) och ger dig en M&A-professionell värdering på 5 minuter. Du får en snygg PDF-rapport med värdering, SWOT-analys och konkreta rekommendationer – helt gratis!'
   },
   {
     category: 'sellers',
@@ -131,8 +131,8 @@ const faqData: FAQItem[] = [
   },
   {
     category: 'security',
-    question: 'Vad är 9 datakällor för AI-värdering?',
-    answer: 'Vår AI-värdering hämtar automatiskt data från: Allabolag (årsredovisningar), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google My Business (recensioner), Trustpilot (kundnöjdhet), företagets hemsida (innehåll), Bolagsverket (officiell data) och SCB (branschstatistik). Detta ger en mycket exakt och datadrivet värdering.'
+    question: 'Vad är 10 datakällor för AI-värdering?',
+    answer: 'Vår AI-värdering hämtar automatiskt data från: Allabolag (årsredovisningar), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google My Business (recensioner), Trustpilot (kundnöjdhet), Google Search (nyheter & sentiment), företagets hemsida (innehåll), Bolagsverket (officiell data) och SCB (branschstatistik). Detta ger en mycket exakt och datadrivet värdering med full marknadskontext.'
   }
 ]
 

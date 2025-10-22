@@ -596,6 +596,71 @@ ${data.paymentTerms ? `- Betaltider från kunder: ${data.paymentTerms} dagar` : 
       prompt += `\n\n⚠️ För e-handel är TrustScore KRITISKT - använd detta som primär varumärkesindikator!`
     }
     
+    // GOOGLE SEARCH DATA - News, mentions, sentiment
+    if (enrichedData.googleSearchData) {
+      const gs = enrichedData.googleSearchData
+      prompt += `\n\n**GOOGLE SEARCH - NEWS, OMNÄMNANDEN & SENTIMENT:**`
+      prompt += `\n- Totalt antal träffar: ${gs.totalResults.toLocaleString()}`
+      
+      // Low online presence warning
+      if (gs.totalResults < 100) {
+        prompt += `\n  ⚠️ VARNING: Mycket låg online-närvaro (< 100 träffar) - begränsad varumärkesstyrka`
+      } else if (gs.totalResults < 1000) {
+        prompt += `\n  ℹ️ Begränsad online-närvaro - lokalt eller nischföretag`
+      } else if (gs.totalResults > 10000) {
+        prompt += `\n  ✓ Stark online-närvaro - etablerat varumärke`
+      }
+      
+      // News and activity
+      prompt += `\n- Nyhetsartiklar: ${gs.insights.newsCount}`
+      prompt += `\n- Senaste nyheter (6 mån): ${gs.insights.hasRecentNews ? 'Ja ✓' : 'Nej ⚠️'}`
+      
+      if (!gs.insights.hasRecentNews) {
+        prompt += `\n  ⚠️ VARNING: Inga senaste nyheter - företaget kan vara inaktivt eller ha låg PR-aktivitet`
+      }
+      
+      prompt += `\n- Social media omnämnanden: ${gs.insights.socialMentions}`
+      prompt += `\n- Branschrelaterade träffar: ${gs.insights.industryMentions}`
+      
+      // Sentiment analysis
+      const { positive, negative } = gs.insights.sentimentIndicators
+      
+      if (positive.length > 0 || negative.length > 0) {
+        prompt += `\n\nSENTIMENT-ANALYS:`
+        
+        if (positive.length > 0) {
+          prompt += `\n✓ POSITIVA SIGNALER (${positive.length}): ${positive.slice(0, 5).join(', ')}`
+          
+          if (positive.length >= 5 && gs.insights.hasRecentNews) {
+            prompt += `\n  ✓ EXCELLENT: Starkt positivt momentum - kan motivera +10-15% högre multipel`
+          } else if (positive.length >= 3) {
+            prompt += `\n  ✓ GOOD: Positiv publicitet - bra tecken för varumärke`
+          }
+        }
+        
+        if (negative.length > 0) {
+          prompt += `\n⚠️ NEGATIVA SIGNALER (${negative.length}): ${negative.slice(0, 5).join(', ')}`
+          
+          if (negative.length >= 3) {
+            prompt += `\n  🚨 KRITISKT: Flera negativa nyckelord - UNDERSÖK NOGGRANNT! Kan motivera 20-40% lägre värdering!`
+          } else if (negative.length >= 1) {
+            prompt += `\n  ⚠️ VARNING: Negativa signaler hittade - verifiera och justera värdering`
+          }
+        }
+      }
+      
+      // Top search results
+      if (gs.results.length > 0) {
+        prompt += `\n\nTOP SÖKRESULTAT:`
+        gs.results.slice(0, 3).forEach((result, i) => {
+          prompt += `\n${i + 1}. ${result.title}`
+          prompt += `\n   ${result.snippet.slice(0, 150)}...`
+        })
+      }
+      
+      prompt += `\n\n⚠️ VIKTIGT: Google Search-data ger kritisk kontext om varumärke, publicitet och eventuella risker!`
+    }
+    
     if (enrichedData.bolagsverketData) {
       prompt += `\n\nBolagsverket (Officiell data):
 - Registreringsdatum: ${enrichedData.bolagsverketData.registrationDate || 'Ej tillgängligt'}

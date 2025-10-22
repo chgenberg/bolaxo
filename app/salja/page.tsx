@@ -27,7 +27,7 @@ export default function SaljaInfoPage() {
             {
               step: 1,
               title: 'Gratis AI-värdering',
-              description: 'Börja med vår AI-driven företagsvärdering (GPT-5-mini). Får värdering, PDF-rapport och konkreta tips på 5 minuter. Automatisk datainsamling från Bolagsverket, SCB och din hemsida. Konto skapas automatiskt när du godkänner integritetspolicyn.',
+              description: 'Börja med vår AI-driven företagsvärdering (GPT-5-mini). Får värdering, PDF-rapport och konkreta tips på 5 minuter. Automatisk datainsamling från 10 källor: Allabolag, Ratsit, Proff, LinkedIn, Google Search (nyheter & sentiment), Trustpilot, Google My Business, Bolagsverket, SCB och din hemsida. Konto skapas automatiskt när du godkänner integritetspolicyn.',
               time: '5 min',
             },
             {
@@ -319,7 +319,7 @@ export default function SaljaInfoPage() {
             {[
               {
                 q: 'Vad är AI-värderingen och hur funkar den?',
-                a: 'Vår AI (GPT-5-mini) analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar automatiskt data från Bolagsverket, SCB och din hemsida (upp till 10 sidor). Får ett realistiskt värdeintervall, 2-sidors PDF-rapport och konkreta tips för att öka värdet. Helt gratis, tar 5 minuter.',
+                a: 'Vår AI (GPT-5-mini) analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar automatiskt data från 10 källor: Allabolag (ekonomi), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google Search (nyheter & sentiment), Trustpilot/Google My Business (recensioner), Bolagsverket, SCB och din hemsida. Får ett realistiskt värdeintervall, professionell PDF-rapport och konkreta tips för att öka värdet. Helt gratis, tar 5 minuter.',
               },
               {
                 q: 'Kan jag vara helt anonym?',

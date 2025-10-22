@@ -7,6 +7,7 @@ import { scrapeProff } from '@/lib/scrapers/proff'
 import { scrapeLinkedIn, estimateEmployeeGrowth } from '@/lib/scrapers/linkedin'
 import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/google-mybusiness'
 import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
+import { searchGoogle } from '@/lib/scrapers/google-search'
 
 const prisma = new PrismaClient()
 
@@ -47,10 +48,11 @@ export async function POST(request: Request) {
         linkedinData: null,
         googleMyBusinessData: null,
         trustpilotData: null,
+        googleSearchData: null,
       },
     }
 
-    // 2. PARALLEL DATA FETCHING (9x källor samtidigt!)
+    // 2. PARALLEL DATA FETCHING (10x källor samtidigt!)
     const startTime = Date.now()
     
     const [
@@ -62,7 +64,8 @@ export async function POST(request: Request) {
       proffResult,
       linkedinResult,
       googleResult,
-      trustpilotResult
+      trustpilotResult,
+      googleSearchResult
     ] = await Promise.allSettled([
       orgNumber ? fetchBolagsverketData(orgNumber) : Promise.resolve(null),
       website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
@@ -73,6 +76,7 @@ export async function POST(request: Request) {
       companyName ? scrapeLinkedIn(companyName, website) : Promise.resolve(null),
       companyName ? scrapeGoogleMyBusiness(companyName, enrichedData.rawData.bolagsverketData?.address) : Promise.resolve(null),
       companyName && website ? scrapeTrustpilot(companyName, website) : Promise.resolve(null),
+      companyName ? searchGoogle(companyName, orgNumber) : Promise.resolve(null),
     ])
 
     console.log(`Parallel fetch completed in ${Date.now() - startTime}ms`)
@@ -318,6 +322,21 @@ export async function POST(request: Request) {
         reviews: trustpilotData.trustScore?.totalReviews,
         trend: trustpilotData.trend?.direction,
         ecommerceTrust: trustpilotData.ecommerceTrust?.score,
+      })
+    }
+    
+    // 10. Google Search (news, mentions, sentiment)
+    if (googleSearchResult.status === 'fulfilled' && googleSearchResult.value) {
+      const googleSearchData = googleSearchResult.value
+      enrichedData.rawData.googleSearchData = googleSearchData
+      
+      console.log('✓ Google Search:', {
+        results: googleSearchData.results.length,
+        totalResults: googleSearchData.totalResults,
+        newsCount: googleSearchData.insights.newsCount,
+        recentNews: googleSearchData.insights.hasRecentNews,
+        positive: googleSearchData.insights.sentimentIndicators.positive.length,
+        negative: googleSearchData.insights.sentimentIndicators.negative.length,
       })
     }
     
