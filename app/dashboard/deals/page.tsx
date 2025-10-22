@@ -127,15 +127,16 @@ export default function DealsPage() {
   }
 
   const getStageBadge = (stage: string) => {
-    const colors = {
-      'NDA': 'bg-gray-100 text-gray-700',
+    const colors: Record<string, string> = {
+      NDA: 'bg-gray-100 text-gray-700',
       'Due Diligence': 'bg-amber-100 text-amber-700',
-      'LOI': 'bg-blue-100 text-blue-700',
-      'SPA': 'bg-purple-100 text-purple-700',
-      'Closing': 'bg-green-100 text-green-700'
+      LOI: 'bg-blue-100 text-blue-700',
+      SPA: 'bg-purple-100 text-purple-700',
+      Closing: 'bg-green-100 text-green-700',
     }
+    const colorClass = colors[stage] ?? 'bg-gray-100 text-gray-700'
     return (
-      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${colors[stage] || 'bg-gray-100 text-gray-700'}`}>
+      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${colorClass}`}>
         {stage}
       </span>
     )
