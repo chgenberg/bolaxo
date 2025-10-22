@@ -23,9 +23,9 @@ export default function HeroSection() {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-light-blue/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative pt-6 md:pt-12 pb-20 md:pb-32">
+      <div className="relative pt-6 md:pt-12">
         {/* Tab Toggle */}
-        <div className="max-w-md mx-auto px-4 mb-12">
+        <div className="max-w-md mx-auto px-4 mb-0">
           <div className="flex bg-white rounded-card shadow-soft p-1.5">
             <button
               onClick={() => setActiveTab('sell')}
@@ -55,7 +55,7 @@ export default function HeroSection() {
       </div>
 
       {/* Metrics Section */}
-      <div className="relative bg-white py-12">
+      <div className="relative bg-white py-12 pb-20 md:pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="heading-2 mb-4">En marknadsplats som ger dig tiden tillbaka</h2>
@@ -95,22 +95,17 @@ interface SellerHeroProps {
 
 function SellerHero({ setShowValuation }: SellerHeroProps) {
   return (
-    <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center">
-      {/* Background with overlay */}
-      <div className="absolute inset-0 seller-hero-bg bg-cover bg-center bg-no-repeat">
-        <div className="absolute inset-0 bg-gradient-to-br from-black/50 to-black/30"></div>
-      </div>
-      
+    <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center seller-hero-bg bg-cover bg-center bg-no-repeat">
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
         <div className="space-y-6">
           {/* Main heading */}
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
             Sälj ditt företag – tryggt, digitalt och klart.
           </h1>
           
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-white drop-shadow-md max-w-2xl mx-auto">
             Från första värdering till signerad affär.
             <br />
             Allt sker säkert och smidigt på ett ställe.
@@ -135,7 +130,7 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
             <div className="mt-6">
               <Link
                 href="/salja"
-                className="text-white/90 hover:text-white inline-flex items-center text-sm font-medium transition-colors"
+                className="text-white hover:text-white/90 inline-flex items-center text-sm font-medium transition-colors drop-shadow-md"
               >
                 Så fungerar det
                 <ArrowRight className="ml-1 w-4 h-4" />
