@@ -91,7 +91,7 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
   return (
     <div className="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center seller-hero-bg bg-cover bg-center bg-no-repeat -mt-12 md:-mt-20">
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-28 md:pt-36 pb-16">
         <div className="space-y-6">
           {/* Main heading */}
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-primary-blue leading-tight uppercase">
