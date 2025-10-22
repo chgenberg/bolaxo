@@ -27,21 +27,36 @@ export default function ObjectCard({ object }: ObjectCardProps) {
   return (
     <Link href={`/objekt/${object.id}`}>
       <div className="card-interactive group h-full overflow-hidden">
-        {/* Image Section with Pulsing Shadow */}
+        {/* Image Section with Organic Shape */}
         <div className="relative mb-4 -mx-6 -mt-6">
-          <div className="relative w-full h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+          <div className="relative w-full h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
             {object.image ? (
               <div className="relative w-full h-full">
-                {/* Pulsing shadow effect */}
-                <div className="absolute inset-0 flex items-center justify-center p-6">
-                  <div className="relative w-full h-full max-w-[280px] max-h-[160px]">
-                    <div className="absolute inset-0 bg-gray-800/20 rounded-2xl blur-xl animate-pulse" />
-                    <div className="relative w-full h-full">
+                {/* Pulsing shadow effect with organic shape */}
+                <div className="absolute inset-0 flex items-center justify-center p-4">
+                  <div className="relative w-full h-full">
+                    {/* Organic shadow shape */}
+                    <div 
+                      className="absolute inset-2 bg-gray-800/20 blur-xl animate-pulse"
+                      style={{
+                        borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+                        transform: 'rotate(-2deg)'
+                      }}
+                    />
+                    {/* Image with organic border */}
+                    <div 
+                      className="relative w-full h-full overflow-hidden"
+                      style={{
+                        borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%',
+                        transform: 'rotate(-2deg)'
+                      }}
+                    >
                       <Image
                         src={object.image}
                         alt={object.anonymousTitle}
                         fill
-                        className="object-contain rounded-2xl"
+                        className="object-cover"
+                        style={{ transform: 'rotate(2deg) scale(1.1)' }}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </div>
@@ -50,7 +65,12 @@ export default function ObjectCard({ object }: ObjectCardProps) {
               </div>
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <div className="text-4xl font-bold text-gray-300">
+                <div 
+                  className="w-32 h-32 flex items-center justify-center bg-gray-200 text-4xl font-bold text-gray-400"
+                  style={{
+                    borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%'
+                  }}
+                >
                   {object.type.charAt(0)}
                 </div>
               </div>
