@@ -112,25 +112,32 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
           </p>
           
           {/* CTA Button */}
-          <div className="pt-4">
-            <button
-              onClick={() => setShowValuation(true)}
-              className="inline-flex flex-col items-center px-8 py-4 bg-white text-primary-blue font-semibold text-lg rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
-            >
-              <span className="flex items-center">
+          <div className="pt-6 space-y-4">
+            {/* Pulsing button wrapper */}
+            <div className="relative inline-block">
+              {/* Pulsing background effect */}
+              <div className="absolute inset-0 bg-white rounded-full blur-xl opacity-40 animate-pulse"></div>
+              
+              {/* Main button */}
+              <button
+                onClick={() => setShowValuation(true)}
+                className="relative inline-flex items-center justify-center px-10 py-4 bg-white text-primary-blue font-bold text-lg rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group"
+              >
                 Starta Gratis Värdering
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </span>
-              <span className="text-sm font-normal text-text-gray mt-1">
-                Tar 2 minuter – helt kostnadsfritt
-              </span>
-            </button>
+              </button>
+            </div>
+            
+            {/* Helper text */}
+            <p className="text-sm text-white drop-shadow-md">
+              Tar 2 minuter – helt kostnadsfritt
+            </p>
             
             {/* Secondary link */}
-            <div className="mt-6">
+            <div>
               <Link
                 href="/salja"
-                className="text-white hover:text-white/90 inline-flex items-center text-sm font-medium transition-colors drop-shadow-md"
+                className="text-white/90 hover:text-white inline-flex items-center text-sm font-medium transition-colors drop-shadow-md underline decoration-white/50 hover:decoration-white underline-offset-4"
               >
                 Så fungerar det
                 <ArrowRight className="ml-1 w-4 h-4" />
