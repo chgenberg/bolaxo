@@ -153,7 +153,12 @@ export default function Header() {
               {user ? (
                 <>
                   <Link href="/dashboard" className="btn-ghost flex items-center">
-                    <User className="w-4 h-4 mr-2" />
+                    <div className="w-8 h-8 rounded-full bg-primary-blue text-white flex items-center justify-center text-xs font-semibold mr-2">
+                      {user.name 
+                        ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+                        : user.email.slice(0, 2).toUpperCase()
+                      }
+                    </div>
                     Min sida
                   </Link>
                   <button onClick={logout} className="btn-secondary flex items-center">
@@ -234,9 +239,15 @@ export default function Header() {
                 <>
                   <Link 
                     href="/dashboard" 
-                    className="block btn-ghost text-center"
+                    className="flex items-center justify-center btn-ghost"
                     onClick={() => setMobileMenuOpen(false)}
                   >
+                    <div className="w-8 h-8 rounded-full bg-primary-blue text-white flex items-center justify-center text-xs font-semibold mr-2">
+                      {user.name 
+                        ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+                        : user.email.slice(0, 2).toUpperCase()
+                      }
+                    </div>
                     Min sida
                   </Link>
                   <button 
