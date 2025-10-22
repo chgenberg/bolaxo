@@ -7,6 +7,7 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import SellerDashboardPro from '@/components/dashboard/SellerDashboardPro'
 import BuyerDashboardPro from '@/components/dashboard/BuyerDashboardPro'
 import AdvisorDashboardPro from '@/components/dashboard/AdvisorDashboardPro'
+import Link from 'next/link'
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth()
