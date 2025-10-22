@@ -6,8 +6,8 @@ export default function HomePage() {
   const features = [
     {
       icon: TrendingUp,
-      title: 'AI-driven värdering & matching',
-      description: 'Få värdering på 5 minuter. AI:n hittar rätt köpare åt dig automatiskt med 87-94% match score.',
+      title: 'Automatisk värdering & matching',
+      description: 'Få värdering på 5 minuter. Systemet hittar rätt köpare åt dig automatiskt med 87-94% match score.',
     },
     {
       icon: Shield,
@@ -25,7 +25,7 @@ export default function HomePage() {
     {
       name: 'Anna Lindgren',
       role: 'VD, TechStart AB',
-      content: 'AI-värderingen gav oss direkt klarhet och dashboarden gjorde hela processen transparent. Följde varje steg i realtid – otroligt lugnande när man säljer sitt livsverk.',
+      content: 'Värderingen gav oss direkt klarhet och dashboarden gjorde hela processen transparent. Följde varje steg i realtid – otroligt lugnande när man säljer sitt livsverk.',
       rating: 5,
       image: '/testimonial-1.jpg',
     },
@@ -62,7 +62,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="heading-2 mb-4">Mer tid till det som betyder något</h2>
             <p className="text-lg text-text-gray max-w-2xl mx-auto">
-              Automatisering sparar veckor av arbete. AI hanterar matchning, analytics och rapporter – du fokuserar på rätt beslut vid rätt tid.
+              Automatisering sparar veckor av arbete. Plattformen hanterar matchning, analytics och rapporter – du fokuserar på rätt beslut vid rätt tid.
             </p>
           </div>
 

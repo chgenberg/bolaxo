@@ -8,7 +8,7 @@ export default function PricingPage() {
       price: '0',
       description: 'För dig som vill testa plattformen och få en värdering av ditt bolag samt förberede en skarp annons',
       features: [
-        { text: 'AI-driven företagsvärdering', included: true },
+        { text: 'Automatisk företagsvärdering', included: true },
         { text: 'Förbered annons (publiceras ej)', included: true },
         { text: 'Grundläggande marknadsanalys', included: true },
         { text: 'E-post support', included: true },

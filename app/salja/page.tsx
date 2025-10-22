@@ -26,8 +26,8 @@ export default function SaljaInfoPage() {
           {[
             {
               step: 1,
-              title: 'Gratis AI-värdering',
-              description: 'Börja med vår AI-driven företagsvärdering (GPT-5-mini). Får värdering, PDF-rapport och konkreta tips på 5 minuter. Automatisk datainsamling från 10 källor: Allabolag, Ratsit, Proff, LinkedIn, Google Search (nyheter & sentiment), Trustpilot, Google My Business, Bolagsverket, SCB och din hemsida. Konto skapas automatiskt när du godkänner integritetspolicyn.',
+              title: 'Gratis värdering',
+              description: 'Börja med vår automatiska företagsvärdering. Får värdering, PDF-rapport och konkreta tips på 5 minuter. Automatisk datainsamling från 10 källor: Allabolag, Ratsit, Proff, LinkedIn, Google Search (nyheter & sentiment), Trustpilot, Google My Business, Bolagsverket, SCB och din hemsida. Konto skapas automatiskt när du godkänner integritetspolicyn.',
               time: '5 min',
             },
             {
@@ -183,7 +183,7 @@ export default function SaljaInfoPage() {
                 </div>
                 <div className="flex items-start text-sm">
                   <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>AI-copy & KPI-mallar</span>
+                  <span>Automatisk copywriting & KPI-mallar</span>
                 </div>
                 <div className="flex items-start text-sm">
                   <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
@@ -318,8 +318,8 @@ export default function SaljaInfoPage() {
           <div className="space-y-6">
             {[
               {
-                q: 'Vad är AI-värderingen och hur funkar den?',
-                a: 'Vår AI (GPT-5-mini) analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar automatiskt data från 10 källor: Allabolag (ekonomi), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google Search (nyheter & sentiment), Trustpilot/Google My Business (recensioner), Bolagsverket, SCB och din hemsida. Får ett realistiskt värdeintervall, professionell PDF-rapport och konkreta tips för att öka värdet. Helt gratis, tar 5 minuter.',
+                q: 'Vad är värderingen och hur funkar den?',
+                a: 'Vår automatiska värdering analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar automatiskt data från 10 källor: Allabolag (ekonomi), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google Search (nyheter & sentiment), Trustpilot/Google My Business (recensioner), Bolagsverket, SCB och din hemsida. Får ett realistiskt värdeintervall, professionell PDF-rapport och konkreta tips för att öka värdet. Helt gratis, tar 5 minuter.',
               },
               {
                 q: 'Kan jag vara helt anonym?',
@@ -335,7 +335,7 @@ export default function SaljaInfoPage() {
               },
               {
                 q: 'Hur säkerställer ni att köparna är seriösa?',
-                a: 'Alla köpare verifieras med BankID och måste signera NDA innan de får tillgång till känslig information. Vi har AI-driven smart matching som hjälper rätt köpare hitta rätt företag (match score 87-94%). Verified buyer badge syns i profilen.',
+                a: 'Alla köpare verifieras med BankID och måste signera NDA innan de får tillgång till känslig information. Vi har smart matching som hjälper rätt köpare hitta rätt företag (match score 87-94%). Verified buyer badge syns i profilen.',
               },
               {
                 q: 'Tar ni provision vid försäljning?',

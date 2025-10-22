@@ -13,7 +13,7 @@ export default function KopareInfoPage() {
             Så funkar det för köpare
           </h1>
           <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto drop-shadow-md">
-            Slipp gissa. AI:n hittar perfekta affärer åt dig – från första match till signerad affär. Ingen mer ineffektiv letande, bara rätt företag i rätt tid.
+            Slipp gissa. Systemet hittar perfekta affärer åt dig – från första match till signerad affär. Ingen mer ineffektiv letande, bara rätt företag i rätt tid.
           </p>
         </div>
       </section>
@@ -25,8 +25,8 @@ export default function KopareInfoPage() {
           {[
             {
               step: 1,
-              title: 'Skapa konto & AI Smart Matching',
-              description: 'Passwordless login (magic link). Sätt preferenser: bransch, region, storlek. Vår AI (GPT-5-mini) analyserar din profil och rekommenderar 3 bästa matchningar med 87-94% match score. Aktivera bevakningar för nya objekt.',
+              title: 'Skapa konto & Smart Matching',
+              description: 'Passwordless login (magic link). Sätt preferenser: bransch, region, storlek. Systemet analyserar din profil och rekommenderar 3 bästa matchningar med 87-94% match score. Aktivera bevakningar för nya objekt.',
               time: '2 min',
             },
             {
@@ -37,8 +37,8 @@ export default function KopareInfoPage() {
             },
             {
               step: 3,
-              title: 'Sök, filtrera & få AI-rekommendationer',
-              description: 'Smart sök med filter (bransch, region, omsättning, EBITDA). Dashboard visar rekommenderade företag baserat på dina preferenser med match-reasons från AI. Spara favoriter och jämför.',
+              title: 'Sök, filtrera & få smarta rekommendationer',
+              description: 'Smart sök med filter (bransch, region, omsättning, EBITDA). Dashboard visar rekommenderade företag baserat på dina preferenser med match-reasons. Spara favoriter och jämför.',
               time: 'Löpande',
             },
             {

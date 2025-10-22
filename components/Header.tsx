@@ -22,7 +22,7 @@ const navigation: NavItem[] = [
   {
     label: 'För säljare',
     dropdown: [
-      { label: 'Gratis företagsvärdering', href: '/vardering', description: 'AI-driven värdering på 5 min' },
+      { label: 'Gratis företagsvärdering', href: '/vardering', description: 'Automatisk värdering på 5 min' },
       { label: 'Så funkar det', href: '/salja', description: 'Läs om säljprocessen' },
       { label: 'Börja sälja', href: '/salja/start', description: 'Skapa din annons' },
       { label: 'Priser', href: '/priser', description: 'Se våra paket' },

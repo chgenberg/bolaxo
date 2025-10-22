@@ -14,29 +14,29 @@ const faqData: FAQItem[] = [
   {
     category: 'general',
     question: 'Vad är BOLAXO?',
-    answer: 'BOLAXO är en AI-driven marknadsplats för företagsköp och försäljning. Vi kopplar samman säljare och köpare av SME-företag på ett säkert och effektivt sätt, med AI-värdering, smart matchning och fullständig anonymitet fram till NDA-signering.'
+    answer: 'BOLAXO är en automatiserad marknadsplats för företagsköp och försäljning. Vi kopplar samman säljare och köpare av SME-företag på ett säkert och effektivt sätt, med automatisk värdering, smart matchning och fullständig anonymitet fram till NDA-signering.'
   },
   {
     category: 'general',
     question: 'Hur fungerar processen?',
-    answer: 'Säljare börjar med gratis AI-värdering (5 min), skapar sedan annons och publicerar. AI:n matchar automatiskt med relevanta köpare. Köpare söker, signerar NDA digitalt för fullständig information, och kan sedan skicka LOI. Hela processen från NDA till closing hanteras i vår deal management-plattform med milestolpar, dokument och e-signering.'
+    answer: 'Säljare börjar med gratis värdering (5 min), skapar sedan annons och publicerar. Systemet matchar automatiskt med relevanta köpare. Köpare söker, signerar NDA digitalt för fullständig information, och kan sedan skicka LOI. Hela processen från NDA till closing hanteras i vår deal management-plattform med milestolpar, dokument och e-signering.'
   },
   {
     category: 'general',
     question: 'Vad kostar det att använda BOLAXO?',
-    answer: 'AI-värdering är alltid gratis! För att publicera annons finns fyra paket: Free (0 kr - skapa utkast), Basic (495 kr/mån - publicera i marknadsplats), Pro (895 kr/mån - prioriterad placering + NDA-hantering), Pro+ Featured (1,495 kr/mån - toppplacering + rotation på startsida). För köpare är det helt gratis att söka, titta och matcha.'
+    answer: 'Värdering är alltid gratis! För att publicera annons finns fyra paket: Free (0 kr - skapa utkast), Basic (495 kr/mån - publicera i marknadsplats), Pro (895 kr/mån - prioriterad placering + NDA-hantering), Pro+ Featured (1,495 kr/mån - toppplacering + rotation på startsida). För köpare är det helt gratis att söka, titta och matcha.'
   },
   
   // Säljare
   {
     category: 'sellers',
     question: 'Hur får jag en gratis värdering av mitt företag?',
-    answer: 'Klicka på "Gratis företagsvärdering" och fyll i vårt smarta formulär. Vår AI analyserar ditt företag med 10 datakällor (Allabolag, Proff, LinkedIn, Google Search för nyheter & sentiment, etc) och ger dig en M&A-professionell värdering på 5 minuter. Du får en snygg PDF-rapport med värdering, SWOT-analys och konkreta rekommendationer – helt gratis!'
+    answer: 'Klicka på "Gratis företagsvärdering" och fyll i vårt smarta formulär. Systemet analyserar ditt företag med 10 datakällor (Allabolag, Proff, LinkedIn, Google Search för nyheter & sentiment, etc) och ger dig en M&A-professionell värdering på 5 minuter. Du får en snygg PDF-rapport med värdering, SWOT-analys och konkreta rekommendationer – helt gratis!'
   },
   {
     category: 'sellers',
     question: 'Hur lång tid tar det att sälja ett företag?',
-    answer: 'Det varierar beroende på företag och bransch, men i genomsnitt tar det 3-9 månader från publicering till avslut. Med vår AI-matchning och verifierade köpare kan processen gå snabbare. Pro+ Featured-paket får i snitt 3x fler visningar vilket kan förkorta tiden betydligt.'
+    answer: 'Det varierar beroende på företag och bransch, men i genomsnitt tar det 3-9 månader från publicering till avslut. Med vår smarta matchning och verifierade köpare kan processen gå snabbare. Pro+ Featured-paket får i snitt 3x fler visningar vilket kan förkorta tiden betydligt.'
   },
   {
     category: 'sellers',
@@ -46,7 +46,7 @@ const faqData: FAQItem[] = [
   {
     category: 'sellers',
     question: 'Vad ingår i de olika paketen?',
-    answer: 'Free (0 kr): Skapa annons-utkast, AI-copy & KPI-mallar. Basic (495 kr/mån): Publicering i marknadsplats, standardexponering, köparchatt, 1 bevakningstagg. Pro (895 kr/mån): Prioriterad placering, anonym kontaktväxel, e-sign för NDA/LOI, 3 bevakningstaggar, 1 featured boost/30 dagar. Pro+ Featured (1,495 kr/mån): Toppplacering, rotation på startsida, obegränsade boosts, nyhetsbrevs-spot/kvartal.'
+    answer: 'Free (0 kr): Skapa annons-utkast, automatisk copywriting & KPI-mallar. Basic (495 kr/mån): Publicering i marknadsplats, standardexponering, köparchatt, 1 bevakningstagg. Pro (895 kr/mån): Prioriterad placering, anonym kontaktväxel, e-sign för NDA/LOI, 3 bevakningstaggar, 1 featured boost/30 dagar. Pro+ Featured (1,495 kr/mån): Toppplacering, rotation på startsida, obegränsade boosts, nyhetsbrevs-spot/kvartal.'
   },
   {
     category: 'sellers',
@@ -63,12 +63,12 @@ const faqData: FAQItem[] = [
   {
     category: 'buyers',
     question: 'Måste jag betala för att söka?',
-    answer: 'Nej, det är 100% gratis att söka, titta på annonser och få AI-matchningar. Du behöver bara skapa ett kostnadsfritt konto för att komma igång. BankID-verifiering krävs för att signera NDA och få tillgång till känslig företagsinformation.'
+    answer: 'Nej, det är 100% gratis att söka, titta på annonser och få smarta matchningar. Du behöver bara skapa ett kostnadsfritt konto för att komma igång. BankID-verifiering krävs för att signera NDA och få tillgång till känslig företagsinformation.'
   },
   {
     category: 'buyers',
-    question: 'Hur fungerar AI-matchningen?',
-    answer: 'När du skapar din köparprofil anger du investeringskriterier (bransch, storlek, geografi, etc). Vår AI matchar dig automatiskt med relevanta företag och ger en match-score (87-94%). Du får notiser när nya företag som passar din profil publiceras.'
+    question: 'Hur fungerar matchningen?',
+    answer: 'När du skapar din köparprofil anger du investeringskriterier (bransch, storlek, geografi, etc). Systemet matchar dig automatiskt med relevanta företag och ger en match-score (87-94%). Du får notiser när nya företag som passar din profil publiceras.'
   },
   {
     category: 'buyers',
@@ -78,7 +78,7 @@ const faqData: FAQItem[] = [
   {
     category: 'buyers',
     question: 'Hur fungerar LOI (Letter of Intent)?',
-    answer: 'LOI är ett indikativt bud där du anger ditt intresse, prisindikation och villkor. Det är inte bindande men visar allvar. Vi har AI-genererade mallar som hjälper dig skapa professionella LOI:s baserat på företagets data. LOI signeras digitalt med BankID.'
+    answer: 'LOI är ett indikativt bud där du anger ditt intresse, prisindikation och villkor. Det är inte bindande men visar allvar. Vi har automatiska mallar som hjälper dig skapa professionella LOI:s baserat på företagets data. LOI signeras digitalt med BankID.'
   },
   {
     category: 'buyers',
@@ -100,7 +100,7 @@ const faqData: FAQItem[] = [
   {
     category: 'pricing',
     question: 'Vad är skillnaden mellan Free och Basic?',
-    answer: 'Free (0 kr) låter dig skapa annons-utkast med AI-genererad copy och KPI-mallar, men annonsen publiceras inte. Basic (495 kr/mån) publicerar din annons i marknadsplatsen, ger dig köparchatt och 1 bevakningstagg. Det är perfekt för att testa plattformen innan du uppgraderar.'
+    answer: 'Free (0 kr) låter dig skapa annons-utkast med automatiskt genererad copy och KPI-mallar, men annonsen publiceras inte. Basic (495 kr/mån) publicerar din annons i marknadsplatsen, ger dig köparchatt och 1 bevakningstagg. Det är perfekt för att testa plattformen innan du uppgraderar.'
   },
   {
     category: 'pricing',
@@ -131,8 +131,8 @@ const faqData: FAQItem[] = [
   },
   {
     category: 'security',
-    question: 'Vad är 10 datakällor för AI-värdering?',
-    answer: 'Vår AI-värdering hämtar automatiskt data från: Allabolag (årsredovisningar), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google My Business (recensioner), Trustpilot (kundnöjdhet), Google Search (nyheter & sentiment), företagets hemsida (innehåll), Bolagsverket (officiell data) och SCB (branschstatistik). Detta ger en mycket exakt och datadrivet värdering med full marknadskontext.'
+    question: 'Vad är 10 datakällor för värdering?',
+    answer: 'Vår värdering hämtar automatiskt data från: Allabolag (årsredovisningar), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google My Business (recensioner), Trustpilot (kundnöjdhet), Google Search (nyheter & sentiment), företagets hemsida (innehåll), Bolagsverket (officiell data) och SCB (branschstatistik). Detta ger en mycket exakt och datadrivet värdering med full marknadskontext.'
   }
 ]
 

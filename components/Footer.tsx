@@ -73,7 +73,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-text-gray leading-relaxed">
-              AI-driven marknadsplats som förenklar hela affärsprocessen. 
+              Automatiserad marknadsplats som förenklar hela affärsprocessen. 
               Från värdering till signering – vi automatiserar det komplexa så du kan fokusera på det viktiga.
             </p>
             
