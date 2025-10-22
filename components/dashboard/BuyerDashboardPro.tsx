@@ -95,7 +95,7 @@ export default function BuyerDashboardPro() {
   return (
     <div className="space-y-6">
       {/* Search Profile Summary */}
-      <div className="bg-gradient-to-r from-primary-blue to-blue-600 text-white p-6 rounded-xl">
+      <div className="bg-primary-blue text-white p-6 rounded-xl">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Din sökprofil</h2>
           <Link href="/dashboard/search-profile" className="text-sm bg-white/20 px-3 py-1.5 rounded-lg hover:bg-white/30 transition-colors">

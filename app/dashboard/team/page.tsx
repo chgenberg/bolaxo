@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import SelectDropdown from '@/components/dashboard/SelectDropdown'
 import { Users, TrendingUp, Calendar, DollarSign, Award, Phone, Mail, MoreVertical } from 'lucide-react'
 
 export default function TeamPage() {
@@ -292,7 +293,7 @@ export default function TeamPage() {
                     <div className="flex-1">
                       <div className="w-full bg-gray-200 rounded-full h-6">
                         <div 
-                          className="bg-gradient-to-r from-primary-blue to-blue-600 h-6 rounded-full flex items-center justify-end pr-2"
+                          className="bg-primary-blue h-6 rounded-full flex items-center justify-end pr-2"
                           style={{ width: `${percentage}%` }}
                         >
                           <span className="text-xs text-white font-medium">

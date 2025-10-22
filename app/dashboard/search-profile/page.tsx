@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import SelectDropdown from '@/components/dashboard/SelectDropdown'
 import { Search, MapPin, Building, TrendingUp, Users, DollarSign, Save, Plus, X } from 'lucide-react'
 
 export default function SearchProfilePage() {
@@ -54,7 +55,7 @@ export default function SearchProfilePage() {
         </div>
 
         {/* Current profile summary */}
-        <div className="bg-gradient-to-r from-primary-blue to-blue-600 text-white p-6 rounded-xl">
+        <div className="bg-primary-blue text-white p-6 rounded-xl">
           <h2 className="text-lg font-semibold mb-4">Nuvarande profil</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
@@ -278,23 +279,33 @@ export default function SearchProfilePage() {
               <label className="block text-sm font-medium text-text-dark mb-2">
                 Investeringstyp
               </label>
-              <select className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue">
-                <option>Helförvärv</option>
-                <option>Delägande</option>
-                <option>Turnaround</option>
-                <option>Alla typer</option>
-              </select>
+              <SelectDropdown
+                value="full_acquisition"
+                onChange={() => {}}
+                options={[
+                  { value: 'full_acquisition', label: 'Helförvärv' },
+                  { value: 'partnership', label: 'Delägande' },
+                  { value: 'turnaround', label: 'Turnaround' },
+                  { value: 'all', label: 'Alla typer' }
+                ]}
+                className="w-full"
+              />
             </div>
             
             <div>
               <label className="block text-sm font-medium text-text-dark mb-2">
                 Lönsamhetskrav
               </label>
-              <select className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue">
-                <option>Endast lönsamma</option>
-                <option>Accepterar förlust</option>
-                <option>Inget krav</option>
-              </select>
+              <SelectDropdown
+                value="profitable"
+                onChange={() => {}}
+                options={[
+                  { value: 'profitable', label: 'Endast lönsamma' },
+                  { value: 'turnaround', label: 'Accepterar förlust' },
+                  { value: 'either', label: 'Inget krav' }
+                ]}
+                className="w-full"
+              />
             </div>
             
             <div>

@@ -35,6 +35,7 @@ const config: Config = {
       },
       animation: {
         'pulse-soft': 'pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'in': 'in 0.2s ease-out',
       },
       keyframes: {
         'pulse-soft': {
@@ -44,6 +45,10 @@ const config: Config = {
           '50%': { 
             boxShadow: '0 10px 15px -3px rgb(59 130 246 / 0.2), 0 4px 6px -4px rgb(59 130 246 / 0.2)' 
           },
+        },
+        'in': {
+          '0%': { opacity: '0', transform: 'translateY(-4px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         }
       }
     },

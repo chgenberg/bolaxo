@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import SelectDropdown from '@/components/dashboard/SelectDropdown'
 import { Users, Building, Phone, Mail, Calendar, TrendingUp, Plus, Search, Filter, MoreVertical } from 'lucide-react'
 
 export default function ClientsPage() {
@@ -176,15 +177,16 @@ export default function ClientsPage() {
               />
             </div>
             
-            <select
+            <SelectDropdown
               value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
-            >
-              <option value="all">Alla typer</option>
-              <option value="seller">Säljare</option>
-              <option value="buyer">Köpare</option>
-            </select>
+              onChange={setFilterType}
+              options={[
+                { value: 'all', label: 'Alla typer' },
+                { value: 'seller', label: 'Säljare' },
+                { value: 'buyer', label: 'Köpare' }
+              ]}
+              className="w-40"
+            />
             
             <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
               <Filter className="w-5 h-5 text-text-gray" />

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import SelectDropdown from '@/components/dashboard/SelectDropdown'
 import { BarChart3, TrendingUp, Eye, Users, Calendar, Download, Filter } from 'lucide-react'
 
 export default function AnalyticsPage() {
@@ -53,16 +54,17 @@ export default function AnalyticsPage() {
         <div className="bg-white p-4 rounded-xl border border-gray-200">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <select
+              <SelectDropdown
                 value={selectedListing}
-                onChange={(e) => setSelectedListing(e.target.value)}
-                className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
-              >
-                <option value="all">Alla annonser</option>
-                <option value="lst-001">E-handelsföretag i Stockholm</option>
-                <option value="lst-002">SaaS-bolag med ARR 8 MSEK</option>
-                <option value="lst-003">Konsultbolag inom IT</option>
-              </select>
+                onChange={setSelectedListing}
+                options={[
+                  { value: 'all', label: 'Alla annonser' },
+                  { value: 'lst-001', label: 'E-handelsföretag i Stockholm' },
+                  { value: 'lst-002', label: 'SaaS-bolag med ARR 8 MSEK' },
+                  { value: 'lst-003', label: 'Konsultbolag inom IT' }
+                ]}
+                className="w-64"
+              />
               
               <div className="flex items-center gap-1">
                 {['7days', '30days', '90days', 'year'].map((range) => (
@@ -233,7 +235,7 @@ export default function AnalyticsPage() {
                 <div className="flex-1">
                   <div className="w-full bg-gray-200 rounded-full h-8">
                     <div 
-                      className="bg-gradient-to-r from-primary-blue to-blue-600 h-8 rounded-full flex items-center justify-end pr-3"
+                      className="bg-primary-blue h-8 rounded-full flex items-center justify-end pr-3"
                       style={{ width: `${step.percentage}%` }}
                     >
                       <span className="text-xs text-white font-medium">{step.count}</span>

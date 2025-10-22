@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import SelectDropdown from '@/components/dashboard/SelectDropdown'
 import { Building, Calendar, DollarSign, User, ChevronRight, Plus, Filter } from 'lucide-react'
 
 interface Deal {
@@ -124,16 +125,17 @@ export default function PipelinePage() {
             <p className="text-sm text-text-gray mt-1">Drag och släpp för att flytta affärer mellan steg</p>
           </div>
           <div className="flex items-center gap-3">
-            <select
+            <SelectDropdown
               value={filterAdvisor}
-              onChange={(e) => setFilterAdvisor(e.target.value)}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
-            >
-              <option value="all">Alla rådgivare</option>
-              <option value="Johan Svensson">Johan Svensson</option>
-              <option value="Anna Lindberg">Anna Lindberg</option>
-              <option value="Maria Eriksson">Maria Eriksson</option>
-            </select>
+              onChange={setFilterAdvisor}
+              options={[
+                { value: 'all', label: 'Alla rådgivare' },
+                { value: 'Johan Svensson', label: 'Johan Svensson' },
+                { value: 'Anna Lindberg', label: 'Anna Lindberg' },
+                { value: 'Maria Eriksson', label: 'Maria Eriksson' }
+              ]}
+              className="w-48"
+            />
             <button className="btn-primary flex items-center gap-2">
               <Plus className="w-4 h-4" />
               Ny affär

@@ -312,7 +312,7 @@ export default function SettingsPage() {
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-6 bg-gradient-to-r from-blue-600 to-blue-400 rounded"></div>
+                        <div className="w-10 h-6 bg-primary-blue rounded"></div>
                         <div>
                           <p className="text-sm font-medium text-text-dark">•••• •••• •••• 4242</p>
                           <p className="text-xs text-text-gray">Utgår 12/25</p>
