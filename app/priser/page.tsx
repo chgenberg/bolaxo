@@ -18,7 +18,7 @@ export default function PricingPage() {
         { text: 'Köparkontakt', included: false },
       ],
       cta: 'Kom igång gratis',
-      ctaLink: '/vardering',
+      ctaLink: '/login',
       popular: false,
     },
     {
@@ -38,7 +38,7 @@ export default function PricingPage() {
         { text: 'Värderingshjälp', included: false },
       ],
       cta: 'Välj Basic',
-      ctaLink: '/salja/start?package=basic',
+      ctaLink: '/checkout?package=basic',
       popular: false,
     },
     {
@@ -60,7 +60,7 @@ export default function PricingPage() {
         { text: 'Due diligence förberedelse', included: true },
       ],
       cta: 'Välj Pro',
-      ctaLink: '/salja/start?package=pro',
+      ctaLink: '/checkout?package=pro',
       popular: true,
     },
     {
