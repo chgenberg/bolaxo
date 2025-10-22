@@ -270,7 +270,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
         // Spara även rå-data för GPT-analysen senare
         localStorage.setItem('enrichedCompanyData', JSON.stringify(enrichedData.rawData))
         
-        setEnrichmentStatus('✓ Data inhämtad! Fortsätt för att granska.')
+        setEnrichmentStatus('Data inhämtad! Fortsätt för att granska.')
       }
     } catch (error) {
       console.error('Enrichment error:', error)
@@ -419,7 +419,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
               <div className="bg-light-blue p-4 rounded-xl">
                 <h4 className="font-semibold text-primary-blue mb-3 text-sm">
-                  ⚡ Automatisk datainsamling (valfritt men rekommenderat)
+                  Automatisk datainsamling (valfritt men rekommenderat)
                 </h4>
                 
                 <FormField
@@ -442,7 +442,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 {(data.website || data.orgNumber) && (
                   <div className="mt-4 text-sm text-text-gray">
                     <p className="flex items-center">
-                      <span className="text-green-600 mr-2">✓</span>
+                      <span className="text-green-600 mr-2">•</span>
                       Vi hämtar automatiskt: företagsdata, branschstatistik, hemsideinnehåll
                     </p>
                   </div>
@@ -593,7 +593,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               {/* OBLIGATORISKA EXAKTA SIFFROR */}
               <div className="bg-blue-50 border-2 border-primary-blue p-4 rounded-xl mb-6">
                 <h4 className="font-semibold text-primary-blue mb-3 flex items-center">
-                  <span className="text-lg mr-2">💰</span>
+                  <span className="text-lg mr-2"></span>
                   Faktiska siffror (senaste 12 månader)
                 </h4>
                 
@@ -638,7 +638,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               {/* KOSTNADSUPPDELNING FÖR BÄTTRE ANALYS */}
               <div className="bg-gray-50 p-4 rounded-xl">
                 <h4 className="font-semibold text-text-dark mb-3">
-                  📊 Kostnadsuppdelning (valfritt men rekommenderat)
+                  Kostnadsuppdelning (valfritt men rekommenderat)
                 </h4>
                 
                 <FormField

@@ -1,200 +1,204 @@
-import PackageCards from '@/components/PackageCards'
-import { CheckCircle, ArrowRight, Shield, TrendingUp, Users, Star } from 'lucide-react'
+import { Check, X, Star } from 'lucide-react'
 import Link from 'next/link'
 
 export default function PricingPage() {
-  const features = [
+  const plans = [
     {
-      icon: Shield,
-      title: 'Säker process',
-      description: 'NDA-skydd och verifierade köpare',
+      name: 'Free',
+      price: '0',
+      description: 'För dig som vill testa plattformen och få en värdering av ditt bolag samt förberede en skarp annons',
+      features: [
+        { text: 'AI-driven företagsvärdering', included: true },
+        { text: 'Förbered annons (publiceras ej)', included: true },
+        { text: 'Grundläggande marknadsanalys', included: true },
+        { text: 'E-post support', included: true },
+        { text: 'Publicera annons', included: false },
+        { text: 'NDA-hantering', included: false },
+        { text: 'Datarum', included: false },
+        { text: 'Köparkontakt', included: false },
+      ],
+      cta: 'Kom igång gratis',
+      ctaLink: '/vardering',
+      popular: false,
     },
     {
-      icon: TrendingUp,
-      title: 'Maximal synlighet',
-      description: 'Nå över 50,000 kvalificerade köpare',
+      name: 'Basic',
+      price: '495',
+      subtitle: '/ mån',
+      description: 'För dig som har en mindre icke komplex verksamhet och vill sälja det mesta på egen hand',
+      features: [
+        { text: 'Allt i Free', included: true },
+        { text: 'Annonstid 90 dagar', value: '90 dagar' },
+        { text: 'Antal bilder', value: 'Upp till 5' },
+        { text: 'Placering', value: 'Standard' },
+        { text: 'NDA-hantering', included: true, value: 'Standard' },
+        { text: 'Statistik', included: false },
+        { text: 'Marknadsföring', included: false },
+        { text: 'Support', value: 'E-post' },
+        { text: 'Värderingshjälp', included: false },
+      ],
+      cta: 'Välj Basic',
+      ctaLink: '/salja/start?package=basic',
+      popular: false,
     },
     {
-      icon: Users,
-      title: 'Personlig rådgivning',
-      description: 'Dedikerade experter guidar dig',
-    },
-  ]
-
-  const comparisonFeatures = [
-    { feature: 'Annonstid', basic: '90 dagar', featured: '180 dagar', premium: 'Tills såld' },
-    { feature: 'Antal bilder', basic: 'Upp till 5', featured: 'Upp till 20', premium: 'Obegränsat' },
-    { feature: 'Placering', basic: 'Standard', featured: 'Framhävd', premium: 'Topplacering' },
-    { feature: 'NDA-hantering', basic: true, featured: true, premium: true },
-    { feature: 'Statistik', basic: false, featured: true, premium: true },
-    { feature: 'Marknadsföring', basic: false, featured: true, premium: true },
-    { feature: 'Support', basic: 'E-post', featured: 'Prioriterad', premium: 'Dedikerad rådgivare' },
-    { feature: 'Värderingshjälp', basic: false, featured: false, premium: true },
-    { feature: 'Due diligence-stöd', basic: false, featured: false, premium: true },
-    { feature: 'Juridisk granskning', basic: false, featured: false, premium: true },
-  ]
-
-  const faqs = [
-    {
-      question: 'Vad ingår i alla paket?',
-      answer: 'Alla paket inkluderar grundläggande annonsering, NDA-hantering, säker kommunikation med köpare och tillgång till vår plattform.',
+      name: 'Pro',
+      price: '895',
+      subtitle: '/ mån',
+      description: 'Vår mest populära tjänst - här får nyttja alla funktioner och hjälp med pitchdeck mm',
+      features: [
+        { text: 'Allt i Basic', included: true },
+        { text: 'Annonstid', value: '180 dagar' },
+        { text: 'Antal bilder', value: 'Upp till 20' },
+        { text: 'Placering', value: 'Framhävd', highlight: true },
+        { text: 'NDA-hantering', included: true, value: 'Prioriterad' },
+        { text: 'Statistik', included: true },
+        { text: 'Marknadsföring', included: true },
+        { text: 'Support', value: 'Prioriterad / Telefon' },
+        { text: 'Värderingshjälp', included: true },
+        { text: 'Pitchdeck-mallar', included: true },
+        { text: 'Due diligence förberedelse', included: true },
+      ],
+      cta: 'Välj Pro',
+      ctaLink: '/salja/start?package=pro',
+      popular: true,
     },
     {
-      question: 'Kan jag uppgradera mitt paket?',
-      answer: 'Ja, du kan när som helst uppgradera från Basic till Featured eller Premium. Du betalar endast mellanskillnaden.',
-    },
-    {
-      question: 'Vad händer när annonstiden går ut?',
-      answer: 'För Basic och Featured-paket kan du förnya din annons till reducerat pris. Premium-annonser är aktiva tills företaget är sålt.',
-    },
-    {
-      question: 'Finns det några dolda avgifter?',
-      answer: 'Nej, priset du ser är allt du betalar. Vi tar ingen provision eller ytterligare avgifter vid försäljning.',
+      name: 'Pro+ Featured',
+      price: '1 495',
+      subtitle: '/ mån',
+      description: 'Är du mäklare har minst 3 annonser per år så få reklamplats/logga denna plats du har tillsammans med extra bra hjälp med pitchdeck mm',
+      features: [
+        { text: 'Allt i Pro', included: true },
+        { text: 'Annonstid', value: 'Tills såld' },
+        { text: 'Antal bilder', value: 'Obegränsat' },
+        { text: 'Placering', value: 'Topplacering', highlight: true },
+        { text: 'Dedikerad rådgivare', included: true },
+        { text: 'Juridisk granskning', included: true },
+        { text: 'Full marknadsföring', included: true },
+        { text: 'Prioriterad matchning', included: true },
+        { text: 'Mäklarvarumärkning', included: true },
+        { text: 'Egen landningssida', included: true },
+        { text: 'API-integration', included: true },
+      ],
+      cta: 'Kontakta oss',
+      ctaLink: '/kontakt?plan=pro-plus',
+      popular: false,
     },
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/10">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-white py-16 md:py-20">
+      <section className="bg-white py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="heading-1 mb-6">Välj rätt paket för din försäljning</h1>
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold text-text-dark mb-6">
+              Transparent prissättning för alla behov
+            </h1>
             <p className="text-xl text-text-gray max-w-3xl mx-auto">
-              Transparent prissättning utan dolda avgifter. Betala en gång, ingen provision vid försäljning.
+              Från gratis värdering till fullservice-försäljning. Inga dolda avgifter, ingen provision.
             </p>
           </div>
 
-          {/* Package Cards */}
-          <PackageCards />
-
-          {/* Trust Features */}
-          <div className="mt-16 grid md:grid-cols-3 gap-6">
-            {features.map((feature, index) => {
-              const Icon = feature.icon
-              return (
-                <div key={index} className="text-center">
-                  <div className="w-12 h-12 bg-light-blue/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-6 h-6 text-primary-blue" />
+          {/* Pricing Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {plans.map((plan, index) => (
+              <div
+                key={index}
+                className={`relative bg-white rounded-2xl overflow-hidden transition-all duration-300 ${
+                  plan.popular
+                    ? 'shadow-2xl ring-2 ring-primary-blue transform scale-105'
+                    : 'shadow-lg hover:shadow-xl'
+                }`}
+              >
+                {/* Popular Badge */}
+                {plan.popular && (
+                  <div className="absolute top-0 right-0 -mr-1">
+                    <div className="bg-primary-blue text-white text-xs font-bold px-6 py-2 rounded-bl-2xl flex items-center gap-1">
+                      <Star className="w-3 h-3 fill-current" />
+                      Mest populär
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-text-dark mb-2">{feature.title}</h3>
-                  <p className="text-sm text-text-gray">{feature.description}</p>
+                )}
+
+                <div className="p-6 lg:p-8">
+                  {/* Plan Name */}
+                  <h3 className="text-2xl font-bold text-text-dark mb-2">{plan.name}</h3>
+                  
+                  {/* Price */}
+                  <div className="flex items-baseline mb-4">
+                    <span className="text-4xl lg:text-5xl font-bold text-text-dark">{plan.price}</span>
+                    <span className="text-text-gray ml-2">kr</span>
+                    {plan.subtitle && (
+                      <span className="text-text-gray ml-1">{plan.subtitle}</span>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-sm text-text-gray mb-6 min-h-[60px]">
+                    {plan.description}
+                  </p>
+
+                  {/* CTA Button */}
+                  <Link
+                    href={plan.ctaLink}
+                    className={`block w-full text-center py-3 px-6 rounded-xl font-semibold transition-all duration-200 ${
+                      plan.popular
+                        ? 'bg-primary-blue text-white hover:bg-blue-700'
+                        : 'bg-gray-100 text-text-dark hover:bg-gray-200'
+                    }`}
+                  >
+                    {plan.cta}
+                  </Link>
+
+                  {/* Features */}
+                  <div className="mt-8 space-y-3">
+                    {plan.features.map((feature, fIndex) => (
+                      <div key={fIndex} className="flex items-start gap-3">
+                        {feature.included === false ? (
+                          <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
+                        ) : (
+                          <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                        )}
+                        <div className="flex-1">
+                          <span className={`text-sm ${feature.included === false ? 'text-gray-400' : 'text-text-gray'}`}>
+                            {feature.text}
+                          </span>
+                          {feature.value && (
+                            <span className={`text-sm font-medium ml-1 ${
+                              feature.highlight ? 'text-primary-blue' : 'text-text-dark'
+                            }`}>
+                              - {feature.value}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Detailed Comparison */}
-      <section className="py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="heading-2 mb-4">Detaljerad jämförelse</h2>
-            <p className="text-lg text-text-gray">Se exakt vad som ingår i varje paket</p>
-          </div>
-
-          <div className="card-static overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left py-4 px-6 font-semibold text-text-dark">Funktioner</th>
-                    <th className="text-center py-4 px-6">
-                      <div className="font-semibold text-text-dark">Basic</div>
-                      <div className="text-sm text-text-gray">4,900 kr</div>
-                    </th>
-                    <th className="text-center py-4 px-6 bg-light-blue/10">
-                      <div className="font-semibold text-primary-blue">Featured</div>
-                      <div className="text-sm text-primary-blue">9,900 kr</div>
-                      <div className="text-xs text-primary-blue mt-1">Mest populär</div>
-                    </th>
-                    <th className="text-center py-4 px-6">
-                      <div className="font-semibold text-text-dark">Premium</div>
-                      <div className="text-sm text-text-gray">19,900 kr</div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonFeatures.map((row, index) => (
-                    <tr key={index} className="border-b border-gray-50">
-                      <td className="py-4 px-6 text-text-dark">{row.feature}</td>
-                      <td className="text-center py-4 px-6">
-                        {typeof row.basic === 'boolean' ? (
-                          row.basic ? (
-                            <CheckCircle className="w-5 h-5 text-success mx-auto" />
-                          ) : (
-                            <span className="text-gray-300">—</span>
-                          )
-                        ) : (
-                          <span className="text-text-gray">{row.basic}</span>
-                        )}
-                      </td>
-                      <td className="text-center py-4 px-6 bg-light-blue/10">
-                        {typeof row.featured === 'boolean' ? (
-                          row.featured ? (
-                            <CheckCircle className="w-5 h-5 text-success mx-auto" />
-                          ) : (
-                            <span className="text-gray-300">—</span>
-                          )
-                        ) : (
-                          <span className="text-text-dark font-medium">{row.featured}</span>
-                        )}
-                      </td>
-                      <td className="text-center py-4 px-6">
-                        {typeof row.premium === 'boolean' ? (
-                          row.premium ? (
-                            <CheckCircle className="w-5 h-5 text-success mx-auto" />
-                          ) : (
-                            <span className="text-gray-300">—</span>
-                          )
-                        ) : (
-                          <span className="text-text-dark font-medium">{row.premium}</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="heading-2 mb-4">Vanliga frågor</h2>
-          </div>
-
-          <div className="space-y-6">
-            {faqs.map((faq, index) => (
-              <div key={index} className="card">
-                <h3 className="font-semibold text-text-dark mb-3">{faq.question}</h3>
-                <p className="text-text-gray">{faq.answer}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-16 md:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="card-static bg-gradient-to-br from-primary-blue to-blue-800 text-white p-12">
-            <Star className="w-12 h-12 mx-auto mb-6 text-white/80" />
-            <h2 className="text-3xl font-bold mb-4">Redo att sälja ditt företag?</h2>
-            <p className="text-xl mb-8 text-white/90">
-              Kom igång direkt. Det tar bara 5 minuter att skapa din annons.
+          {/* Additional Info */}
+          <div className="mt-16 text-center">
+            <p className="text-sm text-text-gray mb-4">
+              Alla priser är exklusive moms. Fakturering sker månadsvis.
             </p>
-            <Link 
-              href="/salja/start" 
-              className="inline-flex items-center bg-white text-primary-blue px-8 py-4 rounded-button font-semibold hover:bg-gray-100 transition-all duration-300 shadow-card"
-            >
-              Börja sälja nu
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <Link href="/faq" className="text-primary-blue hover:underline">
+                Vanliga frågor
+              </Link>
+              <span className="text-gray-300">•</span>
+              <Link href="/kontakt" className="text-primary-blue hover:underline">
+                Kontakta säljteam
+              </Link>
+              <span className="text-gray-300">•</span>
+              <Link href="/villkor" className="text-primary-blue hover:underline">
+                Villkor
+              </Link>
+            </div>
           </div>
         </div>
       </section>

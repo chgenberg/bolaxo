@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
+import InfoPopup from '@/components/InfoPopup'
 
 export default function NDASigningPage() {
   const params = useParams()
@@ -17,6 +18,7 @@ export default function NDASigningPage() {
 
   const [step, setStep] = useState(1)
   const [agreed, setAgreed] = useState(false)
+  const [interestReason, setInterestReason] = useState('')
 
   if (!object) {
     return <div>Objekt ej hittat</div>
@@ -31,18 +33,42 @@ export default function NDASigningPage() {
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-text-dark mb-4">
-            NDA redan signerad
-          </h1>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <h1 className="text-3xl font-bold text-text-dark">
+              NDA redan signerad
+            </h1>
+            <InfoPopup
+              title="Vad händer nu?"
+              content="Säljaren har fått notis och väljer om de vill ge dig åtkomst till datarummet, avvakta eller ställa vidare frågor i chatten. Du får ett meddelande när säljaren har godkänt din åtkomst."
+              size="md"
+            />
+          </div>
           <p className="text-text-gray mb-8">
-            Du har redan signerat NDA för detta objekt. Du har nu fullständig tillgång till alla detaljer.
+            Du har redan signerat NDA för detta objekt. Väntar på att säljaren ska ge dig åtkomst.
           </p>
+          <div className="bg-light-blue/50 rounded-xl p-6 mb-8 text-left">
+            <h3 className="font-semibold text-text-dark mb-3 text-center">Nästa steg i processen</h3>
+            <ol className="space-y-2 text-sm text-text-gray">
+              <li className="flex items-start">
+                <span className="bg-primary-blue text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mr-3 text-xs">1</span>
+                <span>Säljaren granskar din profil och NDA-förfrågan</span>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-primary-blue text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mr-3 text-xs">2</span>
+                <span>De väljer att godkänna, ställa frågor eller avvakta</span>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-primary-blue text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mr-3 text-xs">3</span>
+                <span>Du får ett mail när du har fått tillgång till datarummet</span>
+              </li>
+            </ol>
+          </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href={`/objekt/${objectId}`} className="btn-secondary">
               ← Se objektet
             </Link>
-            <Link href={`/objekt/${objectId}/datarum`} className="btn-primary">
-              Gå till datarum →
+            <Link href="/sok" className="btn-ghost">
+              Fortsätt söka
             </Link>
           </div>
         </div>
@@ -133,7 +159,24 @@ export default function NDASigningPage() {
                 </div>
               </div>
 
-              <div className="flex items-start mb-6">
+              <div className="mb-6">
+              <label htmlFor="interest" className="block text-sm font-medium text-text-dark mb-2">
+                Varför är du intresserad av detta företag? (Valfritt)
+              </label>
+              <textarea
+                id="interest"
+                value={interestReason}
+                onChange={(e) => setInterestReason(e.target.value)}
+                placeholder="Beskriv kort din bakgrund och varför just detta företag passar dig. Detta hjälper säljaren att fatta beslut snabbare..."
+                className="input-field w-full min-h-[100px] resize-y"
+                maxLength={500}
+              />
+              <p className="text-xs text-text-gray mt-1">
+                Tips: En välskriven motivation ökar chansen att säljaren godkänner din NDA snabbt
+              </p>
+            </div>
+
+            <div className="flex items-start mb-6">
                 <input
                   type="checkbox"
                   id="agreed"
@@ -169,7 +212,7 @@ export default function NDASigningPage() {
 
             <div className="space-y-4 mb-8">
               {/* BankID */}
-              <div className="card-hover border-2 border-primary-blue">
+              <div className="card-hover border-2 border-primary-blue bg-primary-blue/5">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start">
                     <div className="w-12 h-12 bg-primary-blue rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
@@ -178,14 +221,27 @@ export default function NDASigningPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">BankID (rekommenderas)</h3>
-                      <p className="text-sm text-text-gray mb-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold text-lg">BankID</h3>
+                        <span className="bg-success text-white text-xs px-2 py-0.5 rounded-full">
+                          Rekommenderas
+                        </span>
+                      </div>
+                      <p className="text-sm text-text-dark font-medium mb-2">
                         Snabbast och säkrast. Signering tar 30 sekunder.
                       </p>
+                      <div className="bg-success/10 border border-success/30 rounded-lg p-3 mb-3">
+                        <p className="text-sm text-success font-medium">
+                          ⚡ Större sannolikhet att säljare delar information
+                        </p>
+                        <p className="text-xs text-text-gray mt-1">
+                          BankID verifierar din identitet, vilket gör dig mer trovärdig och ökar chansen för snabbt godkännande
+                        </p>
+                      </div>
                       <ul className="text-sm text-text-gray space-y-1">
-                        <li>• Juridiskt bindande</li>
-                        <li>• Omedelbar tillgång efter godkännande</li>
-                        <li>• Verifierar din identitet</li>
+                        <li>• Juridiskt bindande signatur</li>
+                        <li>• Omedelbar tillgång efter säljares godkännande</li>
+                        <li>• Full identitetsverifiering</li>
                       </ul>
                     </div>
                   </div>

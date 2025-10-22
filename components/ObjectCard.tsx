@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { MapPin, TrendingUp, Calendar, Eye, Shield } from 'lucide-react'
 import { BusinessObject } from '@/data/mockObjects'
 
@@ -25,65 +26,93 @@ export default function ObjectCard({ object }: ObjectCardProps) {
 
   return (
     <Link href={`/objekt/${object.id}`}>
-      <div className="card-interactive group h-full">
-        {/* Status Badges */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-2">
-            {object.featured && (
-              <span className="bg-primary-blue/10 text-primary-blue px-3 py-1 rounded-full text-xs font-medium">
-                Framhävd
-              </span>
+      <div className="card-interactive group h-full overflow-hidden">
+        {/* Image Section with Pulsing Shadow */}
+        <div className="relative mb-4 -mx-6 -mt-6">
+          <div className="relative w-full h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+            {object.image ? (
+              <div className="relative w-full h-full">
+                {/* Pulsing shadow effect */}
+                <div className="absolute inset-0 flex items-center justify-center p-6">
+                  <div className="relative w-full h-full max-w-[280px] max-h-[160px]">
+                    <div className="absolute inset-0 bg-gray-800/20 rounded-2xl blur-xl animate-pulse" />
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={object.image}
+                        alt={object.anonymousTitle}
+                        fill
+                        className="object-contain rounded-2xl"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="text-4xl font-bold text-gray-300">
+                  {object.type.charAt(0)}
+                </div>
+              </div>
             )}
-            <span className="bg-light-blue/50 text-text-dark px-3 py-1 rounded-full text-xs font-medium">
-              {object.category || object.type}
-            </span>
+            
+            {/* Overlay gradient for better text readability */}
+            <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/20 to-transparent" />
           </div>
-          <div className="flex items-center text-text-gray text-sm">
-            <Calendar className="w-4 h-4 mr-1" />
-            {object.createdAt ? getDaysAgo(object.createdAt) : 'Nyligen'}
+          
+          {/* Status Badges - Positioned over image */}
+          <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              {object.featured && (
+                <span className="bg-primary-blue text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+                  Framhävd
+                </span>
+              )}
+              <span className="bg-white/90 backdrop-blur-sm text-text-dark px-3 py-1 rounded-full text-xs font-medium shadow-lg">
+                {object.category || object.type}
+              </span>
+            </div>
+            <div className="flex items-center text-white bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-sm">
+              <Calendar className="w-4 h-4 mr-1" />
+              {object.createdAt ? getDaysAgo(object.createdAt) : 'Nyligen'}
+            </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="space-y-4">
+        <div className="space-y-3 px-6 pb-6">
           <div>
-            <h3 className="text-xl font-semibold text-text-dark mb-2 group-hover:text-primary-blue transition-colors">
+            <h3 className="text-lg font-semibold text-text-dark mb-1.5 group-hover:text-primary-blue transition-colors line-clamp-2">
               {object.title || object.anonymousTitle || `${object.type} i ${object.region}`}
             </h3>
-            <p className="text-text-gray line-clamp-2">{object.description}</p>
+            <p className="text-sm text-text-gray line-clamp-2">{object.description}</p>
           </div>
 
-          {/* Key Metrics */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="text-sm text-text-gray mb-1">Omsättning</div>
-              <div className="font-semibold text-text-dark flex items-center">
-                <TrendingUp className="w-4 h-4 mr-1 text-success" />
-                {formatCurrency(object.revenue)}
-              </div>
+          {/* Key Metrics - More minimalist */}
+          <div className="flex items-center justify-between py-3 border-y border-gray-100">
+            <div className="flex items-center">
+              <TrendingUp className="w-4 h-4 mr-1.5 text-success" />
+              <span className="text-sm font-medium text-text-dark">{formatCurrency(object.revenue)}</span>
             </div>
-            <div>
-              <div className="text-sm text-text-gray mb-1">Pris</div>
-              <div className="font-semibold text-primary-blue">
-                {formatCurrency(object.price || object.priceMin)}
-              </div>
+            <div className="text-lg font-bold text-primary-blue">
+              {formatCurrency(object.price || object.priceMin)}
             </div>
           </div>
 
-          {/* Additional Info */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-            <div className="flex items-center text-text-gray text-sm">
-              <MapPin className="w-4 h-4 mr-1" />
+          {/* Additional Info - Simplified */}
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center text-text-gray">
+              <MapPin className="w-3.5 h-3.5 mr-1" />
               {object.location || object.region}
             </div>
-            <div className="flex items-center space-x-3 text-sm">
+            <div className="flex items-center space-x-3">
               <div className="flex items-center text-text-gray">
-                <Eye className="w-4 h-4 mr-1" />
+                <Eye className="w-3.5 h-3.5 mr-1" />
                 {object.views}
               </div>
               {(object.ndaRequired !== false) && (
-                <div className="flex items-center text-primary-blue">
-                  <Shield className="w-4 h-4 mr-1" />
+                <div className="flex items-center text-primary-blue font-medium">
+                  <Shield className="w-3.5 h-3.5 mr-1" />
                   NDA
                 </div>
               )}
@@ -91,8 +120,10 @@ export default function ObjectCard({ object }: ObjectCardProps) {
           </div>
         </div>
 
-        {/* Hover Effect */}
-        <div className="absolute inset-x-0 bottom-0 h-1 bg-primary-blue/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-card" />
+        {/* Hover Effect - Subtle glow */}
+        <div className="absolute inset-0 rounded-card opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div className="absolute inset-0 rounded-card shadow-[0_0_20px_rgba(37,99,235,0.1)]" />
+        </div>
       </div>
     </Link>
   )

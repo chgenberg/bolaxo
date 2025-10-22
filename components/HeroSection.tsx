@@ -4,9 +4,14 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { ArrowRight, TrendingUp, Shield, Users, CheckCircle } from 'lucide-react'
 import MetricsDashboard from './MetricsDashboard'
+import ObjectCarousel from './ObjectCarousel'
+import ObjectMap from './ObjectMap'
+import BuyerPreferences from './BuyerPreferences'
 
 export default function HeroSection() {
   const [activeTab, setActiveTab] = useState<'sell' | 'buy'>('sell')
+  const [showMap, setShowMap] = useState(false)
+  const [showPreferences, setShowPreferences] = useState(false)
 
   return (
     <section className="relative bg-gradient-to-b from-white to-light-blue/10 overflow-hidden">
@@ -44,7 +49,7 @@ export default function HeroSection() {
         </div>
 
         {/* Content */}
-        {activeTab === 'sell' ? <SellerHero /> : <BuyerHero />}
+        {activeTab === 'sell' ? <SellerHero /> : <BuyerHero showMap={showMap} setShowMap={setShowMap} />}
       </div>
 
       {/* Metrics Section */}
@@ -57,6 +62,9 @@ export default function HeroSection() {
           <MetricsDashboard />
         </div>
       </div>
+
+      {/* Map Modal */}
+      <ObjectMap isOpen={showMap} onClose={() => setShowMap(false)} />
     </section>
   )
 }
@@ -165,7 +173,7 @@ function SellerHero() {
   )
 }
 
-function BuyerHero() {
+function BuyerHero({ showMap, setShowMap }: { showMap: boolean; setShowMap: (show: boolean) => void }) {
   const benefits = [
     { icon: TrendingUp, text: 'Vi hittar de mest relevanta företagen åt dig' },
     { icon: Shield, text: 'Full insyn från första NDA till signerat avtal' },
@@ -173,7 +181,11 @@ function BuyerHero() {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      {/* Object Carousel */}
+      <ObjectCarousel onMapClick={() => setShowMap(true)} />
+      
+      {/* Hero Content */}
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Content */}
         <div className="space-y-8">

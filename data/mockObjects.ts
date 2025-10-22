@@ -26,6 +26,9 @@ export interface BusinessObject {
   location?: string
   ndaRequired?: boolean
   
+  // Image
+  image?: string
+  
   // Locked data (only after NDA)
   companyName: string // Locked
   orgNumber: string // Locked
@@ -71,6 +74,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['Stockholms kommun', 'Trafikverket', 'Försäkringskassan'],
     anonymousTitle: 'Etablerat IT-konsultbolag i Stockholm',
+    image: '/Annonsbilder/IT-konsult.png',
     createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
   },
   {
@@ -105,6 +109,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['Direktförsäljning B2C'],
     anonymousTitle: 'E-handelsplattform inom heminredning',
+    image: '/Annonsbilder/Heminredning.png',
     createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000)
   },
   {
@@ -139,6 +144,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['Walk-in kunder'],
     anonymousTitle: 'Etablerad restaurang i centrala Malmö',
+    image: '/Annonsbilder/Restaurang.png',
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
   },
   {
@@ -173,6 +179,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['450+ företagskunder i Norden'],
     anonymousTitle: 'SaaS-plattform för projektledning',
+    image: '/Annonsbilder/Tech.png',
     createdAt: new Date(Date.now() - 22 * 24 * 60 * 60 * 1000)
   },
   {
@@ -207,6 +214,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['Privatkunder + 3 större fastighetsbolag'],
     anonymousTitle: 'Byggföretag i Uppsala med ROT-fokus',
+    image: '/Annonsbilder/bygg.png',
     createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000)
   },
   {
@@ -241,6 +249,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['150+ SME-företag'],
     anonymousTitle: 'Redovisningsbyrå i Stockholm med 150+ kunder',
+    image: '/Annonsbilder/Redovisning.png',
     createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000)
   },
   {
@@ -275,6 +284,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['Walk-in + företagskunder'],
     anonymousTitle: 'Café & Bageri i centrala Göteborg',
+    image: '/Annonsbilder/Bageri-GBG.png',
     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
   },
   {
@@ -309,6 +319,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['35 aktiva kunder, B2B tech-fokus'],
     anonymousTitle: 'Marknadsföringsbyrå med B2B SaaS-fokus',
+    image: '/Annonsbilder/Marknadsforingsbyra.png',
     createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000)
   },
   {
@@ -343,6 +354,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['200+ B2B-kunder'],
     anonymousTitle: 'E-learning SaaS-plattform med 200+ kunder',
+    image: '/Annonsbilder/SaaS.png',
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
   },
   {
@@ -377,6 +389,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['Privatkunder'],
     anonymousTitle: 'Frisörsalong i centrala Malmö',
+    image: '/Annonsbilder/Frisor.png',
     createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
   },
   {
@@ -411,6 +424,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['850 aktiva medlemmar'],
     anonymousTitle: 'Gym i Stockholm med 850 medlemmar',
+    image: '/Annonsbilder/Traningscenter.png',
     createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000)
   },
   {
@@ -445,6 +459,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['180 B2B-kunder, huvudsakligen SME'],
     anonymousTitle: 'HR-tech SaaS med AI-matchning',
+    image: '/Annonsbilder/HR-tech.png',
     createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
   },
   {
@@ -479,6 +494,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['40+ kunder inom e-handel och service'],
     anonymousTitle: 'Webbyrå i Malmö med e-handelsfokus',
+    image: '/Annonsbilder/Webbyra.png',
     createdAt: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000)
   },
   {
@@ -513,6 +529,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['25 företagskunder'],
     anonymousTitle: 'Städbolag i Uppsala med företagskunder',
+    image: '/Annonsbilder/stad.png',
     createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000)
   },
   {
@@ -547,6 +564,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['B2C + 15 företagskunder'],
     anonymousTitle: 'Möbelaffär i Göteborg med skandinavisk design',
+    image: '/Annonsbilder/E-learning.png',
     createdAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000)
   },
   {
@@ -581,6 +599,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['120 SME-kunder'],
     anonymousTitle: 'IT-support företag med 120+ kunder',
+    image: '/Annonsbilder/IT-konsult.png',
     createdAt: new Date(Date.now() - 19 * 24 * 60 * 60 * 1000)
   },
   {
@@ -615,6 +634,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['Privatkunder'],
     anonymousTitle: 'Hundtrimning & djuraffär i Uppsala',
+    image: '/Annonsbilder/Djuraffar.png',
     createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
   },
   {
@@ -649,6 +669,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['450+ B2B-kunder i Norden'],
     anonymousTitle: 'CRM SaaS med 450+ kunder och 40M ARR',
+    image: '/Annonsbilder/CRM-system SaaS.png',
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
   },
   {
@@ -683,6 +704,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['B2C + 12 B2B-kunder (hotell/restauranger)'],
     anonymousTitle: 'Bageri & konditori i Malmö',
+    image: '/Annonsbilder/Bageri.png',
     createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000)
   },
   {
@@ -717,6 +739,7 @@ export const mockObjects: BusinessObject[] = [
     detailedFinancials: {},
     customers: ['B2C privatpersoner + företagskunder'],
     anonymousTitle: 'Cykelbutik i Göteborg med verkstad',
+    image: '/Annonsbilder/Cykel.png',
     createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000)
   },
 ]
