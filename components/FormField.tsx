@@ -93,6 +93,7 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
         
         <div className="relative">
           <input
+            {...props}
             ref={ref}
             type={isNumberField ? 'text' : type}
             inputMode={isNumberField ? 'numeric' : undefined}
@@ -101,7 +102,6 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
             className={`input-field ${
               error ? 'border-error focus:border-error focus:ring-error/10' : ''
             } ${suffix ? 'pr-12' : ''}`}
-            {...props}
           />
           
           {suffix && (

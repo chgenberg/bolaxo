@@ -423,7 +423,7 @@ export default function ObjectDetailPage() {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-8 bg-gradient-to-r from-primary-blue to-blue-700 rounded-2xl p-8 text-center text-white">
+        <div className="mt-8 bg-primary-blue rounded-2xl p-8 text-center text-white">
           <h2 className="text-2xl font-bold mb-3">Intresserad av detta företag?</h2>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
             {hasNDA(objectId) 
