@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { checkRateLimit } from '@/lib/ratelimit'
 import { validateAndSanitize } from '@/lib/sanitize'
+import { validateValuationData, buildConditionalPrompts, getIndustrySpecificInstructions, validateDataCombinations } from '@/lib/valuation-rules'
 
 const prisma = new PrismaClient()
 
@@ -235,11 +236,18 @@ ${!exactRevenue || !operatingCosts ? '⚠️ VARNING: Exakta finansiella siffror
 ${ebitdaMargin && Number(ebitdaMargin) < 5 ? `⚠️ FLAGGA: ${ebitdaMargin}% EBITDA-marginal verkar LÅG för ${industryLabels[data.industry]}. Är detta realistiskt? Kontrollera branschnormer.` : ''}
 ${ebitdaMargin && Number(ebitdaMargin) > 40 ? `⚠️ FLAGGA: ${ebitdaMargin}% EBITDA-marginal verkar MYCKET HÖG för ${industryLabels[data.industry]}. Verifiera om detta är hållbart.` : ''}
 
+**UNIVERSELLA RISKFAKTORER:**
+${data.grossMargin ? `- Bruttovinstmarginal (Gross Margin): ${data.grossMargin}%` : '- Gross Margin: Ej angiven'}
+${data.customerConcentrationRisk ? `- Kundkoncentration: ${data.customerConcentrationRisk === 'high' ? '🚨 >50% från en kund (HÖGRISK)' : data.customerConcentrationRisk === 'medium' ? '⚠️ 30-50% från en kund (medel risk)' : 'Diversifierad kundbas'}` : ''}
+${data.totalDebt ? `- Extern skuldsättning: ${Number(data.totalDebt).toLocaleString('sv-SE')} kr` : '- Skulder: Inga/Ej angivna'}
+${data.regulatoryLicenses ? `- Regulatoriska tillstånd: ${data.regulatoryLicenses === 'at_risk' ? '🚨 Risk att förlora (KRITISKT)' : data.regulatoryLicenses === 'complex' ? 'Komplexa tillstånd' : data.regulatoryLicenses === 'standard' ? 'Standard tillstånd OK' : 'Inga speciella'}` : ''}
+${data.paymentTerms ? `- Betaltider från kunder: ${data.paymentTerms} dagar` : ''}
+
 **BRANSCHSPECIFIK INFORMATION:**
 `
 
   // Lägg till branschspecifika detaljer
-  const excludedKeys = ['email', 'companyName', 'industry', 'companyAge', 'revenue', 'revenue3Years', 'profitMargin', 'employees', 'customerBase', 'competitiveAdvantage', 'futureGrowth', 'challenges', 'whySelling', 'exactRevenue', 'operatingCosts', 'cogs', 'salaries', 'marketingCosts', 'rentCosts', 'website', 'orgNumber', 'enrichedCompanyData']
+  const excludedKeys = ['email', 'companyName', 'industry', 'companyAge', 'revenue', 'revenue3Years', 'profitMargin', 'employees', 'customerBase', 'competitiveAdvantage', 'futureGrowth', 'challenges', 'whySelling', 'exactRevenue', 'operatingCosts', 'cogs', 'salaries', 'marketingCosts', 'rentCosts', 'website', 'orgNumber', 'enrichedCompanyData', 'grossMargin', 'customerConcentrationRisk', 'totalDebt', 'regulatoryLicenses', 'paymentTerms']
   
   Object.keys(data).forEach(key => {
     if (!excludedKeys.includes(key)) {
@@ -256,6 +264,42 @@ ${ebitdaMargin && Number(ebitdaMargin) > 40 ? `⚠️ FLAGGA: ${ebitdaMargin}% E
 - Största utmaningar/risker: ${data.challenges || 'Ej angivet'}
 
 **AUTOMATISKT INSAMLAD DATA:**`
+  
+  // Add conditional prompts and warnings BEFORE enriched data
+  const conditionalPrompts = buildConditionalPrompts(data)
+  const dataValidation = validateDataCombinations(data)
+  
+  if (dataValidation.length > 0) {
+    prompt += `\n\n**🚨 DATA VALIDATION ERRORS:**`
+    dataValidation.forEach(error => {
+      prompt += `\n- ${error}`
+    })
+    prompt += `\n\n⚠️ Dessa fel MÅSTE adresseras i din värdering! Förklara varför siffrorna kan vara felaktiga.`
+  }
+  
+  if (conditionalPrompts.criticalFlags.length > 0) {
+    prompt += `\n\n**🚨 KRITISKA VARNINGSFLAGGOR:**`
+    conditionalPrompts.criticalFlags.forEach(flag => {
+      prompt += `\n${flag}`
+    })
+    prompt += `\n\n⚠️ Dessa MÅSTE kraftigt påverka värderingen negativt!`
+  }
+  
+  if (conditionalPrompts.warnings.length > 0) {
+    prompt += `\n\n**⚠️ VARNINGAR SOM PÅVERKAR VÄRDERING:**`
+    conditionalPrompts.warnings.forEach(warning => {
+      prompt += `\n- ${warning}`
+    })
+  }
+  
+  if (conditionalPrompts.adjustments.length > 0) {
+    prompt += `\n\n**📊 VÄRDERINGSJUSTERINGAR ATT GÖRA:**`
+    conditionalPrompts.adjustments.forEach(adjustment => {
+      prompt += `\n- ${adjustment}`
+    })
+  }
+  
+  prompt += `\n\n**AUTOMATISKT INSAMLAD DATA:**`
 
   // Lägg till berikad data om den finns
   if (enrichedData) {
@@ -575,6 +619,9 @@ ${contentPreview}
     }
   }
 
+  // Add industry-specific instructions
+  prompt += getIndustrySpecificInstructions(data)
+
   prompt += `
 
 **UPPGIFT:**
@@ -584,6 +631,7 @@ Analysera företaget och ge:
 3. SWOT-analys med minst 3-4 punkter per kategori
 4. 5-7 konkreta rekommendationer för att öka värdet, rankade efter påverkan (hög/medel/låg)
 5. Jämförelse med typiska värderingar i branschen
+6. **APPLICERA ALLA VÄRDERINGSJUSTERINGAR från avsnittet ovan**
 
 Svara i följande JSON-format:
 {
@@ -624,44 +672,88 @@ Svara i följande JSON-format:
 
 function formatKey(key: string): string {
   const labels: Record<string, string> = {
+    // Tech/SaaS
+    businessModel: 'Affärsmodell',
     recurringRevenue: 'Återkommande intäkter',
+    monthlyRecurringRevenue: 'MRR',
     customerChurn: 'Kundavgång (churn)',
+    netRevenueRetention: 'NRR (Net Revenue Retention)',
+    customerAcquisitionCost: 'CAC (kundanskaffningskostnad)',
+    lifetimeValue: 'LTV (lifetime value)',
+    cacPaybackMonths: 'CAC Payback Period',
     techStack: 'Teknisk plattform',
     scalability: 'Skalbarhet',
     ipRights: 'Patent/Unik teknologi',
-    storeLocation: 'Butiksläge',
-    leaseLength: 'Hyresavtal återstår',
-    footTraffic: 'Kunder per dag',
-    inventoryTurnover: 'Lageromsättning',
-    competition: 'Konkurrenssituation',
-    productionCapacity: 'Kapacitetsutnyttjande',
-    equipmentAge: 'Maskinålder',
-    equipmentValue: 'Utrustningsvärde',
-    customerConcentration: 'Kundkoncentration',
-    longTermContracts: 'Långa avtal',
-    serviceType: 'Tjänstetyp',
-    clientRetention: 'Kundrelationslängd',
-    billableHours: 'Fakturerbara timmar',
-    keyPersonDependency: 'Personberoende',
-    seatingCapacity: 'Sittplatser',
-    avgCheckSize: 'Genomsnittlig nota',
-    openingHours: 'Öppettider/vecka',
-    locationRent: 'Månadshyra',
-    liquorLicense: 'Serveringstillstånd',
-    projectBacklog: 'Orderstock',
-    equipmentOwned: 'Äger utrustning',
-    certifications: 'Certifieringar',
-    contractType: 'Projekttyp',
+    
+    // E-commerce
     monthlyVisitors: 'Månatliga besökare',
     conversionRate: 'Konverteringsgrad',
     avgOrderValue: 'Genomsnittligt ordervärde',
     repeatCustomerRate: 'Återkommande kunder',
+    inventoryDays: 'Lageromsättning (dagar)',
+    supplierDependency: 'Leverantörsberoende',
+    seasonality: 'Säsongsvariationer',
     marketingChannels: 'Marknadsföringskanaler',
+    
+    // Retail
+    storeLocation: 'Butiksläge',
+    leaseLength: 'Hyresavtal återstår',
+    monthlyRent: 'Månadshyra',
+    footTraffic: 'Kunder per dag',
+    avgTransactionSize: 'Genomsnittligt köp',
+    inventoryTurnover: 'Lageromsättning per år',
+    inventoryValue: 'Lagervärde',
+    sameStoreSalesGrowth: 'Same-store sales growth',
+    competition: 'Konkurrenssituation',
+    
+    // Manufacturing
+    productionCapacity: 'Kapacitetsutnyttjande',
+    equipmentAge: 'Maskinålder',
+    equipmentValue: 'Utrustningsvärde',
+    depreciation: 'Årliga avskrivningar',
+    rawMaterialCosts: 'Råvarukostnader',
+    supplierConcentration: 'Leverantörskoncentration',
+    customerConcentration: 'Kundkoncentration',
+    longTermContracts: 'Långa avtal',
+    orderBacklog: 'Orderstock',
+    
+    // Services/Consulting
+    serviceType: 'Tjänstetyp',
+    clientRetention: 'Kundrelationslängd',
+    contractRenewalRate: 'Förnyelserate',
+    billableHours: 'Fakturerbara timmar',
+    avgRevenuePerCustomer: 'Genomsnitt per kund',
+    customerGrowthRate: 'Kundtillväxt',
+    keyPersonDependency: 'Personberoende',
     consultantCount: 'Antal konsulter',
     utilizationRate: 'Debiteringsgrad',
     avgHourlyRate: 'Genomsnittlig timpris',
     clientDiversity: 'Antal aktiva kunder',
-    methodology: 'Unik metodik'
+    avgProjectValue: 'Genomsnittligt projektvärde',
+    grossMarginPerConsultant: 'Bruttomarginal per konsult',
+    methodology: 'Unik metodik',
+    
+    // Restaurant
+    seatingCapacity: 'Sittplatser',
+    avgCheckSize: 'Genomsnittlig nota',
+    dailyCovers: 'Gäster per dag',
+    tableturnover: 'Bordsrotation',
+    foodCostPercentage: 'Food cost %',
+    laborCostPercentage: 'Lönekostnader %',
+    openingHours: 'Öppettider/vecka',
+    locationRent: 'Månadshyra',
+    leaseRemaining: 'Hyresavtal återstår',
+    liquorLicense: 'Serveringstillstånd',
+    deliveryTakeout: 'Andel takeaway/delivery',
+    
+    // Construction
+    projectBacklog: 'Orderstock (månader)',
+    backlogValue: 'Orderstock (värde)',
+    equipmentOwned: 'Äger utrustning',
+    projectMargin: 'Projektmarginal',
+    contractType: 'Projekttyp',
+    certifications: 'Certifieringar',
+    workingCapitalDays: 'Working capital',
   }
   return labels[key] || key
 }

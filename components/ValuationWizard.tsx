@@ -48,8 +48,20 @@ const industries = [
 // Branschspecifika frågor
 const industryQuestions: Record<string, Array<{ key: string; label: string; type: 'text' | 'select' | 'textarea'; options?: {value: string; label: string}[]; tooltip?: string }>> = {
   tech: [
-    { key: 'recurringRevenue', label: 'Andel återkommande intäkter (%)', type: 'text', tooltip: 'T.ex. prenumerationer, support-avtal' },
-    { key: 'customerChurn', label: 'Årlig kundavgång (churn rate %)', type: 'text' },
+    { key: 'businessModel', label: 'Affärsmodell', type: 'select', options: [
+      { value: 'saas', label: 'SaaS (Software as a Service)' },
+      { value: 'license', label: 'Licensförsäljning' },
+      { value: 'services', label: 'Tjänster/konsultation' },
+      { value: 'marketplace', label: 'Marketplace/plattform' },
+      { value: 'hybrid', label: 'Hybrid' }
+    ]},
+    { key: 'recurringRevenue', label: 'Andel återkommande intäkter / MRR (%)', type: 'text', tooltip: 'T.ex. prenumerationer, support-avtal. För SaaS: ange MRR/ARR-andel.' },
+    { key: 'monthlyRecurringRevenue', label: 'MRR - Monthly Recurring Revenue (SEK)', type: 'text', tooltip: 'Endast för SaaS: månatliga återkommande intäkter' },
+    { key: 'customerChurn', label: 'Årlig kundavgång (churn rate %)', type: 'text', tooltip: 'Andel kunder som slutar per år. <5% är excellent för SaaS' },
+    { key: 'netRevenueRetention', label: 'NRR - Net Revenue Retention (%)', type: 'text', tooltip: 'För SaaS: intäkter från befintliga kunder vs förra året. >100% = expansion!' },
+    { key: 'customerAcquisitionCost', label: 'CAC - Customer Acquisition Cost (kr)', type: 'text', tooltip: 'Kostnad för att värva en ny kund' },
+    { key: 'lifetimeValue', label: 'LTV - Lifetime Value per kund (kr)', type: 'text', tooltip: 'Total intäkt från en genomsnittlig kund' },
+    { key: 'cacPaybackMonths', label: 'CAC Payback Period (månader)', type: 'text', tooltip: 'Hur många månader för att tjäna tillbaka kundanskaffningskostnad? <12 mån excellent' },
     { key: 'techStack', label: 'Beskriv er tekniska plattform', type: 'textarea' },
     { key: 'scalability', label: 'Hur skalbar är er lösning?', type: 'select', options: [
       { value: 'high', label: 'Hög - kan lätt växa utan extra kostnad' },
@@ -57,7 +69,8 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
       { value: 'low', label: 'Låg - resurskrävande att växa' }
     ]},
     { key: 'ipRights', label: 'Har ni patent eller unik teknologi?', type: 'select', options: [
-      { value: 'yes', label: 'Ja' },
+      { value: 'yes', label: 'Ja, patent eller skyddad IP' },
+      { value: 'partial', label: 'Delvis, varumärken/copyright' },
       { value: 'no', label: 'Nej' }
     ]},
   ],
@@ -67,9 +80,13 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
       { value: 'good', label: 'Bra läge' },
       { value: 'average', label: 'Genomsnittligt läge' }
     ]},
-    { key: 'leaseLength', label: 'Hur långt hyresavtal återstår (år)?', type: 'text' },
+    { key: 'leaseLength', label: 'Hur långt hyresavtal återstår (år)?', type: 'text', tooltip: 'Långt hyresavtal = mer värt (mindre risk)' },
+    { key: 'monthlyRent', label: 'Månadshyra (kr)', type: 'text', tooltip: 'Total lokalkostnad per månad' },
     { key: 'footTraffic', label: 'Uppskattat antal kunder per dag', type: 'text' },
-    { key: 'inventoryTurnover', label: 'Lageromsättning per år', type: 'text', tooltip: 'Hur många gånger per år säljs lagret' },
+    { key: 'avgTransactionSize', label: 'Genomsnittligt köp per kund (kr)', type: 'text' },
+    { key: 'inventoryTurnover', label: 'Lageromsättning per år', type: 'text', tooltip: 'Hur många gånger per år säljs lagret. Högre = bättre cash flow' },
+    { key: 'inventoryValue', label: 'Genomsnittligt lagervärde (kr)', type: 'text', tooltip: 'Värde på lager i butik. Påverkar working capital' },
+    { key: 'sameStoreSalesGrowth', label: 'Same-store sales growth (%)', type: 'text', tooltip: 'Försäljningstillväxt i befintliga butiker (exkl. nya butiker)' },
     { key: 'competition', label: 'Konkurrenssituation i området', type: 'select', options: [
       { value: 'low', label: 'Låg konkurrens' },
       { value: 'medium', label: 'Medelhög konkurrens' },
@@ -77,19 +94,30 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
     ]},
   ],
   manufacturing: [
-    { key: 'productionCapacity', label: 'Nuvarande kapacitetsutnyttjande (%)', type: 'text' },
+    { key: 'productionCapacity', label: 'Nuvarande kapacitetsutnyttjande (%)', type: 'text', tooltip: '70-85% är optimalt. <50% eller >95% kan vara problem' },
     { key: 'equipmentAge', label: 'Genomsnittlig ålder på maskiner (år)', type: 'text' },
-    { key: 'equipmentValue', label: 'Uppskattat värde på maskiner/utrustning (MSEK)', type: 'text' },
+    { key: 'equipmentValue', label: 'Uppskattat marknadsvärde på maskiner (kr)', type: 'text', tooltip: 'Aktuellt värde, inte inköpspris' },
+    { key: 'depreciation', label: 'Årliga avskrivningar på maskiner (kr)', type: 'text', tooltip: 'Hjälper beräkna EBIT från EBITDA' },
+    { key: 'rawMaterialCosts', label: 'Råvarukostnader som % av COGS', type: 'text', tooltip: 'Hur stor del av produktionskostnaden är råvaror?' },
+    { key: 'supplierConcentration', label: 'Leverantörsberoende', type: 'select', options: [
+      { value: 'high', label: 'Hög - en huvudleverantör (>50%)' },
+      { value: 'medium', label: 'Medel - 2-3 leverantörer' },
+      { value: 'low', label: 'Låg - diversifierade leverantörer (5+)' }
+    ]},
     { key: 'customerConcentration', label: 'Står största kunden för mer än 30% av intäkterna?', type: 'select', options: [
       { value: 'yes', label: 'Ja' },
       { value: 'no', label: 'Nej' }
     ]},
-    { key: 'longTermContracts', label: 'Andel av intäkterna från långa avtal (%)', type: 'text' },
+    { key: 'longTermContracts', label: 'Andel av intäkterna från långa avtal (%)', type: 'text', tooltip: 'Avtal >1 år. Högre = mer förutsägbart' },
+    { key: 'orderBacklog', label: 'Orderstock i månaders omsättning', type: 'text', tooltip: 'Hur många månaders försäljning är redan bokad?' },
   ],
   services: [
     { key: 'serviceType', label: 'Typ av tjänster', type: 'text', tooltip: 'T.ex. redovisning, juridik, marknadsföring' },
     { key: 'clientRetention', label: 'Genomsnittlig kundrelationslängd (år)', type: 'text' },
+    { key: 'contractRenewalRate', label: 'Förnyelserate på avtal (%)', type: 'text', tooltip: 'Andel kunder som förnyas årligen' },
     { key: 'billableHours', label: 'Andel fakturerbara timmar (%)', type: 'text' },
+    { key: 'avgRevenuePerCustomer', label: 'Genomsnittlig årsomsättning per kund (kr)', type: 'text', tooltip: 'Total omsättning / antal kunder' },
+    { key: 'customerGrowthRate', label: 'Kundtillväxt senaste året (%)', type: 'text', tooltip: 'Hur mycket ökade er kundbas?' },
     { key: 'keyPersonDependency', label: 'Hur beroende är verksamheten av nyckelpersoner?', type: 'select', options: [
       { value: 'high', label: 'Hög - verksamheten är starkt personberoende' },
       { value: 'medium', label: 'Medel - viss dokumentation finns' },
@@ -99,26 +127,41 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
   restaurant: [
     { key: 'seatingCapacity', label: 'Antal sittplatser', type: 'text' },
     { key: 'avgCheckSize', label: 'Genomsnittlig notastorlek (kr)', type: 'text' },
-    { key: 'openingHours', label: 'Öppettider per vecka', type: 'text', tooltip: 'T.ex. 50 timmar/vecka' },
-    { key: 'locationRent', label: 'Månadshyra (kr)', type: 'text' },
+    { key: 'dailyCovers', label: 'Antal gäster per dag (genomsnitt)', type: 'text', tooltip: 'Genomsnittligt antal portioner/gäster dagligen' },
+    { key: 'tableturnover', label: 'Bordsrotation per kväll', type: 'text', tooltip: 'Hur många gånger används varje bord per kväll? 1.5-2.5x är bra' },
+    { key: 'foodCostPercentage', label: 'Food cost som % av försäljning', type: 'text', tooltip: 'Råvarukostnad. 28-35% är typiskt. Lägre = bättre marginal' },
+    { key: 'laborCostPercentage', label: 'Lönekostnader som % av försäljning', type: 'text', tooltip: '25-35% är typiskt för restaurang' },
+    { key: 'openingHours', label: 'Öppettider per vecka (timmar)', type: 'text', tooltip: 'T.ex. 50 timmar/vecka' },
+    { key: 'locationRent', label: 'Månadshyra (kr)', type: 'text', tooltip: 'Hyra bör vara <10% av omsättning' },
+    { key: 'leaseRemaining', label: 'Återstående hyresavtal (år)', type: 'text', tooltip: 'Långt avtal = lägre risk' },
     { key: 'liquorLicense', label: 'Har ni serveringstillstånd?', type: 'select', options: [
       { value: 'full', label: 'Fullständigt (alla rättigheter)' },
       { value: 'partial', label: 'Begränsat (öl & vin)' },
       { value: 'none', label: 'Nej' }
     ]},
+    { key: 'deliveryTakeout', label: 'Andel take-away/delivery (%)', type: 'text', tooltip: 'Högre andel = mindre platsberoende' },
   ],
   construction: [
-    { key: 'projectBacklog', label: 'Orderstock (MSEK)', type: 'text', tooltip: 'Värde på pågående och kommande projekt' },
+    { key: 'projectBacklog', label: 'Orderstock i månaders omsättning', type: 'text', tooltip: 'Hur många månaders arbete är redan bokad? 6+ mån är bra' },
+    { key: 'backlogValue', label: 'Totalt värde på orderstock (kr)', type: 'text', tooltip: 'Bokfört värde på alla kontrakt' },
     { key: 'equipmentOwned', label: 'Äger ni egen utrustning/maskiner?', type: 'select', options: [
       { value: 'yes_significant', label: 'Ja, betydande maskinpark' },
       { value: 'yes_some', label: 'Ja, viss utrustning' },
       { value: 'no_leased', label: 'Nej, hyr/leasar' }
     ]},
-    { key: 'certifications', label: 'Certifieringar (ISO, miljö, säkerhet)', type: 'textarea' },
+    { key: 'equipmentValue', label: 'Marknadsvärde på maskiner/utrustning (kr)', type: 'text', tooltip: 'Uppskattat värde om ni skulle sälja idag' },
+    { key: 'projectMargin', label: 'Genomsnittlig projektmarginal (%)', type: 'text', tooltip: 'Vinst per projekt som % av projektintäkt. 8-15% är typiskt' },
     { key: 'contractType', label: 'Typ av projekt', type: 'select', options: [
-      { value: 'fixed', label: 'Huvudsakligen fastprisavtal' },
-      { value: 'time_material', label: 'Löpande räkning/tid & material' },
+      { value: 'fixed', label: 'Huvudsakligen fastprisavtal (högre risk)' },
+      { value: 'time_material', label: 'Löpande räkning/tid & material (lägre risk)' },
       { value: 'mixed', label: 'Blandat' }
+    ]},
+    { key: 'certifications', label: 'Certifieringar (ISO, miljö, säkerhet)', type: 'textarea', tooltip: 'T.ex. ISO 9001, ISO 14001. Certifieringar ökar värdet!' },
+    { key: 'workingCapitalDays', label: 'Working capital (dagar)', type: 'text', tooltip: 'Betalvillkor från kund minus till leverantör. Negativt = bra!' },
+    { key: 'seasonality', label: 'Säsongsberoende', type: 'select', options: [
+      { value: 'high', label: 'Hög - svårt att jobba på vintern' },
+      { value: 'medium', label: 'Medel - viss säsongspåverkan' },
+      { value: 'low', label: 'Låg - året runt verksamhet' }
     ]},
   ],
   ecommerce: [
@@ -126,13 +169,29 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
     { key: 'conversionRate', label: 'Konverteringsgrad (%)', type: 'text' },
     { key: 'avgOrderValue', label: 'Genomsnittligt ordervärde (kr)', type: 'text' },
     { key: 'repeatCustomerRate', label: 'Andel återkommande kunder (%)', type: 'text' },
+    { key: 'customerAcquisitionCost', label: 'CAC - Kostnad per ny kund (kr)', type: 'text', tooltip: 'Marknadsföringskostnad / antal nya kunder. Kritiskt för hållbarhet!' },
+    { key: 'lifetimeValue', label: 'LTV - Lifetime value per kund (kr)', type: 'text', tooltip: 'Genomsnittlig total intäkt per kund över deras livstid' },
+    { key: 'inventoryDays', label: 'Lageromsättning (dagar)', type: 'text', tooltip: 'Hur många dagars lager har ni? Påverkar working capital' },
+    { key: 'supplierDependency', label: 'Leverantörsberoende', type: 'select', options: [
+      { value: 'high', label: 'Hög - en huvudleverantör (>70%)' },
+      { value: 'medium', label: 'Medel - 2-3 leverantörer' },
+      { value: 'low', label: 'Låg - diversifierade leverantörer (5+)' }
+    ]},
+    { key: 'seasonality', label: 'Säsongsvariationer', type: 'select', options: [
+      { value: 'high', label: 'Hög - >60% av årsoms i en säsong' },
+      { value: 'medium', label: 'Medel - viss variation' },
+      { value: 'low', label: 'Låg - jämn försäljning året runt' }
+    ]},
     { key: 'marketingChannels', label: 'Huvudsakliga marknadsföringskanaler', type: 'textarea', tooltip: 'T.ex. SEO, Google Ads, sociala medier' },
   ],
   consulting: [
     { key: 'consultantCount', label: 'Antal konsulter', type: 'text' },
-    { key: 'utilizationRate', label: 'Debiteringsgrad (%)', type: 'text', tooltip: 'Andel av tiden som faktureras' },
+    { key: 'utilizationRate', label: 'Debiteringsgrad (%)', type: 'text', tooltip: 'Andel av tiden som faktureras. 70%+ är bra för konsult' },
     { key: 'avgHourlyRate', label: 'Genomsnittlig timpris (kr)', type: 'text' },
     { key: 'clientDiversity', label: 'Antal aktiva kunder', type: 'text' },
+    { key: 'contractRenewalRate', label: 'Förnyelserate på kontrakt (%)', type: 'text', tooltip: 'Hur stor andel av kunderna förnyas år efter år? 80%+ excellent' },
+    { key: 'avgProjectValue', label: 'Genomsnittligt projektvärde (kr)', type: 'text', tooltip: 'Genomsnittlig storlek på uppdrag' },
+    { key: 'grossMarginPerConsultant', label: 'Bruttovinstmarginal per konsult (%)', type: 'text', tooltip: 'Intäkter minus direkta kostnader per konsult' },
     { key: 'methodology', label: 'Unik metodik eller ramverk?', type: 'select', options: [
       { value: 'yes', label: 'Ja, vi har egenutvecklad metodik' },
       { value: 'partial', label: 'Delvis, vissa verktyg' },
@@ -279,8 +338,15 @@ export default function ValuationWizard({ onClose }: WizardProps) {
         if (isEnriching) return false
         return hasBasics && hasPrivacy
       case 2:
-        // Kräv EXAKTA finansiella siffror
-        return data.exactRevenue && data.operatingCosts && data.companyAge && data.revenue3Years && data.employees
+        // Kräv EXAKTA finansiella siffror + universella riskfrågor
+        return data.exactRevenue && 
+               data.operatingCosts && 
+               data.companyAge && 
+               data.revenue3Years && 
+               data.employees &&
+               data.grossMargin &&
+               data.customerConcentrationRisk &&
+               data.regulatoryLicenses
       case 3:
         // Check if industry-specific questions are answered
         const questions = industryQuestions[data.industry] || []
@@ -576,6 +642,78 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 placeholder="Välj antal"
                 required
               />
+
+              {/* UNIVERSELLA RISKFRÅGOR - Alla branscher */}
+              <div className="bg-red-50 border-2 border-red-300 p-4 rounded-xl mt-6">
+                <h4 className="font-semibold text-red-800 mb-3 flex items-center">
+                  <span className="text-lg mr-2">⚠️</span>
+                  Riskbedömning (kritiskt för värdering)
+                </h4>
+                
+                <FormField
+                  label="Bruttovinstmarginal / Gross Margin (%)"
+                  type="number"
+                  value={data.grossMargin || ''}
+                  onValueChange={(value) => setData({ ...data, grossMargin: value })}
+                  placeholder="45"
+                  tooltip="(Försäljning - COGS) / Försäljning × 100. Visar pricing power och konkurrenskraft."
+                  required
+                />
+
+                <div className="mt-4">
+                  <FormSelect
+                    label="Står största kunden för mer än 30% av omsättningen?"
+                    value={data.customerConcentrationRisk || ''}
+                    onChange={(e) => setData({ ...data, customerConcentrationRisk: e.target.value })}
+                    options={[
+                      { value: 'high', label: 'Ja, >50% från en kund (hög risk)' },
+                      { value: 'medium', label: 'Ja, 30-50% från en kund (medel risk)' },
+                      { value: 'low', label: 'Nej, diversifierad kundbas' },
+                    ]}
+                    placeholder="Välj"
+                    tooltip="Kundkoncentration är en av de största riskfaktorerna i M&A"
+                    required
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <FormField
+                    label="Externa lån/skulder totalt (SEK)"
+                    type="number"
+                    value={data.totalDebt || ''}
+                    onValueChange={(value) => setData({ ...data, totalDebt: value })}
+                    placeholder="0"
+                    tooltip="Banklån, företagsobligationer, andra skulder. Ange 0 om inga skulder."
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <FormSelect
+                    label="Kräver verksamheten speciella tillstånd/licenser?"
+                    value={data.regulatoryLicenses || ''}
+                    onChange={(e) => setData({ ...data, regulatoryLicenses: e.target.value })}
+                    options={[
+                      { value: 'none', label: 'Nej, inga speciella tillstånd' },
+                      { value: 'standard', label: 'Ja, standard branschlicenser (har alla)' },
+                      { value: 'complex', label: 'Ja, komplexa tillstånd (t.ex. läkemedel, finans)' },
+                      { value: 'at_risk', label: 'Ja, och risk för att förlora licens' },
+                    ]}
+                    placeholder="Välj"
+                    required
+                  />
+                </div>
+
+                <div className="mt-4">
+                  <FormField
+                    label="Genomsnittlig betaltid från kunder (dagar)"
+                    type="number"
+                    value={data.paymentTerms || ''}
+                    onValueChange={(value) => setData({ ...data, paymentTerms: value })}
+                    placeholder="30"
+                    tooltip="Hur många dagar tar det innan kunder betalar? Påverkar kassaflöde."
+                  />
+                </div>
+              </div>
 
               {/* LIVE VALUATION PREVIEW MED EXAKTA SIFFROR */}
               {data.exactRevenue && data.operatingCosts && data.industry && (
