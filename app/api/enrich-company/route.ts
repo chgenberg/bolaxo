@@ -213,7 +213,7 @@ async function scrapeWebsite(url: string, companyName: string): Promise<string> 
     })
     
     while (toVisit.length > 0 && visited.size < maxPages) {
-      const currentUrl = toVisit.shift()!
+      let currentUrl = toVisit.shift()!
       
       if (visited.has(currentUrl)) continue
       visited.add(currentUrl)
