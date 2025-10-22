@@ -7,12 +7,16 @@ interface AllabolagData {
     latestYear?: number
     revenue?: number // kr
     profit?: number // kr
+    operatingProfit?: number // Rörelseresultat (EBIT)
+    grossProfit?: number // Bruttovinst
+    cogs?: number // Kostnad sålda varor
     equity?: number // kr
     assets?: number // kr
     liabilities?: number // kr
     employees?: number
     revenueGrowth?: number // %
     profitMargin?: number // %
+    grossMargin?: number // %
   }
   history?: Array<{
     year: number
@@ -99,11 +103,11 @@ export async function scrapeAllabolag(orgNumber: string): Promise<AllabolagData 
       }
     }
 
-    // Extrahera resultat
+    // Extrahera resultat (årets resultat)
     const profitPatterns = [
-      /Resultat[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i,
       /Årets resultat[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i,
-      /Rörelseresultat[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i,
+      /Resultat efter finansiella poster[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i,
+      /Nettoresultat[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i,
     ]
     
     for (const pattern of profitPatterns) {
@@ -113,6 +117,25 @@ export async function scrapeAllabolag(orgNumber: string): Promise<AllabolagData 
         financials.profit = value * 1000
         break
       }
+    }
+    
+    // Extrahera rörelseresultat (EBIT)
+    const operatingProfitMatch = html.match(/Rörelseresultat[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i)
+    if (operatingProfitMatch && operatingProfitMatch[1]) {
+      financials.operatingProfit = parseInt(operatingProfitMatch[1].replace(/\s/g, '')) * 1000
+    }
+    
+    // Extrahera bruttovinst
+    const grossProfitMatch = html.match(/Bruttovinst[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i) ||
+                            html.match(/Bruttoresultat[:\s]+(-?\d[\d\s]*)\s*(?:tkr|TSEK|kr)?/i)
+    if (grossProfitMatch && grossProfitMatch[1]) {
+      financials.grossProfit = parseInt(grossProfitMatch[1].replace(/\s/g, '')) * 1000
+    }
+    
+    // Beräkna COGS om vi har revenue och grossProfit
+    if (financials.revenue && financials.grossProfit) {
+      financials.cogs = financials.revenue - financials.grossProfit
+      financials.grossMargin = (financials.grossProfit / financials.revenue) * 100
     }
 
     // Extrahera eget kapital

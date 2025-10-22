@@ -156,9 +156,17 @@ export async function POST(request: Request) {
         enrichedData.autoFill.totalDebt = allabolagData.financials.liabilities.toString()
       }
       
-      // 2. Gross Margin (uppskatta från profitMargin om möjligt)
-      // För många branscher: gross margin ≈ EBITDA margin + 15-25%
-      if (allabolagData.financials.profitMargin && industry) {
+      // 2. COGS (från årsredovisning om tillgänglig)
+      if (allabolagData.financials.cogs) {
+        enrichedData.autoFill.cogs = allabolagData.financials.cogs.toString()
+      }
+      
+      // 3. Gross Margin (från årsredovisning om tillgänglig, annars uppskatta)
+      if (allabolagData.financials.grossMargin) {
+        // Vi har faktisk gross margin från bruttovinst!
+        enrichedData.autoFill.grossMargin = Math.round(allabolagData.financials.grossMargin).toString()
+      } else if (allabolagData.financials.profitMargin && industry) {
+        // Fallback: uppskatta från EBITDA margin
         const grossMarginEstimate = estimateGrossMarginFromIndustry(
           industry, 
           allabolagData.financials.profitMargin
@@ -306,6 +314,31 @@ export async function POST(request: Request) {
         trend: trustpilotData.trend?.direction,
         ecommerceTrust: trustpilotData.ecommerceTrust?.score,
       })
+    }
+    
+    // SMART AUTO-FILL FOR QUALITATIVE QUESTIONS
+    // Kombinera data från alla källor för att hjälpa användaren
+    
+    // Competitive Advantage (från hemsida + brand metrics)
+    if (!enrichedData.autoFill.competitiveAdvantage) {
+      const advantages: string[] = []
+      
+      if (enrichedData.rawData.trustpilotData?.trustScore?.score >= 4.5) {
+        advantages.push('Starkt varumärke med excellent kundrecensioner')
+      }
+      
+      if (enrichedData.rawData.linkedinData?.employeeGrowth?.trend === 'growing') {
+        advantages.push('Växande organisation - rekryterar aktivt')
+      }
+      
+      if (enrichedData.rawData.allabolagData?.financials?.revenueGrowth && 
+          enrichedData.rawData.allabolagData.financials.revenueGrowth > 20) {
+        advantages.push('Stark historisk tillväxt (>20% årligen)')
+      }
+      
+      if (advantages.length > 0) {
+        enrichedData.autoFill.competitiveAdvantage = advantages.join('. ') + '.'
+      }
     }
 
     // 4. SAVE TO CACHE (30 dagars TTL)
