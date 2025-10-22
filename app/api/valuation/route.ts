@@ -349,6 +349,127 @@ ${ebitdaMargin && Number(ebitdaMargin) > 40 ? `⚠️ FLAGGA: ${ebitdaMargin}% E
       prompt += `\n\n⚠️ Justera värderingen baserat på kreditrisken - högre risk = lägre multipel!`
     }
     
+    // PROFF DATA - Kompletterande finansiell data
+    if (enrichedData.proffData) {
+      const proff = enrichedData.proffData
+      prompt += `\n\n**PROFF.SE - KOMPLETTERANDE DATA:**`
+      
+      if (proff.financials && Object.keys(proff.financials).length > 0) {
+        if (proff.financials.revenue) {
+          prompt += `\n- Omsättning: ${proff.financials.revenue.toLocaleString('sv-SE')} kr`
+        }
+        if (proff.financials.profit !== undefined) {
+          prompt += `\n- Resultat: ${proff.financials.profit.toLocaleString('sv-SE')} kr`
+        }
+        if (proff.financials.equity) {
+          prompt += `\n- Eget kapital: ${(proff.financials.equity / 1000000).toFixed(2)} MSEK`
+        }
+      }
+      
+      if (proff.management) {
+        prompt += `\n\nLedning & Styrelse:`
+        if (proff.management.ceo) prompt += `\n- VD: ${proff.management.ceo}`
+        if (proff.management.chairman) prompt += `\n- Styrelseordförande: ${proff.management.chairman}`
+        if (proff.management.boardMembers && proff.management.boardMembers.length > 0) {
+          prompt += `\n- Styrelseledamöter: ${proff.management.boardMembers.length} st`
+        }
+      }
+      
+      if (proff.parentCompany) {
+        prompt += `\n- Moderbolag: ${proff.parentCompany}`
+        prompt += `\n  ⚠️ OBS: Del av koncern - kan påverka självständighet och värdering`
+      }
+    }
+    
+    // LINKEDIN DATA - Anställda & tillväxt
+    if (enrichedData.linkedinData) {
+      const li = enrichedData.linkedinData
+      prompt += `\n\n**LINKEDIN - AKTUELLA ANSTÄLLNINGSDATA:**`
+      
+      if (li.employees) {
+        prompt += `\n- Nuvarande antal anställda: ${li.employees.current}`
+        if (li.employees.range) {
+          prompt += ` (${li.employees.range})`
+        }
+        
+        if (li.employeeGrowth) {
+          prompt += `\n- Anställningstillväxt: ${li.employeeGrowth.trend}`
+          if (li.employeeGrowth.percentChange) {
+            prompt += ` (${li.employeeGrowth.percentChange > 0 ? '+' : ''}${li.employeeGrowth.percentChange.toFixed(1)}% årligen)`
+          }
+          
+          if (li.employeeGrowth.trend === 'growing') {
+            prompt += `\n  ✓ POSITIVT: Företaget växer och rekryterar aktivt!`
+          } else if (li.employeeGrowth.trend === 'shrinking') {
+            prompt += `\n  ⚠️ VARNING: Företaget minskar personalstyrkan - potentiell varningssignal`
+          }
+        }
+      }
+      
+      if (li.industry) {
+        prompt += `\n- Bransch (LinkedIn): ${li.industry}`
+      }
+      
+      if (li.founded) {
+        prompt += `\n- Grundat: ${li.founded}`
+      }
+      
+      if (li.followers) {
+        prompt += `\n- Följare på LinkedIn: ${li.followers.toLocaleString()}`
+      }
+      
+      prompt += `\n\n⚠️ LinkedIn-data är ofta MER aktuell än officiella register - prioritera denna för anställningsantal!`
+    }
+    
+    // GOOGLE MY BUSINESS DATA - Varumärkesstyrka & recensioner
+    if (enrichedData.googleMyBusinessData) {
+      const gmb = enrichedData.googleMyBusinessData
+      prompt += `\n\n**GOOGLE MY BUSINESS - KUNDRECENSIONER & VARUMÄRKE:**`
+      
+      if (gmb.rating) {
+        prompt += `\n- Genomsnittligt betyg: ${gmb.rating.average.toFixed(1)}/5.0 ⭐`
+        prompt += `\n- Antal recensioner: ${gmb.rating.totalReviews.toLocaleString()}`
+        
+        // Interpret rating
+        if (gmb.rating.average >= 4.5 && gmb.rating.totalReviews >= 50) {
+          prompt += `\n  ✓ EXCELLENT: Starkt varumärke med hög kundnöjdhet - kan motivera högre multipel (+10-15%)`
+        } else if (gmb.rating.average >= 4.0 && gmb.rating.totalReviews >= 20) {
+          prompt += `\n  ✓ GOOD: Bra kundnöjdhet - stabilt varumärke`
+        } else if (gmb.rating.average < 3.5) {
+          prompt += `\n  ⚠️ VARNING: Lågt betyg - potentiella kundproblem kan påverka värdet negativt`
+        } else if (gmb.rating.totalReviews < 10) {
+          prompt += `\n  ℹ️ För få recensioner för att dra slutsatser`
+        }
+      }
+      
+      if (gmb.brandStrength) {
+        prompt += `\n- Varumärkesstyrka-score: ${gmb.brandStrength.score}/100`
+        
+        if (gmb.brandStrength.score >= 70) {
+          prompt += ` (Starkt varumärke)`
+        } else if (gmb.brandStrength.score >= 50) {
+          prompt += ` (Medel varumärke)`
+        } else {
+          prompt += ` (Svagt varumärke)`
+        }
+      }
+      
+      if (gmb.claimed) {
+        prompt += `\n- Status: ✓ Verifierad på Google (visar professionalism)`
+      }
+      
+      if (gmb.category) {
+        prompt += `\n- Kategori: ${gmb.category}`
+      }
+      
+      if (gmb.responseTime) {
+        prompt += `\n- Svarstid på recensioner: ${gmb.responseTime}`
+        prompt += `\n  ✓ Aktivt engagemang i kundrelationer`
+      }
+      
+      prompt += `\n\n⚠️ Använd varumärkesstyrka för att justera multiplar - starkt brand = högre värdering!`
+    }
+    
     if (enrichedData.bolagsverketData) {
       prompt += `\n\nBolagsverket (Officiell data):
 - Registreringsdatum: ${enrichedData.bolagsverketData.registrationDate || 'Ej tillgängligt'}

@@ -3,6 +3,9 @@ import * as cheerio from 'cheerio'
 import { PrismaClient } from '@prisma/client'
 import { scrapeAllabolag } from '@/lib/scrapers/allabolag'
 import { scrapeRatsit } from '@/lib/scrapers/ratsit'
+import { scrapeProff } from '@/lib/scrapers/proff'
+import { scrapeLinkedIn, estimateEmployeeGrowth } from '@/lib/scrapers/linkedin'
+import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/google-mybusiness'
 
 const prisma = new PrismaClient()
 
@@ -39,18 +42,33 @@ export async function POST(request: Request) {
         scbData: null,
         allabolagData: null,
         ratsitData: null,
+        proffData: null,
+        linkedinData: null,
+        googleMyBusinessData: null,
       },
     }
 
-    // 2. PARALLEL DATA FETCHING (5x snabbare med Allabolag + Ratsit)
+    // 2. PARALLEL DATA FETCHING (8x källor samtidigt!)
     const startTime = Date.now()
     
-    const [bolagsverketResult, scrapingResult, scbResult, allabolagResult, ratsitResult] = await Promise.allSettled([
+    const [
+      bolagsverketResult,
+      scrapingResult,
+      scbResult,
+      allabolagResult,
+      ratsitResult,
+      proffResult,
+      linkedinResult,
+      googleResult
+    ] = await Promise.allSettled([
       orgNumber ? fetchBolagsverketData(orgNumber) : Promise.resolve(null),
       website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
       fetchSCBIndustryData(industry),
       orgNumber ? scrapeAllabolag(orgNumber) : Promise.resolve(null),
       orgNumber ? scrapeRatsit(orgNumber) : Promise.resolve(null),
+      orgNumber ? scrapeProff(orgNumber) : Promise.resolve(null),
+      companyName ? scrapeLinkedIn(companyName, website) : Promise.resolve(null),
+      companyName ? scrapeGoogleMyBusiness(companyName, enrichedData.rawData.bolagsverketData?.address) : Promise.resolve(null),
     ])
 
     console.log(`Parallel fetch completed in ${Date.now() - startTime}ms`)
@@ -140,6 +158,88 @@ export async function POST(request: Request) {
         creditRating: ratsitResult.value.creditRating?.rating,
         riskLevel: ratsitResult.value.creditRating?.riskLevel,
         paymentRemarks: ratsitResult.value.paymentRemarks?.count || 0,
+      })
+    }
+
+    // PROFF DATA - Kompletterande finansiell data + ledning
+    if (proffResult.status === 'fulfilled' && proffResult.value) {
+      const proffData = proffResult.value
+      enrichedData.rawData.proffData = proffData
+      
+      // Use Proff data to fill gaps if Allabolag didn't get everything
+      if (proffData.financials.revenue && !enrichedData.autoFill.exactRevenue) {
+        enrichedData.autoFill.exactRevenue = proffData.financials.revenue.toString()
+      }
+      
+      if (proffData.financials.profit && proffData.financials.revenue && !enrichedData.autoFill.operatingCosts) {
+        const operatingCosts = proffData.financials.revenue - proffData.financials.profit
+        enrichedData.autoFill.operatingCosts = operatingCosts.toString()
+      }
+      
+      if (proffData.financials.employees && !enrichedData.autoFill.employees) {
+        enrichedData.autoFill.employees = mapEmployeeCount(proffData.financials.employees)
+      }
+      
+      console.log('✓ Proff.se data:', {
+        revenue: proffData.financials.revenue,
+        ceo: proffData.management?.ceo,
+        boardMembers: proffData.management?.boardMembers?.length || 0,
+      })
+    }
+
+    // LINKEDIN DATA - Aktuellt antal anställda & tillväxt
+    if (linkedinResult.status === 'fulfilled' && linkedinResult.value) {
+      const linkedinData = linkedinResult.value
+      enrichedData.rawData.linkedinData = linkedinData
+      
+      // LinkedIn often has MORE current employee count than official registers
+      if (linkedinData.employees) {
+        // Prefer LinkedIn for current employee count if it's higher (means they're growing)
+        const currentAutoFillEmployees = enrichedData.autoFill.employees
+        const linkedinCount = linkedinData.employees.current
+        
+        // Only override if LinkedIn shows significantly more employees (growth signal)
+        const shouldUseLinkedIn = !currentAutoFillEmployees || 
+                                  linkedinCount > (parseInt(currentAutoFillEmployees.split('-')[1] || '0') || 0)
+        
+        if (shouldUseLinkedIn) {
+          enrichedData.autoFill.employees = mapEmployeeCount(linkedinCount)
+        }
+        
+        // Calculate employee growth if we have historical data
+        const allabolagEmployees = enrichedData.rawData.allabolagData?.financials?.employees
+        if (allabolagEmployees && linkedinCount > allabolagEmployees) {
+          linkedinData.employeeGrowth = estimateEmployeeGrowth(
+            linkedinCount,
+            allabolagEmployees,
+            12 // Assume annual reports are ~12 months old
+          )
+        }
+      }
+      
+      console.log('✓ LinkedIn data:', {
+        employees: linkedinData.employees?.current,
+        growth: linkedinData.employeeGrowth?.trend,
+        industry: linkedinData.industry,
+      })
+    }
+
+    // GOOGLE MY BUSINESS DATA - Recensioner & varumärkesstyrka
+    if (googleResult.status === 'fulfilled' && googleResult.value) {
+      const googleData = googleResult.value
+      enrichedData.rawData.googleMyBusinessData = googleData
+      
+      // Calculate brand strength score
+      if (googleData.rating) {
+        const brandStrength = calculateBrandStrength(googleData)
+        googleData.brandStrength = brandStrength
+      }
+      
+      console.log('✓ Google My Business data:', {
+        rating: googleData.rating?.average,
+        reviews: googleData.rating?.totalReviews,
+        brandScore: googleData.brandStrength?.score,
+        claimed: googleData.claimed,
       })
     }
 
