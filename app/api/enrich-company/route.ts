@@ -221,11 +221,11 @@ async function scrapeWebsite(url: string, companyName: string): Promise<string> 
       try {
         // Retry logic för SSL-problem
         let response
-        let lastError
+        let urlToFetch = currentUrl
         
         for (let attempt = 0; attempt < 2; attempt++) {
           try {
-            response = await fetch(currentUrl, {
+            response = await fetch(urlToFetch, {
               headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -236,11 +236,10 @@ async function scrapeWebsite(url: string, companyName: string): Promise<string> 
             })
             break // Success, exit retry loop
           } catch (err) {
-            lastError = err
             if (attempt === 0) {
               // Retry med http istället om https failar
-              if (currentUrl.startsWith('https://')) {
-                currentUrl = currentUrl.replace('https://', 'http://')
+              if (urlToFetch.startsWith('https://')) {
+                urlToFetch = urlToFetch.replace('https://', 'http://')
                 continue
               }
             }
@@ -248,8 +247,7 @@ async function scrapeWebsite(url: string, companyName: string): Promise<string> 
         }
         
         if (!response) {
-          // Både https och http failade, logga och fortsätt
-          console.log(`Skipping ${currentUrl} due to connection error`)
+          // Både https och http failade, hoppa över
           continue
         }
 
