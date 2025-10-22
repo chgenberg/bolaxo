@@ -1,17 +1,108 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useFormStore } from '@/store/formStore'
-import { Share2, UserPlus, FolderOpen, Lightbulb, ArrowRight } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { Share2, UserPlus, FolderOpen, Lightbulb, ArrowRight, X } from 'lucide-react'
 
 export default function KlartPage() {
+  const router = useRouter()
+  const { user } = useAuth()
   const { formData, resetForm } = useFormStore()
+  const [listingId, setListingId] = useState<string | null>(null)
+  const [publishing, setPublishing] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Optional: Clear the draft after successful publish
-    // resetForm()
+    const publishListing = async () => {
+      if (!user?.id) {
+        setError('Du måste vara inloggad för att publicera')
+        setPublishing(false)
+        return
+      }
+
+      try {
+        // Create listing from formData
+        const response = await fetch('/api/listings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.id,
+            companyName: formData.companyName,
+            anonymousTitle: formData.anonymousTitle || `${formData.category || 'Företag'} i ${formData.location}`,
+            type: formData.type || 'Företag',
+            category: formData.category,
+            industry: formData.category || formData.industry,
+            orgNumber: formData.orgNumber,
+            website: formData.website,
+            location: formData.location,
+            region: `${formData.location}, Sverige`,
+            address: formData.address,
+            revenue: parseInt(formData.revenue || '0'),
+            revenueRange: formData.revenueRange || '0-1 MSEK',
+            priceMin: parseInt(formData.priceMin || '0'),
+            priceMax: parseInt(formData.priceMax || '0'),
+            ebitda: formData.ebitda ? parseInt(formData.ebitda) : null,
+            employees: parseInt(formData.employees || '0'),
+            foundedYear: parseInt(formData.foundedYear || new Date().getFullYear().toString()),
+            description: formData.description || '',
+            image: formData.image || null,
+            images: formData.images || [],
+            packageType: formData.selectedPackage || 'basic',
+            autoPublish: true
+          })
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to publish listing')
+        }
+
+        const listing = await response.json()
+        setListingId(listing.id)
+        setPublishing(false)
+        
+        // Clear form after successful publish
+        setTimeout(() => resetForm(), 3000)
+      } catch (err) {
+        console.error('Error publishing listing:', err)
+        setError('Något gick fel vid publicering. Försök igen.')
+        setPublishing(false)
+      }
+    }
+
+    publishListing()
   }, [])
+
+  if (publishing) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+        <div className="max-w-2xl w-full card text-center">
+          <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-2xl font-bold text-text-dark mb-2">Publicerar din annons...</h2>
+          <p className="text-text-gray">Detta tar bara några sekunder</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+        <div className="max-w-2xl w-full card text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <X className="w-8 h-8 text-red-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-text-dark mb-2">Något gick fel</h2>
+          <p className="text-text-gray mb-6">{error}</p>
+          <button onClick={() => router.push('/salja/preview')} className="btn-primary">
+            Tillbaka till förhandsvisning
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">

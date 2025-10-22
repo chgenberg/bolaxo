@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useFormStore } from '@/store/formStore'
 import StepWizardLayout from '@/components/StepWizardLayout'
 import StickyBottomNav from '@/components/StickyBottomNav'
+import ImageSelector from '@/components/ImageSelector'
 import { Lock } from 'lucide-react'
 
 export default function Step4MediaPage() {
@@ -56,45 +57,14 @@ export default function Step4MediaPage() {
           </div>
         </div>
 
-        {/* Upload placeholder */}
-        <div>
-          <label className="block text-sm font-semibold text-text-dark mb-2">
-            Logotyp {formData.anonymVisning && '(visas endast efter NDA)'}
-          </label>
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary-blue transition-colors cursor-pointer">
-            <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <p className="mt-2 text-sm text-text-gray">
-              Klicka för att ladda upp eller dra och släpp
-            </p>
-            <p className="text-xs text-text-gray mt-1">PNG, JPG upp till 5MB</p>
-          </div>
-          <p className="text-xs text-text-gray mt-2">
-            📌 Funktionalitet för filuppladdning kommer i nästa version
-          </p>
-        </div>
-
-        {/* Images placeholder */}
-        <div>
-          <label className="block text-sm font-semibold text-text-dark mb-2">
-            Bilder på verksamheten (valfritt)
-          </label>
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary-blue transition-colors cursor-pointer">
-            <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-              <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <p className="mt-2 text-sm text-text-gray">
-              Lägg till upp till 5 bilder
-            </p>
-            <p className="text-xs text-text-gray mt-1">
-              Ex. lokal, produkt, team (anonymiserat om önskemål)
-            </p>
-          </div>
-          <p className="text-xs text-text-gray mt-2">
-            📌 Funktionalitet för filuppladdning kommer i nästa version
-          </p>
-        </div>
+        {/* Main listing image */}
+        <ImageSelector
+          selectedImage={formData.image || null}
+          onImageSelect={(imagePath) => {
+            updateField('image', imagePath)
+            saveToLocalStorage()
+          }}
+        />
 
         {/* Info about locked fields */}
         <div className="bg-gray-50 p-4 rounded-xl">

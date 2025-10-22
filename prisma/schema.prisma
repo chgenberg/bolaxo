@@ -73,24 +73,58 @@ model Valuation {
 model Listing {
   id              String   @id @default(cuid())
   userId          String
-  user            User     @relation(fields: [userId], references: [id])
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
+  // Company Info
   companyName     String?
   anonymousTitle  String
+  type            String   // Restaurang, E-handel, etc
+  category        String?  // More specific category
   industry        String
-  revenue         String
-  employees       String
-  location        String
+  orgNumber       String?
+  website         String?
   
+  // Location
+  location        String   // City
+  region          String   // Full region string
+  address         String?  // Full address (NDA-locked)
+  
+  // Financials
+  revenue         Int      // Revenue in SEK
+  revenueRange    String   // e.g. "5-10 MSEK"
+  priceMin        Int      // Min price in SEK
+  priceMax        Int      // Max price in SEK
+  ebitda          Int?     // EBITDA in SEK
+  employees       Int      // Number of employees
+  foundedYear     Int?
+  
+  // Description
+  description     String   @db.Text
+  
+  // Media
+  image           String?  // Path to main image
+  images          String[] // Array of image paths
+  
+  // Metadata
+  views           Int      @default(0)
+  verified        Boolean  @default(false)
+  isNew           Boolean  @default(true)
+  broker          Boolean  @default(false)
+  
+  // Status & Package
   status          String   @default("draft") // draft, active, sold, paused
-  packageType     String   // basic, featured, premium
+  packageType     String   @default("basic") // free, basic, pro, pro_plus
   
+  // Timestamps
   createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   publishedAt     DateTime?
   expiresAt       DateTime?
   
   @@index([userId])
   @@index([status])
+  @@index([industry])
+  @@index([location])
 }
 
 model CompanyCache {

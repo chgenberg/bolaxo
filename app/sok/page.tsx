@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { mockObjects } from '@/data/mockObjects'
+import { mockObjects, BusinessObject } from '@/data/mockObjects'
 import ObjectCard from '@/components/ObjectCard'
 import { Search, SlidersHorizontal, ChevronDown, X, TrendingUp, AlertCircle } from 'lucide-react'
 
 export default function SearchPage() {
-  const [filteredObjects, setFilteredObjects] = useState(mockObjects)
-  const [loading, setLoading] = useState(false)
+  const [allObjects, setAllObjects] = useState<BusinessObject[]>(mockObjects)
+  const [filteredObjects, setFilteredObjects] = useState<BusinessObject[]>(mockObjects)
+  const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   
@@ -24,11 +25,57 @@ export default function SearchPage() {
   // Active filter count
   const activeFilterCount = Object.values(filters).filter(v => v && v !== 'newest').length + (searchQuery ? 1 : 0)
 
+  // Fetch listings on mount
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const response = await fetch('/api/listings?status=active')
+        if (response.ok) {
+          const listings = await response.json()
+          
+          // Transform API listings to BusinessObject format
+          const transformedListings: BusinessObject[] = listings.map((listing: any) => ({
+            id: listing.id,
+            title: listing.companyName,
+            anonymousTitle: listing.anonymousTitle,
+            type: listing.type,
+            category: listing.category,
+            description: listing.description,
+            region: listing.region,
+            location: listing.location,
+            revenue: listing.revenue,
+            revenueRange: listing.revenueRange,
+            priceMin: listing.priceMin,
+            priceMax: listing.priceMax,
+            employees: listing.employees,
+            image: listing.image,
+            verified: listing.verified,
+            isNew: listing.isNew,
+            broker: listing.broker,
+            views: listing.views,
+            createdAt: listing.createdAt
+          }))
+          
+          // Combine with mock objects for now (mock objects have more data)
+          setAllObjects([...transformedListings, ...mockObjects])
+          setFilteredObjects([...transformedListings, ...mockObjects])
+        }
+      } catch (error) {
+        console.error('Error fetching listings:', error)
+        // Fallback to mock objects if API fails
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchListings()
+  }, [])
+
   const applyFilters = () => {
     setLoading(true)
     
     setTimeout(() => {
-      let filtered = [...mockObjects]
+      let filtered = [...allObjects]
 
       // Search filter
       if (searchQuery) {
@@ -119,7 +166,7 @@ export default function SearchPage() {
       <div className="bg-background-off-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-3xl font-bold text-text-dark text-center uppercase">
-            Sök bland {mockObjects.length} företag till salu
+            Sök bland {allObjects.length} företag till salu
           </h1>
         </div>
       </div>
