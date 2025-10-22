@@ -94,12 +94,12 @@ export default function DashboardPage() {
           <BuyerDashboard userId={user.id} />
         )}
 
-        {user?.role === 'advisor' && user?.id && (
+        {(user?.role === 'advisor' || user?.role === 'broker') && user?.id && (
           <AdvisorDashboardNew userId={user.id} />
         )}
 
         {/* Default view for guests or unrecognized roles */}
-        {!user?.role && (
+        {!user?.role && !user?.id && (
           <div className="bg-white p-8 rounded-xl border border-gray-100 text-center">
             <h2 className="text-xl font-bold text-text-dark mb-4">Välkommen till Bolaxo</h2>
             <p className="text-text-gray mb-6">Logga in för att se din personliga dashboard</p>
