@@ -160,4 +160,15 @@
   .animate-pulse-shadow {
     animation: pulse-shadow 3s ease-in-out infinite;
   }
+  
+  /* Valuation Hero Background */
+  .valuation-hero-bg {
+    background-image: url('/hero-undersokning-mobile.png');
+  }
+  
+  @media (min-width: 768px) {
+    .valuation-hero-bg {
+      background-image: url('/hero-undersokning.png');
+    }
+  }
 }
