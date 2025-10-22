@@ -63,9 +63,9 @@ export default function HeroSection() {
 
 function SellerHero() {
   const benefits = [
-    { icon: TrendingUp, text: 'Vi hittar de mest relevanta affärerna åt dig' },
+    { icon: TrendingUp, text: 'Vi hittar de mest relevanta köparna åt dig' },
     { icon: Shield, text: 'Full insyn från första NDA till signerat avtal' },
-    { icon: Users, text: 'Hantera alla dina affärer smidigt i din dashboard' },
+    { icon: Users, text: 'Hantera hela försäljningen smidigt i din dashboard' },
   ]
 
   return (
@@ -75,7 +75,7 @@ function SellerHero() {
         <div className="space-y-8">
           <div>
             <h1 className="heading-1 mb-6">
-              Hitta din nästa affär –{' '}
+              Sälj ditt företag –{' '}
               <span className="text-primary-blue relative">
                 enklare än någonsin
                 <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
@@ -84,8 +84,8 @@ function SellerHero() {
               </span>
             </h1>
             <p className="text-xl text-text-gray leading-relaxed">
-              Vi hjälper dig att hitta rätt köpare eller säljare utan gissningar och krångel. 
-              Du får relevanta matchningar baserat på din profil – från första kontakt till genomförd affär, samlat på ett ställe.
+              Vi hjälper dig hitta rätt köpare utan gissningar och krångel. 
+              Du får relevanta matchningar baserat på ditt företags profil – från gratis värdering till genomförd affär, samlat på ett ställe.
             </p>
           </div>
 
@@ -104,17 +104,17 @@ function SellerHero() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
-              href="/kopare"
+              href="/vardering"
               className="btn-primary inline-flex items-center justify-center group"
             >
-              Sök företag
+              Börja sälja nu
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
-              href="/login"
+              href="/salja"
               className="btn-secondary inline-flex items-center justify-center"
             >
-              Skapa köparkonto
+              Så fungerar det
             </Link>
           </div>
 
@@ -122,15 +122,15 @@ function SellerHero() {
           <div className="flex flex-wrap items-center gap-6 pt-4">
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">Verifierade företag</span>
+              <span className="text-sm text-text-gray">Gratis AI-värdering på 5 min</span>
             </div>
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">NDA-skyddad data</span>
+              <span className="text-sm text-text-gray">NDA-skyddad process</span>
             </div>
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">100% transparent process</span>
+              <span className="text-sm text-text-gray">Verifierade köpare</span>
             </div>
           </div>
         </div>
@@ -167,9 +167,9 @@ function SellerHero() {
 
 function BuyerHero() {
   const benefits = [
-    { icon: TrendingUp, text: 'Vi hittar de mest relevanta affärerna åt dig' },
+    { icon: TrendingUp, text: 'Vi hittar de mest relevanta företagen åt dig' },
     { icon: Shield, text: 'Full insyn från första NDA till signerat avtal' },
-    { icon: Users, text: 'Hantera alla dina affärer smidigt i din dashboard' },
+    { icon: Users, text: 'Hantera alla dina köp smidigt i din dashboard' },
   ]
 
   return (
@@ -179,7 +179,7 @@ function BuyerHero() {
         <div className="space-y-8">
           <div>
             <h1 className="heading-1 mb-6">
-              Hitta din nästa affär –{' '}
+              Köp ditt nästa företag –{' '}
               <span className="text-primary-blue relative">
                 enklare än någonsin
                 <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
@@ -188,8 +188,8 @@ function BuyerHero() {
               </span>
             </h1>
             <p className="text-xl text-text-gray leading-relaxed">
-              Vi hjälper dig att hitta rätt köpare eller säljare utan gissningar och krångel. 
-              Du får relevanta matchningar baserat på din profil – från första kontakt till genomförd affär, samlat på ett ställe.
+              Vi hjälper dig hitta rätt företag utan gissningar och krångel. 
+              Du får relevanta matchningar baserat på dina investeringskriterier – från första kontakt till genomförd affär, samlat på ett ställe.
             </p>
           </div>
 
@@ -208,7 +208,7 @@ function BuyerHero() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
-              href="/kopare"
+              href="/sok"
               className="btn-primary inline-flex items-center justify-center group"
             >
               Sök företag
@@ -226,7 +226,7 @@ function BuyerHero() {
           <div className="flex flex-wrap items-center gap-6 pt-4">
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">Verifierade företag</span>
+              <span className="text-sm text-text-gray">Verifierade säljare</span>
             </div>
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
@@ -234,7 +234,7 @@ function BuyerHero() {
             </div>
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">100% transparent process</span>
+              <span className="text-sm text-text-gray">AI-matchning på 5 min</span>
             </div>
           </div>
         </div>
