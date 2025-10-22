@@ -8,12 +8,14 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || 'active'
+    const userId = searchParams.get('userId')
     const industry = searchParams.get('industry')
     const location = searchParams.get('location')
     const priceMin = searchParams.get('priceMin')
     const priceMax = searchParams.get('priceMax')
     
     const where: any = { status }
+    if (userId) where.userId = userId
     
     if (industry) where.industry = industry
     if (location) where.location = { contains: location, mode: 'insensitive' }

@@ -1,12 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import { MessageSquare, Send, Paperclip, Search, Circle, CheckCheck, Clock } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { getMessages, sendMessage, markMessagesRead } from '@/lib/api-client'
 
 export default function MessagesPage() {
+  const { user } = useAuth()
   const [selectedConversation, setSelectedConversation] = useState('conv-001')
   const [messageText, setMessageText] = useState('')
+  const [inbox, setInbox] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
   
   const mockConversations = [
     {
@@ -85,6 +90,22 @@ export default function MessagesPage() {
   ]
 
   const selectedConv = mockConversations.find(c => c.id === selectedConversation)
+
+  useEffect(() => {
+    const load = async () => {
+      if (!user) return
+      setLoading(true)
+      try {
+        const res = await getMessages({ userId: user.id })
+        setInbox(res.messages)
+      } catch (e) {
+        // fallback to mock
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [user])
 
   return (
     <DashboardLayout>
@@ -199,7 +220,21 @@ export default function MessagesPage() {
                   rows={1}
                 />
               </div>
-              <button className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button 
+                className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors"
+                onClick={async () => {
+                  if (!user || !messageText.trim()) return
+                  try {
+                    await sendMessage({
+                      listingId: 'lst-001', // TODO: bind to current listing context if any
+                      senderId: user.id,
+                      recipientId: 'peer-id', // TODO: bind to selected peer
+                      content: messageText.trim()
+                    })
+                    setMessageText('')
+                  } catch (e) {}
+                }}
+              >
                 <Send className="w-5 h-5" />
               </button>
             </div>

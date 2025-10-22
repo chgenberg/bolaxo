@@ -1,12 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import Link from 'next/link'
 import { Building, MapPin, TrendingUp, Calendar, Bookmark, Eye, MessageSquare, MoreVertical, Filter } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { getSavedListings } from '@/lib/api-client'
 
 export default function SavedListingsPage() {
+  const { user } = useAuth()
   const [filter, setFilter] = useState('all')
+  const [saved, setSaved] = useState<any[]>([])
   
   const savedListings = [
     {
@@ -75,13 +79,40 @@ export default function SavedListingsPage() {
     }
   ]
 
-  const filteredListings = savedListings.filter(listing => {
+  const data = saved.length ? saved.map(s => ({
+    id: s.listingId,
+    title: 'Objekt',
+    description: 'Sparad annons',
+    category: '—',
+    location: '—',
+    revenue: '—',
+    employees: '—',
+    price: '—',
+    matchScore: 0,
+    savedAt: s.createdAt || new Date().toISOString(),
+    ndaStatus: 'none',
+    lastViewed: new Date().toISOString(),
+    notes: s.notes || '',
+    hasNewActivity: false
+  })) : savedListings
+
+  const filteredListings = data.filter(listing => {
     if (filter === 'all') return true
     if (filter === 'nda_approved') return listing.ndaStatus === 'approved'
     if (filter === 'high_match') return listing.matchScore >= 85
     if (filter === 'new_activity') return listing.hasNewActivity
     return true
   })
+  useEffect(() => {
+    const load = async () => {
+      if (!user) return
+      try {
+        const res = await getSavedListings(user.id)
+        setSaved(res.saved)
+      } catch (e) {}
+    }
+    load()
+  }, [user])
 
   const getNDABadge = (status: string) => {
     switch (status) {

@@ -1,11 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import { Shield, CheckCircle, XCircle, Clock, MessageSquare, User, Calendar, FileText, AlertCircle } from 'lucide-react'
+import { listNDARequests, updateNDAStatus } from '@/lib/api-client'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function NDAsPage() {
+  const { user } = useAuth()
   const [filter, setFilter] = useState('all')
+  const [requests, setRequests] = useState<any[]>([])
   
   const mockNDAs = [
     {
@@ -68,10 +72,20 @@ export default function NDAsPage() {
     }
   ]
 
-  const filteredNDAs = mockNDAs.filter(nda => {
+  const filteredNDAs = (requests.length ? requests : mockNDAs).filter(nda => {
     if (filter === 'all') return true
     return nda.status === filter
   })
+  useEffect(() => {
+    const load = async () => {
+      if (!user) return
+      try {
+        const res = await listNDARequests({ sellerId: user.id })
+        setRequests(res.requests)
+      } catch (e) {}
+    }
+    load()
+  }, [user])
 
   const getStatusBadge = (status: string) => {
     switch (status) {
