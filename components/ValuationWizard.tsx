@@ -363,6 +363,14 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+      {/* Global Close (top-right) */}
+      <button
+        onClick={onClose}
+        aria-label="Stäng"
+        className="absolute top-4 right-4 p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-colors z-[60]"
+      >
+        <X className="w-5 h-5" />
+      </button>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
