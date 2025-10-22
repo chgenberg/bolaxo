@@ -163,12 +163,12 @@
   
   /* Valuation Hero Background */
   .valuation-hero-bg {
-    background-image: url('/hero-undersokning-mobile.png');
+    background-image: url('/vardering_mobile.png');
   }
   
   @media (min-width: 768px) {
     .valuation-hero-bg {
-      background-image: url('/hero-undersokning.png');
+      background-image: url('/vardering_desktop.png');
     }
   }
   

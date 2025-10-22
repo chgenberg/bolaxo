@@ -20,8 +20,8 @@ export default function ValuationPage() {
     },
     {
       icon: BarChart3,
-      title: 'AI-driven Analys',
-      description: 'Vår AI analyserar ditt företag med professionella värderingsmetoder'
+      title: 'Automatisk Analys',
+      description: 'Systemet analyserar ditt företag med professionella värderingsmetoder'
     },
     {
       icon: FileText,
@@ -43,8 +43,8 @@ export default function ValuationPage() {
     },
     {
       number: '3',
-      title: 'AI-Analys',
-      description: 'Vår AI analyserar ditt företag'
+      title: 'Automatisk Analys',
+      description: 'Systemet analyserar ditt företag'
     },
     {
       number: '4',
@@ -85,7 +85,7 @@ export default function ValuationPage() {
           <div className="relative max-w-5xl mx-auto px-4 text-center">
             <div className="inline-flex items-center px-4 py-2 bg-white/20 rounded-full text-sm mb-6">
               <Zap className="w-4 h-4 mr-2" />
-              Sveriges mest avancerade AI-värdering
+              Sveriges mest avancerade värdering
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -94,7 +94,7 @@ export default function ValuationPage() {
             
             <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
               Få en professionell värdering av ditt företag på 5 minuter. 
-              Vår AI använder samma metoder som professionella värderare.
+              Vi använder samma metoder som professionella värderare.
             </p>
             
             <button
@@ -188,7 +188,7 @@ export default function ValuationPage() {
             <div className="text-center mb-12">
               <h2 className="heading-2 mb-4">Professionella värderingsmetoder</h2>
               <p className="text-lg text-text-gray">
-                Vår AI kombinerar flera etablerade metoder för en rättvisande värdering
+                Vi kombinerar flera etablerade metoder för en rättvisande värdering
               </p>
             </div>
 
