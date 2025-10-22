@@ -219,13 +219,39 @@ async function scrapeWebsite(url: string, companyName: string): Promise<string> 
       visited.add(currentUrl)
 
       try {
-        const response = await fetch(currentUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; BOLAXO-Valuation-Bot/1.0)',
-            'Accept': 'text/html,application/xhtml+xml',
-          },
-          signal: AbortSignal.timeout(8000), // 8s timeout
-        })
+        // Retry logic för SSL-problem
+        let response
+        let lastError
+        
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            response = await fetch(currentUrl, {
+              headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'sv-SE,sv;q=0.9,en;q=0.8',
+                'Connection': 'keep-alive',
+              },
+              signal: AbortSignal.timeout(10000), // 10s timeout
+            })
+            break // Success, exit retry loop
+          } catch (err) {
+            lastError = err
+            if (attempt === 0) {
+              // Retry med http istället om https failar
+              if (currentUrl.startsWith('https://')) {
+                currentUrl = currentUrl.replace('https://', 'http://')
+                continue
+              }
+            }
+          }
+        }
+        
+        if (!response) {
+          // Både https och http failade, logga och fortsätt
+          console.log(`Skipping ${currentUrl} due to connection error`)
+          continue
+        }
 
         if (!response.ok) {
           console.log(`Failed to fetch ${currentUrl}: ${response.status}`)
@@ -303,14 +329,56 @@ function extractKeyInfoFromContent(content: string): any {
     /(\d+)\s+medarbetare/i,
     /(\d+)\s+anställda/i,
     /vi\s+är\s+(\d+)\s+personer/i,
+    /team\s+på\s+(\d+)/i,
+    /(\d+)\s+employees/i,
   ]
 
   for (const pattern of employeePatterns) {
     const match = content.match(pattern)
     if (match) {
       const num = parseInt(match[1])
-      if (num < 500) { // Sanity check
+      if (num > 0 && num < 1000) { // Sanity check
         extracted.employees = mapEmployeeCount(num)
+        break
+      }
+    }
+  }
+
+  // Omsättning/revenue mentions
+  const revenuePatterns = [
+    /omsättning[:\s]+(\d+(?:\.\d+)?)\s*(?:miljoner?|msek|mkr)/i,
+    /revenue[:\s]+(\d+(?:\.\d+)?)\s*(?:million|msek)/i,
+    /turnover[:\s]+(\d+(?:\.\d+)?)\s*(?:miljoner?|msek)/i,
+  ]
+
+  for (const pattern of revenuePatterns) {
+    const match = content.match(pattern)
+    if (match) {
+      const revenue = parseFloat(match[1])
+      if (revenue > 0 && revenue < 1000) {
+        extracted.revenue = `${revenue} MSEK`
+        break
+      }
+    }
+  }
+
+  // Grundat år
+  const foundedPatterns = [
+    /grundat\s+(\d{4})/i,
+    /startade\s+(\d{4})/i,
+    /sedan\s+(\d{4})/i,
+    /founded\s+(\d{4})/i,
+    /established\s+(\d{4})/i,
+  ]
+
+  for (const pattern of foundedPatterns) {
+    const match = content.match(pattern)
+    if (match) {
+      const year = parseInt(match[1])
+      const currentYear = new Date().getFullYear()
+      if (year > 1900 && year <= currentYear) {
+        extracted.foundedYear = year
+        extracted.companyAge = currentYear - year
         break
       }
     }
@@ -318,7 +386,8 @@ function extractKeyInfoFromContent(content: string): any {
 
   // Försök identifiera konkurrensfördel/USP
   const uspPatterns = [
-    /(?:vi är|unika? med|konkurrensfördelar?|specialist på|expertis inom)[\s\S]{0,200}/gi,
+    /(?:vi är|unika? med|konkurrensfördelar?|specialist på|expertis inom|känd för)[\s\S]{0,250}/gi,
+    /(?:våra styrkor|what makes us|why choose us)[\s\S]{0,250}/gi,
   ]
 
   const usps: string[] = []
@@ -333,10 +402,28 @@ function extractKeyInfoFromContent(content: string): any {
     extracted.competitiveAdvantage = usps.join('. ').slice(0, 500)
   }
 
-  // Försök hitta kunder/case
-  const customerMentions = (content.match(/kunder?|case|referens|samarbeta med/gi) || []).length
-  if (customerMentions > 5) {
-    extracted.customerBase = 'Verkar ha etablerad kundbas baserat på hemsideinnehåll'
+  // Kunder/partners
+  const customerPatterns = [
+    /(?:våra kunder|our clients|kunder inkluderar)[\s\S]{0,300}/gi,
+    /(?:partners?|samarbeten?|samarbetar med)[\s\S]{0,200}/gi,
+  ]
+
+  const customers: string[] = []
+  for (const pattern of customerPatterns) {
+    const matches = content.match(pattern)
+    if (matches) {
+      customers.push(...matches.slice(0, 2))
+    }
+  }
+
+  if (customers.length > 0) {
+    extracted.customerInfo = customers.join('. ').slice(0, 400)
+  }
+
+  // Produkter/tjänster
+  const serviceMentions = (content.match(/tjänster?|produkter?|erbjuder|services|products/gi) || []).length
+  if (serviceMentions > 8) {
+    extracted.hasServiceInfo = true
   }
 
   return extracted
