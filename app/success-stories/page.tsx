@@ -3,20 +3,20 @@ import { BarChart3, CheckCircle, DollarSign } from 'lucide-react'
 
 export default function SuccessStoriesPage() {
   return (
-    <main className="bg-gradient-to-b from-white to-light-blue/20 py-16">
+    <main className="bg-primary-blue py-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-text-dark mb-4">
+          <h1 className="text-4xl font-bold text-white mb-4">
             Success Stories
           </h1>
-          <p className="text-lg text-text-gray max-w-2xl mx-auto">
+          <p className="text-lg text-blue-100 max-w-2xl mx-auto">
             Verkliga berättelser från företagare som sålt sina företag via Bolagsplatsen
           </p>
         </div>
 
         {/* Featured Story */}
-        <div className="card mb-12 bg-gradient-to-br from-primary-blue to-blue-800 text-white">
+        <div className="card mb-12 bg-blue-900 text-white">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <span className="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full">
