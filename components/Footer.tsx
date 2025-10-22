@@ -27,7 +27,6 @@ const footerLinks = {
       { label: 'Om oss', href: '/om-oss' },
       { label: 'För investerare', href: '/investor' },
       { label: 'Kontakt', href: '/kontakt' },
-      { label: 'Karriär', href: '/karriar' },
       { label: 'Blogg', href: '/blogg' },
       { label: 'FAQ', href: '/faq' },
     ],

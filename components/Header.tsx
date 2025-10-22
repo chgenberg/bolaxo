@@ -49,7 +49,6 @@ const navigation: NavItem[] = [
       { label: 'Blogg', href: '/blogg', description: 'Guider, nyheter och insikter' },
       { label: 'FAQ', href: '/faq', description: 'Vanliga frågor och svar' },
       { label: 'Kontakt', href: '/kontakt', description: 'Hör av dig till oss' },
-      { label: 'Karriär', href: '/karriar', description: 'Jobba hos oss' },
     ]
   }
 ]
