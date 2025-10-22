@@ -213,7 +213,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-text-dark mb-2">
-                      NDA-förfrågan för {listings.find(l => l.id === nda.listingId)?.anonymousTitle || 'Annons'}
+                      NDA-förfrågan för annons (ID: {nda.listingId.slice(0, 8)}...)
                     </h3>
                     {nda.message && (
                       <p className="text-sm text-text-gray mb-3">"{nda.message}"</p>

@@ -199,7 +199,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm text-text-dark mb-2">
-                      {listings.find(l => l.id === nda.listingId)?.anonymousTitle || 'Företag'}
+                      Företag (ID: {nda.listingId.slice(0, 8)}...)
                     </h3>
                     <div className="text-xs text-text-gray mb-2">
                       Skickad {new Date(nda.createdAt).toLocaleDateString('sv-SE')}
