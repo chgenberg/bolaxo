@@ -36,9 +36,14 @@ export async function scrapeAllabolag(orgNumber: string): Promise<AllabolagData 
   try {
     const cleanOrgNumber = orgNumber.replace(/\D/g, '')
     
-    // Allabolag URL format: /XXXXXX-XXXX/company-name
-    // Men vi kan söka direkt med org.nr
-    const searchUrl = `https://www.allabolag.se/what/${cleanOrgNumber}`
+    // Allabolag URL format: Try both with and without dash
+    // Format: XXXXXX-XXXX
+    const formattedOrgNumber = cleanOrgNumber.length === 10 
+      ? `${cleanOrgNumber.slice(0, 6)}-${cleanOrgNumber.slice(6)}`
+      : cleanOrgNumber
+    
+    // Try with formatted number first, then clean
+    const searchUrl = `https://www.allabolag.se/what/${formattedOrgNumber}`
     
     console.log(`Scraping Allabolag: ${searchUrl}`)
     
@@ -57,6 +62,13 @@ export async function scrapeAllabolag(orgNumber: string): Promise<AllabolagData 
     }
 
     const html = await response.text()
+    
+    // Check if no results found
+    if (html.includes('0 resultat') || html.includes('Inga träffar') || html.includes('no results')) {
+      console.log(`Allabolag: No company found for ${formattedOrgNumber}`)
+      return null
+    }
+    
     const $ = cheerio.load(html)
 
     // Extrahera företagsnamn
@@ -64,6 +76,12 @@ export async function scrapeAllabolag(orgNumber: string): Promise<AllabolagData 
                        $('.company-name').first().text().trim() ||
                        $('title').text().split('-')[0]?.trim() || 
                        'Okänt företag'
+    
+    // Additional check - if company name looks like error message
+    if (companyName.includes('sökning') || companyName.includes('resultat') || companyName.length < 3) {
+      console.log(`Allabolag: Invalid company name "${companyName}" - likely no match`)
+      return null
+    }
 
     // Extrahera grundläggande info
     const status = extractTextByLabel($, 'Status') || 'Aktiv'

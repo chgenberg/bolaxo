@@ -34,8 +34,13 @@ export async function scrapeProff(orgNumber: string): Promise<ProffData | null> 
   try {
     const cleanOrgNumber = orgNumber.replace(/\D/g, '')
     
-    // Proff.se URL format
-    const searchUrl = `https://www.proff.se/bransch-s%C3%B6k?q=${cleanOrgNumber}`
+    // Format with dash: XXXXXX-XXXX
+    const formattedOrgNumber = cleanOrgNumber.length === 10 
+      ? `${cleanOrgNumber.slice(0, 6)}-${cleanOrgNumber.slice(6)}`
+      : cleanOrgNumber
+    
+    // Proff.se URL format - try formatted first
+    const searchUrl = `https://www.proff.se/bransch-s%C3%B6k?q=${formattedOrgNumber}`
     
     console.log(`Scraping Proff.se: ${searchUrl}`)
     

@@ -31,23 +31,56 @@ export async function scrapeRatsit(orgNumber: string): Promise<RatsitData | null
   try {
     const cleanOrgNumber = orgNumber.replace(/\D/g, '')
     
-    // Ratsit URL format
-    const searchUrl = `https://www.ratsit.se/sok/foretag?vem=${cleanOrgNumber}`
+    // Format with dash: XXXXXX-XXXX
+    const formattedOrgNumber = cleanOrgNumber.length === 10 
+      ? `${cleanOrgNumber.slice(0, 6)}-${cleanOrgNumber.slice(6)}`
+      : cleanOrgNumber
+    
+    // Ratsit URL format - try formatted number
+    const searchUrl = `https://www.ratsit.se/sok/foretag?vem=${formattedOrgNumber}`
     
     console.log(`Scraping Ratsit: ${searchUrl}`)
     
-    const response = await fetch(searchUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'sv-SE,sv;q=0.9',
-        'Referer': 'https://www.ratsit.se/',
-      },
-      signal: AbortSignal.timeout(10000),
-    })
+    // Ratsit often blocks, try with different user agents
+    const userAgents = [
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+      'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    ]
+    
+    let response
+    for (const ua of userAgents) {
+      try {
+        response = await fetch(searchUrl, {
+          headers: {
+            'User-Agent': ua,
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'sv-SE,sv;q=0.9',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Referer': 'https://www.ratsit.se/',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+          },
+          signal: AbortSignal.timeout(10000),
+        })
+        
+        if (response.ok) break
+        
+        // If 403, try next user agent
+        if (response.status === 403) {
+          console.log(`Ratsit 403 with UA ${ua.slice(0, 30)}... trying next`)
+          await new Promise(r => setTimeout(r, 500))
+          continue
+        }
+      } catch (err) {
+        // Try next UA
+        continue
+      }
+    }
 
-    if (!response.ok) {
-      console.log(`Ratsit returned ${response.status}`)
+    if (!response || !response.ok) {
+      console.log(`Ratsit returned ${response?.status || 'no response'} after all retries`)
       return null
     }
 
