@@ -16,16 +16,10 @@ export default function HeroSection() {
   const [showValuation, setShowValuation] = useState(false)
 
   return (
-    <section className="relative bg-gradient-to-b from-white to-light-blue/10 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-blue/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-light-blue/30 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative pt-6 md:pt-12">
+    <section className="relative bg-white overflow-hidden">
+      <div className="relative pt-6 md:pt-12 pb-0">
         {/* Tab Toggle */}
-        <div className="max-w-md mx-auto px-4 mb-0">
+        <div className="max-w-md mx-auto px-4 mb-0 relative z-20">
           <div className="flex bg-white rounded-card shadow-soft p-1.5">
             <button
               onClick={() => setActiveTab('sell')}
@@ -100,12 +94,12 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16">
         <div className="space-y-6">
           {/* Main heading */}
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg uppercase">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-primary-blue leading-tight uppercase">
             Sälj ditt företag – tryggt, digitalt och klart.
           </h1>
           
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-white drop-shadow-md max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-text-dark max-w-2xl mx-auto">
             Från första värdering till signerad affär.
             <br />
             Allt sker säkert och smidigt på ett ställe.
@@ -116,12 +110,12 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
             {/* Pulsing button wrapper */}
             <div className="relative inline-block">
               {/* Pulsing background effect */}
-              <div className="absolute inset-0 bg-white rounded-full blur-xl opacity-40 animate-pulse"></div>
+              <div className="absolute inset-0 bg-primary-blue rounded-full blur-xl opacity-40 animate-pulse"></div>
               
               {/* Main button */}
               <button
                 onClick={() => setShowValuation(true)}
-                className="relative inline-flex items-center justify-center px-10 py-4 bg-white text-primary-blue font-bold text-lg rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group"
+                className="relative inline-flex items-center justify-center px-10 py-4 bg-primary-blue text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 group"
               >
                 Starta Gratis Värdering
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -129,7 +123,7 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
             </div>
             
             {/* Helper text */}
-            <p className="text-sm text-white drop-shadow-md">
+            <p className="text-sm text-text-gray">
               Tar 2 minuter – helt kostnadsfritt
             </p>
             
@@ -137,7 +131,7 @@ function SellerHero({ setShowValuation }: SellerHeroProps) {
             <div>
               <Link
                 href="/salja"
-                className="text-white/90 hover:text-white inline-flex items-center text-sm font-medium transition-colors drop-shadow-md underline decoration-white/50 hover:decoration-white underline-offset-4"
+                className="text-primary-blue hover:text-blue-700 inline-flex items-center text-sm font-medium transition-colors underline decoration-primary-blue/50 hover:decoration-primary-blue underline-offset-4"
               >
                 Så fungerar det
                 <ArrowRight className="ml-1 w-4 h-4" />
