@@ -212,86 +212,71 @@ function BuyerHero({ showMap, setShowMap }: { showMap: boolean; setShowMap: (sho
       {/* Object Carousel */}
       <ObjectCarousel onMapClick={() => setShowMap(true)} />
       
-      {/* Hero Content */}
-      <div className="grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
-        <div className="space-y-8">
-          <div>
-            <p className="text-xl text-text-gray leading-relaxed">
-              Vi hjälper dig hitta rätt företag utan gissningar och krångel. 
-              Du får relevanta matchningar baserat på dina investeringskriterier – från första kontakt till genomförd affär, samlat på ett ställe.
-            </p>
-          </div>
-
-          {/* Benefits */}
-          <div className="space-y-4">
+      {/* Hero Content - More Spacious */}
+      <div className="mt-16 space-y-16">
+        {/* Description and Trust */}
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <p className="text-xl text-text-gray leading-relaxed">
+            Vi hjälper dig hitta rätt företag utan gissningar och krångel. Du får relevanta matchningar baserat på dina investeringskriterier – från första kontakt till genomförd affär, samlat på ett ställe.
+          </p>
+          
+          {/* Benefits Grid */}
+          <div className="grid md:grid-cols-3 gap-8 mt-12">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center space-x-3 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
-                <div className="flex-shrink-0 w-10 h-10 bg-light-blue/30 rounded-full flex items-center justify-center">
-                  <benefit.icon className="w-5 h-5 text-primary-blue" />
+              <div key={index} className="flex flex-col items-center text-center space-y-3 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <div className="w-16 h-16 bg-light-blue/20 rounded-2xl flex items-center justify-center">
+                  <benefit.icon className="w-8 h-8 text-primary-blue" />
                 </div>
                 <span className="text-text-dark font-medium">{benefit.text}</span>
               </div>
             ))}
           </div>
+        </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/sok"
-              className="btn-primary inline-flex items-center justify-center group"
-            >
-              Sök företag
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="/login"
-              className="btn-secondary inline-flex items-center justify-center"
-            >
-              Skapa köparkonto
-            </Link>
-          </div>
+        {/* CTA Section */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            href="/sok"
+            className="btn-primary inline-flex items-center justify-center group px-8 py-4 text-lg"
+          >
+            Sök företag
+            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <Link
+            href="/login"
+            className="btn-secondary inline-flex items-center justify-center px-8 py-4 text-lg"
+          >
+            Skapa köparkonto
+          </Link>
+        </div>
 
-          {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center gap-6 pt-4">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">Verifierade säljare</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">NDA-skyddad data</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-sm text-text-gray">Smart matchning på 5 min</span>
-            </div>
+        {/* Handshake Image - Centered with Pulse */}
+        <div className="relative mx-auto w-full max-w-lg">
+          <div className="relative">
+            {/* Pulsing background effect */}
+            <div className="absolute inset-0 bg-primary-blue/10 rounded-3xl blur-3xl animate-pulse"></div>
+            <img
+              src="/bolaxo_hero.png"
+              alt="BOLAXO - Trusted Partnership"
+              className="relative w-full h-auto rounded-2xl shadow-2xl"
+              style={{ maxHeight: '400px', objectFit: 'contain' }}
+            />
           </div>
         </div>
 
-        {/* Right Content - Hero Image */}
-        <div className="relative lg:ml-auto">
-          <div className="relative max-w-xl mx-auto">
-            <img
-              src="/bolaxo_hero.png"
-              alt="Bolaxo Platform"
-              className="w-full h-auto rounded-2xl shadow-2xl animate-pulse-shadow"
-            />
-            
-            {/* Floating Badges */}
-            <div className="absolute -bottom-4 -left-4 bg-white px-6 py-3 rounded-xl shadow-card animate-float-slow">
-              <div className="flex items-center space-x-2">
-                <Shield className="w-5 h-5 text-green-600" />
-                <span className="font-semibold text-text-dark">Verifierad köpare</span>
-              </div>
-            </div>
-            
-            <div className="absolute -top-4 -right-4 bg-white px-6 py-3 rounded-xl shadow-card animate-float-delayed">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-5 h-5 text-primary-blue" />
-                <span className="font-semibold text-text-dark">NDA-skyddad</span>
-              </div>
-            </div>
+        {/* Trust Indicators - Bottom */}
+        <div className="flex flex-wrap items-center justify-center gap-8">
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <span className="text-sm text-text-gray">Verifierade säljare</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <span className="text-sm text-text-gray">NDA-skyddad data</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <span className="text-sm text-text-gray">Smart matchning på 5 min</span>
           </div>
         </div>
       </div>
