@@ -29,7 +29,7 @@ export default function ObjectCard({ object }: ObjectCardProps) {
       <div className="card-interactive group h-full overflow-hidden">
         {/* Image Section with Organic Shape */}
         <div className="relative mb-4 -mx-6 -mt-6">
-          <div className="relative w-full h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+          <div className="relative w-full h-64 overflow-hidden bg-white">
             {object.image ? (
               <div className="relative w-full h-full">
                 {/* Pulsing shadow effect with organic shape */}

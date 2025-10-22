@@ -196,6 +196,19 @@ function BuyerHero({ showMap, setShowMap }: { showMap: boolean; setShowMap: (sho
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      {/* Centered Heading */}
+      <div className="text-center">
+        <h1 className="heading-1">
+          Köp ditt nästa företag –{' '}
+          <span className="text-primary-blue relative inline-block">
+            enklare än någonsin
+            <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
+              <path d="M0 4 Q50 0 100 4 T200 4" stroke="#003366" strokeWidth="2" fill="none" opacity="0.3"/>
+            </svg>
+          </span>
+        </h1>
+      </div>
+
       {/* Object Carousel */}
       <ObjectCarousel onMapClick={() => setShowMap(true)} />
       
@@ -204,15 +217,6 @@ function BuyerHero({ showMap, setShowMap }: { showMap: boolean; setShowMap: (sho
         {/* Left Content */}
         <div className="space-y-8">
           <div>
-            <h1 className="heading-1 mb-6">
-              Köp ditt nästa företag –{' '}
-              <span className="text-primary-blue relative">
-                enklare än någonsin
-                <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 200 8">
-                  <path d="M0 4 Q50 0 100 4 T200 4" stroke="#003366" strokeWidth="2" fill="none" opacity="0.3"/>
-                </svg>
-              </span>
-            </h1>
             <p className="text-xl text-text-gray leading-relaxed">
               Vi hjälper dig hitta rätt företag utan gissningar och krångel. 
               Du får relevanta matchningar baserat på dina investeringskriterier – från första kontakt till genomförd affär, samlat på ett ställe.

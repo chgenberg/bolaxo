@@ -45,71 +45,19 @@ export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
 
   useEffect(() => {
     if (isOpen && !isMapLoaded) {
-      // Load Leaflet CSS
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
-      document.head.appendChild(link)
-
-      // Load Leaflet JS
-      const script = document.createElement('script')
-      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
-      script.onload = () => {
+      // Simple timeout to ensure DOM is ready, then show placeholder map
+      setTimeout(() => {
         setIsMapLoaded(true)
-        initializeMap()
-      }
-      document.body.appendChild(script)
-
-      return () => {
-        // Cleanup
-        if (link.parentNode) link.parentNode.removeChild(link)
-        if (script.parentNode) script.parentNode.removeChild(script)
-      }
+      }, 100)
     }
   }, [isOpen, isMapLoaded])
 
-  const initializeMap = () => {
-    if (typeof window === 'undefined' || !(window as any).L) return
-
-    const L = (window as any).L
-    const mapContainer = document.getElementById('object-map')
-    if (!mapContainer || mapContainer.hasChildNodes()) return
-
-    // Initialize map centered on Sweden
-    const map = L.map('object-map').setView([62.0, 15.0], 5)
-
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19
-    }).addTo(map)
-
-    // Add markers for each city
-    Object.entries(objectsByCity).forEach(([city, objects]) => {
-      const coords = cityCoordinates[city]
-      if (!coords) return
-
-      // Create custom icon with count
-      const icon = L.divIcon({
-        html: `<div class="custom-marker">
-          <div class="marker-count">${objects.length}</div>
-        </div>`,
-        className: 'custom-div-icon',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40]
-      })
-
-      const marker = L.marker(coords, { icon })
-        .addTo(map)
-        .on('click', () => setSelectedCity(city))
-
-      // Add tooltip with city name
-      marker.bindTooltip(city, { 
-        permanent: false, 
-        direction: 'top',
-        offset: [0, -40]
-      })
-    })
+  // Convert coordinates to SVG percentages for simplified map
+  const coordsToPercent = (lat: number, lon: number): { x: string; y: string } => {
+    // Sweden bounds: lat 55-69, lon 11-24
+    const x = ((lon - 11) / (24 - 11)) * 100
+    const y = ((69 - lat) / (69 - 55)) * 100
+    return { x: `${x}%`, y: `${y}%` }
   }
 
   if (!isOpen) return null
@@ -134,8 +82,48 @@ export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
         </button>
 
         {/* Map Container */}
-        <div className="relative w-full h-full">
-          <div id="object-map" className="w-full h-full"></div>
+        <div className="relative w-full h-full bg-gradient-to-b from-blue-50 to-blue-100">
+          {/* Simplified Sweden Map */}
+          <div className="relative w-full h-full">
+            {/* SVG Map Background */}
+            <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <text x="50" y="50" textAnchor="middle" fontSize="20" fill="#dbeafe" opacity="0.3">
+                SVERIGE
+              </text>
+            </svg>
+
+            {/* City Markers */}
+            {Object.entries(objectsByCity).map(([city, objects]) => {
+              const coords = cityCoordinates[city]
+              if (!coords) return null
+              
+              const pos = coordsToPercent(coords[0], coords[1])
+
+              return (
+                <div
+                  key={city}
+                  className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                  style={{ left: pos.x, top: pos.y }}
+                  onClick={() => setSelectedCity(city === selectedCity ? null : city)}
+                >
+                  {/* Marker */}
+                  <div className="relative">
+                    <div className="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold shadow-lg group-hover:scale-110 transition-transform">
+                      {objects.length}
+                    </div>
+                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-primary-blue"></div>
+                  </div>
+                  
+                  {/* City Name */}
+                  <div className="absolute top-14 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                    <span className="text-sm font-semibold text-text-dark bg-white px-2 py-1 rounded shadow">
+                      {city}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
 
           {/* Selected City Popup */}
           {selectedCity && (
@@ -195,57 +183,6 @@ export default function ObjectMap({ isOpen, onClose }: ObjectMapProps) {
         </div>
       </div>
 
-      {/* Custom marker styles */}
-      <style jsx global>{`
-        .custom-div-icon {
-          background: transparent;
-          border: none;
-        }
-        .custom-marker {
-          position: relative;
-          width: 40px;
-          height: 40px;
-        }
-        .marker-count {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 36px;
-          height: 36px;
-          background: #003366;
-          color: white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: bold;
-          font-size: 14px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-          transition: transform 0.2s;
-        }
-        .marker-count:hover {
-          transform: translateX(-50%) scale(1.1);
-        }
-        .marker-count::after {
-          content: '';
-          position: absolute;
-          bottom: -8px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 0;
-          height: 0;
-          border-left: 6px solid transparent;
-          border-right: 6px solid transparent;
-          border-top: 8px solid #003366;
-        }
-        .leaflet-container {
-          font-family: inherit;
-        }
-        .leaflet-popup-content-wrapper {
-          border-radius: 12px;
-        }
-      `}</style>
     </div>
   )
 }

@@ -77,7 +77,7 @@ export default function ObjectDetailPage() {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
           <div className="flex flex-col lg:flex-row">
             {/* Image Section */}
-            <div className="lg:w-2/5 bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="lg:w-2/5 bg-white">
               {object.image ? (
                 <div className="relative w-full h-96 lg:h-full min-h-[500px] p-8">
                   {/* Organic shadow shape */}
