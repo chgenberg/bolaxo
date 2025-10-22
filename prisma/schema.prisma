@@ -331,3 +331,57 @@ model BuyerProfile {
   
   @@index([userId])
 }
+
+model NDARequest {
+  id              String   @id @default(cuid())
+  listingId       String
+  buyerId         String
+  sellerId        String
+  
+  status          String   @default("pending") // pending, approved, rejected
+  message         String?  @db.Text
+  buyerProfile    Json?    // Snapshot of buyer info at time of request
+  
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+  viewedAt        DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([status])
+}
+
+model Message {
+  id              String   @id @default(cuid())
+  listingId       String
+  senderId        String
+  recipientId     String
+  
+  subject         String?
+  content         String   @db.Text
+  read            Boolean  @default(false)
+  
+  createdAt       DateTime @default(now())
+  
+  @@index([listingId])
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([createdAt])
+}
+
+model SavedListing {
+  id              String   @id @default(cuid())
+  userId          String
+  listingId       String
+  notes           String?  @db.Text
+  
+  createdAt       DateTime @default(now())
+  
+  @@unique([userId, listingId])
+  @@index([userId])
+  @@index([listingId])
+}

@@ -1,45 +1,31 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { cookies } from 'next/headers'
 
 const prisma = new PrismaClient()
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const cookieStore = await cookies()
-    const userId = cookieStore.get('bolaxo_user_id')?.value
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get('userId')
+    const email = searchParams.get('email')
+    
+    if (!userId && !email) {
+      return NextResponse.json({ error: 'userId or email required' }, { status: 400 })
     }
-
+    
+    const where: any = {}
+    if (userId) where.userId = userId
+    if (email) where.email = email
+    
     const valuations = await prisma.valuation.findMany({
-      where: { userId },
+      where,
       orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        createdAt: true,
-        companyName: true,
-        industry: true,
-        mostLikely: true,
-        minValue: true,
-        maxValue: true,
-        inputJson: true,
-        resultJson: true,
-      }
+      take: 20
     })
-
+    
     return NextResponse.json({ valuations })
-
   } catch (error) {
-    console.error('Fetch valuations error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch valuations' },
-      { status: 500 }
-    )
+    console.error('Error fetching valuations:', error)
+    return NextResponse.json({ error: 'Failed to fetch valuations' }, { status: 500 })
   }
 }
-

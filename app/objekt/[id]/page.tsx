@@ -12,11 +12,46 @@ import InfoPopup from '@/components/InfoPopup'
 export default function ObjectDetailPage() {
   const params = useParams()
   const objectId = params.id as string
-  const object = mockObjects.find(obj => obj.id === objectId)
+  const [object, setObject] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   
   const [activeTab, setActiveTab] = useState('overview')
   const { savedObjects, toggleSaved, hasNDA } = useBuyerStore()
   const isSaved = savedObjects.includes(objectId)
+  
+  useEffect(() => {
+    const fetchObject = async () => {
+      try {
+        // Try DB first
+        const response = await fetch(`/api/listings/${objectId}`)
+        if (response.ok) {
+          const listing = await response.json()
+          setObject(listing)
+        } else {
+          // Fallback to mock
+          const mockObj = mockObjects.find(obj => obj.id === objectId)
+          setObject(mockObj || null)
+        }
+      } catch (error) {
+        console.error('Error fetching object:', error)
+        // Fallback to mock
+        const mockObj = mockObjects.find(obj => obj.id === objectId)
+        setObject(mockObj || null)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchObject()
+  }, [objectId])
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
+  }
   
   if (!object) {
     return (
