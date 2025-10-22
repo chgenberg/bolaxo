@@ -109,21 +109,57 @@ function SellerHero() {
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/vardering"
-              className="btn-primary inline-flex items-center justify-center group"
-            >
-              Börja sälja nu
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="/salja"
-              className="btn-secondary inline-flex items-center justify-center"
-            >
-              Så fungerar det
-            </Link>
+          {/* CTA Section with Arrows */}
+          <div className="relative mt-12">
+            {/* Arrow indicators pointing to CTA */}
+            <div className="absolute inset-0 pointer-events-none">
+              {/* Top left arrow */}
+              <svg className="absolute -top-8 left-20 w-8 h-8 text-primary-blue/40 animate-bounce" style={{ animationDelay: '0ms' }}>
+                <path d="M4 0 L8 8 L0 8 Z" fill="currentColor" transform="rotate(45 4 4)" />
+              </svg>
+              {/* Top right arrow */}
+              <svg className="absolute -top-6 right-32 w-8 h-8 text-primary-blue/40 animate-bounce" style={{ animationDelay: '200ms' }}>
+                <path d="M4 0 L8 8 L0 8 Z" fill="currentColor" transform="rotate(135 4 4)" />
+              </svg>
+              {/* Left arrow */}
+              <svg className="absolute top-6 -left-4 w-8 h-8 text-primary-blue/40 animate-bounce" style={{ animationDelay: '400ms' }}>
+                <path d="M0 4 L8 0 L8 8 Z" fill="currentColor" />
+              </svg>
+              {/* Bottom arrow */}
+              <svg className="absolute -bottom-4 left-40 w-8 h-8 text-primary-blue/40 animate-bounce" style={{ animationDelay: '600ms' }}>
+                <path d="M4 8 L8 0 L0 0 Z" fill="currentColor" transform="rotate(315 4 4)" />
+              </svg>
+              {/* Right arrow */}
+              <svg className="absolute top-4 -right-2 w-8 h-8 text-primary-blue/40 animate-bounce" style={{ animationDelay: '800ms' }}>
+                <path d="M8 4 L0 0 L0 8 Z" fill="currentColor" />
+              </svg>
+            </div>
+
+            {/* Main CTA Button with pulsing effect */}
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <div className="relative">
+                {/* Pulsing background effect */}
+                <div className="absolute inset-0 bg-primary-blue rounded-full blur-xl opacity-50 animate-pulse"></div>
+                <Link
+                  href="/vardering"
+                  className="relative inline-flex items-center justify-center px-8 py-4 bg-primary-blue text-white font-semibold text-lg rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 group"
+                >
+                  Starta Gratis Värdering
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+              
+              <Link
+                href="/salja"
+                className="btn-secondary inline-flex items-center justify-center"
+              >
+                Så fungerar det
+              </Link>
+            </div>
+            
+            <p className="mt-4 text-sm text-text-gray">
+              Få din företagsvärdering på 2 minuter – helt kostnadsfritt
+            </p>
           </div>
 
           {/* Trust Indicators */}
