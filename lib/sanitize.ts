@@ -66,6 +66,8 @@ export function isValidEmail(email: string): boolean {
  * Validate Swedish org number
  */
 export function isValidOrgNumber(orgNumber: string): boolean {
+  if (!orgNumber || orgNumber.trim() === '') return true // Tom org.nr är ok (optional)
+  
   const cleaned = orgNumber.replace(/\D/g, '')
   return cleaned.length === 10
 }
@@ -74,8 +76,12 @@ export function isValidOrgNumber(orgNumber: string): boolean {
  * Validate URL
  */
 export function isValidURL(url: string): boolean {
+  if (!url || url.trim() === '') return true // Tom URL är ok (optional field)
+  
   try {
-    new URL(url)
+    // Om URL inte har protokoll, lägg till https://
+    const urlWithProtocol = url.startsWith('http') ? url : `https://${url}`
+    new URL(urlWithProtocol)
     return true
   } catch {
     return false
@@ -94,16 +100,21 @@ export function validateAndSanitize(data: {
   const errors: string[] = []
   const sanitized = sanitizeObject(data)
 
-  if (data.email && !isValidEmail(data.email)) {
+  if (data.email && data.email.trim() && !isValidEmail(data.email)) {
     errors.push('Ogiltig e-postadress')
   }
 
-  if (data.orgNumber && !isValidOrgNumber(data.orgNumber)) {
+  if (data.orgNumber && data.orgNumber.trim() && !isValidOrgNumber(data.orgNumber)) {
     errors.push('Ogiltigt organisationsnummer (ska vara 10 siffror)')
   }
 
   if (data.website && data.website.trim() && !isValidURL(data.website)) {
-    errors.push('Ogiltig URL')
+    errors.push('Ogiltig webbadress')
+  }
+
+  // Normalisera website URL (lägg till https:// om det saknas)
+  if (sanitized.website && sanitized.website.trim() && !sanitized.website.startsWith('http')) {
+    sanitized.website = `https://${sanitized.website}`
   }
 
   return {
