@@ -66,7 +66,7 @@ export default function SearchPage() {
       }
 
       // Location filter
-      if (filters.location && filters.location !== 'ovriga') {
+      if (filters.location) {
         filtered = filtered.filter(obj => 
           obj.region.toLowerCase().includes(filters.location.toLowerCase())
         )
@@ -184,11 +184,39 @@ export default function SearchPage() {
                   className="select-field"
                 >
                   <option value="">Alla branscher</option>
-                  <option value="E-handel">E-handel</option>
-                  <option value="Teknologi">Teknologi</option>
-                  <option value="Konsultbolag">Konsultbolag</option>
-                  <option value="Tillverkning">Tillverkning</option>
-                  <option value="Restaurang">Restaurang</option>
+                  <optgroup label="Teknologi & IT">
+                    <option value="SaaS-företag">SaaS-företag</option>
+                    <option value="E-handel">E-handel</option>
+                    <option value="Konsultbolag">IT-konsult</option>
+                    <option value="Tech-support företag">Tech-support</option>
+                    <option value="Webbyrå">Webbyrå</option>
+                    <option value="E-learning plattform">E-learning</option>
+                    <option value="HR-tech SaaS">HR-tech</option>
+                    <option value="CRM-system SaaS">CRM/SaaS</option>
+                  </optgroup>
+                  <optgroup label="Tjänster">
+                    <option value="Redovisningsbyrå">Redovisning</option>
+                    <option value="Marknadsföringsbyrå">Marknadsföring</option>
+                    <option value="Städbolag">Städ</option>
+                    <option value="Frisörsalong">Frisör/Skönhet</option>
+                    <option value="Hundtrimning & djuraffär">Djur/Husdjur</option>
+                  </optgroup>
+                  <optgroup label="Bygg & Fastighet">
+                    <option value="Bygg & Fastighet">Bygg</option>
+                  </optgroup>
+                  <optgroup label="Restaurang & Mat">
+                    <option value="Restaurang">Restaurang</option>
+                    <option value="Café & Bageri">Café</option>
+                    <option value="Bageri & konditori">Bageri</option>
+                  </optgroup>
+                  <optgroup label="Detaljhandel">
+                    <option value="Möbelaffär">Möbler</option>
+                    <option value="Cykelbutik">Cykel</option>
+                    <option value="Frisörsalong">Frisörsalong</option>
+                  </optgroup>
+                  <optgroup label="Träning & Hälsa">
+                    <option value="Träningscenter">Gym/Träning</option>
+                  </optgroup>
                 </select>
 
                 {/* Price Range */}
@@ -198,11 +226,15 @@ export default function SearchPage() {
                   className="select-field"
                 >
                   <option value="">Alla priser</option>
-                  <option value="0-5">0-5 MSEK</option>
+                  <option value="0-2">0-2 MSEK</option>
+                  <option value="2-5">2-5 MSEK</option>
                   <option value="5-10">5-10 MSEK</option>
-                  <option value="10-25">10-25 MSEK</option>
-                  <option value="25-50">25-50 MSEK</option>
-                  <option value="50+">50+ MSEK</option>
+                  <option value="10-20">10-20 MSEK</option>
+                  <option value="20-30">20-30 MSEK</option>
+                  <option value="30-50">30-50 MSEK</option>
+                  <option value="50-75">50-75 MSEK</option>
+                  <option value="75-100">75-100 MSEK</option>
+                  <option value="100+">100+ MSEK</option>
                 </select>
 
                 {/* Revenue Range */}
@@ -212,9 +244,12 @@ export default function SearchPage() {
                   className="select-field"
                 >
                   <option value="">All omsättning</option>
-                  <option value="0-10">0-10 MSEK</option>
-                  <option value="10-50">10-50 MSEK</option>
-                  <option value="50-100">50-100 MSEK</option>
+                  <option value="0-5">0-5 MSEK</option>
+                  <option value="5-10">5-10 MSEK</option>
+                  <option value="10-25">10-25 MSEK</option>
+                  <option value="25-50">25-50 MSEK</option>
+                  <option value="50-75">50-75 MSEK</option>
+                  <option value="75-100">75-100 MSEK</option>
                   <option value="100+">100+ MSEK</option>
                 </select>
 
@@ -225,11 +260,35 @@ export default function SearchPage() {
                   className="select-field"
                 >
                   <option value="">Hela Sverige</option>
-                  <option value="stockholm">Stockholm</option>
-                  <option value="göteborg">Göteborg</option>
-                  <option value="malmö">Malmö</option>
-                  <option value="uppsala">Uppsala</option>
-                  <option value="ovriga">Övriga</option>
+                  <optgroup label="Storstäder">
+                    <option value="stockholm">Stockholm</option>
+                    <option value="göteborg">Göteborg</option>
+                    <option value="malmö">Malmö</option>
+                  </optgroup>
+                  <optgroup label="Större städer">
+                    <option value="uppsala">Uppsala</option>
+                    <option value="västerås">Västerås</option>
+                    <option value="örebro">Örebro</option>
+                    <option value="linköping">Linköping</option>
+                    <option value="helsingborg">Helsingborg</option>
+                    <option value="jönköping">Jönköping</option>
+                    <option value="norrköping">Norrköping</option>
+                    <option value="lund">Lund</option>
+                    <option value="umeå">Umeå</option>
+                    <option value="gävle">Gävle</option>
+                  </optgroup>
+                  <optgroup label="Regioner">
+                    <option value="stockholms län">Stockholms län</option>
+                    <option value="västra götaland">Västra Götaland</option>
+                    <option value="skåne">Skåne</option>
+                    <option value="uppsala län">Uppsala län</option>
+                    <option value="södermanland">Södermanland</option>
+                    <option value="östergötland">Östergötland</option>
+                    <option value="halland">Halland</option>
+                    <option value="värmland">Värmland</option>
+                    <option value="dalarna">Dalarna</option>
+                    <option value="gävleborg">Gävleborg</option>
+                  </optgroup>
                 </select>
 
                 {/* Sort By */}
