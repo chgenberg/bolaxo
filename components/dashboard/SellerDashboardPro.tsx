@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { TrendingUp, Eye, Users, MessageSquare, Shield, Calendar, BarChart3, AlertCircle, CheckCircle, Clock } from 'lucide-react'
 import Link from 'next/link'
+import { mockObjects } from '@/data/mockObjects'
 
 // Mock data generators
 const generateRevenueData = () => [
@@ -14,18 +15,20 @@ const generateRevenueData = () => [
   { month: 'Jun', views: 523, ndas: 32, messages: 78 },
 ]
 
+// Use first real object from mockObjects
+const realObject = mockObjects[0]
 const mockListings = [
   {
-    id: 'lst-001',
-    title: 'E-handelsföretag i Stockholm',
+    id: realObject.id,
+    title: realObject.anonymousTitle,
     status: 'active',
     package: 'pro',
-    publishedAt: '2024-05-15',
-    views: 1234,
+    publishedAt: new Date(realObject.createdAt).toISOString().split('T')[0],
+    views: realObject.views,
     ndaRequests: 8,
     messages: 12,
     lastActivity: '2 timmar sedan',
-    priceRange: '15-20 MSEK',
+    priceRange: `${(realObject.priceMin / 1000000).toFixed(0)}-${(realObject.priceMax / 1000000).toFixed(0)} MSEK`,
     viewsTrend: 12.5,
     conversionRate: 6.5
   }
@@ -34,25 +37,25 @@ const mockListings = [
 const mockNDARequests = [
   {
     id: 'nda-001',
-    listingId: 'lst-001',
+    listingId: realObject.id,
     buyerName: 'Investmentbolaget Nord',
     buyerType: 'Private Equity',
     requestedAt: '2024-06-20 14:30',
     status: 'pending',
     buyerVerified: true,
     matchScore: 92,
-    message: 'Vi är mycket intresserade av er e-handelsverksamhet och har erfarenhet från liknande förvärv.'
+    message: 'Vi är mycket intresserade av er verksamhet och har erfarenhet från liknande förvärv.'
   },
   {
     id: 'nda-002',
-    listingId: 'lst-001',
+    listingId: realObject.id,
     buyerName: 'Tech Ventures AB',
     buyerType: 'Strategic Buyer',
     requestedAt: '2024-06-19 09:15',
     status: 'pending',
     buyerVerified: true,
     matchScore: 87,
-    message: 'Ser synergier med vår befintliga SaaS-portfölj.'
+    message: 'Ser synergier med vår befintliga portfölj och verksamhet.'
   }
 ]
 
@@ -275,12 +278,19 @@ export default function SellerDashboardPro() {
                     {listing.lastActivity}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <Link 
-                        href={`/dashboard/listings/${listing.id}`}
+                        href={`/objekt/${listing.id}`}
                         className="text-primary-blue hover:text-blue-700 text-sm font-medium"
                       >
-                        Hantera
+                        Visa annons
+                      </Link>
+                      <span className="text-gray-300">•</span>
+                      <Link 
+                        href={`/dashboard/analytics`}
+                        className="text-primary-blue hover:text-blue-700 text-sm font-medium"
+                      >
+                        Analys
                       </Link>
                     </div>
                   </td>
