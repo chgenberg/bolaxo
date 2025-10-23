@@ -371,7 +371,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
       >
         <X className="w-5 h-5" />
       </button>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 max-h-[85vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="heading-3">Gratis Företagsvärdering</h2>
@@ -402,7 +402,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
           {/* Step 1: Grunduppgifter */}
           {step === 1 && (
             <div className="space-y-6">
-              <div className="text-center mb-8">
+              <div className="text-center mb-6">
                 <Mail className="w-12 h-12 text-primary-blue mx-auto mb-4" />
                 <h3 className="heading-3 mb-2">Låt oss börja</h3>
                 <p className="text-text-gray">Vi hämtar automatiskt så mycket data vi kan</p>
@@ -599,7 +599,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               </div>
 
               {/* OBLIGATORISKA EXAKTA SIFFROR */}
-              <div className="bg-blue-50 border-2 border-primary-blue p-4 rounded-xl mb-6">
+              <div className="bg-blue-50 border-2 border-primary-blue p-3 rounded-xl mb-6">
                 <h4 className="font-semibold text-primary-blue mb-3 flex items-center">
                   <span className="text-lg mr-2"></span>
                   Faktiska siffror (senaste 12 månader)
@@ -610,7 +610,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   type="number"
                   value={data.exactRevenue || ''}
                   onValueChange={(value) => setData({ ...data, exactRevenue: value })}
-                  placeholder="7500000"
+                  placeholder="700.000 kr"
                   tooltip="Ange exakt omsättning i kronor för mest exakt värdering"
                   required
                 />
@@ -621,7 +621,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     type="number"
                     value={data.operatingCosts || ''}
                     onValueChange={(value) => setData({ ...data, operatingCosts: value })}
-                    placeholder="6500000"
+                    placeholder="700.000 kr"
                     tooltip="Alla kostnader: COGS + löner + marknadsföring + lokaler + etc"
                     required
                   />
@@ -644,7 +644,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               </div>
 
               {/* KOSTNADSUPPDELNING FÖR BÄTTRE ANALYS */}
-              <div className="bg-gray-50 p-4 rounded-xl">
+              <div className="bg-gray-50 p-3 rounded-xl">
                 <h4 className="font-semibold text-text-dark mb-3">
                   Kostnadsuppdelning (valfritt men rekommenderat)
                 </h4>
@@ -654,7 +654,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   type="number"
                   value={data.cogs || ''}
                   onValueChange={(value) => setData({ ...data, cogs: value })}
-                  placeholder="3000000"
+                  placeholder="700.000 kr"
                   tooltip="Direkta kostnader för produkter/tjänster du säljer"
                 />
 
@@ -664,7 +664,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     type="number"
                     value={data.salaries || ''}
                     onValueChange={(value) => setData({ ...data, salaries: value })}
-                    placeholder="1500000"
+                    placeholder="700.000 kr"
                     tooltip="Totala personalkostnader"
                   />
                 </div>
@@ -675,7 +675,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     type="number"
                     value={data.marketingCosts || ''}
                     onValueChange={(value) => setData({ ...data, marketingCosts: value })}
-                    placeholder="800000"
+                    placeholder="700.000 kr"
                     tooltip="Totala utgifter för marknadsföring och försäljning"
                   />
                 </div>
@@ -686,7 +686,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     type="number"
                     value={data.rentCosts || ''}
                     onValueChange={(value) => setData({ ...data, rentCosts: value })}
-                    placeholder="240000"
+                    placeholder="700.000 kr"
                     tooltip="Årlig hyra eller fastighetskostnader"
                   />
                 </div>
