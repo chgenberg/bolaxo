@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles, AlertCircle } from 'lucide-react'
+import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles, AlertCircle, CheckCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from './FormField'
-import FormSelect from './FormSelect'
+import FormSelectMinimal from './FormSelectMinimal'
 import FormTextarea from './FormTextarea'
 import { calculateQuickValuation, getValuationColor } from '@/utils/quickValuation'
 
@@ -414,50 +414,47 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   }, [step])
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-hidden">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-hidden">
       {/* Global Close (top-right) */}
       <button
         onClick={onClose}
         aria-label="Stäng"
-        className="absolute top-4 right-4 p-2 bg-white/90 hover:bg-white rounded-full shadow-lg transition-colors z-[60]"
+        className="absolute top-6 right-6 p-3 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all z-[60] group"
       >
-        <X className="w-5 h-5" />
+        <X className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" />
       </button>
-      <div ref={scrollRef} className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 max-h-[85vh] overflow-y-auto">
+      <div ref={scrollRef} className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl my-8 max-h-[85vh] overflow-y-auto overflow-x-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h2 className="heading-3">Gratis Företagsvärdering</h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
+        <div className="px-8 pt-8 pb-0">
+          <h2 className="text-3xl font-light tracking-tight text-text-dark">Gratis Företagsvärdering</h2>
+          <p className="text-text-gray mt-2 text-sm">Få en AI-driven värdering på 2 minuter</p>
         </div>
 
         {/* Progress Bar */}
-        <div className="px-6 pt-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-gray">Steg {step} av {totalSteps}</span>
-            <span className="text-sm text-text-gray">{Math.round(progress)}%</span>
+        <div className="px-8 pt-6">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs text-text-gray font-medium tracking-wider uppercase">Steg {step} av {totalSteps}</span>
+            <span className="text-xs text-text-gray font-medium">{Math.round(progress)}%</span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-primary-blue transition-all duration-300"
+              className="h-full bg-gradient-to-r from-primary-blue to-blue-600 transition-all duration-500 ease-out rounded-full"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 min-h-[400px]">
+        <div className="px-8 pb-8 pt-8 min-h-[400px]">
           {/* Step 1: Grunduppgifter */}
           {step === 1 && (
             <div className="space-y-6">
-              <div className="text-center mb-6">
-                <Mail className="w-12 h-12 text-primary-blue mx-auto mb-4" />
-                <h3 className="heading-3 mb-2">Låt oss börja</h3>
-                <p className="text-text-gray">Vi hämtar automatiskt så mycket data vi kan</p>
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Mail className="w-8 h-8 text-primary-blue" />
+                </div>
+                <h3 className="text-2xl font-light text-text-dark mb-2">Låt oss börja</h3>
+                <p className="text-text-gray text-sm">Vi hämtar automatiskt så mycket data vi kan</p>
               </div>
 
               <FormField
@@ -477,9 +474,10 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 required
               />
 
-              <div className="bg-light-blue p-4 rounded-xl">
-                <h4 className="font-semibold text-primary-blue mb-3 text-sm">
-                  Automatisk datainsamling (valfritt men rekommenderat)
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+                <h4 className="font-medium text-primary-blue mb-4 text-sm flex items-center">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Automatisk datainsamling
                 </h4>
                 
                 <FormField
@@ -500,16 +498,16 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 />
                 
                 {(data.website || data.orgNumber) && (
-                  <div className="mt-4 text-sm text-text-gray">
+                  <div className="mt-4 text-xs text-primary-blue bg-white/70 backdrop-blur-sm px-4 py-2 rounded-lg">
                     <p className="flex items-center">
-                      <span className="text-green-600 mr-2">•</span>
-                      Vi hämtar automatiskt: företagsdata, branschstatistik, hemsideinnehåll
+                      <CheckCircle className="w-3 h-3 mr-2 flex-shrink-0" />
+                      Hämtar företagsdata, branschstatistik och hemsideinnehåll
                     </p>
                   </div>
                 )}
               </div>
 
-              <FormSelect
+              <FormSelectMinimal
                 label="Bransch"
                 value={data.industry}
                 onChange={(e) => setData({ ...data, industry: e.target.value })}
@@ -520,23 +518,23 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
               {/* Privacy Policy - endast om ej inloggad */}
               {!user && (
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">
-                  <div className="flex items-start">
+                <div className="bg-gray-50 p-5 rounded-2xl">
+                  <label className="flex items-start cursor-pointer group">
                     <input
                       type="checkbox"
                       id="privacy-wizard"
                       checked={acceptedPrivacy}
                       onChange={(e) => setAcceptedPrivacy(e.target.checked)}
-                      className="mt-1 w-4 h-4 text-primary-blue border-gray-300 rounded focus:ring-primary-blue"
+                      className="mt-0.5 w-5 h-5 text-primary-blue border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-primary-blue focus:ring-offset-2 transition-all"
                     />
-                    <label htmlFor="privacy-wizard" className="ml-3 text-sm text-gray-700">
+                    <span className="ml-3 text-sm text-text-dark">
                       Jag godkänner{' '}
-                      <a href="/juridiskt/integritetspolicy" className="text-primary-blue hover:underline" target="_blank">
+                      <a href="/juridiskt/integritetspolicy" className="text-primary-blue hover:text-blue-700 underline underline-offset-2" target="_blank">
                         integritetspolicyn
                       </a>{' '}
-                      och skapar ett konto för att spara min värdering
-                    </label>
-                  </div>
+                      och får ett konto för att spara värderingen
+                    </span>
+                  </label>
                 </div>
               )}
 
@@ -562,15 +560,17 @@ export default function ValuationWizard({ onClose }: WizardProps) {
           {step === 2 && (
             <div className="space-y-6">
               <div className="text-center mb-8">
-                <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
-                <h3 className="heading-3 mb-2">Riskbedömning</h3>
-                <p className="text-text-gray">Kritiska faktorer för värdering - påverkar multiplar med 20-50%</p>
+                <div className="w-16 h-16 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <AlertCircle className="w-8 h-8 text-red-600" />
+                </div>
+                <h3 className="text-2xl font-light text-text-dark mb-2">Riskbedömning</h3>
+                <p className="text-text-gray text-sm">Kritiska faktorer för värdering - påverkar multiplar med 20-50%</p>
               </div>
 
               {/* UNIVERSELLA RISKFRÅGOR */}
-              <div className="bg-red-50 border-2 border-red-300 p-4 rounded-xl">
-                <h4 className="font-semibold text-red-800 mb-3 flex items-center">
-                  <span className="text-lg mr-2">⚠️</span>
+              <div className="bg-gradient-to-br from-red-50 to-orange-50 p-6 rounded-2xl border border-red-100">
+                <h4 className="font-medium text-red-900 mb-4 flex items-center">
+                  <AlertCircle className="w-4 h-4 mr-2" />
                   Kritiska riskfaktorer
                 </h4>
                 
@@ -585,7 +585,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 />
 
                 <div className="mt-4">
-                  <FormSelect
+                  <FormSelectMinimal
                     label="Står största kunden för mer än 30% av omsättningen?"
                     value={data.customerConcentrationRisk || ''}
                     onChange={(e) => setData({ ...data, customerConcentrationRisk: e.target.value })}
@@ -612,7 +612,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 </div>
 
                 <div className="mt-4">
-                  <FormSelect
+                  <FormSelectMinimal
                     label="Kräver verksamheten speciella tillstånd/licenser?"
                     value={data.regulatoryLicenses || ''}
                     onChange={(e) => setData({ ...data, regulatoryLicenses: e.target.value })}
@@ -645,15 +645,17 @@ export default function ValuationWizard({ onClose }: WizardProps) {
           {step === 3 && (
             <div className="space-y-6">
               <div className="text-center mb-8">
-                <Building className="w-12 h-12 text-primary-blue mx-auto mb-4" />
-                <h3 className="heading-3 mb-2">Finansiell Information</h3>
-                <p className="text-text-gray">Exakta siffror ger bäst värdering - var så specifik som möjligt</p>
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Building className="w-8 h-8 text-primary-blue" />
+                </div>
+                <h3 className="text-2xl font-light text-text-dark mb-2">Finansiell Information</h3>
+                <p className="text-text-gray text-sm">Exakta siffror ger bäst värdering - var så specifik som möjligt</p>
               </div>
 
               {/* OBLIGATORISKA EXAKTA SIFFROR */}
-              <div className="bg-blue-50 border-2 border-primary-blue p-3 rounded-xl mb-6">
-                <h4 className="font-semibold text-primary-blue mb-3 flex items-center">
-                  <span className="text-lg mr-2"></span>
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100 mb-6">
+                <h4 className="font-medium text-primary-blue mb-4 flex items-center">
+                  <TrendingUp className="w-4 h-4 mr-2" />
                   Faktiska siffror (senaste 12 månader)
                 </h4>
                 
@@ -679,16 +681,17 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   />
                 </div>
 
-                <div className="mt-4 p-3 bg-white rounded-lg">
-                  <div className="text-sm text-text-gray mb-1">Beräknad EBITDA (automatisk)</div>
-                  <div className="text-2xl font-bold text-primary-blue">
+                <div className="mt-4 p-4 bg-white/70 backdrop-blur-sm rounded-xl border border-blue-100">
+                  <div className="text-xs text-text-gray mb-2 uppercase tracking-wider">Beräknad EBITDA</div>
+                  <div className="text-3xl font-light text-primary-blue">
                     {data.exactRevenue && data.operatingCosts 
                       ? `${(Number(data.exactRevenue) - Number(data.operatingCosts)).toLocaleString('sv-SE')} kr`
                       : '---'
                     }
                   </div>
                   {data.exactRevenue && data.operatingCosts && (
-                    <div className="text-sm text-text-gray mt-1">
+                    <div className="text-sm text-text-gray mt-2 flex items-center">
+                      <div className="w-2 h-2 bg-primary-blue rounded-full mr-2"></div>
                       Marginal: {((Number(data.exactRevenue) - Number(data.operatingCosts)) / Number(data.exactRevenue) * 100).toFixed(1)}%
                     </div>
                   )}
@@ -745,7 +748,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               </div>
 
               {/* ÖVRIG VIKTIG INFO */}
-              <FormSelect
+              <FormSelectMinimal
                 label="Hur gammalt är företaget?"
                 value={data.companyAge}
                 onChange={(e) => setData({ ...data, companyAge: e.target.value })}
@@ -760,7 +763,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 required
               />
 
-              <FormSelect
+              <FormSelectMinimal
                 label="Omsättningsutveckling senaste 3 åren"
                 value={data.revenue3Years}
                 onChange={(e) => setData({ ...data, revenue3Years: e.target.value })}
@@ -774,7 +777,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 required
               />
 
-              <FormSelect
+              <FormSelectMinimal
                 label="Antal anställda"
                 value={data.employees}
                 onChange={(e) => setData({ ...data, employees: e.target.value })}
@@ -831,7 +834,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               {(industryQuestions[data.industry] || []).map((question) => {
                 if (question.type === 'select' && question.options) {
                   return (
-                    <FormSelect
+                    <FormSelectMinimal
                       key={question.key}
                       label={question.label}
                       value={data[question.key] as string || ''}
@@ -959,34 +962,40 @@ export default function ValuationWizard({ onClose }: WizardProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-200">
+        <div className="flex items-center justify-between px-8 pb-8 pt-4">
           <button
             onClick={handleBack}
             disabled={step === 1}
-            className="btn-ghost flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group flex items-center px-6 py-3 text-text-gray hover:text-text-dark transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
-            <ArrowLeft className="w-5 h-5 mr-2" />
-            Tillbaka
+            <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-medium">Tillbaka</span>
           </button>
 
           <button
             onClick={handleNext}
             disabled={!canProceed() || isSubmitting}
-            className="btn-primary flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="relative group bg-gradient-to-r from-primary-blue to-blue-600 text-white px-8 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none overflow-hidden"
           >
-            {isSubmitting ? (
-              'Analyserar...'
-            ) : step === totalSteps ? (
-              <>
-                Få Min Värdering
-                <TrendingUp className="w-5 h-5 ml-2" />
-              </>
-            ) : (
-              <>
-                Nästa
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </>
-            )}
+            <span className="relative z-10 flex items-center">
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Analyserar...
+                </>
+              ) : step === totalSteps ? (
+                <>
+                  Få Min Värdering
+                  <TrendingUp className="w-4 h-4 ml-2 group-hover:translate-y-[-2px] transition-transform" />
+                </>
+              ) : (
+                <>
+                  Nästa
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
         </div>
       </div>
