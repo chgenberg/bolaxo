@@ -245,6 +245,13 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     avgRevenuePerCustomer: 'Ex: 120.000 kr',
     customerGrowthRate: 'Ex: 12',
     keyPersonDependency: '',
+    // Consulting
+    consultantCount: 'Ex: 8',
+    utilizationRate: 'Ex: 75',
+    avgHourlyRate: 'Ex: 1.250 kr',
+    clientDiversity: 'Ex: 12',
+    avgProjectValue: 'Ex: 240.000 kr',
+    grossMarginPerConsultant: 'Ex: 40',
     // Retail examples
     leaseLength: 'Ex: 3',
     monthlyRent: 'Ex: 35.000 kr',
@@ -259,6 +266,17 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     equipmentValue: 'Ex: 1.200.000 kr',
     depreciation: 'Ex: 350.000 kr',
     rawMaterialCosts: 'Ex: 55',
+  }
+
+  const getExamplePlaceholder = (question: { key: string; label: string; type: 'text' | 'select' | 'textarea' }): string => {
+    if (questionPlaceholders[question.key]) return questionPlaceholders[question.key]
+    const label = question.label.toLowerCase()
+    if (label.includes('%')) return 'Ex: 75'
+    if (label.includes('kr') || label.includes('sek')) return 'Ex: 700.000 kr'
+    if (label.includes('antal')) return 'Ex: 6'
+    if (label.includes('år')) return 'Ex: 3'
+    if (question.type === 'textarea') return 'Beskriv...'
+    return 'Ex: 12'
   }
 
   const handleEnrichData = async () => {
@@ -831,7 +849,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       label={question.label}
                       value={data[question.key] as string || ''}
                       onChange={(e) => setData({ ...data, [question.key]: e.target.value })}
-                      placeholder={questionPlaceholders[question.key] || 'Beskriv...'}
+                      placeholder={getExamplePlaceholder(question)}
                       tooltip={question.tooltip}
                       rows={3}
                       required
@@ -844,7 +862,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       label={question.label}
                       value={data[question.key] as string || ''}
                       onValueChange={(value) => setData({ ...data, [question.key]: value })}
-                      placeholder={questionPlaceholders[question.key] || 'Ex: 700.000 kr'}
+                      placeholder={getExamplePlaceholder(question)}
                       tooltip={question.tooltip}
                       required
                     />
