@@ -121,7 +121,7 @@ export default function Footer() {
         <div className="mt-12 pt-12 border-t border-gray-100">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Boka demo CTA */}
-            <div className="bg-gradient-to-r from-primary-blue to-blue-600 rounded-2xl p-8 text-white">
+            <div className="bg-primary-blue rounded-2xl p-8 text-white">
               <h3 className="font-semibold text-2xl mb-2">Vill du veta mer?</h3>
               <p className="mb-6 opacity-90">Boka en gratis demo och se hur BOLAXO kan hjälpa dig sälja eller köpa företag.</p>
               <Link
