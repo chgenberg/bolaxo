@@ -28,34 +28,6 @@ const mockListings = [
     priceRange: '15-20 MSEK',
     viewsTrend: 12.5,
     conversionRate: 6.5
-  },
-  {
-    id: 'lst-002',
-    title: 'SaaS-bolag med ARR 8 MSEK',
-    status: 'active',
-    package: 'pro_plus',
-    publishedAt: '2024-04-20',
-    views: 2341,
-    ndaRequests: 15,
-    messages: 23,
-    lastActivity: '45 min sedan',
-    priceRange: '25-35 MSEK',
-    viewsTrend: -5.2,
-    conversionRate: 8.2
-  },
-  {
-    id: 'lst-003',
-    title: 'Konsultbolag inom IT',
-    status: 'paused',
-    package: 'basic',
-    publishedAt: '2024-03-10',
-    views: 567,
-    ndaRequests: 3,
-    messages: 7,
-    lastActivity: '3 dagar sedan',
-    priceRange: '8-12 MSEK',
-    viewsTrend: 0,
-    conversionRate: 4.1
   }
 ]
 
@@ -73,7 +45,7 @@ const mockNDARequests = [
   },
   {
     id: 'nda-002',
-    listingId: 'lst-002',
+    listingId: 'lst-001',
     buyerName: 'Tech Ventures AB',
     buyerType: 'Strategic Buyer',
     requestedAt: '2024-06-19 09:15',
