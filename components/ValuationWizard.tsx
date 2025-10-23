@@ -37,7 +37,7 @@ interface ValuationData {
   rentCosts?: string
   
   // Step 3: Branschspecifika frågor (dynamiska baserat på bransch)
-  [key: string]: string | number
+  [key: string]: string | number | undefined
 }
 
 interface WizardProps {
