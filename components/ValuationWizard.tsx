@@ -235,6 +235,32 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const totalSteps = 6
   const progress = (step / totalSteps) * 100
 
+  // Placeholder-exempel för branschspecifika frågor
+  const questionPlaceholders: Record<string, string> = {
+    // Services (tjänsteföretag)
+    serviceType: 'Ex: redovisning, juridik, marknadsföring',
+    clientRetention: 'Ex: 5',
+    contractRenewalRate: 'Ex: 85',
+    billableHours: 'Ex: 72',
+    avgRevenuePerCustomer: 'Ex: 120.000 kr',
+    customerGrowthRate: 'Ex: 12',
+    keyPersonDependency: '',
+    // Retail examples
+    leaseLength: 'Ex: 3',
+    monthlyRent: 'Ex: 35.000 kr',
+    footTraffic: 'Ex: 250',
+    avgTransactionSize: 'Ex: 320 kr',
+    inventoryTurnover: 'Ex: 6',
+    inventoryValue: 'Ex: 400.000 kr',
+    sameStoreSalesGrowth: 'Ex: 12',
+    // Manufacturing
+    productionCapacity: 'Ex: 75',
+    equipmentAge: 'Ex: 8',
+    equipmentValue: 'Ex: 1.200.000 kr',
+    depreciation: 'Ex: 350.000 kr',
+    rawMaterialCosts: 'Ex: 55',
+  }
+
   const handleEnrichData = async () => {
     if (!data.website && !data.orgNumber) return
     
@@ -792,8 +818,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       label={question.label}
                       value={data[question.key] as string || ''}
                       onChange={(e) => setData({ ...data, [question.key]: e.target.value })}
-                      options={question.options}
-                      placeholder="Välj alternativ"
+                      options={[...question.options, { value: '__custom__', label: 'Annan...' }]}
+                      placeholder={questionPlaceholders[question.key] || 'Välj alternativ'}
                       tooltip={question.tooltip}
                       required
                     />
@@ -805,7 +831,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       label={question.label}
                       value={data[question.key] as string || ''}
                       onChange={(e) => setData({ ...data, [question.key]: e.target.value })}
-                      placeholder="Beskriv..."
+                      placeholder={questionPlaceholders[question.key] || 'Beskriv...'}
                       tooltip={question.tooltip}
                       rows={3}
                       required
@@ -818,7 +844,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       label={question.label}
                       value={data[question.key] as string || ''}
                       onValueChange={(value) => setData({ ...data, [question.key]: value })}
-                      placeholder="Ange värde"
+                      placeholder={questionPlaceholders[question.key] || 'Ex: 700.000 kr'}
                       tooltip={question.tooltip}
                       required
                     />
