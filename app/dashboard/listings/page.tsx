@@ -6,17 +6,35 @@ import Link from 'next/link'
 import { Building, Eye, Shield, MessageSquare, Edit, Pause, Play, MoreVertical, TrendingUp, Calendar, Download, Bookmark } from 'lucide-react'
 import { mockObjects } from '@/data/mockObjects'
 
+type ListingStatus = 'active' | 'paused' | 'draft'
+type ListingPackage = 'pro' | 'pro_plus' | 'basic'
+interface ListingRow {
+  id: string
+  title: string
+  status: ListingStatus
+  package: ListingPackage
+  publishedAt: string | null
+  expiresAt: string | null
+  views: number
+  viewsToday: number
+  ndaRequests: number
+  messages: number
+  saves: number
+  priceRange: string
+  lastActivity: string
+}
+
 export default function ListingsPage() {
   const [filter, setFilter] = useState('all')
   
   // Use first real object for the seller's mock state
   const obj = mockObjects[0]
-  const mockListings = [
+  const mockListings: ListingRow[] = [
     {
       id: obj.id,
       title: obj.anonymousTitle || obj.title || 'Företag till salu',
-      status: 'active' as const,
-      package: 'pro' as const,
+      status: 'active',
+      package: 'pro',
       publishedAt: new Date(obj.createdAt).toISOString().split('T')[0],
       expiresAt: null as string | null,
       views: obj.views || 0,
