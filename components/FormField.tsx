@@ -12,19 +12,19 @@ interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   onValueChange?: (value: string) => void
 }
 
-// Helper function to format number with spaces
+// Helper function to format number with thousand separators (dots)
 const formatNumber = (value: string): string => {
   // Remove all non-digit characters
   const numbers = value.replace(/\D/g, '')
   if (!numbers) return ''
   
-  // Add space every 3 digits from the right
-  return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+  // Add a dot every 3 digits from the right (e.g., 700.000)
+  return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
 
 // Helper function to get raw number (remove formatting)
 const getRawValue = (value: string): string => {
-  return value.replace(/\s/g, '')
+  return value.replace(/[\.\s]/g, '')
 }
 
 const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
