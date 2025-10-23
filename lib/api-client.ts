@@ -84,3 +84,15 @@ export async function getUserListings(params: { status?: string; userId?: string
 export async function getListingById(id: string) {
   return apiGet<any>(`/api/listings/${id}`)
 }
+
+// Buyer Profile
+export async function getBuyerProfile(params: { userId?: string; email?: string }) {
+  const q = new URLSearchParams()
+  if (params.userId) q.set('userId', params.userId)
+  if (params.email) q.set('email', params.email)
+  return apiGet<{ profile: any | null; user: { id: string; email: string; name?: string; role: string } }>(`/api/buyer-profile?${q.toString()}`)
+}
+
+export async function saveBuyerProfile(payload: any) {
+  return apiJSON<{ success: boolean; profile: any }>(`/api/buyer-profile`, 'POST', payload)
+}

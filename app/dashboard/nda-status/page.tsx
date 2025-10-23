@@ -1,14 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import Link from 'next/link'
 import { Shield, CheckCircle, XCircle, Clock, Calendar, Building, MessageSquare, FileText } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { listNDARequests, getListingById } from '@/lib/api-client'
 
 export default function NDAStatusPage() {
+  const { user } = useAuth()
   const [filter, setFilter] = useState('all')
+  const [ndaRequests, setNdaRequests] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
   
-  const ndaRequests = [
+  const mockRequests = [
     {
       id: 'nda-001',
       objectTitle: 'E-handelsföretag inom mode',
@@ -59,7 +64,41 @@ export default function NDAStatusPage() {
     }
   ]
 
-  const filteredRequests = ndaRequests.filter(request => {
+  useEffect(() => {
+    const load = async () => {
+      if (!user) return
+      setLoading(true)
+      try {
+        const res = await listNDARequests({ buyerId: user.id })
+        // Enrich with listing titles
+        const withTitles = await Promise.all(
+          res.requests.map(async (r: any) => {
+            try {
+              const listing = await getListingById(r.listingId)
+              return {
+                ...r,
+                objectTitle: listing.anonymousTitle || listing.companyName || 'Objekt',
+                objectId: listing.id,
+                documentsAvailable: 0,
+                lastActivity: 'NDA-status uppdaterad',
+                activityTime: r.updatedAt,
+              }
+            } catch {
+              return r
+            }
+          })
+        )
+        setNdaRequests(withTitles)
+      } catch (e) {
+        setNdaRequests(mockRequests)
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [user])
+
+  const filteredRequests = (ndaRequests.length ? ndaRequests : mockRequests).filter(request => {
     if (filter === 'all') return true
     return request.status === filter
   })

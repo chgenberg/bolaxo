@@ -1,23 +1,38 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
 import { MessageCircle, Folder } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { getListingById, sendMessage } from '@/lib/api-client'
 
 export default function DataroomPage() {
   const params = useParams()
   const router = useRouter()
   const { ndaSignedObjects } = useBuyerStore()
+  const { user } = useAuth()
   
   const objectId = params.id as string
-  const object = getObjectById(objectId)
+  const [object, setObject] = useState<any>(getObjectById(objectId))
   const hasNDA = ndaSignedObjects.includes(objectId)
 
   const [activeTab, setActiveTab] = useState<'dataroom' | 'qa'>('qa')
   const [question, setQuestion] = useState('')
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const listing = await getListingById(objectId)
+        setObject(listing)
+      } catch (e) {
+        setObject(getObjectById(objectId))
+      }
+    }
+    load()
+  }, [objectId])
 
   if (!object) {
     return <div>Objekt ej hittat</div>
@@ -96,11 +111,18 @@ export default function DataroomPage() {
     }
   ]
 
-  const handleAskQuestion = () => {
-    if (question.trim()) {
-      alert(`Fråga skickad: "${question}"`)
+  const handleAskQuestion = async () => {
+    if (!question.trim() || !user || !object?.user?.id) return
+    try {
+      await sendMessage({
+        listingId: objectId,
+        senderId: user.id,
+        recipientId: object.user.id,
+        subject: 'Q&A fråga',
+        content: question.trim(),
+      })
       setQuestion('')
-    }
+    } catch (e) {}
   }
 
   return (

@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import SelectDropdown from '@/components/dashboard/SelectDropdown'
 import { Search, MapPin, Building, TrendingUp, Users, DollarSign, Save, Plus, X } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
+import { getBuyerProfile, saveBuyerProfile } from '@/lib/api-client'
 
 export default function SearchProfilePage() {
+  const { user } = useAuth()
   const [industries, setIndustries] = useState(['E-handel', 'SaaS', 'Teknologi'])
   const [locations, setLocations] = useState(['Stockholm', 'Göteborg'])
   const [revenueMin, setRevenueMin] = useState('5')
@@ -14,6 +17,9 @@ export default function SearchProfilePage() {
   const [priceMax, setPriceMax] = useState('50')
   const [customIndustry, setCustomIndustry] = useState('')
   const [customLocation, setCustomLocation] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState('')
 
   const availableIndustries = [
     'E-handel', 'SaaS', 'Teknologi', 'Konsult', 'Tillverkning', 
@@ -44,6 +50,32 @@ export default function SearchProfilePage() {
   const removeLocation = (location: string) => {
     setLocations(locations.filter(l => l !== location))
   }
+
+  // Load existing profile
+  useEffect(() => {
+    const load = async () => {
+      if (!user) return
+      setLoading(true)
+      try {
+        const res = await getBuyerProfile({ userId: user.id })
+        const profile = res.profile
+        if (profile) {
+          setIndustries(profile.preferredIndustries || [])
+          setLocations(profile.preferredRegions || [])
+          const toMSEK = (v?: number | null) => (v ? String(Math.round(v / 1_000_000)) : '')
+          setRevenueMin(toMSEK(profile.revenueMin))
+          setRevenueMax(toMSEK(profile.revenueMax))
+          setPriceMin(toMSEK(profile.priceMin))
+          setPriceMax(toMSEK(profile.priceMax))
+        }
+      } catch (e) {
+        // keep defaults in demo mode
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [user])
 
   return (
     <DashboardLayout>
@@ -330,11 +362,42 @@ export default function SearchProfilePage() {
         </div>
 
         {/* Save button */}
-        <div className="flex justify-end">
-          <button className="btn-primary flex items-center gap-2">
-            <Save className="w-4 h-4" />
-            Spara ändringar
-          </button>
+        <div className="flex justify-between items-center">
+          {!user && (
+            <p className="text-sm text-text-gray">Logga in för att spara din profil.</p>
+          )}
+          <div className="flex items-center gap-3">
+            {saveMessage && <span className="text-sm text-primary-blue">{saveMessage}</span>}
+            <button
+              disabled={!user || saving}
+              onClick={async () => {
+                if (!user) return
+                setSaving(true)
+                setSaveMessage('')
+                try {
+                  const toNum = (v: string) => (v ? Number(v) : undefined)
+                  await saveBuyerProfile({
+                    userId: user.id,
+                    preferredIndustries: industries,
+                    preferredRegions: locations,
+                    revenueMin: toNum(revenueMin),
+                    revenueMax: toNum(revenueMax),
+                    priceMin: toNum(priceMin),
+                    priceMax: toNum(priceMax),
+                  })
+                  setSaveMessage('Sparat!')
+                } catch (e) {
+                  setSaveMessage('Kunde inte spara just nu')
+                } finally {
+                  setSaving(false)
+                }
+              }}
+              className={`btn-primary flex items-center gap-2 ${(!user || saving) && 'opacity-50 cursor-not-allowed'}`}
+            >
+              <Save className="w-4 h-4" />
+              {saving ? 'Sparar...' : 'Spara ändringar'}
+            </button>
+          </div>
         </div>
       </div>
     </DashboardLayout>
