@@ -96,3 +96,7 @@ export async function getBuyerProfile(params: { userId?: string; email?: string 
 export async function saveBuyerProfile(payload: any) {
   return apiJSON<{ success: boolean; profile: any }>(`/api/buyer-profile`, 'POST', payload)
 }
+
+export async function getUserById(id: string) {
+  return apiGet<{ user: { id: string; email: string; name?: string; role: string; companyName?: string } }>(`/api/users/${id}`)
+}

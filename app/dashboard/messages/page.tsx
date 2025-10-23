@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import { MessageSquare, Send, Paperclip, Search, Circle, CheckCheck, Clock } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { getMessages, sendMessage, markMessagesRead, getListingById } from '@/lib/api-client'
+import { getMessages, sendMessage, markMessagesRead, getListingById, getUserById } from '@/lib/api-client'
 
 export default function MessagesPage() {
   const { user } = useAuth()
@@ -255,6 +255,22 @@ export default function MessagesPage() {
 }
 
 // Helpers to transform raw messages into conversation list
+async function enrichConversationMeta(listingId: string, peerId: string) {
+  try {
+    const [listing, peer] = await Promise.all([
+      getListingById(listingId),
+      getUserById(peerId)
+    ])
+    return {
+      listingTitle: listing.anonymousTitle || listing.companyName || 'Objekt',
+      peerName: peer.user.name || peer.user.email,
+      peerCompany: peer.user.companyName || '',
+    }
+  } catch {
+    return { listingTitle: 'Objekt', peerName: 'Kontakt', peerCompany: '' }
+  }
+}
+
 function groupConversations(messages: any[], userId?: string | null) {
   const map = new Map<string, any>()
   for (const m of messages) {
@@ -264,8 +280,8 @@ function groupConversations(messages: any[], userId?: string | null) {
     const lastTime = new Date(m.createdAt).toLocaleDateString('sv-SE')
     map.set(id, {
       id,
-      contactName: 'Kontakt',
-      contactCompany: '',
+      contactName: m.peerName || 'Kontakt',
+      contactCompany: m.peerCompany || '',
       listing: m.listingTitle || 'Objekt',
       lastMessage: m.content,
       lastMessageTime: lastTime,
