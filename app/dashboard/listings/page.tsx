@@ -4,70 +4,28 @@ import { useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import Link from 'next/link'
 import { Building, Eye, Shield, MessageSquare, Edit, Pause, Play, MoreVertical, TrendingUp, Calendar, Download, Bookmark } from 'lucide-react'
+import { mockObjects } from '@/data/mockObjects'
 
 export default function ListingsPage() {
   const [filter, setFilter] = useState('all')
   
+  // Use first real object for the seller's mock state
+  const obj = mockObjects[0]
   const mockListings = [
     {
-      id: 'lst-001',
-      title: 'E-handelsföretag i Stockholm',
-      status: 'active',
-      package: 'pro',
-      publishedAt: '2024-05-15',
-      expiresAt: '2024-08-15',
-      views: 1234,
-      viewsToday: 45,
+      id: obj.id,
+      title: obj.anonymousTitle || obj.title || 'Företag till salu',
+      status: 'active' as const,
+      package: 'pro' as const,
+      publishedAt: new Date(obj.createdAt).toISOString().split('T')[0],
+      expiresAt: null as string | null,
+      views: obj.views || 0,
+      viewsToday: 0,
       ndaRequests: 8,
       messages: 12,
       saves: 23,
-      priceRange: '15-20 MSEK',
+      priceRange: `${(obj.priceMin / 1_000_000).toFixed(0)}-${(obj.priceMax / 1_000_000).toFixed(0)} MSEK`,
       lastActivity: '2 timmar sedan'
-    },
-    {
-      id: 'lst-002',
-      title: 'SaaS-bolag med ARR 8 MSEK',
-      status: 'active',
-      package: 'pro_plus',
-      publishedAt: '2024-04-20',
-      expiresAt: '2024-07-20',
-      views: 2341,
-      viewsToday: 67,
-      ndaRequests: 15,
-      messages: 23,
-      saves: 41,
-      priceRange: '25-35 MSEK',
-      lastActivity: '45 min sedan'
-    },
-    {
-      id: 'lst-003',
-      title: 'Konsultbolag inom IT',
-      status: 'paused',
-      package: 'basic',
-      publishedAt: '2024-03-10',
-      expiresAt: '2024-06-10',
-      views: 567,
-      viewsToday: 0,
-      ndaRequests: 3,
-      messages: 7,
-      saves: 8,
-      priceRange: '8-12 MSEK',
-      lastActivity: '3 dagar sedan'
-    },
-    {
-      id: 'lst-004',
-      title: 'Restaurang med central läge',
-      status: 'draft',
-      package: 'basic',
-      publishedAt: null,
-      expiresAt: null,
-      views: 0,
-      viewsToday: 0,
-      ndaRequests: 0,
-      messages: 0,
-      saves: 0,
-      priceRange: '5-8 MSEK',
-      lastActivity: 'Aldrig publicerad'
     }
   ]
 
@@ -202,35 +160,20 @@ export default function ListingsPage() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-2 ml-6">
-                  {listing.status === 'active' ? (
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Pausa">
-                      <Pause className="w-5 h-5 text-text-gray" />
-                    </button>
-                  ) : listing.status === 'paused' ? (
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Aktivera">
-                      <Play className="w-5 h-5 text-text-gray" />
-                    </button>
-                  ) : null}
-                  
                   <Link 
-                    href={`/dashboard/listings/${listing.id}/edit`}
+                    href={`/objekt/${listing.id}`}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    title="Redigera"
+                    title="Visa annons"
                   >
-                    <Edit className="w-5 h-5 text-text-gray" />
+                    <Eye className="w-5 h-5 text-text-gray" />
                   </Link>
-                  
                   <Link 
-                    href={`/dashboard/listings/${listing.id}/analytics`}
+                    href={`/dashboard/analytics`}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                     title="Analytics"
                   >
                     <TrendingUp className="w-5 h-5 text-text-gray" />
                   </Link>
-                  
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Mer">
-                    <MoreVertical className="w-5 h-5 text-text-gray" />
-                  </button>
                 </div>
               </div>
 
@@ -244,16 +187,10 @@ export default function ListingsPage() {
                     Visa annons →
                   </Link>
                   <Link 
-                    href={`/dashboard/listings/${listing.id}/boost`}
+                    href={`/dashboard/analytics`}
                     className="text-sm text-primary-blue hover:underline"
                   >
-                    Boosta annons
-                  </Link>
-                  <Link 
-                    href={`/dashboard/listings/${listing.id}/dataroom`}
-                    className="text-sm text-primary-blue hover:underline"
-                  >
-                    Hantera datarum
+                    Analys
                   </Link>
                   <button className="text-sm text-primary-blue hover:underline ml-auto">
                     <Download className="w-4 h-4 inline mr-1" />
