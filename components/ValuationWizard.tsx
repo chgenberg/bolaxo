@@ -23,6 +23,18 @@ interface ValuationData {
   revenue3Years: string
   profitMargin: string
   employees: string
+  // Nyckelrisker och finansiella fält som används i formuläret
+  grossMargin?: string
+  customerConcentrationRisk?: string
+  totalDebt?: string
+  regulatoryLicenses?: string
+  paymentTerms?: string
+  exactRevenue?: string
+  operatingCosts?: string
+  cogs?: string
+  salaries?: string
+  marketingCosts?: string
+  rentCosts?: string
   
   // Step 3: Branschspecifika frågor (dynamiska baserat på bransch)
   [key: string]: string | number
