@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles, AlertCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
@@ -213,6 +213,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user, login } = useAuth()
   const [step, setStep] = useState(1)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const [data, setData] = useState<ValuationData>({
     email: user?.email || '',
     companyName: '',
@@ -361,8 +362,15 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     }
   }
 
+  useEffect(() => {
+    // Ensure the content starts at the very top when opening or changing step
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0
+    }
+  }, [step])
+
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-hidden">
       {/* Global Close (top-right) */}
       <button
         onClick={onClose}
@@ -371,7 +379,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
       >
         <X className="w-5 h-5" />
       </button>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 max-h-[85vh] overflow-y-auto">
+      <div ref={scrollRef} className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl my-8 max-h-[85vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="heading-3">Gratis Företagsvärdering</h2>
