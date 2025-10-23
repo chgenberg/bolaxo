@@ -66,19 +66,19 @@ function LoginForm() {
           </p>
           
           {magicLink && (
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-400 p-6 rounded-xl mb-6 animate-fade-in">
-              <p className="text-sm font-bold text-green-800 mb-3 flex items-center justify-center">
-                <span className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                🚀 DEMO MODE - Magic Link Redo!
+            <div className="bg-blue-50 border-2 border-primary-blue/40 p-6 rounded-xl mb-6 animate-fade-in">
+              <p className="text-sm font-semibold text-primary-blue mb-3 flex items-center justify-center">
+                <CheckCircle className="w-4 h-4 mr-2" />
+                Demo-läge – magisk länk genererad
               </p>
               <p className="text-xs text-gray-700 mb-4 text-center">
                 I produktion skickas denna länk via email. För demo klickar du bara:
               </p>
               <a 
                 href={magicLink}
-                className="block w-full bg-gradient-to-r from-primary-blue to-blue-700 text-white py-4 px-6 rounded-xl font-bold text-center hover:shadow-lg transition-all text-base"
+                className="block w-full bg-primary-blue text-white py-4 px-6 rounded-xl font-bold text-center hover:shadow-lg transition-all text-base"
               >
-                🔓 Klicka här för att logga in direkt
+                Logga in direkt
               </a>
               <p className="text-xs text-gray-600 mt-3 text-center break-all">
                 Full URL: {magicLink}
