@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import { MessageSquare, Send, Paperclip, Search, Circle, CheckCheck, Clock } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { getMessages, sendMessage, markMessagesRead } from '@/lib/api-client'
+import { getMessages, sendMessage, markMessagesRead, getListingById } from '@/lib/api-client'
 
 export default function MessagesPage() {
   const { user } = useAuth()
-  const [selectedConversation, setSelectedConversation] = useState('conv-001')
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null)
   const [messageText, setMessageText] = useState('')
   const [inbox, setInbox] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -98,8 +98,13 @@ export default function MessagesPage() {
       try {
         const res = await getMessages({ userId: user.id })
         setInbox(res.messages)
+        // Autoselect most recent conversation by peer
+        if (res.messages.length > 0) {
+          const last = res.messages[res.messages.length - 1]
+          setSelectedConversation(`${last.listingId}::${last.senderId === user.id ? last.recipientId : last.senderId}`)
+        }
       } catch (e) {
-        // fallback to mock
+        // fallback keeps mock
       } finally {
         setLoading(false)
       }
@@ -126,7 +131,7 @@ export default function MessagesPage() {
 
           {/* Conversations */}
           <div className="flex-1 overflow-y-auto">
-            {mockConversations.map((conv) => (
+            {(inbox.length ? groupConversations(inbox, user?.id) : mockConversations).map((conv: any) => (
               <button
                 key={conv.id}
                 onClick={() => setSelectedConversation(conv.id)}
@@ -175,14 +180,14 @@ export default function MessagesPage() {
 
           {/* Messages list */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {mockMessages.map((message) => (
+            {(inbox.length ? filterByConversation(inbox, selectedConversation, user?.id) : mockMessages).map((message: any) => (
               <div
                 key={message.id}
-                className={`flex ${message.sent ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${(message.senderId === user?.id || message.sent) ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`max-w-[70%] ${message.sent ? 'text-right' : 'text-left'}`}>
+                <div className={`max-w-[70%] ${(message.senderId === user?.id || message.sent) ? 'text-right' : 'text-left'}`}>
                   <div className={`rounded-lg px-4 py-2 ${
-                    message.sent 
+                    (message.senderId === user?.id || message.sent) 
                       ? 'bg-primary-blue text-white' 
                       : 'bg-gray-100 text-text-dark'
                   }`}>
@@ -190,9 +195,9 @@ export default function MessagesPage() {
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-text-gray">
-                      {new Date(message.timestamp).toLocaleString('sv-SE')}
+                      {new Date(message.createdAt || message.timestamp).toLocaleString('sv-SE')}
                     </span>
-                    {message.sent && (
+                    {(message.senderId === user?.id || message.sent) && (
                       message.read ? (
                         <CheckCheck className="w-3 h-3 text-primary-blue" />
                       ) : (
@@ -224,14 +229,13 @@ export default function MessagesPage() {
                 className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors"
                 onClick={async () => {
                   if (!user || !messageText.trim()) return
+                  const [listingId, peerId] = (selectedConversation || '').split('::')
+                  if (!listingId || !peerId) return
                   try {
-                    await sendMessage({
-                      listingId: 'lst-001', // TODO: bind to current listing context if any
-                      senderId: user.id,
-                      recipientId: 'peer-id', // TODO: bind to selected peer
-                      content: messageText.trim()
-                    })
+                    await sendMessage({ listingId, senderId: user.id, recipientId: peerId, content: messageText.trim() })
                     setMessageText('')
+                    const res = await getMessages({ userId: user.id, listingId, peerId })
+                    setInbox(res.messages)
                   } catch (e) {}
                 }}
               >
@@ -248,4 +252,32 @@ export default function MessagesPage() {
       </div>
     </DashboardLayout>
   )
+}
+
+// Helpers to transform raw messages into conversation list
+function groupConversations(messages: any[], userId?: string | null) {
+  const map = new Map<string, any>()
+  for (const m of messages) {
+    const peerId = m.senderId === userId ? m.recipientId : m.senderId
+    const id = `${m.listingId}::${peerId}`
+    const existing = map.get(id)
+    const lastTime = new Date(m.createdAt).toLocaleDateString('sv-SE')
+    map.set(id, {
+      id,
+      contactName: 'Kontakt',
+      contactCompany: '',
+      listing: m.listingTitle || 'Objekt',
+      lastMessage: m.content,
+      lastMessageTime: lastTime,
+      unread: existing ? existing.unread : (m.read ? 0 : 1),
+      status: 'offline',
+    })
+  }
+  return Array.from(map.values()).reverse()
+}
+
+function filterByConversation(messages: any[], conversationId: string | null, userId?: string | null) {
+  if (!conversationId) return []
+  const [listingId, peerId] = conversationId.split('::')
+  return messages.filter(m => m.listingId === listingId && (m.senderId === peerId || m.recipientId === peerId))
 }

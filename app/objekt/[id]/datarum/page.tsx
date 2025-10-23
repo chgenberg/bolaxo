@@ -7,7 +7,7 @@ import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
 import { MessageCircle, Folder } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { getListingById, sendMessage } from '@/lib/api-client'
+import { getListingById, getMessages, sendMessage } from '@/lib/api-client'
 
 export default function DataroomPage() {
   const params = useParams()
@@ -21,18 +21,24 @@ export default function DataroomPage() {
 
   const [activeTab, setActiveTab] = useState<'dataroom' | 'qa'>('qa')
   const [question, setQuestion] = useState('')
+  const [messages, setMessages] = useState<any[]>([])
 
   useEffect(() => {
     const load = async () => {
       try {
         const listing = await getListingById(objectId)
         setObject(listing)
+        // Load existing Q&A messages between buyer and seller for this listing
+        if (user && listing?.user?.id) {
+          const res = await getMessages({ userId: user.id, listingId: objectId, peerId: listing.user.id })
+          setMessages(res.messages || [])
+        }
       } catch (e) {
         setObject(getObjectById(objectId))
       }
     }
     load()
-  }, [objectId])
+  }, [objectId, user])
 
   if (!object) {
     return <div>Objekt ej hittat</div>
@@ -122,6 +128,9 @@ export default function DataroomPage() {
         content: question.trim(),
       })
       setQuestion('')
+      // Refresh thread after sending
+      const res = await getMessages({ userId: user.id, listingId: objectId, peerId: object.user.id })
+      setMessages(res.messages || [])
     } catch (e) {}
   }
 
@@ -198,33 +207,13 @@ export default function DataroomPage() {
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Tidigare frågor & svar</h2>
               
-              {mockQA.map((qa) => (
-                <div key={qa.id} className={`card ${qa.pinned ? 'border-2 border-primary-blue' : ''}`}>
-                  {qa.pinned && (
-                    <div className="flex items-center text-primary-blue text-sm font-semibold mb-3">
-                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                      </svg>
-                      Pinnad av säljaren
-                    </div>
-                  )}
-                  
-                  <div className="mb-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-text-dark">Fråga:</h3>
-                      <span className="text-xs text-text-gray">{qa.date}</span>
-                    </div>
-                    <p className="text-text-gray">{qa.question}</p>
-                    <p className="text-xs text-text-gray mt-1">— {qa.askedBy}</p>
+              {messages.map((m) => (
+                <div key={m.id} className={`card`}>
+                  <div className="mb-1 flex items-center justify-between">
+                    <span className="text-sm font-semibold text-text-dark">{m.senderId === user?.id ? 'Du' : 'Säljaren'}</span>
+                    <span className="text-xs text-text-gray">{new Date(m.createdAt).toLocaleString('sv-SE')}</span>
                   </div>
-
-                  {qa.answer && (
-                    <div className="bg-light-blue p-4 rounded-xl">
-                      <div className="font-semibold text-sm text-primary-blue mb-2">Svar från {qa.answeredBy}:</div>
-                      <p className="text-text-dark">{qa.answer}</p>
-                    </div>
-                  )}
+                  <p className="text-text-dark whitespace-pre-wrap">{m.content}</p>
                 </div>
               ))}
             </div>
