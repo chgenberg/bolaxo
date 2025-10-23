@@ -125,7 +125,7 @@ export default function TeamPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-5 h-5 text-green-600" />
+              <TrendingUp className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {teamMembers.reduce((sum, m) => sum + m.activeDeals, 0)}
@@ -143,7 +143,7 @@ export default function TeamPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Award className="w-5 h-5 text-amber-600" />
+              <Award className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {Math.round(teamMembers.filter(m => m.conversionRate > 0).reduce((sum, m) => sum + m.conversionRate, 0) / teamMembers.filter(m => m.conversionRate > 0).length)}%

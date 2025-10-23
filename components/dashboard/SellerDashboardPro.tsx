@@ -103,7 +103,7 @@ export default function SellerDashboardPro() {
             <div className="p-3 bg-blue-50 rounded-lg">
               <TrendingUp className="w-6 h-6 text-primary-blue" />
             </div>
-            <span className="text-xs text-green-600 font-medium">+12.5%</span>
+            <span className="text-xs text-primary-blue font-medium">+12.5%</span>
           </div>
           <h3 className="text-2xl font-bold text-text-dark">{activeListings}</h3>
           <p className="text-sm text-text-gray mt-1">Aktiva annonser</p>
@@ -114,7 +114,7 @@ export default function SellerDashboardPro() {
             <div className="p-3 bg-blue-50 rounded-lg">
               <Eye className="w-6 h-6 text-primary-blue" />
             </div>
-            <span className="text-xs text-green-600 font-medium">+23.1%</span>
+            <span className="text-xs text-primary-blue font-medium">+23.1%</span>
           </div>
           <h3 className="text-2xl font-bold text-text-dark">{totalViews.toLocaleString('sv-SE')}</h3>
           <p className="text-sm text-text-gray mt-1">Totala visningar</p>
@@ -125,7 +125,7 @@ export default function SellerDashboardPro() {
             <div className="p-3 bg-blue-50 rounded-lg">
               <Shield className="w-6 h-6 text-primary-blue" />
             </div>
-            <span className="text-xs text-amber-600 font-medium">{totalNDAs} väntar</span>
+            <span className="text-xs text-primary-blue font-medium">{totalNDAs} väntar</span>
           </div>
           <h3 className="text-2xl font-bold text-text-dark">{totalNDAs}</h3>
           <p className="text-sm text-text-gray mt-1">NDA-förfrågningar</p>
@@ -136,7 +136,7 @@ export default function SellerDashboardPro() {
             <div className="p-3 bg-blue-50 rounded-lg">
               <BarChart3 className="w-6 h-6 text-primary-blue" />
             </div>
-            <span className="text-xs text-green-600 font-medium">+2.3%</span>
+            <span className="text-xs text-primary-blue font-medium">+2.3%</span>
           </div>
           <h3 className="text-2xl font-bold text-text-dark">{avgConversion}%</h3>
           <p className="text-sm text-text-gray mt-1">Konvertering</p>
@@ -282,7 +282,7 @@ export default function SellerDashboardPro() {
                         {listing.views.toLocaleString('sv-SE')}
                       </span>
                       <span className={`ml-2 text-xs ${
-                        listing.viewsTrend > 0 ? 'text-green-600' : listing.viewsTrend < 0 ? 'text-red-600' : 'text-gray-500'
+                        listing.viewsTrend !== 0 ? 'text-primary-blue' : 'text-gray-500'
                       }`}>
                         {listing.viewsTrend > 0 ? '+' : ''}{listing.viewsTrend}%
                       </span>
@@ -339,7 +339,7 @@ export default function SellerDashboardPro() {
                       {nda.buyerType}
                     </span>
                     {nda.buyerVerified && (
-                      <div className="flex items-center text-xs text-green-600">
+                      <div className="flex items-center text-xs text-primary-blue">
                         <CheckCircle className="w-3 h-3 mr-1" />
                         Verifierad
                       </div>

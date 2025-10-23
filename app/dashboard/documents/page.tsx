@@ -83,12 +83,12 @@ export default function DocumentsPage() {
 
   const getFileIcon = (type: string) => {
     const colors: Record<string, string> = {
-      pdf: 'text-red-600',
-      excel: 'text-green-600',
-      word: 'text-blue-600',
-      powerpoint: 'text-orange-600',
+      pdf: 'text-primary-blue',
+      excel: 'text-primary-blue',
+      word: 'text-primary-blue',
+      powerpoint: 'text-primary-blue',
     }
-    const colorClass = colors[type] ?? 'text-gray-600'
+    const colorClass = colors[type] ?? 'text-primary-blue'
     return <FileText className={`w-5 h-5 ${colorClass}`} />
   }
 

@@ -110,8 +110,8 @@ export default function ComparePage() {
   const getValueColor = (value: number, allValues: number[]) => {
     const max = Math.max(...allValues)
     const min = Math.min(...allValues)
-    if (value === max) return 'text-green-600 font-semibold'
-    if (value === min) return 'text-red-600'
+    if (value === max) return 'text-primary-blue font-semibold'
+    if (value === min) return 'text-primary-blue'
     return 'text-text-dark'
   }
 
@@ -241,7 +241,7 @@ export default function ComparePage() {
                     <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Tillväxttakt</td>
                     {compareObjects.map((obj) => (
                       <td key={obj.id} className={`px-6 py-3 text-sm ${
-                        parseFloat(obj.growthRate) > 20 ? 'text-green-600 font-semibold' : 'text-text-dark'
+                        parseFloat(obj.growthRate) > 20 ? 'text-primary-blue font-semibold' : 'text-text-dark'
                       }`}>
                         {obj.growthRate}
                       </td>

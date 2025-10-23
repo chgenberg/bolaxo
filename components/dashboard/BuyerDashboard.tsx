@@ -78,7 +78,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
         <div className="bg-white p-4 rounded-lg border border-gray-100">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-text-gray">Godkända NDA</span>
-            <Shield className="w-4 h-4 text-green-600" />
+            <Shield className="w-4 h-4 text-primary-blue" />
           </div>
           <div className="text-2xl font-bold text-text-dark">{approvedNDAs.length}</div>
         </div>
@@ -86,7 +86,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
         <div className="bg-white p-4 rounded-lg border border-gray-100">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-text-gray">Väntande NDA</span>
-            <Clock className="w-4 h-4 text-amber-600" />
+            <Clock className="w-4 h-4 text-primary-blue" />
           </div>
           <div className="text-2xl font-bold text-text-dark">{pendingNDAs.length}</div>
         </div>

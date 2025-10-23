@@ -167,7 +167,7 @@ export default function DealsPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <DollarSign className="w-5 h-5 text-green-600" />
+              <DollarSign className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {(deals.reduce((sum, d) => sum + d.value, 0) / 1000000).toFixed(0)} MSEK
@@ -185,7 +185,7 @@ export default function DealsPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Clock className="w-5 h-5 text-amber-600" />
+              <Clock className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {deals.filter(d => d.status === 'closing_soon').length}

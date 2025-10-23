@@ -224,15 +224,15 @@ function BuyerHero({ showMap, setShowMap }: { showMap: boolean; setShowMap: (sho
         {/* Trust Indicators - Bottom */}
         <div className="flex flex-wrap items-center justify-center gap-8">
           <div className="flex items-center space-x-2">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+            <CheckCircle className="w-5 h-5 text-primary-blue" />
             <span className="text-sm text-text-gray">Verifierade säljare</span>
           </div>
           <div className="flex items-center space-x-2">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+            <CheckCircle className="w-5 h-5 text-primary-blue" />
             <span className="text-sm text-text-gray">NDA-skyddad data</span>
           </div>
           <div className="flex items-center space-x-2">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+            <CheckCircle className="w-5 h-5 text-primary-blue" />
             <span className="text-sm text-text-gray">Smart matchning på 5 min</span>
           </div>
         </div>

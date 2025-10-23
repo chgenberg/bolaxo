@@ -110,7 +110,7 @@ export default function NDAStatusPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+              <CheckCircle className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {ndaRequests.filter(r => r.status === 'approved').length}
@@ -119,7 +119,7 @@ export default function NDAStatusPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Clock className="w-5 h-5 text-amber-600" />
+              <Clock className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {ndaRequests.filter(r => r.status === 'pending').length}
@@ -190,7 +190,7 @@ export default function NDAStatusPage() {
                     {request.approvedAt && (
                       <div>
                         <p className="text-xs text-text-gray mb-1">Godkänd</p>
-                        <p className="text-sm font-medium text-green-600">
+                        <p className="text-sm font-medium text-primary-blue">
                           {new Date(request.approvedAt).toLocaleDateString('sv-SE')}
                         </p>
                       </div>
@@ -198,7 +198,7 @@ export default function NDAStatusPage() {
                     {request.rejectedAt && (
                       <div>
                         <p className="text-xs text-text-gray mb-1">Avslagen</p>
-                        <p className="text-sm font-medium text-red-600">
+                        <p className="text-sm font-medium text-primary-blue">
                           {new Date(request.rejectedAt).toLocaleDateString('sv-SE')}
                         </p>
                       </div>

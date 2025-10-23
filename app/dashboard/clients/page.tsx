@@ -136,7 +136,7 @@ export default function ClientsPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Building className="w-5 h-5 text-green-600" />
+              <Building className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {mockClients.filter(c => c.activeDeals > 0).length}
@@ -154,7 +154,7 @@ export default function ClientsPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Users className="w-5 h-5 text-purple-600" />
+              <Users className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {mockClients.filter(c => c.type === 'buyer').length}

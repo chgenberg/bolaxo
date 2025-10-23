@@ -115,7 +115,7 @@ export default function AdvisorDashboardNew({ userId }: AdvisorDashboardNewProps
         
         <div className="space-y-3">
           {[
-            { type: 'NDA godkänd', company: 'Tech-bolag Stockholm', time: '2 tim sedan', icon: CheckCircle, color: 'text-green-600' },
+            { type: 'NDA godkänd', company: 'Tech-bolag Stockholm', time: '2 tim sedan', icon: CheckCircle, color: 'text-primary-blue' },
             { type: 'Nytt dokument', company: 'E-handel Göteborg', time: '5 tim sedan', icon: FileText, color: 'text-primary-blue' },
             { type: 'Möte bokat', company: 'Restaurang Malmö', time: '1 dag sedan', icon: Clock, color: 'text-amber-600' }
           ].map((activity, i) => (

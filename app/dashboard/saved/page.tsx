@@ -144,14 +144,14 @@ export default function SavedListingsPage() {
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <Bookmark className="w-5 h-5 text-primary-blue" />
-              <span className="text-xs text-green-600 font-medium">+2</span>
+              <span className="text-xs text-primary-blue font-medium">+2</span>
             </div>
             <p className="text-2xl font-bold text-text-dark">{savedListings.length}</p>
             <p className="text-xs text-text-gray">Sparade objekt</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Eye className="w-5 h-5 text-green-600" />
+              <Eye className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">
               {savedListings.filter(l => l.ndaStatus === 'approved').length}
@@ -169,7 +169,7 @@ export default function SavedListingsPage() {
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <MessageSquare className="w-5 h-5 text-amber-600" />
+              <MessageSquare className="w-5 h-5 text-primary-blue" />
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
             </div>
             <p className="text-2xl font-bold text-text-dark">

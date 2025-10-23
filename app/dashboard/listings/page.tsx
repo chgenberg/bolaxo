@@ -149,7 +149,7 @@ export default function ListingsPage() {
                         <Eye className="w-4 h-4 text-text-gray" />
                         <span className="text-sm font-medium text-text-dark">{listing.views.toLocaleString('sv-SE')}</span>
                         {listing.viewsToday > 0 && (
-                          <span className="text-xs text-green-600">+{listing.viewsToday} idag</span>
+                          <span className="text-xs text-primary-blue">+{listing.viewsToday} idag</span>
                         )}
                       </div>
                     </div>

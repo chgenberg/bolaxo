@@ -127,21 +127,21 @@ export default function NDAsPage() {
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <Shield className="w-5 h-5 text-primary-blue" />
-              <span className="text-xs text-amber-600 font-medium">2 nya</span>
+              <span className="text-xs text-primary-blue font-medium">2 nya</span>
             </div>
             <p className="text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'pending').length}</p>
             <p className="text-xs text-text-gray">Väntande</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+              <CheckCircle className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'approved').length}</p>
             <p className="text-xs text-text-gray">Godkända</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <XCircle className="w-5 h-5 text-red-600" />
+              <XCircle className="w-5 h-5 text-primary-blue" />
             </div>
             <p className="text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
             <p className="text-xs text-text-gray">Avslagna</p>
@@ -223,9 +223,9 @@ export default function NDAsPage() {
                       <p className="text-xs text-text-gray mb-1">Verifiering</p>
                       <p className="text-sm font-medium text-text-dark">
                         {nda.verificationStatus === 'bankid_verified' ? (
-                          <span className="text-green-600">BankID verifierad</span>
+                          <span className="text-primary-blue">BankID verifierad</span>
                         ) : (
-                          <span className="text-amber-600">Endast e-post</span>
+                          <span className="text-text-gray">Endast e-post</span>
                         )}
                       </p>
                     </div>
@@ -274,13 +274,13 @@ export default function NDAsPage() {
                     {nda.approvedAt && (
                       <>
                         <span>•</span>
-                        <span className="text-green-600">Godkänd: {new Date(nda.approvedAt).toLocaleString('sv-SE')}</span>
+                        <span className="text-primary-blue">Godkänd: {new Date(nda.approvedAt).toLocaleString('sv-SE')}</span>
                       </>
                     )}
                     {nda.rejectedAt && (
                       <>
                         <span>•</span>
-                        <span className="text-red-600">Avslagen: {new Date(nda.rejectedAt).toLocaleString('sv-SE')}</span>
+                        <span className="text-primary-blue">Avslagen: {new Date(nda.rejectedAt).toLocaleString('sv-SE')}</span>
                       </>
                     )}
                   </div>

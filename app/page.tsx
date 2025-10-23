@@ -152,7 +152,7 @@ export default function HomePage() {
             <Link href="/salja/start" className="btn-primary bg-white text-primary-blue hover:bg-gray-100">
               Börja sälja nu
             </Link>
-            <Link href="/priser" className="btn-secondary border-white text-white hover:bg-white/10">
+            <Link href="/priser" className="btn-secondary border-white text-primary-blue hover:bg-white/10">
               Se priser
             </Link>
           </div>

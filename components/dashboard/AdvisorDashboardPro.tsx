@@ -127,7 +127,7 @@ export default function AdvisorDashboardPro() {
             <div className="p-3 bg-blue-50 rounded-lg">
               <TrendingUp className="w-6 h-6 text-primary-blue" />
             </div>
-            <span className="text-xs text-green-600 font-medium">+15%</span>
+            <span className="text-xs text-primary-blue font-medium">+15%</span>
           </div>
           <h3 className="text-2xl font-bold text-text-dark">{(avgDealSize / 1000000).toFixed(1)} MSEK</h3>
           <p className="text-sm text-text-gray mt-1">Genomsnittlig affär</p>
@@ -356,7 +356,7 @@ export default function AdvisorDashboardPro() {
                 type: 'deal_update', 
                 text: 'Tech Innovations AB flyttade till DD-fas', 
                 icon: TrendingUp, 
-                color: 'text-green-600' 
+                color: 'text-primary-blue' 
               },
               { 
                 time: '11:45', 
@@ -370,14 +370,14 @@ export default function AdvisorDashboardPro() {
                 type: 'document', 
                 text: 'LOI mottaget för SaaS-affären', 
                 icon: FileText, 
-                color: 'text-purple-600' 
+                color: 'text-primary-blue' 
               },
               { 
                 time: 'Igår', 
                 type: 'alert', 
                 text: 'Byggmästaren i Syd - inväntar svar på teaser', 
                 icon: AlertCircle, 
-                color: 'text-amber-600' 
+                color: 'text-primary-blue' 
               }
             ].map((activity, i) => (
               <div key={i} className="flex items-start gap-3">

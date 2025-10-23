@@ -96,7 +96,7 @@ export default function AnalyticsPage() {
           <div className="bg-white p-6 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <Eye className="w-8 h-8 text-primary-blue" />
-              <span className="text-sm text-green-600 font-medium">+23%</span>
+              <span className="text-sm text-primary-blue font-medium">+23%</span>
             </div>
             <p className="text-2xl font-bold text-text-dark">4 132</p>
             <p className="text-sm text-text-gray">Totala visningar</p>
@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
           <div className="bg-white p-6 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <Users className="w-8 h-8 text-primary-blue" />
-              <span className="text-sm text-green-600 font-medium">+15%</span>
+              <span className="text-sm text-primary-blue font-medium">+15%</span>
             </div>
             <p className="text-2xl font-bold text-text-dark">2 847</p>
             <p className="text-sm text-text-gray">Unika besökare</p>
@@ -114,7 +114,7 @@ export default function AnalyticsPage() {
           <div className="bg-white p-6 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-4">
               <TrendingUp className="w-8 h-8 text-primary-blue" />
-              <span className="text-sm text-green-600 font-medium">+2.3%</span>
+              <span className="text-sm text-primary-blue font-medium">+2.3%</span>
             </div>
             <p className="text-2xl font-bold text-text-dark">6.5%</p>
             <p className="text-sm text-text-gray">Konverteringsgrad</p>
