@@ -78,7 +78,7 @@ model Listing {
   // Company Info
   companyName     String?
   anonymousTitle  String   // User-editable anonymous title
-  type            String   // Restaurang, E-handel, etc
+  type            String   @default("Icke specifierad") // Restaurang, E-handel, etc
   category        String?  // More specific category
   industry        String
   orgNumber       String?
@@ -86,20 +86,20 @@ model Listing {
   
   // Location
   location        String   // City
-  region          String   // Full region string
+  region          String   @default("Okänd region") // Full region string
   address         String?  // Full address (NDA-locked)
   
   // Financials
-  revenue         Int      // Revenue in SEK
-  revenueRange    String   // e.g. "5-10 MSEK"
-  priceMin        Int      // Min price in SEK
-  priceMax        Int      // Max price in SEK
+  revenue         Int      @default(0) // Revenue in SEK
+  revenueRange    String   @default("Okänd") // e.g. "5-10 MSEK"
+  priceMin        Int      @default(0) // Min price in SEK
+  priceMax        Int      @default(0) // Max price in SEK
   ebitda          Int?     // EBITDA in SEK
-  employees       Int      // Number of employees
+  employees       Int      @default(0) // Number of employees
   foundedYear     Int?
   
   // Description & Qualitative
-  description     String   @db.Text
+  description     String   @default("") @db.Text
   strengths       String[] // Array of 3 strengths
   risks           String[] // Array of 3 risks
   whySelling      String?  @db.Text // Why selling
@@ -121,7 +121,7 @@ model Listing {
   
   // Timestamps
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  updatedAt       DateTime @default(now()) @updatedAt
   publishedAt     DateTime?
   expiresAt       DateTime?
   
