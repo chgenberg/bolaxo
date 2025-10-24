@@ -4,7 +4,7 @@ import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from '@/components/FormField'
-import { Mail, CheckCircle, AlertCircle, Building, Search, Handshake } from 'lucide-react'
+import { Mail, CheckCircle, AlertCircle, Building, Search, Handshake, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 function LoginForm() {
@@ -19,10 +19,7 @@ function LoginForm() {
   const [magicLink, setMagicLink] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  // Hantera error från URL (t.ex. invalid/expired token)
   const urlError = searchParams?.get('error')
-  
-  // Hantera referral code från URL
   const referralCode = searchParams?.get('ref')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,7 +38,7 @@ function LoginForm() {
     if (result.success) {
       setLinkSent(true)
       if (result.magicLink) {
-        setMagicLink(result.magicLink) // Visa i dev-mode
+        setMagicLink(result.magicLink)
       }
     } else {
       setError(result.message || 'Något gick fel')
@@ -52,22 +49,23 @@ function LoginForm() {
 
   if (linkSent) {
     return (
-      <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center p-4">
-        <div className="bg-white p-12 rounded-2xl shadow-card max-w-md text-center">
-          <div className="w-20 h-20 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-6">
-            <Mail className="w-10 h-10 text-primary-blue" />
+      <main className="min-h-screen bg-neutral-white py-12 sm:py-16 md:py-24 flex items-center justify-center px-4">
+        <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card max-w-md w-full text-center border border-gray-200">
+          <div className="w-20 h-20 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+            <Mail className="w-10 h-10 text-accent-pink" />
           </div>
-          <h1 className="heading-2 mb-4">Kolla din inkorg!</h1>
-          <p className="text-text-gray mb-6">
+          
+          <h1 className="text-3xl sm:text-4xl font-bold text-accent-orange mb-2">Kolla din inkorg!</h1>
+          <p className="text-lg text-primary-navy mb-6">
             Vi har skickat en inloggningslänk till <strong>{email}</strong>
           </p>
-          <p className="text-sm text-text-gray mb-8">
+          <p className="text-sm text-gray-600 mb-8">
             Länken är giltig i 1 timme. Klicka på länken i mailet för att logga in.
           </p>
           
           {magicLink && (
-            <div className="bg-blue-50 border-2 border-primary-blue/40 p-6 rounded-xl mb-6 animate-fade-in">
-              <p className="text-sm font-semibold text-primary-blue mb-3 flex items-center justify-center">
+            <div className="bg-accent-orange/5 border-2 border-accent-orange/30 p-6 rounded-lg mb-6 animate-fade-in">
+              <p className="text-sm font-semibold text-primary-navy mb-3 flex items-center justify-center">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Demo-läge – magisk länk genererad
               </p>
@@ -76,7 +74,7 @@ function LoginForm() {
               </p>
               <a 
                 href={magicLink}
-                className="block w-full bg-primary-blue text-white py-4 px-6 rounded-xl font-bold text-center hover:shadow-lg transition-all text-base"
+                className="block w-full bg-accent-pink text-primary-navy py-3 px-6 rounded-lg font-bold text-center hover:shadow-lg transition-all text-base"
               >
                 Logga in direkt
               </a>
@@ -91,9 +89,9 @@ function LoginForm() {
               setLinkSent(false)
               setEmail('')
             }}
-            className="btn-ghost"
+            className="text-accent-orange font-semibold hover:text-accent-orange/80 transition-colors"
           >
-            Skicka ny länk
+            ← Skicka ny länk
           </button>
         </div>
       </main>
@@ -101,19 +99,21 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
-      <div className="max-w-md mx-auto px-3 sm:px-4">
-        <div className="bg-white p-8 rounded-2xl shadow-card">
+    <main className="min-h-screen bg-neutral-white py-8 sm:py-12 md:py-16">
+      <div className="max-w-md mx-auto px-4 sm:px-6">
+        <div className="bg-white p-8 sm:p-10 rounded-lg shadow-card border border-gray-200">
+          {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="heading-2 mb-2">Logga in eller skapa konto</h1>
-            <p className="text-text-gray">
+            <h1 className="text-3xl sm:text-4xl font-bold text-accent-orange mb-2">Logga in</h1>
+            <p className="text-lg text-primary-navy">
               Ingen lösenord behövs – vi skickar en magisk länk
             </p>
           </div>
 
+          {/* Errors */}
           {urlError && (
-            <div className="bg-red-50 border border-red-200 p-4 rounded-xl mb-6 flex items-start">
-              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
+            <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6 flex items-start">
+              <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-red-800">
                 {urlError === 'invalid_token' && 'Ogiltig eller redan använd inloggningslänk'}
                 {urlError === 'expired_token' && 'Inloggningslänken har gått ut. Begär en ny.'}
@@ -123,8 +123,8 @@ function LoginForm() {
           )}
 
           {error && (
-            <div className="bg-red-50 border border-red-200 p-4 rounded-xl mb-6 flex items-start">
-              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
+            <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6 flex items-start">
+              <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-red-800">{error}</div>
             </div>
           )}
@@ -132,15 +132,16 @@ function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Role Selection */}
             <div>
-              <label className="block text-sm font-medium text-text-dark mb-3">
-                Jag är:
+              <label className="block text-sm font-semibold text-primary-navy mb-4">
+                Du är:
               </label>
               <div className="space-y-3">
+                {/* Seller */}
                 <div
                   onClick={() => setSelectedRole('seller')}
-                  className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                     selectedRole === 'seller'
-                      ? 'border-primary-blue bg-light-blue'
+                      ? 'border-accent-pink bg-accent-pink/5'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -149,18 +150,19 @@ function LoginForm() {
                       type="radio"
                       checked={selectedRole === 'seller'}
                       onChange={() => setSelectedRole('seller')}
-                      className="w-4 h-4 text-primary-blue mr-3"
+                      className="w-5 h-5 accent-accent-pink mr-3"
                     />
-                    <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" />
-                    <span className="font-semibold">Säljare</span>
+                    <Building className="w-5 h-5 text-accent-orange mr-2" />
+                    <span className="font-semibold text-primary-navy">Säljare</span>
                   </div>
                 </div>
 
+                {/* Buyer */}
                 <div
                   onClick={() => setSelectedRole('buyer')}
-                  className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                     selectedRole === 'buyer'
-                      ? 'border-primary-blue bg-light-blue'
+                      ? 'border-accent-pink bg-accent-pink/5'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -169,18 +171,19 @@ function LoginForm() {
                       type="radio"
                       checked={selectedRole === 'buyer'}
                       onChange={() => setSelectedRole('buyer')}
-                      className="w-4 h-4 text-primary-blue mr-3"
+                      className="w-5 h-5 accent-accent-pink mr-3"
                     />
-                    <Search className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" />
-                    <span className="font-semibold">Köpare</span>
+                    <Search className="w-5 h-5 text-accent-orange mr-2" />
+                    <span className="font-semibold text-primary-navy">Köpare</span>
                   </div>
                 </div>
 
+                {/* Broker */}
                 <div
                   onClick={() => setSelectedRole('broker')}
-                  className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                     selectedRole === 'broker'
-                      ? 'border-primary-blue bg-light-blue'
+                      ? 'border-accent-pink bg-accent-pink/5'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -189,10 +192,10 @@ function LoginForm() {
                       type="radio"
                       checked={selectedRole === 'broker'}
                       onChange={() => setSelectedRole('broker')}
-                      className="w-4 h-4 text-primary-blue mr-3"
+                      className="w-5 h-5 accent-accent-pink mr-3"
                     />
-                    <Handshake className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" />
-                    <span className="font-semibold">Mäklare</span>
+                    <Handshake className="w-5 h-5 text-accent-orange mr-2" />
+                    <span className="font-semibold text-primary-navy">Mäklare</span>
                   </div>
                 </div>
               </div>
@@ -209,21 +212,21 @@ function LoginForm() {
             />
 
             {/* Privacy Policy */}
-            <div className="flex items-start">
+            <div className="flex items-start gap-3">
               <input
                 type="checkbox"
                 id="privacy"
                 checked={acceptedPrivacy}
                 onChange={(e) => setAcceptedPrivacy(e.target.checked)}
-                className="mt-1 w-4 h-4 text-primary-blue border-gray-300 rounded focus:ring-primary-blue"
+                className="mt-1 w-5 h-5 accent-accent-pink border-gray-300 rounded"
               />
-              <label htmlFor="privacy" className="ml-3 text-sm text-text-gray">
+              <label htmlFor="privacy" className="text-sm text-gray-700 leading-relaxed">
                 Jag godkänner{' '}
-                <Link href="/juridiskt/integritetspolicy" className="text-primary-blue hover:underline" target="_blank">
+                <Link href="/juridiskt/integritetspolicy" className="text-accent-orange hover:underline font-semibold" target="_blank">
                   integritetspolicyn
                 </Link>{' '}
                 och{' '}
-                <Link href="/juridiskt/anvandarvillkor" className="text-primary-blue hover:underline" target="_blank">
+                <Link href="/juridiskt/anvandarvillkor" className="text-accent-orange hover:underline font-semibold" target="_blank">
                   användarvillkoren
                 </Link>
               </label>
@@ -233,22 +236,33 @@ function LoginForm() {
             <button
               type="submit"
               disabled={!email || !acceptedPrivacy || isSubmitting}
-              className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
             >
               {isSubmitting ? 'Skickar...' : 'Skicka inloggningslänk'}
+              {!isSubmitting && <ArrowRight className="w-5 h-5" />}
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="bg-light-blue p-4 rounded-xl">
-              <div className="flex items-start">
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-3 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-text-gray">
-                  <strong>Inget lösenord</strong> att komma ihåg. Vi skickar en säker inloggningslänk 
-                  direkt till din inkorg. Klicka på länken för att logga in.
+          {/* Info Box */}
+          <div className="mt-8 pt-8 border-t border-gray-200">
+            <div className="bg-accent-orange/5 p-5 rounded-lg border border-accent-orange/20">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-accent-orange mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-primary-navy">
+                  <strong className="text-accent-orange">Säkert och enkelt.</strong> Vi skickar en magisk inloggningslänk direkt till din inkorg. Du behöver aldrig komma ihåg ett lösenord.
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Sign Up Link */}
+          <div className="mt-6 text-center text-sm">
+            <p className="text-gray-600">
+              Ny användare?{' '}
+              <Link href="/registrera" className="text-accent-orange font-semibold hover:underline">
+                Registrera dig här
+              </Link>
+            </p>
           </div>
         </div>
       </div>
@@ -259,8 +273,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-neutral-white flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-accent-pink border-t-transparent rounded-full animate-spin"></div>
       </div>
     }>
       <LoginForm />
