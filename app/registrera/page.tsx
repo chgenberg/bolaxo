@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePaymentStore, UserRole } from '@/store/paymentStore'
 import FormField from '@/components/FormField'
-import { Building, Handshake, Search } from 'lucide-react'
+import { Building, Handshake, Search, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -16,7 +16,6 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [emailVerified, setEmailVerified] = useState(false)
   
-  // Profile data
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [companyName, setCompanyName] = useState('')
@@ -29,23 +28,19 @@ export default function RegisterPage() {
   }
 
   const handleEmailPassword = () => {
-    // Mock email verification
     setEmailVerified(true)
     setStep(2)
   }
 
   const handleBankId = () => {
-    // Mock BankID login
     setEmailVerified(true)
     setStep(2)
   }
 
   const handleProfileSubmit = () => {
     if (selectedRole === 'broker') {
-      // Broker requires BankID
       setStep(3)
     } else {
-      // Create user and proceed
       createUserAndProceed(false)
     }
   }
@@ -70,7 +65,6 @@ export default function RegisterPage() {
 
     setUser(user)
 
-    // Redirect based on role
     if (selectedRole === 'seller') {
       router.push('/salja/start')
     } else if (selectedRole === 'broker') {
@@ -81,107 +75,116 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
-      <div className="max-w-2xl mx-auto px-3 sm:px-4">
+    <main className="min-h-screen bg-neutral-white py-8 sm:py-12 md:py-16">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6">
         {step === 1 && (
-          <div className="card animate-pulse-soft">
-            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3 text-center">
-              Skapa konto
-            </h1>
-            <p className="text-text-gray mb-8 text-center">
-              Välj vem du är för att komma igång
-            </p>
+          <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card border border-gray-200">
+            <div className="text-center mb-10">
+              <h1 className="text-4xl font-bold text-accent-orange mb-2">Skapa konto</h1>
+              <p className="text-lg text-primary-navy">
+                Välj din roll för att komma igång
+              </p>
+            </div>
 
             {/* Role Selection */}
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-10">
+              {/* Seller */}
               <div
                 onClick={() => handleRoleSelect('seller')}
-                className={`p-6 border-2 rounded-xl cursor-pointer transition-all ${
+                className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
                   selectedRole === 'seller'
-                    ? 'border-primary-blue bg-light-blue'
+                    ? 'border-accent-pink bg-accent-pink/5'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="flex items-start">
-                  <input
-                    type="radio"
-                    checked={selectedRole === 'seller'}
-                    onChange={() => handleRoleSelect('seller')}
-                    className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
-                  />
-                  <div className="ml-4 flex items-center">
-                    <Building className="w-6 h-6 text-primary-blue mr-3" />
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Jag vill sälja</h3>
-                      <p className="text-sm text-text-gray">
-                        Skapa en annons för ditt företag. Kan vara helt anonymt tills NDA.
-                      </p>
+                <div className="flex items-start gap-4">
+                  <div>
+                    <input
+                      type="radio"
+                      checked={selectedRole === 'seller'}
+                      onChange={() => handleRoleSelect('seller')}
+                      className="w-5 h-5 accent-accent-pink"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Building className="w-6 h-6 text-accent-orange" />
+                      <h3 className="text-lg font-bold text-primary-navy">Jag vill sälja</h3>
                     </div>
+                    <p className="text-gray-700">
+                      Skapa en annons för ditt företag. Kan vara helt anonymt tills NDA.
+                    </p>
                   </div>
                 </div>
               </div>
 
+              {/* Broker */}
               <div
                 onClick={() => handleRoleSelect('broker')}
-                className={`p-6 border-2 rounded-xl cursor-pointer transition-all ${
+                className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
                   selectedRole === 'broker'
-                    ? 'border-primary-blue bg-light-blue'
+                    ? 'border-accent-pink bg-accent-pink/5'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="flex items-start">
-                  <input
-                    type="radio"
-                    checked={selectedRole === 'broker'}
-                    onChange={() => handleRoleSelect('broker')}
-                    className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
-                  />
-                  <div className="ml-4 flex items-center">
-                    <Handshake className="w-6 h-6 text-primary-blue mr-3" />
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Jag är företagsmäklare</h3>
-                      <p className="text-sm text-text-gray">
-                        Hantera flera annonser åt dina kunder. BankID-verifiering krävs.
-                      </p>
+                <div className="flex items-start gap-4">
+                  <div>
+                    <input
+                      type="radio"
+                      checked={selectedRole === 'broker'}
+                      onChange={() => handleRoleSelect('broker')}
+                      className="w-5 h-5 accent-accent-pink"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Handshake className="w-6 h-6 text-accent-orange" />
+                      <h3 className="text-lg font-bold text-primary-navy">Jag är mäklare</h3>
                     </div>
+                    <p className="text-gray-700">
+                      Hantera flera annonser åt dina kunder. BankID-verifiering krävs.
+                    </p>
                   </div>
                 </div>
               </div>
 
+              {/* Buyer */}
               <div
                 onClick={() => handleRoleSelect('buyer')}
-                className={`p-6 border-2 rounded-xl cursor-pointer transition-all ${
+                className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
                   selectedRole === 'buyer'
-                    ? 'border-primary-blue bg-light-blue'
+                    ? 'border-accent-pink bg-accent-pink/5'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
-                <div className="flex items-start">
-                  <input
-                    type="radio"
-                    checked={selectedRole === 'buyer'}
-                    onChange={() => handleRoleSelect('buyer')}
-                    className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
-                  />
-                  <div className="ml-4 flex items-center">
-                    <Search className="w-6 h-6 text-primary-blue mr-3" />
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Jag är köpare</h3>
-                      <p className="text-sm text-text-gray">
-                        Sök företag att köpa. Helt gratis att skapa konto och bevaka objekt.
-                      </p>
+                <div className="flex items-start gap-4">
+                  <div>
+                    <input
+                      type="radio"
+                      checked={selectedRole === 'buyer'}
+                      onChange={() => handleRoleSelect('buyer')}
+                      className="w-5 h-5 accent-accent-pink"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Search className="w-6 h-6 text-accent-orange" />
+                      <h3 className="text-lg font-bold text-primary-navy">Jag är köpare</h3>
                     </div>
+                    <p className="text-gray-700">
+                      Sök företag att köpa. Helt gratis att skapa konto och bevaka objekt.
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             {selectedRole && (
-              <div className="space-y-4 border-t border-gray-200 pt-6">
-                <h2 className="font-semibold text-lg mb-4">Logga in eller skapa konto</h2>
+              <div className="space-y-6 border-t border-gray-200 pt-8">
+                <h2 className="text-2xl font-bold text-accent-orange">Logga in eller skapa konto</h2>
                 
                 <FormField
-                  label="E-post"
+                  label="E-postadress"
                   name="email"
                   type="email"
                   placeholder="din@epost.se"
@@ -203,9 +206,10 @@ export default function RegisterPage() {
                 <button
                   onClick={handleEmailPassword}
                   disabled={!email || !password}
-                  className="btn-primary w-full"
+                  className="w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
                 >
-                  Skapa konto med e-post →
+                  Skapa konto med e-post
+                  <ArrowRight className="w-5 h-5" />
                 </button>
 
                 <div className="relative my-6">
@@ -213,18 +217,21 @@ export default function RegisterPage() {
                     <div className="w-full border-t border-gray-300"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-3 sm:px-4 bg-white text-text-gray">eller</span>
+                    <span className="px-4 bg-white text-gray-600 font-medium">eller</span>
                   </div>
                 </div>
 
-                <button onClick={handleBankId} className="w-full btn-secondary">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button 
+                  onClick={handleBankId} 
+                  className="w-full py-3 px-6 border-2 border-accent-orange text-primary-navy font-bold rounded-lg hover:bg-accent-orange/5 transition-all inline-flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                   BankID (rekommenderas)
                 </button>
 
-                <p className="text-xs text-text-gray text-center">
+                <p className="text-xs text-gray-600 text-center">
                   Genom att skapa konto godkänner du våra användarvillkor och integritetspolicy
                 </p>
               </div>
@@ -233,15 +240,15 @@ export default function RegisterPage() {
         )}
 
         {step === 2 && selectedRole && (
-          <div className="card">
-            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">
-              Komplettera din profil
-            </h1>
-            <p className="text-text-gray mb-8">
-              {selectedRole === 'seller' && 'Berätta kort om dig och ditt företag'}
-              {selectedRole === 'broker' && 'Uppgifter om din mäklarverksamhet'}
-              {selectedRole === 'buyer' && 'Dina preferenser (valfritt, hjälper oss ge bättre förslag)'}
-            </p>
+          <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card border border-gray-200">
+            <div className="text-center mb-10">
+              <h1 className="text-4xl font-bold text-accent-orange mb-2">Komplettera profil</h1>
+              <p className="text-lg text-primary-navy">
+                {selectedRole === 'seller' && 'Berätta kort om dig och ditt företag'}
+                {selectedRole === 'broker' && 'Uppgifter om din mäklarverksamhet'}
+                {selectedRole === 'buyer' && 'Dina preferenser (valfritt, hjälper oss ge bättre förslag)'}
+              </p>
+            </div>
 
             <div className="space-y-6">
               <FormField
@@ -320,8 +327,9 @@ export default function RegisterPage() {
                     onValueChange={setBrokerWebsite}
                   />
 
-                  <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-xl">
-                    <p className="text-sm text-yellow-800">
+                  <div className="bg-accent-orange/5 border border-accent-orange/20 p-5 rounded-lg flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                    <p className="text-sm text-primary-navy">
                       BankID-verifiering krävs för mäklarlicens (personlig licensiering)
                     </p>
                   </div>
@@ -329,60 +337,81 @@ export default function RegisterPage() {
               )}
 
               {selectedRole === 'buyer' && (
-                <div className="bg-light-blue p-4 rounded-xl">
-                  <p className="text-sm text-text-gray">
+                <div className="bg-accent-pink/5 p-5 rounded-lg border border-accent-pink/20 flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-primary-navy">
                     Som köpare är kontot helt gratis. Du fyller i dina preferenser i nästa steg.
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="flex gap-3 mt-8">
-              <button onClick={() => setStep(1)} className="btn-ghost flex-1">
+            <div className="flex gap-4 mt-10">
+              <button 
+                onClick={() => setStep(1)} 
+                className="flex-1 py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg hover:bg-primary-navy/5 transition-all inline-flex items-center justify-center gap-2"
+              >
                 ← Tillbaka
               </button>
               <button
                 onClick={handleProfileSubmit}
-                className="btn-primary flex-1"
                 disabled={!name || !phone || (selectedRole === 'broker' && (!companyName || !orgNumber))}
+                className="flex-1 py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
               >
-                {selectedRole === 'broker' ? 'Fortsätt till BankID' : 'Skapa konto'} →
+                {selectedRole === 'broker' ? 'Fortsätt till BankID' : 'Skapa konto'}
+                <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           </div>
         )}
 
         {step === 3 && selectedRole === 'broker' && (
-          <div className="card text-center">
-            <div className="w-20 h-20 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card border border-gray-200 text-center">
+            <div className="w-20 h-20 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+              <svg className="w-12 h-12 text-accent-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
-              BankID-verifiering krävs
-            </h1>
-            <p className="text-text-gray mb-8">
+            <h1 className="text-4xl font-bold text-accent-orange mb-3">BankID-verifiering</h1>
+            <p className="text-lg text-primary-navy mb-8">
               Mäklarlicenser är personbundna och kräver BankID-verifiering för att säkerställa legitimitet.
             </p>
 
-            <div className="bg-light-blue p-6 rounded-xl mb-8 text-left">
-              <h3 className="font-semibold mb-3">Vad som verifieras:</h3>
-              <ul className="space-y-2 text-sm text-text-gray">
-                <li>• Personlig identitet (personnummer)</li>
-                <li>• Koppling till mäklarföretaget</li>
-                <li>• Behörighet att teckna avtal</li>
+            <div className="bg-accent-orange/5 p-6 rounded-lg mb-8 text-left border border-accent-orange/20">
+              <h3 className="font-bold text-primary-navy mb-4">Vad som verifieras:</h3>
+              <ul className="space-y-2 text-sm text-gray-700">
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                  <span>Personlig identitet (personnummer)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                  <span>Koppling till mäklarföretaget</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                  <span>Behörighet att teckna avtal</span>
+                </li>
               </ul>
             </div>
 
-            <button onClick={handleBankIdVerification} className="btn-primary w-full mb-4">
-              Verifiera med BankID
-            </button>
+            <div className="space-y-4">
+              <button 
+                onClick={handleBankIdVerification} 
+                className="w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all inline-flex items-center justify-center gap-2"
+              >
+                Verifiera med BankID
+                <ArrowRight className="w-5 h-5" />
+              </button>
 
-            <button onClick={() => setStep(2)} className="btn-ghost w-full">
-              ← Tillbaka
-            </button>
+              <button 
+                onClick={() => setStep(2)} 
+                className="w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg hover:bg-primary-navy/5 transition-all inline-flex items-center justify-center gap-2"
+              >
+                ← Tillbaka
+              </button>
+            </div>
           </div>
         )}
       </div>
