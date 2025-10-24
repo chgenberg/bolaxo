@@ -244,8 +244,12 @@ export default function NDAsPage() {
                   {/* Header */}
                   <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                     <div className="min-w-0">
-                      <h3 className="text-base sm:text-lg font-semibold text-text-dark mb-1 truncate">{nda.buyerName}</h3>
-                      <p className="text-xs sm:text-sm text-text-gray truncate">{nda.buyerCompany}</p>
+                      <h3 className="text-base sm:text-lg font-semibold text-text-dark mb-1 truncate">
+                        {nda.status === 'approved' ? nda.buyerName : 'Anonym köpare'}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-text-gray truncate">
+                        {nda.status === 'approved' ? nda.buyerCompany : nda.buyerType || 'Köparprofil'}
+                      </p>
                     </div>
                     {getStatusBadge(nda.status)}
                   </div>
@@ -287,6 +291,12 @@ export default function NDAsPage() {
                         )}
                       </p>
                     </div>
+                    {nda.status === 'approved' && (
+                      <div className="hidden md:block min-w-0">
+                        <p className="text-xs text-text-gray mb-1">Email</p>
+                        <p className="text-xs sm:text-sm font-medium text-text-dark truncate">{nda.buyerEmail}</p>
+                      </div>
+                    )}
                   </div>
 
                   {/* Footer */}

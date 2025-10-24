@@ -44,6 +44,25 @@ export async function POST(request: NextRequest) {
     }
 
     try {
+      // Check for existing NDA request (pending or approved)
+      const existing = await prisma.nDARequest.findFirst({
+        where: {
+          listingId,
+          buyerId,
+          status: { in: ['pending', 'approved'] }
+        }
+      })
+
+      if (existing) {
+        return NextResponse.json(
+          { 
+            error: 'Du har redan begärt NDA för denna annons',
+            existing: true
+          },
+          { status: 400 }
+        )
+      }
+
       const created = await prisma.nDARequest.create({
         data: {
           listingId,

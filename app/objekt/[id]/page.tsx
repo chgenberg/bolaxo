@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/contexts/ToastContext'
 import { Building, MapPin, Users, TrendingUp, Lock, CheckCircle, Clock, Mail, MessageSquare, Share2, Heart } from 'lucide-react'
 import Link from 'next/link'
 
@@ -39,6 +40,7 @@ interface NDAStatus {
 
 export default function ListingDetailPage() {
   const { user } = useAuth()
+  const { error: showError, success: showSuccess } = useToast()
   const params = useParams()
   const listingId = params.id as string
   
@@ -55,6 +57,16 @@ export default function ListingDetailPage() {
         if (response.ok) {
           const data = await response.json()
           setListing(data)
+          
+          // Increment view count
+          try {
+            await fetch(`/api/listings/${listingId}/views`, { 
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            })
+          } catch (e) {
+            console.error('Error incrementing views:', e)
+          }
         }
       } catch (error) {
         console.error('Error fetching listing:', error)
@@ -112,11 +124,20 @@ export default function ListingDetailPage() {
         const data = await response.json()
         setNdaStatus({
           status: 'pending',
-          requestId: data.nDARequest.id
+          requestId: data.request?.id || data.nDARequest?.id
         })
+        showSuccess('NDA-begäran skickad!')
+      } else if (response.status === 400) {
+        const data = await response.json()
+        if (data.existing) {
+          showError('Du har redan begärt NDA för denna annons')
+        } else {
+          showError('Kunde inte skicka NDA-begäran')
+        }
       }
     } catch (error) {
       console.error('Error requesting NDA:', error)
+      showError('Ett fel uppstod vid skickning av NDA-begäran')
     } finally {
       setRequesting(false)
     }

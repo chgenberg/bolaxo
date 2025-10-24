@@ -110,6 +110,10 @@ export default function MessagesPage() {
       }
     }
     load()
+
+    // Poll for new messages every 5 seconds
+    const pollInterval = setInterval(load, 5000)
+    return () => clearInterval(pollInterval)
   }, [user])
 
   return (
