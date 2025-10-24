@@ -131,8 +131,8 @@ export default function SavedListingsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Sparade objekt</h1>
-            <p className="text-sm text-text-gray mt-1">Objekt du följer och är intresserad av</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Sparade objekt</h1>
+            <p className="text-sm text-gray-600 mt-1">Objekt du följer och är intresserad av</p>
           </div>
           <Link href="/sok" className="btn-secondary">
             Hitta fler objekt
@@ -143,39 +143,39 @@ export default function SavedListingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
-              <span className="text-xs text-primary-blue font-medium">+2</span>
+              <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
+              <span className="text-xs text-accent-pink font-medium">+2</span>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{savedListings.length}</p>
-            <p className="text-xs text-text-gray">Sparade objekt</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{savedListings.length}</p>
+            <p className="text-xs text-gray-600">Sparade objekt</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {savedListings.filter(l => l.ndaStatus === 'approved').length}
             </p>
-            <p className="text-xs text-text-gray">Med godkänd NDA</p>
+            <p className="text-xs text-gray-600">Med godkänd NDA</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {savedListings.filter(l => l.matchScore >= 85).length}
             </p>
-            <p className="text-xs text-text-gray">Hög matchning (85%+)</p>
+            <p className="text-xs text-gray-600">Hög matchning (85%+)</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {savedListings.filter(l => l.hasNewActivity).length}
             </p>
-            <p className="text-xs text-text-gray">Ny aktivitet</p>
+            <p className="text-xs text-gray-600">Ny aktivitet</p>
           </div>
         </div>
 
@@ -192,8 +192,8 @@ export default function SavedListingsPage() {
               onClick={() => setFilter(option.value)}
               className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
                 filter === option.value
-                  ? 'bg-primary-blue text-white'
-                  : 'bg-gray-100 text-text-gray hover:bg-gray-200'
+                  ? 'bg-accent-pink text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               {option.label}
@@ -211,7 +211,7 @@ export default function SavedListingsPage() {
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg font-semibold text-text-dark">{listing.title}</h3>
+                        <h3 className="text-lg font-semibold text-primary-navy">{listing.title}</h3>
                         {listing.hasNewActivity && (
                           <span className="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-700">
                             Ny aktivitet
@@ -219,44 +219,44 @@ export default function SavedListingsPage() {
                         )}
                         {getNDABadge(listing.ndaStatus)}
                       </div>
-                      <p className="text-sm text-text-gray">{listing.description}</p>
+                      <p className="text-sm text-gray-600">{listing.description}</p>
                     </div>
                     <div className="text-right">
                       <div className="flex items-center justify-end gap-2 mb-1">
-                        <span className="text-sm text-text-gray">Match:</span>
-                        <span className="text-lg font-semibold text-primary-blue">{listing.matchScore}%</span>
+                        <span className="text-sm text-gray-600">Match:</span>
+                        <span className="text-lg font-semibold text-accent-pink">{listing.matchScore}%</span>
                       </div>
-                      <p className="text-xs text-text-gray">Sparad {new Date(listing.savedAt).toLocaleDateString('sv-SE')}</p>
+                      <p className="text-xs text-gray-600">Sparad {new Date(listing.savedAt).toLocaleDateString('sv-SE')}</p>
                     </div>
                   </div>
 
                   {/* Details */}
                   <div className="grid grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
                     <div>
-                      <p className="text-xs text-text-gray mb-1">Bransch</p>
+                      <p className="text-xs text-gray-600 mb-1">Bransch</p>
                       <div className="flex items-center gap-1">
-                        <Building className="w-4 h-4 text-text-gray" />
-                        <span className="text-sm font-medium text-text-dark">{listing.category}</span>
+                        <Building className="w-4 h-4 text-gray-600" />
+                        <span className="text-sm font-medium text-primary-navy">{listing.category}</span>
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs text-text-gray mb-1">Plats</p>
+                      <p className="text-xs text-gray-600 mb-1">Plats</p>
                       <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4 text-text-gray" />
-                        <span className="text-sm font-medium text-text-dark">{listing.location}</span>
+                        <MapPin className="w-4 h-4 text-gray-600" />
+                        <span className="text-sm font-medium text-primary-navy">{listing.location}</span>
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs text-text-gray mb-1">Omsättning</p>
-                      <span className="text-sm font-medium text-text-dark">{listing.revenue}</span>
+                      <p className="text-xs text-gray-600 mb-1">Omsättning</p>
+                      <span className="text-sm font-medium text-primary-navy">{listing.revenue}</span>
                     </div>
                     <div>
-                      <p className="text-xs text-text-gray mb-1">Anställda</p>
-                      <span className="text-sm font-medium text-text-dark">{listing.employees}</span>
+                      <p className="text-xs text-gray-600 mb-1">Anställda</p>
+                      <span className="text-sm font-medium text-primary-navy">{listing.employees}</span>
                     </div>
                     <div>
-                      <p className="text-xs text-text-gray mb-1">Prisintervall</p>
-                      <span className="text-sm font-medium text-primary-blue">{listing.price}</span>
+                      <p className="text-xs text-gray-600 mb-1">Prisintervall</p>
+                      <span className="text-sm font-medium text-accent-pink">{listing.price}</span>
                     </div>
                   </div>
 
@@ -271,7 +271,7 @@ export default function SavedListingsPage() {
 
                   {/* Footer */}
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-xs text-text-gray">
+                    <div className="flex items-center gap-4 text-xs text-gray-600">
                       <span className="flex items-center gap-1">
                         <Eye className="w-3 h-3" />
                         Senast visad {new Date(listing.lastViewed).toLocaleDateString('sv-SE')}
@@ -285,7 +285,7 @@ export default function SavedListingsPage() {
                         Visa objekt
                       </Link>
                       {listing.ndaStatus === 'approved' && (
-                        <button className="px-3 py-1.5 text-sm text-primary-blue hover:bg-blue-50 rounded-lg transition-colors">
+                        <button className="px-3 py-1.5 text-sm text-accent-pink hover:bg-accent-pink/10 rounded-lg transition-colors">
                           Kontakta säljare
                         </button>
                       )}
@@ -295,7 +295,7 @@ export default function SavedListingsPage() {
 
                 {/* Actions menu */}
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-4">
-                  <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
+                  <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 </button>
               </div>
             </div>
@@ -306,8 +306,8 @@ export default function SavedListingsPage() {
         {filteredListings.length === 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
             <Bookmark className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-text-dark mb-2">Inga sparade objekt</h3>
-            <p className="text-sm text-text-gray mb-6">
+            <h3 className="text-lg font-semibold text-primary-navy mb-2">Inga sparade objekt</h3>
+            <p className="text-sm text-gray-600 mb-6">
               {filter === 'all' 
                 ? 'Du har inte sparat några objekt än.'
                 : 'Inga objekt matchar ditt filter.'

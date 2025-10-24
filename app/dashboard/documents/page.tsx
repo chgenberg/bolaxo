@@ -83,19 +83,19 @@ export default function DocumentsPage() {
 
   const getFileIcon = (type: string) => {
     const colors: Record<string, string> = {
-      pdf: 'text-primary-blue',
-      excel: 'text-primary-blue',
-      word: 'text-primary-blue',
-      powerpoint: 'text-primary-blue',
+      pdf: 'text-accent-pink',
+      excel: 'text-accent-pink',
+      word: 'text-accent-pink',
+      powerpoint: 'text-accent-pink',
     }
-    const colorClass = colors[type] ?? 'text-primary-blue'
+    const colorClass = colors[type] ?? 'text-accent-pink'
     return <FileText className={`w-4 h-4 sm:w-5 sm:h-5 ${colorClass}`} />
   }
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
       signed: 'bg-green-100 text-green-700',
-      shared: 'bg-blue-100 text-blue-700',
+      shared: 'bg-accent-pink/10 text-accent-pink',
       draft: 'bg-gray-100 text-gray-700',
       final: 'bg-purple-100 text-purple-700',
     }
@@ -120,8 +120,8 @@ export default function DocumentsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Dokument</h1>
-            <p className="text-sm text-text-gray mt-1">Hantera datarum och delade dokument</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Dokument</h1>
+            <p className="text-sm text-gray-600 mt-1">Hantera datarum och delade dokument</p>
           </div>
           <div className="flex items-center gap-3">
             <button className="btn-secondary flex items-center gap-2">
@@ -139,7 +139,7 @@ export default function DocumentsPage() {
         <div className="bg-white p-4 rounded-xl border border-gray-200">
           <div className="flex items-center justify-between gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-gray" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
               <input
                 type="text"
                 value={searchQuery}
@@ -154,8 +154,8 @@ export default function DocumentsPage() {
                 onClick={() => setView('grid')}
                 className={`p-2 rounded-lg transition-colors ${
                   view === 'grid' 
-                    ? 'bg-primary-blue text-white' 
-                    : 'text-text-gray hover:bg-gray-100'
+                    ? 'bg-accent-pink text-white' 
+                    : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
                 <Grid className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -164,8 +164,8 @@ export default function DocumentsPage() {
                 onClick={() => setView('list')}
                 className={`p-2 rounded-lg transition-colors ${
                   view === 'list' 
-                    ? 'bg-primary-blue text-white' 
-                    : 'text-text-gray hover:bg-gray-100'
+                    ? 'bg-accent-pink text-white' 
+                    : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
                 <List className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -176,26 +176,26 @@ export default function DocumentsPage() {
 
         {/* Folders */}
         <div>
-          <h2 className="text-lg font-semibold text-text-dark mb-4">Mappar</h2>
+          <h2 className="text-lg font-semibold text-primary-navy mb-4">Mappar</h2>
           
           {view === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {folders.map((folder) => (
-                <div key={folder.id} className="bg-white p-6 rounded-xl border border-gray-200 hover:border-primary-blue transition-colors cursor-pointer">
+                <div key={folder.id} className="bg-white p-6 rounded-xl border border-gray-200 hover:border-accent-pink transition-colors cursor-pointer">
                   <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 bg-blue-50 rounded-lg">
-                      <Folder className="w-6 h-6 text-primary-blue" />
+                    <div className="p-3 bg-accent-pink/10 rounded-lg">
+                      <Folder className="w-6 h-6 text-accent-pink" />
                     </div>
                     <button className="p-1 hover:bg-gray-100 rounded transition-colors">
-                      <MoreVertical className="w-4 h-4 text-text-gray" />
+                      <MoreVertical className="w-4 h-4 text-gray-600" />
                     </button>
                   </div>
-                  <h3 className="font-medium text-text-dark mb-2">{folder.name}</h3>
-                  <div className="space-y-1 text-sm text-text-gray">
+                  <h3 className="font-medium text-primary-navy mb-2">{folder.name}</h3>
+                  <div className="space-y-1 text-sm text-gray-600">
                     <p>{folder.documents} dokument • {folder.size}</p>
                     <p>Uppdaterad {new Date(folder.lastModified).toLocaleDateString('sv-SE')}</p>
                     {folder.shared > 0 && (
-                      <p className="text-primary-blue">Delad med {folder.shared} personer</p>
+                      <p className="text-accent-pink">Delad med {folder.shared} personer</p>
                     )}
                   </div>
                 </div>
@@ -204,44 +204,44 @@ export default function DocumentsPage() {
           ) : (
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-neutral-white border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Namn
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Dokument
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Storlek
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Senast ändrad
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                       Delad med
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {folders.map((folder) => (
-                    <tr key={folder.id} className="hover:bg-gray-50 transition-colors cursor-pointer">
+                    <tr key={folder.id} className="hover:bg-neutral-white transition-colors cursor-pointer">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <Folder className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-3" />
-                          <span className="text-sm font-medium text-text-dark">{folder.name}</span>
+                          <Folder className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink mr-3" />
+                          <span className="text-sm font-medium text-primary-navy">{folder.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-gray">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {folder.documents}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-gray">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {folder.size}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-gray">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {new Date(folder.lastModified).toLocaleDateString('sv-SE')}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-text-gray">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                         {folder.shared > 0 ? `${folder.shared} personer` : '-'}
                       </td>
                     </tr>
@@ -254,48 +254,48 @@ export default function DocumentsPage() {
 
         {/* Recent documents */}
         <div>
-          <h2 className="text-lg font-semibold text-text-dark mb-4">Senaste dokument</h2>
+          <h2 className="text-lg font-semibold text-primary-navy mb-4">Senaste dokument</h2>
           
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-neutral-white border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                     Dokument
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                     Mapp
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                     Uppladdad av
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                     Åtgärder
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {recentDocuments.map((doc) => (
-                  <tr key={doc.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={doc.id} className="hover:bg-neutral-white transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         {getFileIcon(doc.type)}
                         <div className="ml-3">
-                          <p className="text-sm font-medium text-text-dark">{doc.name}</p>
-                          <p className="text-xs text-text-gray">{doc.size}</p>
+                          <p className="text-sm font-medium text-primary-navy">{doc.name}</p>
+                          <p className="text-xs text-gray-600">{doc.size}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-gray">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                       {doc.folder}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
-                        <p className="text-sm text-text-dark">{doc.uploadedBy}</p>
-                        <p className="text-xs text-text-gray">{doc.uploadedAt}</p>
+                        <p className="text-sm text-primary-navy">{doc.uploadedBy}</p>
+                        <p className="text-xs text-gray-600">{doc.uploadedAt}</p>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -303,10 +303,10 @@ export default function DocumentsPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <button className="p-1 text-text-gray hover:text-primary-blue transition-colors">
+                        <button className="p-1 text-gray-600 hover:text-accent-pink transition-colors">
                           <Download className="w-4 h-4" />
                         </button>
-                        <button className="p-1 text-text-gray hover:text-primary-blue transition-colors">
+                        <button className="p-1 text-gray-600 hover:text-accent-pink transition-colors">
                           <MoreVertical className="w-4 h-4" />
                         </button>
                       </div>

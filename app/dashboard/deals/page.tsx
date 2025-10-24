@@ -116,7 +116,7 @@ export default function DealsPage() {
         )
       case 'closing_soon':
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent-pink/10 text-accent-pink">
             <Clock className="w-3 h-3 mr-1" />
             Closing snart
           </span>
@@ -130,7 +130,7 @@ export default function DealsPage() {
     const colors: Record<string, string> = {
       NDA: 'bg-gray-100 text-gray-700',
       'Due Diligence': 'bg-amber-100 text-amber-700',
-      LOI: 'bg-blue-100 text-blue-700',
+      LOI: 'bg-accent-pink/10 text-accent-pink',
       SPA: 'bg-purple-100 text-purple-700',
       Closing: 'bg-green-100 text-green-700',
     }
@@ -148,8 +148,8 @@ export default function DealsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Aktiva affärer</h1>
-            <p className="text-sm text-text-gray mt-1">Detaljerad översikt över pågående transaktioner</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Aktiva affärer</h1>
+            <p className="text-sm text-gray-600 mt-1">Detaljerad översikt över pågående transaktioner</p>
           </div>
           <button className="btn-primary">
             Exportera rapport
@@ -160,37 +160,37 @@ export default function DealsPage() {
         <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{deals.length}</p>
-            <p className="text-xs text-text-gray">Aktiva affärer</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{deals.length}</p>
+            <p className="text-xs text-gray-600">Aktiva affärer</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {(deals.reduce((sum, d) => sum + d.value, 0) / 1000000).toFixed(0)} MSEK
             </p>
-            <p className="text-xs text-text-gray">Total volym</p>
+            <p className="text-xs text-gray-600">Total volym</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {(deals.reduce((sum, d) => sum + d.commission, 0) / 1000000).toFixed(1)} MSEK
             </p>
-            <p className="text-xs text-text-gray">Förväntad provision</p>
+            <p className="text-xs text-gray-600">Förväntad provision</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {deals.filter(d => d.status === 'closing_soon').length}
             </p>
-            <p className="text-xs text-text-gray">Closing inom 30 dagar</p>
+            <p className="text-xs text-gray-600">Closing inom 30 dagar</p>
           </div>
         </div>
 
@@ -207,8 +207,8 @@ export default function DealsPage() {
               onClick={() => setFilter(option.value)}
               className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
                 filter === option.value
-                  ? 'bg-primary-blue text-white'
-                  : 'bg-gray-100 text-text-gray hover:bg-gray-200'
+                  ? 'bg-accent-pink text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               {option.label}
@@ -219,55 +219,55 @@ export default function DealsPage() {
         {/* Deals table */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-neutral-white border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Affär
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Parter
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Värde
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Fas
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Förväntat closing
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Rådgivare
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Åtgärder
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredDeals.map((deal) => (
-                <tr key={deal.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={deal.id} className="hover:bg-neutral-white transition-colors">
                   <td className="px-6 py-4">
                     <div>
-                      <p className="text-sm font-medium text-text-dark">{deal.title}</p>
-                      <p className="text-xs text-text-gray mt-1">{deal.lastActivity}</p>
+                      <p className="text-sm font-medium text-primary-navy">{deal.title}</p>
+                      <p className="text-xs text-gray-600 mt-1">{deal.lastActivity}</p>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <p className="text-sm text-text-dark">K: {deal.buyer}</p>
-                      <p className="text-sm text-text-gray">S: {deal.seller}</p>
+                      <p className="text-sm text-primary-navy">K: {deal.buyer}</p>
+                      <p className="text-sm text-gray-600">S: {deal.seller}</p>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <p className="text-sm font-medium text-text-dark">
+                      <p className="text-sm font-medium text-primary-navy">
                         {(deal.value / 1000000).toFixed(0)} MSEK
                       </p>
-                      <p className="text-xs text-text-gray">
+                      <p className="text-xs text-gray-600">
                         Prov: {(deal.commission / 1000).toFixed(0)}k
                       </p>
                     </div>
@@ -278,7 +278,7 @@ export default function DealsPage() {
                   <td className="px-6 py-4">
                     <div>
                       {getStatusBadge(deal.status)}
-                      <p className="text-xs text-text-gray mt-1">
+                      <p className="text-xs text-gray-600 mt-1">
                         {deal.probability}% sannolikhet
                       </p>
                     </div>
@@ -287,24 +287,24 @@ export default function DealsPage() {
                     <div>
                       {deal.expectedClose && new Date(deal.expectedClose).getTime() ? (
                         <>
-                          <p className="text-sm text-text-dark">
+                          <p className="text-sm text-primary-navy">
                             {new Date(deal.expectedClose).toLocaleDateString('sv-SE')}
                           </p>
-                          <p className="text-xs text-text-gray">
+                          <p className="text-xs text-gray-600">
                             {Math.ceil((new Date(deal.expectedClose).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} dagar
                           </p>
                         </>
                       ) : (
-                        <p className="text-sm text-text-gray">-</p>
+                        <p className="text-sm text-gray-600">-</p>
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-text-gray">
+                  <td className="px-6 py-4 text-sm text-gray-600">
                     {deal.advisor}
                   </td>
                   <td className="px-6 py-4">
                     <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                      <MoreVertical className="w-4 h-4 text-text-gray" />
+                      <MoreVertical className="w-4 h-4 text-gray-600" />
                     </button>
                   </td>
                 </tr>
@@ -315,21 +315,21 @@ export default function DealsPage() {
 
         {/* Next steps overview */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-4">Kommande åtgärder</h2>
+          <h2 className="text-lg font-semibold text-primary-navy mb-4">Kommande åtgärder</h2>
           <div className="space-y-3">
             {filteredDeals.map((deal) => (
-              <div key={deal.id} className="flex items-start gap-4 p-3 bg-gray-50 rounded-lg">
+              <div key={deal.id} className="flex items-start gap-4 p-3 bg-neutral-white rounded-lg">
                 <div className="flex-shrink-0">
                   <div className={`w-2 h-2 rounded-full mt-2 ${
                     deal.status === 'at_risk' ? 'bg-amber-500' : 
-                    deal.status === 'closing_soon' ? 'bg-blue-500' : 'bg-green-500'
+                    deal.status === 'closing_soon' ? 'bg-accent-pink/100' : 'bg-green-500'
                   }`} />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-text-dark">{deal.title}</p>
-                  <p className="text-sm text-text-gray mt-1">{deal.nextSteps}</p>
+                  <p className="text-sm font-medium text-primary-navy">{deal.title}</p>
+                  <p className="text-sm text-gray-600 mt-1">{deal.nextSteps}</p>
                 </div>
-                <div className="text-xs text-text-gray">
+                <div className="text-xs text-gray-600">
                   {deal.advisor}
                 </div>
               </div>

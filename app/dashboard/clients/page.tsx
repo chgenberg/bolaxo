@@ -116,8 +116,8 @@ export default function ClientsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Klienter</h1>
-            <p className="text-sm text-text-gray mt-1">Hantera och följ upp dina klientrelationer</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Klienter</h1>
+            <p className="text-sm text-gray-600 mt-1">Hantera och följ upp dina klientrelationer</p>
           </div>
           <button className="btn-primary flex items-center gap-2">
             <Plus className="w-4 h-4" />
@@ -129,37 +129,37 @@ export default function ClientsPage() {
         <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockClients.length}</p>
-            <p className="text-xs text-text-gray">Totala klienter</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockClients.length}</p>
+            <p className="text-xs text-gray-600">Totala klienter</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {mockClients.filter(c => c.activeDeals > 0).length}
             </p>
-            <p className="text-xs text-text-gray">Med aktiva affärer</p>
+            <p className="text-xs text-gray-600">Med aktiva affärer</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {mockClients.filter(c => c.type === 'seller').length}
             </p>
-            <p className="text-xs text-text-gray">Säljare</p>
+            <p className="text-xs text-gray-600">Säljare</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {mockClients.filter(c => c.type === 'buyer').length}
             </p>
-            <p className="text-xs text-text-gray">Köpare</p>
+            <p className="text-xs text-gray-600">Köpare</p>
           </div>
         </div>
 
@@ -167,7 +167,7 @@ export default function ClientsPage() {
         <div className="bg-white p-4 rounded-xl border border-gray-200">
           <div className="flex items-center gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-gray" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600" />
               <input
                 type="text"
                 value={searchQuery}
@@ -189,7 +189,7 @@ export default function ClientsPage() {
             />
             
             <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
             </button>
           </div>
         </div>
@@ -197,52 +197,52 @@ export default function ClientsPage() {
         {/* Clients table */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-neutral-white border-b border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Klient
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Kontakt
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Typ
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Affärer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Totalt värde
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Rådgivare
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-text-gray uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                   Åtgärder
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredClients.map((client) => (
-                <tr key={client.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={client.id} className="hover:bg-neutral-white transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-text-dark">{client.name}</div>
-                      <div className="text-xs text-text-gray">{client.industry}</div>
+                      <div className="text-sm font-medium text-primary-navy">{client.name}</div>
+                      <div className="text-xs text-gray-600">{client.industry}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm text-text-dark">{client.contactPerson}</div>
+                      <div className="text-sm text-primary-navy">{client.contactPerson}</div>
                       <div className="flex items-center gap-3 mt-1">
-                        <a href={`mailto:${client.email}`} className="text-xs text-primary-blue hover:underline">
+                        <a href={`mailto:${client.email}`} className="text-xs text-accent-pink hover:underline">
                           <Mail className="w-3 h-3 inline mr-1" />
                           {client.email}
                         </a>
-                        <span className="text-xs text-text-gray">
+                        <span className="text-xs text-gray-600">
                           <Phone className="w-3 h-3 inline mr-1" />
                           {client.phone}
                         </span>
@@ -252,7 +252,7 @@ export default function ClientsPage() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs rounded-lg ${
                       client.type === 'seller' 
-                        ? 'bg-blue-100 text-blue-700' 
+                        ? 'bg-accent-pink/10 text-accent-pink' 
                         : 'bg-purple-100 text-purple-700'
                     }`}>
                       {getClientTypeLabel(client.type)}
@@ -260,27 +260,27 @@ export default function ClientsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm">
-                      <span className="font-medium text-text-dark">{client.activeDeals}</span>
-                      <span className="text-text-gray"> aktiva</span>
+                      <span className="font-medium text-primary-navy">{client.activeDeals}</span>
+                      <span className="text-gray-600"> aktiva</span>
                       {client.completedDeals > 0 && (
-                        <span className="text-text-gray"> • {client.completedDeals} avslutade</span>
+                        <span className="text-gray-600"> • {client.completedDeals} avslutade</span>
                       )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-medium text-text-dark">
+                    <span className="text-sm font-medium text-primary-navy">
                       {(client.totalValue / 1000000).toFixed(0)} MSEK
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusBadge(client.status)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-gray">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                     {client.advisor}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                      <MoreVertical className="w-4 h-4 text-text-gray" />
+                      <MoreVertical className="w-4 h-4 text-gray-600" />
                     </button>
                   </td>
                 </tr>

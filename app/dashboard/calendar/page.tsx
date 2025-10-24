@@ -18,7 +18,7 @@ export default function CalendarPage() {
       type: 'meeting',
       location: 'Teams',
       attendees: ['Erik Johansson', 'Anna Lindberg'],
-      color: 'bg-blue-100 border-blue-300 text-blue-900'
+      color: 'bg-accent-pink/10 border-blue-300 text-primary-navy'
     },
     {
       id: 'evt-002',
@@ -79,8 +79,8 @@ export default function CalendarPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Kalender</h1>
-            <p className="text-sm text-text-gray mt-1">Hantera möten och viktiga datum</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Kalender</h1>
+            <p className="text-sm text-gray-600 mt-1">Hantera möten och viktiga datum</p>
           </div>
           <button className="btn-primary flex items-center gap-2">
             <Plus className="w-4 h-4" />
@@ -93,15 +93,15 @@ export default function CalendarPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
               </button>
-              <h2 className="text-lg font-semibold text-text-dark">
+              <h2 className="text-lg font-semibold text-primary-navy">
                 Juni 2024 - Vecka 25
               </h2>
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
               </button>
-              <button className="px-3 py-1.5 text-sm text-primary-blue hover:bg-blue-50 rounded-lg transition-colors">
+              <button className="px-3 py-1.5 text-sm text-accent-pink hover:bg-accent-pink/10 rounded-lg transition-colors">
                 Idag
               </button>
             </div>
@@ -113,8 +113,8 @@ export default function CalendarPage() {
                   onClick={() => setView(v as any)}
                   className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                     view === v
-                      ? 'bg-primary-blue text-white'
-                      : 'text-text-gray hover:bg-gray-100'
+                      ? 'bg-accent-pink text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
                   {v === 'month' ? 'Månad' : v === 'week' ? 'Vecka' : 'Dag'}
@@ -128,14 +128,14 @@ export default function CalendarPage() {
         {view === 'week' && (
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div className="grid grid-cols-8 border-b border-gray-200">
-              <div className="p-3 text-xs font-medium text-text-gray uppercase"></div>
+              <div className="p-3 text-xs font-medium text-gray-600 uppercase"></div>
               {currentWeek.map((date, i) => (
                 <div key={i} className="p-3 text-center border-l border-gray-200">
-                  <div className="text-xs font-medium text-text-gray uppercase">{weekDays[i]}</div>
+                  <div className="text-xs font-medium text-gray-600 uppercase">{weekDays[i]}</div>
                   <div className={`text-lg font-semibold mt-1 ${
                     date.toDateString() === new Date().toDateString() 
-                      ? 'text-primary-blue' 
-                      : 'text-text-dark'
+                      ? 'text-accent-pink' 
+                      : 'text-primary-navy'
                   }`}>
                     {date.getDate()}
                   </div>
@@ -146,7 +146,7 @@ export default function CalendarPage() {
             <div className="grid grid-cols-8">
               {timeSlots.map((hour) => (
                 <>
-                  <div key={`time-${hour}`} className="p-3 text-xs text-text-gray text-right border-t border-gray-100">
+                  <div key={`time-${hour}`} className="p-3 text-xs text-gray-600 text-right border-t border-gray-100">
                     {hour}:00
                   </div>
                   {currentWeek.map((date, dayIndex) => (
@@ -188,19 +188,19 @@ export default function CalendarPage() {
 
         {/* Upcoming events */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-4">Kommande händelser</h2>
+          <h2 className="text-lg font-semibold text-primary-navy mb-4">Kommande händelser</h2>
           
           <div className="space-y-3">
             {events.map((event) => {
               const Icon = getEventIcon(event.type)
               return (
-                <div key={event.id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                <div key={event.id} className="flex items-start gap-4 p-4 bg-neutral-white rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                   <div className={`p-2 rounded-lg ${event.color}`}>
                     <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-medium text-sm text-text-dark">{event.title}</h3>
-                    <div className="flex items-center gap-4 mt-1 text-xs text-text-gray">
+                    <h3 className="font-medium text-sm text-primary-navy">{event.title}</h3>
+                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-600">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {new Date(event.date).toLocaleDateString('sv-SE')}
@@ -222,7 +222,7 @@ export default function CalendarPage() {
                       ))}
                     </div>
                   </div>
-                  <button className="text-sm text-primary-blue hover:underline">
+                  <button className="text-sm text-accent-pink hover:underline">
                     Visa detaljer
                   </button>
                 </div>

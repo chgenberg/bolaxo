@@ -38,8 +38,8 @@ export default function SettingsPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-6 py-4 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === tab.id
-                      ? 'border-primary-blue text-primary-blue'
-                      : 'border-transparent text-text-gray hover:text-text-dark'
+                      ? 'border-accent-pink text-accent-pink'
+                      : 'border-transparent text-gray-600 hover:text-primary-navy'
                   }`}
                 >
                   <tab.icon className="w-4 h-4" />
@@ -54,11 +54,11 @@ export default function SettingsPage() {
             {activeTab === 'profile' && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-text-dark mb-6">Personlig information</h2>
+                  <h2 className="text-lg font-semibold text-primary-navy mb-6">Personlig information</h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">
+                      <label className="block text-sm font-medium text-primary-navy mb-2">
                         Förnamn
                       </label>
                       <input
@@ -69,7 +69,7 @@ export default function SettingsPage() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">
+                      <label className="block text-sm font-medium text-primary-navy mb-2">
                         Efternamn
                       </label>
                       <input
@@ -80,7 +80,7 @@ export default function SettingsPage() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">
+                      <label className="block text-sm font-medium text-primary-navy mb-2">
                         E-postadress
                       </label>
                       <input
@@ -91,7 +91,7 @@ export default function SettingsPage() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">
+                      <label className="block text-sm font-medium text-primary-navy mb-2">
                         Telefonnummer
                       </label>
                       <input
@@ -102,7 +102,7 @@ export default function SettingsPage() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">
+                      <label className="block text-sm font-medium text-primary-navy mb-2">
                         Roll
                       </label>
                       <select className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
@@ -113,7 +113,7 @@ export default function SettingsPage() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-text-dark mb-2">
+                      <label className="block text-sm font-medium text-primary-navy mb-2">
                         Språk
                       </label>
                       <select className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
@@ -125,16 +125,16 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="pt-6 border-t border-gray-200">
-                  <h3 className="text-md font-semibold text-text-dark mb-4">Profilbild</h3>
+                  <h3 className="text-md font-semibold text-primary-navy mb-4">Profilbild</h3>
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 bg-primary-blue rounded-full flex items-center justify-center text-white text-xl sm:text-2xl font-semibold">
+                    <div className="w-20 h-20 bg-accent-pink rounded-full flex items-center justify-center text-white text-xl sm:text-2xl font-semibold">
                       {user?.name?.[0] || user?.email?.[0] || 'U'}
                     </div>
                     <div>
-                      <button className="text-sm text-primary-blue hover:underline">
+                      <button className="text-sm text-accent-pink hover:underline">
                         Ladda upp ny bild
                       </button>
-                      <p className="text-xs text-text-gray mt-1">JPG, PNG eller GIF. Max 2MB.</p>
+                      <p className="text-xs text-gray-600 mt-1">JPG, PNG eller GIF. Max 2MB.</p>
                     </div>
                   </div>
                 </div>
@@ -143,11 +143,11 @@ export default function SettingsPage() {
 
             {activeTab === 'company' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-text-dark mb-6">Företagsuppgifter</h2>
+                <h2 className="text-lg font-semibold text-primary-navy mb-6">Företagsuppgifter</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-text-dark mb-2">
+                    <label className="block text-sm font-medium text-primary-navy mb-2">
                       Företagsnamn
                     </label>
                     <input
@@ -158,7 +158,7 @@ export default function SettingsPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-text-dark mb-2">
+                    <label className="block text-sm font-medium text-primary-navy mb-2">
                       Organisationsnummer
                     </label>
                     <input
@@ -169,7 +169,7 @@ export default function SettingsPage() {
                   </div>
                   
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-text-dark mb-2">
+                    <label className="block text-sm font-medium text-primary-navy mb-2">
                       Adress
                     </label>
                     <input
@@ -196,11 +196,11 @@ export default function SettingsPage() {
 
             {activeTab === 'security' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-text-dark mb-6">Säkerhetsinställningar</h2>
+                <h2 className="text-lg font-semibold text-primary-navy mb-6">Säkerhetsinställningar</h2>
                 
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-md font-medium text-text-dark mb-3">Ändra lösenord</h3>
+                    <h3 className="text-md font-medium text-primary-navy mb-3">Ändra lösenord</h3>
                     <div className="space-y-3 max-w-md">
                       <input
                         type="password"
@@ -221,30 +221,30 @@ export default function SettingsPage() {
                   </div>
                   
                   <div className="pt-6 border-t border-gray-200">
-                    <h3 className="text-md font-medium text-text-dark mb-3">Tvåfaktorsautentisering</h3>
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <h3 className="text-md font-medium text-primary-navy mb-3">Tvåfaktorsautentisering</h3>
+                    <div className="flex items-center justify-between p-4 bg-neutral-white rounded-lg">
                       <div>
-                        <p className="text-sm font-medium text-text-dark">BankID</p>
-                        <p className="text-xs text-text-gray mt-1">Använd BankID för säker inloggning</p>
+                        <p className="text-sm font-medium text-primary-navy">BankID</p>
+                        <p className="text-xs text-gray-600 mt-1">Använd BankID för säker inloggning</p>
                       </div>
-                      <button className="text-sm text-primary-blue hover:underline">
+                      <button className="text-sm text-accent-pink hover:underline">
                         Aktivera
                       </button>
                     </div>
                   </div>
                   
                   <div className="pt-6 border-t border-gray-200">
-                    <h3 className="text-md font-medium text-text-dark mb-3">Inloggningshistorik</h3>
+                    <h3 className="text-md font-medium text-primary-navy mb-3">Inloggningshistorik</h3>
                     <div className="space-y-2">
                       {[
                         { device: 'Chrome - Windows', location: 'Stockholm', time: '2024-06-20 14:32' },
                         { device: 'Safari - iPhone', location: 'Göteborg', time: '2024-06-19 09:15' },
                         { device: 'Firefox - Mac', location: 'Stockholm', time: '2024-06-18 16:45' },
                       ].map((login, i) => (
-                        <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg text-sm">
+                        <div key={i} className="flex items-center justify-between p-3 bg-neutral-white rounded-lg text-sm">
                           <div>
-                            <p className="font-medium text-text-dark">{login.device}</p>
-                            <p className="text-xs text-text-gray">{login.location} • {login.time}</p>
+                            <p className="font-medium text-primary-navy">{login.device}</p>
+                            <p className="text-xs text-gray-600">{login.location} • {login.time}</p>
                           </div>
                         </div>
                       ))}
@@ -256,7 +256,7 @@ export default function SettingsPage() {
 
             {activeTab === 'notifications' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-text-dark mb-6">Notifieringsinställningar</h2>
+                <h2 className="text-lg font-semibold text-primary-navy mb-6">Notifieringsinställningar</h2>
                 
                 <div className="space-y-4">
                   {[
@@ -269,17 +269,17 @@ export default function SettingsPage() {
                     <div key={setting.id} className="p-4 border border-gray-200 rounded-lg">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h3 className="text-sm font-medium text-text-dark">{setting.label}</h3>
-                          <p className="text-xs text-text-gray mt-1">{setting.description}</p>
+                          <h3 className="text-sm font-medium text-primary-navy">{setting.label}</h3>
+                          <p className="text-xs text-gray-600 mt-1">{setting.description}</p>
                         </div>
                         <div className="flex items-center gap-4 ml-4">
                           <label className="flex items-center gap-2 text-xs">
                             <input type="checkbox" defaultChecked={setting.email} className="rounded" />
-                            <Mail className="w-4 h-4 text-text-gray" />
+                            <Mail className="w-4 h-4 text-gray-600" />
                           </label>
                           <label className="flex items-center gap-2 text-xs">
                             <input type="checkbox" defaultChecked={setting.push} className="rounded" />
-                            <Bell className="w-4 h-4 text-text-gray" />
+                            <Bell className="w-4 h-4 text-gray-600" />
                           </label>
                         </div>
                       </div>
@@ -291,40 +291,40 @@ export default function SettingsPage() {
 
             {activeTab === 'billing' && (
               <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-text-dark mb-6">Fakturering & prenumeration</h2>
+                <h2 className="text-lg font-semibold text-primary-navy mb-6">Fakturering & prenumeration</h2>
                 
-                <div className="p-6 bg-blue-50 rounded-lg border border-blue-100">
+                <div className="p-6 bg-accent-pink/10 rounded-lg border border-blue-100">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-text-dark">Pro Plan</h3>
-                      <p className="text-sm text-text-gray">895 kr/månad</p>
+                      <h3 className="text-lg font-semibold text-primary-navy">Pro Plan</h3>
+                      <p className="text-sm text-gray-600">895 kr/månad</p>
                     </div>
                     <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">Aktiv</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <button className="text-sm text-primary-blue hover:underline">Uppgradera plan</button>
-                    <button className="text-sm text-text-gray hover:underline">Avsluta prenumeration</button>
+                    <button className="text-sm text-accent-pink hover:underline">Uppgradera plan</button>
+                    <button className="text-sm text-gray-600 hover:underline">Avsluta prenumeration</button>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-md font-medium text-text-dark mb-4">Betalningsmetod</h3>
+                  <h3 className="text-md font-medium text-primary-navy mb-4">Betalningsmetod</h3>
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-6 bg-primary-blue rounded"></div>
+                        <div className="w-10 h-6 bg-accent-pink rounded"></div>
                         <div>
-                          <p className="text-sm font-medium text-text-dark">•••• •••• •••• 4242</p>
-                          <p className="text-xs text-text-gray">Utgår 12/25</p>
+                          <p className="text-sm font-medium text-primary-navy">•••• •••• •••• 4242</p>
+                          <p className="text-xs text-gray-600">Utgår 12/25</p>
                         </div>
                       </div>
-                      <button className="text-sm text-primary-blue hover:underline">Ändra</button>
+                      <button className="text-sm text-accent-pink hover:underline">Ändra</button>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-md font-medium text-text-dark mb-4">Faktureringshistorik</h3>
+                  <h3 className="text-md font-medium text-primary-navy mb-4">Faktureringshistorik</h3>
                   <div className="space-y-2">
                     {[
                       { date: '2024-06-01', amount: '895 kr', status: 'Betald' },
@@ -333,12 +333,12 @@ export default function SettingsPage() {
                     ].map((invoice, i) => (
                       <div key={i} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                         <div>
-                          <p className="text-sm font-medium text-text-dark">Faktura #{1000 + i}</p>
-                          <p className="text-xs text-text-gray">{invoice.date}</p>
+                          <p className="text-sm font-medium text-primary-navy">Faktura #{1000 + i}</p>
+                          <p className="text-xs text-gray-600">{invoice.date}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm font-medium text-text-dark">{invoice.amount}</span>
-                          <button className="text-xs text-primary-blue hover:underline">Ladda ner</button>
+                          <span className="text-sm font-medium text-primary-navy">{invoice.amount}</span>
+                          <button className="text-xs text-accent-pink hover:underline">Ladda ner</button>
                         </div>
                       </div>
                     ))}
@@ -352,7 +352,7 @@ export default function SettingsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-6 py-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                className="px-6 py-2 bg-accent-pink text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
                 {saving ? 'Sparar...' : 'Spara ändringar'}
               </button>

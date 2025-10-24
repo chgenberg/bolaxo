@@ -82,7 +82,7 @@ export default function TeamPage() {
       case 'medium':
         return <span className="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700">Bra prestation</span>
       case 'new':
-        return <span className="px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">Ny medarbetare</span>
+        return <span className="px-2 py-0.5 text-xs rounded-full bg-accent-pink/10 text-accent-pink">Ny medarbetare</span>
       default:
         return null
     }
@@ -105,8 +105,8 @@ export default function TeamPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Team</h1>
-            <p className="text-sm text-text-gray mt-1">Översikt över teamets prestationer och aktiviteter</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Team</h1>
+            <p className="text-sm text-gray-600 mt-1">Översikt över teamets prestationer och aktiviteter</p>
           </div>
           <button className="btn-primary flex items-center gap-2">
             <Users className="w-4 h-4" />
@@ -118,44 +118,44 @@ export default function TeamPage() {
         <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{teamMembers.length}</p>
-            <p className="text-xs text-text-gray">Teammedlemmar</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{teamMembers.length}</p>
+            <p className="text-xs text-gray-600">Teammedlemmar</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {teamMembers.reduce((sum, m) => sum + m.activeDeals, 0)}
             </p>
-            <p className="text-xs text-text-gray">Aktiva affärer</p>
+            <p className="text-xs text-gray-600">Aktiva affärer</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {(teamMembers.reduce((sum, m) => sum + m.totalVolume, 0) / 1000000).toFixed(0)} MSEK
             </p>
-            <p className="text-xs text-text-gray">Total volym</p>
+            <p className="text-xs text-gray-600">Total volym</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Award className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {Math.round(teamMembers.filter(m => m.conversionRate > 0).reduce((sum, m) => sum + m.conversionRate, 0) / teamMembers.filter(m => m.conversionRate > 0).length)}%
             </p>
-            <p className="text-xs text-text-gray">Genomsnittlig konvertering</p>
+            <p className="text-xs text-gray-600">Genomsnittlig konvertering</p>
           </div>
         </div>
 
         {/* Period selector */}
         <div className="bg-white p-4 rounded-xl border border-gray-200">
           <div className="flex items-center gap-4">
-            <span className="text-sm text-text-gray">Visa data för:</span>
+            <span className="text-sm text-gray-600">Visa data för:</span>
             <div className="flex items-center gap-1">
               {['week', 'month', 'quarter', 'year'].map((period) => (
                 <button
@@ -163,8 +163,8 @@ export default function TeamPage() {
                   onClick={() => setSelectedPeriod(period)}
                   className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                     selectedPeriod === period
-                      ? 'bg-primary-blue text-white'
-                      : 'text-text-gray hover:bg-gray-100'
+                      ? 'bg-accent-pink text-white'
+                      : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
                   {period === 'week' ? 'Vecka' : 
@@ -183,8 +183,8 @@ export default function TeamPage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4">
                   {/* Avatar */}
-                  <div className="w-12 h-12 bg-primary-blue/10 rounded-full flex items-center justify-center">
-                    <span className="text-lg font-semibold text-primary-blue">
+                  <div className="w-12 h-12 bg-accent-pink/10 rounded-full flex items-center justify-center">
+                    <span className="text-lg font-semibold text-accent-pink">
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </span>
                   </div>
@@ -192,14 +192,14 @@ export default function TeamPage() {
                   {/* Member info */}
                   <div>
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-lg font-semibold text-text-dark">{member.name}</h3>
+                      <h3 className="text-lg font-semibold text-primary-navy">{member.name}</h3>
                       {getStatusBadge(member.status)}
                       {getPerformanceBadge(member.performance)}
                     </div>
-                    <p className="text-sm text-text-gray mb-3">{member.role}</p>
+                    <p className="text-sm text-gray-600 mb-3">{member.role}</p>
                     
-                    <div className="flex items-center gap-4 text-sm text-text-gray">
-                      <a href={`mailto:${member.email}`} className="flex items-center gap-1 hover:text-primary-blue">
+                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <a href={`mailto:${member.email}`} className="flex items-center gap-1 hover:text-accent-pink">
                         <Mail className="w-4 h-4" />
                         {member.email}
                       </a>
@@ -216,41 +216,41 @@ export default function TeamPage() {
                 </div>
                 
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
+                  <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 </button>
               </div>
 
               {/* Performance metrics */}
               <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mt-6 pt-6 border-t border-gray-100">
                 <div>
-                  <p className="text-xs text-text-gray mb-1">Aktiva affärer</p>
-                  <p className="text-xl font-bold text-text-dark">{member.activeDeals}</p>
+                  <p className="text-xs text-gray-600 mb-1">Aktiva affärer</p>
+                  <p className="text-xl font-bold text-primary-navy">{member.activeDeals}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-text-gray mb-1">Avslutade affärer</p>
-                  <p className="text-xl font-bold text-text-dark">{member.closedDeals}</p>
+                  <p className="text-xs text-gray-600 mb-1">Avslutade affärer</p>
+                  <p className="text-xl font-bold text-primary-navy">{member.closedDeals}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-text-gray mb-1">Total volym</p>
-                  <p className="text-xl font-bold text-text-dark">
+                  <p className="text-xs text-gray-600 mb-1">Total volym</p>
+                  <p className="text-xl font-bold text-primary-navy">
                     {member.totalVolume > 0 ? `${(member.totalVolume / 1000000).toFixed(0)} MSEK` : '-'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-text-gray mb-1">Provision</p>
-                  <p className="text-xl font-bold text-primary-blue">
+                  <p className="text-xs text-gray-600 mb-1">Provision</p>
+                  <p className="text-xl font-bold text-accent-pink">
                     {member.commission > 0 ? `${(member.commission / 1000000).toFixed(1)} MSEK` : '-'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-text-gray mb-1">Konvertering</p>
-                  <p className="text-xl font-bold text-text-dark">
+                  <p className="text-xs text-gray-600 mb-1">Konvertering</p>
+                  <p className="text-xl font-bold text-primary-navy">
                     {member.conversionRate > 0 ? `${member.conversionRate}%` : '-'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-text-gray mb-1">Snitt affärsstorlek</p>
-                  <p className="text-xl font-bold text-text-dark">
+                  <p className="text-xs text-gray-600 mb-1">Snitt affärsstorlek</p>
+                  <p className="text-xl font-bold text-primary-navy">
                     {member.avgDealSize > 0 ? `${(member.avgDealSize / 1000000).toFixed(0)} MSEK` : '-'}
                   </p>
                 </div>
@@ -259,13 +259,13 @@ export default function TeamPage() {
               {/* Progress bar */}
               {member.status === 'active' && member.closedDeals > 0 && (
                 <div className="mt-4">
-                  <div className="flex items-center justify-between text-xs text-text-gray mb-1">
+                  <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
                     <span>Årsmål: 300 MSEK</span>
                     <span>{Math.round((member.totalVolume / 300000000) * 100)}% uppnått</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
-                      className="bg-primary-blue h-2 rounded-full"
+                      className="bg-accent-pink h-2 rounded-full"
                       style={{ width: `${Math.min((member.totalVolume / 300000000) * 100, 100)}%` }}
                     />
                   </div>
@@ -277,7 +277,7 @@ export default function TeamPage() {
 
         {/* Team comparison chart */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-6">Teamjämförelse - Provision (MSEK)</h2>
+          <h2 className="text-lg font-semibold text-primary-navy mb-6">Teamjämförelse - Provision (MSEK)</h2>
           
           <div className="space-y-3">
             {teamMembers
@@ -289,11 +289,11 @@ export default function TeamPage() {
                 
                 return (
                   <div key={member.id} className="flex items-center gap-4">
-                    <div className="w-32 text-sm text-text-dark">{member.name}</div>
+                    <div className="w-32 text-sm text-primary-navy">{member.name}</div>
                     <div className="flex-1">
                       <div className="w-full bg-gray-200 rounded-full h-6">
                         <div 
-                          className="bg-primary-blue h-6 rounded-full flex items-center justify-end pr-2"
+                          className="bg-accent-pink h-6 rounded-full flex items-center justify-end pr-2"
                           style={{ width: `${percentage}%` }}
                         >
                           <span className="text-xs text-white font-medium">

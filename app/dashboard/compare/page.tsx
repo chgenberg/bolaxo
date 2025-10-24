@@ -110,9 +110,9 @@ export default function ComparePage() {
   const getValueColor = (value: number, allValues: number[]) => {
     const max = Math.max(...allValues)
     const min = Math.min(...allValues)
-    if (value === max) return 'text-primary-blue font-semibold'
-    if (value === min) return 'text-primary-blue'
-    return 'text-text-dark'
+    if (value === max) return 'text-accent-pink font-semibold'
+    if (value === min) return 'text-accent-pink'
+    return 'text-primary-navy'
   }
 
   return (
@@ -120,15 +120,15 @@ export default function ComparePage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Jämför objekt</h1>
-          <p className="text-sm text-text-gray mt-1">Jämför upp till 4 objekt sida vid sida</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Jämför objekt</h1>
+          <p className="text-sm text-gray-600 mt-1">Jämför upp till 4 objekt sida vid sida</p>
         </div>
 
         {/* Add object */}
         {compareList.length < 4 && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-accent-pink/10 border border-accent-pink/20 rounded-lg p-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-blue-900">
+              <p className="text-sm text-primary-navy">
                 Du kan lägga till {4 - compareList.length} objekt till för jämförelse
               </p>
               <select
@@ -154,7 +154,7 @@ export default function ComparePage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
-                    <th className="px-6 py-4 text-left text-sm font-medium text-text-gray sticky left-0 bg-white">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-600 sticky left-0 bg-white">
                       Egenskap
                     </th>
                     {compareObjects.map((obj) => (
@@ -162,19 +162,19 @@ export default function ComparePage() {
                         <div className="space-y-2">
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold text-text-dark">{obj.title}</h3>
-                              <p className="text-sm text-text-gray">{obj.category} • {obj.location}</p>
+                              <h3 className="font-semibold text-primary-navy">{obj.title}</h3>
+                              <p className="text-sm text-gray-600">{obj.category} • {obj.location}</p>
                             </div>
                             <button
                               onClick={() => removeFromCompare(obj.id)}
                               className="p-1 hover:bg-gray-100 rounded transition-colors"
                             >
-                              <X className="w-4 h-4 text-text-gray" />
+                              <X className="w-4 h-4 text-gray-600" />
                             </button>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-sm text-text-gray">Match:</span>
-                            <span className="text-lg font-semibold text-primary-blue">{obj.matchScore}%</span>
+                            <span className="text-sm text-gray-600">Match:</span>
+                            <span className="text-lg font-semibold text-accent-pink">{obj.matchScore}%</span>
                           </div>
                         </div>
                       </th>
@@ -183,42 +183,42 @@ export default function ComparePage() {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {/* Basic info */}
-                  <tr className="bg-gray-50">
-                    <td className="px-6 py-3 text-sm font-medium text-text-gray sticky left-0 bg-gray-50">
+                  <tr className="bg-neutral-white">
+                    <td className="px-6 py-3 text-sm font-medium text-gray-600 sticky left-0 bg-neutral-white">
                       Grundinformation
                     </td>
                     <td colSpan={compareObjects.length}></td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Grundat</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">Grundat</td>
                     {compareObjects.map((obj) => (
-                      <td key={obj.id} className="px-6 py-3 text-sm text-text-dark">
+                      <td key={obj.id} className="px-6 py-3 text-sm text-primary-navy">
                         {obj.founded} ({new Date().getFullYear() - parseInt(obj.founded)} år)
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Kundtyp</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">Kundtyp</td>
                     {compareObjects.map((obj) => (
-                      <td key={obj.id} className="px-6 py-3 text-sm text-text-dark">{obj.customerBase}</td>
+                      <td key={obj.id} className="px-6 py-3 text-sm text-primary-navy">{obj.customerBase}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Huvudmarknader</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">Huvudmarknader</td>
                     {compareObjects.map((obj) => (
-                      <td key={obj.id} className="px-6 py-3 text-sm text-text-dark">{obj.mainMarkets}</td>
+                      <td key={obj.id} className="px-6 py-3 text-sm text-primary-navy">{obj.mainMarkets}</td>
                     ))}
                   </tr>
 
                   {/* Financial */}
-                  <tr className="bg-gray-50">
-                    <td className="px-6 py-3 text-sm font-medium text-text-gray sticky left-0 bg-gray-50">
+                  <tr className="bg-neutral-white">
+                    <td className="px-6 py-3 text-sm font-medium text-gray-600 sticky left-0 bg-neutral-white">
                       Finansiell information
                     </td>
                     <td colSpan={compareObjects.length}></td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Omsättning</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">Omsättning</td>
                     {compareObjects.map((obj) => (
                       <td key={obj.id} className={`px-6 py-3 text-sm ${
                         getValueColor(obj.revenueValue, compareObjects.map(o => o.revenueValue))
@@ -228,7 +228,7 @@ export default function ComparePage() {
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">EBITDA</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">EBITDA</td>
                     {compareObjects.map((obj) => (
                       <td key={obj.id} className={`px-6 py-3 text-sm ${
                         getValueColor(obj.ebitdaValue, compareObjects.map(o => o.ebitdaValue))
@@ -238,47 +238,47 @@ export default function ComparePage() {
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Tillväxttakt</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">Tillväxttakt</td>
                     {compareObjects.map((obj) => (
                       <td key={obj.id} className={`px-6 py-3 text-sm ${
-                        parseFloat(obj.growthRate) > 20 ? 'text-primary-blue font-semibold' : 'text-text-dark'
+                        parseFloat(obj.growthRate) > 20 ? 'text-accent-pink font-semibold' : 'text-primary-navy'
                       }`}>
                         {obj.growthRate}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Anställda</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">Anställda</td>
                     {compareObjects.map((obj) => (
-                      <td key={obj.id} className="px-6 py-3 text-sm text-text-dark">{obj.employees}</td>
+                      <td key={obj.id} className="px-6 py-3 text-sm text-primary-navy">{obj.employees}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">Prisintervall</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">Prisintervall</td>
                     {compareObjects.map((obj) => (
-                      <td key={obj.id} className="px-6 py-3 text-sm font-semibold text-primary-blue">
+                      <td key={obj.id} className="px-6 py-3 text-sm font-semibold text-accent-pink">
                         {obj.price}
                       </td>
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray sticky left-0 bg-white">P/E-tal</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 sticky left-0 bg-white">P/E-tal</td>
                     {compareObjects.map((obj) => (
-                      <td key={obj.id} className="px-6 py-3 text-sm text-text-dark">
+                      <td key={obj.id} className="px-6 py-3 text-sm text-primary-navy">
                         {(obj.priceValue / obj.ebitdaValue).toFixed(1)}x
                       </td>
                     ))}
                   </tr>
 
                   {/* Strengths & Risks */}
-                  <tr className="bg-gray-50">
-                    <td className="px-6 py-3 text-sm font-medium text-text-gray sticky left-0 bg-gray-50">
+                  <tr className="bg-neutral-white">
+                    <td className="px-6 py-3 text-sm font-medium text-gray-600 sticky left-0 bg-neutral-white">
                       Styrkor & Risker
                     </td>
                     <td colSpan={compareObjects.length}></td>
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray align-top sticky left-0 bg-white">Styrkor</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 align-top sticky left-0 bg-white">Styrkor</td>
                     {compareObjects.map((obj) => (
                       <td key={obj.id} className="px-6 py-3">
                         <ul className="space-y-1">
@@ -293,7 +293,7 @@ export default function ComparePage() {
                     ))}
                   </tr>
                   <tr>
-                    <td className="px-6 py-3 text-sm text-text-gray align-top sticky left-0 bg-white">Risker</td>
+                    <td className="px-6 py-3 text-sm text-gray-600 align-top sticky left-0 bg-white">Risker</td>
                     {compareObjects.map((obj) => (
                       <td key={obj.id} className="px-6 py-3">
                         <ul className="space-y-1">
@@ -314,8 +314,8 @@ export default function ComparePage() {
         ) : (
           <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
             <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-text-dark mb-2">Inga objekt att jämföra</h3>
-            <p className="text-sm text-text-gray mb-6">
+            <h3 className="text-lg font-semibold text-primary-navy mb-2">Inga objekt att jämföra</h3>
+            <p className="text-sm text-gray-600 mb-6">
               Välj objekt från din sparade lista eller sök efter nya objekt att jämföra.
             </p>
           </div>

@@ -304,7 +304,7 @@ export default function ListingsPage() {
               }
             </p>
             {filter === 'all' && (
-              <Link href="/salja/start" className="inline-flex px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800">
+              <Link href="/salja/start" className="inline-flex px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-accent-pink text-white rounded-lg font-medium hover:bg-blue-800">
                 Skapa första annonsen
               </Link>
             )}

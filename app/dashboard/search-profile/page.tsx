@@ -82,12 +82,12 @@ export default function SearchProfilePage() {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Min sökprofil</h1>
-          <p className="text-sm text-text-gray mt-1">Anpassa dina preferenser för att få bättre matchningar</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Min sökprofil</h1>
+          <p className="text-sm text-gray-600 mt-1">Anpassa dina preferenser för att få bättre matchningar</p>
         </div>
 
         {/* Current profile summary */}
-        <div className="bg-primary-blue text-white p-6 rounded-xl">
+        <div className="bg-accent-pink text-white p-6 rounded-xl">
           <h2 className="text-lg font-semibold mb-4">Nuvarande profil</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div>
@@ -111,8 +111,8 @@ export default function SearchProfilePage() {
 
         {/* Industries */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+          <h2 className="text-lg font-semibold text-primary-navy mb-4 flex items-center gap-2">
+            <Building className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             Branscher
           </h2>
           
@@ -121,7 +121,7 @@ export default function SearchProfilePage() {
             {industries.map((industry) => (
               <span
                 key={industry}
-                className="bg-primary-blue text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-2"
+                className="bg-accent-pink text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-2"
               >
                 {industry}
                 <button
@@ -142,7 +142,7 @@ export default function SearchProfilePage() {
                 <button
                   key={industry}
                   onClick={() => addIndustry(industry)}
-                  className="bg-gray-100 text-text-gray px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition-colors"
+                  className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition-colors"
                 >
                   + {industry}
                 </button>
@@ -171,7 +171,7 @@ export default function SearchProfilePage() {
                   setCustomIndustry('')
                 }
               }}
-              className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="p-2 bg-accent-pink text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
@@ -180,8 +180,8 @@ export default function SearchProfilePage() {
 
         {/* Locations */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+          <h2 className="text-lg font-semibold text-primary-navy mb-4 flex items-center gap-2">
+            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             Platser
           </h2>
           
@@ -190,7 +190,7 @@ export default function SearchProfilePage() {
             {locations.map((location) => (
               <span
                 key={location}
-                className="bg-primary-blue text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-2"
+                className="bg-accent-pink text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-2"
               >
                 {location}
                 <button
@@ -211,7 +211,7 @@ export default function SearchProfilePage() {
                 <button
                   key={location}
                   onClick={() => addLocation(location)}
-                  className="bg-gray-100 text-text-gray px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition-colors"
+                  className="bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition-colors"
                 >
                   + {location}
                 </button>
@@ -240,7 +240,7 @@ export default function SearchProfilePage() {
                   setCustomLocation('')
                 }
               }}
-              className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="p-2 bg-accent-pink text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
@@ -249,14 +249,14 @@ export default function SearchProfilePage() {
 
         {/* Financial criteria */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+          <h2 className="text-lg font-semibold text-primary-navy mb-4 flex items-center gap-2">
+            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             Finansiella kriterier
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             <div>
-              <label className="block text-sm font-medium text-text-dark mb-2">
+              <label className="block text-sm font-medium text-primary-navy mb-2">
                 Omsättning (MSEK)
               </label>
               <div className="flex items-center gap-2">
@@ -266,7 +266,7 @@ export default function SearchProfilePage() {
                   onChange={(e) => setRevenueMin(e.target.value)}
                   className="w-24 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
                 />
-                <span className="text-text-gray">-</span>
+                <span className="text-gray-600">-</span>
                 <input
                   type="number"
                   value={revenueMax}
@@ -277,7 +277,7 @@ export default function SearchProfilePage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-dark mb-2">
+              <label className="block text-sm font-medium text-primary-navy mb-2">
                 Prisintervall (MSEK)
               </label>
               <div className="flex items-center gap-2">
@@ -287,7 +287,7 @@ export default function SearchProfilePage() {
                   onChange={(e) => setPriceMin(e.target.value)}
                   className="w-24 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
                 />
-                <span className="text-text-gray">-</span>
+                <span className="text-gray-600">-</span>
                 <input
                   type="number"
                   value={priceMax}
@@ -301,14 +301,14 @@ export default function SearchProfilePage() {
 
         {/* Additional criteria */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+          <h2 className="text-lg font-semibold text-primary-navy mb-4 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             Ytterligare kriterier
           </h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-text-dark mb-2">
+              <label className="block text-sm font-medium text-primary-navy mb-2">
                 Investeringstyp
               </label>
               <SelectDropdown
@@ -325,7 +325,7 @@ export default function SearchProfilePage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-dark mb-2">
+              <label className="block text-sm font-medium text-primary-navy mb-2">
                 Lönsamhetskrav
               </label>
               <SelectDropdown
@@ -341,7 +341,7 @@ export default function SearchProfilePage() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-text-dark mb-2">
+              <label className="block text-sm font-medium text-primary-navy mb-2">
                 Antal anställda
               </label>
               <div className="flex items-center gap-2">
@@ -350,7 +350,7 @@ export default function SearchProfilePage() {
                   placeholder="Min"
                   className="w-24 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
                 />
-                <span className="text-text-gray">-</span>
+                <span className="text-gray-600">-</span>
                 <input
                   type="number"
                   placeholder="Max"
@@ -364,10 +364,10 @@ export default function SearchProfilePage() {
         {/* Save button */}
         <div className="flex justify-between items-center">
           {!user && (
-            <p className="text-sm text-text-gray">Logga in för att spara din profil.</p>
+            <p className="text-sm text-gray-600">Logga in för att spara din profil.</p>
           )}
           <div className="flex items-center gap-3">
-            {saveMessage && <span className="text-sm text-primary-blue">{saveMessage}</span>}
+            {saveMessage && <span className="text-sm text-accent-pink">{saveMessage}</span>}
             <button
               disabled={!user || saving}
               onClick={async () => {

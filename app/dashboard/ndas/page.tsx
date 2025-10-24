@@ -244,10 +244,10 @@ export default function NDAsPage() {
                   {/* Header */}
                   <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                     <div className="min-w-0">
-                      <h3 className="text-base sm:text-lg font-semibold text-text-dark mb-1 truncate">
+                      <h3 className="text-base sm:text-lg font-semibold text-primary-navy mb-1 truncate">
                         {nda.status === 'approved' ? nda.buyerName : 'Anonym köpare'}
                       </h3>
-                      <p className="text-xs sm:text-sm text-text-gray truncate">
+                      <p className="text-xs sm:text-sm text-gray-600 truncate">
                         {nda.status === 'approved' ? nda.buyerCompany : nda.buyerType || 'Köparprofil'}
                       </p>
                     </div>
@@ -255,52 +255,52 @@ export default function NDAsPage() {
                   </div>
 
                   {/* Message */}
-                  <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
-                    <p className="text-xs sm:text-sm text-text-dark italic line-clamp-2">"{nda.message}"</p>
+                  <div className="bg-neutral-white rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+                    <p className="text-xs sm:text-sm text-primary-navy italic line-clamp-2">"{nda.message}"</p>
                   </div>
 
                   {/* Details grid */}
                   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4">
                     <div className="min-w-0">
-                      <p className="text-xs text-text-gray mb-1">Annons</p>
-                      <p className="text-xs sm:text-sm font-medium text-text-dark truncate">{nda.listingTitle}</p>
+                      <p className="text-xs text-gray-600 mb-1">Annons</p>
+                      <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.listingTitle}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs text-text-gray mb-1">Typ</p>
-                      <p className="text-xs sm:text-sm font-medium text-text-dark truncate">{nda.buyerType}</p>
+                      <p className="text-xs text-gray-600 mb-1">Typ</p>
+                      <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.buyerType}</p>
                     </div>
                     <div className="hidden sm:block min-w-0">
-                      <p className="text-xs text-text-gray mb-1">Poäng</p>
+                      <p className="text-xs text-gray-600 mb-1">Poäng</p>
                       <div className="flex items-center gap-2">
                         <div className="w-full bg-gray-200 rounded-full h-1.5 max-w-[60px]">
                           <div 
-                            className="bg-primary-blue h-1.5 rounded-full"
+                            className="bg-accent-pink h-1.5 rounded-full"
                             style={{ width: `${nda.matchScore}%` }}
                           />
                         </div>
-                        <span className="text-xs font-medium text-text-dark">{nda.matchScore}%</span>
+                        <span className="text-xs font-medium text-primary-navy">{nda.matchScore}%</span>
                       </div>
                     </div>
                     <div className="hidden lg:block min-w-0">
-                      <p className="text-xs text-text-gray mb-1">Verifiering</p>
-                      <p className="text-xs sm:text-sm font-medium text-text-dark">
+                      <p className="text-xs text-gray-600 mb-1">Verifiering</p>
+                      <p className="text-xs sm:text-sm font-medium text-primary-navy">
                         {nda.verificationStatus === 'bankid_verified' ? (
-                          <span className="text-primary-blue">BankID</span>
+                          <span className="text-accent-pink">BankID</span>
                         ) : (
-                          <span className="text-text-gray">E-post</span>
+                          <span className="text-gray-600">E-post</span>
                         )}
                       </p>
                     </div>
                     {nda.status === 'approved' && (
                       <div className="hidden md:block min-w-0">
-                        <p className="text-xs text-text-gray mb-1">Email</p>
-                        <p className="text-xs sm:text-sm font-medium text-text-dark truncate">{nda.buyerEmail}</p>
+                        <p className="text-xs text-gray-600 mb-1">Email</p>
+                        <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.buyerEmail}</p>
                       </div>
                     )}
                   </div>
 
                   {/* Footer */}
-                  <div className="text-xs text-text-gray">{new Date(nda.requestedAt).toLocaleDateString('sv-SE')}</div>
+                  <div className="text-xs text-gray-600">{new Date(nda.requestedAt).toLocaleDateString('sv-SE')}</div>
                 </div>
 
                 {/* Actions */}

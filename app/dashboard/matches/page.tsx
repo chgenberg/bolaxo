@@ -52,7 +52,7 @@ export default function MatchesPage() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return { bg: 'bg-green-50', text: 'text-green-900', bar: 'bg-green-500' }
-    if (score >= 60) return { bg: 'bg-blue-50', text: 'text-blue-900', bar: 'bg-blue-500' }
+    if (score >= 60) return { bg: 'bg-accent-pink/10', text: 'text-primary-navy', bar: 'bg-accent-pink/100' }
     return { bg: 'bg-yellow-50', text: 'text-yellow-900', bar: 'bg-yellow-500' }
   }
 
@@ -204,12 +204,12 @@ export default function MatchesPage() {
 
                     {/* Actions - Mobile optimized */}
                     <div className="flex flex-row sm:flex-col gap-2 sm:gap-2 flex-shrink-0 w-full sm:w-auto">
-                      <button className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
+                      <button className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-accent-pink text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
                         Kontakta
                       </button>
                       <Link
                         href={`/dashboard/listings/${match.listingId}`}
-                        className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-colors text-xs sm:text-sm text-center min-h-10 sm:min-h-auto inline-flex items-center justify-center"
+                        className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-neutral-white transition-colors text-xs sm:text-sm text-center min-h-10 sm:min-h-auto inline-flex items-center justify-center"
                       >
                         Annons
                       </Link>

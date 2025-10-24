@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {listings.map((listing) => (
-                  <tr key={listing.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={listing.id} className="hover:bg-neutral-white transition-colors">
                     <td className="px-6 py-4 text-sm font-medium text-gray-900 truncate">{listing.anonymousTitle || listing.companyName}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       <div className="flex items-center gap-2">
@@ -183,7 +183,7 @@ export default function AnalyticsPage() {
         {/* Trend Chart Placeholder */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Trend (senaste {dateRange === '7days' ? '7 dagar' : '30 dagar'})</h2>
-          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
+          <div className="h-64 flex items-center justify-center bg-neutral-white rounded-lg border border-gray-200">
             <p className="text-gray-500">Trendgraf kommer snart</p>
           </div>
         </div>

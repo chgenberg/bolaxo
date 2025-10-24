@@ -134,45 +134,45 @@ export default function NDAStatusPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">NDA-status</h1>
-          <p className="text-sm text-text-gray mt-1">Följ upp dina sekretessavtal och få tillgång till mer information</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">NDA-status</h1>
+          <p className="text-sm text-gray-600 mt-1">Följ upp dina sekretessavtal och få tillgång till mer information</p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{ndaRequests.length}</p>
-            <p className="text-xs text-text-gray">Totala förfrågningar</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{ndaRequests.length}</p>
+            <p className="text-xs text-gray-600">Totala förfrågningar</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {ndaRequests.filter(r => r.status === 'approved').length}
             </p>
-            <p className="text-xs text-text-gray">Godkända</p>
+            <p className="text-xs text-gray-600">Godkända</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {ndaRequests.filter(r => r.status === 'pending').length}
             </p>
-            <p className="text-xs text-text-gray">Väntar svar</p>
+            <p className="text-xs text-gray-600">Väntar svar</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
               {ndaRequests.reduce((sum, r) => sum + r.documentsAvailable, 0)}
             </p>
-            <p className="text-xs text-text-gray">Dokument tillgängliga</p>
+            <p className="text-xs text-gray-600">Dokument tillgängliga</p>
           </div>
         </div>
 
@@ -189,8 +189,8 @@ export default function NDAStatusPage() {
               onClick={() => setFilter(option.value)}
               className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
                 filter === option.value
-                  ? 'bg-primary-blue text-white'
-                  : 'bg-gray-100 text-text-gray hover:bg-gray-200'
+                  ? 'bg-accent-pink text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               {option.label}
@@ -207,49 +207,49 @@ export default function NDAStatusPage() {
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-text-dark mb-1">{request.objectTitle}</h3>
-                      <p className="text-sm text-text-gray">Objekt-ID: {request.objectId}</p>
+                      <h3 className="text-lg font-semibold text-primary-navy mb-1">{request.objectTitle}</h3>
+                      <p className="text-sm text-gray-600">Objekt-ID: {request.objectId}</p>
                     </div>
                     {getStatusBadge(request.status)}
                   </div>
 
                   {/* Message */}
-                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                    <p className="text-sm text-text-dark italic">"{request.message}"</p>
+                  <div className="bg-neutral-white rounded-lg p-4 mb-4">
+                    <p className="text-sm text-primary-navy italic">"{request.message}"</p>
                   </div>
 
                   {/* Details */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                     <div>
-                      <p className="text-xs text-text-gray mb-1">Begärd</p>
-                      <p className="text-sm font-medium text-text-dark">
+                      <p className="text-xs text-gray-600 mb-1">Begärd</p>
+                      <p className="text-sm font-medium text-primary-navy">
                         {new Date(request.requestedAt).toLocaleDateString('sv-SE')}
                       </p>
                     </div>
                     {request.approvedAt && (
                       <div>
-                        <p className="text-xs text-text-gray mb-1">Godkänd</p>
-                        <p className="text-sm font-medium text-primary-blue">
+                        <p className="text-xs text-gray-600 mb-1">Godkänd</p>
+                        <p className="text-sm font-medium text-accent-pink">
                           {new Date(request.approvedAt).toLocaleDateString('sv-SE')}
                         </p>
                       </div>
                     )}
                     {request.rejectedAt && (
                       <div>
-                        <p className="text-xs text-text-gray mb-1">Avslagen</p>
-                        <p className="text-sm font-medium text-primary-blue">
+                        <p className="text-xs text-gray-600 mb-1">Avslagen</p>
+                        <p className="text-sm font-medium text-accent-pink">
                           {new Date(request.rejectedAt).toLocaleDateString('sv-SE')}
                         </p>
                       </div>
                     )}
                     <div>
-                      <p className="text-xs text-text-gray mb-1">Senaste aktivitet</p>
-                      <p className="text-sm font-medium text-text-dark">{request.lastActivity}</p>
+                      <p className="text-xs text-gray-600 mb-1">Senaste aktivitet</p>
+                      <p className="text-sm font-medium text-primary-navy">{request.lastActivity}</p>
                     </div>
                     {request.status === 'approved' && (
                       <div>
-                        <p className="text-xs text-text-gray mb-1">Dokument</p>
-                        <p className="text-sm font-medium text-primary-blue">
+                        <p className="text-xs text-gray-600 mb-1">Dokument</p>
+                        <p className="text-sm font-medium text-accent-pink">
                           {request.documentsAvailable} tillgängliga
                         </p>
                       </div>
@@ -282,14 +282,14 @@ export default function NDAStatusPage() {
                           <FileText className="w-4 h-4" />
                           Visa dokument
                         </Link>
-                        <button className="px-3 py-1.5 text-sm text-primary-blue hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-2">
+                        <button className="px-3 py-1.5 text-sm text-accent-pink hover:bg-accent-pink/10 rounded-lg transition-colors flex items-center gap-2">
                           <MessageSquare className="w-4 h-4" />
                           Kontakta säljare
                         </button>
                       </>
                     )}
                     {request.status === 'pending' && (
-                      <span className="text-sm text-text-gray">
+                      <span className="text-sm text-gray-600">
                         Väntar på säljarens godkännande...
                       </span>
                     )}
@@ -304,8 +304,8 @@ export default function NDAStatusPage() {
         {filteredRequests.length === 0 && (
           <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
             <Shield className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-text-dark mb-2">Inga NDA-förfrågningar</h3>
-            <p className="text-sm text-text-gray">
+            <h3 className="text-lg font-semibold text-primary-navy mb-2">Inga NDA-förfrågningar</h3>
+            <p className="text-sm text-gray-600">
               {filter === 'all' 
                 ? 'Du har inte skickat några NDA-förfrågningar än.'
                 : `Du har inga ${filter === 'approved' ? 'godkända' : filter === 'pending' ? 'väntande' : 'avslagna'} NDA-förfrågningar.`

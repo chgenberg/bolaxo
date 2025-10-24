@@ -23,7 +23,7 @@ export default function PipelinePage() {
   
   const stages = [
     { id: 'lead', name: 'Lead', color: 'bg-gray-100 border-gray-300' },
-    { id: 'nda', name: 'NDA', color: 'bg-blue-50 border-blue-300' },
+    { id: 'nda', name: 'NDA', color: 'bg-accent-pink/10 border-blue-300' },
     { id: 'dd', name: 'Due Diligence', color: 'bg-amber-50 border-amber-300' },
     { id: 'loi', name: 'LOI', color: 'bg-green-50 border-green-300' },
     { id: 'spa', name: 'SPA', color: 'bg-purple-50 border-purple-300' },
@@ -121,8 +121,8 @@ export default function PipelinePage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Pipeline</h1>
-            <p className="text-sm text-text-gray mt-1">Drag och släpp för att flytta affärer mellan steg</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Pipeline</h1>
+            <p className="text-sm text-gray-600 mt-1">Drag och släpp för att flytta affärer mellan steg</p>
           </div>
           <div className="flex items-center gap-3">
             <SelectDropdown
@@ -150,9 +150,9 @@ export default function PipelinePage() {
             const totalValue = stageDeals.reduce((sum, deal) => sum + deal.value, 0)
             return (
               <div key={stage.id} className="bg-white p-4 rounded-lg border border-gray-200">
-                <h3 className="text-sm font-medium text-text-dark">{stage.name}</h3>
-                <p className="text-xl sm:text-2xl font-bold text-text-dark mt-1">{stageDeals.length}</p>
-                <p className="text-xs text-text-gray">{(totalValue / 1000000).toFixed(0)} MSEK</p>
+                <h3 className="text-sm font-medium text-primary-navy">{stage.name}</h3>
+                <p className="text-xl sm:text-2xl font-bold text-primary-navy mt-1">{stageDeals.length}</p>
+                <p className="text-xs text-gray-600">{(totalValue / 1000000).toFixed(0)} MSEK</p>
               </div>
             )
           })}
@@ -168,7 +168,7 @@ export default function PipelinePage() {
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, stage.id)}
               >
-                <h3 className="font-semibold text-sm text-text-dark mb-3 text-center">
+                <h3 className="font-semibold text-sm text-primary-navy mb-3 text-center">
                   {stage.name}
                 </h3>
                 
@@ -181,29 +181,29 @@ export default function PipelinePage() {
                       className="bg-white p-3 rounded-lg shadow-sm cursor-move hover:shadow-md transition-shadow"
                     >
                       <div className="mb-2">
-                        <h4 className="font-medium text-sm text-text-dark truncate">
+                        <h4 className="font-medium text-sm text-primary-navy truncate">
                           {deal.businessName}
                         </h4>
-                        <p className="text-xs text-text-gray truncate">
+                        <p className="text-xs text-gray-600 truncate">
                           {deal.clientName}
                         </p>
                       </div>
                       
                       <div className="space-y-1 text-xs">
                         <div className="flex items-center justify-between">
-                          <span className="text-text-gray">Värde:</span>
-                          <span className="font-medium text-text-dark">
+                          <span className="text-gray-600">Värde:</span>
+                          <span className="font-medium text-primary-navy">
                             {(deal.value / 1000000).toFixed(1)} MSEK
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-text-gray">Sannolikhet:</span>
-                          <span className="font-medium text-text-dark">{deal.probability}%</span>
+                          <span className="text-gray-600">Sannolikhet:</span>
+                          <span className="font-medium text-primary-navy">{deal.probability}%</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-text-gray">Dagar:</span>
+                          <span className="text-gray-600">Dagar:</span>
                           <span className={`font-medium ${
-                            deal.daysInStage > 10 ? 'text-amber-600' : 'text-text-dark'
+                            deal.daysInStage > 10 ? 'text-amber-600' : 'text-primary-navy'
                           }`}>
                             {deal.daysInStage}d
                           </span>
@@ -211,8 +211,8 @@ export default function PipelinePage() {
                       </div>
                       
                       <div className="mt-2 pt-2 border-t border-gray-100">
-                        <p className="text-xs text-text-gray">{deal.advisor}</p>
-                        <p className="text-xs text-primary-blue mt-1">
+                        <p className="text-xs text-gray-600">{deal.advisor}</p>
+                        <p className="text-xs text-accent-pink mt-1">
                           → {deal.nextAction}
                         </p>
                       </div>
@@ -226,7 +226,7 @@ export default function PipelinePage() {
 
         {/* Conversion metrics */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-4">Konverteringsmetrik</h2>
+          <h2 className="text-lg font-semibold text-primary-navy mb-4">Konverteringsmetrik</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             {[
               { from: 'Lead', to: 'NDA', rate: 67 },
@@ -237,14 +237,14 @@ export default function PipelinePage() {
             ].map((metric, index) => (
               <div key={index} className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <span className="text-sm text-text-gray">{metric.from}</span>
-                  <ChevronRight className="w-4 h-4 text-text-gray" />
-                  <span className="text-sm text-text-gray">{metric.to}</span>
+                  <span className="text-sm text-gray-600">{metric.from}</span>
+                  <ChevronRight className="w-4 h-4 text-gray-600" />
+                  <span className="text-sm text-gray-600">{metric.to}</span>
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-text-dark">{metric.rate}%</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary-navy">{metric.rate}%</div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                   <div 
-                    className="bg-primary-blue h-2 rounded-full"
+                    className="bg-accent-pink h-2 rounded-full"
                     style={{ width: `${metric.rate}%` }}
                   />
                 </div>
