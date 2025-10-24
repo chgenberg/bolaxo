@@ -6,9 +6,10 @@ const prisma = new PrismaClient()
 // PATCH /api/listings/[id]/status?action=pause|resume|delete
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const { searchParams } = new URL(request.url)
     const action = searchParams.get('action') as 'pause' | 'resume' | 'delete' | null
     const body = await request.json()
@@ -37,7 +38,7 @@ export async function PATCH(
     if (action === 'pause') {
       const updated = await prisma.listing.update({
         where: { id: params.id },
-        data: { status: 'paused', pausedAt: new Date() }
+        data: { status: 'paused' }
       })
       return NextResponse.json({ success: true, listing: updated, message: 'Annons pausad' })
     }
@@ -45,7 +46,7 @@ export async function PATCH(
     if (action === 'resume') {
       const updated = await prisma.listing.update({
         where: { id: params.id },
-        data: { status: 'active', pausedAt: null }
+        data: { status: 'active' }
       })
       return NextResponse.json({ success: true, listing: updated, message: 'Annons aktiv igen' })
     }
