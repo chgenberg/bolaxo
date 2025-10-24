@@ -39,6 +39,8 @@ export default function BuyerStartPage() {
   const { success, error: showError } = useToast()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
   
   const [formData, setFormData] = useState({
     preferredRegions: [] as string[],
@@ -52,19 +54,6 @@ export default function BuyerStartPage() {
     investmentExperience: 'first_time',
     financingReady: false
   })
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">Du måste logga in först</p>
-          <Link href="/login" className="text-blue-900 font-semibold hover:underline">
-            Gå till login →
-          </Link>
-        </div>
-      </div>
-    )
-  }
 
   const toggleRegion = (region: string) => {
     setFormData(prev => ({
@@ -85,6 +74,22 @@ export default function BuyerStartPage() {
   }
 
   const handleSave = async () => {
+    // If not logged in, redirect to login with formData in session
+    if (!user) {
+      if (!email || !acceptedTerms) {
+        showError('Fyll i email och godkänn villkoren för att fortsätta')
+        return
+      }
+      // Redirect to login with continuation
+      sessionStorage.setItem('buyerFormData', JSON.stringify({
+        email,
+        ...formData
+      }))
+      router.push('/login?from=buyer-signup')
+      return
+    }
+
+    // If logged in, save profile to database
     setLoading(true)
     try {
       const response = await fetch('/api/buyer-profile', {
@@ -134,9 +139,36 @@ export default function BuyerStartPage() {
 
       {/* Content */}
       <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-12">
-        {/* Step 1: Regioner */}
+        {/* Step 1: Email (if not logged in) + Regioner */}
         {step === 1 && (
           <div className="space-y-6">
+            {/* Email field for non-logged-in users */}
+            {!user && (
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-3">Din email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="din@email.se"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                  required
+                />
+                <label className="flex items-start gap-3 mt-4">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="mt-1"
+                    required
+                  />
+                  <span className="text-sm text-gray-700">
+                    Jag godkänner <a href="/användarvillkor" className="text-blue-900 hover:underline">användarvillkoren</a> och <a href="/integritet" className="text-blue-900 hover:underline">integritetspolicyn</a>
+                  </span>
+                </label>
+              </div>
+            )}
+
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
