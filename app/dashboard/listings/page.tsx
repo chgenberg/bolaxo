@@ -99,20 +99,20 @@ export default function ListingsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Mina annonser</h1>
-            <p className="text-sm text-gray-600 mt-1">Hantera och följ upp dina företagsannonser</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Mina annonser</h1>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">Hantera och följ upp dina annonser</p>
           </div>
-          <Link href="/salja/start" className="px-4 py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors">
-            Skapa ny annons
+          <Link href="/salja/start" className="px-4 py-2.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-sm sm:text-base min-h-11 sm:min-h-auto inline-flex items-center justify-center">
+            + Ny annons
           </Link>
         </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-2">
+        {/* Filters - Mobile optimized */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {[
             { value: 'all', label: 'Alla', count: filteredListings.length },
             { value: 'active', label: 'Aktiva', count: filteredListings.filter(l => l.status === 'active').length },
@@ -122,7 +122,7 @@ export default function ListingsPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
                 filter === option.value
                   ? 'bg-blue-900 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -133,16 +133,17 @@ export default function ListingsPage() {
           ))}
         </div>
 
-        {/* Listings */}
-        <div className="space-y-4">
+        {/* Listings - Card based layout */}
+        <div className="space-y-3 sm:space-y-4">
           {displayListings.map((listing) => (
-            <div key={listing.id} className="bg-white rounded-lg border border-gray-200 p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  {/* Title and status */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900">{listing.title}</h3>
-                    <span className={`px-2.5 py-0.5 text-xs font-medium rounded-full ${
+            <div key={listing.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
+              {/* Header row - Mobile optimized */}
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
+                <div className="flex-1 min-w-0">
+                  {/* Title and status badges */}
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{listing.title}</h3>
+                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap ${
                       listing.status === 'active' 
                         ? 'bg-green-100 text-green-700'
                         : listing.status === 'paused'
@@ -151,7 +152,7 @@ export default function ListingsPage() {
                     }`}>
                       {listing.status === 'active' ? 'Aktiv' : listing.status === 'paused' ? 'Pausad' : 'Utkast'}
                     </span>
-                    <span className={`px-2.5 py-0.5 text-xs font-medium rounded-full ${
+                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                       listing.package === 'pro_plus'
                         ? 'bg-purple-100 text-purple-700'
                         : listing.package === 'pro'
@@ -162,80 +163,64 @@ export default function ListingsPage() {
                     </span>
                   </div>
 
-                  {/* Metrics */}
-                  <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
+                  {/* Metrics - Responsive grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4">
                     <div>
                       <p className="text-xs text-gray-600 mb-1">Visningar</p>
-                      <div className="flex items-center gap-2">
-                        <Eye className="w-4 h-4 text-gray-600" />
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <Eye className="w-4 h-4 text-gray-600 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-900">{listing.views.toLocaleString('sv-SE')}</span>
-                        {listing.viewsToday > 0 && (
-                          <span className="text-xs text-blue-600">+{listing.viewsToday} idag</span>
-                        )}
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs text-gray-600 mb-1">NDA-förfrågningar</p>
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-gray-600" />
+                      <p className="text-xs text-gray-600 mb-1">NDA</p>
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <Shield className="w-4 h-4 text-gray-600 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-900">{listing.ndaRequests}</span>
                       </div>
                     </div>
                     <div>
                       <p className="text-xs text-gray-600 mb-1">Meddelanden</p>
-                      <div className="flex items-center gap-2">
-                        <MessageSquare className="w-4 h-4 text-gray-600" />
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <MessageSquare className="w-4 h-4 text-gray-600 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-900">{listing.messages}</span>
                       </div>
                     </div>
-                    <div>
+                    <div className="hidden sm:block">
                       <p className="text-xs text-gray-600 mb-1">Sparningar</p>
-                      <div className="flex items-center gap-2">
-                        <Bookmark className="w-4 h-4 text-gray-600" />
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <Bookmark className="w-4 h-4 text-gray-600 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-900">{listing.saves}</span>
                       </div>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Prisintervall</p>
+                    <div className="hidden md:block">
+                      <p className="text-xs text-gray-600 mb-1">Pris</p>
                       <span className="text-sm font-medium text-blue-600">{listing.priceRange}</span>
                     </div>
-                    <div>
+                    <div className="hidden md:block">
                       <p className="text-xs text-gray-600 mb-1">Konvertering</p>
                       <span className="text-sm font-medium text-gray-900">
                         {listing.views > 0 ? ((listing.ndaRequests / listing.views) * 100).toFixed(1) : '0'}%
                       </span>
                     </div>
                   </div>
-
-                  {/* Footer info */}
-                  <div className="flex items-center gap-4 text-xs text-gray-600">
-                    {listing.publishedAt && (
-                      <>
-                        <span>Publicerad: {new Date(listing.publishedAt).toLocaleDateString('sv-SE')}</span>
-                        <span>•</span>
-                        <span>Utgår: {listing.expiresAt ? new Date(listing.expiresAt).toLocaleDateString('sv-SE') : 'N/A'}</span>
-                        <span>•</span>
-                      </>
-                    )}
-                    <span>Senaste aktivitet: {listing.lastActivity}</span>
-                  </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex items-center gap-2 ml-6">
+                {/* Action Buttons - Mobile optimized */}
+                <div className="flex items-center gap-1 sm:gap-2 mt-3 sm:mt-0 flex-shrink-0">
                   <Link 
                     href={`/objekt/${listing.id}`}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
                     title="Visa annons"
                   >
-                    <Eye className="w-5 h-5 text-gray-600" />
+                    <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                   </Link>
                   <Link 
                     href={`/dashboard/analytics`}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
                     title="Analytics"
                   >
-                    <TrendingUp className="w-5 h-5 text-gray-600" />
+                    <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                   </Link>
                   
                   {/* Pause/Resume */}
@@ -243,41 +228,52 @@ export default function ListingsPage() {
                     <button
                       onClick={() => handleListingAction(listing.id, 'pause')}
                       disabled={processing === listing.id}
-                      className="p-2 hover:bg-amber-50 rounded-lg transition-colors disabled:opacity-50"
+                      className="p-2 hover:bg-amber-50 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
                       title="Pausa annons"
                     >
-                      <Pause className="w-5 h-5 text-amber-600" />
+                      <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
                     </button>
                   ) : listing.status === 'paused' ? (
                     <button
                       onClick={() => handleListingAction(listing.id, 'resume')}
                       disabled={processing === listing.id}
-                      className="p-2 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
+                      className="p-2 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
                       title="Aktivera annons"
                     >
-                      <Play className="w-5 h-5 text-green-600" />
+                      <Play className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                     </button>
                   ) : null}
                   
                   {/* Delete */}
                   <button
                     onClick={() => {
-                      if (confirm('Är du säker på att du vill ta bort denna annons?')) {
+                      if (confirm('Är du säker?')) {
                         handleListingAction(listing.id, 'delete')
                       }
                     }}
                     disabled={processing === listing.id}
-                    className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                    className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
                     title="Ta bort annons"
                   >
-                    <Trash2 className="w-5 h-5 text-red-600" />
+                    <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
                   </button>
                 </div>
               </div>
 
-              {/* Quick actions bar */}
+              {/* Footer info - Mobile optimized */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs text-gray-600 mt-3 sm:mt-0 pt-3 sm:pt-0 sm:border-t sm:border-gray-100 sm:pt-3">
+                {listing.publishedAt && (
+                  <>
+                    <span className="whitespace-nowrap">Publ: {new Date(listing.publishedAt).toLocaleDateString('sv-SE')}</span>
+                    <span className="hidden sm:inline">•</span>
+                  </>
+                )}
+                <span className="whitespace-nowrap">Senast: {listing.lastActivity}</span>
+              </div>
+
+              {/* Quick actions bar - Mobile */}
               {listing.status === 'active' && (
-                <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-3">
+                <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                   <Link 
                     href={`/objekt/${listing.id}`}
                     className="text-sm text-blue-600 hover:underline"
@@ -286,14 +282,10 @@ export default function ListingsPage() {
                   </Link>
                   <Link 
                     href={`/dashboard/analytics`}
-                    className="text-sm text-blue-600 hover:underline"
+                    className="text-sm text-blue-600 hover:underline hidden sm:block"
                   >
                     Analys
                   </Link>
-                  <button className="text-sm text-blue-600 hover:underline ml-auto">
-                    <Download className="w-4 h-4 inline mr-1" />
-                    Exportera rapport
-                  </button>
                 </div>
               )}
             </div>

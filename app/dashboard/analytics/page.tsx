@@ -53,56 +53,56 @@ export default function AnalyticsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
-            <p className="text-sm text-gray-600 mt-1">Detaljerad statistik för dina annonser</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Analytics</h1>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">Statistik för dina annonser</p>
           </div>
-          <button className="px-4 py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors flex items-center gap-2">
+          <button className="px-3 sm:px-4 py-2.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base min-h-11 sm:min-h-auto">
             <Download className="w-4 h-4" />
-            Exportera rapport
+            <span className="hidden sm:inline">Exportera</span>
           </button>
         </div>
 
-        {/* Stats Cards */}
+        {/* Stats Cards - Responsive grid */}
         {!loading && summary && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600 font-medium">Totala visningar</span>
-                <Eye className="w-5 h-5 text-blue-900" />
+                <span className="text-xs sm:text-sm text-gray-600 font-medium">Visningar</span>
+                <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{summary.totalViews}</p>
-              <p className="text-xs text-gray-500 mt-2">Snitt: {summary.avgViewsPerListing} per annons</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalViews}</p>
+              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Snitt: {summary.avgViewsPerListing}</p>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600 font-medium">NDA-förfrågningar</span>
-                <Users className="w-5 h-5 text-blue-900" />
+                <span className="text-xs sm:text-sm text-gray-600 font-medium">NDA</span>
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{summary.totalNDAs}</p>
-              <p className="text-xs text-gray-500 mt-2">Konvertering: {summary.ndaConversionRate}%</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalNDAs}</p>
+              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konv: {summary.ndaConversionRate}%</p>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600 font-medium">Meddelanden</span>
-                <MessageSquare className="w-5 h-5 text-blue-900" />
+                <span className="text-xs sm:text-sm text-gray-600 font-medium">Meddelanden</span>
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{summary.totalMessages}</p>
-              <p className="text-xs text-gray-500 mt-2">Aktiva konversationer</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalMessages}</p>
+              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konversationer</p>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600 font-medium">Tidsperiod</span>
-                <BarChart3 className="w-5 h-5 text-blue-900" />
+                <span className="text-xs sm:text-sm text-gray-600 font-medium">Sparningar</span>
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{listings.length}</p>
-              <p className="text-xs text-gray-500 mt-2">Aktiva annonser</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalSaves}</p>
+              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Intresserade köpare</p>
             </div>
           </div>
         )}
