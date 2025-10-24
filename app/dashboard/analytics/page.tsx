@@ -1,38 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import SelectDropdown from '@/components/dashboard/SelectDropdown'
-import { BarChart3, TrendingUp, Eye, Users, Calendar, Download, Filter } from 'lucide-react'
+import { BarChart3, TrendingUp, Eye, Users, MessageSquare, Download, Filter } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function AnalyticsPage() {
+  const { user } = useAuth()
   const [dateRange, setDateRange] = useState('30days')
   const [selectedListing, setSelectedListing] = useState('all')
-  
-  const viewsData = [
-    { date: '1 Jun', views: 45, ndas: 2, messages: 5 },
-    { date: '5 Jun', views: 62, ndas: 3, messages: 8 },
-    { date: '10 Jun', views: 78, ndas: 4, messages: 12 },
-    { date: '15 Jun', views: 95, ndas: 5, messages: 15 },
-    { date: '20 Jun', views: 112, ndas: 6, messages: 18 },
-    { date: '25 Jun', views: 89, ndas: 4, messages: 14 },
-    { date: '30 Jun', views: 103, ndas: 5, messages: 16 }
-  ]
+  const [loading, setLoading] = useState(true)
+  const [listings, setListings] = useState<any[]>([])
+  const [summary, setSummary] = useState<any>(null)
+  const [trend, setTrend] = useState<any[]>([])
 
-  const sourceData = [
-    { source: 'Direkt trafik', visits: 234, percentage: 35 },
-    { source: 'Google sökning', visits: 189, percentage: 28 },
-    { source: 'E-postlänk', visits: 123, percentage: 18 },
-    { source: 'Sociala medier', visits: 78, percentage: 12 },
-    { source: 'Andra', visits: 47, percentage: 7 }
-  ]
+  // Fetch analytics data
+  useEffect(() => {
+    if (!user) return
 
-  const geoData = [
-    { region: 'Stockholm', visits: 287, percentage: 42 },
-    { region: 'Göteborg', visits: 156, percentage: 23 },
-    { region: 'Malmö', visits: 98, percentage: 14 },
-    { region: 'Uppsala', visits: 67, percentage: 10 },
-    { region: 'Övriga', visits: 75, percentage: 11 }
+    const fetchAnalytics = async () => {
+      setLoading(true)
+      try {
+        const params = new URLSearchParams({
+          sellerId: user.id,
+          dateRange,
+          ...(selectedListing !== 'all' && { listingId: selectedListing })
+        })
+
+        const response = await fetch(`/api/analytics?${params}`)
+        if (response.ok) {
+          const data = await response.json()
+          setListings(data.listings || [])
+          setSummary(data.summary || {})
+          setTrend(data.trend || [])
+        }
+      } catch (error) {
+        console.error('Error fetching analytics:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAnalytics()
+  }, [user, dateRange, selectedListing])
+
+  // Get all listing options
+  const listingOptions = [
+    { value: 'all', label: 'Alla annonser' },
+    ...listings.map(l => ({ value: l.id, label: l.title }))
   ]
 
   return (
@@ -41,210 +57,134 @@ export default function AnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Analytics</h1>
-            <p className="text-sm text-text-gray mt-1">Detaljerad statistik för dina annonser</p>
+            <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
+            <p className="text-sm text-gray-600 mt-1">Detaljerad statistik för dina annonser</p>
           </div>
-          <button className="btn-secondary flex items-center gap-2">
+          <button className="px-4 py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors flex items-center gap-2">
             <Download className="w-4 h-4" />
             Exportera rapport
           </button>
         </div>
 
+        {/* Stats Cards */}
+        {!loading && summary && (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600 font-medium">Totala visningar</span>
+                <Eye className="w-5 h-5 text-blue-900" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{summary.totalViews}</p>
+              <p className="text-xs text-gray-500 mt-2">Snitt: {summary.avgViewsPerListing} per annons</p>
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600 font-medium">NDA-förfrågningar</span>
+                <Users className="w-5 h-5 text-blue-900" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{summary.totalNDAs}</p>
+              <p className="text-xs text-gray-500 mt-2">Konvertering: {summary.ndaConversionRate}%</p>
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600 font-medium">Meddelanden</span>
+                <MessageSquare className="w-5 h-5 text-blue-900" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{summary.totalMessages}</p>
+              <p className="text-xs text-gray-500 mt-2">Aktiva konversationer</p>
+            </div>
+
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600 font-medium">Tidsperiod</span>
+                <BarChart3 className="w-5 h-5 text-blue-900" />
+              </div>
+              <p className="text-3xl font-bold text-gray-900">{listings.length}</p>
+              <p className="text-xs text-gray-500 mt-2">Aktiva annonser</p>
+            </div>
+          </div>
+        )}
+
         {/* Filters */}
-        <div className="bg-white p-4 rounded-xl border border-gray-200">
+        <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
+              <Filter className="w-5 h-5 text-gray-600" />
               <SelectDropdown
                 value={selectedListing}
                 onChange={setSelectedListing}
-                options={[
-                  { value: 'all', label: 'Alla annonser' },
-                  { value: 'lst-001', label: 'E-handelsföretag i Stockholm' },
-                  { value: 'lst-002', label: 'SaaS-bolag med ARR 8 MSEK' },
-                  { value: 'lst-003', label: 'Konsultbolag inom IT' }
-                ]}
+                options={listingOptions}
                 className="w-64"
               />
               
-              <div className="flex items-center gap-1">
-                {['7days', '30days', '90days', 'year'].map((range) => (
-                  <button
-                    key={range}
-                    onClick={() => setDateRange(range)}
-                    className={`px-3 py-2 text-sm rounded-lg transition-colors ${
-                      dateRange === range
-                        ? 'bg-primary-blue text-white'
-                        : 'bg-gray-100 text-text-gray hover:bg-gray-200'
-                    }`}
-                  >
-                    {range === '7days' ? '7 dagar' : 
-                     range === '30days' ? '30 dagar' :
-                     range === '90days' ? '90 dagar' : 'År'}
-                  </button>
+              <SelectDropdown
+                value={dateRange}
+                onChange={setDateRange}
+                options={[
+                  { value: '7days', label: 'Senaste 7 dagar' },
+                  { value: '30days', label: 'Senaste 30 dagar' },
+                  { value: '90days', label: 'Senaste 90 dagar' },
+                  { value: '1year', label: 'Senaste året' }
+                ]}
+                className="w-56"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Listings Table */}
+        {!loading && listings.length > 0 ? (
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Annons</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Visningar</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">NDA-förfrågningar</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Godkända NDAs</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Meddelanden</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Publicerad</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {listings.map((listing) => (
+                  <tr key={listing.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{listing.title}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      <div className="flex items-center gap-2">
+                        <Eye className="w-4 h-4 text-gray-400" />
+                        {listing.views}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{listing.ndaRequests}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      <span className="inline-block px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-medium">
+                        {listing.ndaApproved}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{listing.messages}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {new Date(listing.createdAt).toLocaleDateString('sv-SE')}
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            </div>
-            
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <Filter className="w-5 h-5 text-text-gray" />
-            </button>
+              </tbody>
+            </table>
           </div>
-        </div>
+        ) : (
+          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+            <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">Ingen data att visa ännu</p>
+          </div>
+        )}
 
-        {/* KPIs */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <Eye className="w-8 h-8 text-primary-blue" />
-              <span className="text-sm text-primary-blue font-medium">+23%</span>
-            </div>
-            <p className="text-2xl font-bold text-text-dark">4 132</p>
-            <p className="text-sm text-text-gray">Totala visningar</p>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <Users className="w-8 h-8 text-primary-blue" />
-              <span className="text-sm text-primary-blue font-medium">+15%</span>
-            </div>
-            <p className="text-2xl font-bold text-text-dark">2 847</p>
-            <p className="text-sm text-text-gray">Unika besökare</p>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="w-8 h-8 text-primary-blue" />
-              <span className="text-sm text-primary-blue font-medium">+2.3%</span>
-            </div>
-            <p className="text-2xl font-bold text-text-dark">6.5%</p>
-            <p className="text-sm text-text-gray">Konverteringsgrad</p>
-          </div>
-          
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <Calendar className="w-8 h-8 text-primary-blue" />
-            </div>
-            <p className="text-2xl font-bold text-text-dark">3:24</p>
-            <p className="text-sm text-text-gray">Genomsnittlig tid</p>
-          </div>
-        </div>
-
-        {/* Views chart */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-6">Aktivitet över tid</h2>
-          
-          <div className="h-64 flex items-end justify-between gap-2">
-            {viewsData.map((data, index) => (
-              <div key={index} className="flex-1 flex flex-col items-center gap-2">
-                <div className="w-full flex flex-col gap-1">
-                  <div 
-                    className="bg-primary-blue rounded-t"
-                    style={{ height: `${data.views * 1.5}px` }}
-                  />
-                  <div 
-                    className="bg-blue-300 rounded-t"
-                    style={{ height: `${data.ndas * 10}px` }}
-                  />
-                  <div 
-                    className="bg-blue-100 rounded-t"
-                    style={{ height: `${data.messages * 5}px` }}
-                  />
-                </div>
-                <span className="text-xs text-text-gray">{data.date}</span>
-              </div>
-            ))}
-          </div>
-          
-          <div className="flex items-center justify-center gap-6 mt-4">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-primary-blue rounded"></div>
-              <span className="text-xs text-text-gray">Visningar</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-blue-300 rounded"></div>
-              <span className="text-xs text-text-gray">NDA-förfrågningar</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-blue-100 rounded"></div>
-              <span className="text-xs text-text-gray">Meddelanden</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Traffic sources */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <h2 className="text-lg font-semibold text-text-dark mb-6">Trafikkällor</h2>
-            
-            <div className="space-y-3">
-              {sourceData.map((source) => (
-                <div key={source.source}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-text-dark">{source.source}</span>
-                    <span className="text-sm text-text-gray">{source.visits} besök</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-primary-blue h-2 rounded-full"
-                      style={{ width: `${source.percentage}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Geographic distribution */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <h2 className="text-lg font-semibold text-text-dark mb-6">Geografisk fördelning</h2>
-            
-            <div className="space-y-3">
-              {geoData.map((region) => (
-                <div key={region.region}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-text-dark">{region.region}</span>
-                    <span className="text-sm text-text-gray">{region.percentage}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-green-500 h-2 rounded-full"
-                      style={{ width: `${region.percentage}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Conversion funnel */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-text-dark mb-6">Konverteringstratt</h2>
-          
-          <div className="space-y-2">
-            {[
-              { step: 'Visningar', count: 4132, percentage: 100 },
-              { step: 'Klick på "Visa mer"', count: 1847, percentage: 45 },
-              { step: 'NDA-förfrågningar', count: 268, percentage: 6.5 },
-              { step: 'Godkända NDA', count: 189, percentage: 4.6 },
-              { step: 'Meddelanden', count: 156, percentage: 3.8 },
-              { step: 'Möten bokade', count: 23, percentage: 0.6 }
-            ].map((step, index) => (
-              <div key={step.step} className="flex items-center gap-4">
-                <div className="w-40 text-sm text-text-dark">{step.step}</div>
-                <div className="flex-1">
-                  <div className="w-full bg-gray-200 rounded-full h-8">
-                    <div 
-                      className="bg-primary-blue h-8 rounded-full flex items-center justify-end pr-3"
-                      style={{ width: `${step.percentage}%` }}
-                    >
-                      <span className="text-xs text-white font-medium">{step.count}</span>
-                    </div>
-                  </div>
-                </div>
-                <span className="text-sm text-text-gray w-12 text-right">{step.percentage}%</span>
-              </div>
-            ))}
+        {/* Trend Chart Placeholder */}
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Trend (senaste {dateRange === '7days' ? '7 dagar' : '30 dagar'})</h2>
+          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-200">
+            <p className="text-gray-500">Trendgraf kommer snart</p>
           </div>
         </div>
       </div>
