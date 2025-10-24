@@ -1,11 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { mockObjects, BusinessObject } from '@/data/mockObjects'
+import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/contexts/ToastContext'
 import ObjectCard from '@/components/ObjectCard'
 import { Search, SlidersHorizontal, ChevronDown, X, TrendingUp, AlertCircle } from 'lucide-react'
 
 export default function SearchPage() {
+  const router = useRouter()
+  const { user } = useAuth()
+  const { error: showError, info } = useToast()
+  const [profileChecked, setProfileChecked] = useState(false)
   const [allObjects, setAllObjects] = useState<BusinessObject[]>(mockObjects)
   const [filteredObjects, setFilteredObjects] = useState<BusinessObject[]>(mockObjects)
   const [loading, setLoading] = useState(true)
@@ -22,11 +29,38 @@ export default function SearchPage() {
     sortBy: 'newest'
   })
 
+  // Check buyer profile on mount
+  useEffect(() => {
+    const checkProfile = async () => {
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      try {
+        const response = await fetch(`/api/buyer-profile?userId=${user.id}`)
+        if (!response.ok) {
+          info('Du behöver slutföra din profil innan du kan söka')
+          router.push('/kopare/start')
+          return
+        }
+        setProfileChecked(true)
+      } catch (error) {
+        console.error('Error checking profile:', error)
+        setProfileChecked(true) // Allow anyway
+      }
+    }
+
+    checkProfile()
+  }, [user, router, info])
+
   // Active filter count
   const activeFilterCount = Object.values(filters).filter(v => v && v !== 'newest').length + (searchQuery ? 1 : 0)
 
   // Fetch listings on mount
   useEffect(() => {
+    if (!profileChecked) return
+
     const fetchListings = async () => {
       try {
         const response = await fetch('/api/listings?status=active')
@@ -69,7 +103,7 @@ export default function SearchPage() {
     }
 
     fetchListings()
-  }, [])
+  }, [profileChecked])
 
   const applyFilters = () => {
     setLoading(true)
