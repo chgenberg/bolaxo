@@ -40,10 +40,10 @@ export default function InvoicePaymentPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-16">
-      <div className="max-w-2xl mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
+      <div className="max-w-2xl mx-auto px-3 sm:px-4">
         <div className="card">
-          <h1 className="text-2xl font-bold text-text-dark mb-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-text-dark mb-3">
             Faktura
           </h1>
           <p className="text-text-gray mb-8">
@@ -69,7 +69,7 @@ export default function InvoicePaymentPage() {
                   type="radio"
                   checked={deliveryMethod === 'peppol'}
                   onChange={() => setDeliveryMethod('peppol')}
-                  className="mt-1 w-5 h-5 text-primary-blue"
+                  className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
                 />
                 <div className="ml-4">
                   <h3 className="font-bold mb-1">E-faktura (Peppol)</h3>
@@ -103,7 +103,7 @@ export default function InvoicePaymentPage() {
                   type="radio"
                   checked={deliveryMethod === 'email'}
                   onChange={() => setDeliveryMethod('email')}
-                  className="mt-1 w-5 h-5 text-primary-blue"
+                  className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
                 />
                 <div className="ml-4">
                   <h3 className="font-bold mb-1">PDF via e-post</h3>

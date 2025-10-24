@@ -38,8 +38,8 @@ export default function ContactPage() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-background-off-white py-16">
-        <div className="max-w-2xl mx-auto px-4 text-center">
+      <main className="min-h-screen bg-background-off-white py-6 sm:py-8 md:py-12">
+        <div className="max-w-2xl mx-auto px-3 sm:px-4 text-center">
           <div className="bg-white p-12 rounded-2xl shadow-card">
             <div className="w-20 h-20 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-6">
               <Send className="w-10 h-10 text-primary-blue" />
@@ -71,8 +71,8 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background-off-white py-16">
-      <div className="max-w-6xl mx-auto px-4">
+    <main className="min-h-screen bg-background-off-white py-6 sm:py-8 md:py-12">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="heading-1 mb-4">Kontakta oss</h1>
@@ -82,7 +82,7 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
           {/* Contact Information */}
           <div className="lg:col-span-1">
             <div className="bg-white p-8 rounded-2xl shadow-card h-full">
@@ -90,7 +90,7 @@ export default function ContactPage() {
               
               <div className="space-y-6">
                 <div className="flex items-start">
-                  <Phone className="w-5 h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
                   <div>
                     <p className="font-semibold text-text-dark">Telefon</p>
                     <p className="text-text-gray">08-123 456 78</p>
@@ -99,7 +99,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start">
-                  <Mail className="w-5 h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
                   <div>
                     <p className="font-semibold text-text-dark">E-post</p>
                     <p className="text-text-gray">info@bolagsplatsen.se</p>
@@ -108,7 +108,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start">
-                  <MapPin className="w-5 h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
                   <div>
                     <p className="font-semibold text-text-dark">Besöksadress</p>
                     <p className="text-text-gray">Stureplan 15</p>
@@ -117,7 +117,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start">
-                  <Clock className="w-5 h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
                   <div>
                     <p className="font-semibold text-text-dark">Svarstid</p>
                     <p className="text-text-gray">Vanligtvis inom 2-4 timmar</p>
@@ -146,7 +146,7 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-card">
               <h2 className="heading-3 mb-6">Skicka meddelande</h2>
 
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-6">
                 <FormField
                   label="Namn"
                   value={formData.name}
@@ -163,7 +163,7 @@ export default function ContactPage() {
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-6">
                 <FormField
                   label="Telefon (valfritt)"
                   type="tel"
@@ -178,7 +178,7 @@ export default function ContactPage() {
                   <select
                     value={formData.interest}
                     onChange={(e) => setFormData({ ...formData, interest: e.target.value as ContactFormData['interest'] })}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all"
+                    className="w-full px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all"
                   >
                     <option value="buying">Att köpa företag</option>
                     <option value="selling">Att sälja företag</option>
@@ -205,7 +205,7 @@ export default function ContactPage() {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all resize-none"
+                  className="w-full px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all resize-none"
                   placeholder="Beskriv ditt ärende..."
                   required
                 />
@@ -221,7 +221,7 @@ export default function ContactPage() {
                     <>Skickar...</>
                   ) : (
                     <>
-                      <Send className="w-5 h-5 mr-2" />
+                      <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       Skicka meddelande
                     </>
                   )}
@@ -240,10 +240,10 @@ export default function ContactPage() {
 
         {/* Additional Contact Options */}
         <div className="mt-12 bg-white p-8 rounded-2xl shadow-card">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-8 h-8 text-primary-blue" />
+                <MessageCircle className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue" />
               </div>
               <h3 className="font-semibold text-text-dark mb-2">Live Chat</h3>
               <p className="text-sm text-text-gray mb-4">
@@ -256,7 +256,7 @@ export default function ContactPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-primary-blue" />
+                <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue" />
               </div>
               <h3 className="font-semibold text-text-dark mb-2">Boka samtal</h3>
               <p className="text-sm text-text-gray mb-4">
@@ -269,7 +269,7 @@ export default function ContactPage() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-8 h-8 text-primary-blue" />
+                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue" />
               </div>
               <h3 className="font-semibold text-text-dark mb-2">Nyhetsbrev</h3>
               <p className="text-sm text-text-gray mb-4">

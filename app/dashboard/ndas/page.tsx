@@ -176,7 +176,7 @@ export default function NDAsPage() {
       <div className="space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="mb-2">
-          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">NDA-förfrågningar</h1>
+          <h1 className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">NDA-förfrågningar</h1>
           <p className="text-xs sm:text-sm text-text-gray mt-1">Hantera sekretessavtal</p>
         </div>
 
@@ -187,28 +187,28 @@ export default function NDAsPage() {
               <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
               <span className="text-xs text-primary-blue font-medium hidden sm:block">Nytt</span>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'pending').length}</p>
+            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'pending').length}</p>
             <p className="text-xs text-text-gray">Väntande</p>
           </div>
           <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'approved').length}</p>
+            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'approved').length}</p>
             <p className="text-xs text-text-gray">Godkända</p>
           </div>
           <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
+            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
             <p className="text-xs text-text-gray">Avslagna</p>
           </div>
           <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <User className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.length}</p>
+            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.length}</p>
             <p className="text-xs text-text-gray">Totalt</p>
           </div>
         </div>
@@ -224,7 +224,7 @@ export default function NDAsPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
+              className={`px-3 sm:px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
                 filter === option.value
                   ? 'bg-primary-blue text-white'
                   : 'bg-gray-100 text-text-gray hover:bg-gray-200'
@@ -300,14 +300,14 @@ export default function NDAsPage() {
                       <button
                         onClick={() => handleApprove(nda.id, nda)}
                         disabled={processing === nda.id}
-                        className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto"
+                        className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto"
                       >
                         Godkänn
                       </button>
                       <button
                         onClick={() => handleReject(nda.id)}
                         disabled={processing === nda.id}
-                        className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto"
+                        className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto"
                       >
                         Avslå
                       </button>

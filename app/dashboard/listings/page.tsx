@@ -103,10 +103,10 @@ export default function ListingsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Mina annonser</h1>
+            <h1 className="text-xl sm:text-xl sm:text-2xl font-bold text-gray-900">Mina annonser</h1>
             <p className="text-xs sm:text-sm text-gray-600 mt-1">Hantera och följ upp dina annonser</p>
           </div>
-          <Link href="/salja/start" className="px-4 py-2.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-sm sm:text-base min-h-11 sm:min-h-auto inline-flex items-center justify-center">
+          <Link href="/salja/start" className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-sm sm:text-base min-h-11 sm:min-h-auto inline-flex items-center justify-center">
             + Ny annons
           </Link>
         </div>
@@ -122,7 +122,7 @@ export default function ListingsPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
+              className={`px-3 sm:px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
                 filter === option.value
                   ? 'bg-blue-900 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -304,7 +304,7 @@ export default function ListingsPage() {
               }
             </p>
             {filter === 'all' && (
-              <Link href="/salja/start" className="inline-flex px-4 py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800">
+              <Link href="/salja/start" className="inline-flex px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800">
                 Skapa första annonsen
               </Link>
             )}

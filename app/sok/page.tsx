@@ -199,7 +199,7 @@ export default function SearchPage() {
       {/* Header Section */}
       <div className="bg-background-off-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-text-dark text-center uppercase">
+          <h1 className="text-2xl sm:text-2xl sm:text-3xl md:text-4xl font-bold text-text-dark text-center uppercase">
             Sök bland {allObjects.length} företag till salu
           </h1>
         </div>
@@ -332,7 +332,7 @@ export default function SearchPage() {
 
         {/* Loading State */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3 sm:gap-4 md:gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="card animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-4" />
@@ -349,7 +349,7 @@ export default function SearchPage() {
 
         {/* Results Grid */}
         {!loading && filteredObjects.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3 sm:gap-4 md:gap-6">
             {filteredObjects.map((object) => (
               <ObjectCard key={object.id} object={object} />
             ))}
@@ -358,7 +358,7 @@ export default function SearchPage() {
 
         {/* No Results */}
         {!loading && filteredObjects.length === 0 && (
-          <div className="card text-center py-16 max-w-md mx-auto">
+          <div className="card text-center py-6 sm:py-8 md:py-12 max-w-md mx-auto">
             <AlertCircle className="w-16 h-16 text-text-gray/50 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-text-dark mb-2">
               Inga företag hittades

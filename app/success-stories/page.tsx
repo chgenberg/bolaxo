@@ -3,8 +3,8 @@ import { BarChart3, CheckCircle, DollarSign } from 'lucide-react'
 
 export default function SuccessStoriesPage() {
   return (
-    <main className="bg-primary-blue py-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="bg-primary-blue py-6 sm:py-8 md:py-12">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -17,12 +17,12 @@ export default function SuccessStoriesPage() {
 
         {/* Featured Story */}
         <div className="card mb-12 bg-blue-900 text-white">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             <div>
               <span className="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full">
                 Featured Story
               </span>
-              <h2 className="text-3xl font-bold mt-4 mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold mt-4 mb-4">
                 "Från annons till avslut på 45 dagar"
               </h2>
               <p className="opacity-90 mb-6">
@@ -32,7 +32,7 @@ export default function SuccessStoriesPage() {
               <div className="space-y-3">
                 <div className="flex items-start">
                   <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                    <BarChart3 className="w-5 h-5" />
+                    <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div>
                     <div className="font-semibold">12 NDA-förfrågningar</div>
@@ -41,7 +41,7 @@ export default function SuccessStoriesPage() {
                 </div>
                 <div className="flex items-start">
                   <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                    <CheckCircle className="w-5 h-5" />
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div>
                     <div className="font-semibold">5 seriösa budgivare</div>
@@ -50,7 +50,7 @@ export default function SuccessStoriesPage() {
                 </div>
                 <div className="flex items-start">
                   <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-                    <DollarSign className="w-5 h-5" />
+                    <DollarSign className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div>
                     <div className="font-semibold">14 MSEK slutpris</div>
@@ -89,7 +89,7 @@ export default function SuccessStoriesPage() {
         </div>
 
         {/* More Stories */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 mb-12">
           <div className="card">
             <div className="flex items-center mb-4">
               <div className="w-12 h-12 bg-primary-blue rounded-full flex items-center justify-center text-white font-bold mr-3">
@@ -163,25 +163,25 @@ export default function SuccessStoriesPage() {
 
         {/* Stats Banner */}
         <div className="card bg-light-blue text-center">
-          <h2 className="text-2xl font-bold text-text-dark mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-8">
             Samlad statistik från våra genomförda affärer
           </h2>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             <div>
-              <div className="text-3xl font-bold text-primary-blue mb-2">580M</div>
+              <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">580M</div>
               <div className="text-sm text-text-gray">Totalt transaktionsvärde</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-blue mb-2">74 dagar</div>
+              <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">74 dagar</div>
               <div className="text-sm text-text-gray">Genomsnittlig försäljningstid</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-blue mb-2">8.2</div>
+              <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">8.2</div>
               <div className="text-sm text-text-gray">NDA-förfrågningar per annons</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary-blue mb-2">92%</div>
+              <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">92%</div>
               <div className="text-sm text-text-gray">Nöjda säljare (4.6/5)</div>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function SuccessStoriesPage() {
 
         {/* CTA */}
         <div className="text-center mt-12">
-          <h2 className="text-2xl font-bold text-text-dark mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">
             Vill du bli nästa success story?
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

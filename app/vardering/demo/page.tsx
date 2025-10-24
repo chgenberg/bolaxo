@@ -101,7 +101,7 @@ export default function ValuationDemoPage() {
 
   return (
     <main className="min-h-screen bg-background-off-white py-12">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4">
         {/* Demo Banner */}
         <div className="bg-yellow-100 border border-yellow-300 p-4 rounded-xl mb-8 text-center">
           <p className="text-yellow-800 font-semibold">
@@ -114,7 +114,7 @@ export default function ValuationDemoPage() {
 
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm mb-4">
+          <div className="inline-flex items-center px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-green-100 text-green-800 rounded-full text-sm mb-4">
             <CheckCircle className="w-4 h-4 mr-2" />
             Värdering klar!
           </div>
@@ -128,7 +128,7 @@ export default function ValuationDemoPage() {
         <div className="bg-gradient-to-br from-primary-blue to-blue-800 text-white p-8 md:p-12 rounded-2xl shadow-card mb-8">
           <div className="text-center">
             <TrendingUp className="w-16 h-16 mx-auto mb-6" />
-            <h2 className="text-2xl font-semibold mb-2">Uppskattat företagsvärde</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-2">Uppskattat företagsvärde</h2>
             <div className="text-5xl md:text-6xl font-bold mb-4">
               {formatCurrency(demoResult.valuationRange.mostLikely)}
             </div>
@@ -143,11 +143,11 @@ export default function ValuationDemoPage() {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           {demoResult.keyMetrics.map((metric, index) => (
             <div key={index} className="bg-white p-6 rounded-2xl shadow-card text-center">
               <div className="text-sm text-text-gray mb-1">{metric.label}</div>
-              <div className="text-2xl font-bold text-primary-blue">{metric.value}</div>
+              <div className="text-xl sm:text-2xl font-bold text-primary-blue">{metric.value}</div>
             </div>
           ))}
         </div>
@@ -195,11 +195,11 @@ export default function ValuationDemoPage() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             {/* Strengths */}
             <div>
               <h3 className="font-semibold text-green-700 mb-3 flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" />
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Styrkor ({demoResult.analysis.strengths.length})
               </h3>
               <ul className="space-y-2">
@@ -215,7 +215,7 @@ export default function ValuationDemoPage() {
             {/* Weaknesses */}
             <div>
               <h3 className="font-semibold text-orange-700 mb-3 flex items-center">
-                <AlertCircle className="w-5 h-5 mr-2" />
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Svagheter ({demoResult.analysis.weaknesses.length})
               </h3>
               <ul className="space-y-2">
@@ -231,7 +231,7 @@ export default function ValuationDemoPage() {
             {/* Opportunities */}
             <div>
               <h3 className="font-semibold text-blue-700 mb-3 flex items-center">
-                <TrendingUp className="w-5 h-5 mr-2" />
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Möjligheter ({demoResult.analysis.opportunities.length})
               </h3>
               <ul className="space-y-2">
@@ -247,7 +247,7 @@ export default function ValuationDemoPage() {
             {/* Risks */}
             <div>
               <h3 className="font-semibold text-red-700 mb-3 flex items-center">
-                <AlertCircle className="w-5 h-5 mr-2" />
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Risker ({demoResult.analysis.risks.length})
               </h3>
               <ul className="space-y-2">
@@ -311,13 +311,13 @@ export default function ValuationDemoPage() {
         />
 
         {/* Actions */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-8 mt-8">
           <button className="btn-secondary flex items-center justify-center">
-            <Download className="w-5 h-5 mr-2" />
+            <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
             Ladda ner som PDF
           </button>
           <button className="btn-secondary flex items-center justify-center">
-            <Mail className="w-5 h-5 mr-2" />
+            <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
             Skicka till min e-post
           </button>
         </div>
@@ -331,7 +331,7 @@ export default function ValuationDemoPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/salja/start" className="btn-secondary bg-white text-primary-blue hover:bg-gray-100 inline-flex items-center justify-center">
               Skapa annons
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
             </Link>
             <Link href="/kontakt" className="btn-secondary bg-white/20 text-white hover:bg-white/30 inline-flex items-center justify-center">
               Kontakta rådgivare

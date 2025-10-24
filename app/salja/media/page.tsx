@@ -44,7 +44,7 @@ export default function Step4MediaPage() {
               id="anonymVisning"
               checked={formData.anonymVisning}
               onChange={(e) => updateField('anonymVisning', e.target.checked)}
-              className="mt-1 w-5 h-5 text-primary-blue border-gray-300 rounded focus:ring-primary-blue"
+              className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue border-gray-300 rounded focus:ring-primary-blue"
             />
             <div className="ml-3">
               <label htmlFor="anonymVisning" className="font-semibold text-text-dark cursor-pointer">

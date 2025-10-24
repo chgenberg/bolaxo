@@ -101,8 +101,8 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-16">
-      <div className="max-w-md mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
+      <div className="max-w-md mx-auto px-3 sm:px-4">
         <div className="bg-white p-8 rounded-2xl shadow-card">
           <div className="text-center mb-8">
             <h1 className="heading-2 mb-2">Logga in eller skapa konto</h1>
@@ -113,7 +113,7 @@ function LoginForm() {
 
           {urlError && (
             <div className="bg-red-50 border border-red-200 p-4 rounded-xl mb-6 flex items-start">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-red-800">
                 {urlError === 'invalid_token' && 'Ogiltig eller redan använd inloggningslänk'}
                 {urlError === 'expired_token' && 'Inloggningslänken har gått ut. Begär en ny.'}
@@ -124,7 +124,7 @@ function LoginForm() {
 
           {error && (
             <div className="bg-red-50 border border-red-200 p-4 rounded-xl mb-6 flex items-start">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-red-800">{error}</div>
             </div>
           )}
@@ -151,7 +151,7 @@ function LoginForm() {
                       onChange={() => setSelectedRole('seller')}
                       className="w-4 h-4 text-primary-blue mr-3"
                     />
-                    <Building className="w-5 h-5 text-primary-blue mr-2" />
+                    <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" />
                     <span className="font-semibold">Säljare</span>
                   </div>
                 </div>
@@ -171,7 +171,7 @@ function LoginForm() {
                       onChange={() => setSelectedRole('buyer')}
                       className="w-4 h-4 text-primary-blue mr-3"
                     />
-                    <Search className="w-5 h-5 text-primary-blue mr-2" />
+                    <Search className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" />
                     <span className="font-semibold">Köpare</span>
                   </div>
                 </div>
@@ -191,7 +191,7 @@ function LoginForm() {
                       onChange={() => setSelectedRole('broker')}
                       className="w-4 h-4 text-primary-blue mr-3"
                     />
-                    <Handshake className="w-5 h-5 text-primary-blue mr-2" />
+                    <Handshake className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" />
                     <span className="font-semibold">Mäklare</span>
                   </div>
                 </div>
@@ -242,7 +242,7 @@ function LoginForm() {
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="bg-light-blue p-4 rounded-xl">
               <div className="flex items-start">
-                <CheckCircle className="w-5 h-5 text-primary-blue mr-3 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-3 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-text-gray">
                   <strong>Inget lösenord</strong> att komma ihåg. Vi skickar en säker inloggningslänk 
                   direkt till din inkorg. Klicka på länken för att logga in.

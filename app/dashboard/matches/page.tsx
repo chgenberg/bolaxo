@@ -61,7 +61,7 @@ export default function MatchesPage() {
       <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
+          <h1 className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
             <Target className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
             Matchade köpare
           </h1>
@@ -76,9 +76,9 @@ export default function MatchesPage() {
             <div className="flex items-center justify-between">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 font-medium">Totalt</p>
-                <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{matches.length}</p>
+                <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{matches.length}</p>
               </div>
-              <Users className="w-8 h-8 sm:w-10 sm:h-10 text-blue-900 opacity-20 flex-shrink-0" />
+              <Users className="w-6 h-6 sm:w-8 sm:h-8 sm:w-10 sm:h-10 text-blue-900 opacity-20 flex-shrink-0" />
             </div>
           </div>
 
@@ -86,11 +86,11 @@ export default function MatchesPage() {
             <div className="flex items-center justify-between">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 font-medium">Högkvalitet</p>
-                <p className="text-2xl sm:text-3xl font-bold text-green-900 mt-1 sm:mt-2">
+                <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-green-900 mt-1 sm:mt-2">
                   {matches.filter(m => m.matchScore >= 80).length}
                 </p>
               </div>
-              <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-green-500 opacity-20 flex-shrink-0" />
+              <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 sm:w-10 sm:h-10 text-green-500 opacity-20 flex-shrink-0" />
             </div>
           </div>
 
@@ -98,7 +98,7 @@ export default function MatchesPage() {
             <div className="flex items-center justify-between">
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 font-medium">Genomsnitt</p>
-                <p className="text-2xl sm:text-3xl font-bold text-blue-900 mt-1 sm:mt-2">
+                <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-blue-900 mt-1 sm:mt-2">
                   {matches.length > 0
                     ? Math.round(
                         matches.reduce((sum, m) => sum + m.matchScore, 0) / matches.length
@@ -107,7 +107,7 @@ export default function MatchesPage() {
                   %
                 </p>
               </div>
-              <Target className="w-8 h-8 sm:w-10 sm:h-10 text-blue-500 opacity-20 flex-shrink-0" />
+              <Target className="w-6 h-6 sm:w-8 sm:h-8 sm:w-10 sm:h-10 text-blue-500 opacity-20 flex-shrink-0" />
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@ export default function MatchesPage() {
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
           <button
             onClick={() => setSortBy('score')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
+            className={`px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
               sortBy === 'score'
                 ? 'bg-blue-900 text-white'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
@@ -126,7 +126,7 @@ export default function MatchesPage() {
           </button>
           <button
             onClick={() => setSortBy('recent')}
-            className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
+            className={`px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
               sortBy === 'recent'
                 ? 'bg-blue-900 text-white'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
@@ -139,11 +139,11 @@ export default function MatchesPage() {
         {/* Matches List */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block w-8 h-8 border-4 border-blue-200 border-t-blue-900 rounded-full animate-spin" />
+            <div className="inline-block w-6 h-6 sm:w-8 sm:h-8 border-4 border-blue-200 border-t-blue-900 rounded-full animate-spin" />
           </div>
         ) : matches.length === 0 ? (
           <div className="bg-white rounded-lg p-6 sm:p-12 text-center border border-gray-200">
-            <AlertCircle className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+            <AlertCircle className="w-6 h-6 sm:w-8 sm:h-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Inga matchningar än</h3>
             <p className="text-xs sm:text-sm text-gray-600">
               Köpare kommer att registrera sig snart.
@@ -158,7 +158,7 @@ export default function MatchesPage() {
                   key={match.id}
                   className={`${scoreColor.bg} rounded-lg p-4 sm:p-6 border border-gray-200 hover:shadow-md transition-shadow`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-3 sm:gap-4 md:gap-6">
                     <div className="flex-1 min-w-0">
                       <h3 className={`text-base sm:text-lg font-semibold ${scoreColor.text} mb-1 truncate`}>
                         {match.buyerName || 'Anonym köpare'}
@@ -214,12 +214,12 @@ export default function MatchesPage() {
 
                     {/* Actions - Mobile optimized */}
                     <div className="flex flex-row sm:flex-col gap-2 sm:gap-2 flex-shrink-0 w-full sm:w-auto">
-                      <button className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
+                      <button className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
                         Kontakta
                       </button>
                       <Link
                         href={`/dashboard/listings/${match.listingId}`}
-                        className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-colors text-xs sm:text-sm text-center min-h-10 sm:min-h-auto inline-flex items-center justify-center"
+                        className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-colors text-xs sm:text-sm text-center min-h-10 sm:min-h-auto inline-flex items-center justify-center"
                       >
                         Annons
                       </Link>

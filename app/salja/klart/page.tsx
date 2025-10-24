@@ -81,10 +81,10 @@ export default function KlartPage() {
 
   if (publishing) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
           <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-text-dark mb-2">Publicerar din annons...</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">Publicerar din annons...</h2>
           <p className="text-text-gray">Detta tar bara några sekunder</p>
         </div>
       </div>
@@ -93,12 +93,12 @@ export default function KlartPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <X className="w-8 h-8 text-red-600" />
+            <X className="w-6 h-6 sm:w-8 sm:h-8 text-red-600" />
           </div>
-          <h2 className="text-2xl font-bold text-text-dark mb-2">Något gick fel</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">Något gick fel</h2>
           <p className="text-text-gray mb-6">{error}</p>
           <button onClick={() => router.push('/salja/preview')} className="btn-primary">
             Tillbaka till förhandsvisning
@@ -109,7 +109,7 @@ export default function KlartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
       <div className="max-w-2xl w-full">
         <div className="card text-center animate-pulse-soft">
           {/* Success Icon */}
@@ -122,7 +122,7 @@ export default function KlartPage() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-3xl md:text-4xl font-bold text-text-dark mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-text-dark mb-4">
             Klart! Din annons är nu publicerad
           </h1>
 
@@ -134,7 +134,7 @@ export default function KlartPage() {
           <div className="bg-light-blue p-6 rounded-xl mb-8">
             <div className="flex items-center justify-between mb-4">
               <span className="font-semibold text-text-dark">Status:</span>
-              <span className="px-4 py-2 bg-success text-white rounded-full text-sm font-semibold">
+              <span className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-success text-white rounded-full text-sm font-semibold">
                 Live
               </span>
             </div>
@@ -158,33 +158,33 @@ export default function KlartPage() {
             
             <button className="w-full btn-primary py-4 flex items-center justify-between">
               <span className="flex items-center">
-                <Share2 className="w-5 h-5 mr-2" />
+                <Share2 className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Dela annons
               </span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
             <button className="w-full btn-secondary py-4 flex items-center justify-between">
               <span className="flex items-center">
-                <UserPlus className="w-5 h-5 mr-2" />
+                <UserPlus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Bjud in rådgivare
               </span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
             <button className="w-full btn-secondary py-4 flex items-center justify-between">
               <span className="flex items-center">
-                <FolderOpen className="w-5 h-5 mr-2" />
+                <FolderOpen className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Öppna datarum light
               </span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
 
           {/* Info box */}
           <div className="bg-gray-50 p-4 rounded-xl text-left">
             <h3 className="font-semibold text-sm text-text-dark mb-2 flex items-center">
-              <svg className="w-5 h-5 text-primary-blue mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>

@@ -160,8 +160,8 @@ export default function CareerPage() {
   return (
     <main className="min-h-screen bg-background-off-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-blue via-primary-blue to-blue-800 text-white py-20">
-        <div className="max-w-6xl mx-auto px-4 text-center">
+      <section className="bg-gradient-to-br from-primary-blue via-primary-blue to-blue-800 text-white py-6 sm:py-8 md:py-12">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Bygg framtiden med oss
           </h1>
@@ -171,15 +171,15 @@ export default function CareerPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-lg">
             <div className="flex items-center">
-              <Users className="w-5 h-5 mr-2" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               <span>15+ medarbetare</span>
             </div>
             <div className="flex items-center">
-              <MapPin className="w-5 h-5 mr-2" />
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               <span>Stockholm & Remote</span>
             </div>
             <div className="flex items-center">
-              <Zap className="w-5 h-5 mr-2" />
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               <span>Snabbväxande startup</span>
             </div>
           </div>
@@ -187,8 +187,8 @@ export default function CareerPage() {
       </section>
 
       {/* Company Values */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-12">
             <h2 className="heading-2 mb-4">Varför jobba hos oss?</h2>
             <p className="text-lg text-text-gray">
@@ -196,7 +196,7 @@ export default function CareerPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {benefits.map((benefit, index) => {
               const Icon = benefit.icon
               return (
@@ -214,8 +214,8 @@ export default function CareerPage() {
       </section>
 
       {/* Open Positions */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-12">
             <h2 className="heading-2 mb-4">Lediga tjänster</h2>
             <p className="text-lg text-text-gray mb-8">
@@ -228,7 +228,7 @@ export default function CareerPage() {
                 <button
                   key={dept.id}
                   onClick={() => setSelectedDepartment(dept.id)}
-                  className={`px-4 py-2 rounded-xl font-medium transition-all ${
+                  className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl font-medium transition-all ${
                     selectedDepartment === dept.id
                       ? 'bg-primary-blue text-white'
                       : 'bg-gray-100 text-text-gray hover:bg-gray-200'
@@ -282,7 +282,7 @@ export default function CareerPage() {
                           </span>
                         </div>
                       </div>
-                      <ArrowRight className={`w-5 h-5 text-primary-blue transition-transform ${
+                      <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 text-primary-blue transition-transform ${
                         expandedPosition === position.id ? 'rotate-90' : ''
                       }`} />
                     </div>
@@ -296,7 +296,7 @@ export default function CareerPage() {
                         {position.description}
                       </p>
 
-                      <div className="grid md:grid-cols-2 gap-6 mb-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-6">
                         <div>
                           <h4 className="font-semibold text-text-dark mb-3">Krav</h4>
                           <ul className="space-y-2">
@@ -343,8 +343,8 @@ export default function CareerPage() {
       </section>
 
       {/* Spontaneous Application */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4">
           <div className="bg-primary-blue text-white p-8 md:p-12 rounded-2xl text-center">
             <h2 className="heading-2 text-white mb-4">
               Inte rätt roll just nu?
@@ -358,15 +358,15 @@ export default function CareerPage() {
               className="btn-secondary bg-white text-primary-blue hover:bg-gray-100 inline-flex items-center"
             >
               Skicka spontanansökan
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
             </a>
           </div>
         </div>
       </section>
 
       {/* Culture Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-12">
             <h2 className="heading-2 mb-4">Vår kultur</h2>
             <p className="text-lg text-text-gray max-w-2xl mx-auto">
@@ -375,7 +375,7 @@ export default function CareerPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             <div className="aspect-square bg-gradient-to-br from-light-blue to-primary-blue/20 rounded-2xl"></div>
             <div className="aspect-square bg-gradient-to-br from-primary-blue/20 to-light-blue rounded-2xl"></div>
             <div className="aspect-square bg-gradient-to-br from-light-blue to-primary-blue/20 rounded-2xl"></div>

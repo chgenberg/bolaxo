@@ -89,7 +89,7 @@ export default function DocumentsPage() {
       powerpoint: 'text-primary-blue',
     }
     const colorClass = colors[type] ?? 'text-primary-blue'
-    return <FileText className={`w-5 h-5 ${colorClass}`} />
+    return <FileText className={`w-4 h-4 sm:w-5 sm:h-5 ${colorClass}`} />
   }
 
   const getStatusBadge = (status: string) => {
@@ -120,7 +120,7 @@ export default function DocumentsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Dokument</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Dokument</h1>
             <p className="text-sm text-text-gray mt-1">Hantera datarum och delade dokument</p>
           </div>
           <div className="flex items-center gap-3">
@@ -158,7 +158,7 @@ export default function DocumentsPage() {
                     : 'text-text-gray hover:bg-gray-100'
                 }`}
               >
-                <Grid className="w-5 h-5" />
+                <Grid className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <button
                 onClick={() => setView('list')}
@@ -168,7 +168,7 @@ export default function DocumentsPage() {
                     : 'text-text-gray hover:bg-gray-100'
                 }`}
               >
-                <List className="w-5 h-5" />
+                <List className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function DocumentsPage() {
                     <tr key={folder.id} className="hover:bg-gray-50 transition-colors cursor-pointer">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <Folder className="w-5 h-5 text-primary-blue mr-3" />
+                          <Folder className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-3" />
                           <span className="text-sm font-medium text-text-dark">{folder.name}</span>
                         </div>
                       </td>

@@ -17,12 +17,12 @@ export default function ComparePage() {
 
   if (objects.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
           <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <h1 className="text-3xl font-bold text-text-dark mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
             Ingen jämförelse ännu
           </h1>
           <p className="text-text-gray mb-8">
@@ -38,11 +38,11 @@ export default function ComparePage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-text-dark mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-2">
               Jämför objekt
             </h1>
             <p className="text-text-gray">
@@ -65,11 +65,11 @@ export default function ComparePage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-4 px-4 font-semibold text-text-dark w-48">
+                  <th className="text-left py-4 px-3 sm:px-4 font-semibold text-text-dark w-48">
                     Fält
                   </th>
                   {objects.map(obj => (
-                    <th key={obj!.id} className="py-4 px-4 text-left">
+                    <th key={obj!.id} className="py-4 px-3 sm:px-4 text-left">
                       <div>
                         <Link href={`/objekt/${obj!.id}`} className="font-semibold text-primary-blue hover:underline">
                           {obj!.anonymousTitle}
@@ -94,41 +94,41 @@ export default function ComparePage() {
               <tbody>
                 {/* Type */}
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray">Typ</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray">Typ</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-sm">{obj!.type}</td>
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-sm">{obj!.type}</td>
                   ))}
                 </tr>
 
                 {/* Region */}
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray">Region</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray">Region</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-sm">{obj!.region}</td>
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-sm">{obj!.region}</td>
                   ))}
                 </tr>
 
                 {/* Revenue */}
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray">Omsättning</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray">Omsättning</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-sm">{obj!.revenueRange}</td>
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-sm">{obj!.revenueRange}</td>
                   ))}
                 </tr>
 
                 {/* Employees */}
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray">Anställda</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray">Anställda</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-sm">{obj!.employees}</td>
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-sm">{obj!.employees}</td>
                   ))}
                 </tr>
 
                 {/* Price */}
                 <tr className="border-b border-gray-100 bg-light-blue/50">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray">Prisidé</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray">Prisidé</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-sm font-semibold text-primary-blue">
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-sm font-semibold text-primary-blue">
                       {(obj!.priceMin / 1000000).toFixed(1)}-{(obj!.priceMax / 1000000).toFixed(1)} MSEK
                     </td>
                   ))}
@@ -136,9 +136,9 @@ export default function ComparePage() {
 
                 {/* Strengths */}
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray align-top">Styrkor</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray align-top">Styrkor</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-xs">
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-xs">
                       <ul className="space-y-1">
                         {obj!.strengths.slice(0, 2).map((strength, i) => (
                           <li key={i} className="flex items-start">
@@ -153,9 +153,9 @@ export default function ComparePage() {
 
                 {/* Risks */}
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray align-top">Risker</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray align-top">Risker</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-xs">
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-xs">
                       <ul className="space-y-1">
                         {obj!.risks.slice(0, 2).map((risk, i) => (
                           <li key={i} className="flex items-start">
@@ -170,17 +170,17 @@ export default function ComparePage() {
 
                 {/* Views */}
                 <tr className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-sm font-medium text-text-gray">Visningar</td>
+                  <td className="py-3 px-3 sm:px-4 text-sm font-medium text-text-gray">Visningar</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-3 px-4 text-sm">{obj!.views}</td>
+                    <td key={obj!.id} className="py-3 px-3 sm:px-4 text-sm">{obj!.views}</td>
                   ))}
                 </tr>
 
                 {/* Actions */}
                 <tr>
-                  <td className="py-4 px-4 text-sm font-medium text-text-gray">Åtgärder</td>
+                  <td className="py-4 px-3 sm:px-4 text-sm font-medium text-text-gray">Åtgärder</td>
                   {objects.map(obj => (
-                    <td key={obj!.id} className="py-4 px-4">
+                    <td key={obj!.id} className="py-4 px-3 sm:px-4">
                       <div className="space-y-2">
                         <Link href={`/objekt/${obj!.id}`} className="block btn-primary text-center text-sm py-2">
                           Se detaljer

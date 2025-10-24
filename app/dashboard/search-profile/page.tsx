@@ -82,14 +82,14 @@ export default function SearchProfilePage() {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-text-dark">Min sökprofil</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Min sökprofil</h1>
           <p className="text-sm text-text-gray mt-1">Anpassa dina preferenser för att få bättre matchningar</p>
         </div>
 
         {/* Current profile summary */}
         <div className="bg-primary-blue text-white p-6 rounded-xl">
           <h2 className="text-lg font-semibold mb-4">Nuvarande profil</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div>
               <p className="text-xs opacity-80 mb-1">Branscher</p>
               <p className="text-sm font-medium">{industries.length} valda</p>
@@ -112,7 +112,7 @@ export default function SearchProfilePage() {
         {/* Industries */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <Building className="w-5 h-5 text-primary-blue" />
+            <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             Branscher
           </h2>
           
@@ -173,7 +173,7 @@ export default function SearchProfilePage() {
               }}
               className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
@@ -181,7 +181,7 @@ export default function SearchProfilePage() {
         {/* Locations */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-primary-blue" />
+            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             Platser
           </h2>
           
@@ -242,7 +242,7 @@ export default function SearchProfilePage() {
               }}
               className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
@@ -250,11 +250,11 @@ export default function SearchProfilePage() {
         {/* Financial criteria */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-primary-blue" />
+            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             Finansiella kriterier
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             <div>
               <label className="block text-sm font-medium text-text-dark mb-2">
                 Omsättning (MSEK)
@@ -302,7 +302,7 @@ export default function SearchProfilePage() {
         {/* Additional criteria */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <h2 className="text-lg font-semibold text-text-dark mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-primary-blue" />
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             Ytterligare kriterier
           </h2>
           

@@ -3,8 +3,8 @@ import { Cookie, ArrowLeft, CheckCircle, X } from 'lucide-react'
 
 export default function CookiePolicyPage() {
   return (
-    <main className="min-h-screen bg-white py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
         <Link href="/" className="inline-flex items-center text-primary-blue hover:text-blue-700 mb-8">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Tillbaka till startsidan
@@ -12,7 +12,7 @@ export default function CookiePolicyPage() {
 
         <div className="card-static">
           <div className="flex items-center mb-6">
-            <Cookie className="w-8 h-8 text-primary-blue mr-3" />
+            <Cookie className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue mr-3" />
             <h1 className="text-4xl font-bold text-text-dark">Cookiepolicy</h1>
           </div>
           
@@ -22,7 +22,7 @@ export default function CookiePolicyPage() {
 
           <div className="prose prose-lg max-w-none space-y-8">
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">Vad är cookies?</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">Vad är cookies?</h2>
               <p className="text-text-gray leading-relaxed">
                 Cookies är små textfiler som lagras på din enhet när du besöker en webbplats. De används för 
                 att webbplatsen ska fungera korrekt och för att förbättra din användarupplevelse.
@@ -30,13 +30,13 @@ export default function CookiePolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">Hur använder BOLAXO cookies?</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">Hur använder BOLAXO cookies?</h2>
               
               <div className="space-y-6">
                 {/* Necessary Cookies */}
                 <div className="border-l-4 border-primary-blue pl-6">
                   <div className="flex items-center mb-3">
-                    <CheckCircle className="w-5 h-5 text-success mr-2" />
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-success mr-2" />
                     <h3 className="text-lg font-semibold text-text-dark">Nödvändiga cookies (kan ej avstås)</h3>
                   </div>
                   <p className="text-text-gray mb-3">
@@ -52,7 +52,7 @@ export default function CookiePolicyPage() {
                 {/* Functional Cookies */}
                 <div className="border-l-4 border-blue-400 pl-6">
                   <div className="flex items-center mb-3">
-                    <CheckCircle className="w-5 h-5 text-primary-blue mr-2" />
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2" />
                     <h3 className="text-lg font-semibold text-text-dark">Funktionella cookies</h3>
                   </div>
                   <p className="text-text-gray mb-3">
@@ -68,7 +68,7 @@ export default function CookiePolicyPage() {
                 {/* Analytics Cookies */}
                 <div className="border-l-4 border-yellow-400 pl-6">
                   <div className="flex items-center mb-3">
-                    <X className="w-5 h-5 text-text-gray mr-2" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray mr-2" />
                     <h3 className="text-lg font-semibold text-text-dark">Analysinformation (valfritt)</h3>
                   </div>
                   <p className="text-text-gray mb-3">
@@ -84,7 +84,7 @@ export default function CookiePolicyPage() {
                 {/* Marketing Cookies */}
                 <div className="border-l-4 border-red-400 pl-6">
                   <div className="flex items-center mb-3">
-                    <X className="w-5 h-5 text-text-gray mr-2" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray mr-2" />
                     <h3 className="text-lg font-semibold text-text-dark">Marknadsföringscookies (valfritt)</h3>
                   </div>
                   <p className="text-text-gray mb-3">
@@ -100,7 +100,7 @@ export default function CookiePolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">Hantera dina cookie-inställningar</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">Hantera dina cookie-inställningar</h2>
               <p className="text-text-gray leading-relaxed mb-4">
                 Du kan när som helst ändra dina cookie-inställningar i din webbläsare eller via vår cookie-banner 
                 längst ner på sidan.
@@ -113,7 +113,7 @@ export default function CookiePolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">Lagringstid</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">Lagringstid</h2>
               <ul className="list-disc ml-6 text-text-gray space-y-2">
                 <li><strong>Sessionscookies:</strong> Raderas när du stänger webbläsaren</li>
                 <li><strong>Funktionella cookies:</strong> 30 dagar</li>
@@ -123,7 +123,7 @@ export default function CookiePolicyPage() {
             </section>
 
             <section className="pt-8 border-t border-gray-100">
-              <h2 className="text-2xl font-bold text-text-dark mb-4">Kontakt</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">Kontakt</h2>
               <p className="text-text-gray leading-relaxed">
                 Frågor om cookies? Kontakta privacy@bolaxo.se
               </p>

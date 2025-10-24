@@ -105,7 +105,7 @@ export default function TeamPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Team</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Team</h1>
             <p className="text-sm text-text-gray mt-1">Översikt över teamets prestationer och aktiviteter</p>
           </div>
           <button className="btn-primary flex items-center gap-2">
@@ -118,34 +118,34 @@ export default function TeamPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Users className="w-5 h-5 text-primary-blue" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">{teamMembers.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{teamMembers.length}</p>
             <p className="text-xs text-text-gray">Teammedlemmar</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-5 h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {teamMembers.reduce((sum, m) => sum + m.activeDeals, 0)}
             </p>
             <p className="text-xs text-text-gray">Aktiva affärer</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <DollarSign className="w-5 h-5 text-primary-blue" />
+              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {(teamMembers.reduce((sum, m) => sum + m.totalVolume, 0) / 1000000).toFixed(0)} MSEK
             </p>
             <p className="text-xs text-text-gray">Total volym</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Award className="w-5 h-5 text-primary-blue" />
+              <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {Math.round(teamMembers.filter(m => m.conversionRate > 0).reduce((sum, m) => sum + m.conversionRate, 0) / teamMembers.filter(m => m.conversionRate > 0).length)}%
             </p>
             <p className="text-xs text-text-gray">Genomsnittlig konvertering</p>
@@ -177,7 +177,7 @@ export default function TeamPage() {
         </div>
 
         {/* Team members */}
-        <div className="grid gap-6">
+        <div className="grid gap-3 sm:gap-4 md:gap-6">
           {teamMembers.map((member) => (
             <div key={member.id} className="bg-white rounded-xl border border-gray-200 p-6">
               <div className="flex items-start justify-between">
@@ -216,7 +216,7 @@ export default function TeamPage() {
                 </div>
                 
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <MoreVertical className="w-5 h-5 text-text-gray" />
+                  <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
                 </button>
               </div>
 

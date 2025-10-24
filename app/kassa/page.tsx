@@ -76,20 +76,20 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-16">
-      <div className="max-w-4xl mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4">
         {/* Progress */}
         <div className="flex items-center justify-center mb-8 gap-4">
           {[1, 2, 3].map((s) => (
             <div key={s} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
+              <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-semibold ${
                 s === step 
                   ? 'bg-primary-blue text-white'
                   : s < step
                     ? 'bg-success text-white'
                     : 'bg-gray-200 text-text-gray'
               }`}>
-                {s < step ? <Check className="w-5 h-5" /> : s}
+                {s < step ? <Check className="w-4 h-4 sm:w-5 sm:h-5" /> : s}
               </div>
               {s < 3 && (
                 <div className={`w-16 h-1 mx-2 ${
@@ -100,12 +100,12 @@ export default function CheckoutPage() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2">
             {step === 1 && (
               <div className="card">
-                <h1 className="text-2xl font-bold text-text-dark mb-6">
+                <h1 className="text-xl sm:text-2xl font-bold text-text-dark mb-6">
                   Välj plan
                 </h1>
 
@@ -172,7 +172,7 @@ export default function CheckoutPage() {
 
             {step === 2 && (
               <div className="card">
-                <h1 className="text-2xl font-bold text-text-dark mb-6">
+                <h1 className="text-xl sm:text-2xl font-bold text-text-dark mb-6">
                   Kunduppgifter
                 </h1>
 
@@ -251,7 +251,7 @@ export default function CheckoutPage() {
 
             {step === 3 && (
               <div className="card">
-                <h1 className="text-2xl font-bold text-text-dark mb-6">
+                <h1 className="text-xl sm:text-2xl font-bold text-text-dark mb-6">
                   Välj betalsätt
                 </h1>
 
@@ -270,7 +270,7 @@ export default function CheckoutPage() {
                         type="radio"
                         checked={selectedPaymentMethod === 'card'}
                         onChange={() => setSelectedPaymentMethod('card')}
-                        className="mt-1 w-5 h-5 text-primary-blue"
+                        className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
                       />
                       <div className="ml-4 flex-1">
                         <h3 className="font-bold text-lg mb-1">Betala med kort</h3>
@@ -300,7 +300,7 @@ export default function CheckoutPage() {
                         type="radio"
                         checked={selectedPaymentMethod === 'invoice'}
                         onChange={() => setSelectedPaymentMethod('invoice')}
-                        className="mt-1 w-5 h-5 text-primary-blue"
+                        className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
                       />
                       <div className="ml-4 flex-1">
                         <h3 className="font-bold text-lg mb-1">Faktura</h3>

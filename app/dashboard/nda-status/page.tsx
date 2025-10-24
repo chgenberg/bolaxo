@@ -134,7 +134,7 @@ export default function NDAStatusPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-text-dark">NDA-status</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">NDA-status</h1>
           <p className="text-sm text-text-gray mt-1">Följ upp dina sekretessavtal och få tillgång till mer information</p>
         </div>
 
@@ -142,34 +142,34 @@ export default function NDAStatusPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Shield className="w-5 h-5 text-primary-blue" />
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">{ndaRequests.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{ndaRequests.length}</p>
             <p className="text-xs text-text-gray">Totala förfrågningar</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-5 h-5 text-primary-blue" />
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {ndaRequests.filter(r => r.status === 'approved').length}
             </p>
             <p className="text-xs text-text-gray">Godkända</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Clock className="w-5 h-5 text-primary-blue" />
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {ndaRequests.filter(r => r.status === 'pending').length}
             </p>
             <p className="text-xs text-text-gray">Väntar svar</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <FileText className="w-5 h-5 text-primary-blue" />
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {ndaRequests.reduce((sum, r) => sum + r.documentsAvailable, 0)}
             </p>
             <p className="text-xs text-text-gray">Dokument tillgängliga</p>
@@ -187,7 +187,7 @@ export default function NDAStatusPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+              className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
                 filter === option.value
                   ? 'bg-primary-blue text-white'
                   : 'bg-gray-100 text-text-gray hover:bg-gray-200'
@@ -219,7 +219,7 @@ export default function NDAStatusPage() {
                   </div>
 
                   {/* Details */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                     <div>
                       <p className="text-xs text-text-gray mb-1">Begärd</p>
                       <p className="text-sm font-medium text-text-dark">

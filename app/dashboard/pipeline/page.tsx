@@ -121,7 +121,7 @@ export default function PipelinePage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Pipeline</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Pipeline</h1>
             <p className="text-sm text-text-gray mt-1">Drag och släpp för att flytta affärer mellan steg</p>
           </div>
           <div className="flex items-center gap-3">
@@ -151,7 +151,7 @@ export default function PipelinePage() {
             return (
               <div key={stage.id} className="bg-white p-4 rounded-lg border border-gray-200">
                 <h3 className="text-sm font-medium text-text-dark">{stage.name}</h3>
-                <p className="text-2xl font-bold text-text-dark mt-1">{stageDeals.length}</p>
+                <p className="text-xl sm:text-2xl font-bold text-text-dark mt-1">{stageDeals.length}</p>
                 <p className="text-xs text-text-gray">{(totalValue / 1000000).toFixed(0)} MSEK</p>
               </div>
             )
@@ -227,7 +227,7 @@ export default function PipelinePage() {
         {/* Conversion metrics */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <h2 className="text-lg font-semibold text-text-dark mb-4">Konverteringsmetrik</h2>
-          <div className="grid grid-cols-5 gap-8">
+          <div className="grid grid-cols-5 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             {[
               { from: 'Lead', to: 'NDA', rate: 67 },
               { from: 'NDA', to: 'DD', rate: 63 },
@@ -241,7 +241,7 @@ export default function PipelinePage() {
                   <ChevronRight className="w-4 h-4 text-text-gray" />
                   <span className="text-sm text-text-gray">{metric.to}</span>
                 </div>
-                <div className="text-2xl font-bold text-text-dark">{metric.rate}%</div>
+                <div className="text-xl sm:text-2xl font-bold text-text-dark">{metric.rate}%</div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                   <div 
                     className="bg-primary-blue h-2 rounded-full"

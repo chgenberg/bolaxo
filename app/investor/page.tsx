@@ -2,8 +2,8 @@ export default function InvestorPage() {
   return (
     <main className="bg-primary-blue">
       {/* Hero */}
-      <section className="py-16 bg-primary-blue text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-6 sm:py-8 md:py-12 bg-primary-blue text-white">
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Investera i framtidens företagsmarknadsplats
           </h1>
@@ -17,16 +17,16 @@ export default function InvestorPage() {
       </section>
 
       {/* The Problem */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-dark mb-3">Problemet</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">Problemet</h2>
             <p className="text-text-gray max-w-2xl mx-auto">
               Företagsförsäljning är idag dyrt, långsamt och otillgängligt
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             <div className="card text-center">
               <div className="text-5xl font-bold text-red-500 mb-3">5-10%</div>
               <h3 className="font-semibold mb-2">Provision</h3>
@@ -55,19 +55,19 @@ export default function InvestorPage() {
       </section>
 
       {/* The Solution */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-dark mb-3">Vår lösning</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">Vår lösning</h2>
             <p className="text-text-gray max-w-2xl mx-auto">
               Digital marknadsplats som gör företagsförsäljning transparent och tillgänglig
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             <div className="card">
               <div className="w-12 h-12 bg-primary-blue rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
@@ -79,7 +79,7 @@ export default function InvestorPage() {
 
             <div className="card">
               <div className="w-12 h-12 bg-primary-blue rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
@@ -91,7 +91,7 @@ export default function InvestorPage() {
 
             <div className="card">
               <div className="w-12 h-12 bg-primary-blue rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -103,7 +103,7 @@ export default function InvestorPage() {
 
             <div className="card">
               <div className="w-12 h-12 bg-primary-blue rounded-xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
@@ -117,14 +117,14 @@ export default function InvestorPage() {
       </section>
 
       {/* Market Opportunity */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 sm:py-8 md:py-12">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-dark mb-3">Marknadsmöjlighet</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">Marknadsmöjlighet</h2>
             <p className="text-text-gray">En enorm och växande marknad</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 mb-12">
             <div className="card text-center">
               <div className="text-sm text-text-gray mb-2">TAM (Total Addressable Market)</div>
               <div className="text-4xl font-bold text-primary-blue mb-3">50 Mdr kr</div>
@@ -175,14 +175,14 @@ export default function InvestorPage() {
       </section>
 
       {/* Business Model */}
-      <section className="py-16 bg-light-blue/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 sm:py-8 md:py-12 bg-light-blue/30">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-dark mb-3">Affärsmodell</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">Affärsmodell</h2>
             <p className="text-text-gray">Transparent och skalbar revenue model</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             <div className="card">
               <h3 className="text-xl font-bold mb-4">Intäktsströmmar</h3>
               <div className="space-y-4">
@@ -250,14 +250,14 @@ export default function InvestorPage() {
       </section>
 
       {/* Traction */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 sm:py-8 md:py-12">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-dark mb-3">Traction</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">Traction</h2>
             <p className="text-text-gray">Stark tillväxt sedan lansering för 8 månader sedan</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-12">
             <div className="card text-center">
               <div className="text-4xl font-bold text-primary-blue mb-2">127</div>
               <div className="text-sm text-text-gray">Aktiva annonser</div>
@@ -296,21 +296,21 @@ export default function InvestorPage() {
             </div>
             <div className="text-center mt-6">
               <div className="text-sm text-text-gray">Månatlig tillväxt:</div>
-              <div className="text-2xl font-bold text-success">+35% MoM</div>
+              <div className="text-xl sm:text-2xl font-bold text-success">+35% MoM</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Roadmap */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text-dark mb-3">Produktroadmap 2025</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">Produktroadmap 2025</h2>
             <p className="text-text-gray">Vad vi bygger nästa 12 månader</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[
               { q: 'Q1 2025', items: ['AI-driven värdering', 'Mobilapp (iOS/Android)', 'Advanced analytics'] },
               { q: 'Q2 2025', items: ['Marketplace för rådgivare', 'Video DD-möten', 'API för mäklare'] },
@@ -334,11 +334,11 @@ export default function InvestorPage() {
       </section>
 
       {/* Ask */}
-      <section className="py-16 bg-primary-blue text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">The Ask</h2>
+      <section className="py-6 sm:py-8 md:py-12 bg-primary-blue text-white">
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6">The Ask</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 mb-12">
             <div>
               <div className="text-4xl font-bold mb-2">12 MSEK</div>
               <div className="text-sm opacity-90">Seed-runda</div>

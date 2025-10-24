@@ -90,8 +90,8 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-white py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="bg-white py-6 sm:py-8 md:py-12 md:py-8 sm:py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-text-dark mb-6 uppercase">
               Transparent prissättning för alla behov
@@ -102,7 +102,7 @@ export default function PricingPage() {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 lg:gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             {plans.map((plan, index) => (
               <div
                 key={index}
@@ -124,7 +124,7 @@ export default function PricingPage() {
 
                 <div className="p-6 lg:p-8">
                   {/* Plan Name */}
-                  <h3 className="text-2xl font-bold text-text-dark mb-2">{plan.name}</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">{plan.name}</h3>
                   
                   {/* Price */}
                   <div className="flex items-baseline mb-4">
@@ -157,9 +157,9 @@ export default function PricingPage() {
                     {plan.features.map((feature, fIndex) => (
                       <div key={fIndex} className="flex items-start gap-3">
                         {feature.included === false ? (
-                          <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
+                          <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 flex-shrink-0 mt-0.5" />
                         ) : (
-                          <Check className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                          <Check className="w-4 h-4 sm:w-5 sm:h-5 text-success flex-shrink-0 mt-0.5" />
                         )}
                         <div className="flex-1">
                           <span className={`text-sm ${feature.included === false ? 'text-gray-400' : 'text-text-gray'}`}>

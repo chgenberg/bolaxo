@@ -56,7 +56,7 @@ export default function SellerOnboardingPage() {
         <div className="space-y-4">
           <div className="space-y-3">
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-sm">
+              <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-sm">
                 1
               </div>
               <div>
@@ -65,7 +65,7 @@ export default function SellerOnboardingPage() {
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-sm">
+              <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-sm">
                 2
               </div>
               <div>
@@ -74,7 +74,7 @@ export default function SellerOnboardingPage() {
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-sm">
+              <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-sm">
                 3
               </div>
               <div>
@@ -117,9 +117,9 @@ export default function SellerOnboardingPage() {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Progress Bar */}
       <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">Kom igång som säljare</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Kom igång som säljare</h1>
             <span className="text-sm font-medium text-gray-600">{step} av {steps.length}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -132,15 +132,15 @@ export default function SellerOnboardingPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-start gap-6 mb-8">
+      <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-12">
+        <div className="flex items-start gap-3 sm:gap-4 md:gap-6 mb-8">
           <div className="flex-shrink-0">
             <div className="flex items-center justify-center h-16 w-16 rounded-lg bg-blue-100">
               <Icon className="h-8 w-8 text-blue-900" />
             </div>
           </div>
           <div className="flex-1">
-            <h2 className="text-3xl font-bold text-gray-900">{currentStep.title}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{currentStep.title}</h2>
             <p className="text-lg text-gray-600 mt-2">{currentStep.description}</p>
           </div>
         </div>

@@ -46,12 +46,12 @@ export default function DataroomPage() {
 
   if (!hasNDA) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
           <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
           </svg>
-          <h1 className="text-3xl font-bold text-text-dark mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
             NDA krävs för tillgång
           </h1>
           <p className="text-text-gray mb-8">
@@ -136,13 +136,13 @@ export default function DataroomPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-8">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6">
           <Link href={`/objekt/${objectId}`} className="text-primary-blue hover:underline inline-block mb-4">
             ← Tillbaka till objektet
           </Link>
-          <h1 className="text-3xl font-bold text-text-dark mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-2">
             Datarum & Q&A
           </h1>
           <p className="text-text-gray">
@@ -160,7 +160,7 @@ export default function DataroomPage() {
                 : 'bg-gray-100 text-text-gray hover:bg-gray-200'
             }`}
           >
-            <MessageCircle className="w-5 h-5 mr-2" />
+            <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
             Q&A
           </button>
           <button
@@ -171,7 +171,7 @@ export default function DataroomPage() {
                 : 'bg-gray-100 text-text-gray hover:bg-gray-200'
             }`}
           >
-            <Folder className="w-5 h-5 mr-2" />
+            <Folder className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
             Datarum
           </button>
         </div>
@@ -188,7 +188,7 @@ export default function DataroomPage() {
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="Skriv din fråga här..."
                   rows={4}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-blue focus:outline-none"
+                  className="w-full px-3 sm:px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-blue focus:outline-none"
                 />
                 <button
                   onClick={handleAskQuestion}
@@ -254,7 +254,7 @@ export default function DataroomPage() {
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       <div className="flex items-center flex-1">
-                        <svg className="w-5 h-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
                         </svg>
                         <div>
@@ -264,7 +264,7 @@ export default function DataroomPage() {
                           </div>
                         </div>
                       </div>
-                      <button className="btn-secondary text-sm px-4 py-2">
+                      <button className="btn-secondary text-sm px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto">
                         Ladda ner
                       </button>
                     </div>

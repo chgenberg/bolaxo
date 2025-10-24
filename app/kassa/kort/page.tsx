@@ -49,7 +49,7 @@ export default function CardPaymentPage() {
 
   if (requires3DS) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-md w-full card text-center">
           <div className="w-20 h-20 bg-primary-blue rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
             <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +57,7 @@ export default function CardPaymentPage() {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-text-dark mb-4">
+          <h1 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">
             Auktorisera betalningen
           </h1>
           <p className="text-text-gray mb-8">
@@ -84,10 +84,10 @@ export default function CardPaymentPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-16">
-      <div className="max-w-2xl mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
+      <div className="max-w-2xl mx-auto px-3 sm:px-4">
         <div className="card">
-          <h1 className="text-2xl font-bold text-text-dark mb-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-text-dark mb-3">
             Betala med kort
           </h1>
           <p className="text-text-gray mb-8">
@@ -141,7 +141,7 @@ export default function CardPaymentPage() {
 
           <div className="bg-gray-50 p-4 rounded-xl mt-6 mb-6">
             <div className="flex items-start">
-              <svg className="w-5 h-5 text-success mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-success mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <div>

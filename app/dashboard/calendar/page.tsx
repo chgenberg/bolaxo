@@ -79,7 +79,7 @@ export default function CalendarPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Kalender</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Kalender</h1>
             <p className="text-sm text-text-gray mt-1">Hantera möten och viktiga datum</p>
           </div>
           <button className="btn-primary flex items-center gap-2">
@@ -93,13 +93,13 @@ export default function CalendarPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <ChevronLeft className="w-5 h-5 text-text-gray" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
               </button>
               <h2 className="text-lg font-semibold text-text-dark">
                 Juni 2024 - Vecka 25
               </h2>
               <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <ChevronRight className="w-5 h-5 text-text-gray" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
               </button>
               <button className="px-3 py-1.5 text-sm text-primary-blue hover:bg-blue-50 rounded-lg transition-colors">
                 Idag
@@ -196,7 +196,7 @@ export default function CalendarPage() {
               return (
                 <div key={event.id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
                   <div className={`p-2 rounded-lg ${event.color}`}>
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-medium text-sm text-text-dark">{event.title}</h3>

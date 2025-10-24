@@ -3,8 +3,8 @@ import { FileText, ArrowLeft } from 'lucide-react'
 
 export default function UserTermsPage() {
   return (
-    <main className="min-h-screen bg-white py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
         <Link href="/" className="inline-flex items-center text-primary-blue hover:text-blue-700 mb-8">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Tillbaka till startsidan
@@ -12,7 +12,7 @@ export default function UserTermsPage() {
 
         <div className="card-static">
           <div className="flex items-center mb-6">
-            <FileText className="w-8 h-8 text-primary-blue mr-3" />
+            <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue mr-3" />
             <h1 className="text-4xl font-bold text-text-dark">Användarvillkor</h1>
           </div>
           
@@ -22,7 +22,7 @@ export default function UserTermsPage() {
 
           <div className="prose prose-lg max-w-none space-y-8">
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">1. Allmänt</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">1. Allmänt</h2>
               <p className="text-text-gray leading-relaxed">
                 Dessa användarvillkor ("Villkoren") reglerar din användning av BOLAXO:s plattform och tjänster 
                 ("Tjänsten"). Genom att registrera ett konto eller använda Tjänsten godkänner du dessa Villkor.
@@ -33,7 +33,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">2. Tjänstens omfattning</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">2. Tjänstens omfattning</h2>
               <p className="text-text-gray leading-relaxed mb-3">
                 BOLAXO är en digital marknadsplats där säljare kan annonsera företag till försäljning och 
                 köpare kan söka efter investeringsmöjligheter. Tjänsten inkluderar:
@@ -48,7 +48,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">3. Kontoregistrering</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">3. Kontoregistrering</h2>
               <p className="text-text-gray leading-relaxed">
                 För att använda Tjänsten måste du registrera ett konto. Du ansvarar för att hålla dina 
                 inloggningsuppgifter säkra och för all aktivitet som sker via ditt konto.
@@ -59,7 +59,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">4. Priser och betalning</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">4. Priser och betalning</h2>
               <p className="text-text-gray leading-relaxed mb-3">
                 Priser för våra tjänster anges tydligt på plattformen. Betalning kan ske via:
               </p>
@@ -74,7 +74,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">5. Annonsering</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">5. Annonsering</h2>
               <p className="text-text-gray leading-relaxed">
                 Som säljare ansvarar du för att informationen i din annons är korrekt och inte vilseledande. 
                 Du har rätt att vara anonym tills NDA signeras, men måste ändå tillhandahålla korrekta uppgifter.
@@ -86,7 +86,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">6. NDA och sekretess</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">6. NDA och sekretess</h2>
               <p className="text-text-gray leading-relaxed">
                 NDA-avtal signerade via plattformen är juridiskt bindande. Båda parter är skyldiga att följa 
                 sekretessåtaganden. BOLAXO är inte part i NDA-avtalet utan endast faciliterar signeringen.
@@ -94,7 +94,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">7. Återbetalning och ångerrätt</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">7. Återbetalning och ångerrätt</h2>
               <p className="text-text-gray leading-relaxed">
                 Om din annons inte fått några visningar inom 14 dagar från publicering har du rätt till 
                 full återbetalning. Efter 14 dagar eller om annonsen fått visningar gäller ingen återbetalningsrätt.
@@ -106,7 +106,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">8. Ansvarsbegränsning</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">8. Ansvarsbegränsning</h2>
               <p className="text-text-gray leading-relaxed">
                 BOLAXO tillhandahåller en plattform för att koppla samman köpare och säljare. Vi är inte 
                 part i transaktionen och tar inget ansvar för:
@@ -123,7 +123,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">9. Immateriella rättigheter</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">9. Immateriella rättigheter</h2>
               <p className="text-text-gray leading-relaxed">
                 Allt innehåll på plattformen, inklusive design, logotyper, texter och kod, ägs av BOLAXO eller 
                 våra licensgivare. Du får inte kopiera, reproducera eller använda vårt material utan tillstånd.
@@ -131,7 +131,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">10. Uppsägning</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">10. Uppsägning</h2>
               <p className="text-text-gray leading-relaxed">
                 Du kan när som helst avsluta ditt konto. BOLAXO förbehåller sig rätten att stänga av konton 
                 som bryter mot dessa Villkor.
@@ -139,7 +139,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">11. Ändringar av villkor</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">11. Ändringar av villkor</h2>
               <p className="text-text-gray leading-relaxed">
                 Vi kan uppdatera dessa Villkor från tid till annan. Väsentliga ändringar kommer att meddelas 
                 via e-post. Fortsatt användning efter ändringar innebär att du godkänner de nya villkoren.
@@ -147,7 +147,7 @@ export default function UserTermsPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">12. Tvistlösning och tillämplig lag</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">12. Tvistlösning och tillämplig lag</h2>
               <p className="text-text-gray leading-relaxed">
                 Dessa Villkor regleras av svensk lag. Eventuella tvister ska avgöras av svensk domstol, 
                 med Stockholms tingsrätt som första instans.
@@ -155,7 +155,7 @@ export default function UserTermsPage() {
             </section>
 
             <section className="pt-8 border-t border-gray-100">
-              <h2 className="text-2xl font-bold text-text-dark mb-4">Kontakt</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">Kontakt</h2>
               <p className="text-text-gray leading-relaxed">
                 Har du frågor om dessa villkor? Kontakta oss:
               </p>

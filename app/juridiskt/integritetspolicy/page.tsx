@@ -3,8 +3,8 @@ import { Shield, ArrowLeft } from 'lucide-react'
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-white py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-white py-6 sm:py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
         <Link href="/" className="inline-flex items-center text-primary-blue hover:text-blue-700 mb-8">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Tillbaka till startsidan
@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
 
         <div className="card-static">
           <div className="flex items-center mb-6">
-            <Shield className="w-8 h-8 text-primary-blue mr-3" />
+            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue mr-3" />
             <h1 className="text-4xl font-bold text-text-dark">Integritetspolicy</h1>
           </div>
           
@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
 
           <div className="prose prose-lg max-w-none space-y-8">
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">1. Introduktion</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">1. Introduktion</h2>
               <p className="text-text-gray leading-relaxed mb-4">
                 Bolaxo AB ("BOLAXO", "vi", "oss") värnar om din integritet. Denna policy förklarar hur vi 
                 samlar in, använder och skyddar dina personuppgifter i enlighet med GDPR och svensk dataskyddslag.
@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">2. Personuppgiftsansvarig</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">2. Personuppgiftsansvarig</h2>
               <div className="bg-light-blue/20 p-4 rounded-card">
                 <p className="text-text-dark font-medium">Bolaxo AB</p>
                 <p className="text-text-gray">Org.nr: 559123-4567</p>
@@ -52,7 +52,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">3. Vilka uppgifter samlar vi in?</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">3. Vilka uppgifter samlar vi in?</h2>
               <h3 className="text-lg font-semibold text-text-dark mb-3">För alla användare:</h3>
               <ul className="list-disc ml-6 text-text-gray space-y-2 mb-4">
                 <li>E-postadress</li>
@@ -84,7 +84,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">4. Hur använder vi dina uppgifter?</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">4. Hur använder vi dina uppgifter?</h2>
               <p className="text-text-gray leading-relaxed mb-3">Vi använder dina personuppgifter för att:</p>
               <ul className="list-disc ml-6 text-text-gray space-y-2">
                 <li>Tillhandahålla och förbättra våra tjänster</li>
@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">5. Delning med tredje part</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">5. Delning med tredje part</h2>
               <p className="text-text-gray leading-relaxed mb-3">
                 Vi delar dina personuppgifter endast med:
               </p>
@@ -113,7 +113,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">6. Dina rättigheter</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">6. Dina rättigheter</h2>
               <p className="text-text-gray leading-relaxed mb-3">
                 Enligt GDPR har du rätt att:
               </p>
@@ -131,7 +131,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">7. Lagringstid</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">7. Lagringstid</h2>
               <p className="text-text-gray leading-relaxed">
                 Vi lagrar dina personuppgifter så länge som är nödvändigt för att tillhandahålla våra tjänster. 
                 Efter att ditt konto raderas sparar vi viss information för bokföringsändamål (7 år enligt lag) 
@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">8. Säkerhet</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">8. Säkerhet</h2>
               <p className="text-text-gray leading-relaxed">
                 Vi använder branschstandard säkerhetsåtgärder inklusive SSL-kryptering, säker datalagring 
                 och regelbundna säkerhetsgranskningar. Ingen metod är dock 100% säker.
@@ -148,7 +148,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">9. Cookies</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">9. Cookies</h2>
               <p className="text-text-gray leading-relaxed">
                 Vi använder cookies för att förbättra din upplevelse. Läs mer i vår{' '}
                 <Link href="/juridiskt/cookies" className="text-primary-blue hover:underline">
@@ -158,14 +158,14 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold text-text-dark mb-4">10. Ändringar</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">10. Ändringar</h2>
               <p className="text-text-gray leading-relaxed">
                 Vi kan uppdatera denna policy. Väsentliga ändringar meddelas via e-post 30 dagar i förväg.
               </p>
             </section>
 
             <section className="pt-8 border-t border-gray-100">
-              <h2 className="text-2xl font-bold text-text-dark mb-4">Kontakta oss</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-4">Kontakta oss</h2>
               <p className="text-text-gray leading-relaxed mb-4">
                 Har du frågor om hur vi hanterar dina personuppgifter?
               </p>

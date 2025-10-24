@@ -114,17 +114,17 @@ export default function MessagesPage() {
 
   return (
     <DashboardLayout>
-      <div className="flex h-[calc(100vh-200px)] bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="flex flex-col md:flex-row h-[calc(100vh-200px)] bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Conversations list */}
-        <div className="w-1/3 border-r border-gray-200 flex flex-col">
+        <div className="w-full md:w-1/3 border-r border-gray-200 flex flex-col border-b md:border-b-0">
           {/* Search */}
-          <div className="p-4 border-b border-gray-200">
+          <div className="p-3 sm:p-4 border-b border-gray-200">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-text-gray" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
               <input
                 type="text"
-                placeholder="Sök konversationer..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                placeholder="Sök..."
+                className="w-full pl-10 pr-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
               />
             </div>
           </div>
@@ -135,25 +135,25 @@ export default function MessagesPage() {
               <button
                 key={conv.id}
                 onClick={() => setSelectedConversation(conv.id)}
-                className={`w-full p-4 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 ${
+                className={`w-full p-3 sm:p-4 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 ${
                   selectedConversation === conv.id ? 'bg-blue-50' : ''
                 }`}
               >
-                <div className="flex items-start justify-between mb-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-medium text-sm text-text-dark">{conv.contactName}</h3>
+                <div className="flex items-start justify-between mb-1 gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2 min-w-0">
+                    <h3 className="font-medium text-xs sm:text-sm text-text-dark truncate">{conv.contactName}</h3>
                     {conv.status === 'online' && (
-                      <Circle className="w-2 h-2 text-green-500 fill-current" />
+                      <Circle className="w-2 h-2 text-green-500 fill-current flex-shrink-0" />
                     )}
                   </div>
-                  <span className="text-xs text-text-gray">{conv.lastMessageTime}</span>
+                  <span className="text-xs text-text-gray flex-shrink-0">{conv.lastMessageTime}</span>
                 </div>
-                <p className="text-xs text-text-gray mb-1">{conv.contactCompany}</p>
-                <p className="text-xs text-primary-blue mb-2">{conv.listing}</p>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-text-gray truncate flex-1">{conv.lastMessage}</p>
+                <p className="text-xs text-text-gray mb-1 truncate">{conv.contactCompany}</p>
+                <p className="text-xs text-primary-blue mb-2 line-clamp-1">{conv.listing}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-xs sm:text-sm text-text-gray truncate flex-1 line-clamp-1">{conv.lastMessage}</p>
                   {conv.unread > 0 && (
-                    <span className="ml-2 bg-primary-blue text-white text-xs rounded-full px-2 py-0.5">
+                    <span className="ml-1 bg-primary-blue text-white text-xs rounded-full px-2 py-0.5 flex-shrink-0">
                       {conv.unread}
                     </span>
                   )}
@@ -164,91 +164,175 @@ export default function MessagesPage() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 flex flex-col">
-          {/* Header */}
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="font-semibold text-text-dark">{selectedConv?.contactName}</h2>
-                <p className="text-sm text-text-gray">{selectedConv?.contactCompany} • {selectedConv?.listing}</p>
-              </div>
-              <button className="text-sm text-primary-blue hover:underline">
-                Visa köparprofil
-              </button>
-            </div>
-          </div>
-
-          {/* Messages list */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {(inbox.length ? filterByConversation(inbox, selectedConversation, user?.id) : mockMessages).map((message: any) => (
-              <div
-                key={message.id}
-                className={`flex ${(message.senderId === user?.id || message.sent) ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`max-w-[70%] ${(message.senderId === user?.id || message.sent) ? 'text-right' : 'text-left'}`}>
-                  <div className={`rounded-lg px-4 py-2 ${
-                    (message.senderId === user?.id || message.sent) 
-                      ? 'bg-primary-blue text-white' 
-                      : 'bg-gray-100 text-text-dark'
-                  }`}>
-                    <p className="text-sm">{message.content}</p>
+        <div className="hidden md:flex md:flex-1 flex-col">
+          {selectedConversation ? (
+            <>
+              {/* Header */}
+              <div className="p-3 sm:p-4 border-b border-gray-200">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <h2 className="font-semibold text-sm sm:text-base text-text-dark truncate">{selectedConv?.contactName}</h2>
+                    <p className="text-xs sm:text-sm text-text-gray truncate">{selectedConv?.contactCompany}</p>
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-text-gray">
-                      {new Date(message.createdAt || message.timestamp).toLocaleString('sv-SE')}
-                    </span>
-                    {(message.senderId === user?.id || message.sent) && (
-                      message.read ? (
-                        <CheckCheck className="w-3 h-3 text-primary-blue" />
-                      ) : (
-                        <Clock className="w-3 h-3 text-text-gray" />
-                      )
-                    )}
-                  </div>
+                  <button className="text-xs sm:text-sm text-primary-blue hover:underline flex-shrink-0 whitespace-nowrap">
+                    Visa profil
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
 
-          {/* Message input */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="flex items-end gap-2">
-              <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <Paperclip className="w-5 h-5 text-text-gray" />
-              </button>
-              <div className="flex-1">
-                <textarea
-                  value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
-                  placeholder="Skriv ett meddelande..."
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-blue"
-                  rows={1}
-                />
+              {/* Messages list */}
+              <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
+                {(inbox.length ? filterByConversation(inbox, selectedConversation, user?.id) : mockMessages).map((message: any) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${(message.senderId === user?.id || message.sent) ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div className={`max-w-[85%] sm:max-w-[70%] ${(message.senderId === user?.id || message.sent) ? 'text-right' : 'text-left'}`}>
+                      <div className={`rounded-lg px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto ${
+                        (message.senderId === user?.id || message.sent) 
+                          ? 'bg-primary-blue text-white' 
+                          : 'bg-gray-100 text-text-dark'
+                      }`}>
+                        <p className="text-xs sm:text-sm">{message.content}</p>
+                      </div>
+                      <div className="flex items-center gap-1 mt-1 justify-between sm:justify-start">
+                        <span className="text-xs text-text-gray">
+                          {new Date(message.createdAt || message.timestamp).toLocaleString('sv-SE')}
+                        </span>
+                        {(message.senderId === user?.id || message.sent) && (
+                          message.read ? (
+                            <CheckCheck className="w-3 h-3 text-primary-blue flex-shrink-0" />
+                          ) : (
+                            <Clock className="w-3 h-3 text-text-gray flex-shrink-0" />
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <button 
-                className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors"
-                onClick={async () => {
-                  if (!user || !messageText.trim()) return
-                  const [listingId, peerId] = (selectedConversation || '').split('::')
-                  if (!listingId || !peerId) return
-                  try {
-                    await sendMessage({ listingId, senderId: user.id, recipientId: peerId, content: messageText.trim() })
-                    setMessageText('')
-                    const res = await getMessages({ userId: user.id, listingId, peerId })
-                    setInbox(res.messages)
-                  } catch (e) {}
-                }}
-              >
-                <Send className="w-5 h-5" />
-              </button>
+
+              {/* Message input */}
+              <div className="p-3 sm:p-4 border-t border-gray-200">
+                <div className="flex items-end gap-2 mb-2">
+                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-10 flex items-center justify-center">
+                    <Paperclip className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
+                  </button>
+                  <div className="flex-1">
+                    <textarea
+                      value={messageText}
+                      onChange={(e) => setMessageText(e.target.value)}
+                      placeholder="Skriv meddelande..."
+                      className="w-full px-3 sm:px-4 py-2 min-h-10 border border-gray-200 rounded-lg text-xs sm:text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                      rows={1}
+                    />
+                  </div>
+                  <button 
+                    className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors min-h-10 flex items-center justify-center"
+                    onClick={async () => {
+                      if (!user || !messageText.trim()) return
+                      const [listingId, peerId] = (selectedConversation || '').split('::')
+                      if (!listingId || !peerId) return
+                      try {
+                        await sendMessage({ listingId, senderId: user.id, recipientId: peerId, content: messageText.trim() })
+                        setMessageText('')
+                        const res = await getMessages({ userId: user.id, listingId, peerId })
+                        setInbox(res.messages)
+                      } catch (e) {}
+                    }}
+                  >
+                    <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-text-gray flex-wrap">
+                  <button className="hover:text-primary-blue">Snabbsvar</button>
+                  <button className="hover:text-primary-blue">Mall</button>
+                  <button className="hover:text-primary-blue">Schemalägg</button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-full text-text-gray">
+              <p className="text-sm">Välj en konversation</p>
             </div>
-            <div className="flex items-center gap-4 mt-2 text-xs text-text-gray">
-              <button className="hover:text-primary-blue">Snabbsvar</button>
-              <button className="hover:text-primary-blue">Mall</button>
-              <button className="hover:text-primary-blue">Schemalägg</button>
+          )}
+        </div>
+
+        {/* Mobile message preview */}
+        {selectedConversation && (
+          <div className="md:hidden flex flex-col flex-1 border-t border-gray-200">
+            {/* Header */}
+            <div className="p-3 border-b border-gray-200">
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <h2 className="font-semibold text-sm text-text-dark truncate">{selectedConv?.contactName}</h2>
+                </div>
+                <button className="text-xs text-primary-blue hover:underline flex-shrink-0 whitespace-nowrap">
+                  Profil
+                </button>
+              </div>
+            </div>
+
+            {/* Messages list */}
+            <div className="flex-1 overflow-y-auto p-3 space-y-3">
+              {(inbox.length ? filterByConversation(inbox, selectedConversation, user?.id) : mockMessages).map((message: any) => (
+                <div
+                  key={message.id}
+                  className={`flex ${(message.senderId === user?.id || message.sent) ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div className={`max-w-[85%] ${(message.senderId === user?.id || message.sent) ? 'text-right' : 'text-left'}`}>
+                    <div className={`rounded-lg px-3 py-2 min-h-10 ${
+                      (message.senderId === user?.id || message.sent) 
+                        ? 'bg-primary-blue text-white' 
+                        : 'bg-gray-100 text-text-dark'
+                    }`}>
+                      <p className="text-xs">{message.content}</p>
+                    </div>
+                    <div className="flex items-center gap-1 mt-1">
+                      <span className="text-xs text-text-gray">
+                        {new Date(message.createdAt || message.timestamp).toLocaleString('sv-SE')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Message input */}
+            <div className="p-3 border-t border-gray-200">
+              <div className="flex items-end gap-1 mb-1">
+                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-10 flex items-center justify-center">
+                  <Paperclip className="w-3 h-3 text-text-gray" />
+                </button>
+                <div className="flex-1">
+                  <textarea
+                    value={messageText}
+                    onChange={(e) => setMessageText(e.target.value)}
+                    placeholder="Meddelande..."
+                    className="w-full px-2 py-2 min-h-10 border border-gray-200 rounded-lg text-xs resize-none focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                    rows={1}
+                  />
+                </div>
+                <button 
+                  className="p-2 bg-primary-blue text-white rounded-lg hover:bg-blue-700 transition-colors min-h-10 flex items-center justify-center"
+                  onClick={async () => {
+                    if (!user || !messageText.trim()) return
+                    const [listingId, peerId] = (selectedConversation || '').split('::')
+                    if (!listingId || !peerId) return
+                    try {
+                      await sendMessage({ listingId, senderId: user.id, recipientId: peerId, content: messageText.trim() })
+                      setMessageText('')
+                      const res = await getMessages({ userId: user.id, listingId, peerId })
+                      setInbox(res.messages)
+                    } catch (e) {}
+                  }}
+                >
+                  <Send className="w-3 h-3" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </DashboardLayout>
   )

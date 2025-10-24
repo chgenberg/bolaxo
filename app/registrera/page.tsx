@@ -81,11 +81,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-16">
-      <div className="max-w-2xl mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
+      <div className="max-w-2xl mx-auto px-3 sm:px-4">
         {step === 1 && (
           <div className="card animate-pulse-soft">
-            <h1 className="text-3xl font-bold text-text-dark mb-3 text-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3 text-center">
               Skapa konto
             </h1>
             <p className="text-text-gray mb-8 text-center">
@@ -107,7 +107,7 @@ export default function RegisterPage() {
                     type="radio"
                     checked={selectedRole === 'seller'}
                     onChange={() => handleRoleSelect('seller')}
-                    className="mt-1 w-5 h-5 text-primary-blue"
+                    className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
                   />
                   <div className="ml-4 flex items-center">
                     <Building className="w-6 h-6 text-primary-blue mr-3" />
@@ -134,7 +134,7 @@ export default function RegisterPage() {
                     type="radio"
                     checked={selectedRole === 'broker'}
                     onChange={() => handleRoleSelect('broker')}
-                    className="mt-1 w-5 h-5 text-primary-blue"
+                    className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
                   />
                   <div className="ml-4 flex items-center">
                     <Handshake className="w-6 h-6 text-primary-blue mr-3" />
@@ -161,7 +161,7 @@ export default function RegisterPage() {
                     type="radio"
                     checked={selectedRole === 'buyer'}
                     onChange={() => handleRoleSelect('buyer')}
-                    className="mt-1 w-5 h-5 text-primary-blue"
+                    className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue"
                   />
                   <div className="ml-4 flex items-center">
                     <Search className="w-6 h-6 text-primary-blue mr-3" />
@@ -213,12 +213,12 @@ export default function RegisterPage() {
                     <div className="w-full border-t border-gray-300"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-text-gray">eller</span>
+                    <span className="px-3 sm:px-4 bg-white text-text-gray">eller</span>
                   </div>
                 </div>
 
                 <button onClick={handleBankId} className="w-full btn-secondary">
-                  <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                   BankID (rekommenderas)
@@ -234,7 +234,7 @@ export default function RegisterPage() {
 
         {step === 2 && selectedRole && (
           <div className="card">
-            <h1 className="text-3xl font-bold text-text-dark mb-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3">
               Komplettera din profil
             </h1>
             <p className="text-text-gray mb-8">
@@ -360,7 +360,7 @@ export default function RegisterPage() {
               </svg>
             </div>
 
-            <h1 className="text-3xl font-bold text-text-dark mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
               BankID-verifiering krävs
             </h1>
             <p className="text-text-gray mb-8">

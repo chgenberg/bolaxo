@@ -116,7 +116,7 @@ export default function ClientsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Klienter</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Klienter</h1>
             <p className="text-sm text-text-gray mt-1">Hantera och följ upp dina klientrelationer</p>
           </div>
           <button className="btn-primary flex items-center gap-2">
@@ -129,34 +129,34 @@ export default function ClientsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Users className="w-5 h-5 text-primary-blue" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">{mockClients.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockClients.length}</p>
             <p className="text-xs text-text-gray">Totala klienter</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Building className="w-5 h-5 text-primary-blue" />
+              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {mockClients.filter(c => c.activeDeals > 0).length}
             </p>
             <p className="text-xs text-text-gray">Med aktiva affärer</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-5 h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {mockClients.filter(c => c.type === 'seller').length}
             </p>
             <p className="text-xs text-text-gray">Säljare</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Users className="w-5 h-5 text-primary-blue" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {mockClients.filter(c => c.type === 'buyer').length}
             </p>
             <p className="text-xs text-text-gray">Köpare</p>
@@ -189,7 +189,7 @@ export default function ClientsPage() {
             />
             
             <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <Filter className="w-5 h-5 text-text-gray" />
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
             </button>
           </div>
         </div>

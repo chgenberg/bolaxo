@@ -145,7 +145,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-white">
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-white to-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-gradient-to-b from-white to-gray-50 py-6 sm:py-8 md:py-12 px-3 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
 
           {/* Vision Statement */}
           <div className="bg-white rounded-lg border border-gray-200 p-8 mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Vad vi löser</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Vad vi löser</h2>
             <ul className="space-y-3">
               {[
                 'Allt sker digitalt – utan papper, utan advokatkostnader',
@@ -169,7 +169,7 @@ export default function CheckoutPage() {
                 'Köpare och säljare får omedelbar transparens och säkerhet genom AI'
               ].map((item, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-900 mt-1 flex-shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900 mt-1 flex-shrink-0" />
                   <span className="text-gray-700">{item}</span>
                 </li>
               ))}
@@ -179,9 +179,9 @@ export default function CheckoutPage() {
       </section>
 
       {/* Process Steps */}
-      <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-white py-6 sm:py-8 md:py-12 px-3 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Så fungerar det</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-12 text-center">Så fungerar det</h2>
 
           {/* Step Timeline - Desktop */}
           <div className="hidden md:grid grid-cols-5 gap-2 mb-16">
@@ -195,14 +195,14 @@ export default function CheckoutPage() {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   } rounded-lg p-4 font-semibold text-sm h-full flex flex-col items-center justify-center gap-2`}
                 >
-                  <span className="text-2xl">
+                  <span className="text-xl sm:text-2xl">
                     {idx + 1}
                   </span>
                   <span className="text-xs line-clamp-2">{step.title.split(' ').slice(1).join(' ')}</span>
                 </button>
                 {idx < steps.length - 1 && (
                   <div className="hidden md:flex justify-center items-center pt-4">
-                    <ArrowRight className="w-5 h-5 text-gray-300 -mx-6" />
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300 -mx-6" />
                   </div>
                 )}
               </div>
@@ -232,10 +232,10 @@ export default function CheckoutPage() {
             <div className="bg-gradient-to-br from-blue-50 to-blue-50 rounded-xl p-8 md:p-12 border border-blue-100">
               <div className="flex items-center gap-4 mb-8">
                 <div className="bg-blue-900 rounded-lg p-3">
-                  <ActiveIcon className="w-8 h-8 text-white" />
+                  <ActiveIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-3xl font-bold text-gray-900">{activeContent.title}</h3>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">{activeContent.title}</h3>
                   <p className="text-gray-600 mt-1">{activeContent.description}</p>
                 </div>
               </div>
@@ -244,7 +244,7 @@ export default function CheckoutPage() {
                 {activeContent.details.map((detail, idx) => (
                   <div key={idx}>
                     <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Database className="w-5 h-5 text-blue-900" />
+                      <Database className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
                       {detail.subtitle}
                     </h4>
                     <ul className="space-y-3 ml-7">
@@ -264,9 +264,9 @@ export default function CheckoutPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-blue-900 text-white py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-blue-900 text-white py-6 sm:py-8 md:py-12 px-3 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Redo att börja?</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Redo att börja?</h2>
           <p className="text-blue-100 text-lg mb-8">
             Antingen du är säljare eller köpare, kan du komma igång på minuter. Ingen komplicerad process, 
             bara den digitala transformation din företagsöverlåtelse behöver.

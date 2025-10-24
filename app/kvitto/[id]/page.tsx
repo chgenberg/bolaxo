@@ -18,15 +18,15 @@ export default function ReceiptPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-16">
-      <div className="max-w-3xl mx-auto px-4">
+    <main className="min-h-screen bg-gray-50 py-6 sm:py-8 md:py-12">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4">
         {/* Actions */}
         <div className="flex justify-between items-center mb-6 print:hidden">
           <Link href="/dashboard" className="text-primary-blue hover:underline">
             ← Tillbaka till översikt
           </Link>
           <button onClick={handlePrint} className="btn-secondary flex items-center">
-            <Printer className="w-5 h-5 mr-2" />
+            <Printer className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
             Skriv ut / Spara PDF
           </button>
         </div>
@@ -36,7 +36,7 @@ export default function ReceiptPage() {
           {/* Header */}
           <div className="flex justify-between items-start mb-12">
             <div>
-              <h1 className="text-3xl font-bold text-primary-blue mb-2">Bolagsplatsen</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">Bolagsplatsen</h1>
               <p className="text-sm text-text-gray">
                 Bolaxo AB<br />
                 Org.nr: 559123-4567<br />
@@ -46,7 +46,7 @@ export default function ReceiptPage() {
               </p>
             </div>
             <div className="text-right">
-              <h2 className="text-2xl font-bold text-text-dark mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">
                 {subscription?.paymentMethod === 'card' ? 'KVITTO' : 'FAKTURA'}
               </h2>
               {invoice && (
@@ -119,7 +119,7 @@ export default function ReceiptPage() {
               <div className="border-t-2 border-gray-300 pt-3">
                 <div className="flex justify-between">
                   <span className="font-bold text-lg">Totalt:</span>
-                  <span className="font-bold text-2xl text-primary-blue">
+                  <span className="font-bold text-xl sm:text-2xl text-primary-blue">
                     {Math.round(price * 1.25).toLocaleString('sv-SE')} kr
                   </span>
                 </div>

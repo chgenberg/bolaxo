@@ -123,7 +123,7 @@ export default function SecretRoomPage() {
               <Lock className="w-6 h-6" />
             </div>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold">🔐 Säkert Dokumentrum</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">🔐 Säkert Dokumentrum</h1>
               <p className="text-blue-100 mt-2">Här kan känsliga dokument lagras med högsta säkerhet. All data är krypterad och alla åtkomster loggas.</p>
             </div>
           </div>
@@ -131,17 +131,17 @@ export default function SecretRoomPage() {
           {/* Security Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
             <div className="bg-white/10 rounded-lg p-4 border border-white/20">
-              <Shield className="w-5 h-5 mb-2" />
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5 mb-2" />
               <p className="text-sm font-medium">AES-256 Kryptering</p>
               <p className="text-xs text-blue-100">Industristandardkryptering</p>
             </div>
             <div className="bg-white/10 rounded-lg p-4 border border-white/20">
-              <Eye className="w-5 h-5 mb-2" />
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 mb-2" />
               <p className="text-sm font-medium">Åtkomstloggning</p>
               <p className="text-xs text-blue-100">Alla åtkomster registreras</p>
             </div>
             <div className="bg-white/10 rounded-lg p-4 border border-white/20">
-              <Lock className="w-5 h-5 mb-2" />
+              <Lock className="w-4 h-4 sm:w-5 sm:h-5 mb-2" />
               <p className="text-sm font-medium">Åtkomstkontroll</p>
               <p className="text-xs text-blue-100">Endast behöriga användare</p>
             </div>
@@ -185,11 +185,11 @@ export default function SecretRoomPage() {
         {/* Documents Grid */}
         <div className="space-y-4 mb-8">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">Lagrade Dokument</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Lagrade Dokument</h2>
             <button
               onClick={() => setShowAccessLog(!showAccessLog)}
               disabled={documents.length === 0}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
               {showAccessLog ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               {showAccessLog ? 'Dölj' : 'Visa'} åtkomstlogg
@@ -198,7 +198,7 @@ export default function SecretRoomPage() {
 
           {loadingDocs ? (
             <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-              <Loader className="w-8 h-8 text-gray-400 mx-auto mb-3 animate-spin" />
+              <Loader className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mx-auto mb-3 animate-spin" />
               <p className="text-gray-600">Laddar dokument...</p>
             </div>
           ) : documents.length === 0 ? (
@@ -233,7 +233,7 @@ export default function SecretRoomPage() {
                       onClick={() => handleDelete(doc.id)}
                       className="p-2 hover:bg-red-50 rounded-lg transition-colors"
                     >
-                      <Trash2 className="w-5 h-5 text-red-600" />
+                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
                     </button>
                   </div>
                 </div>

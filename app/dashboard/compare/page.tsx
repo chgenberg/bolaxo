@@ -120,7 +120,7 @@ export default function ComparePage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-text-dark">Jämför objekt</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Jämför objekt</h1>
           <p className="text-sm text-text-gray mt-1">Jämför upp till 4 objekt sida vid sida</p>
         </div>
 

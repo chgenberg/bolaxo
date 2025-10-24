@@ -126,8 +126,8 @@ export default function BlogPage() {
   const featuredPosts = blogPosts.filter(post => post.featured)
 
   return (
-    <main className="min-h-screen bg-background-off-white py-16">
-      <div className="max-w-7xl mx-auto px-4">
+    <main className="min-h-screen bg-background-off-white py-6 sm:py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="heading-1 mb-4">Kunskap & Insikter</h1>
@@ -140,7 +140,7 @@ export default function BlogPage() {
         {/* Search */}
         <div className="max-w-2xl mx-auto mb-12">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-gray" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
             <input
               type="text"
               placeholder="Sök artiklar, taggar..."
@@ -155,7 +155,7 @@ export default function BlogPage() {
         {!searchQuery && selectedCategory === 'all' && (
           <div className="mb-16">
             <h2 className="heading-2 mb-8">Utvalda artiklar</h2>
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
               {featuredPosts.map(post => (
                 <article key={post.id} className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-all group">
                   <div className="h-48 bg-gradient-to-br from-light-blue to-primary-blue/20"></div>
@@ -199,7 +199,7 @@ export default function BlogPage() {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-4 gap-8">
+        <div className="grid lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
           {/* Sidebar */}
           <aside className="lg:col-span-1">
             {/* Categories */}
@@ -210,7 +210,7 @@ export default function BlogPage() {
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full text-left px-4 py-2 rounded-xl transition-all flex items-center justify-between ${
+                    className={`w-full text-left px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl transition-all flex items-center justify-between ${
                       selectedCategory === category.id
                         ? 'bg-primary-blue text-white'
                         : 'hover:bg-gray-50 text-text-gray'
@@ -264,7 +264,7 @@ export default function BlogPage() {
                 </p>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                 {filteredPosts.map(post => (
                   <article key={post.id} className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-all group">
                     <div className="h-40 bg-gradient-to-br from-light-blue to-primary-blue/20"></div>
@@ -309,19 +309,19 @@ export default function BlogPage() {
             {filteredPosts.length > 6 && (
               <div className="flex justify-center mt-8">
                 <div className="flex gap-2">
-                  <button className="px-4 py-2 rounded-xl bg-white hover:bg-gray-50 transition-all">
+                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
                     Föregående
                   </button>
-                  <button className="px-4 py-2 rounded-xl bg-primary-blue text-white">
+                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-primary-blue text-white">
                     1
                   </button>
-                  <button className="px-4 py-2 rounded-xl bg-white hover:bg-gray-50 transition-all">
+                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
                     2
                   </button>
-                  <button className="px-4 py-2 rounded-xl bg-white hover:bg-gray-50 transition-all">
+                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
                     3
                   </button>
-                  <button className="px-4 py-2 rounded-xl bg-white hover:bg-gray-50 transition-all">
+                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
                     Nästa
                   </button>
                 </div>

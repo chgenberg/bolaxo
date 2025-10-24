@@ -56,7 +56,7 @@ export default function SettingsPage() {
                 <div>
                   <h2 className="text-lg font-semibold text-text-dark mb-6">Personlig information</h2>
                   
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                     <div>
                       <label className="block text-sm font-medium text-text-dark mb-2">
                         Förnamn
@@ -64,7 +64,7 @@ export default function SettingsPage() {
                       <input
                         type="text"
                         defaultValue={user?.name?.split(' ')[0] || ''}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                     </div>
                     
@@ -75,7 +75,7 @@ export default function SettingsPage() {
                       <input
                         type="text"
                         defaultValue={user?.name?.split(' ')[1] || ''}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                     </div>
                     
@@ -86,7 +86,7 @@ export default function SettingsPage() {
                       <input
                         type="email"
                         defaultValue={user?.email || ''}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                     </div>
                     
@@ -97,7 +97,7 @@ export default function SettingsPage() {
                       <input
                         type="tel"
                         placeholder="+46 70 123 45 67"
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                     </div>
                     
@@ -105,7 +105,7 @@ export default function SettingsPage() {
                       <label className="block text-sm font-medium text-text-dark mb-2">
                         Roll
                       </label>
-                      <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
+                      <select className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
                         <option value="seller" selected={user?.role === 'seller'}>Säljare</option>
                         <option value="buyer" selected={user?.role === 'buyer'}>Köpare</option>
                         <option value="advisor" selected={user?.role === 'advisor' || user?.role === 'broker'}>Mäklare</option>
@@ -116,7 +116,7 @@ export default function SettingsPage() {
                       <label className="block text-sm font-medium text-text-dark mb-2">
                         Språk
                       </label>
-                      <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
+                      <select className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue">
                         <option value="sv">Svenska</option>
                         <option value="en">English</option>
                       </select>
@@ -127,7 +127,7 @@ export default function SettingsPage() {
                 <div className="pt-6 border-t border-gray-200">
                   <h3 className="text-md font-semibold text-text-dark mb-4">Profilbild</h3>
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 bg-primary-blue rounded-full flex items-center justify-center text-white text-2xl font-semibold">
+                    <div className="w-20 h-20 bg-primary-blue rounded-full flex items-center justify-center text-white text-xl sm:text-2xl font-semibold">
                       {user?.name?.[0] || user?.email?.[0] || 'U'}
                     </div>
                     <div>
@@ -145,7 +145,7 @@ export default function SettingsPage() {
               <div className="space-y-6">
                 <h2 className="text-lg font-semibold text-text-dark mb-6">Företagsuppgifter</h2>
                 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-text-dark mb-2">
                       Företagsnamn
@@ -153,7 +153,7 @@ export default function SettingsPage() {
                     <input
                       type="text"
                       placeholder="ABC Företag AB"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                      className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                     />
                   </div>
                   
@@ -164,7 +164,7 @@ export default function SettingsPage() {
                     <input
                       type="text"
                       placeholder="556123-4567"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                      className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                     />
                   </div>
                   
@@ -175,18 +175,18 @@ export default function SettingsPage() {
                     <input
                       type="text"
                       placeholder="Kungsgatan 1"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue mb-3"
+                      className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue mb-3"
                     />
                     <div className="grid grid-cols-3 gap-3">
                       <input
                         type="text"
                         placeholder="111 22"
-                        className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                       <input
                         type="text"
                         placeholder="Stockholm"
-                        className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue col-span-2"
+                        className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue col-span-2"
                       />
                     </div>
                   </div>
@@ -205,17 +205,17 @@ export default function SettingsPage() {
                       <input
                         type="password"
                         placeholder="Nuvarande lösenord"
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                       <input
                         type="password"
                         placeholder="Nytt lösenord"
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                       <input
                         type="password"
                         placeholder="Bekräfta nytt lösenord"
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
+                        className="w-full px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-blue"
                       />
                     </div>
                   </div>

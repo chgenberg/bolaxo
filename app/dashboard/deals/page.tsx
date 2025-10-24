@@ -148,7 +148,7 @@ export default function DealsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Aktiva affärer</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Aktiva affärer</h1>
             <p className="text-sm text-text-gray mt-1">Detaljerad översikt över pågående transaktioner</p>
           </div>
           <button className="btn-primary">
@@ -160,34 +160,34 @@ export default function DealsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Building className="w-5 h-5 text-primary-blue" />
+              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">{deals.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{deals.length}</p>
             <p className="text-xs text-text-gray">Aktiva affärer</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <DollarSign className="w-5 h-5 text-primary-blue" />
+              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {(deals.reduce((sum, d) => sum + d.value, 0) / 1000000).toFixed(0)} MSEK
             </p>
             <p className="text-xs text-text-gray">Total volym</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-5 h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {(deals.reduce((sum, d) => sum + d.commission, 0) / 1000000).toFixed(1)} MSEK
             </p>
             <p className="text-xs text-text-gray">Förväntad provision</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Clock className="w-5 h-5 text-primary-blue" />
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {deals.filter(d => d.status === 'closing_soon').length}
             </p>
             <p className="text-xs text-text-gray">Closing inom 30 dagar</p>
@@ -205,7 +205,7 @@ export default function DealsPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+              className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
                 filter === option.value
                   ? 'bg-primary-blue text-white'
                   : 'bg-gray-100 text-text-gray hover:bg-gray-200'

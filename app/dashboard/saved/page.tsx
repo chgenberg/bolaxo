@@ -131,7 +131,7 @@ export default function SavedListingsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-text-dark">Sparade objekt</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-text-dark">Sparade objekt</h1>
             <p className="text-sm text-text-gray mt-1">Objekt du följer och är intresserad av</p>
           </div>
           <Link href="/sok" className="btn-secondary">
@@ -143,36 +143,36 @@ export default function SavedListingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Bookmark className="w-5 h-5 text-primary-blue" />
+              <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
               <span className="text-xs text-primary-blue font-medium">+2</span>
             </div>
-            <p className="text-2xl font-bold text-text-dark">{savedListings.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{savedListings.length}</p>
             <p className="text-xs text-text-gray">Sparade objekt</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Eye className="w-5 h-5 text-primary-blue" />
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {savedListings.filter(l => l.ndaStatus === 'approved').length}
             </p>
             <p className="text-xs text-text-gray">Med godkänd NDA</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-5 h-5 text-primary-blue" />
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {savedListings.filter(l => l.matchScore >= 85).length}
             </p>
             <p className="text-xs text-text-gray">Hög matchning (85%+)</p>
           </div>
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <MessageSquare className="w-5 h-5 text-primary-blue" />
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
               <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
             </div>
-            <p className="text-2xl font-bold text-text-dark">
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">
               {savedListings.filter(l => l.hasNewActivity).length}
             </p>
             <p className="text-xs text-text-gray">Ny aktivitet</p>
@@ -190,7 +190,7 @@ export default function SavedListingsPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+              className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
                 filter === option.value
                   ? 'bg-primary-blue text-white'
                   : 'bg-gray-100 text-text-gray hover:bg-gray-200'
@@ -295,7 +295,7 @@ export default function SavedListingsPage() {
 
                 {/* Actions menu */}
                 <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-4">
-                  <MoreVertical className="w-5 h-5 text-text-gray" />
+                  <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
                 </button>
               </div>
             </div>

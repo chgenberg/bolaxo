@@ -57,16 +57,16 @@ export default function HomePage() {
       <HeroSection />
 
       {/* Features Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-6 sm:py-8 md:py-12 md:py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="heading-2 text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Mer tid till det som betyder något</h2>
+            <h2 className="heading-2 text-2xl sm:text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Mer tid till det som betyder något</h2>
             <p className="text-base sm:text-lg text-text-gray max-w-2xl mx-auto px-2">
               Automatisering sparar veckor av arbete. Plattformen hanterar matchning, analytics och rapporter – du fokuserar på rätt beslut vid rätt tid.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 sm:gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             {features.map((feature, index) => {
               const Icon = feature.icon
               return (
@@ -91,14 +91,14 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-light-blue/10 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-12 sm:py-6 sm:py-8 md:py-12 md:py-6 sm:py-8 md:py-12 bg-gradient-to-b from-light-blue/10 to-white">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="heading-2 text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Vad våra kunder säger</h2>
+            <h2 className="heading-2 text-2xl sm:text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Vad våra kunder säger</h2>
             <p className="text-sm sm:text-base text-text-gray">Över 2,000 lyckade affärer sedan 2020</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 sm:gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             {testimonials.map((testimonial, index) => (
               <div 
                 key={index} 
@@ -140,9 +140,9 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-primary-blue text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
+      <section className="py-12 sm:py-6 sm:py-8 md:py-12 md:py-6 sm:py-8 md:py-12 bg-primary-blue text-white">
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
             Redo att sälja ditt företag?
           </h2>
           <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90">
@@ -161,15 +161,15 @@ export default function HomePage() {
 
       {/* Trust Brands */}
       <section className="py-8 sm:py-10 md:py-12 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-6 sm:mb-8">
             <p className="text-sm sm:text-base text-text-gray">Omnämnda i</p>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 md:gap-6 sm:gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 md:gap-12">
             {trustLogos.map((brand) => (
               <div 
                 key={brand.name} 
-                className="text-lg sm:text-2xl font-bold text-gray-300 hover:text-gray-400 transition-colors"
+                className="text-lg sm:text-xl sm:text-2xl font-bold text-gray-300 hover:text-gray-400 transition-colors"
               >
                 {brand.logo}
               </div>

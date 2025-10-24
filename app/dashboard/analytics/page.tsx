@@ -57,10 +57,10 @@ export default function AnalyticsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Analytics</h1>
+            <h1 className="text-xl sm:text-xl sm:text-2xl font-bold text-gray-900">Analytics</h1>
             <p className="text-xs sm:text-sm text-gray-600 mt-1">Statistik för dina annonser</p>
           </div>
-          <button className="px-3 sm:px-4 py-2.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base min-h-11 sm:min-h-auto">
+          <button className="px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base min-h-11 sm:min-h-auto">
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">Exportera</span>
           </button>
@@ -74,7 +74,7 @@ export default function AnalyticsPage() {
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">Visningar</span>
                 <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalViews}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalViews}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Snitt: {summary.avgViewsPerListing}</p>
             </div>
 
@@ -83,7 +83,7 @@ export default function AnalyticsPage() {
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">NDA</span>
                 <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalNDAs}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalNDAs}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konv: {summary.ndaConversionRate}%</p>
             </div>
 
@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">Meddelanden</span>
                 <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalMessages}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalMessages}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konversationer</p>
             </div>
 
@@ -101,7 +101,7 @@ export default function AnalyticsPage() {
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">Sparningar</span>
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalSaves}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalSaves}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Intresserade köpare</p>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function AnalyticsPage() {
         <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Filter className="w-5 h-5 text-gray-600" />
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
               <SelectDropdown
                 value={selectedListing}
                 onChange={setSelectedListing}

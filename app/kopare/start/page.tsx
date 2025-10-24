@@ -118,9 +118,9 @@ export default function BuyerStartPage() {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Progress Bar */}
       <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">Kom igång</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Kom igång</h1>
             <span className="text-sm font-medium text-gray-600">{step} av {totalSteps}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -133,13 +133,13 @@ export default function BuyerStartPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-12">
         {/* Step 1: Regioner */}
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <MapPin className="w-8 h-8 text-blue-900" />
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
                 Vilka regioner intresserar dig?
               </h2>
               <p className="text-gray-600">Välj en eller flera regioner där du vill investera</p>
@@ -167,8 +167,8 @@ export default function BuyerStartPage() {
         {step === 2 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <Building className="w-8 h-8 text-blue-900" />
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
+                <Building className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
                 Vilka branscher intresserar dig?
               </h2>
               <p className="text-gray-600">Välj en eller flera branscher</p>
@@ -196,8 +196,8 @@ export default function BuyerStartPage() {
         {step === 3 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <TrendingUp className="w-8 h-8 text-blue-900" />
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
                 Budget & erfarenhet
               </h2>
               <p className="text-gray-600">Berätta om dina investeringskriterier</p>
@@ -213,7 +213,7 @@ export default function BuyerStartPage() {
                     <select
                       value={formData.priceMin}
                       onChange={(e) => setFormData({ ...formData, priceMin: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                      className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
                     >
                       <option value="">Från...</option>
                       <option value="50000">50.000 kr</option>
@@ -232,7 +232,7 @@ export default function BuyerStartPage() {
                     <select
                       value={formData.priceMax}
                       onChange={(e) => setFormData({ ...formData, priceMax: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                      className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
                     >
                       <option value="">Till...</option>
                       <option value="100000">100.000 kr</option>
@@ -255,7 +255,7 @@ export default function BuyerStartPage() {
                   <select
                     value={formData.investmentExperience}
                     onChange={(e) => setFormData({ ...formData, investmentExperience: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                    className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
                   >
                     <option value="first_time">Första gången - Ny investerare</option>
                     <option value="experienced">Viss erfarenhet - Några affärer genomförda</option>
@@ -272,7 +272,7 @@ export default function BuyerStartPage() {
                   <select
                     value={formData.timeframe}
                     onChange={(e) => setFormData({ ...formData, timeframe: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                    className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
                   >
                     <option value="immediate">Omedelbar - Jag är redo nu</option>
                     <option value="3_months">3 månader - Ganska snart</option>
@@ -290,7 +290,7 @@ export default function BuyerStartPage() {
                     type="checkbox"
                     checked={formData.financingReady}
                     onChange={(e) => setFormData({ ...formData, financingReady: e.target.checked })}
-                    className="w-5 h-5 rounded border-2 border-blue-300 text-blue-900 cursor-pointer"
+                    className="w-4 h-4 sm:w-5 sm:h-5 rounded border-2 border-blue-300 text-blue-900 cursor-pointer"
                   />
                   <span className="text-sm font-medium text-blue-900">Jag har redan finansiering på plats</span>
                 </label>
@@ -303,8 +303,8 @@ export default function BuyerStartPage() {
         {step === 4 && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <CheckCircle className="w-8 h-8 text-green-600" />
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
+                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
                 Du är nästan klar!
               </h2>
               <p className="text-gray-600">Granska dina preferenser</p>

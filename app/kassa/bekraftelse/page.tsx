@@ -20,7 +20,7 @@ export default function ConfirmationPage() {
   const latestInvoice = invoices[invoices.length - 1]
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
       <div className="max-w-2xl w-full">
         <div className="card text-center animate-pulse-soft">
           {/* Success Icon */}
@@ -30,7 +30,7 @@ export default function ConfirmationPage() {
             </svg>
           </div>
 
-          <h1 className="text-3xl font-bold text-text-dark mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
             Klart! Din plan är aktiv
           </h1>
 

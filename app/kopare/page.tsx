@@ -4,11 +4,11 @@ export default function KopareInfoPage() {
   return (
     <main className="bg-background-off-white">
       {/* Hero Section */}
-      <section className="relative galaxy-hero-bg bg-cover bg-center bg-no-repeat py-20">
+      <section className="relative galaxy-hero-bg bg-cover bg-center bg-no-repeat py-6 sm:py-8 md:py-12">
         {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/20"></div>
         
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg uppercase">
             Så funkar det för köpare
           </h1>
@@ -18,7 +18,7 @@ export default function KopareInfoPage() {
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
 
         {/* Process Steps */}
         <div className="space-y-8 mb-16">
@@ -67,7 +67,7 @@ export default function KopareInfoPage() {
             },
           ].map((item) => (
             <div key={item.step} className="card-hover flex items-start">
-              <div className="flex-shrink-0 w-16 h-16 bg-primary-blue text-white rounded-2xl flex items-center justify-center text-2xl font-bold mr-6">
+              <div className="flex-shrink-0 w-16 h-16 bg-primary-blue text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold mr-6">
                 {item.step}
               </div>
               <div className="flex-1">
@@ -83,11 +83,11 @@ export default function KopareInfoPage() {
 
         {/* Benefits */}
         <div className="card mb-16">
-          <h2 className="text-2xl font-bold text-text-dark mb-8 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-8 text-center">
             Varför använda Bolagsplatsen?
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
             <div className="flex items-start">
               <svg className="w-6 h-6 text-success mr-3 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />

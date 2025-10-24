@@ -59,12 +59,12 @@ export default function OnePagerPage() {
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left: Main message */}
             <div>
               {/* Social proof badge */}
-              <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm mb-6 animate-fade-in">
+              <div className="inline-flex items-center px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-white/20 backdrop-blur-sm rounded-full text-sm mb-6 animate-fade-in">
                 <Users className="w-4 h-4 mr-2" />
                 <span className="font-semibold">{liveCounter.toLocaleString('sv-SE')}</span>
                 <span className="ml-1">företagare använder BOLAXO</span>
@@ -78,7 +78,7 @@ export default function OnePagerPage() {
               </h1>
 
               {/* Subheadline - Smärta → Lösning */}
-              <p className="text-xl md:text-2xl mb-8 opacity-90 leading-relaxed">
+              <p className="text-xl md:text-xl sm:text-2xl mb-8 opacity-90 leading-relaxed">
                 Slipp oseriösa köpare, långa processer och dyra mellanhänder. 
                 <strong className="text-white"> Vi kopplar dig direkt till rätt köpare</strong> - helt anonymt tills du bestämmer dig.
               </p>
@@ -107,7 +107,7 @@ export default function OnePagerPage() {
                 >
                   <Zap className="w-6 h-6 mr-2 group-hover:scale-110 transition-transform" />
                   Få Gratis Värdering (5 min)
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 
                 <Link 
@@ -115,18 +115,18 @@ export default function OnePagerPage() {
                   className="btn-secondary bg-white text-primary-blue hover:bg-gray-100 text-lg px-8 py-4 inline-flex items-center justify-center"
                 >
                   Börja sälja
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
                 </Link>
               </div>
 
               {/* Trust signals */}
-              <div className="mt-8 flex items-center gap-6 text-sm opacity-75">
+              <div className="mt-8 flex items-center gap-3 sm:gap-4 md:gap-6 text-sm opacity-75">
                 <div className="flex items-center">
-                  <Shield className="w-5 h-5 mr-2" />
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   <span>BankID-säkrat</span>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="w-5 h-5 mr-2" />
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   <span>Ø 94 dagar till affär</span>
                 </div>
               </div>
@@ -138,7 +138,7 @@ export default function OnePagerPage() {
               <div className="bg-white text-text-dark p-8 rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300">
                 <div className="flex mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-warning fill-current" />
+                    <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-warning fill-current" />
                   ))}
                 </div>
                 
@@ -174,12 +174,12 @@ export default function OnePagerPage() {
 
               {/* Floating stats */}
               <div className="absolute -top-6 -left-6 bg-white text-text-dark px-6 py-3 rounded-xl shadow-lg animate-bounce-slow">
-                <div className="text-3xl font-bold text-primary-blue">2,847</div>
+                <div className="text-2xl sm:text-3xl font-bold text-primary-blue">2,847</div>
                 <div className="text-sm text-text-gray">Företag sålda</div>
               </div>
 
               <div className="absolute -bottom-6 -right-6 bg-white text-text-dark px-6 py-3 rounded-xl shadow-lg animate-bounce-slow" style={{ animationDelay: '0.5s' }}>
-                <div className="text-3xl font-bold text-green-600">4.9/5</div>
+                <div className="text-2xl sm:text-3xl font-bold text-green-600">4.9/5</div>
                 <div className="text-sm text-text-gray">Nöjda säljare</div>
               </div>
             </div>
@@ -196,8 +196,8 @@ export default function OnePagerPage() {
 
       {/* Stats Bar - Social proof */}
       <section className="bg-white py-12 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 text-center">
             <div>
               <div className="text-4xl font-bold text-primary-blue mb-2">18.7M kr</div>
               <div className="text-text-gray">Genomsnittligt försäljningspris</div>
@@ -219,8 +219,8 @@ export default function OnePagerPage() {
       </section>
 
       {/* Problem → Solution */}
-      <section className="py-20 bg-gradient-to-b from-white to-light-blue/10">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-gradient-to-b from-white to-light-blue/10">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-16">
             <h2 className="heading-1 mb-6">
               Varför är det så <span className="text-red-600">svårt</span> att sälja sitt företag?
@@ -231,10 +231,10 @@ export default function OnePagerPage() {
           </div>
 
           {/* Problem vs Solution Grid */}
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             {/* Problems */}
             <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-text-dark mb-6 flex items-center">
+            <h3 className="text-xl sm:text-2xl font-bold text-text-dark mb-6 flex items-center">
               <XCircle className="w-6 h-6 text-red-600 mr-2" />
               Traditionellt sätt
             </h3>
@@ -262,7 +262,7 @@ export default function OnePagerPage() {
 
             {/* Solutions */}
             <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-primary-blue mb-6 flex items-center">
+            <h3 className="text-xl sm:text-2xl font-bold text-primary-blue mb-6 flex items-center">
               <CheckCircle className="w-6 h-6 text-primary-blue mr-2" />
               Med BOLAXO
             </h3>
@@ -293,11 +293,11 @@ export default function OnePagerPage() {
           <div className="mt-16 text-center">
             <Link 
               href="/vardering" 
-              className="inline-flex items-center px-12 py-6 bg-primary-blue hover:bg-blue-800 text-white text-2xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center px-12 py-6 bg-primary-blue hover:bg-blue-800 text-white text-xl sm:text-2xl font-bold rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
             >
-              <Zap className="w-8 h-8 mr-3" />
+              <Zap className="w-6 h-6 sm:w-8 sm:h-8 mr-3" />
               Värdera Mitt Företag Gratis
-              <ArrowRight className="w-8 h-8 ml-3" />
+              <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 ml-3" />
             </Link>
             <p className="text-text-gray mt-4">Tar bara 5 minuter • Ingen registrering • Helt gratis</p>
           </div>
@@ -305,20 +305,20 @@ export default function OnePagerPage() {
       </section>
 
       {/* How it works - Super simpel */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-16">
             <h2 className="heading-1 mb-4">Så enkelt är det</h2>
             <p className="text-xl text-text-gray">Från värdering till avslut på 3 steg</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 relative">
             {/* Arrow connectors */}
             <div className="hidden md:block absolute top-1/2 left-1/3 w-1/3 h-0.5 bg-gradient-to-r from-primary-blue to-light-blue transform -translate-y-1/2"></div>
             <div className="hidden md:block absolute top-1/2 right-0 w-1/3 h-0.5 bg-gradient-to-r from-light-blue to-primary-blue transform -translate-y-1/2"></div>
 
             <div className="relative bg-gradient-to-br from-light-blue to-white p-8 rounded-2xl shadow-card text-center transform hover:scale-105 transition-all">
-              <div className="w-16 h-16 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+              <div className="w-16 h-16 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl sm:text-2xl font-bold">
                 1
               </div>
               <h3 className="text-xl font-semibold text-text-dark mb-3">Värdera Gratis</h3>
@@ -329,7 +329,7 @@ export default function OnePagerPage() {
             </div>
 
             <div className="relative bg-gradient-to-br from-light-blue to-white p-8 rounded-2xl shadow-card text-center transform hover:scale-105 transition-all">
-              <div className="w-16 h-16 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+              <div className="w-16 h-16 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl sm:text-2xl font-bold">
                 2
               </div>
               <h3 className="text-xl font-semibold text-text-dark mb-3">Skapa Annons</h3>
@@ -340,7 +340,7 @@ export default function OnePagerPage() {
             </div>
 
             <div className="relative bg-gradient-to-br from-light-blue to-white p-8 rounded-2xl shadow-card text-center transform hover:scale-105 transition-all">
-              <div className="w-16 h-16 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">
+              <div className="w-16 h-16 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl sm:text-2xl font-bold">
                 3
               </div>
               <h3 className="text-xl font-semibold text-text-dark mb-3">Ta Emot Bud</h3>
@@ -354,14 +354,14 @@ export default function OnePagerPage() {
       </section>
 
       {/* Social Proof - Recent sales */}
-      <section className="py-16 bg-primary-blue/5">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-primary-blue/5">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-12">
             <h2 className="heading-2 mb-2">Senaste affärerna</h2>
             <p className="text-text-gray">Live-uppdaterat från vår plattform</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {[
               { company: 'Tech-bolag Stockholm', price: '23.5M kr', days: '67 dagar', bids: 18 },
               { company: 'E-handel Göteborg', price: '12.8M kr', days: '89 dagar', bids: 14 },
@@ -375,7 +375,7 @@ export default function OnePagerPage() {
                   </span>
                 </div>
                 <div className="font-semibold text-text-dark mb-2">{sale.company}</div>
-                <div className="text-2xl font-bold text-primary-blue mb-2">{sale.price}</div>
+                <div className="text-xl sm:text-2xl font-bold text-primary-blue mb-2">{sale.price}</div>
                 <div className="text-sm text-text-gray">{sale.bids} bud mottagna</div>
               </div>
             ))}
@@ -384,14 +384,14 @@ export default function OnePagerPage() {
       </section>
 
       {/* Features - Konkret värde */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-16">
             <h2 className="heading-1 mb-4">Allt du behöver för en lyckad försäljning</h2>
             <p className="text-xl text-text-gray">Från värdering till avslut - vi guidar dig hela vägen</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[
               { icon: Zap, title: 'AI-Värdering', desc: 'Gratis värdering på 5 min', value: 'Värd 5,000 kr' },
               { icon: Lock, title: 'Anonymitet', desc: 'Full kontroll över vad som visas', value: 'Priceless' },
@@ -414,14 +414,14 @@ export default function OnePagerPage() {
       </section>
 
       {/* Testimonials - Emotionella berättelser */}
-      <section className="py-20 bg-gradient-to-br from-primary-blue/5 to-light-blue/10">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-gradient-to-br from-primary-blue/5 to-light-blue/10">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4">
           <div className="text-center mb-16">
             <h2 className="heading-1 mb-4">Riktiga företagare. Riktiga resultat.</h2>
             <p className="text-xl text-text-gray">Över 2,800 entreprenörer har nått sina drömmar genom BOLAXO</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
                 {[
                   {
                     name: 'Stefan Andersson',
@@ -476,13 +476,13 @@ export default function OnePagerPage() {
       </section>
 
       {/* FOMO - Brådska */}
-      <section className="py-16 bg-yellow-50 border-y-4 border-yellow-400">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center px-4 py-2 bg-yellow-200 text-yellow-900 rounded-full font-semibold mb-6">
-            <Clock className="w-5 h-5 mr-2" />
+      <section className="py-6 sm:py-8 md:py-12 bg-yellow-50 border-y-4 border-yellow-400">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 text-center">
+          <div className="inline-flex items-center px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-yellow-200 text-yellow-900 rounded-full font-semibold mb-6">
+            <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
             Begränsat erbjudande
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-text-dark mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-text-dark mb-4">
             Första 100 värderingar i mars får <span className="text-primary-blue">50% rabatt</span> på annonspris
           </h2>
           <p className="text-lg text-text-gray mb-6">
@@ -501,17 +501,17 @@ export default function OnePagerPage() {
       </section>
 
       {/* Guarantee - Risk reversal */}
-      <section className="py-20 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-5xl mx-auto px-3 sm:px-4">
           <div className="bg-gradient-to-br from-green-50 to-light-blue p-12 rounded-3xl border-2 border-green-200 text-center">
             <Shield className="w-20 h-20 text-green-600 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-text-dark mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
               Vår BOLAXO-Garanti
             </h2>
             <p className="text-xl text-text-gray mb-8">
               Om du inte får minst 3 kvalificerade bud inom 90 dagar får du <strong className="text-primary-blue">pengarna tillbaka + 90 dagar gratis förlängning</strong>
             </p>
-            <div className="grid md:grid-cols-3 gap-6 text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 text-left">
               <div className="flex items-start">
                 <CheckCircle className="w-6 h-6 text-green-600 mr-3 flex-shrink-0 mt-1" />
                 <div>
@@ -539,19 +539,19 @@ export default function OnePagerPage() {
       </section>
 
       {/* Final CTA - Emotionell */}
-      <section className="py-24 bg-gradient-to-br from-primary-blue via-blue-800 to-blue-900 text-white relative overflow-hidden">
+      <section className="py-8 sm:py-12 md:py-16 bg-gradient-to-br from-primary-blue via-blue-800 to-blue-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('/pattern.svg')] bg-repeat"></div>
         </div>
 
-        <div className="relative max-w-4xl mx-auto px-4 text-center">
+        <div className="relative max-w-4xl mx-auto px-3 sm:px-4 text-center">
           <Heart className="w-16 h-16 mx-auto mb-6 text-red-400" />
           
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Du har byggt något värdefullt.
           </h2>
           
-          <p className="text-2xl mb-4 opacity-90">
+          <p className="text-xl sm:text-2xl mb-4 opacity-90">
             Nu är det dags att få vad det är värt.
           </p>
           
@@ -560,10 +560,10 @@ export default function OnePagerPage() {
             <strong className="text-white"> Din tur nu.</strong>
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center mb-8">
             <Link 
               href="/vardering" 
-              className="btn-primary bg-white text-primary-blue hover:bg-gray-100 text-2xl px-12 py-6 inline-flex items-center justify-center shadow-2xl group"
+              className="btn-primary bg-white text-primary-blue hover:bg-gray-100 text-xl sm:text-2xl px-12 py-6 inline-flex items-center justify-center shadow-2xl group"
             >
               <Zap className="w-7 h-7 mr-3 group-hover:scale-110 transition-transform" />
               Starta Min Gratis Värdering
@@ -578,8 +578,8 @@ export default function OnePagerPage() {
       </section>
 
       {/* FAQ - Hantera invändningar */}
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
+      <section className="py-6 sm:py-8 md:py-12 bg-white">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4">
           <h2 className="heading-2 text-center mb-12">Vanliga frågor</h2>
           
           <div className="space-y-4">

@@ -168,8 +168,8 @@ export default function FAQPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background-off-white py-16">
-      <div className="max-w-4xl mx-auto px-4">
+    <main className="min-h-screen bg-background-off-white py-6 sm:py-8 md:py-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="heading-1 mb-4">Vanliga frågor</h1>
@@ -182,7 +182,7 @@ export default function FAQPage() {
         {/* Search */}
         <div className="mb-8">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-gray" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
             <input
               type="text"
               placeholder="Sök bland frågor..."
@@ -201,7 +201,7 @@ export default function FAQPage() {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`px-4 py-2 rounded-xl font-medium transition-all flex items-center ${
+                className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl font-medium transition-all flex items-center ${
                   selectedCategory === category.id
                     ? 'bg-primary-blue text-white'
                     : 'bg-white text-text-gray hover:bg-gray-50'
@@ -239,7 +239,7 @@ export default function FAQPage() {
                       {item.question}
                     </span>
                     <ChevronDown 
-                      className={`w-5 h-5 text-text-gray flex-shrink-0 transition-transform ${
+                      className={`w-4 h-4 sm:w-5 sm:h-5 text-text-gray flex-shrink-0 transition-transform ${
                         isExpanded ? 'rotate-180' : ''
                       }`}
                     />

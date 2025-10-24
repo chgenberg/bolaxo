@@ -26,7 +26,7 @@ export default function NDASigningPage() {
 
   if (hasSignedNDA) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
           <div className="w-20 h-20 bg-success rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -34,7 +34,7 @@ export default function NDASigningPage() {
             </svg>
           </div>
           <div className="flex items-center justify-center gap-2 mb-4">
-            <h1 className="text-3xl font-bold text-text-dark">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark">
               NDA redan signerad
             </h1>
             <InfoPopup
@@ -87,8 +87,8 @@ export default function NDASigningPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-16">
-      <div className="max-w-3xl mx-auto px-4">
+    <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4">
         <Link href={`/objekt/${objectId}`} className="text-primary-blue hover:underline mb-6 inline-block">
           ← Tillbaka till objektet
         </Link>
@@ -101,7 +101,7 @@ export default function NDASigningPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h1 className="text-3xl font-bold text-text-dark mb-2">
+              <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-2">
                 Signera NDA
               </h1>
               <p className="text-text-gray">
@@ -182,7 +182,7 @@ export default function NDASigningPage() {
                   id="agreed"
                   checked={agreed}
                   onChange={(e) => setAgreed(e.target.checked)}
-                  className="mt-1 w-5 h-5 text-primary-blue border-gray-300 rounded focus:ring-primary-blue"
+                  className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-primary-blue border-gray-300 rounded focus:ring-primary-blue"
                 />
                 <label htmlFor="agreed" className="ml-3 text-sm cursor-pointer">
                   Jag har läst och förstår villkoren i sekretessavtalet och åtar mig att följa dessa.
@@ -206,7 +206,7 @@ export default function NDASigningPage() {
 
         {step === 2 && (
           <div className="card">
-            <h1 className="text-3xl font-bold text-text-dark mb-8 text-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-8 text-center">
               Steg 2: Välj signeringsmetod
             </h1>
 
@@ -216,7 +216,7 @@ export default function NDASigningPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-start">
                     <div className="w-12 h-12 bg-primary-blue rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
                     </div>
@@ -256,7 +256,7 @@ export default function NDASigningPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-start">
                     <div className="w-12 h-12 bg-gray-200 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                      <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 sm:w-8 sm:h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                     </div>
@@ -288,7 +288,7 @@ export default function NDASigningPage() {
               </svg>
             </div>
 
-            <h1 className="text-3xl font-bold text-text-dark mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
               NDA skickad!
             </h1>
             

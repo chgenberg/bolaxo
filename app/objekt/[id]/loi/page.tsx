@@ -37,9 +37,9 @@ export default function LOIPage() {
 
   if (!hasNDA) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-16 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
-          <h1 className="text-3xl font-bold text-text-dark mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
             NDA krävs för att lämna LOI
           </h1>
           <p className="text-text-gray mb-8">
@@ -109,14 +109,14 @@ export default function LOIPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4">
         <Link href={`/objekt/${objectId}`} className="text-primary-blue hover:underline mb-6 inline-block">
           ← Tillbaka till objektet
         </Link>
 
         <div className="card">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-text-dark mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-2">
               Indikativt bud (LOI)
             </h1>
             <p className="text-text-gray">
@@ -232,7 +232,7 @@ export default function LOIPage() {
               <select
                 value={loiData.financing}
                 onChange={(e) => setLoiData({ ...loiData, financing: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-blue focus:outline-none"
+                className="w-full px-3 sm:px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-blue focus:outline-none"
               >
                 <option value="own_capital">Eget kapital</option>
                 <option value="bank_loan">Banklån (preliminärt godkänt)</option>
@@ -249,7 +249,7 @@ export default function LOIPage() {
               <select
                 value={loiData.ddScope}
                 onChange={(e) => setLoiData({ ...loiData, ddScope: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-blue focus:outline-none"
+                className="w-full px-3 sm:px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary-blue focus:outline-none"
               >
                 <option value="light">Light DD (2-3 veckor)</option>
                 <option value="standard">Standard DD (4-6 veckor)</option>
@@ -280,7 +280,7 @@ export default function LOIPage() {
             {/* Advisory */}
             <div className="card bg-light-blue">
               <h3 className="font-semibold mb-3 flex items-center">
-                <Handshake className="w-5 h-5 mr-2 text-primary-blue" />
+                <Handshake className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-blue" />
                 Behöver du rådgivare?
               </h3>
               <p className="text-sm text-text-gray mb-4">
@@ -295,11 +295,11 @@ export default function LOIPage() {
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 mt-8 pt-6 border-t border-gray-200">
             <button onClick={handleDownloadPDF} className="btn-secondary flex-1 flex items-center justify-center">
-              <Download className="w-5 h-5 mr-2" />
+              <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Ladda ner utkast (PDF)
             </button>
             <button onClick={handleSendLOI} className="btn-ghost flex-1 flex items-center justify-center">
-              <Send className="w-5 h-5 mr-2" />
+              <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Skicka LOI till säljaren
             </button>
           </div>
@@ -334,7 +334,7 @@ export default function LOIPage() {
               ) : (
                 <>
                   Starta Transaktion & Deal Management
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
                 </>
               )}
             </button>
