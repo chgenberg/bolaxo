@@ -230,7 +230,37 @@ export default function TransactionPage() {
                         )}
                       </div>
                       {!milestone.completed && (
-                        <button className="mt-4 px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors text-sm font-medium">
+                        <button 
+                          onClick={async () => {
+                            try {
+                              const response = await fetch(
+                                `/api/transactions/${params.id}/milestones/${milestone.id}/complete`,
+                                {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    userId: user?.id,
+                                    userName: user?.email || 'Unknown'
+                                  })
+                                }
+                              )
+                              if (response.ok) {
+                                success('Milstolpe markerad som slutförd')
+                                // Refresh transaction
+                                const txRes = await fetch(`/api/transactions/${params.id}`)
+                                if (txRes.ok) {
+                                  const data = await txRes.json()
+                                  setTransaction(data.transaction)
+                                }
+                              } else {
+                                showError('Kunde inte markera milstolpe')
+                              }
+                            } catch (error) {
+                              showError('Fel vid uppdatering')
+                            }
+                          }}
+                          className="mt-4 px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors text-sm font-medium"
+                        >
                           Markera som slutförd
                         </button>
                       )}

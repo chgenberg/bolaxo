@@ -1,53 +1,30 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { cookies } from 'next/headers'
 
 const prisma = new PrismaClient()
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   context: { params: Promise<{ id: string; milestoneId: string }> }
 ) {
   const params = await context.params
   try {
-    const cookieStore = await cookies()
-    const userId = cookieStore.get('bolaxo_user_id')?.value
+    const body = await request.json()
+    const { userId, userName } = body
 
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
-
-    // Hämta transaktion för att verifiera access
-    const transaction = await prisma.transaction.findUnique({
-      where: { id: params.id }
+    const milestone = await prisma.milestone.findUnique({
+      where: { id: params.milestoneId }
     })
 
-    if (!transaction) {
-      return NextResponse.json(
-        { error: 'Transaction not found' },
-        { status: 404 }
-      )
+    if (!milestone) {
+      return NextResponse.json({ error: 'Milestone not found' }, { status: 404 })
     }
 
-    if (transaction.buyerId !== userId && 
-        transaction.sellerId !== userId && 
-        transaction.advisorId !== userId) {
-      return NextResponse.json(
-        { error: 'Access denied' },
-        { status: 403 }
-      )
+    if (milestone.transactionId !== params.id) {
+      return NextResponse.json({ error: 'Milestone does not belong to this transaction' }, { status: 400 })
     }
 
-    // Hämta user-info för loggning
-    const user = await prisma.user.findUnique({
-      where: { id: userId }
-    })
-
-    // Markera milestone som klar
-    const milestone = await prisma.milestone.update({
+    const updated = await prisma.milestone.update({
       where: { id: params.milestoneId },
       data: {
         completed: true,
@@ -56,27 +33,23 @@ export async function POST(
       }
     })
 
-    // Lägg till aktivitet
+    // Log activity
     await prisma.activity.create({
       data: {
         transactionId: params.id,
         type: 'MILESTONE_COMPLETED',
-        title: `Milstolpe klar: ${milestone.title}`,
-        description: milestone.description || undefined,
+        title: `Milstolpe slutförd: ${milestone.title}`,
+        description: `${userName} markerade "${milestone.title}" som slutförd`,
         actorId: userId,
-        actorName: user?.name || user?.email || 'Användare',
-        actorRole: transaction.buyerId === userId ? 'buyer' : transaction.sellerId === userId ? 'seller' : 'advisor'
+        actorName: userName || 'Unknown',
+        actorRole: 'seller'
       }
     })
 
-    return NextResponse.json({ milestone })
-
+    return NextResponse.json({ milestone: updated })
   } catch (error) {
-    console.error('Complete milestone error:', error)
-    return NextResponse.json(
-      { error: 'Failed to complete milestone' },
-      { status: 500 }
-    )
+    console.error('Error completing milestone:', error)
+    return NextResponse.json({ error: 'Failed to complete milestone' }, { status: 500 })
   }
 }
 
