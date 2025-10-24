@@ -40,6 +40,30 @@ export default function HeroSection() {
       {/* Desktop Hero */}
       <div className="hidden md:block relative h-screen w-full">
         <div className="absolute inset-0 flex items-center">
+          {/* Background Image - Always visible */}
+          <div className="absolute inset-0">
+            {activeTab === 'seller' ? (
+              <Image
+                src="/hero_photo.png"
+                alt="Hero"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+            ) : (
+              <Image
+                src="/hero_photo.png"
+                alt="Hero"
+                fill
+                className="object-cover object-center opacity-40"
+                priority
+              />
+            )}
+            {activeTab === 'seller' && (
+              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-neutral-white pointer-events-none" />
+            )}
+          </div>
+
           {/* Content - Left side */}
           <div className="w-1/2 px-8 lg:px-16 z-10">
             <div className="max-w-xl">
@@ -70,7 +94,7 @@ export default function HeroSection() {
               {/* Main Headline */}
               {activeTab === 'seller' ? (
                 <>
-                  <h1 className="text-6xl lg:text-7xl font-bold text-accent-orange leading-tight mb-6">
+                  <h1 className="text-6xl lg:text-7xl font-bold text-accent-orange leading-tight mb-6 uppercase">
                     Sälj ditt företag.
                     <br />
                     Enkelt & säkert.
@@ -102,7 +126,7 @@ export default function HeroSection() {
                 </>
               ) : (
                 <>
-                  <h1 className="text-6xl lg:text-7xl font-bold text-accent-orange leading-tight mb-6">
+                  <h1 className="text-6xl lg:text-7xl font-bold text-accent-orange leading-tight mb-6 uppercase">
                     Hitta rätt företag
                     <br />
                     att köpa.
@@ -138,7 +162,7 @@ export default function HeroSection() {
 
           {/* Right side - Carousel for buyer tab */}
           {activeTab === 'buyer' && (
-            <div className="w-1/2 relative h-full flex items-center justify-center px-16">
+            <div className="w-1/2 relative h-full flex items-center justify-center px-16 z-20">
               <div className="w-full">
                 {/* Carousel Item */}
                 <div className="bg-white rounded-lg p-12 border border-gray-200 shadow-lg">
@@ -189,20 +213,6 @@ export default function HeroSection() {
               </div>
             </div>
           )}
-
-          {/* Background Image - Only for seller */}
-          {activeTab === 'seller' && (
-            <div className="w-1/2 relative h-full">
-              <Image
-                src="/hero_photo.png"
-                alt="Hero"
-                fill
-                className="object-cover object-center"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-neutral-white pointer-events-none" />
-            </div>
-          )}
         </div>
       </div>
 
@@ -250,7 +260,7 @@ export default function HeroSection() {
         <div className="px-4 py-8">
           {activeTab === 'seller' ? (
             <>
-              <h1 className="text-4xl font-bold text-accent-orange leading-tight mb-4">
+              <h1 className="text-4xl font-bold text-accent-orange leading-tight mb-4 uppercase">
                 Sälj ditt företag. Enkelt & säkert.
               </h1>
               <p className="text-lg text-primary-navy leading-relaxed mb-6">
@@ -279,7 +289,7 @@ export default function HeroSection() {
             </>
           ) : (
             <>
-              <h1 className="text-4xl font-bold text-accent-orange leading-tight mb-4">
+              <h1 className="text-4xl font-bold text-accent-orange leading-tight mb-4 uppercase">
                 Hitta rätt företag att köpa.
               </h1>
               <p className="text-lg text-primary-navy leading-relaxed mb-6">
