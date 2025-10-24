@@ -26,6 +26,11 @@ export const useAutosave = (callback: () => void, delay: number = 10000) => {
 export const formatLastSaved = (date: Date | null): string => {
   if (!date) return ''
   
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return ''
+  }
+  
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffSecs = Math.floor(diffMs / 1000)

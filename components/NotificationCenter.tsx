@@ -165,7 +165,15 @@ export default function NotificationCenter() {
 }
 
 function formatTime(dateString: string): string {
+  if (!dateString) return ''
+  
   const date = new Date(dateString)
+  
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return ''
+  }
+  
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffMins = Math.floor(diffMs / 60000)

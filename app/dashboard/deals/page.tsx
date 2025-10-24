@@ -285,12 +285,18 @@ export default function DealsPage() {
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <p className="text-sm text-text-dark">
-                        {new Date(deal.expectedClose).toLocaleDateString('sv-SE')}
-                      </p>
-                      <p className="text-xs text-text-gray">
-                        {Math.ceil((new Date(deal.expectedClose).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} dagar
-                      </p>
+                      {deal.expectedClose && new Date(deal.expectedClose).getTime() ? (
+                        <>
+                          <p className="text-sm text-text-dark">
+                            {new Date(deal.expectedClose).toLocaleDateString('sv-SE')}
+                          </p>
+                          <p className="text-xs text-text-gray">
+                            {Math.ceil((new Date(deal.expectedClose).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} dagar
+                          </p>
+                        </>
+                      ) : (
+                        <p className="text-sm text-text-gray">-</p>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-text-gray">
