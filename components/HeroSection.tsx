@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 import { mockObjects } from '@/data/mockObjects'
 
 export default function HeroSection() {
-  const [activeTab, setActiveTab] = useState<'seller' | 'buyer'>('buyer')
+  const [activeTab, setActiveTab] = useState<'seller' | 'buyer'>('seller')
   const [carouselIndex, setCarouselIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
