@@ -169,8 +169,9 @@ export default function HeroSection() {
           {/* Right side - Object Carousel for buyer tab */}
           {activeTab === 'buyer' && currentObject && (
             <div className="w-1/2 relative h-full flex items-center justify-center px-8 lg:px-12 z-20">
-              <Link href={`/objekt/${currentObject.id}`} className="block w-full">
-                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 h-fit">
+              <div className="w-full">
+                <Link href={`/objekt/${currentObject.id}`} className="block w-full pointer-events-auto">
+                  <div className="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 h-fit">
                   {/* Object Image */}
                   <div className="relative h-72 bg-gray-100 overflow-hidden">
                     {currentObject.image ? (
@@ -204,10 +205,14 @@ export default function HeroSection() {
                   </div>
 
                   {/* Carousel Controls - Between Image and Details */}
-                  <div className="flex items-center justify-between px-6 py-3 bg-gray-50 border-b border-gray-200">
+                  <div className="flex items-center justify-between px-6 py-3 bg-gray-50 border-b border-gray-200 relative z-30">
                     <button
-                      onClick={prevSlide}
-                      className="p-1.5 hover:bg-white rounded-lg transition-all"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        prevSlide()
+                      }}
+                      className="p-1.5 hover:bg-white rounded-lg transition-all relative z-30"
                     >
                       <ChevronLeft className="w-5 h-5 text-primary-navy" />
                     </button>
@@ -216,7 +221,9 @@ export default function HeroSection() {
                       {featuredObjects.map((_, idx) => (
                         <button
                           key={idx}
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
                             setIsAutoPlaying(false)
                             setCarouselIndex(idx)
                           }}
@@ -228,8 +235,12 @@ export default function HeroSection() {
                     </div>
 
                     <button
-                      onClick={nextSlide}
-                      className="p-1.5 hover:bg-white rounded-lg transition-all"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        nextSlide()
+                      }}
+                      className="p-1.5 hover:bg-white rounded-lg transition-all relative z-30"
                     >
                       <ChevronRight className="w-5 h-5 text-primary-navy" />
                     </button>
@@ -282,6 +293,7 @@ export default function HeroSection() {
                   </div>
                 </div>
               </Link>
+              </div>
             </div>
           )}
         </div>
