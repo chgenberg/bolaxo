@@ -381,7 +381,8 @@ export default function ListingWizard() {
               {data.strengths.map((strength, idx) => (
                 <FormField
                   key={idx}
-                  placeholder={`Styrka ${idx + 1}`}
+                  label={`Styrka ${idx + 1}`}
+                  placeholder={`T.ex. Etablerad marknad`}
                   value={strength}
                   onValueChange={(value) => {
                     const newStrengths = [...data.strengths]
@@ -397,7 +398,8 @@ export default function ListingWizard() {
               {data.risks.map((risk, idx) => (
                 <FormField
                   key={idx}
-                  placeholder={`Risk/utmaning ${idx + 1}`}
+                  label={`Risk/utmaning ${idx + 1}`}
+                  placeholder={`T.ex. Personnelberoende`}
                   value={risk}
                   onValueChange={(value) => {
                     const newRisks = [...data.risks]
