@@ -140,7 +140,7 @@ export default function SellerOnboardingPage() {
             </div>
           </div>
           <div className="flex-1">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{$1$2}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{currentStep.title}</h2>
             <p className="text-lg text-gray-600 mt-2">{currentStep.description}</p>
           </div>
         </div>
