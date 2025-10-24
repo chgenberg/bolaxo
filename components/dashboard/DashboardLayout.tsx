@@ -69,20 +69,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const menuItems = getMenuItems()
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-neutral-white flex">
       {/* Sidebar */}
-      <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-white border-r border-gray-200 transition-all duration-300 flex flex-col`}>
+      <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-neutral-off-white border-r border-gray-200 transition-all duration-300 flex flex-col`}>
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <Link href="/dashboard" className={`font-bold text-2xl text-primary-blue ${collapsed ? 'hidden' : ''}`}>
+            <Link href="/dashboard" className={`font-bold text-2xl text-primary-navy ${collapsed ? 'hidden' : ''}`}>
               BOLAXO
             </Link>
             <button
               onClick={() => setCollapsed(!collapsed)}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              <ChevronLeft className={`w-5 h-5 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
+              <ChevronLeft className={`w-5 h-5 transition-transform text-primary-navy ${collapsed ? 'rotate-180' : ''}`} />
             </button>
           </div>
         </div>
@@ -90,15 +90,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* User info */}
         <div className="p-4 border-b border-gray-200">
           <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-            <div className="w-10 h-10 bg-primary-blue rounded-full flex items-center justify-center text-white font-semibold">
+            <div className="w-10 h-10 bg-accent-pink rounded-full flex items-center justify-center text-white font-semibold">
               {user?.name?.[0] || user?.email?.[0] || 'U'}
             </div>
             {!collapsed && (
               <div className="flex-1">
-                <div className="font-medium text-sm text-text-dark truncate">
+                <div className="font-medium text-sm text-primary-navy truncate">
                   {user?.name || user?.email}
                 </div>
-                <div className="text-xs text-text-gray">
+                <div className="text-xs text-gray-600">
                   {user?.role === 'seller' ? 'Säljare' : user?.role === 'buyer' ? 'Köpare' : 'Mäklare'}
                 </div>
               </div>
@@ -117,8 +117,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     href={item.href}
                     className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-all ${
                       isActive 
-                        ? 'bg-blue-50 text-primary-blue' 
-                        : 'text-text-gray hover:bg-gray-100 hover:text-text-dark'
+                        ? 'bg-accent-pink/10 text-accent-pink font-medium' 
+                        : 'text-gray-600 hover:bg-gray-100 hover:text-primary-navy'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -126,8 +126,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
                     </div>
                     {!collapsed && item.badge && (
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        isActive ? 'bg-primary-blue text-white' : 'bg-gray-200 text-text-dark'
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                        isActive ? 'bg-accent-pink text-white' : 'bg-gray-200 text-primary-navy'
                       }`}>
                         {item.badge}
                       </span>
@@ -143,7 +143,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="p-4 border-t border-gray-200">
           <button
             onClick={logout}
-            className={`flex items-center gap-3 px-3 py-2.5 text-text-gray hover:text-text-dark hover:bg-gray-100 rounded-lg transition-all w-full ${
+            className={`flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:text-primary-navy hover:bg-gray-100 rounded-lg transition-all w-full ${
               collapsed ? 'justify-center' : ''
             }`}
           >
@@ -156,10 +156,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Main content */}
       <div className="flex-1 flex flex-col">
         {/* Top bar */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
+        <header className="bg-neutral-white border-b border-gray-200 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-semibold text-text-dark">
+              <h1 className="text-xl font-bold text-primary-navy uppercase">
                 {menuItems.find(item => item.href === pathname)?.label || 'Dashboard'}
               </h1>
             </div>
@@ -167,13 +167,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex items-center gap-3">
               {/* Quick actions based on role */}
               {user?.role === 'seller' && (
-                <Link href="/salja/start" className="btn-primary flex items-center gap-2">
+                <Link href="/salja/start" className="flex items-center gap-2 px-4 py-2 bg-accent-pink text-primary-navy font-semibold rounded-lg hover:shadow-md transition-shadow">
                   <Plus className="w-4 h-4" />
                   Ny annons
                 </Link>
               )}
               {user?.role === 'buyer' && (
-                <Link href="/sok" className="btn-primary flex items-center gap-2">
+                <Link href="/sok" className="flex items-center gap-2 px-4 py-2 bg-accent-pink text-primary-navy font-semibold rounded-lg hover:shadow-md transition-shadow">
                   <Search className="w-4 h-4" />
                   Sök företag
                 </Link>
@@ -181,15 +181,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               
               {/* Notifications */}
               <button className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <Bell className="w-5 h-5 text-text-gray" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                <Bell className="w-5 h-5 text-gray-600" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-accent-orange rounded-full"></span>
               </button>
             </div>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-6 overflow-auto bg-neutral-white">
           {children}
         </main>
       </div>

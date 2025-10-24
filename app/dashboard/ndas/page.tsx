@@ -176,40 +176,40 @@ export default function NDAsPage() {
       <div className="space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="mb-2">
-          <h1 className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">NDA-förfrågningar</h1>
-          <p className="text-xs sm:text-sm text-text-gray mt-1">Hantera sekretessavtal</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary-navy uppercase">NDA-FÖRFRÅGNINGAR</h1>
+          <p className="text-sm text-gray-600 mt-1">Hantera sekretessavtal</p>
         </div>
 
         {/* Stats - Mobile optimized */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
+          <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
-              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
-              <span className="text-xs text-primary-blue font-medium hidden sm:block">Nytt</span>
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
+              <span className="text-xs text-accent-pink font-semibold hidden sm:block uppercase">Nytt</span>
             </div>
-            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'pending').length}</p>
-            <p className="text-xs text-text-gray">Väntande</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.filter(n => n.status === 'pending').length}</p>
+            <p className="text-xs text-gray-600 font-medium">Väntande</p>
           </div>
-          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
+          <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-accent-orange" />
             </div>
-            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'approved').length}</p>
-            <p className="text-xs text-text-gray">Godkända</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.filter(n => n.status === 'approved').length}</p>
+            <p className="text-xs text-gray-600 font-medium">Godkända</p>
           </div>
-          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
+          <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
-              <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
             </div>
-            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
-            <p className="text-xs text-text-gray">Avslagna</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
+            <p className="text-xs text-gray-600 font-medium">Avslagna</p>
           </div>
-          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
+          <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
-              <User className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <User className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.length}</p>
-            <p className="text-xs text-text-gray">Totalt</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.length}</p>
+            <p className="text-xs text-gray-600 font-medium">Totalt</p>
           </div>
         </div>
 
@@ -217,17 +217,17 @@ export default function NDAsPage() {
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {[
             { value: 'all', label: 'Alla' },
-            { value: 'pending', label: 'Vänt' },
-            { value: 'approved', label: 'God' },
-            { value: 'rejected', label: 'Avsl' }
+            { value: 'pending', label: 'Väntande' },
+            { value: 'approved', label: 'Godkända' },
+            { value: 'rejected', label: 'Avslagna' }
           ].map((option) => (
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-3 sm:px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
+              className={`px-4 py-2 text-sm rounded-lg font-semibold transition-all ${
                 filter === option.value
-                  ? 'bg-primary-blue text-white'
-                  : 'bg-gray-100 text-text-gray hover:bg-gray-200'
+                  ? 'bg-accent-pink text-primary-navy'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               {option.label}

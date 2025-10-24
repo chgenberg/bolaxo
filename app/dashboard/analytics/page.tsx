@@ -57,10 +57,10 @@ export default function AnalyticsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-xl sm:text-2xl font-bold text-gray-900">Analytics</h1>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">Statistik för dina annonser</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-primary-navy uppercase">Analytics</h1>
+            <p className="text-sm text-gray-600 mt-1">Statistik för dina annonser</p>
           </div>
-          <button className="px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base min-h-11 sm:min-h-auto">
+          <button className="px-4 py-2.5 bg-accent-pink text-primary-navy rounded-lg font-semibold hover:shadow-md transition-shadow flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap">
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">Exportera</span>
           </button>
@@ -69,49 +69,49 @@ export default function AnalyticsPage() {
         {/* Stats Cards - Responsive grid */}
         {!loading && summary && (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs sm:text-sm text-gray-600 font-medium">Visningar</span>
-                <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
+            <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 hover:border-accent-pink/30 transition-colors">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">Visningar</span>
+                <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{summary.totalViews}</p>
-              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Snitt: {summary.avgViewsPerListing}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-primary-navy">{summary.totalViews}</p>
+              <p className="text-xs text-gray-500 mt-2 hidden sm:block">Snitt: {summary.avgViewsPerListing}</p>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs sm:text-sm text-gray-600 font-medium">NDA</span>
-                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
+            <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 hover:border-accent-pink/30 transition-colors">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">NDA</span>
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{summary.totalNDAs}</p>
-              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konv: {summary.ndaConversionRate}%</p>
+              <p className="text-2xl sm:text-3xl font-bold text-primary-navy">{summary.totalNDAs}</p>
+              <p className="text-xs text-gray-500 mt-2 hidden sm:block">Konv: {summary.ndaConversionRate}%</p>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs sm:text-sm text-gray-600 font-medium">Meddelanden</span>
-                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
+            <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 hover:border-accent-pink/30 transition-colors">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">Meddelanden</span>
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{summary.totalMessages}</p>
-              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konversationer</p>
+              <p className="text-2xl sm:text-3xl font-bold text-primary-navy">{summary.totalMessages}</p>
+              <p className="text-xs text-gray-500 mt-2 hidden sm:block">Konversationer</p>
             </div>
 
-            <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs sm:text-sm text-gray-600 font-medium">Sparningar</span>
-                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
+            <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 hover:border-accent-pink/30 transition-colors">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">Sparningar</span>
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{summary.savedListings || 0}</p>
-              <p className="text-xs text-gray-500 mt-1 hidden sm:block">Intresserade köpare</p>
+              <p className="text-2xl sm:text-3xl font-bold text-primary-navy">{summary.savedListings || 0}</p>
+              <p className="text-xs text-gray-500 mt-2 hidden sm:block">Intresserade köpare</p>
             </div>
           </div>
         )}
 
         {/* Filters */}
         <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3 flex-wrap">
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
               <SelectDropdown
                 value={selectedListing}
                 onChange={setSelectedListing}
@@ -138,14 +138,14 @@ export default function AnalyticsPage() {
         {!loading && listings.length > 0 ? (
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-neutral-off-white border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Annons</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Visningar</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">NDA-förfrågningar</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Godkända NDAs</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Meddelanden</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Publicerad</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-navy uppercase">Annons</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-navy uppercase">Visningar</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-navy uppercase">NDA-förfrågningar</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-navy uppercase">Godkända NDAs</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-navy uppercase">Meddelanden</th>
+                  <th className="px-6 py-4 text-left text-sm font-bold text-primary-navy uppercase">Publicerad</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">

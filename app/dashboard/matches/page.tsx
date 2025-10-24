@@ -57,48 +57,38 @@ export default function MatchesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-white">
       <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
-            <Target className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
+          <h1 className="text-3xl sm:text-4xl font-bold text-primary-navy flex items-center gap-2 sm:gap-3 uppercase">
+            <Target className="w-7 h-7 sm:w-8 sm:h-8 text-accent-pink" />
             Matchade köpare
           </h1>
-          <p className="text-xs sm:text-sm text-gray-600 mt-2">
+          <p className="text-sm text-gray-600 mt-2">
             Köpare som matchar din annons
           </p>
         </div>
 
         {/* Stats - Responsive grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between">
               <div className="min-w-0">
-                <p className="text-xs sm:text-sm text-gray-600 font-medium">Totalt</p>
-                <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{matches.length}</p>
-              </div>
-              <Users className="w-6 h-6 sm:w-8 sm:h-8 sm:w-10 sm:h-10 text-blue-900 opacity-20 flex-shrink-0" />
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm text-gray-600 font-medium">Högkvalitet</p>
-                <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-green-900 mt-1 sm:mt-2">
+                <p className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">Högkvalitet</p>
+                <p className="text-2xl sm:text-3xl font-bold text-accent-orange mt-1 sm:mt-2">
                   {matches.filter(m => m.matchScore >= 80).length}
                 </p>
               </div>
-              <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 sm:w-10 sm:h-10 text-green-500 opacity-20 flex-shrink-0" />
+              <TrendingUp className="w-6 h-6 sm:w-8 sm:w-10 sm:h-10 text-accent-orange opacity-20 flex-shrink-0" />
             </div>
           </div>
 
-          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 sm:col-span-2 md:col-span-1">
+          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 hover:border-accent-pink/30 transition-colors sm:col-span-2 md:col-span-1">
             <div className="flex items-center justify-between">
               <div className="min-w-0">
-                <p className="text-xs sm:text-sm text-gray-600 font-medium">Genomsnitt</p>
-                <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-blue-900 mt-1 sm:mt-2">
+                <p className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">Genomsnitt</p>
+                <p className="text-2xl sm:text-3xl font-bold text-primary-navy mt-1 sm:mt-2">
                   {matches.length > 0
                     ? Math.round(
                         matches.reduce((sum, m) => sum + m.matchScore, 0) / matches.length
@@ -107,7 +97,7 @@ export default function MatchesPage() {
                   %
                 </p>
               </div>
-              <Target className="w-6 h-6 sm:w-8 sm:h-8 sm:w-10 sm:h-10 text-blue-500 opacity-20 flex-shrink-0" />
+              <Target className="w-6 h-6 sm:w-8 sm:w-10 sm:h-10 text-accent-pink opacity-20 flex-shrink-0" />
             </div>
           </div>
         </div>
@@ -116,9 +106,9 @@ export default function MatchesPage() {
         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
           <button
             onClick={() => setSortBy('score')}
-            className={`px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
+            className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all ${
               sortBy === 'score'
-                ? 'bg-blue-900 text-white'
+                ? 'bg-accent-pink text-primary-navy'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
           >
@@ -126,9 +116,9 @@ export default function MatchesPage() {
           </button>
           <button
             onClick={() => setSortBy('recent')}
-            className={`px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
+            className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all ${
               sortBy === 'recent'
-                ? 'bg-blue-900 text-white'
+                ? 'bg-accent-pink text-primary-navy'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
           >
@@ -139,11 +129,11 @@ export default function MatchesPage() {
         {/* Matches List */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block w-6 h-6 sm:w-8 sm:h-8 border-4 border-blue-200 border-t-blue-900 rounded-full animate-spin" />
+            <div className="inline-block w-6 h-6 sm:w-8 border-4 border-accent-pink/20 border-t-accent-pink rounded-full animate-spin" />
           </div>
         ) : matches.length === 0 ? (
           <div className="bg-white rounded-lg p-6 sm:p-12 text-center border border-gray-200">
-            <AlertCircle className="w-6 h-6 sm:w-8 sm:h-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+            <AlertCircle className="w-6 h-6 sm:w-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Inga matchningar än</h3>
             <p className="text-xs sm:text-sm text-gray-600">
               Köpare kommer att registrera sig snart.

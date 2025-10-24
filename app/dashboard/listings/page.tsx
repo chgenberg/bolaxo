@@ -103,10 +103,10 @@ export default function ListingsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-xl sm:text-2xl font-bold text-gray-900">Mina annonser</h1>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">Hantera och följ upp dina annonser</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-primary-navy uppercase">Mina annonser</h1>
+            <p className="text-sm text-gray-600 mt-1">Hantera och följ upp dina annonser</p>
           </div>
-          <Link href="/salja/start" className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto.5 sm:py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-sm sm:text-base min-h-11 sm:min-h-auto inline-flex items-center justify-center">
+          <Link href="/salja/start" className="px-4 py-2.5 bg-accent-pink text-primary-navy rounded-lg font-semibold hover:shadow-md transition-shadow text-sm sm:text-base inline-flex items-center justify-center gap-2 whitespace-nowrap">
             + Ny annons
           </Link>
         </div>
@@ -122,9 +122,9 @@ export default function ListingsPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-3 sm:px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
+              className={`px-4 py-2 text-sm rounded-lg font-medium transition-all ${
                 filter === option.value
-                  ? 'bg-blue-900 text-white'
+                  ? 'bg-accent-pink text-primary-navy'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -136,14 +136,14 @@ export default function ListingsPage() {
         {/* Listings - Card based layout */}
         <div className="space-y-3 sm:space-y-4">
           {displayListings.map((listing) => (
-            <div key={listing.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
+            <div key={listing.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6 hover:border-accent-pink/30 transition-colors">
               {/* Header row - Mobile optimized */}
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
                 <div className="flex-1 min-w-0">
                   {/* Title and status badges */}
                   <div className="flex flex-wrap items-center gap-2 mb-3">
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{listing.title}</h3>
-                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap ${
+                    <h3 className="text-base sm:text-lg font-bold text-primary-navy truncate uppercase">{listing.title}</h3>
+                    <span className={`px-2 py-1 text-xs font-bold rounded-full whitespace-nowrap uppercase ${
                       listing.status === 'active' 
                         ? 'bg-green-100 text-green-700'
                         : listing.status === 'paused'
@@ -152,11 +152,11 @@ export default function ListingsPage() {
                     }`}>
                       {listing.status === 'active' ? 'Aktiv' : listing.status === 'paused' ? 'Pausad' : 'Utkast'}
                     </span>
-                    <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
+                    <span className={`px-2 py-1 text-xs font-bold rounded-full uppercase ${
                       listing.package === 'pro_plus'
-                        ? 'bg-purple-100 text-purple-700'
+                        ? 'bg-accent-orange/10 text-accent-orange'
                         : listing.package === 'pro'
-                        ? 'bg-blue-100 text-blue-700'
+                        ? 'bg-accent-pink/10 text-accent-pink'
                         : 'bg-gray-100 text-gray-700'
                     }`}>
                       {listing.package === 'pro_plus' ? 'Pro+' : listing.package === 'pro' ? 'Pro' : 'Basic'}
@@ -210,17 +210,17 @@ export default function ListingsPage() {
                 <div className="flex items-center gap-1 sm:gap-2 mt-3 sm:mt-0 flex-shrink-0">
                   <Link 
                     href={`/objekt/${listing.id}`}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
+                    className="p-2 hover:bg-accent-pink/10 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
                     title="Visa annons"
                   >
-                    <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                    <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
                   </Link>
                   <Link 
                     href={`/dashboard/analytics`}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
+                    className="p-2 hover:bg-accent-pink/10 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
                     title="Analytics"
                   >
-                    <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                    <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
                   </Link>
                   
                   {/* Pause/Resume */}
@@ -228,10 +228,10 @@ export default function ListingsPage() {
                     <button
                       onClick={() => handleListingAction(listing.id, 'pause')}
                       disabled={processing === listing.id}
-                      className="p-2 hover:bg-amber-50 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
+                      className="p-2 hover:bg-accent-orange/10 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
                       title="Pausa annons"
                     >
-                      <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
+                      <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-accent-orange" />
                     </button>
                   ) : listing.status === 'paused' ? (
                     <button
