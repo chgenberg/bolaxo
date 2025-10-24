@@ -10,23 +10,23 @@ export default function ValuationPage() {
   const features = [
     {
       icon: Zap,
-      title: 'Snabbt & Enkelt',
-      description: 'Få din värdering på 5 minuter genom vårt smarta formulär'
+      title: 'Snabbt',
+      description: 'Få din värdering på 5 minuter'
     },
     {
       icon: Shield,
-      title: '100% Gratis',
-      description: 'Ingen kostnad, inga dolda avgifter. Helt gratis värdering.'
+      title: 'Gratis',
+      description: 'Ingen kostnad eller dolda avgifter'
     },
     {
       icon: BarChart3,
-      title: 'Automatisk Analys',
-      description: 'Systemet analyserar ditt företag med professionella värderingsmetoder'
+      title: 'Professionell',
+      description: 'Same metoder som experter använder'
     },
     {
       icon: FileText,
-      title: 'Detaljerad Rapport',
-      description: 'Få en komplett rapport med värdering, underlag och förbättringstips'
+      title: 'Rapport',
+      description: 'Detaljerad rapport med tips'
     }
   ]
 
@@ -34,107 +34,101 @@ export default function ValuationPage() {
     {
       number: '1',
       title: 'Grunduppgifter',
-      description: 'Börja med e-post och bransch'
+      description: 'E-post och bransch'
     },
     {
       number: '2',
       title: 'Företagsdata',
-      description: 'Svara på branschspecifika frågor'
+      description: 'Branschspecifika frågor'
     },
     {
       number: '3',
-      title: 'Automatisk Analys',
-      description: 'Systemet analyserar ditt företag'
+      title: 'Analys',
+      description: 'Systemet analyserar'
     },
     {
       number: '4',
-      title: 'Få Värdering',
-      description: 'Detaljerad rapport med värdering och tips'
+      title: 'Rapport',
+      description: 'Din värdering och tips'
     }
   ]
 
   const methods = [
     {
       name: 'Multipelvärdering',
-      description: 'Jämför ditt företag med liknande bolag i branschen'
+      description: 'Jämför med liknande bolag'
     },
     {
       name: 'Avkastningsvärdering',
-      description: 'Baserat på företagets intjäningsförmåga och framtida kassaflöde'
+      description: 'Baserat på kassaflöde'
     },
     {
       name: 'Substansvärdering',
-      description: 'Värdet av företagets tillgångar minus skulder'
+      description: 'Värde av tillgångar minus skulder'
     },
     {
       name: 'DCF-metoden',
-      description: 'Diskonterat kassaflöde för tillväxtföretag'
+      description: 'Diskonterat kassaflöde'
     }
   ]
 
   return (
     <>
-      <main className="min-h-screen bg-background-off-white">
+      <main className="min-h-screen bg-neutral-white">
         {/* Hero Section */}
-        <section 
-          className="relative text-white py-6 sm:py-8 md:py-12 overflow-hidden bg-cover bg-center bg-no-repeat valuation-hero-bg"
-        >
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/30"></div>
-          
-          <div className="relative max-w-5xl mx-auto px-3 sm:px-4 text-center">
-            <div className="inline-flex items-center px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-white/20 rounded-full text-sm mb-6">
-              <Zap className="w-4 h-4 mr-2" />
-              Sveriges mest avancerade värdering
+        <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-orange/10 rounded-full mb-6 border border-accent-orange/20">
+              <Zap className="w-4 h-4 text-accent-orange" />
+              <span className="text-sm font-semibold text-accent-orange">10,000+ företag värderade</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 uppercase">
-              Gratis Företagsvärdering
+            <h1 className="text-5xl sm:text-7xl font-bold text-accent-orange mb-6">
+              Gratis Värdering
             </h1>
             
-            <p className="text-xl md:text-xl sm:text-2xl mb-8 opacity-90 max-w-3xl mx-auto">
-              Få en professionell värdering av ditt företag på 5 minuter. 
-              Vi använder samma metoder som professionella värderare.
+            <p className="text-2xl text-primary-navy leading-relaxed mb-10 max-w-3xl mx-auto">
+              Få en professionell värdering av ditt företag på 5 minuter. Inga dolda avgifter.
             </p>
             
             <button
               onClick={() => setShowWizard(true)}
-              className="btn-primary bg-white text-primary-blue hover:bg-gray-100 text-lg px-8 py-4 inline-flex items-center group"
+              className="inline-flex items-center gap-2 px-10 py-4 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all text-lg"
             >
-              Starta Gratis Värdering
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              Starta Värdering
+              <ArrowRight className="w-5 h-5" />
             </button>
             
-            <div className="mt-8 flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-6 text-sm">
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Tar bara 5 minuter
+            <div className="mt-10 flex flex-wrap justify-center gap-8 text-base text-primary-navy">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-accent-pink" />
+                <span>5 minuter</span>
               </div>
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Helt kostnadsfritt
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-accent-pink" />
+                <span>Helt gratis</span>
               </div>
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Ingen registrering krävs
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-accent-pink" />
+                <span>Ingen registrering</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* Features */}
-        <section className="py-6 sm:py-8 md:py-12 bg-white">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
+        <section className="py-24 bg-neutral-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => {
                 const Icon = feature.icon
                 return (
                   <div key={index} className="text-center">
-                    <div className="w-16 h-16 bg-light-blue rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue" />
+                    <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+                      <Icon className="w-8 h-8 text-accent-pink" />
                     </div>
-                    <h3 className="font-semibold text-text-dark mb-2">{feature.title}</h3>
-                    <p className="text-sm text-text-gray">{feature.description}</p>
+                    <h3 className="text-xl font-bold text-accent-orange mb-2">{feature.title}</h3>
+                    <p className="text-gray-700">{feature.description}</p>
                   </div>
                 )
               })}
@@ -143,138 +137,121 @@ export default function ValuationPage() {
         </section>
 
         {/* How it works */}
-        <section className="py-6 sm:py-8 md:py-12">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4">
-            <div className="text-center mb-12">
-              <h2 className="heading-2 mb-4">Så funkar det</h2>
-              <p className="text-lg text-text-gray">
-                Följ dessa enkla steg för att få din företagsvärdering
+        <section className="py-24 bg-neutral-off-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-accent-orange mb-6">Så funkar värderingen</h2>
+              <p className="text-xl text-primary-navy max-w-2xl mx-auto">
+                Följ dessa 4 enkla steg för att få din värdering
               </p>
             </div>
 
-            <div className="grid md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {steps.map((step, index) => (
-                <div key={index} className="relative">
-                  <div className="bg-white p-6 rounded-2xl shadow-card text-center">
-                    <div className="w-12 h-12 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                      {step.number}
-                    </div>
-                    <h3 className="font-semibold text-text-dark mb-2">{step.title}</h3>
-                    <p className="text-sm text-text-gray">{step.description}</p>
+                <div key={index} className="bg-white p-8 rounded-lg border border-gray-200">
+                  <div className="w-14 h-14 bg-accent-pink text-white rounded-lg flex items-center justify-center mb-6 text-2xl font-bold">
+                    {step.number}
                   </div>
-                  {index < steps.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2">
-                      <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 text-gray-300" />
-                    </div>
-                  )}
+                  <h3 className="text-lg font-bold text-primary-navy mb-2">{step.title}</h3>
+                  <p className="text-gray-700">{step.description}</p>
                 </div>
               ))}
             </div>
 
-            <div className="text-center mt-12">
+            <div className="text-center mt-16">
               <button
                 onClick={() => setShowWizard(true)}
-                className="btn-primary text-lg px-8 py-4"
+                className="inline-flex items-center gap-2 px-10 py-4 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all text-lg"
               >
                 Kom igång nu
+                <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           </div>
         </section>
 
         {/* Methods */}
-        <section className="py-6 sm:py-8 md:py-12 bg-white">
-          <div className="max-w-5xl mx-auto px-3 sm:px-4">
-            <div className="text-center mb-12">
-              <h2 className="heading-2 mb-4">Professionella värderingsmetoder</h2>
-              <p className="text-lg text-text-gray">
-                Vi kombinerar flera etablerade metoder för en rättvisande värdering
+        <section className="py-24 bg-neutral-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-accent-orange mb-6">Professionella metoder</h2>
+              <p className="text-lg text-primary-navy max-w-2xl mx-auto">
+                Vi kombinerar flera etablerade värderingsmetoder för en rättvisande bedömning
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
               {methods.map((method, index) => (
-                <div key={index} className="bg-background-off-white p-6 rounded-2xl border border-gray-200">
-                  <div className="flex items-start">
-                    <div className="w-10 h-10 bg-primary-blue rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Target className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <div key={index} className="bg-neutral-off-white p-8 rounded-lg border border-gray-200">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-accent-pink rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Target className="w-6 h-6 text-white" />
                     </div>
-                    <div className="ml-4">
-                      <h3 className="font-semibold text-text-dark mb-2">{method.name}</h3>
-                      <p className="text-sm text-text-gray">{method.description}</p>
+                    <div>
+                      <h3 className="font-bold text-primary-navy mb-2">{method.name}</h3>
+                      <p className="text-gray-700">{method.description}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 bg-light-blue p-6 rounded-2xl">
-              <h3 className="font-semibold text-primary-blue mb-2">Vad ingår i din rapport?</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                <div className="flex items-start">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-text-dark">Uppskattad värdering med intervall</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-text-dark">Detaljerat underlag för beräkningen</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-text-dark">Konkreta tips för att öka värdet</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-text-dark">Jämförelse med branschgenomsnitt</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-text-dark">Analys av styrkor och svagheter</span>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-text-dark">Tillväxtpotential och risker</span>
-                </div>
+            <div className="bg-accent-orange/5 border border-accent-orange/20 rounded-lg p-8">
+              <h3 className="text-2xl font-bold text-accent-orange mb-6">Vad ingår i rapporten?</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {[
+                  'Uppskattad värdering',
+                  'Detaljerat underlag',
+                  'Konkreta förbättringstips',
+                  'Branschgenomsnitt',
+                  'Styrkor & svagheter',
+                  'Tillväxtpotential'
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                    <span className="text-primary-navy">{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
         {/* CTA */}
-        <section className="py-6 sm:py-8 md:py-12 bg-gradient-to-br from-primary-blue to-blue-800 text-white">
-          <div className="max-w-4xl mx-auto px-3 sm:px-4 text-center">
-            <TrendingUp className="w-16 h-16 mx-auto mb-6" />
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
+        <section className="py-24 bg-accent-pink">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <TrendingUp className="w-16 h-16 text-primary-navy mx-auto mb-6" />
+            <h2 className="text-4xl font-bold text-primary-navy mb-6">
               Redo att värdera ditt företag?
             </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Få en professionell värdering helt gratis. Inga dolda avgifter eller förpliktelser.
+            <p className="text-lg text-primary-navy leading-relaxed mb-10 max-w-2xl mx-auto">
+              Få en professionell värdering helt gratis. Inga dolda avgifter eller förpliktelser. Det tar bara 5 minuter.
             </p>
             <button
               onClick={() => setShowWizard(true)}
-              className="btn-primary bg-white text-primary-blue hover:bg-gray-100 text-lg px-8 py-4 inline-flex items-center"
+              className="inline-flex items-center gap-2 px-10 py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-lg"
             >
-              Starta Gratis Värdering Nu
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+              Starta Värdering Nu
+              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         </section>
 
         {/* Trust indicators */}
-        <section className="py-12 bg-white border-t border-gray-100">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 text-center">
+        <section className="py-16 bg-neutral-white border-t border-gray-200">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">10,000+</div>
-                <div className="text-text-gray">Värderingar genomförda</div>
+                <div className="text-4xl font-bold text-accent-orange mb-2">10,000+</div>
+                <div className="text-gray-700">Värderingar genomförda</div>
               </div>
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">4.9/5</div>
-                <div className="text-text-gray">Genomsnittligt betyg</div>
+                <div className="text-4xl font-bold text-accent-orange mb-2">4.9/5</div>
+                <div className="text-gray-700">Genomsnittligt betyg</div>
               </div>
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">5 min</div>
-                <div className="text-text-gray">Genomsnittlig tid</div>
+                <div className="text-4xl font-bold text-accent-orange mb-2">5 min</div>
+                <div className="text-gray-700">Genomsnittlig tid</div>
               </div>
             </div>
           </div>
