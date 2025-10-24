@@ -203,6 +203,38 @@ export default function HeroSection() {
                     </div>
                   </div>
 
+                  {/* Carousel Controls - Between Image and Details */}
+                  <div className="flex items-center justify-between px-6 py-3 bg-gray-50 border-b border-gray-200">
+                    <button
+                      onClick={prevSlide}
+                      className="p-1.5 hover:bg-white rounded-lg transition-all"
+                    >
+                      <ChevronLeft className="w-5 h-5 text-primary-navy" />
+                    </button>
+
+                    <div className="flex gap-1.5">
+                      {featuredObjects.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setIsAutoPlaying(false)
+                            setCarouselIndex(idx)
+                          }}
+                          className={`w-2 h-2 rounded-full transition-all ${
+                            idx === carouselIndex ? 'bg-accent-pink w-6' : 'bg-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={nextSlide}
+                      className="p-1.5 hover:bg-white rounded-lg transition-all"
+                    >
+                      <ChevronRight className="w-5 h-5 text-primary-navy" />
+                    </button>
+                  </div>
+
                   {/* Object Details */}
                   <div className="p-6">
                     <h3 className="text-2xl font-bold text-accent-orange mb-2">
@@ -250,38 +282,6 @@ export default function HeroSection() {
                   </div>
                 </div>
               </Link>
-
-              {/* Carousel Controls */}
-              <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between z-30">
-                <button
-                  onClick={prevSlide}
-                  className="p-2 bg-white/80 hover:bg-white rounded-lg transition-all shadow-lg hover:shadow-xl"
-                >
-                  <ChevronLeft className="w-6 h-6 text-primary-navy" />
-                </button>
-
-                <div className="flex gap-2">
-                  {featuredObjects.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setIsAutoPlaying(false)
-                        setCarouselIndex(idx)
-                      }}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        idx === carouselIndex ? 'bg-accent-pink w-8' : 'bg-white/60 hover:bg-white/90'
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  onClick={nextSlide}
-                  className="p-2 bg-white/80 hover:bg-white rounded-lg transition-all shadow-lg hover:shadow-xl"
-                >
-                  <ChevronRight className="w-6 h-6 text-primary-navy" />
-                </button>
-              </div>
             </div>
           )}
         </div>
