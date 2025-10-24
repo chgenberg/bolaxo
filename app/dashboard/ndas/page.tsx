@@ -173,58 +173,58 @@ export default function NDAsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-2xl font-bold text-text-dark">NDA-förfrågningar</h1>
-          <p className="text-sm text-text-gray mt-1">Hantera och granska sekretessavtal från potentiella köpare</p>
+        <div className="mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-text-dark">NDA-förfrågningar</h1>
+          <p className="text-xs sm:text-sm text-text-gray mt-1">Hantera sekretessavtal</p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
+        {/* Stats - Mobile optimized */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <Shield className="w-5 h-5 text-primary-blue" />
-              <span className="text-xs text-primary-blue font-medium">2 nya</span>
+              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
+              <span className="text-xs text-primary-blue font-medium hidden sm:block">Nytt</span>
             </div>
-            <p className="text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'pending').length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'pending').length}</p>
             <p className="text-xs text-text-gray">Väntande</p>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-5 h-5 text-primary-blue" />
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'approved').length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'approved').length}</p>
             <p className="text-xs text-text-gray">Godkända</p>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <XCircle className="w-5 h-5 text-primary-blue" />
+              <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
             <p className="text-xs text-text-gray">Avslagna</p>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
+          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
-              <User className="w-5 h-5 text-primary-blue" />
+              <User className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
             </div>
-            <p className="text-2xl font-bold text-text-dark">{mockNDAs.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-text-dark">{mockNDAs.length}</p>
             <p className="text-xs text-text-gray">Totalt</p>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex items-center gap-2">
+        {/* Filters - Mobile responsive */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {[
             { value: 'all', label: 'Alla' },
-            { value: 'pending', label: 'Väntande' },
-            { value: 'approved', label: 'Godkända' },
-            { value: 'rejected', label: 'Avslagna' }
+            { value: 'pending', label: 'Vänt' },
+            { value: 'approved', label: 'God' },
+            { value: 'rejected', label: 'Avsl' }
           ].map((option) => (
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-4 py-2 text-sm rounded-lg transition-colors ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors min-h-9 sm:min-h-auto ${
                 filter === option.value
                   ? 'bg-primary-blue text-white'
                   : 'bg-gray-100 text-text-gray hover:bg-gray-200'
@@ -235,140 +235,89 @@ export default function NDAsPage() {
           ))}
         </div>
 
-        {/* NDA Requests */}
-        <div className="space-y-4">
+        {/* NDA Requests - Card based */}
+        <div className="space-y-3 sm:space-y-4">
           {filteredNDAs.map((nda) => (
-            <div key={nda.id} className="bg-white rounded-xl border border-gray-200 p-6">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
+            <div key={nda.id} className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+                <div className="flex-1 min-w-0">
                   {/* Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-text-dark mb-1">{nda.buyerName}</h3>
-                      <p className="text-sm text-text-gray">{nda.buyerCompany}</p>
+                  <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
+                    <div className="min-w-0">
+                      <h3 className="text-base sm:text-lg font-semibold text-text-dark mb-1 truncate">{nda.buyerName}</h3>
+                      <p className="text-xs sm:text-sm text-text-gray truncate">{nda.buyerCompany}</p>
                     </div>
                     {getStatusBadge(nda.status)}
                   </div>
 
                   {/* Message */}
-                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                    <p className="text-sm text-text-dark italic">"{nda.message}"</p>
+                  <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+                    <p className="text-xs sm:text-sm text-text-dark italic line-clamp-2">"{nda.message}"</p>
                   </div>
 
                   {/* Details grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                    <div>
-                      <p className="text-xs text-text-gray mb-1">För annons</p>
-                      <p className="text-sm font-medium text-text-dark">{nda.listingTitle}</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4">
+                    <div className="min-w-0">
+                      <p className="text-xs text-text-gray mb-1">Annons</p>
+                      <p className="text-xs sm:text-sm font-medium text-text-dark truncate">{nda.listingTitle}</p>
                     </div>
-                    <div>
-                      <p className="text-xs text-text-gray mb-1">Köpartyp</p>
-                      <p className="text-sm font-medium text-text-dark">{nda.buyerType}</p>
+                    <div className="min-w-0">
+                      <p className="text-xs text-text-gray mb-1">Typ</p>
+                      <p className="text-xs sm:text-sm font-medium text-text-dark truncate">{nda.buyerType}</p>
                     </div>
-                    <div>
-                      <p className="text-xs text-text-gray mb-1">Matchpoäng</p>
+                    <div className="hidden sm:block min-w-0">
+                      <p className="text-xs text-text-gray mb-1">Poäng</p>
                       <div className="flex items-center gap-2">
-                        <div className="w-full bg-gray-200 rounded-full h-2 max-w-[60px]">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 max-w-[60px]">
                           <div 
-                            className="bg-primary-blue h-2 rounded-full"
+                            className="bg-primary-blue h-1.5 rounded-full"
                             style={{ width: `${nda.matchScore}%` }}
                           />
                         </div>
-                        <span className="text-sm font-medium text-text-dark">{nda.matchScore}%</span>
+                        <span className="text-xs font-medium text-text-dark">{nda.matchScore}%</span>
                       </div>
                     </div>
-                    <div>
+                    <div className="hidden md:block min-w-0">
                       <p className="text-xs text-text-gray mb-1">Verifiering</p>
-                      <p className="text-sm font-medium text-text-dark">
+                      <p className="text-xs sm:text-sm font-medium text-text-dark">
                         {nda.verificationStatus === 'bankid_verified' ? (
-                          <span className="text-primary-blue">BankID verifierad</span>
+                          <span className="text-primary-blue">BankID</span>
                         ) : (
-                          <span className="text-text-gray">Endast e-post</span>
+                          <span className="text-text-gray">E-post</span>
                         )}
                       </p>
                     </div>
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between text-xs text-text-gray">
-                    <div className="flex items-center gap-4">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        {new Date(nda.requestedAt).toLocaleString('sv-SE')}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <User className="w-3 h-3" />
-                        {nda.previousInteractions} tidigare interaktioner
-                      </span>
-                      <a href={`mailto:${nda.buyerEmail}`} className="flex items-center gap-1 text-primary-blue hover:underline">
-                        <MessageSquare className="w-3 h-3" />
-                        {nda.buyerEmail}
-                      </a>
-                    </div>
-                  </div>
+                  <div className="text-xs text-text-gray">{new Date(nda.requestedAt).toLocaleDateString('sv-SE')}</div>
                 </div>
 
                 {/* Actions */}
-                {nda.status === 'pending' && (
-                  <div className="flex flex-col gap-2 ml-6">
-                    <button 
-                      onClick={() => handleApprove(nda.id, nda)}
-                      disabled={processing === nda.id}
-                      className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
-                    >
-                      {processing === nda.id ? 'Godkänner...' : 'Godkänn'}
-                    </button>
-                    <button 
-                      onClick={() => handleReject(nda.id)}
-                      disabled={processing === nda.id}
-                      className="px-4 py-2 bg-gray-200 text-text-dark text-sm font-medium rounded-lg hover:bg-gray-300 disabled:opacity-50 transition-colors"
-                    >
-                      {processing === nda.id ? 'Avslår...' : 'Avslå'}
-                    </button>
-                    <button className="p-2 text-primary-blue hover:bg-blue-50 rounded-lg transition-colors">
-                      <MessageSquare className="w-5 h-5" />
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Status timeline */}
-              {nda.status !== 'pending' && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <div className="flex items-center gap-2 text-xs text-text-gray">
-                    <span>Begärd: {new Date(nda.requestedAt).toLocaleString('sv-SE')}</span>
-                    {nda.approvedAt && (
-                      <>
-                        <span>•</span>
-                        <span className="text-primary-blue">Godkänd: {new Date(nda.approvedAt).toLocaleString('sv-SE')}</span>
-                      </>
-                    )}
-                    {nda.rejectedAt && (
-                      <>
-                        <span>•</span>
-                        <span className="text-primary-blue">Avslagen: {new Date(nda.rejectedAt).toLocaleString('sv-SE')}</span>
-                      </>
-                    )}
-                  </div>
+                <div className="flex flex-row sm:flex-col gap-2 flex-shrink-0 w-full sm:w-auto">
+                  {nda.status === 'pending' && (
+                    <>
+                      <button
+                        onClick={() => handleApprove(nda.id, nda)}
+                        disabled={processing === nda.id}
+                        className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto"
+                      >
+                        Godkänn
+                      </button>
+                      <button
+                        onClick={() => handleReject(nda.id)}
+                        disabled={processing === nda.id}
+                        className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 disabled:opacity-50 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto"
+                      >
+                        Avslå
+                      </button>
+                    </>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
-
-        {/* Empty state */}
-        {filteredNDAs.length === 0 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-            <Shield className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-text-dark mb-2">Inga NDA-förfrågningar</h3>
-            <p className="text-sm text-text-gray">
-              {filter === 'all' 
-                ? 'Du har inga NDA-förfrågningar än.'
-                : `Du har inga ${filter === 'pending' ? 'väntande' : filter === 'approved' ? 'godkända' : 'avslagna'} NDA-förfrågningar.`
-              }
-            </p>
-          </div>
-        )}
       </div>
     </DashboardLayout>
   )
