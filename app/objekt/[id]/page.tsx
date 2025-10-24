@@ -193,7 +193,7 @@ export default function ListingDetailPage() {
           <div className="lg:col-span-2 space-y-6 sm:space-y-8">
             {/* Title & Price */}
             <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">{listing.anonymousTitle}</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-2">{listing.anonymousTitle}</h1>
               <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                 <span>{listing.location}</span>
@@ -221,14 +221,14 @@ export default function ListingDetailPage() {
 
             {/* Description */}
             <div>
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Om företaget</h2>
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy mb-3 sm:mb-4 uppercase">OM FÖRETAGET</h2>
               <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{listing.description}</p>
             </div>
 
             {/* Strengths & Risks */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Styrkor</h3>
+                <h3 className="text-base sm:text-lg font-bold text-primary-navy mb-3 sm:mb-4 uppercase">STYRKOR</h3>
                 <ul className="space-y-2">
                   {listing.strengths.map((strength, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-700">
@@ -240,7 +240,7 @@ export default function ListingDetailPage() {
               </div>
 
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Risker/Utmaningar</h3>
+                <h3 className="text-base sm:text-lg font-bold text-primary-navy mb-3 sm:mb-4 uppercase">RISKER/UTMANINGAR</h3>
                 <ul className="space-y-2">
                   {listing.risks.map((risk, idx) => (
                     <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-700">
