@@ -203,69 +203,98 @@ export default function BuyerStartPage() {
               <p className="text-gray-600">Berätta om dina investeringskriterier</p>
             </div>
 
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Prisintervall (MSEK)
-                </label>
-                <div className="flex gap-3">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    value={formData.priceMin}
-                    onChange={(e) => setFormData({ ...formData, priceMin: e.target.value })}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    value={formData.priceMax}
-                    onChange={(e) => setFormData({ ...formData, priceMax: e.target.value })}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
-                  />
+            <div className="space-y-6">
+              {/* Price Range */}
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-gray-900">Budgetintervall</label>
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Min Price Dropdown */}
+                  <div className="relative">
+                    <select
+                      value={formData.priceMin}
+                      onChange={(e) => setFormData({ ...formData, priceMin: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                    >
+                      <option value="">Från...</option>
+                      <option value="50000">50.000 kr</option>
+                      <option value="100000">100.000 kr</option>
+                      <option value="500000">500.000 kr</option>
+                      <option value="1000000">1.000.000 kr</option>
+                      <option value="5000000">5.000.000 kr</option>
+                      <option value="10000000">10.000.000 kr</option>
+                      <option value="50000000">50.000.000 kr</option>
+                    </select>
+                    <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">▼</div>
+                  </div>
+
+                  {/* Max Price Dropdown */}
+                  <div className="relative">
+                    <select
+                      value={formData.priceMax}
+                      onChange={(e) => setFormData({ ...formData, priceMax: e.target.value })}
+                      className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                    >
+                      <option value="">Till...</option>
+                      <option value="100000">100.000 kr</option>
+                      <option value="500000">500.000 kr</option>
+                      <option value="1000000">1.000.000 kr</option>
+                      <option value="5000000">5.000.000 kr</option>
+                      <option value="10000000">10.000.000 kr</option>
+                      <option value="50000000">50.000.000 kr</option>
+                      <option value="100000000">100.000.000 kr</option>
+                    </select>
+                    <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">▼</div>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Investeringserfarenhet
-                </label>
-                <select
-                  value={formData.investmentExperience}
-                  onChange={(e) => setFormData({ ...formData, investmentExperience: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
-                >
-                  <option value="first_time">Första gången</option>
-                  <option value="experienced">Viss erfarenhet</option>
-                  <option value="professional">Professionell investerare</option>
-                </select>
+              {/* Investment Experience */}
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-gray-900">Investeringserfarenhet</label>
+                <div className="relative">
+                  <select
+                    value={formData.investmentExperience}
+                    onChange={(e) => setFormData({ ...formData, investmentExperience: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                  >
+                    <option value="first_time">Första gången - Ny investerare</option>
+                    <option value="experienced">Viss erfarenhet - Några affärer genomförda</option>
+                    <option value="professional">Professionell investerare - Många transaktioner</option>
+                  </select>
+                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">▼</div>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Tidsram
-                </label>
-                <select
-                  value={formData.timeframe}
-                  onChange={(e) => setFormData({ ...formData, timeframe: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
-                >
-                  <option value="immediate">Omedelbar</option>
-                  <option value="3_months">3 månader</option>
-                  <option value="6_months">6 månader</option>
-                  <option value="12_months">12 månader</option>
-                </select>
+              {/* Timeframe */}
+              <div className="space-y-3">
+                <label className="block text-sm font-semibold text-gray-900">Önskad tidsram för köp</label>
+                <div className="relative">
+                  <select
+                    value={formData.timeframe}
+                    onChange={(e) => setFormData({ ...formData, timeframe: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                  >
+                    <option value="immediate">Omedelbar - Jag är redo nu</option>
+                    <option value="3_months">3 månader - Ganska snart</option>
+                    <option value="6_months">6 månader - Ungefär ett halvår</option>
+                    <option value="12_months">12 månader - Ungefär ett år</option>
+                  </select>
+                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">▼</div>
+                </div>
               </div>
 
-              <label className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={formData.financingReady}
-                  onChange={(e) => setFormData({ ...formData, financingReady: e.target.checked })}
-                  className="w-4 h-4 rounded border-gray-300"
-                />
-                <span className="text-sm text-gray-700">Jag har redan finansiering på plats</span>
-              </label>
+              {/* Financing Checkbox */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.financingReady}
+                    onChange={(e) => setFormData({ ...formData, financingReady: e.target.checked })}
+                    className="w-5 h-5 rounded border-2 border-blue-300 text-blue-900 cursor-pointer"
+                  />
+                  <span className="text-sm font-medium text-blue-900">Jag har redan finansiering på plats</span>
+                </label>
+              </div>
             </div>
           </div>
         )}
@@ -304,7 +333,7 @@ export default function BuyerStartPage() {
                 <p className="text-sm text-gray-600 font-medium">Budget</p>
                 <p className="text-gray-900 mt-1">
                   {formData.priceMin || formData.priceMax 
-                    ? `${formData.priceMin || '0'}-${formData.priceMax || '∞'} MSEK`
+                    ? `${formData.priceMin ? new Intl.NumberFormat('sv-SE').format(parseInt(formData.priceMin)) : '0'} - ${formData.priceMax ? new Intl.NumberFormat('sv-SE').format(parseInt(formData.priceMax)) : '∞'} kr`
                     : 'Ingen budget angiven'}
                 </p>
               </div>
