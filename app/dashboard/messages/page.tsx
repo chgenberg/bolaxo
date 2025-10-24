@@ -116,7 +116,7 @@ export default function MessagesPage() {
     <DashboardLayout>
       <div className="flex flex-col md:flex-row h-[calc(100vh-200px)] bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Conversations list */}
-        <div className="w-full md:w-full md:w-1/3 border-r border-gray-200 flex flex-col border-b md:border-b-0">
+        <div className="w-full md:w-1/3 border-r border-gray-200 flex flex-col border-b md:border-b-0">
           {/* Search */}
           <div className="p-3 sm:p-4 border-b border-gray-200">
             <div className="relative">
