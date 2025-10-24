@@ -83,8 +83,8 @@ export default function ValuationPage() {
               <span className="text-sm font-semibold text-accent-orange">10,000+ företag värderade</span>
             </div>
             
-            <h1 className="text-5xl sm:text-7xl font-bold text-accent-orange mb-6">
-              Gratis Värdering
+            <h1 className="text-5xl sm:text-7xl font-bold text-accent-orange mb-6 uppercase">
+              GRATIS VÄRDERING
             </h1>
             
             <p className="text-2xl text-primary-navy leading-relaxed mb-10 max-w-3xl mx-auto">
@@ -140,7 +140,7 @@ export default function ValuationPage() {
         <section className="py-24 bg-neutral-off-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-accent-orange mb-6">Så funkar värderingen</h2>
+              <h2 className="text-4xl font-bold text-accent-orange mb-6 uppercase">SÅ FUNKAR VÄRDERINGEN</h2>
               <p className="text-xl text-primary-navy max-w-2xl mx-auto">
                 Följ dessa 4 enkla steg för att få din värdering
               </p>
@@ -174,7 +174,7 @@ export default function ValuationPage() {
         <section className="py-24 bg-neutral-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-accent-orange mb-6">Professionella metoder</h2>
+              <h2 className="text-4xl font-bold text-accent-orange mb-6 uppercase">PROFESSIONELLA METODER</h2>
               <p className="text-lg text-primary-navy max-w-2xl mx-auto">
                 Vi kombinerar flera etablerade värderingsmetoder för en rättvisande bedömning
               </p>

@@ -80,7 +80,7 @@ export default function RegisterPage() {
         {step === 1 && (
           <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card border border-gray-200">
             <div className="text-center mb-10">
-              <h1 className="text-4xl font-bold text-accent-orange mb-2">Skapa konto</h1>
+              <h1 className="text-4xl font-bold text-accent-orange mb-2 uppercase">SKAPA KONTO</h1>
               <p className="text-lg text-primary-navy">
                 Välj din roll för att komma igång
               </p>

@@ -93,8 +93,8 @@ export default function PricingPage() {
       <section className="bg-neutral-white py-16 sm:py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6">
-              Transparent prissättning
+            <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+              TRANSPARENT PRISSÄTTNING
             </h1>
             <p className="text-2xl text-primary-navy leading-relaxed max-w-3xl mx-auto">
               Från gratis värdering till fullservice. Inga dolda avgifter, ingen provision.
