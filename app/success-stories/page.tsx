@@ -167,7 +167,7 @@ export default function SuccessStoriesPage() {
             Samlad statistik från våra genomförda affärer
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             <div>
               <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-2">580M</div>
               <div className="text-sm text-text-gray">Totalt transaktionsvärde</div>

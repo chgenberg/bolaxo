@@ -324,7 +324,7 @@ export default function SearchPage() {
             {filteredObjects.length} företag {activeFilterCount > 0 && 'matchade'}
           </h2>
           {!loading && filteredObjects.length > 0 && (
-            <p className="text-xs sm:text-sm text-text-gray hidden md:block">
+            <p className="text-xs sm:text-sm text-text-gray hidden lg:block">
               Alla annonser är verifierade
             </p>
           )}
@@ -337,7 +337,7 @@ export default function SearchPage() {
               <div key={i} className="card animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-4" />
                 <div className="h-4 bg-gray-200 rounded w-full mb-2" />
-                <div className="h-4 bg-gray-200 rounded w-2/3" />
+                <div className="h-4 bg-gray-200 rounded w-full md:w-2/3" />
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   <div className="h-8 bg-gray-200 rounded" />
                   <div className="h-8 bg-gray-200 rounded" />

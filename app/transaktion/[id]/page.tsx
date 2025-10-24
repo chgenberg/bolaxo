@@ -216,7 +216,7 @@ export default function TransactionPage() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm sm:text-lg font-semibold text-gray-900">{milestone.title}</h3>
+                      <h3 className="text-sm sm:text-lg font-semibold text-gray-900 truncate">{$1$2}</h3>
                       {milestone.description && (
                         <p className="text-gray-600 text-xs sm:text-sm mt-1">{milestone.description}</p>
                       )}
@@ -335,7 +335,7 @@ export default function TransactionPage() {
               <div key={payment.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0">
                   <div className="min-w-0">
-                    <h3 className="font-semibold text-sm sm:text-base text-gray-900">{payment.description}</h3>
+                    <h3 className="font-semibold text-sm sm:text-base text-gray-900 truncate">{$1$2}</h3>
                     <p className="text-xs sm:text-sm text-gray-600 mt-1">Typ: {payment.type === 'DEPOSIT' ? 'Handpenning' : 'Huvudbetalning'}</p>
                   </div>
                   <div className="text-left sm:text-right">
@@ -376,7 +376,7 @@ export default function TransactionPage() {
                       <div className="flex items-start gap-2 sm:gap-3">
                         <div className="w-2 h-2 rounded-full bg-primary-blue mt-1.5 flex-shrink-0"></div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-xs sm:text-base text-gray-900">{activity.title}</p>
+                          <p className="font-medium text-xs sm:text-base text-gray-900 truncate">{$1$2}</p>
                           {activity.description && (
                             <p className="text-xs sm:text-sm text-gray-600 mt-1">{activity.description}</p>
                           )}

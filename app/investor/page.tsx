@@ -257,7 +257,7 @@ export default function InvestorPage() {
             <p className="text-text-gray">Stark tillväxt sedan lansering för 8 månader sedan</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-12">
             <div className="card text-center">
               <div className="text-4xl font-bold text-primary-blue mb-2">127</div>
               <div className="text-sm text-text-gray">Aktiva annonser</div>
@@ -310,7 +310,7 @@ export default function InvestorPage() {
             <p className="text-text-gray">Vad vi bygger nästa 12 månader</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[
               { q: 'Q1 2025', items: ['AI-driven värdering', 'Mobilapp (iOS/Android)', 'Advanced analytics'] },
               { q: 'Q2 2025', items: ['Marketplace för rådgivare', 'Video DD-möten', 'API för mäklare'] },

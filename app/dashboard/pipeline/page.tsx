@@ -227,7 +227,7 @@ export default function PipelinePage() {
         {/* Conversion metrics */}
         <div className="bg-white p-6 rounded-xl border border-gray-200">
           <h2 className="text-lg font-semibold text-text-dark mb-4">Konverteringsmetrik</h2>
-          <div className="grid grid-cols-5 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
             {[
               { from: 'Lead', to: 'NDA', rate: 67 },
               { from: 'NDA', to: 'DD', rate: 63 },

@@ -89,7 +89,7 @@ export default function SearchProfilePage() {
         {/* Current profile summary */}
         <div className="bg-primary-blue text-white p-6 rounded-xl">
           <h2 className="text-lg font-semibold mb-4">Nuvarande profil</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <div>
               <p className="text-xs opacity-80 mb-1">Branscher</p>
               <p className="text-sm font-medium">{industries.length} valda</p>

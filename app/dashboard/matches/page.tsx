@@ -182,7 +182,7 @@ export default function MatchesPage() {
                       </div>
 
                       {/* Match Details - Mobile responsive */}
-                      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
                         <div className="min-w-0">
                           <p className="text-gray-600 text-xs mb-1">Regioner</p>
                           <p className="font-medium text-gray-900 truncate">
@@ -202,7 +202,7 @@ export default function MatchesPage() {
                             {(match.priceRange.max / 1_000_000).toFixed(0)}M
                           </p>
                         </div>
-                        <div className="hidden md:block min-w-0">
+                        <div className="hidden lg:block min-w-0">
                           <p className="text-gray-600 text-xs mb-1">Omsättning</p>
                           <p className="font-medium text-gray-900">
                             {(match.revenueRange.min / 1_000_000).toFixed(0)}-

@@ -176,28 +176,28 @@ export default function ListingsPage() {
                       <p className="text-xs text-gray-600 mb-1">NDA</p>
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <Shield className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                        <span className="text-sm font-medium text-gray-900">{listing.ndaRequests}</span>
+                        <span className="text-sm font-medium text-gray-900 truncate">{$1$2}</span>
                       </div>
                     </div>
                     <div>
                       <p className="text-xs text-gray-600 mb-1">Meddelanden</p>
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <MessageSquare className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                        <span className="text-sm font-medium text-gray-900">{listing.messages}</span>
+                        <span className="text-sm font-medium text-gray-900 truncate">{$1$2}</span>
                       </div>
                     </div>
                     <div className="hidden sm:block">
                       <p className="text-xs text-gray-600 mb-1">Sparningar</p>
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <Bookmark className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                        <span className="text-sm font-medium text-gray-900">{listing.saves}</span>
+                        <span className="text-sm font-medium text-gray-900 truncate">{$1$2}</span>
                       </div>
                     </div>
-                    <div className="hidden md:block">
+                    <div className="hidden lg:block">
                       <p className="text-xs text-gray-600 mb-1">Pris</p>
                       <span className="text-sm font-medium text-blue-600">{listing.priceRange}</span>
                     </div>
-                    <div className="hidden md:block">
+                    <div className="hidden lg:block">
                       <p className="text-xs text-gray-600 mb-1">Konvertering</p>
                       <span className="text-sm font-medium text-gray-900">
                         {listing.views > 0 ? ((listing.ndaRequests / listing.views) * 100).toFixed(1) : '0'}%

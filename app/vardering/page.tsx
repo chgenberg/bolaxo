@@ -125,7 +125,7 @@ export default function ValuationPage() {
         {/* Features */}
         <section className="py-6 sm:py-8 md:py-12 bg-white">
           <div className="max-w-6xl mx-auto px-3 sm:px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
               {features.map((feature, index) => {
                 const Icon = feature.icon
                 return (
@@ -152,7 +152,7 @@ export default function ValuationPage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
+            <div className="grid md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
               {steps.map((step, index) => (
                 <div key={index} className="relative">
                   <div className="bg-white p-6 rounded-2xl shadow-card text-center">
@@ -163,7 +163,7 @@ export default function ValuationPage() {
                     <p className="text-sm text-text-gray">{step.description}</p>
                   </div>
                   {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                    <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2">
                       <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 text-gray-300" />
                     </div>
                   )}

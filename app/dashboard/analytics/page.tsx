@@ -68,13 +68,13 @@ export default function AnalyticsPage() {
 
         {/* Stats Cards - Responsive grid */}
         {!loading && summary && (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
             <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">Visningar</span>
                 <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalViews}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{$1$2}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Snitt: {summary.avgViewsPerListing}</p>
             </div>
 
@@ -83,7 +83,7 @@ export default function AnalyticsPage() {
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">NDA</span>
                 <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalNDAs}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{$1$2}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konv: {summary.ndaConversionRate}%</p>
             </div>
 
@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">Meddelanden</span>
                 <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalMessages}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{$1$2}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Konversationer</p>
             </div>
 
@@ -101,7 +101,7 @@ export default function AnalyticsPage() {
                 <span className="text-xs sm:text-sm text-gray-600 font-medium">Sparningar</span>
                 <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-900" />
               </div>
-              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900">{summary.totalSaves}</p>
+              <p className="text-2xl sm:text-2xl sm:text-3xl font-bold text-gray-900 truncate">{$1$2}</p>
               <p className="text-xs text-gray-500 mt-1 hidden sm:block">Intresserade köpare</p>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function AnalyticsPage() {
               <tbody className="divide-y divide-gray-200">
                 {listings.map((listing) => (
                   <tr key={listing.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{listing.title}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900 truncate">{$1$2}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       <div className="flex items-center gap-2">
                         <Eye className="w-4 h-4 text-gray-400" />

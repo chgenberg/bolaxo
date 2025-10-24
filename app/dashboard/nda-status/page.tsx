@@ -139,7 +139,7 @@ export default function NDAStatusPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
@@ -219,7 +219,7 @@ export default function NDAStatusPage() {
                   </div>
 
                   {/* Details */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                     <div>
                       <p className="text-xs text-text-gray mb-1">Begärd</p>
                       <p className="text-sm font-medium text-text-dark">

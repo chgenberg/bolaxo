@@ -184,7 +184,7 @@ export default function CheckoutPage() {
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-12 text-center">Så fungerar det</h2>
 
           {/* Step Timeline - Desktop */}
-          <div className="hidden md:grid grid-cols-5 gap-2 mb-16">
+          <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-16">
             {steps.map((step, idx) => (
               <div key={step.id}>
                 <button
@@ -235,7 +235,7 @@ export default function CheckoutPage() {
                   <ActiveIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">{activeContent.title}</h3>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{$1$2}</h3>
                   <p className="text-gray-600 mt-1">{activeContent.description}</p>
                 </div>
               </div>

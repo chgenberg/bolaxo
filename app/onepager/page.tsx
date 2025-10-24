@@ -197,7 +197,7 @@ export default function OnePagerPage() {
       {/* Stats Bar - Social proof */}
       <section className="bg-white py-12 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-3 sm:px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 text-center">
             <div>
               <div className="text-4xl font-bold text-primary-blue mb-2">18.7M kr</div>
               <div className="text-text-gray">Genomsnittligt försäljningspris</div>
@@ -314,8 +314,8 @@ export default function OnePagerPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 relative">
             {/* Arrow connectors */}
-            <div className="hidden md:block absolute top-1/2 left-1/3 w-1/3 h-0.5 bg-gradient-to-r from-primary-blue to-light-blue transform -translate-y-1/2"></div>
-            <div className="hidden md:block absolute top-1/2 right-0 w-1/3 h-0.5 bg-gradient-to-r from-light-blue to-primary-blue transform -translate-y-1/2"></div>
+            <div className="hidden lg:block absolute top-1/2 left-1/3 w-full md:w-1/3 h-0.5 bg-gradient-to-r from-primary-blue to-light-blue transform -translate-y-1/2"></div>
+            <div className="hidden lg:block absolute top-1/2 right-0 w-full md:w-1/3 h-0.5 bg-gradient-to-r from-light-blue to-primary-blue transform -translate-y-1/2"></div>
 
             <div className="relative bg-gradient-to-br from-light-blue to-white p-8 rounded-2xl shadow-card text-center transform hover:scale-105 transition-all">
               <div className="w-16 h-16 bg-primary-blue text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl sm:text-2xl font-bold">
@@ -391,7 +391,7 @@ export default function OnePagerPage() {
             <p className="text-xl text-text-gray">Från värdering till avslut - vi guidar dig hela vägen</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[
               { icon: Zap, title: 'AI-Värdering', desc: 'Gratis värdering på 5 min', value: 'Värd 5,000 kr' },
               { icon: Lock, title: 'Anonymitet', desc: 'Full kontroll över vad som visas', value: 'Priceless' },

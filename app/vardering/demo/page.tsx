@@ -143,7 +143,7 @@ export default function ValuationDemoPage() {
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           {demoResult.keyMetrics.map((metric, index) => (
             <div key={index} className="bg-white p-6 rounded-2xl shadow-card text-center">
               <div className="text-sm text-text-gray mb-1">{metric.label}</div>

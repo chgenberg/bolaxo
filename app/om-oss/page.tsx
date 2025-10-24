@@ -138,7 +138,7 @@ export default function AboutPage() {
             <p className="text-text-gray">Samarbetar med ledande aktörer inom juridik och finans</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             <div className="card text-center">
               <div className="text-lg font-semibold text-primary-blue">Vinge Advokatbyrå</div>
               <div className="text-xs text-text-gray mt-1">Juridisk rådgivning</div>

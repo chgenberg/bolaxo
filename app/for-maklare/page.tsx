@@ -193,7 +193,7 @@ export default function ForMaklarePage() {
             Så fungerar det
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[
               { step: 1, title: 'Registrera', desc: 'Skapa konto och verifiera med BankID' },
               { step: 2, title: 'Köp licens', desc: 'Välj Pro eller Premium. Personbunden licens.' },

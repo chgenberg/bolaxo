@@ -181,7 +181,7 @@ export default function NDAsPage() {
         </div>
 
         {/* Stats - Mobile optimized */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
             <div className="flex items-center justify-between mb-2">
               <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue" />
@@ -256,7 +256,7 @@ export default function NDAsPage() {
                   </div>
 
                   {/* Details grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4">
                     <div className="min-w-0">
                       <p className="text-xs text-text-gray mb-1">Annons</p>
                       <p className="text-xs sm:text-sm font-medium text-text-dark truncate">{nda.listingTitle}</p>
@@ -277,7 +277,7 @@ export default function NDAsPage() {
                         <span className="text-xs font-medium text-text-dark">{nda.matchScore}%</span>
                       </div>
                     </div>
-                    <div className="hidden md:block min-w-0">
+                    <div className="hidden lg:block min-w-0">
                       <p className="text-xs text-text-gray mb-1">Verifiering</p>
                       <p className="text-xs sm:text-sm font-medium text-text-dark">
                         {nda.verificationStatus === 'bankid_verified' ? (

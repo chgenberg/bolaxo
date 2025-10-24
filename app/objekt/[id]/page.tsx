@@ -190,11 +190,11 @@ export default function ListingDetailPage() {
               </div>
               <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200">
                 <div className="text-xs sm:text-sm text-gray-600 mb-1">Anställda</div>
-                <div className="text-base sm:text-lg md:text-xl font-bold text-gray-900">{listing.employees}</div>
+                <div className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">{$1$2}</div>
               </div>
               <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200">
                 <div className="text-xs sm:text-sm text-gray-600 mb-1">Visningar</div>
-                <div className="text-base sm:text-lg md:text-xl font-bold text-gray-900">{listing.views}</div>
+                <div className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">{$1$2}</div>
               </div>
             </div>
 
@@ -277,7 +277,7 @@ export default function ListingDetailPage() {
                   {listing.whySelling && (
                     <div>
                       <p className="text-xs sm:text-sm font-medium text-gray-600">Varför säljer de?</p>
-                      <p className="text-xs sm:text-sm text-gray-900">{listing.whySelling}</p>
+                      <p className="text-xs sm:text-sm text-gray-900 truncate">{$1$2}</p>
                     </div>
                   )}
                 </div>

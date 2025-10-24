@@ -199,7 +199,7 @@ export default function BlogPage() {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
+        <div className="grid lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
           {/* Sidebar */}
           <aside className="lg:col-span-1">
             {/* Categories */}
