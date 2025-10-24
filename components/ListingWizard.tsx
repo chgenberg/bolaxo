@@ -168,14 +168,14 @@ export default function ListingWizard() {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50" ref={scrollRef}>
       {/* Progress Bar */}
       <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">Skapa annons</h1>
-            <span className="text-sm font-medium text-gray-600">{step} av {totalSteps}</span>
+        <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Skapa annons</h1>
+            <span className="text-xs sm:text-sm font-medium text-gray-600">{step}/{totalSteps}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="bg-blue-900 h-2 rounded-full transition-all duration-300"
+              className="bg-primary-blue h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -183,16 +183,16 @@ export default function ListingWizard() {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
         {/* Step 1: Company Info */}
         {step === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <Building className="w-8 h-8 text-blue-900" />
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                <Building className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue flex-shrink-0" />
                 Företagsinformation
               </h2>
-              <p className="text-gray-600">Berätta lite om ditt företag</p>
+              <p className="text-xs sm:text-base text-gray-600">Berätta lite om ditt företag</p>
             </div>
 
             <FormField
@@ -260,13 +260,13 @@ export default function ListingWizard() {
 
         {/* Step 2: Financials */}
         {step === 2 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <TrendingUp className="w-8 h-8 text-blue-900" />
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue flex-shrink-0" />
                 Finansiell information
               </h2>
-              <p className="text-gray-600">Nästa: din ekonomiska data</p>
+              <p className="text-xs sm:text-base text-gray-600">Nästa: din ekonomiska data</p>
             </div>
 
             <FormField
@@ -338,21 +338,21 @@ export default function ListingWizard() {
 
         {/* Step 3: Description & Strengths */}
         {step === 3 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <FileText className="w-8 h-8 text-blue-900" />
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue flex-shrink-0" />
                 Annons & beskrivning
               </h2>
-              <p className="text-gray-600">Presentera ditt företag</p>
+              <p className="text-xs sm:text-base text-gray-600">Presentera ditt företag</p>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex gap-2">
-                <Sparkles className="w-5 h-5 text-blue-900 flex-shrink-0 mt-0.5" />
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+              <div className="flex gap-2 sm:gap-3">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-blue-900">Auto-genererad titel</p>
-                  <p className="text-sm text-blue-800">{data.anonymousTitle || 'Uppdateras när du väljer bransch och region'}</p>
+                  <p className="font-medium text-xs sm:text-sm text-primary-blue">Auto-genererad titel</p>
+                  <p className="text-xs sm:text-sm text-blue-900 mt-0.5">{data.anonymousTitle || 'Uppdateras när du väljer bransch och region'}</p>
                 </div>
               </div>
             </div>
@@ -376,8 +376,8 @@ export default function ListingWizard() {
               maxLength={300}
             />
 
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold text-gray-900">Styrkor (3 st)</label>
+            <div className="space-y-2 sm:space-y-3">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-900">Styrkor (3 st)</label>
               {data.strengths.map((strength, idx) => (
                 <FormField
                   key={idx}
@@ -393,8 +393,8 @@ export default function ListingWizard() {
               ))}
             </div>
 
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold text-gray-900">Risker/Utmaningar (3 st)</label>
+            <div className="space-y-2 sm:space-y-3">
+              <label className="block text-xs sm:text-sm font-semibold text-gray-900">Risker/Utmaningar (3 st)</label>
               {data.risks.map((risk, idx) => (
                 <FormField
                   key={idx}
@@ -414,29 +414,29 @@ export default function ListingWizard() {
 
         {/* Step 4: Images */}
         {step === 4 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <ImageIcon className="w-8 h-8 text-blue-900" />
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                <ImageIcon className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue flex-shrink-0" />
                 Bilder & media
               </h2>
-              <p className="text-gray-600">Lägg upp professionella bilder av ditt företag</p>
+              <p className="text-xs sm:text-base text-gray-600">Lägg upp professionella bilder av ditt företag</p>
             </div>
 
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-900 transition-colors cursor-pointer">
-              <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-sm font-medium text-gray-900 mb-1">Dra bilder här eller klicka</p>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-8 text-center hover:border-primary-blue transition-colors cursor-pointer">
+              <ImageIcon className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-2 sm:mb-3" />
+              <p className="text-xs sm:text-sm font-medium text-gray-900 mb-0.5 sm:mb-1">Dra bilder här eller klicka</p>
               <p className="text-xs text-gray-600">PNG, JPG upp till 10 MB</p>
             </div>
 
             {data.images.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4">
                 {data.images.map((image, idx) => (
                   <div key={idx} className="relative group">
-                    <img src={image} alt={`Upload ${idx}`} className="w-full h-32 object-cover rounded-lg" />
+                    <img src={image} alt={`Upload ${idx}`} className="w-full h-24 sm:h-32 object-cover rounded-lg" />
                     <button
                       onClick={() => setData({ ...data, images: data.images.filter((_, i) => i !== idx) })}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-xs sm:text-base"
                     >
                       ✕
                     </button>
@@ -449,35 +449,35 @@ export default function ListingWizard() {
 
         {/* Step 5: Package Selection */}
         {step === 5 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <Package className="w-8 h-8 text-blue-900" />
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                <Package className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue flex-shrink-0" />
                 Paketval
               </h2>
-              <p className="text-gray-600">Välj rätt paket för din behov</p>
+              <p className="text-xs sm:text-base text-gray-600">Välj rätt paket för din behov</p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
               {packages.map((pkg) => (
                 <button
                   key={pkg.id}
                   onClick={() => setData({ ...data, packageType: pkg.id as any })}
-                  className={`relative rounded-lg p-6 border-2 transition-all ${
+                  className={`relative rounded-lg p-3 sm:p-6 border-2 transition-all text-left ${
                     data.packageType === pkg.id
-                      ? 'border-blue-900 bg-blue-50'
+                      ? 'border-primary-blue bg-blue-50'
                       : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                 >
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{pkg.name}</h3>
-                  <div className="text-3xl font-bold text-blue-900 mb-1">{pkg.price} kr</div>
-                  <p className="text-sm text-gray-600 mb-4">{pkg.duration}</p>
+                  <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1 sm:mb-2">{pkg.name}</h3>
+                  <div className="text-2xl sm:text-3xl font-bold text-primary-blue mb-0.5 sm:mb-1">{pkg.price} kr</div>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">{pkg.duration}</p>
                   
-                  <ul className="space-y-2 text-left">
+                  <ul className="space-y-1 sm:space-y-2">
                     {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
-                        <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                        {feature}
+                      <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-700">
+                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -489,13 +489,13 @@ export default function ListingWizard() {
 
         {/* Step 6: Preview & Publish */}
         {step === 6 && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <Eye className="w-8 h-8 text-blue-900" />
+              <h2 className="text-lg sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                <Eye className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue flex-shrink-0" />
                 Förhandsgranskning
               </h2>
-              <p className="text-gray-600">Så kommer din annons att se ut</p>
+              <p className="text-xs sm:text-base text-gray-600">Så kommer din annons att se ut</p>
             </div>
 
             {/* Preview Card */}
@@ -504,19 +504,19 @@ export default function ListingWizard() {
                 {data.images.length > 0 ? (
                   <img src={data.images[0]} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
-                  <ImageIcon className="w-16 h-16 text-gray-400" />
+                  <ImageIcon className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400" />
                 )}
               </div>
 
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{data.anonymousTitle}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{data.location}</p>
+              <div className="p-3 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2 sm:mb-3 gap-2 sm:gap-0">
+                  <div className="min-w-0">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">{data.anonymousTitle}</h3>
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1">{data.location}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-600">Pris</p>
-                    <p className="text-2xl font-bold text-blue-900">
+                  <div className="text-left sm:text-right">
+                    <p className="text-xs sm:text-sm text-gray-600">Pris</p>
+                    <p className="text-lg sm:text-2xl font-bold text-primary-blue">
                       {data.priceMin && data.priceMax
                         ? `${(parseInt(data.priceMin) / 1_000_000).toFixed(1)}-${(parseInt(data.priceMax) / 1_000_000).toFixed(1)} MSEK`
                         : 'TBD'}
@@ -524,22 +524,22 @@ export default function ListingWizard() {
                   </div>
                 </div>
 
-                <div className="prose prose-sm max-w-none mb-4">
-                  <p className="text-gray-700">{data.description}</p>
+                <div className="prose prose-sm max-w-none mb-3 sm:mb-4">
+                  <p className="text-xs sm:text-base text-gray-700">{data.description}</p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Styrkor</h4>
-                    <ul className="space-y-1 text-sm text-gray-700">
+                    <h4 className="font-semibold text-xs sm:text-sm text-gray-900 mb-1 sm:mb-2">Styrkor</h4>
+                    <ul className="space-y-0.5 sm:space-y-1 text-xs sm:text-sm text-gray-700">
                       {data.strengths.filter(s => s).map((strength, idx) => (
                         <li key={idx}>✓ {strength}</li>
                       ))}
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Risker</h4>
-                    <ul className="space-y-1 text-sm text-gray-700">
+                    <h4 className="font-semibold text-xs sm:text-sm text-gray-900 mb-1 sm:mb-2">Risker</h4>
+                    <ul className="space-y-0.5 sm:space-y-1 text-xs sm:text-sm text-gray-700">
                       {data.risks.filter(r => r).map((risk, idx) => (
                         <li key={idx}>• {risk}</li>
                       ))}
@@ -549,22 +549,22 @@ export default function ListingWizard() {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
-              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-              <div className="text-sm">
-                <p className="font-medium text-blue-900">Klar att publicera!</p>
-                <p className="text-blue-800 mt-1">Din annons kommer att matchas mot köparpaser automatiskt och publiceras på marknadsplatsen.</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 flex gap-2 sm:gap-3">
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <div className="text-xs sm:text-sm">
+                <p className="font-medium text-primary-blue">Klar att publicera!</p>
+                <p className="text-blue-900 mt-0.5 sm:mt-1">Din annons kommer att matchas mot köparprofiler automatiskt och publiceras på marknadsplatsen.</p>
               </div>
             </div>
           </div>
         )}
 
         {/* Navigation */}
-        <div className="flex gap-3 mt-12">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-8 sm:mt-12">
           <button
             onClick={handlePrev}
             disabled={step === 1}
-            className="flex-1 px-6 py-3 border border-gray-300 text-gray-900 font-medium rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:flex-1 px-3 sm:px-6 py-2 min-h-10 sm:min-h-auto border border-gray-300 text-gray-900 font-medium rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             Tillbaka
@@ -573,7 +573,7 @@ export default function ListingWizard() {
           {step < totalSteps ? (
             <button
               onClick={handleNext}
-              className="flex-1 px-6 py-3 bg-blue-900 text-white font-medium rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-center gap-2"
+              className="w-full sm:flex-1 px-3 sm:px-6 py-2 min-h-10 sm:min-h-auto bg-primary-blue text-white font-medium rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-center gap-2 text-sm"
             >
               Nästa
               <ArrowRight className="w-4 h-4" />
@@ -582,7 +582,7 @@ export default function ListingWizard() {
             <button
               onClick={handlePublish}
               disabled={loading}
-              className="flex-1 px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="w-full sm:flex-1 px-3 sm:px-6 py-2 min-h-10 sm:min-h-auto bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-sm"
             >
               {loading ? 'Publicerar...' : 'Publicera annons'}
               <CheckCircle className="w-4 h-4" />
