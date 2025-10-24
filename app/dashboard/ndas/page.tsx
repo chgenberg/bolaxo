@@ -10,6 +10,7 @@ export default function NDAsPage() {
   const { user } = useAuth()
   const [filter, setFilter] = useState('all')
   const [requests, setRequests] = useState<any[]>([])
+  const [processing, setProcessing] = useState<string | null>(null)
   
   const mockNDAs = [
     {
@@ -86,6 +87,63 @@ export default function NDAsPage() {
     }
     load()
   }, [user])
+
+  const handleApprove = async (ndaId: string, nda: any) => {
+    setProcessing(ndaId)
+    try {
+      // Uppdatera NDA-status
+      const response = await fetch(`/api/nda-requests/${ndaId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'approved' })
+      })
+
+      if (response.ok) {
+        // Auto-create initial chat message
+        await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            listingId: nda.listingId,
+            senderId: user?.id,
+            recipientId: nda.buyerId,
+            subject: 'Hej! NDA godkänd',
+            content: `Hej ${nda.buyerName},\n\nDin NDA-förfrågan för "${nda.listingTitle}" har godkänts. Du kan nu se all information om företaget och vi kan börja diskutera möjligheterna.\n\nLooking forward to speaking with you!\n\nBest regards`
+          })
+        })
+
+        // Update local state
+        setRequests(requests.map(r => 
+          r.id === ndaId ? { ...r, status: 'approved', approvedAt: new Date().toISOString() } : r
+        ))
+      }
+    } catch (error) {
+      console.error('Error approving NDA:', error)
+    } finally {
+      setProcessing(null)
+    }
+  }
+
+  const handleReject = async (ndaId: string) => {
+    setProcessing(ndaId)
+    try {
+      const response = await fetch(`/api/nda-requests/${ndaId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'rejected' })
+      })
+
+      if (response.ok) {
+        setRequests(requests.map(r => 
+          r.id === ndaId ? { ...r, status: 'rejected', rejectedAt: new Date().toISOString() } : r
+        ))
+      }
+    } catch (error) {
+      console.error('Error rejecting NDA:', error)
+    } finally {
+      setProcessing(null)
+    }
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -253,11 +311,19 @@ export default function NDAsPage() {
                 {/* Actions */}
                 {nda.status === 'pending' && (
                   <div className="flex flex-col gap-2 ml-6">
-                    <button className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
-                      Godkänn
+                    <button 
+                      onClick={() => handleApprove(nda.id, nda)}
+                      disabled={processing === nda.id}
+                      className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
+                    >
+                      {processing === nda.id ? 'Godkänner...' : 'Godkänn'}
                     </button>
-                    <button className="px-4 py-2 bg-gray-200 text-text-dark text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors">
-                      Avslå
+                    <button 
+                      onClick={() => handleReject(nda.id)}
+                      disabled={processing === nda.id}
+                      className="px-4 py-2 bg-gray-200 text-text-dark text-sm font-medium rounded-lg hover:bg-gray-300 disabled:opacity-50 transition-colors"
+                    >
+                      {processing === nda.id ? 'Avslår...' : 'Avslå'}
                     </button>
                     <button className="p-2 text-primary-blue hover:bg-blue-50 rounded-lg transition-colors">
                       <MessageSquare className="w-5 h-5" />
