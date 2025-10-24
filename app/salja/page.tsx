@@ -1,362 +1,264 @@
 import Link from 'next/link'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, ArrowRight } from 'lucide-react'
 
 export default function SaljaInfoPage() {
   return (
-    <main className="bg-background-off-white">
+    <main className="bg-neutral-white">
       {/* Hero Section */}
-      <section className="relative galaxy-hero-bg bg-cover bg-center bg-no-repeat py-6 sm:py-8 md:py-12">
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/20"></div>
-        
-        <div className="relative max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 drop-shadow-lg uppercase">
-            Så funkar det för säljare
+      <section className="bg-gradient-to-br from-accent-pink/10 to-accent-orange/10 py-20 sm:py-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6">
+            Så säljer du ditt företag
           </h1>
-          <p className="text-lg md:text-xl text-white/95 max-w-2xl mx-auto drop-shadow-md">
-            Ditt livsverk förtjänar en värderad process. Vi automatiserar det komplexa och ger dig full kontroll – från första värderingen till signerad affär.
+          <p className="text-2xl text-primary-navy leading-relaxed">
+            Från värdering till affär avslutad. Vi automatiserar det komplicerade och ger dig full kontroll.
           </p>
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
 
         {/* Steps */}
-        <div className="space-y-8 mb-16">
-          {[
-            {
-              step: 1,
-              title: 'Gratis värdering',
-              description: 'Börja med vår automatiska företagsvärdering. Får värdering, PDF-rapport och konkreta tips på 5 minuter. Automatisk datainsamling från 10 källor: Allabolag, Ratsit, Proff, LinkedIn, Google Search (nyheter & sentiment), Trustpilot, Google My Business, Bolagsverket, SCB och din hemsida. Konto skapas automatiskt när du godkänner integritetspolicyn.',
-              time: '5 min',
-            },
-            {
-              step: 2,
-              title: 'Skapa annons',
-              description: '7-stegs wizard guidar dig. Bestäm själv vad som ska vara synligt före och efter NDA. Auto-sparning så du kan fortsätta när du vill. Se live-analys av ditt företagsvärde medan du fyller i.',
-              time: '8-12 min',
-            },
-            {
-              step: 3,
-              title: 'Få förfrågningar & följ analytics',
-              description: 'Kvalificerade köpare kontaktar dig. Se visningar, NDA-förfrågningar och konvertering i realtid via charts. Geografisk fördelning av intressenter. Mail-notiser när någon vill signera NDA.',
-              time: 'Löpande',
-            },
-            {
-              step: 4,
-              title: 'NDA, Datarum & LOI',
-              description: 'Köpare signerar NDA digitalt (BankID). Dela dokument säkert i datarum. Ta emot indikativa bud (LOI) med strukturerat formulär.',
-              time: 'Efter behov',
-            },
-            {
-              step: 5,
-              title: 'Deal Management & Closing',
-              description: 'Starta formell transaktion med automatiska milestolpar (9 steg, 90-dagarsprocess). Spåra betalningar (deposition + huvudbetalning). Bjud in rådgivare, revisorer och jurister med rollbaserade behörigheter. Full aktivitetslogg och transparens.',
-              time: '60-90 dagar',
-            },
-          ].map((item) => (
-            <div key={item.step} className="card-hover flex items-start">
-              <div className="flex-shrink-0 w-16 h-16 bg-primary-blue text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold mr-6">
-                {item.step}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-semibold text-text-dark">{item.title}</h3>
-                  <span className="text-sm text-text-gray">{item.time}</span>
+        <div className="mb-32">
+          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center">Processen i 5 steg</h2>
+          <div className="space-y-8">
+            {[
+              {
+                step: 1,
+                title: 'Gratis värdering',
+                description: 'Börja med vår automatiska företagsvärdering. Få värdering, PDF-rapport och tips på 5 minuter. Vi hämtar data från 10 källor: Allabolag, Ratsit, Proff, LinkedIn, Google Search, Trustpilot, Bolagsverket, SCB och din hemsida.',
+                time: '5 min',
+              },
+              {
+                step: 2,
+                title: 'Skapa annons',
+                description: '7-stegs wizard guidar dig genom processen. Bestäm själv vad som ska synas före och efter NDA. Auto-sparning så du kan fortsätta senare. Se live-analys av ditt företagsvärde.',
+                time: '8-12 min',
+              },
+              {
+                step: 3,
+                title: 'Få förfrågningar',
+                description: 'Kvalificerade köpare kontaktar dig. Se visningar, NDA-förfrågningar och konvertering i realtid via analytics. Geografisk fördelning av intressenter. Mail-notiser när någon vill signera NDA.',
+                time: 'Löpande',
+              },
+              {
+                step: 4,
+                title: 'NDA & Datarum',
+                description: 'Köpare signerar NDA digitalt (BankID). Dela känsliga dokument säkert i datarum. Ta emot indikativa bud (LOI) med strukturerat formulär.',
+                time: 'Efter behov',
+              },
+              {
+                step: 5,
+                title: 'Deal Management',
+                description: 'Starta formell transaktion med automatiska milestolpar (60-90 dagar). Spåra betalningar, bjud in rådgivare/revisorer med rollbaserade rättigheter. Full aktivitetslogg.',
+                time: '60-90 dagar',
+              },
+            ].map((item) => (
+              <div key={item.step} className="flex gap-6 sm:gap-8">
+                <div className="flex-shrink-0 w-20 h-20 bg-accent-pink text-white rounded-lg flex items-center justify-center text-3xl font-bold">
+                  {item.step}
                 </div>
-                <p className="text-text-gray">{item.description}</p>
+                <div className="flex-1 pt-2">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-2xl font-bold text-accent-orange">{item.title}</h3>
+                    <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-lg font-medium">{item.time}</span>
+                  </div>
+                  <p className="text-lg text-gray-700 leading-relaxed">{item.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Before/After NDA Comparison */}
-        <div className="card mb-16">
-          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-8 text-center">
+        <div className="mb-32 bg-neutral-off-white rounded-lg p-8 sm:p-12">
+          <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center">
             Före vs efter NDA
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Before NDA */}
             <div>
-              <h3 className="font-semibold text-lg mb-4 flex items-center">
-                <span className="w-3 h-3 bg-yellow-400 rounded-full mr-2"></span>
-                Före NDA – Synligt för alla
-              </h3>
-              <ul className="space-y-2 text-sm text-text-gray">
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Bransch & typ av företag
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Ort/region
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Omsättningsintervall
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Antal anställda
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Allmän beskrivning
-                </li>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-4 h-4 bg-accent-orange rounded-full"></div>
+                <h3 className="text-2xl font-bold text-primary-navy">Före NDA</h3>
+                <span className="text-sm text-gray-600 font-medium">Publik info</span>
+              </div>
+              <ul className="space-y-4">
+                {[
+                  'Bransch & typ av företag',
+                  'Ort/region',
+                  'Omsättningsintervall',
+                  'Antal anställda',
+                  'Allmän beskrivning'
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-gray-700">
+                    <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
             </div>
 
             {/* After NDA */}
             <div>
-              <h3 className="font-semibold text-lg mb-4 flex items-center">
-                <span className="w-3 h-3 bg-success rounded-full mr-2"></span>
-                Efter NDA – Låst upp
-              </h3>
-              <ul className="space-y-2 text-sm text-text-gray">
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-success mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  Företagsnamn & org.nr
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-success mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  Exakta nyckeltal (EBITDA, etc.)
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-success mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  Prisidé & värdering
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-success mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  Kundlista & kontrakt
-                </li>
-                <li className="flex items-start">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-success mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                  Fullständigt datarum
-                </li>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-4 h-4 bg-accent-pink rounded-full"></div>
+                <h3 className="text-2xl font-bold text-primary-navy">Efter NDA</h3>
+                <span className="text-sm text-gray-600 font-medium">Låst upp</span>
+              </div>
+              <ul className="space-y-4">
+                {[
+                  'Företagsnamn & org.nr',
+                  'Exakta nyckeltal (EBITDA, etc)',
+                  'Prisidé & värdering',
+                  'Kundlista & kontrakt',
+                  'Fullständigt datarum'
+                ].map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3 text-gray-700">
+                    <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
+                    <span>{item}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
         </div>
 
         {/* Pricing Overview */}
-        <div className="mb-16">
-          <h2 className="text-2xl sm:text-3xl font-bold text-text-dark mb-3 text-center">
-            Prisöversikt
-          </h2>
-          <p className="text-center text-text-gray mb-12 max-w-2xl mx-auto">
+        <div className="mb-32">
+          <h2 className="text-4xl font-bold text-accent-orange mb-6 text-center">Prisöversikt</h2>
+          <p className="text-center text-lg text-gray-700 mb-16 max-w-2xl mx-auto">
             Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Free */}
-            <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 hover:border-gray-300 transition-all h-full flex flex-col">
-              <div className="text-center mb-6">
-                <div className="text-sm text-text-gray mb-2">Utkast</div>
-                <div className="text-5xl font-bold text-text-dark mb-2">0 kr</div>
-                <div className="text-sm text-text-gray">Gratis</div>
+            <div className="bg-white border-2 border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all">
+              <div className="text-center mb-8">
+                <div className="text-sm font-semibold text-gray-600 mb-2">Utkast</div>
+                <div className="text-5xl font-bold text-accent-orange mb-2">0 kr</div>
+                <div className="text-sm text-gray-600">Gratis</div>
               </div>
-              <div className="space-y-3 mb-8 flex-grow">
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Skapa annons (utkast)</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Automatisk copywriting & KPI-mallar</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Spara utkast</span>
-                </div>
+              <div className="space-y-4 mb-8">
+                {['Skapa annons (utkast)', 'Automatisk copywriting', 'Spara utkast'].map((f, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{f}</span>
+                  </div>
+                ))}
               </div>
-              <button className="w-full btn-ghost text-sm">
+              <Link href="/vardering" className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
                 Skapa utkast
-              </button>
+              </Link>
             </div>
 
             {/* Basic */}
-            <div className="bg-white rounded-2xl border-2 border-primary-blue/30 p-8 hover:border-primary-blue/50 transition-all hover:shadow-md h-full flex flex-col">
-              <div className="text-center mb-6">
-                <div className="text-sm text-primary-blue font-semibold mb-2">Basic</div>
-                <div className="text-5xl font-bold text-primary-blue mb-1">495</div>
-                <div className="text-sm text-text-gray">kr / mån</div>
+            <div className="bg-white border-2 border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all">
+              <div className="text-center mb-8">
+                <div className="text-sm font-semibold text-primary-navy mb-2">Basic</div>
+                <div className="text-5xl font-bold text-accent-orange mb-2">495 kr</div>
+                <div className="text-sm text-gray-600">/ mån</div>
               </div>
-              <div className="space-y-3 mb-8 flex-grow">
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Publicering i marknadsplats</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Standardexponering</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Köparchatt & 1 tagg</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>KPI-PDF</span>
-                </div>
+              <div className="space-y-4 mb-8">
+                {['Publicering i marknadsplats', 'Standardexponering', 'Köparchatt', 'KPI-PDF'].map((f, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{f}</span>
+                  </div>
+                ))}
               </div>
-              <Link href="/salja/start" className="w-full btn-secondary text-sm block text-center">
+              <Link href="/salja/start" className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
                 Publicera
               </Link>
             </div>
 
-            {/* Pro (Highlighted) */}
-            <div className="relative bg-gradient-to-br from-primary-blue to-blue-700 rounded-2xl border-2 border-primary-blue p-8 shadow-xl h-full flex flex-col">
+            {/* Pro */}
+            <div className="relative bg-white border-2 border-accent-pink rounded-lg p-8 shadow-lg ring-2 ring-accent-pink">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="bg-green-500 text-white px-3 sm:px-4 py-1 rounded-full text-xs font-bold shadow-md">
-                  POPULÄRAST
+                <span className="bg-accent-pink text-primary-navy px-4 py-1 rounded-lg text-xs font-bold">
+                  POPULÄR
                 </span>
               </div>
-              <div className="text-center mb-6">
-                <div className="text-sm text-white/90 font-semibold mb-2">Pro</div>
-                <div className="text-5xl font-bold text-white mb-1">895</div>
-                <div className="text-sm text-white/80">kr / mån</div>
+              <div className="text-center mb-8">
+                <div className="text-sm font-semibold text-primary-navy mb-2">Pro</div>
+                <div className="text-5xl font-bold text-accent-orange mb-2">895 kr</div>
+                <div className="text-sm text-gray-600">/ mån</div>
               </div>
-              <div className="space-y-3 mb-8 text-white flex-grow">
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Prioriterad listplacering</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Anonym kontaktväxel</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>E-sign för NDA/LOI</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>3 bevakningstaggar</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>1 Featured boost / 30d</span>
-                </div>
+              <div className="space-y-4 mb-8">
+                {['Prioriterad placering', 'Anonym kontaktväxel', 'E-sign för NDA/LOI', '3 bevakningstaggar', 'Featured boost'].map((f, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{f}</span>
+                  </div>
+                ))}
               </div>
-              <Link href="/salja/start" className="w-full bg-white text-primary-blue py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all text-sm block text-center">
+              <Link href="/salja/start" className="block w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg text-center hover:shadow-lg transition-all inline-flex items-center justify-center gap-2">
                 Välj Pro
-              </Link>
-            </div>
-
-            {/* Pro+ Featured */}
-            <div className="bg-white rounded-2xl border-2 border-blue-600/40 p-8 hover:border-blue-600 transition-all hover:shadow-md h-full flex flex-col">
-              <div className="text-center mb-6">
-                <div className="text-sm text-blue-700 font-semibold mb-2">Pro+ Featured</div>
-                <div className="text-5xl font-bold text-blue-700 mb-1">1 495</div>
-                <div className="text-sm text-text-gray">kr / mån</div>
-              </div>
-              <div className="space-y-3 mb-8 flex-grow">
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Topp-placering</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Rotation på startsida</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Obegränsade boosts</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Nyhetsbrevs-spot</span>
-                </div>
-                <div className="flex items-start text-sm">
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                  <span>Analytics dashboard</span>
-                </div>
-              </div>
-              <Link href="/salja/start" className="w-full btn-primary text-sm block text-center">
-                Välj Pro+
+                <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
           </div>
 
-          <div className="text-center mt-8">
-            <Link href="/priser" className="inline-flex items-center text-primary-blue hover:underline font-semibold text-lg">
-              Se detaljerad jämförelse av alla funktioner
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+          <div className="text-center mt-12">
+            <Link href="/priser" className="text-accent-orange font-semibold hover:underline inline-flex items-center gap-2 text-lg">
+              Se detaljerad jämförelse
+              <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
         </div>
 
         {/* FAQ */}
-        <div className="card mb-16">
-          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-8 text-center">
-            Vanliga frågor
-          </h2>
+        <div className="mb-24">
+          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center">Vanliga frågor</h2>
           
-          <div className="space-y-6">
+          <div className="space-y-8">
             {[
               {
                 q: 'Vad är värderingen och hur funkar den?',
-                a: 'Vår automatiska värdering analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar automatiskt data från 10 källor: Allabolag (ekonomi), Ratsit (kreditbetyg), Proff (ledning), LinkedIn (anställda), Google Search (nyheter & sentiment), Trustpilot/Google My Business (recensioner), Bolagsverket, SCB och din hemsida. Får ett realistiskt värdeintervall, professionell PDF-rapport och konkreta tips för att öka värdet. Helt gratis, tar 5 minuter.',
+                a: 'Vår automatiska värdering analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar data från 10 källor automatiskt. Du får ett realistiskt värdeintervall, professionell rapport och konkreta tips. Helt gratis och tar 5 minuter.',
               },
               {
                 q: 'Kan jag vara helt anonym?',
                 a: 'Ja! Du väljer själv vad som ska synas före NDA. Många väljer att endast visa bransch, region och ungefärlig omsättning tills köparen signerat sekretessavtal med BankID.',
               },
               {
-                q: 'Vad är Deal Management-plattformen?',
-                a: 'När köpare lämnat LOI kan ni starta en formell transaktion med automatiska milestolpar (LOI → DD → SPA → Closing), dokumenthantering, betalningsspårning och aktivitetslogg. Bjud in rådgivare, revisorer och jurister med olika behörighetsnivåer. Helt transparent process, tar typiskt 60-90 dagar.',
+                q: 'Vad är Deal Management?',
+                a: 'När köpare lämnat LOI kan ni starta en formell transaktion med automatiska milestolpar, dokumenthantering, betalningsspårning och aktivitetslogg. Bjud in rådgivare med olika rättigheter.',
               },
               {
                 q: 'Vilka analytics får jag se?',
-                a: 'Som säljare ser du: visningar över tid (line chart), NDA-förfrågningar, konverteringstratt (visningar → NDA → LOI), geografisk fördelning av intressenter (pie chart), och +% tillväxt per vecka. Uppdateras i realtid på din dashboard.',
+                a: 'Du ser: visningar över tid, NDA-förfrågningar, konverteringstratt, geografisk fördelning av köpare, och tillväxtkurva. Uppdateras i realtid på din dashboard.',
               },
               {
                 q: 'Hur säkerställer ni att köparna är seriösa?',
-                a: 'Alla köpare verifieras med BankID och måste signera NDA innan de får tillgång till känslig information. Vi har smart matching som hjälper rätt köpare hitta rätt företag (match score 87-94%). Verified buyer badge syns i profilen.',
+                a: 'Alla köpare verifieras med BankID och måste signera NDA. Vi har smart matching (87-94% match score) som hjälper rätt köpare hitta rätt företag.',
               },
               {
                 q: 'Tar ni provision vid försäljning?',
-                a: 'Nej provision på annonspaket (engångsavgift 5-20k). För vår Deal Management-tjänst (optional): 1-3% av transaktionsvärde, delat mellan köpare och säljare. Traditionella mäklare tar 8-15%.',
+                a: 'Nej provision på annonspaket. För Deal Management (optional): 1-3% av transaktionsvärde delat mellan köpare och säljare. Traditionella mäklare tar 8-15%.',
               },
             ].map((faq, index) => (
-              <div key={index} className="border-b border-gray-200 pb-6 last:border-0">
-                <h3 className="font-semibold text-lg text-text-dark mb-2">{faq.q}</h3>
-                <p className="text-text-gray">{faq.a}</p>
+              <div key={index} className="pb-8 border-b border-gray-200 last:border-0">
+                <h3 className="text-xl font-bold text-primary-navy mb-3">{faq.q}</h3>
+                <p className="text-gray-700 leading-relaxed">{faq.a}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* CTA */}
-        <div className="text-center">
-          <Link href="/salja/start" className="btn-primary text-lg px-10 py-4 inline-block">
-            Kom igång nu →
+        <div className="bg-accent-pink rounded-lg p-12 text-center">
+          <h2 className="text-3xl font-bold text-primary-navy mb-6">Redo att sälja?</h2>
+          <p className="text-lg text-primary-navy mb-8 max-w-2xl mx-auto">
+            Börja med en gratis värdering. Det tar 5 minuter och du får en detaljerad rapport direkt.
+          </p>
+          <Link href="/vardering" className="inline-flex items-center gap-2 px-10 py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-lg">
+            Kom igång nu
+            <ArrowRight className="w-5 h-5" />
           </Link>
-          <p className="text-sm text-text-gray mt-4">
-            Basic passar dig som vill komma igång snabbt. Uppgradera när som helst.
+          <p className="text-sm text-primary-navy mt-6 opacity-80">
+            Inte säker än? Börja med ett utkast helt gratis.
           </p>
         </div>
       </div>
