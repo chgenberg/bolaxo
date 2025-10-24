@@ -1,5 +1,5 @@
 import HeroSection from '@/components/HeroSection'
-import { ArrowRight, TrendingUp, Shield, Users, Zap, Award, Lightbulb } from 'lucide-react'
+import { ArrowRight, TrendingUp, Shield, Users, Zap, Award, Lightbulb, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       <section className="py-24 bg-neutral-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6">Varför välja oss?</h2>
+            <h2 className="text-5xl font-bold text-accent-orange mb-6">Varför BOLAXO?</h2>
             <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
               Vi gör det enklare än någonsin att köpa eller sälja ett företag. Automatisering sparar veckor av arbete – följ allt i realtid.
             </p>
@@ -25,9 +25,9 @@ export default function Home() {
               <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
                 <TrendingUp className="w-8 h-8 text-accent-pink" />
               </div>
-              <h3 className="text-2xl font-bold text-accent-orange mb-3">Smarta matchningar</h3>
+              <h3 className="text-2xl font-bold text-accent-orange mb-3">Smart matchning</h3>
               <p className="text-gray-700 leading-relaxed">
-                Vår AI matchar säljare och köpare baserat på faktiska kriterier. Ingen tid på irrelevanta möten.
+                AI matchar säljare och köpare baserat på faktiska kriterier. Ingen tid på irrelevanta möten.
               </p>
             </div>
 
@@ -38,7 +38,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold text-accent-orange mb-3">100% säker process</h3>
               <p className="text-gray-700 leading-relaxed">
-                NDA-skyddad från dag ett. Alla dokument hanteras säkert i vår sekretessrum med full revision.
+                NDA-skyddad från dag ett. Alla dokument hanteras säkert med full revision.
               </p>
             </div>
 
@@ -60,7 +60,7 @@ export default function Home() {
       <section className="py-24 bg-neutral-off-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6">Så fungerar det</h2>
+            <h2 className="text-5xl font-bold text-accent-orange mb-6">Så fungerar BOLAXO</h2>
             <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
               En enkel process från start till mållinjen
             </p>
@@ -74,7 +74,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-primary-navy mb-3">Registrera dig</h3>
               <p className="text-gray-700">
-                Skapa ett konto på 2 minuter och berätta vad du letar efter eller vill sälja.
+                Skapa ett konto och berätta vad du letar efter eller vill sälja. Tar 2 minuter.
               </p>
             </div>
 
@@ -85,7 +85,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-primary-navy mb-3">Vi matchar</h3>
               <p className="text-gray-700">
-                Vår AI matchar dig med relevanta företag eller köpare på din nivå.
+                AI matchar dig med relevanta företag eller köpare på din nivå.
               </p>
             </div>
 
@@ -96,7 +96,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-primary-navy mb-3">Mötas säkert</h3>
               <p className="text-gray-700">
-                Dina NDA är redan på plats. Börja diskutera detaljer med full sekretess.
+                NDA är redan på plats. Börja diskutera detaljer med full sekretess.
               </p>
             </div>
 
@@ -107,7 +107,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-primary-navy mb-3">Avsluta affär</h3>
               <p className="text-gray-700">
-                Signera dokumenten digitalt och kom vidare till nästa kapitel.
+                Signera dokumenten digitalt på en säker plattform.
               </p>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2 className="text-5xl font-bold text-accent-orange mb-6">Det säger våra användare</h2>
             <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
-              Se vad köpare och säljare tycker om att använda vår plattform
+              Se vad köpare och säljare tycker om att använda BOLAXO
             </p>
           </div>
 
@@ -156,7 +156,7 @@ export default function Home() {
                 "Jag trodde aldrig att sälja mitt företag skulle kunna vara så enkelt. BOLAXO sparade mig månader av arbete."
               </p>
               <div className="font-semibold text-primary-navy">Anna Bergström</div>
-              <div className="text-sm text-gray-600">Säljare, Tech Startup</div>
+              <div className="text-sm text-gray-600">Säljare, E-commerce</div>
             </div>
 
             {/* Testimonial 2 */}
@@ -167,7 +167,7 @@ export default function Home() {
                 ))}
               </div>
               <p className="text-primary-navy leading-relaxed mb-6 italic">
-                "Matchningen är så smart. Vi fick relevanta möjligheter direkt utan att slösa tid på olämpliga anbudare."
+                "Matchningen är så smart. Vi fick relevanta möjligheter direkt utan att slösa tid på olämpliga bud."
               </p>
               <div className="font-semibold text-primary-navy">Johan Svensson</div>
               <div className="text-sm text-gray-600">Köpare, PE Fond</div>
@@ -181,10 +181,10 @@ export default function Home() {
                 ))}
               </div>
               <p className="text-primary-navy leading-relaxed mb-6 italic">
-                "Det känns tryggt från första stund. Sekretessen och processen är väl genomtänkta."
+                "Det känns tryggt från första stund. Processen är väl genomtänkt och säkerheten är uppenbar."
               </p>
               <div className="font-semibold text-primary-navy">Maria Garcia</div>
-              <div className="text-sm text-gray-600">Säljare, E-commerce</div>
+              <div className="text-sm text-gray-600">Säljare, Tech</div>
             </div>
           </div>
         </div>
@@ -195,21 +195,21 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-5xl font-bold text-accent-orange mb-6">Byggt för att spara tid</h2>
+              <h2 className="text-5xl font-bold text-accent-orange mb-6">Skapad för SME:er</h2>
               <p className="text-lg text-primary-navy leading-relaxed mb-8">
-                Traditionella M&A-processer tar månader. Vi har automatiserat det helt krävande och gjort det intuitivt.
+                BOLAXO är byggd av M&A-proffs för att lösa de verkliga smärtpunkterna i köp och försäljning av små till mellanstora företag.
               </p>
               
               <ul className="space-y-4">
                 {[
-                  'Intelligent matching-algoritm',
-                  'NDA förberedd från start',
-                  'Säkert dokumenthantering',
-                  'Realtidsuppdateringar',
-                  'Dedikerat support'
+                  'Ingen provision eller success fees',
+                  'Transparenta priser från dag ett',
+                  'NDA-skyddad från början',
+                  'Digital signering och dokumentation',
+                  'Dedikerat support-team'
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <Award className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                    <CheckCircle className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
                     <span className="text-primary-navy font-medium">{item}</span>
                   </li>
                 ))}
@@ -219,7 +219,7 @@ export default function Home() {
             <div className="bg-white rounded-lg p-12 border border-gray-200">
               <div className="text-center space-y-6">
                 <Lightbulb className="w-16 h-16 text-accent-orange mx-auto" />
-                <h3 className="text-2xl font-bold text-primary-navy">Skapades av erfarna M&A-proffs</h3>
+                <h3 className="text-2xl font-bold text-primary-navy">Byggd av M&A-proffs</h3>
                 <p className="text-gray-700 leading-relaxed">
                   Vårt team har genomfört hundratals köp och försäljningar. Vi vet exakt vilka smärtpunkter vi behöver lösa.
                 </p>
@@ -232,11 +232,11 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-24 bg-accent-pink">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl font-bold text-primary-navy mb-6">Redo att ta nästa steg?</h2>
+          <h2 className="text-5xl font-bold text-primary-navy mb-6">Redo för nästa steg?</h2>
           <p className="text-xl text-primary-navy leading-relaxed mb-10 max-w-2xl mx-auto">
             Oavsett om du vill sälja eller köpa ditt nästa företag, vi har allt du behöver.
           </p>
-
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/kopare/start"
@@ -253,7 +253,7 @@ export default function Home() {
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
-
+          
           <p className="text-sm text-primary-navy mt-6 opacity-75">
             Tar bara 2 minuter att registrera sig. Helt kostnadsfritt.
           </p>
