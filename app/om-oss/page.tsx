@@ -111,7 +111,7 @@ export default function AboutPage() {
       {/* Values */}
       <section className="py-24 bg-accent-pink">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-primary-navy mb-16">Våra värden</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-16 uppercase">VÅRA VÄRDEN</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
               { title: 'Transparens', desc: 'Vi är öppna och ärliga om hur allt fungerar' },
