@@ -235,7 +235,7 @@ export default function CheckoutPage() {
                   <ActiveIcon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{$1$2}</h3>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 truncate">{activeContent.title}</h3>
                   <p className="text-gray-600 mt-1">{activeContent.description}</p>
                 </div>
               </div>
