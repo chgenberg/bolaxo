@@ -33,7 +33,8 @@ export default function SearchPage() {
   useEffect(() => {
     const checkProfile = async () => {
       if (!user) {
-        router.push('/login')
+        // Allow non-logged-in users to browse
+        setProfileChecked(true)
         return
       }
 
