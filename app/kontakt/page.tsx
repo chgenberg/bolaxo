@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import FormField from '@/components/FormField'
-import { Mail, Phone, MapPin, Send, MessageCircle, Clock } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, MessageCircle, Clock, ArrowRight } from 'lucide-react'
 
 interface ContactFormData {
   name: string
@@ -28,41 +28,32 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500))
-    
     setIsSubmitting(false)
     setSubmitted(true)
   }
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-background-off-white py-6 sm:py-8 md:py-12">
-        <div className="max-w-2xl mx-auto px-3 sm:px-4 text-center">
-          <div className="bg-white p-12 rounded-2xl shadow-card">
-            <div className="w-20 h-20 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-6">
-              <Send className="w-10 h-10 text-primary-blue" />
+      <main className="min-h-screen bg-neutral-white py-20 sm:py-32 flex items-center justify-center">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+          <div className="bg-white p-12 rounded-lg shadow-card border border-gray-200">
+            <div className="w-20 h-20 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+              <Send className="w-10 h-10 text-accent-pink" />
             </div>
-            <h1 className="heading-2 mb-4">Tack för ditt meddelande!</h1>
-            <p className="text-text-gray text-lg mb-8">
+            <h1 className="text-4xl font-bold text-accent-orange mb-4">Tack för ditt meddelande!</h1>
+            <p className="text-lg text-primary-navy leading-relaxed mb-10">
               Vi har tagit emot ditt meddelande och återkommer inom 24 timmar.
             </p>
             <button 
               onClick={() => {
                 setSubmitted(false)
-                setFormData({
-                  name: '',
-                  email: '',
-                  phone: '',
-                  subject: '',
-                  message: '',
-                  interest: 'buying'
-                })
+                setFormData({ name: '', email: '', phone: '', subject: '', message: '', interest: 'buying' })
               }}
-              className="btn-secondary"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all"
             >
-              Skicka ett nytt meddelande
+              Skicka nytt meddelande
+              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -71,215 +62,145 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background-off-white py-6 sm:py-8 md:py-12">
-      <div className="max-w-6xl mx-auto px-3 sm:px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="heading-1 mb-4">Kontakta oss</h1>
-          <p className="text-lg text-text-gray max-w-2xl mx-auto">
-            Vi finns här för att hjälpa dig med alla frågor om företagsförmedling. 
-            Hör av dig så återkommer vi inom 24 timmar.
+    <main className="min-h-screen bg-neutral-white">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6">Kontakta oss</h1>
+          <p className="text-2xl text-primary-navy leading-relaxed">
+            Vi finns här för att hjälpa dig. Skicka ett meddelande så återkommer vi inom 24 timmar.
           </p>
         </div>
+      </section>
 
-        <div className="grid lg:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
-          {/* Contact Information */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Contact Info */}
           <div className="lg:col-span-1">
-            <div className="bg-white p-8 rounded-2xl shadow-card h-full">
-              <h2 className="heading-3 mb-6">Kontaktinformation</h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-text-dark">Telefon</p>
-                    <p className="text-text-gray">08-123 456 78</p>
-                    <p className="text-sm text-text-gray mt-1">Måndag-fredag 9-17</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-text-dark">E-post</p>
-                    <p className="text-text-gray">info@bolagsplatsen.se</p>
-                    <p className="text-sm text-text-gray mt-1">support@bolagsplatsen.se</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-text-dark">Besöksadress</p>
-                    <p className="text-text-gray">Stureplan 15</p>
-                    <p className="text-text-gray">114 35 Stockholm</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-primary-blue mt-1 mr-4 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-text-dark">Svarstid</p>
-                    <p className="text-text-gray">Vanligtvis inom 2-4 timmar</p>
-                    <p className="text-sm text-text-gray mt-1">Senast inom 24 timmar</p>
-                  </div>
+            <h2 className="text-2xl font-bold text-accent-orange mb-8">Kontaktinformation</h2>
+            
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <Mail className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="font-bold text-primary-navy mb-1">E-post</h3>
+                  <a href="mailto:hej@bolagsplatsen.se" className="text-gray-700 hover:text-accent-pink transition-colors">
+                    hej@bolagsplatsen.se
+                  </a>
                 </div>
               </div>
 
-              {/* Quick Contact Cards */}
-              <div className="mt-8 space-y-3">
-                <div className="bg-light-blue p-4 rounded-xl">
-                  <p className="font-semibold text-primary-blue mb-1">För säljare</p>
-                  <p className="text-sm text-text-gray">Få gratis värdering av ditt företag</p>
+              <div className="flex gap-4">
+                <Phone className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="font-bold text-primary-navy mb-1">Telefon</h3>
+                  <a href="tel:+46812345678" className="text-gray-700 hover:text-accent-pink transition-colors">
+                    +46 (0) 8 123 456 78
+                  </a>
                 </div>
-                
-                <div className="bg-light-blue p-4 rounded-xl">
-                  <p className="font-semibold text-primary-blue mb-1">För köpare</p>
-                  <p className="text-sm text-text-gray">Boka personlig genomgång</p>
+              </div>
+
+              <div className="flex gap-4">
+                <MapPin className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="font-bold text-primary-navy mb-1">Adress</h3>
+                  <p className="text-gray-700">
+                    Norrmälarstrand 10<br />
+                    111 19 Stockholm<br />
+                    Sverige
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 pt-4 border-t border-gray-200">
+                <Clock className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="font-bold text-primary-navy mb-1">Öppettider</h3>
+                  <p className="text-gray-700">
+                    Mån–Fre: 09:00–17:00<br />
+                    Lör–Sön: Stängt
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-card">
-              <h2 className="heading-3 mb-6">Skicka meddelande</h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-6">
+          <form onSubmit={handleSubmit} className="lg:col-span-2 bg-neutral-off-white p-10 rounded-lg border border-gray-200">
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <FormField
-                  label="Namn"
+                  label="Namn *"
+                  type="text"
                   value={formData.name}
-                  onValueChange={(value) => setFormData({ ...formData, name: value })}
+                  onValueChange={(val) => setFormData({...formData, name: val})}
+                  placeholder="Ditt namn"
                   required
                 />
-                
                 <FormField
-                  label="E-post"
+                  label="E-post *"
                   type="email"
                   value={formData.email}
-                  onValueChange={(value) => setFormData({ ...formData, email: value })}
+                  onValueChange={(val) => setFormData({...formData, email: val})}
+                  placeholder="din@epost.se"
                   required
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <FormField
-                  label="Telefon (valfritt)"
+                  label="Telefon"
                   type="tel"
                   value={formData.phone || ''}
-                  onValueChange={(value) => setFormData({ ...formData, phone: value })}
+                  onValueChange={(val) => setFormData({...formData, phone: val})}
+                  placeholder="070-123 45 67"
                 />
-                
                 <div>
-                  <label className="block text-sm font-medium text-text-dark mb-2">
-                    Jag är intresserad av
-                  </label>
+                  <label className="block text-sm font-semibold text-primary-navy mb-2">Intresse *</label>
                   <select
                     value={formData.interest}
-                    onChange={(e) => setFormData({ ...formData, interest: e.target.value as ContactFormData['interest'] })}
-                    className="w-full px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all"
+                    onChange={(e) => setFormData({...formData, interest: e.target.value as any})}
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-primary-navy focus:outline-none focus:ring-2 focus:ring-accent-pink"
                   >
-                    <option value="buying">Att köpa företag</option>
-                    <option value="selling">Att sälja företag</option>
-                    <option value="partnership">Partnerskap/Mäklare</option>
-                    <option value="other">Annat</option>
+                    <option value="buying">Jag vill köpa</option>
+                    <option value="selling">Jag vill sälja</option>
+                    <option value="partnership">Samarbete/Partnership</option>
+                    <option value="other">Övrigt</option>
                   </select>
                 </div>
               </div>
 
               <FormField
-                label="Ämne"
+                label="Ämne *"
+                type="text"
                 value={formData.subject}
-                onValueChange={(value) => setFormData({ ...formData, subject: value })}
-                placeholder="Vad gäller ditt ärende?"
+                onValueChange={(val) => setFormData({...formData, subject: val})}
+                placeholder="Vad handlar detta om?"
                 required
-                className="mb-6"
               />
 
-              <div className="mb-8">
-                <label className="block text-sm font-medium text-text-dark mb-2">
-                  Meddelande
-                </label>
+              <div>
+                <label className="block text-sm font-semibold text-primary-navy mb-2">Meddelande *</label>
                 <textarea
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  placeholder="Berätta mer om din fråga..."
                   rows={6}
-                  className="w-full px-3 sm:px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all resize-none"
-                  placeholder="Beskriv ditt ärende..."
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-primary-navy focus:outline-none focus:ring-2 focus:ring-accent-pink"
                   required
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 items-center">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="btn-primary w-full sm:w-auto flex items-center justify-center disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <>Skickar...</>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                      Skicka meddelande
-                    </>
-                  )}
-                </button>
-                
-                <p className="text-sm text-text-gray">
-                  Vi hanterar dina uppgifter enligt vår{' '}
-                  <a href="/juridiskt/integritetspolicy" className="text-primary-blue hover:underline">
-                    integritetspolicy
-                  </a>
-                </p>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        {/* Additional Contact Options */}
-        <div className="mt-12 bg-white p-8 rounded-2xl shadow-card">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue" />
-              </div>
-              <h3 className="font-semibold text-text-dark mb-2">Live Chat</h3>
-              <p className="text-sm text-text-gray mb-4">
-                Chatta direkt med våra rådgivare vardagar 9-17
-              </p>
-              <button className="btn-secondary text-sm">
-                Starta chat
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-4 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? 'Skickar...' : 'Skicka meddelande'}
+                {!isSubmitting && <ArrowRight className="w-5 h-5" />}
               </button>
             </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue" />
-              </div>
-              <h3 className="font-semibold text-text-dark mb-2">Boka samtal</h3>
-              <p className="text-sm text-text-gray mb-4">
-                Boka tid för telefonmöte med våra experter
-              </p>
-              <button className="btn-secondary text-sm">
-                Boka tid
-              </button>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-light-blue rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-primary-blue" />
-              </div>
-              <h3 className="font-semibold text-text-dark mb-2">Nyhetsbrev</h3>
-              <p className="text-sm text-text-gray mb-4">
-                Få tips och nyheter om företagsöverlåtelser
-              </p>
-              <button className="btn-secondary text-sm">
-                Prenumerera
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </main>
