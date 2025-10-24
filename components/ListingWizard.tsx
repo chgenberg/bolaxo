@@ -133,6 +133,11 @@ export default function ListingWizard() {
     if (step > 1) setStep(step - 1)
   }
 
+  // Helper to update form data
+  const updateField = (field: keyof ListingData, value: any) => {
+    setData(prev => ({ ...prev, [field]: value }))
+  }
+
   const handlePublish = async () => {
     setLoading(true)
     try {
@@ -193,7 +198,7 @@ export default function ListingWizard() {
             <FormField
               label="Företagsnamn"
               value={data.companyName}
-              onChange={(value) => setData({ ...data, companyName: value })}
+              onValueChange={(value) => updateField('companyName', value)}
               placeholder="T.ex. Exempel AB"
               required
             />
@@ -201,14 +206,14 @@ export default function ListingWizard() {
             <FormField
               label="Organisationsnummer"
               value={data.orgNumber}
-              onChange={(value) => setData({ ...data, orgNumber: value })}
+              onValueChange={(value) => updateField('orgNumber', value)}
               placeholder="T.ex. 559000-1234"
             />
 
             <FormSelectMinimal
               label="Bransch"
               value={data.industry}
-              onChange={(value) => setData({ ...data, industry: value })}
+              onChange={(e) => updateField('industry', e.target.value)}
               options={industries}
               required
             />
@@ -216,7 +221,7 @@ export default function ListingWizard() {
             <FormField
               label="Webbsida"
               value={data.website}
-              onChange={(value) => setData({ ...data, website: value })}
+              onValueChange={(value) => updateField('website', value)}
               placeholder="https://example.se"
               type="url"
             />
@@ -224,14 +229,14 @@ export default function ListingWizard() {
             <FormField
               label="Grundat år"
               value={data.foundedYear}
-              onChange={(value) => setData({ ...data, foundedYear: value })}
+              onValueChange={(value) => updateField('foundedYear', value)}
               type="number"
             />
 
             <FormField
               label="Huvudort"
               value={data.location}
-              onChange={(value) => setData({ ...data, location: value })}
+              onValueChange={(value) => updateField('location', value)}
               placeholder="T.ex. Stockholm"
               required
             />
@@ -239,7 +244,7 @@ export default function ListingWizard() {
             <FormField
               label="Region"
               value={data.region}
-              onChange={(value) => setData({ ...data, region: value })}
+              onValueChange={(value) => updateField('region', value)}
               placeholder="T.ex. Stockholm"
               required
             />
@@ -247,7 +252,7 @@ export default function ListingWizard() {
             <FormField
               label="Adress (visas endast efter godkänd NDA)"
               value={data.address}
-              onChange={(value) => setData({ ...data, address: value })}
+              onValueChange={(value) => updateField('address', value)}
               placeholder="Gata 123, 111 11 Stad"
             />
           </div>
@@ -267,7 +272,7 @@ export default function ListingWizard() {
             <FormField
               label="Årlig omsättning (SEK)"
               value={data.revenue}
-              onChange={(value) => setData({ ...data, revenue: value })}
+              onValueChange={(value) => updateField('revenue', value)}
               placeholder="T.ex. 5000000"
               type="number"
               required
@@ -276,7 +281,7 @@ export default function ListingWizard() {
             <FormSelectMinimal
               label="Omsättningsintervall"
               value={data.revenueRange}
-              onChange={(value) => setData({ ...data, revenueRange: value })}
+              onChange={(e) => updateField('revenueRange', e.target.value)}
               options={[
                 { value: '0-1', label: '0-1 MSEK' },
                 { value: '1-5', label: '1-5 MSEK' },
@@ -291,7 +296,7 @@ export default function ListingWizard() {
             <FormField
               label="EBITDA (SEK)"
               value={data.ebitda}
-              onChange={(value) => setData({ ...data, ebitda: value })}
+              onValueChange={(value) => updateField('ebitda', value)}
               placeholder="T.ex. 1000000"
               type="number"
             />
@@ -299,7 +304,7 @@ export default function ListingWizard() {
             <FormField
               label="Prisintervall - från (SEK)"
               value={data.priceMin}
-              onChange={(value) => setData({ ...data, priceMin: value })}
+              onValueChange={(value) => updateField('priceMin', value)}
               placeholder="T.ex. 2000000"
               type="number"
               required
@@ -308,7 +313,7 @@ export default function ListingWizard() {
             <FormField
               label="Prisintervall - till (SEK)"
               value={data.priceMax}
-              onChange={(value) => setData({ ...data, priceMax: value })}
+              onValueChange={(value) => updateField('priceMax', value)}
               placeholder="T.ex. 5000000"
               type="number"
               required
@@ -317,7 +322,7 @@ export default function ListingWizard() {
             <FormSelectMinimal
               label="Antal anställda"
               value={data.employees}
-              onChange={(value) => setData({ ...data, employees: value })}
+              onChange={(e) => updateField('employees', e.target.value)}
               options={[
                 { value: '1-5', label: '1-5 anställda' },
                 { value: '6-10', label: '6-10 anställda' },
@@ -355,7 +360,7 @@ export default function ListingWizard() {
             <FormField
               label="Kortbeskrivning av verksamheten"
               value={data.description}
-              onChange={(value) => setData({ ...data, description: value })}
+              onValueChange={(value) => updateField('description', value)}
               placeholder="Beskriv vad företaget gör, kundkrets, specialitet..."
               type="textarea"
               maxLength={500}
@@ -365,7 +370,7 @@ export default function ListingWizard() {
             <FormField
               label="Varför säljer du?"
               value={data.whySelling}
-              onChange={(value) => setData({ ...data, whySelling: value })}
+              onValueChange={(value) => updateField('whySelling', value)}
               placeholder="T.ex. Fokusera på annan verksamhet, pensionering..."
               type="textarea"
               maxLength={300}
@@ -378,7 +383,7 @@ export default function ListingWizard() {
                   key={idx}
                   placeholder={`Styrka ${idx + 1}`}
                   value={strength}
-                  onChange={(value) => {
+                  onValueChange={(value) => {
                     const newStrengths = [...data.strengths]
                     newStrengths[idx] = value
                     setData({ ...data, strengths: newStrengths })
@@ -394,7 +399,7 @@ export default function ListingWizard() {
                   key={idx}
                   placeholder={`Risk/utmaning ${idx + 1}`}
                   value={risk}
-                  onChange={(value) => {
+                  onValueChange={(value) => {
                     const newRisks = [...data.risks]
                     newRisks[idx] = value
                     setData({ ...data, risks: newRisks })
