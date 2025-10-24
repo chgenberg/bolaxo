@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Building, Eye, Shield, MessageSquare, Edit, Pause, Play, MoreVertical, TrendingUp, Calendar, Download, Bookmark, Trash2 } from 'lucide-react'
 import { mockObjects } from '@/data/mockObjects'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/contexts/ToastContext'
 
 type ListingStatus = 'active' | 'paused' | 'draft'
 type ListingPackage = 'pro' | 'pro_plus' | 'basic'
@@ -27,6 +28,7 @@ interface ListingRow {
 
 export default function ListingsPage() {
   const { user } = useAuth()
+  const { success, error: showError } = useToast()
   const [filter, setFilter] = useState('all')
   const [processing, setProcessing] = useState<string | null>(null)
   const [listings, setListings] = useState<ListingRow[]>([])
@@ -68,20 +70,22 @@ export default function ListingsPage() {
         if (action === 'delete') {
           // Remove from local state
           setListings(listings.filter(l => l.id !== listingId))
+          success('Annons borttagen')
         } else {
           // Update status in local state
           const newStatus = action === 'pause' ? 'paused' : 'active'
           setListings(listings.map(l => 
             l.id === listingId ? { ...l, status: newStatus } : l
           ))
+          success(action === 'pause' ? 'Annons pausad' : 'Annons aktiv igen')
         }
-        
-        // Show success message
-        alert(data.message || `Annons ${action === 'delete' ? 'borttagen' : action === 'pause' ? 'pausad' : 'aktiv igen'}`)
+      } else {
+        const data = await response.json()
+        showError(data.error || 'Något gick fel')
       }
     } catch (error) {
       console.error('Error:', error)
-      alert('Något gick fel')
+      showError('Kunde inte uppdatera annons. Försök igen senare.')
     } finally {
       setProcessing(null)
     }

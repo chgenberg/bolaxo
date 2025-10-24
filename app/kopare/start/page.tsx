@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/contexts/ToastContext'
 import { Building, MapPin, TrendingUp, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -35,6 +36,7 @@ const REGIONS = [
 export default function BuyerStartPage() {
   const router = useRouter()
   const { user } = useAuth()
+  const { success, error: showError } = useToast()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   
@@ -95,10 +97,15 @@ export default function BuyerStartPage() {
       })
 
       if (response.ok) {
-        router.push('/sok')
+        success('Profil skapad! Du omdirigeras till söksidan...')
+        setTimeout(() => router.push('/sok'), 1000)
+      } else {
+        const data = await response.json()
+        showError(data.error || 'Något gick fel')
       }
     } catch (error) {
       console.error('Error saving profile:', error)
+      showError('Kunde inte spara profil. Försök igen senare.')
     } finally {
       setLoading(false)
     }
