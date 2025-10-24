@@ -7,8 +7,8 @@ export default function SaljaInfoPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-accent-pink/10 to-accent-orange/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6">
-            Så säljer du ditt företag
+          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+            SÅ SÄLJER DU DITT FÖRETAG
           </h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
             Från värdering till affär avslutad. Vi automatiserar det komplicerade och ger dig full kontroll.
@@ -20,7 +20,7 @@ export default function SaljaInfoPage() {
 
         {/* Steps */}
         <div className="mb-32">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center">Processen i 5 steg</h2>
+          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">PROCESSEN I 5 STEG</h2>
           <div className="space-y-8">
             {[
               {
@@ -72,8 +72,8 @@ export default function SaljaInfoPage() {
 
         {/* Before/After NDA Comparison */}
         <div className="mb-32 bg-neutral-off-white rounded-lg p-8 sm:p-12">
-          <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center">
-            Före vs efter NDA
+          <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center uppercase">
+            FÖRE VS Efter NDA
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -81,7 +81,7 @@ export default function SaljaInfoPage() {
             <div>
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-4 h-4 bg-accent-orange rounded-full"></div>
-                <h3 className="text-2xl font-bold text-primary-navy">Före NDA</h3>
+                <h3 className="text-2xl font-bold text-primary-navy">FÖRE NDA</h3>
                 <span className="text-sm text-gray-600 font-medium">Publik info</span>
               </div>
               <ul className="space-y-4">
@@ -127,7 +127,7 @@ export default function SaljaInfoPage() {
 
         {/* Pricing Overview */}
         <div className="mb-32">
-          <h2 className="text-4xl font-bold text-accent-orange mb-6 text-center">Prisöversikt</h2>
+          <h2 className="text-4xl font-bold text-accent-orange mb-6 text-center uppercase">PRISÖVERSIKT</h2>
           <p className="text-center text-lg text-gray-700 mb-16 max-w-2xl mx-auto">
             Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.
           </p>
@@ -210,7 +210,7 @@ export default function SaljaInfoPage() {
 
         {/* FAQ */}
         <div className="mb-24">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center">Vanliga frågor</h2>
+          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">VANLIGA FRÅGOR</h2>
           
           <div className="space-y-8">
             {[

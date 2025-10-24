@@ -7,8 +7,8 @@ export default function KopareInfoPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6">
-            Så köper du ditt nästa företag
+          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+            SÅ KÖPER DU DITT NÄSTA FÖRETAG
           </h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
             Smarta matchningar, inte gissningar. Från första möte till signerad affär på en plats.
@@ -20,7 +20,7 @@ export default function KopareInfoPage() {
 
         {/* Process Steps */}
         <div className="mb-32">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center">Processen i 7 steg</h2>
+          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">PROCESSEN I 7 STEG</h2>
           <div className="space-y-8">
             {[
               {
@@ -84,7 +84,7 @@ export default function KopareInfoPage() {
 
         {/* Benefits */}
         <div className="mb-32 bg-neutral-off-white rounded-lg p-8 sm:p-12">
-          <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center">
+          <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center uppercase">
             Varför välja oss?
           </h2>
           
@@ -110,7 +110,7 @@ export default function KopareInfoPage() {
 
         {/* Trust & Safety */}
         <div className="mb-32 border-l-4 border-accent-orange bg-accent-orange/5 rounded-r-lg p-8 sm:p-12">
-          <h2 className="text-3xl font-bold text-accent-orange mb-8">
+          <h2 className="text-3xl font-bold text-accent-orange mb-8 uppercase">
             Säkerhet & sekretess
           </h2>
           <ul className="space-y-4 text-gray-700">
@@ -143,7 +143,7 @@ export default function KopareInfoPage() {
 
         {/* FAQ */}
         <div className="mb-24">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center">Vanliga frågor</h2>
+          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">Vanliga frågor</h2>
           
           <div className="space-y-8">
             {[
@@ -182,7 +182,7 @@ export default function KopareInfoPage() {
 
         {/* CTA */}
         <div className="bg-accent-pink rounded-lg p-12 text-center">
-          <h2 className="text-3xl font-bold text-primary-navy mb-6">Redo att köpa?</h2>
+          <h2 className="text-3xl font-bold text-primary-navy mb-6 uppercase">Redo att köpa?</h2>
           <p className="text-lg text-primary-navy mb-8 max-w-2xl mx-auto">
             Börja med att skapa en profil och sätt dina preferenser. Du får smarta matchningar direkt baserat på vad du söker.
           </p>
