@@ -84,16 +84,16 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-background-off-white border-b border-gray-100">
       <div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-28 md:h-32">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-20 md:h-24 lg:h-28">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center flex-shrink-0">
               <Image 
                 src="/BOLAXO_logo.png" 
                 alt="BOLAXO" 
                 width={120} 
                 height={36}
-                className="h-8 md:h-9 w-auto"
+                className="h-6 sm:h-7 md:h-8 lg:h-9 w-auto"
                 style={{ width: 'auto', height: 'auto' }}
                 priority
               />
@@ -109,11 +109,11 @@ export default function Header() {
                   onMouseLeave={handleMouseLeave}
                 >
                   {item.href ? (
-                    <Link href={item.href} className="nav-link px-4 py-2 flex items-center">
+                    <Link href={item.href} className="nav-link px-4 py-2 flex items-center text-sm">
                       {item.label}
                     </Link>
                   ) : (
-                    <button className="nav-link px-4 py-2 flex items-center group">
+                    <button className="nav-link px-4 py-2 flex items-center group text-sm">
                       {item.label}
                       {item.dropdown && (
                         <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
@@ -135,9 +135,9 @@ export default function Header() {
                           className="dropdown-item"
                           onClick={() => setActiveDropdown(null)}
                         >
-                          <div className="font-medium">{dropdownItem.label}</div>
+                          <div className="font-medium text-sm">{dropdownItem.label}</div>
                           {dropdownItem.description && (
-                            <div className="text-sm text-text-gray mt-0.5">
+                            <div className="text-xs text-text-gray mt-0.5">
                               {dropdownItem.description}
                             </div>
                           )}
@@ -153,8 +153,8 @@ export default function Header() {
             <div className="hidden lg:flex items-center space-x-3">
               {user ? (
                 <>
-                  <Link href="/dashboard" className="btn-ghost flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-primary-blue text-white flex items-center justify-center text-xs font-semibold mr-2">
+                  <Link href="/dashboard" className="btn-ghost flex items-center text-sm">
+                    <div className="w-7 h-7 rounded-full bg-primary-blue text-white flex items-center justify-center text-xs font-semibold mr-1.5">
                       {user.name 
                         ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
                         : user.email.slice(0, 2).toUpperCase()
@@ -163,22 +163,22 @@ export default function Header() {
                     Min sida
                   </Link>
                   <NotificationCenter />
-                  <button onClick={logout} className="btn-secondary flex items-center">
+                  <button onClick={logout} className="btn-secondary flex items-center text-sm">
                     <LogOut className="w-4 h-4 mr-2" />
                     Logga ut
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="btn-secondary">
+                  <Link href="/login" className="btn-secondary text-sm">
                     Logga in
                   </Link>
-                  <Link href="/login" className="btn-secondary">
+                  <Link href="/login" className="btn-secondary text-sm">
                     Skapa konto
                   </Link>
                 </>
               )}
-              <Link href="/salja/start" className="btn-primary">
+              <Link href="/salja/start" className="btn-primary text-sm">
                 Sälj företag
               </Link>
             </div>
@@ -186,12 +186,12 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-button hover:bg-light-blue/20 transition-colors"
+              className="lg:hidden p-1.5 sm:p-2 rounded-button hover:bg-light-blue/20 transition-colors"
             >
               {mobileMenuOpen ? (
-                <X className="h-6 w-6 text-text-dark" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6 text-text-dark" />
               ) : (
-                <Menu className="h-6 w-6 text-text-dark" />
+                <Menu className="h-5 w-5 sm:h-6 sm:w-6 text-text-dark" />
               )}
             </button>
           </div>
@@ -200,30 +200,30 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-background-off-white border-b border-gray-100 shadow-dropdown animate-slide-down">
-          <div className="px-4 py-6 space-y-4">
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-background-off-white border-b border-gray-100 shadow-dropdown animate-slide-down max-h-[calc(100vh-64px)] overflow-y-auto">
+          <div className="px-3 sm:px-4 py-3 sm:py-4 space-y-2 sm:space-y-3">
             {navigation.map((item) => (
               <div key={item.label}>
                 {item.href ? (
                   <Link
                     href={item.href}
-                    className="block py-2 text-text-dark font-medium"
+                    className="block py-2 text-xs sm:text-sm text-text-dark font-medium"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.label}
                   </Link>
                 ) : (
                   <>
-                    <div className="py-2 text-text-dark font-medium">
+                    <div className="py-2 text-xs sm:text-sm text-text-dark font-medium">
                       {item.label}
                     </div>
                     {item.dropdown && (
-                      <div className="ml-4 mt-2 space-y-2">
+                      <div className="ml-3 mt-1 space-y-1">
                         {item.dropdown.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.href}
                             href={dropdownItem.href}
-                            className="block py-2 text-text-gray"
+                            className="block py-1.5 text-xs sm:text-sm text-text-gray"
                             onClick={() => setMobileMenuOpen(false)}
                           >
                             {dropdownItem.label}
@@ -236,15 +236,15 @@ export default function Header() {
               </div>
             ))}
             
-            <div className="pt-4 border-t border-gray-100 space-y-3">
+            <div className="pt-2 sm:pt-3 border-t border-gray-100 space-y-2">
               {user ? (
                 <>
                   <Link 
                     href="/dashboard" 
-                    className="flex items-center justify-center btn-ghost"
+                    className="flex items-center justify-center btn-ghost text-xs sm:text-sm"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <div className="w-8 h-8 rounded-full bg-primary-blue text-white flex items-center justify-center text-xs font-semibold mr-2">
+                    <div className="w-6 h-6 rounded-full bg-primary-blue text-white flex items-center justify-center text-xs font-semibold mr-1">
                       {user.name 
                         ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
                         : user.email.slice(0, 2).toUpperCase()
@@ -255,7 +255,7 @@ export default function Header() {
                   <NotificationCenter />
                   <button 
                     onClick={() => { logout(); setMobileMenuOpen(false); }}
-                    className="w-full btn-secondary text-center"
+                    className="w-full btn-secondary text-center text-xs sm:text-sm"
                   >
                     Logga ut
                   </button>
@@ -264,14 +264,14 @@ export default function Header() {
                 <>
                   <Link 
                     href="/login" 
-                    className="block btn-secondary text-center"
+                    className="block btn-secondary text-center text-xs sm:text-sm"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Logga in
                   </Link>
                   <Link 
                     href="/login" 
-                    className="block btn-secondary text-center"
+                    className="block btn-secondary text-center text-xs sm:text-sm"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Skapa konto
@@ -280,7 +280,7 @@ export default function Header() {
               )}
               <Link 
                 href="/salja/start" 
-                className="block btn-primary text-center"
+                className="block btn-primary text-center text-xs sm:text-sm"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Sälj företag
