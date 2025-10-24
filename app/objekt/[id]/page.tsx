@@ -2,480 +2,385 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
+import { Building, MapPin, Users, TrendingUp, Lock, CheckCircle, Clock, Mail, MessageSquare, Share2, Heart } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowLeft, MapPin, TrendingUp, Users, Eye, Bookmark, Shield, AlertCircle, Calendar, FileText, BarChart, CheckCircle } from 'lucide-react'
-import { mockObjects } from '@/data/mockObjects'
-import { useBuyerStore } from '@/stores/buyerStore'
-import InfoPopup from '@/components/InfoPopup'
 
-export default function ObjectDetailPage() {
+interface ListingDetail {
+  id: string
+  companyName: string
+  anonymousTitle: string
+  industry: string
+  location: string
+  region: string
+  address?: string
+  website?: string
+  description: string
+  revenue: number
+  revenueRange: string
+  ebitda?: number
+  employees: number
+  priceMin: number
+  priceMax: number
+  strengths: string[]
+  risks: string[]
+  whySelling?: string
+  image?: string
+  views: number
+  verified: boolean
+  userId: string
+}
+
+interface NDAStatus {
+  status: 'none' | 'pending' | 'approved' | 'rejected'
+  requestId?: string
+  approvedAt?: string
+}
+
+export default function ListingDetailPage() {
+  const { user } = useAuth()
   const params = useParams()
-  const objectId = params.id as string
-  const [object, setObject] = useState<any>(null)
+  const listingId = params.id as string
+  
+  const [listing, setListing] = useState<ListingDetail | null>(null)
+  const [ndaStatus, setNdaStatus] = useState<NDAStatus>({ status: 'none' })
   const [loading, setLoading] = useState(true)
-  
-  const [activeTab, setActiveTab] = useState('overview')
-  const { savedObjects, toggleSaved, hasNDA } = useBuyerStore()
-  const isSaved = savedObjects.includes(objectId)
-  
+  const [requesting, setRequesting] = useState(false)
+
+  // Fetch listing details
   useEffect(() => {
-    const fetchObject = async () => {
+    const fetchListing = async () => {
       try {
-        // Try DB first
-        const response = await fetch(`/api/listings/${objectId}`)
+        const response = await fetch(`/api/listings/${listingId}`)
         if (response.ok) {
-          const listing = await response.json()
-          setObject(listing)
-        } else {
-          // Fallback to mock
-          const mockObj = mockObjects.find(obj => obj.id === objectId)
-          setObject(mockObj || null)
+          const data = await response.json()
+          setListing(data)
         }
       } catch (error) {
-        console.error('Error fetching object:', error)
-        // Fallback to mock
-        const mockObj = mockObjects.find(obj => obj.id === objectId)
-        setObject(mockObj || null)
+        console.error('Error fetching listing:', error)
+      }
+    }
+
+    fetchListing()
+  }, [listingId])
+
+  // Check NDA status if user is logged in
+  useEffect(() => {
+    if (!user || !listing) return
+
+    const checkNDAStatus = async () => {
+      try {
+        const response = await fetch(`/api/nda-requests?listingId=${listingId}&buyerId=${user.id}`)
+        if (response.ok) {
+          const data = await response.json()
+          if (data.ndaRequests && data.ndaRequests.length > 0) {
+            const latest = data.ndaRequests[0]
+            setNdaStatus({
+              status: latest.status as any,
+              requestId: latest.id,
+              approvedAt: latest.approvedAt
+            })
+          }
+        }
+      } catch (error) {
+        console.error('Error checking NDA status:', error)
       } finally {
         setLoading(false)
       }
     }
-    
-    fetchObject()
-  }, [objectId])
-  
+
+    checkNDAStatus()
+  }, [user, listing, listingId])
+
+  const handleRequestNDA = async () => {
+    if (!user || !listing) return
+
+    setRequesting(true)
+    try {
+      const response = await fetch('/api/nda-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listingId,
+          buyerId: user.id,
+          sellerId: listing.userId,
+          message: `Jag är intresserad av denna möjlighet och öppet för att signa NDA.`
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setNdaStatus({
+          status: 'pending',
+          requestId: data.nDARequest.id
+        })
+      }
+    } catch (error) {
+      console.error('Error requesting NDA:', error)
+    } finally {
+      setRequesting(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-900 rounded-full animate-spin" />
       </div>
     )
   }
-  
-  if (!object) {
+
+  if (!listing) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-text-dark mb-2">Objekt hittades inte</h1>
-          <Link href="/sok" className="text-primary-blue hover:underline">
-            Tillbaka till sök
-          </Link>
+          <p className="text-gray-600">Annonsen hittades inte</p>
         </div>
       </div>
     )
   }
 
-  const tabs = [
-    { id: 'overview', label: 'Översikt', icon: FileText },
-    { id: 'economics', label: 'Ekonomi', icon: BarChart },
-    { id: 'strengths', label: 'Styrkor & Risker', icon: CheckCircle }
-  ]
-
-  const calculateEBITDARange = () => {
-    const margin = 0.15 // Assume 15% EBITDA margin
-    const minRevenue = parseInt(object.revenueRange.split('-')[0])
-    const maxRevenue = parseInt(object.revenueRange.split('-')[1])
-    return `${(minRevenue * margin).toFixed(0)}-${(maxRevenue * margin).toFixed(0)} MSEK`
-  }
+  const isOwner = user?.id === listing.userId
+  const isNDAApproved = ndaStatus.status === 'approved'
+  const canSeeDetails = isOwner || isNDAApproved
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* Navigation */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <Link 
-              href="/sok" 
-              className="inline-flex items-center text-text-gray hover:text-text-dark transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Tillbaka till sök
-            </Link>
-            <button
-              onClick={() => toggleSaved(objectId)}
-              className={`inline-flex items-center px-4 py-2 rounded-full font-medium transition-all ${
-                isSaved
-                  ? 'bg-primary-blue text-white'
-                  : 'bg-gray-100 text-text-dark hover:bg-gray-200'
-              }`}
-            >
-              <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
-              {isSaved ? 'Sparad' : 'Spara'}
-            </button>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header Image */}
+      <div className="h-96 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center relative">
+        {listing.image ? (
+          <img src={listing.image} alt={listing.anonymousTitle} className="w-full h-full object-cover" />
+        ) : (
+          <Building className="w-20 h-20 text-gray-400" />
+        )}
+        
+        {/* Overlay Actions */}
+        <div className="absolute top-4 right-4 flex gap-2">
+          <button className="bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <Heart className="w-5 h-5 text-gray-600" />
+          </button>
+          <button className="bg-white p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <Share2 className="w-5 h-5 text-gray-600" />
+          </button>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Main Content with Image and Info Side by Side */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
-          <div className="flex flex-col lg:flex-row">
-            {/* Image Section */}
-            <div className="lg:w-2/5 bg-white">
-              {object.image ? (
-                <div className="relative w-full h-96 lg:h-full min-h-[500px] p-8">
-                  {/* Organic shadow shape */}
-                  <div 
-                    className="absolute inset-8 bg-gray-800/20 blur-xl animate-pulse"
-                    style={{
-                      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-                      transform: 'rotate(-8deg)'
-                    }}
-                  />
-                  {/* Image with organic border */}
-                  <div 
-                    className="relative w-full h-full overflow-hidden"
-                    style={{
-                      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-                      transform: 'rotate(-8deg)'
-                    }}
-                  >
-                    <Image
-                      src={object.image}
-                      alt={object.anonymousTitle}
-                      fill
-                      className="object-cover"
-                      style={{ transform: 'rotate(8deg) scale(1.2)' }}
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                      priority
-                    />
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Title & Price */}
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">{listing.anonymousTitle}</h1>
+              <div className="flex items-center gap-2 text-gray-600 mb-4">
+                <MapPin className="w-5 h-5" />
+                <span>{listing.location}</span>
+              </div>
+              <div className="text-3xl font-bold text-blue-900">
+                {(listing.priceMin / 1_000_000).toFixed(1)}-{(listing.priceMax / 1_000_000).toFixed(1)} MSEK
+              </div>
+            </div>
+
+            {/* Key Metrics */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <div className="text-sm text-gray-600 mb-1">Omsättning</div>
+                <div className="text-2xl font-bold text-gray-900">{listing.revenueRange}</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <div className="text-sm text-gray-600 mb-1">Anställda</div>
+                <div className="text-2xl font-bold text-gray-900">{listing.employees}</div>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <div className="text-sm text-gray-600 mb-1">Visningar</div>
+                <div className="text-2xl font-bold text-gray-900">{listing.views}</div>
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Om företaget</h2>
+              <p className="text-gray-700 leading-relaxed">{listing.description}</p>
+            </div>
+
+            {/* Strengths & Risks */}
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Styrkor</h3>
+                <ul className="space-y-2">
+                  {listing.strengths.map((strength, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      {strength}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Risker/Utmaningar</h3>
+                <ul className="space-y-2">
+                  {listing.risks.map((risk, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700">
+                      <span className="text-lg text-gray-400">•</span>
+                      {risk}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Locked Info */}
+            {!canSeeDetails && (
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
+                <div className="flex gap-3">
+                  <Lock className="w-6 h-6 text-blue-900 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-blue-900 mb-1">Information låst</h3>
+                    <p className="text-sm text-blue-800">
+                      För att se företagsnamn, adress och mer detaljer behöver du godkänna NDA.
+                    </p>
                   </div>
                 </div>
-              ) : (
-                <div className="w-full h-96 lg:h-full min-h-[500px] flex items-center justify-center">
-                  <div 
-                    className="w-48 h-48 flex items-center justify-center bg-gray-200 text-6xl font-bold text-gray-400"
-                    style={{
-                      borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
-                    }}
-                  >
-                    {object.type.charAt(0)}
+              </div>
+            )}
+
+            {/* Revealed Info */}
+            {canSeeDetails && (
+              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 space-y-4">
+                <div className="flex gap-3 items-start">
+                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-green-900">NDA godkänd</h3>
+                    <p className="text-sm text-green-800 mt-1">Du har tillgång till all information</p>
                   </div>
+                </div>
+
+                <div className="pt-4 border-t border-green-200 space-y-3">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Företagsnamn</p>
+                    <p className="text-lg font-bold text-gray-900">{listing.companyName}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Adress</p>
+                    <p className="text-gray-900">{listing.address || 'Ej angivet'}</p>
+                  </div>
+                  {listing.website && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Webbsida</p>
+                      <a href={listing.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                        {listing.website}
+                      </a>
+                    </div>
+                  )}
+                  {listing.whySelling && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Varför säljer de?</p>
+                      <p className="text-gray-900">{listing.whySelling}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar - CTA & NDA Status */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 space-y-4">
+              {/* NDA Status Card */}
+              {user && !isOwner && (
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                  {ndaStatus.status === 'none' && (
+                    <>
+                      <h3 className="font-bold text-gray-900 mb-3">Intresserad?</h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        För att se företagsdetaljer och chatta direkt, godkänn NDA.
+                      </p>
+                      <button
+                        onClick={handleRequestNDA}
+                        disabled={requesting}
+                        className="w-full px-4 py-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                      >
+                        {requesting ? 'Skickar...' : 'Begär NDA'}
+                      </button>
+                    </>
+                  )}
+
+                  {ndaStatus.status === 'pending' && (
+                    <>
+                      <div className="flex items-center gap-2 mb-3">
+                        <Clock className="w-5 h-5 text-yellow-600" />
+                        <h3 className="font-bold text-gray-900">Väntar på svar</h3>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        Din NDA-förfrågan har skickats till säljaren. Du får ett meddelande när den är godkänd.
+                      </p>
+                    </>
+                  )}
+
+                  {ndaStatus.status === 'approved' && (
+                    <>
+                      <div className="flex items-center gap-2 mb-3">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <h3 className="font-bold text-gray-900">NDA godkänd!</h3>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Du kan nu se all information och chatta med säljaren.
+                      </p>
+                      <Link
+                        href={`/dashboard/messages?listingId=${listingId}&peerId=${listing.userId}`}
+                        className="w-full px-4 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        Öppna chat
+                      </Link>
+                    </>
+                  )}
+
+                  {ndaStatus.status === 'rejected' && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <p className="text-sm text-red-800">
+                        Din NDA-förfrågan avvisades av säljaren.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Owner View */}
+              {isOwner && (
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                  <h3 className="font-bold text-gray-900 mb-3">Din annons</h3>
+                  <p className="text-sm text-gray-600 mb-4">{listing.views} visningar hittills</p>
+                  <Link
+                    href="/dashboard/matches"
+                    className="w-full px-4 py-2 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors text-center"
+                  >
+                    Se matchade köpare
+                  </Link>
+                </div>
+              )}
+
+              {/* Login CTA */}
+              {!user && (
+                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                  <h3 className="font-bold text-gray-900 mb-3">Intresserad?</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Logga in för att begära NDA och chatta med säljaren.
+                  </p>
+                  <Link
+                    href="/login"
+                    className="w-full px-4 py-3 bg-blue-900 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors text-center"
+                  >
+                    Logga in
+                  </Link>
                 </div>
               )}
             </div>
-
-            {/* Info Section */}
-            <div className="lg:w-3/5 p-6 md:p-8">
-              {/* Badges */}
-              <div className="flex flex-wrap gap-2 mb-4">
-                {object.isNew && (
-                  <span className="bg-primary-blue text-white text-xs font-semibold px-3 py-1.5 rounded-full">
-                    Ny
-                  </span>
-                )}
-                {object.verified && (
-                  <span className="bg-success text-white text-xs font-semibold px-3 py-1.5 rounded-full">
-                    ✓ Verifierad
-                  </span>
-                )}
-                {object.broker && (
-                  <span className="bg-light-blue text-primary-blue text-xs font-semibold px-3 py-1.5 rounded-full">
-                    Mäklare
-                  </span>
-                )}
-                <span className="bg-gray-100 text-text-dark text-xs font-semibold px-3 py-1.5 rounded-full">
-                  {object.category || object.type}
-                </span>
-              </div>
-              
-              {/* Title and Location */}
-              <h1 className="text-3xl md:text-4xl font-bold text-text-dark mb-3">
-                {hasNDA(objectId) && !object.anonymousTitle ? object.companyName : object.anonymousTitle}
-              </h1>
-              
-              <div className="flex items-center text-text-gray mb-6">
-                <MapPin className="w-5 h-5 mr-2" />
-                <span className="text-lg">
-                  {hasNDA(objectId) && object.address ? object.address : `${object.type} • ${object.region}`}
-                </span>
-              </div>
-
-              {/* Key Metrics Grid */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center text-text-gray mb-2">
-                    <TrendingUp className="w-4 h-4 mr-1.5" />
-                    <span className="text-sm">Omsättning</span>
-                  </div>
-                  <div className="text-xl font-bold text-text-dark">{object.revenueRange}</div>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center text-text-gray mb-2">
-                    <Users className="w-4 h-4 mr-1.5" />
-                    <span className="text-sm">Anställda</span>
-                  </div>
-                  <div className="text-xl font-bold text-text-dark">{object.employees}</div>
-                </div>
-                <div className="bg-primary-blue/10 rounded-xl p-4">
-                  <div className="text-text-gray text-sm mb-2">Prisidé</div>
-                  <div className="text-xl font-bold text-primary-blue">
-                    {(object.priceMin / 1000000).toFixed(1)}-{(object.priceMax / 1000000).toFixed(1)} MSEK
-                  </div>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center text-text-gray mb-2">
-                    <Eye className="w-4 h-4 mr-1.5" />
-                    <span className="text-sm">Visningar</span>
-                  </div>
-                  <div className="text-xl font-bold text-text-dark">{object.views}</div>
-                </div>
-              </div>
-              
-              {/* Description */}
-              <div className="prose prose-gray max-w-none">
-                <p className="text-text-gray leading-relaxed">
-                  {object.description}
-                </p>
-              </div>
-
-              {/* Created Date */}
-              <div className="mt-6 flex items-center text-sm text-text-gray">
-                <Calendar className="w-4 h-4 mr-1.5" />
-                <span>Publicerad {new Date(object.createdAt).toLocaleDateString('sv-SE')}</span>
-              </div>
-            </div>
           </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Tab Navigation */}
-          <div className="border-b border-gray-200">
-            <nav className="flex -mb-px">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 border-b-2 font-medium text-sm transition-colors ${
-                    activeTab === tab.id
-                      ? 'border-primary-blue text-primary-blue'
-                      : 'border-transparent text-text-gray hover:text-text-dark hover:border-gray-300'
-                  }`}
-                >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-
-          {/* Tab Content */}
-          <div className="p-6 md:p-8">
-            {activeTab === 'overview' && (
-              <div className="space-y-8">
-                {/* Company Info */}
-                <section>
-                  <h2 className="text-2xl font-bold text-text-dark mb-4">Om företaget</h2>
-                  <div className="prose prose-gray max-w-none">
-                    <p className="text-text-gray leading-relaxed mb-4">
-                      {object.description}
-                    </p>
-                    <p className="text-text-gray leading-relaxed">
-                      Företaget har varit verksamt i över {Math.floor(Math.random() * 10 + 5)} år och har byggt upp en stark position på marknaden. Verksamheten drivs med fokus på kvalitet och kundnöjdhet, med en etablerad kundbas och goda relationer med leverantörer.
-                    </p>
-                    <p className="text-text-gray leading-relaxed">
-                      Det finns goda möjligheter för tillväxt genom expansion till närliggande marknader eller genom att bredda tjänsteutbudet.
-                    </p>
-                  </div>
-                </section>
-
-                {/* Key Facts */}
-                <section>
-                  <h2 className="text-2xl font-bold text-text-dark mb-4">Nyckeltal</h2>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Bransch</span>
-                        <span className="text-text-dark font-medium">{object.category || object.type}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Etablerat</span>
-                        <span className="text-text-dark font-medium">{2024 - Math.floor(Math.random() * 10 + 5)}</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Antal kunder</span>
-                        <span className="text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)}+</span>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Tillväxt (YoY)</span>
-                        <span className="text-text-dark font-medium text-success">+{Math.floor(Math.random() * 20 + 5)}%</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Lokalyta</span>
-                        <span className="text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)} kvm</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Hyresavtal</span>
-                        <span className="text-text-dark font-medium">{Math.floor(Math.random() * 5 + 2)} år kvar</span>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              </div>
-            )}
-
-            {activeTab === 'economics' && (
-              <div className="space-y-6">
-                {!hasNDA(objectId) ? (
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
-                    <div className="flex items-start space-x-3">
-                      <Shield className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold text-amber-900">Vissa uppgifter är låsta</h3>
-                          <InfoPopup
-                            title="Varför är vissa uppgifter låsta?"
-                            content="För att få tillgång till detaljerad finansiell information behöver du signera ett NDA (sekretessavtal). Detta skyddar säljarens känsliga affärsinformation och säkerställer att endast seriösa köpare får tillgång. Efter att du signerat NDA:n kommer säljaren att granska din ansökan och om den godkänns får du full tillgång till all information."
-                          />
-                        </div>
-                        <p className="text-amber-800 mb-4">
-                          Signera NDA för att se detaljerad finansiell information
-                        </p>
-                        <Link
-                          href={`/nda/${objectId}`}
-                          className="inline-flex items-center px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
-                        >
-                          <Shield className="w-4 h-4 mr-2" />
-                          Signera NDA
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
-
-                {/* Financial Overview - Always visible but with ranges */}
-                <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Finansiell översikt</h3>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-gray-50 rounded-xl p-6">
-                      <h4 className="text-text-gray text-sm mb-2">Omsättning</h4>
-                      <p className="text-2xl font-bold text-text-dark mb-1">{object.revenueRange}</p>
-                      <p className="text-sm text-text-gray">Senaste 12 månaderna</p>
-                    </div>
-                    <div className="bg-gray-50 rounded-xl p-6">
-                      <h4 className="text-text-gray text-sm mb-2">EBITDA (uppskattad)</h4>
-                      <p className="text-2xl font-bold text-text-dark mb-1">{calculateEBITDARange()}</p>
-                      <p className="text-sm text-text-gray">Baserat på branschsnitt</p>
-                    </div>
-                  </div>
-                </section>
-
-                {hasNDA(objectId) && (
-                  <>
-                    <section>
-                      <h3 className="text-xl font-semibold text-text-dark mb-4">Resultaträkning (3 år)</h3>
-                      <div className="overflow-x-auto">
-                        <table className="w-full border-collapse">
-                          <thead>
-                            <tr className="border-b border-gray-200">
-                              <th className="text-left py-3 px-4 text-text-gray font-medium">Post</th>
-                              <th className="text-right py-3 px-4 text-text-gray font-medium">2023</th>
-                              <th className="text-right py-3 px-4 text-text-gray font-medium">2022</th>
-                              <th className="text-right py-3 px-4 text-text-gray font-medium">2021</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-gray-100">
-                              <td className="py-3 px-4 text-text-dark">Omsättning</td>
-                              <td className="text-right py-3 px-4 font-medium">{object.revenue / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.95) / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.88) / 1000000} MSEK</td>
-                            </tr>
-                            <tr className="border-b border-gray-100">
-                              <td className="py-3 px-4 text-text-dark">EBITDA</td>
-                              <td className="text-right py-3 px-4 font-medium text-success">{(object.revenue * 0.15) / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.14) / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.13) / 1000000} MSEK</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'strengths' && (
-              <div className="space-y-6">
-                <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Styrkor</h3>
-                  <ul className="space-y-3">
-                    {[
-                      'Etablerat varumärke på lokal marknad',
-                      'Lojal och återkommande kundbas',
-                      'Erfaren och driven personalstyrka',
-                      'Moderna lokaler med bra läge',
-                      'Starka kassaflöden och god lönsamhet'
-                    ].map((strength, index) => (
-                      <li key={index} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5 mr-3" />
-                        <span className="text-text-gray">{strength}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-
-                <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Utvecklingsmöjligheter</h3>
-                  <ul className="space-y-3">
-                    {[
-                      'Expansion till närliggande geografiska marknader',
-                      'Digitalisering av försäljningskanaler',
-                      'Utökning av produkt/tjänsteutbud',
-                      'Strategiska partnerskap och samarbeten'
-                    ].map((opportunity, index) => (
-                      <li key={index} className="flex items-start">
-                        <TrendingUp className="w-5 h-5 text-primary-blue flex-shrink-0 mt-0.5 mr-3" />
-                        <span className="text-text-gray">{opportunity}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-
-                <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Att beakta</h3>
-                  <ul className="space-y-3">
-                    {[
-                      'Behov av fortsatt marknadsföringssatsningar',
-                      'Beroende av nyckelpersoner i organisationen',
-                      'Konkurrenssituation på lokal marknad'
-                    ].map((risk, index) => (
-                      <li key={index} className="flex items-start">
-                        <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5 mr-3" />
-                        <span className="text-text-gray">{risk}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="mt-8 bg-primary-blue rounded-2xl p-8 text-center text-white">
-          <h2 className="text-2xl font-bold mb-3">Intresserad av detta företag?</h2>
-          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            {hasNDA(objectId) 
-              ? 'Du har redan signerat NDA för detta objekt. Kontakta säljaren för mer information.'
-              : 'Signera NDA för att få tillgång till all information och komma i kontakt med säljaren.'}
-          </p>
-          {!hasNDA(objectId) && (
-            <Link
-              href={`/nda/${objectId}`}
-              className="inline-flex items-center px-6 py-3 bg-white text-primary-blue rounded-xl font-semibold hover:bg-gray-100 transition-colors"
-            >
-              <Shield className="w-5 h-5 mr-2" />
-              Signera NDA och fortsätt
-            </Link>
-          )}
         </div>
       </div>
-    </main>
+    </div>
   )
 }
