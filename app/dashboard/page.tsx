@@ -15,7 +15,7 @@ export default function DashboardPage() {
     // Redirect based on user type
     const checkUserProfile = async () => {
       try {
-        // Check if buyer has profile
+        // Buyers: check if they have profile
         if (user.role === 'buyer') {
           const response = await fetch(`/api/buyer-profile?userId=${user.id}`)
           if (!response.ok) {
@@ -23,9 +23,16 @@ export default function DashboardPage() {
             router.push('/kopare/start')
           }
         }
-        // Sellers go to their listings
+        // Sellers: check if they have listings
         else if (user.role === 'seller') {
-          router.push('/dashboard/listings')
+          const response = await fetch(`/api/listings?userId=${user.id}`)
+          if (!response.ok || response.status === 204) {
+            // No listings exist, show onboarding
+            router.push('/salja/onboarding')
+          } else {
+            // Has listings, go to dashboard
+            router.push('/dashboard/listings')
+          }
         }
       } catch (error) {
         console.error('Error checking profile:', error)
