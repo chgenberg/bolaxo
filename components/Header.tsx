@@ -85,15 +85,15 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-[#fdfbf9] border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main header content */}
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div className="flex items-center justify-between h-24 sm:h-28 lg:h-32">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <Image
               src="/BOLAXO_logo.png"
               alt="BOLAXO"
-              width={180}
-              height={52}
-              className="h-12 sm:h-14 lg:h-16 w-auto"
+              width={220}
+              height={64}
+              className="h-16 sm:h-20 lg:h-24 w-auto"
               priority
             />
           </Link>
