@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import Link from 'next/link'
-import { ArrowLeft, Lock, Shield, Upload, FileText, Trash2, Eye, EyeOff, AlertTriangle, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Lock, Shield, Upload, FileText, Trash2, Eye, EyeOff, AlertTriangle, CheckCircle, Loader } from 'lucide-react'
 
 interface UploadedDocument {
   id: string
@@ -15,7 +15,7 @@ interface UploadedDocument {
   uploadedBy: string
   type: string
   encrypted: boolean
-  accessLog: Array<{ user: string; timestamp: string; action: string }>
+  status: string
 }
 
 export default function SecretRoomPage() {
@@ -26,22 +26,29 @@ export default function SecretRoomPage() {
   
   const [uploading, setUploading] = useState(false)
   const [showAccessLog, setShowAccessLog] = useState(false)
-  const [documents, setDocuments] = useState<UploadedDocument[]>([
-    // Mock data for demo
-    {
-      id: '1',
-      name: 'Finansiella rapporter 2024.pdf',
-      size: 2.5,
-      uploadedAt: new Date().toISOString(),
-      uploadedBy: user?.email || 'Okänd',
-      type: 'FINANCIALS',
-      encrypted: true,
-      accessLog: [
-        { user: 'user@example.com', timestamp: new Date().toISOString(), action: 'uploaded' },
-        { user: 'advisor@bolaxo.se', timestamp: new Date().toISOString(), action: 'viewed' }
-      ]
+  const [documents, setDocuments] = useState<UploadedDocument[]>([])
+  const [loadingDocs, setLoadingDocs] = useState(true)
+
+  // Fetch documents from database
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await fetch(`/api/transactions/${params.id}/documents`)
+        if (response.ok) {
+          const data = await response.json()
+          setDocuments(data.documents || [])
+        }
+      } catch (error) {
+        console.error('Error fetching documents:', error)
+      } finally {
+        setLoadingDocs(false)
+      }
     }
-  ])
+
+    if (params.id) {
+      fetchDocuments()
+    }
+  }, [params.id])
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -50,35 +57,54 @@ export default function SecretRoomPage() {
     setUploading(true)
     try {
       for (const file of files) {
-        // Simulated upload - in production would use multipart/form-data
-        const newDoc: UploadedDocument = {
-          id: Math.random().toString(36).substr(2, 9),
-          name: file.name,
-          size: file.size / 1024 / 1024, // MB
-          uploadedAt: new Date().toISOString(),
-          uploadedBy: user?.email || 'Okänd',
-          type: 'DOCUMENT',
-          encrypted: true,
-          accessLog: [
-            { user: user?.email || 'Okänd', timestamp: new Date().toISOString(), action: 'uploaded' }
-          ]
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('title', file.name)
+        formData.append('type', 'DOCUMENT')
+
+        const uploadResponse = await fetch(`/api/transactions/${params.id}/documents`, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Upload-User': user?.email || 'unknown'
+          }
+        })
+
+        if (uploadResponse.ok) {
+          const newDoc = await uploadResponse.json()
+          setDocuments(prev => [newDoc.document, ...prev])
+          success(`${file.name} uppladdat och krypterat`)
+        } else {
+          const err = await uploadResponse.json()
+          showError(err.error || 'Kunde inte ladda upp fil')
         }
-        setDocuments(prev => [newDoc, ...prev])
-        success(`${file.name} uppladdat och krypterat`)
       }
     } catch (error) {
       console.error('Upload error:', error)
-      showError('Kunde inte ladda upp fil')
+      showError('Kunde inte ladda upp fil. Försök igen senare.')
     } finally {
       setUploading(false)
       if (fileInputRef.current) fileInputRef.current.value = ''
     }
   }
 
-  const handleDelete = (docId: string) => {
+  const handleDelete = async (docId: string) => {
     if (confirm('Är du säker på att du vill ta bort detta dokument? Åtgärden kan inte ångras.')) {
-      setDocuments(docs => docs.filter(d => d.id !== docId))
-      success('Dokument borttaget')
+      try {
+        const response = await fetch(`/api/transactions/${params.id}/documents/${docId}`, {
+          method: 'DELETE'
+        })
+
+        if (response.ok) {
+          setDocuments(docs => docs.filter(d => d.id !== docId))
+          success('Dokument borttaget')
+        } else {
+          showError('Kunde inte ta bort dokument')
+        }
+      } catch (error) {
+        console.error('Delete error:', error)
+        showError('Fel vid borttagning')
+      }
     }
   }
 
@@ -128,13 +154,22 @@ export default function SecretRoomPage() {
         {/* Upload Zone */}
         <div className="mb-8">
           <div
-            className="border-2 border-dashed border-blue-300 bg-blue-50 rounded-lg p-12 text-center hover:border-blue-900 hover:bg-blue-100 transition-colors cursor-pointer"
-            onClick={() => fileInputRef.current?.click()}
+            className="border-2 border-dashed border-blue-300 bg-blue-50 rounded-lg p-12 text-center hover:border-blue-900 hover:bg-blue-100 transition-colors cursor-pointer relative"
+            onClick={() => !uploading && fileInputRef.current?.click()}
           >
-            <Upload className="w-12 h-12 text-blue-900 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Ladda upp känsliga dokument</h2>
-            <p className="text-gray-600 mb-4">Dra filer här eller klicka för att välja</p>
-            <p className="text-xs text-gray-500">Stödat: PDF, Word, Excel | Max: 50 MB per fil | Allt är krypterat</p>
+            {uploading ? (
+              <>
+                <Loader className="w-12 h-12 text-blue-900 mx-auto mb-4 animate-spin" />
+                <p className="text-blue-900 font-medium">Laddar upp och krypterar...</p>
+              </>
+            ) : (
+              <>
+                <Upload className="w-12 h-12 text-blue-900 mx-auto mb-4" />
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">Ladda upp känsliga dokument</h2>
+                <p className="text-gray-600 mb-4">Dra filer här eller klicka för att välja</p>
+                <p className="text-xs text-gray-500">Stödat: PDF, Word, Excel | Max: 50 MB per fil | Allt är krypterat</p>
+              </>
+            )}
             <input
               ref={fileInputRef}
               type="file"
@@ -144,7 +179,6 @@ export default function SecretRoomPage() {
               className="hidden"
               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
             />
-            {uploading && <p className="mt-4 text-blue-900 font-medium">Laddar upp och krypterar...</p>}
           </div>
         </div>
 
@@ -154,14 +188,20 @@ export default function SecretRoomPage() {
             <h2 className="text-2xl font-bold text-gray-900">Lagrade Dokument</h2>
             <button
               onClick={() => setShowAccessLog(!showAccessLog)}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors"
+              disabled={documents.length === 0}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
               {showAccessLog ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               {showAccessLog ? 'Dölj' : 'Visa'} åtkomstlogg
             </button>
           </div>
 
-          {documents.length === 0 ? (
+          {loadingDocs ? (
+            <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+              <Loader className="w-8 h-8 text-gray-400 mx-auto mb-3 animate-spin" />
+              <p className="text-gray-600">Laddar dokument...</p>
+            </div>
+          ) : documents.length === 0 ? (
             <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
               <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
               <p className="text-gray-600">Inga dokument uppladdade än</p>
@@ -170,10 +210,10 @@ export default function SecretRoomPage() {
             <div className="space-y-3">
               {documents.map((doc) => (
                 <div key={doc.id} className="bg-white rounded-lg border border-gray-200 p-6">
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4 flex-1">
                       <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        {doc.encrypted && <Lock className="w-6 h-6 text-green-600" />}
+                        <Lock className="w-6 h-6 text-green-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-gray-900 break-words">{doc.name}</h3>
@@ -196,22 +236,6 @@ export default function SecretRoomPage() {
                       <Trash2 className="w-5 h-5 text-red-600" />
                     </button>
                   </div>
-
-                  {/* Access Log */}
-                  {showAccessLog && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <p className="text-sm font-semibold text-gray-900 mb-3">📋 Åtkomsthistorik</p>
-                      <div className="space-y-2">
-                        {doc.accessLog.map((log, idx) => (
-                          <div key={idx} className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
-                            <span className="font-medium">{log.user}</span>
-                            {' '}{log.action === 'uploaded' ? 'laddat upp' : log.action === 'viewed' ? 'visade' : log.action}
-                            {' '}{new Date(log.timestamp).toLocaleString('sv-SE')}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
