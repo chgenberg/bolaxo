@@ -2,37 +2,43 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, ChevronRight, Users, Shield, Search, Filter, Bell } from 'lucide-react'
-import { useState } from 'react'
+import { ArrowRight, ChevronRight, ChevronLeft, MapPin, TrendingUp, Eye } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { mockObjects } from '@/data/mockObjects'
 
 export default function HeroSection() {
   const [activeTab, setActiveTab] = useState<'seller' | 'buyer'>('buyer')
   const [carouselIndex, setCarouselIndex] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
-  const buyerFeatures = [
-    {
-      icon: Filter,
-      title: 'Smart matchning',
-      description: 'Vår AI matchar dig med rätt företag baserat på dina kriterier'
-    },
-    {
-      icon: Shield,
-      title: '100% säkra processer',
-      description: 'NDA-skyddad från dag ett. Känslig info endast för verifierade köpare'
-    },
-    {
-      icon: Search,
-      title: 'Verifierade säljare',
-      description: 'Alla säljare är identitetsverifierade med BankID och transparenta siffror'
-    }
-  ]
+  const featuredObjects = mockObjects.filter(obj => obj.isNew || obj.verified).slice(0, 10)
+  const currentObject = featuredObjects[carouselIndex]
+
+  useEffect(() => {
+    if (!isAutoPlaying || activeTab !== 'buyer') return
+
+    const interval = setInterval(() => {
+      setCarouselIndex((prev) => (prev + 1) % featuredObjects.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, featuredObjects.length, activeTab])
 
   const nextSlide = () => {
-    setCarouselIndex((prev) => (prev + 1) % buyerFeatures.length)
+    setIsAutoPlaying(false)
+    setCarouselIndex((prev) => (prev + 1) % featuredObjects.length)
   }
 
   const prevSlide = () => {
-    setCarouselIndex((prev) => (prev - 1 + buyerFeatures.length) % buyerFeatures.length)
+    setIsAutoPlaying(false)
+    setCarouselIndex((prev) => (prev - 1 + featuredObjects.length) % featuredObjects.length)
+  }
+
+  const formatCurrency = (amount: number) => {
+    if (amount >= 1000000) {
+      return `${(amount / 1000000).toFixed(1)} MSEK`
+    }
+    return `${(amount / 1000).toFixed(0)} KSEK`
   }
 
   return (
@@ -55,7 +61,7 @@ export default function HeroSection() {
                 src="/hero_photo.png"
                 alt="Hero"
                 fill
-                className="object-cover object-center opacity-40"
+                className="object-cover object-center opacity-30"
                 priority
               />
             )}
@@ -160,56 +166,121 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right side - Carousel for buyer tab */}
-          {activeTab === 'buyer' && (
-            <div className="w-1/2 relative h-full flex items-center justify-center px-16 z-20">
-              <div className="w-full">
-                {/* Carousel Item */}
-                <div className="bg-white rounded-lg p-12 border border-gray-200 shadow-lg">
-                  {(() => {
-                    const Feature = buyerFeatures[carouselIndex].icon
-                    return (
-                      <>
-                        <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
-                          <Feature className="w-8 h-8 text-accent-pink" />
+          {/* Right side - Object Carousel for buyer tab */}
+          {activeTab === 'buyer' && currentObject && (
+            <div className="w-1/2 relative h-full flex items-center justify-center px-8 lg:px-12 z-20">
+              <Link href={`/objekt/${currentObject.id}`} className="block w-full">
+                <div className="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 h-fit">
+                  {/* Object Image */}
+                  <div className="relative h-72 bg-gray-100 overflow-hidden">
+                    {currentObject.image ? (
+                      <Image
+                        src={currentObject.image}
+                        alt={currentObject.anonymousTitle || currentObject.title || 'Företag till salu'}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent-pink/20 to-accent-orange/20">
+                        <div className="text-6xl font-bold text-accent-orange/30">
+                          {currentObject.type.charAt(0)}
                         </div>
-                        <h3 className="text-2xl font-bold text-accent-orange mb-3">
-                          {buyerFeatures[carouselIndex].title}
-                        </h3>
-                        <p className="text-lg text-gray-700 leading-relaxed mb-8">
-                          {buyerFeatures[carouselIndex].description}
-                        </p>
-                      </>
-                    )
-                  })()}
+                      </div>
+                    )}
+                    
+                    {/* Status Badges */}
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      {currentObject.isNew && (
+                        <span className="bg-accent-pink text-white px-3 py-1 rounded-full text-xs font-bold">
+                          NY
+                        </span>
+                      )}
+                      {currentObject.verified && (
+                        <span className="bg-accent-orange text-white px-3 py-1 rounded-full text-xs font-bold">
+                          VERIFIERAD
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Object Details */}
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-accent-orange mb-2">
+                      {currentObject.anonymousTitle || currentObject.title || 'Företag till salu'}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4 flex items-center gap-1">
+                      <MapPin className="w-4 h-4 text-accent-pink" />
+                      {currentObject.region}
+                    </p>
+
+                    {/* Quick Facts */}
+                    <div className="space-y-3 mb-6 pb-6 border-b border-gray-200">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Typ</span>
+                        <span className="font-semibold text-primary-navy">{currentObject.type}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Omsättning</span>
+                        <span className="font-semibold text-primary-navy">{formatCurrency(currentObject.revenue)}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Anställda</span>
+                        <span className="font-semibold text-primary-navy">{currentObject.employees}</span>
+                      </div>
+                    </div>
+
+                    {/* Price */}
+                    <div className="mb-6">
+                      <p className="text-xs text-gray-500 mb-1">Prisidé</p>
+                      <p className="text-2xl font-bold text-accent-orange">
+                        {formatCurrency(currentObject.priceMin)} - {formatCurrency(currentObject.priceMax)}
+                      </p>
+                    </div>
+
+                    {/* View Stats */}
+                    <div className="flex items-center gap-2 text-xs text-gray-600 mb-6 pb-6 border-b border-gray-200">
+                      <Eye className="w-4 h-4 text-accent-pink" />
+                      <span>{currentObject.views || 0} visningar</span>
+                    </div>
+
+                    {/* CTA Button */}
+                    <button className="w-full py-3 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all">
+                      Be om NDA
+                    </button>
+                  </div>
+                </div>
+              </Link>
+
+              {/* Carousel Controls */}
+              <div className="absolute bottom-8 left-8 right-8 flex items-center justify-between z-30">
+                <button
+                  onClick={prevSlide}
+                  className="p-2 bg-white/80 hover:bg-white rounded-lg transition-all shadow-lg hover:shadow-xl"
+                >
+                  <ChevronLeft className="w-6 h-6 text-primary-navy" />
+                </button>
+
+                <div className="flex gap-2">
+                  {featuredObjects.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        setIsAutoPlaying(false)
+                        setCarouselIndex(idx)
+                      }}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        idx === carouselIndex ? 'bg-accent-pink w-8' : 'bg-white/60 hover:bg-white/90'
+                      }`}
+                    />
+                  ))}
                 </div>
 
-                {/* Carousel Controls */}
-                <div className="flex items-center justify-center gap-4 mt-8">
-                  <button
-                    onClick={prevSlide}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <ChevronRight className="w-6 h-6 text-primary-navy rotate-180" />
-                  </button>
-                  <div className="flex gap-2">
-                    {buyerFeatures.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCarouselIndex(idx)}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                          idx === carouselIndex ? 'bg-accent-pink w-8' : 'bg-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <button
-                    onClick={nextSlide}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    <ChevronRight className="w-6 h-6 text-primary-navy" />
-                  </button>
-                </div>
+                <button
+                  onClick={nextSlide}
+                  className="p-2 bg-white/80 hover:bg-white rounded-lg transition-all shadow-lg hover:shadow-xl"
+                >
+                  <ChevronRight className="w-6 h-6 text-primary-navy" />
+                </button>
               </div>
             </div>
           )}
@@ -219,7 +290,7 @@ export default function HeroSection() {
       {/* Mobile Hero */}
       <div className="md:hidden relative min-h-screen flex flex-col justify-center w-full">
         {/* Tab Toggle Mobile */}
-        <div className="px-4 pt-6 pb-4 flex gap-2">
+        <div className="px-4 pt-6 pb-4 flex gap-2 z-20 relative">
           <button
             onClick={() => setActiveTab('seller')}
             className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-all ${
@@ -257,7 +328,7 @@ export default function HeroSection() {
         )}
 
         {/* Mobile Content */}
-        <div className="px-4 py-8">
+        <div className="px-4 py-8 relative z-10">
           {activeTab === 'seller' ? (
             <>
               <h1 className="text-4xl font-bold text-accent-orange leading-tight mb-4 uppercase">
@@ -296,32 +367,62 @@ export default function HeroSection() {
                 Smarta matchningar och verifierade säljare.
               </p>
 
-              {/* Mobile Carousel */}
-              <div className="bg-white rounded-lg p-6 border border-gray-200 mb-6">
-                {(() => {
-                  const Feature = buyerFeatures[carouselIndex].icon
-                  return (
-                    <>
-                      <div className="w-12 h-12 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-4">
-                        <Feature className="w-6 h-6 text-accent-pink" />
+              {/* Mobile Object Card */}
+              {currentObject && (
+                <Link href={`/objekt/${currentObject.id}`} className="block mb-6">
+                  <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                    <div className="relative h-48 bg-gray-100">
+                      {currentObject.image ? (
+                        <Image
+                          src={currentObject.image}
+                          alt={currentObject.anonymousTitle || currentObject.title || 'Företag till salu'}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent-pink/20 to-accent-orange/20">
+                          <div className="text-4xl font-bold text-accent-orange/30">
+                            {currentObject.type.charAt(0)}
+                          </div>
+                        </div>
+                      )}
+                      <div className="absolute top-2 left-2 flex gap-1">
+                        {currentObject.isNew && (
+                          <span className="bg-accent-pink text-white px-2 py-1 rounded text-xs font-bold">NY</span>
+                        )}
+                        {currentObject.verified && (
+                          <span className="bg-accent-orange text-white px-2 py-1 rounded text-xs font-bold">VERIFIERAD</span>
+                        )}
                       </div>
+                    </div>
+                    <div className="p-4">
                       <h3 className="text-lg font-bold text-accent-orange mb-2">
-                        {buyerFeatures[carouselIndex].title}
+                        {currentObject.anonymousTitle || currentObject.title || 'Företag till salu'}
                       </h3>
-                      <p className="text-sm text-gray-700 leading-relaxed">
-                        {buyerFeatures[carouselIndex].description}
+                      <p className="text-xs text-gray-600 mb-3 flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-accent-pink" />
+                        {currentObject.region}
                       </p>
-                    </>
-                  )
-                })()}
-              </div>
+                      <p className="text-lg font-bold text-accent-orange mb-3">
+                        {formatCurrency(currentObject.priceMin)}
+                      </p>
+                      <button className="w-full py-2 bg-accent-pink text-primary-navy font-bold rounded text-sm">
+                        Be om NDA
+                      </button>
+                    </div>
+                  </div>
+                </Link>
+              )}
 
               {/* Mobile Carousel Dots */}
               <div className="flex gap-2 justify-center mb-6">
-                {buyerFeatures.map((_, idx) => (
+                {featuredObjects.map((_, idx) => (
                   <button
                     key={idx}
-                    onClick={() => setCarouselIndex(idx)}
+                    onClick={() => {
+                      setIsAutoPlaying(false)
+                      setCarouselIndex(idx)
+                    }}
                     className={`w-2 h-2 rounded-full transition-all ${
                       idx === carouselIndex ? 'bg-accent-pink w-6' : 'bg-gray-300'
                     }`}
