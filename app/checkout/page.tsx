@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { ArrowRight, CheckCircle2, Database, Users, FileCheck, Zap, Shield, TrendingUp } from 'lucide-react';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const steps = [
@@ -144,7 +143,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-white to-gray-50 py-16 px-4 sm:px-6 lg:px-8">
