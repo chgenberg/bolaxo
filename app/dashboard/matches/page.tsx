@@ -58,47 +58,47 @@ export default function MatchesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <Target className="w-8 h-8 text-blue-900" />
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
+            <Target className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
             Matchade köpare
           </h1>
-          <p className="text-gray-600 mt-2">
-            Här ser du vilka köpare som matchar din annons baserat på deras sökkriterier
+          <p className="text-xs sm:text-sm text-gray-600 mt-2">
+            Köpare som matchar din annons
           </p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
+        {/* Stats - Responsive grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm font-medium">Totala matchningar</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{matches.length}</p>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">Totalt</p>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{matches.length}</p>
               </div>
-              <Users className="w-10 h-10 text-blue-900 opacity-20" />
+              <Users className="w-8 h-8 sm:w-10 sm:h-10 text-blue-900 opacity-20 flex-shrink-0" />
             </div>
           </div>
 
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm font-medium">Högkvalitativa (80+)</p>
-                <p className="text-3xl font-bold text-green-900 mt-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">Högkvalitet</p>
+                <p className="text-2xl sm:text-3xl font-bold text-green-900 mt-1 sm:mt-2">
                   {matches.filter(m => m.matchScore >= 80).length}
                 </p>
               </div>
-              <TrendingUp className="w-10 h-10 text-green-500 opacity-20" />
+              <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-green-500 opacity-20 flex-shrink-0" />
             </div>
           </div>
 
-          <div className="bg-white rounded-lg p-6 border border-gray-200">
+          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 sm:col-span-2 md:col-span-1">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm font-medium">Genomsnittlig matchning</p>
-                <p className="text-3xl font-bold text-blue-900 mt-2">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">Genomsnitt</p>
+                <p className="text-2xl sm:text-3xl font-bold text-blue-900 mt-1 sm:mt-2">
                   {matches.length > 0
                     ? Math.round(
                         matches.reduce((sum, m) => sum + m.matchScore, 0) / matches.length
@@ -107,26 +107,26 @@ export default function MatchesPage() {
                   %
                 </p>
               </div>
-              <Target className="w-10 h-10 text-blue-500 opacity-20" />
+              <Target className="w-8 h-8 sm:w-10 sm:h-10 text-blue-500 opacity-20 flex-shrink-0" />
             </div>
           </div>
         </div>
 
-        {/* Sort */}
-        <div className="flex gap-2 mb-6">
+        {/* Sort - Mobile optimized */}
+        <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
           <button
             onClick={() => setSortBy('score')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
               sortBy === 'score'
                 ? 'bg-blue-900 text-white'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
           >
-            Högsta matchning
+            Högsta
           </button>
           <button
             onClick={() => setSortBy('recent')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium text-sm sm:text-base min-h-10 sm:min-h-auto transition-colors ${
               sortBy === 'recent'
                 ? 'bg-blue-900 text-white'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
@@ -142,87 +142,86 @@ export default function MatchesPage() {
             <div className="inline-block w-8 h-8 border-4 border-blue-200 border-t-blue-900 rounded-full animate-spin" />
           </div>
         ) : matches.length === 0 ? (
-          <div className="bg-white rounded-lg p-12 text-center border border-gray-200">
-            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Inga matchningar än</h3>
-            <p className="text-gray-600">
-              Det verkar inte som om det finns köpare som matchar din annons än. 
-              Mer köpare kommer att registrera sig snart.
+          <div className="bg-white rounded-lg p-6 sm:p-12 text-center border border-gray-200">
+            <AlertCircle className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Inga matchningar än</h3>
+            <p className="text-xs sm:text-sm text-gray-600">
+              Köpare kommer att registrera sig snart.
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {sortedMatches.map((match) => {
               const scoreColor = getScoreColor(match.matchScore)
               return (
                 <div
                   key={match.id}
-                  className={`${scoreColor.bg} rounded-lg p-6 border border-gray-200 hover:shadow-md transition-shadow`}
+                  className={`${scoreColor.bg} rounded-lg p-4 sm:p-6 border border-gray-200 hover:shadow-md transition-shadow`}
                 >
-                  <div className="flex items-start justify-between gap-6">
-                    <div className="flex-1">
-                      <h3 className={`text-lg font-semibold ${scoreColor.text} mb-1`}>
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6">
+                    <div className="flex-1 min-w-0">
+                      <h3 className={`text-base sm:text-lg font-semibold ${scoreColor.text} mb-1 truncate`}>
                         {match.buyerName || 'Anonym köpare'}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-4">{match.buyerEmail}</p>
+                      <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 truncate">{match.buyerEmail}</p>
 
                       {/* Match Score Bar */}
-                      <div className="mb-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-700">Matchningsgrad</span>
-                          <span className={`text-lg font-bold ${scoreColor.text}`}>
+                      <div className="mb-4 sm:mb-4">
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-xs sm:text-sm font-medium text-gray-700">Matchning</span>
+                          <span className={`text-base sm:text-lg font-bold ${scoreColor.text}`}>
                             {match.matchScore}%
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className={`h-2.5 rounded-full ${scoreColor.bar}`}
+                            className={`h-2 rounded-full ${scoreColor.bar}`}
                             style={{ width: `${match.matchScore}%` }}
                           />
                         </div>
                       </div>
 
-                      {/* Match Details */}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div>
+                      {/* Match Details - Mobile responsive */}
+                      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
+                        <div className="min-w-0">
                           <p className="text-gray-600 text-xs mb-1">Regioner</p>
-                          <p className="font-medium text-gray-900">
-                            {match.regions.join(', ') || 'Hela Sverige'}
+                          <p className="font-medium text-gray-900 truncate">
+                            {match.regions.join(', ') || 'Sverige'}
                           </p>
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-gray-600 text-xs mb-1">Branscher</p>
-                          <p className="font-medium text-gray-900">
-                            {match.industries.join(', ')}
+                          <p className="font-medium text-gray-900 truncate">
+                            {match.industries.slice(0, 1).join(', ')}
                           </p>
                         </div>
-                        <div>
-                          <p className="text-gray-600 text-xs mb-1">Prisintervall</p>
+                        <div className="hidden sm:block min-w-0">
+                          <p className="text-gray-600 text-xs mb-1">Pris</p>
                           <p className="font-medium text-gray-900">
-                            {(match.priceRange.min / 1_000_000).toFixed(1)}-
-                            {(match.priceRange.max / 1_000_000).toFixed(1)} MSEK
+                            {(match.priceRange.min / 1_000_000).toFixed(0)}-
+                            {(match.priceRange.max / 1_000_000).toFixed(0)}M
                           </p>
                         </div>
-                        <div>
+                        <div className="hidden md:block min-w-0">
                           <p className="text-gray-600 text-xs mb-1">Omsättning</p>
                           <p className="font-medium text-gray-900">
-                            {(match.revenueRange.min / 1_000_000).toFixed(1)}-
-                            {(match.revenueRange.max / 1_000_000).toFixed(1)} MSEK
+                            {(match.revenueRange.min / 1_000_000).toFixed(0)}-
+                            {(match.revenueRange.max / 1_000_000).toFixed(0)}M
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex flex-col gap-2">
-                      <button className="px-4 py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-sm">
+                    {/* Actions - Mobile optimized */}
+                    <div className="flex flex-row sm:flex-col gap-2 sm:gap-2 flex-shrink-0 w-full sm:w-auto">
+                      <button className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
                         Kontakta
                       </button>
                       <Link
                         href={`/dashboard/listings/${match.listingId}`}
-                        className="px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm text-center"
+                        className="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition-colors text-xs sm:text-sm text-center min-h-10 sm:min-h-auto inline-flex items-center justify-center"
                       >
-                        Till annons
+                        Annons
                       </Link>
                     </div>
                   </div>
