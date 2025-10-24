@@ -57,30 +57,30 @@ export default function HomePage() {
       <HeroSection />
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="heading-2 mb-4">Mer tid till det som betyder något</h2>
-            <p className="text-lg text-text-gray max-w-2xl mx-auto">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="heading-2 text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Mer tid till det som betyder något</h2>
+            <p className="text-base sm:text-lg text-text-gray max-w-2xl mx-auto px-2">
               Automatisering sparar veckor av arbete. Plattformen hanterar matchning, analytics och rapporter – du fokuserar på rätt beslut vid rätt tid.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, index) => {
               const Icon = feature.icon
               return (
                 <div 
                   key={index} 
-                  className="card text-center hover:transform hover:-translate-y-1 transition-all duration-300"
+                  className="card text-center hover:transform hover:-translate-y-1 transition-all duration-300 p-6 sm:p-8"
                 >
-                  <div className="w-16 h-16 bg-light-blue/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Icon className="w-8 h-8 text-primary-blue" />
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-light-blue/30 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6">
+                    <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-primary-blue" />
                   </div>
-                  <h3 className="text-xl font-semibold text-text-dark mb-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-2 sm:mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-text-gray">
+                  <p className="text-sm sm:text-base text-text-gray leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -91,45 +91,45 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gradient-to-b from-light-blue/10 to-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-light-blue/10 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="heading-2 mb-4">Vad våra kunder säger</h2>
-            <p className="text-lg text-text-gray">Över 2,000 lyckade affärer sedan 2020</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="heading-2 text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Vad våra kunder säger</h2>
+            <p className="text-sm sm:text-base text-text-gray">Över 2,000 lyckade affärer sedan 2020</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {testimonials.map((testimonial, index) => (
               <div 
                 key={index} 
-                className="card relative"
+                className="card relative p-6 sm:p-8"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <Quote className="absolute top-6 right-6 w-8 h-8 text-light-blue/50" />
+                <Quote className="absolute top-4 sm:top-6 right-4 sm:right-6 w-6 h-6 sm:w-8 sm:h-8 text-light-blue/50" />
                 
                 <div className="relative">
                   {/* Rating */}
-                  <div className="flex mb-4">
+                  <div className="flex gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-warning fill-current" />
+                      <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-warning fill-current" />
                     ))}
                   </div>
 
                   {/* Content */}
-                  <p className="text-text-gray mb-6 italic">
+                  <p className="text-sm sm:text-base text-text-gray mb-6 italic leading-relaxed">
                     "{testimonial.content}"
                   </p>
 
                   {/* Author */}
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 bg-light-blue/30 rounded-full flex items-center justify-center">
-                      <span className="text-primary-blue font-semibold">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-light-blue/30 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-xs sm:text-sm text-primary-blue font-semibold">
                         {testimonial.name.charAt(0)}
                       </span>
                     </div>
-                    <div className="ml-3">
-                      <div className="font-semibold text-text-dark">{testimonial.name}</div>
-                      <div className="text-sm text-text-gray">{testimonial.role}</div>
+                    <div className="min-w-0">
+                      <div className="font-semibold text-sm sm:text-base text-text-dark truncate">{testimonial.name}</div>
+                      <div className="text-xs sm:text-sm text-text-gray truncate">{testimonial.role}</div>
                     </div>
                   </div>
                 </div>
@@ -140,19 +140,19 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary-blue text-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-primary-blue text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
             Redo att sälja ditt företag?
           </h2>
-          <p className="text-xl mb-8 opacity-90">
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90">
             Kom igång på 5 minuter. Helt kostnadsfritt att börja.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/salja/start" className="btn-primary bg-white text-primary-blue hover:bg-gray-100">
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center">
+            <Link href="/salja/start" className="btn-primary bg-white text-primary-blue hover:bg-gray-100 text-base sm:text-lg py-3 sm:py-4 px-6 sm:px-8 min-h-12 flex items-center justify-center">
               Börja sälja nu
             </Link>
-            <Link href="/priser" className="btn-secondary border-white text-primary-blue hover:bg-white/10">
+            <Link href="/priser" className="btn-secondary border-white text-white hover:bg-white/10 text-base sm:text-lg py-3 sm:py-4 px-6 sm:px-8 min-h-12 flex items-center justify-center">
               Se priser
             </Link>
           </div>
@@ -160,16 +160,16 @@ export default function HomePage() {
       </section>
 
       {/* Trust Brands */}
-      <section className="py-12 bg-white border-t border-gray-100">
+      <section className="py-8 sm:py-10 md:py-12 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <p className="text-text-gray">Omnämnda i</p>
+          <div className="text-center mb-6 sm:mb-8">
+            <p className="text-sm sm:text-base text-text-gray">Omnämnda i</p>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12">
             {trustLogos.map((brand) => (
               <div 
                 key={brand.name} 
-                className="text-2xl font-bold text-gray-300 hover:text-gray-400 transition-colors"
+                className="text-lg sm:text-2xl font-bold text-gray-300 hover:text-gray-400 transition-colors"
               >
                 {brand.logo}
               </div>
