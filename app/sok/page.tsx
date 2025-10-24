@@ -196,36 +196,36 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Simplified Header */}
+      {/* Header Section */}
       <div className="bg-background-off-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl font-bold text-text-dark text-center uppercase">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-text-dark text-center uppercase">
             Sök bland {allObjects.length} företag till salu
           </h1>
         </div>
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="sticky top-28 md:top-32 z-20 bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col lg:flex-row gap-4">
+      <div className="sticky top-20 sm:top-28 md:top-32 z-20 bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
             {/* Search Input */}
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-gray" />
+                <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
                 <input
                   type="text"
-                  placeholder="Sök på bransch, beskrivning eller plats..."
+                  placeholder="Sök bransch, beskrivning..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="input-field pl-12 pr-4 w-full"
+                  className="input-field pl-10 sm:pl-12 pr-10 sm:pr-4 w-full text-base"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-text-gray hover:text-text-dark"
+                    className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-text-gray hover:text-text-dark"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 )}
               </div>
@@ -235,148 +235,63 @@ export default function SearchPage() {
             <button
               onClick={() => setShowFilters(!showFilters)}
               className={`
-                flex items-center justify-center px-6 py-3 rounded-button font-medium
-                transition-all duration-200 border-2
+                flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-button font-medium text-sm sm:text-base min-h-11 sm:min-h-12
+                transition-all duration-200 border-2 w-full sm:w-auto
                 ${showFilters 
                   ? 'bg-primary-blue text-white border-primary-blue' 
                   : 'bg-white text-text-dark border-gray-200 hover:border-primary-blue'
                 }
               `}
             >
-              <SlidersHorizontal className="w-5 h-5 mr-2" />
+              <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Filter
               {activeFilterCount > 0 && (
-                <span className="ml-2 bg-white text-primary-blue px-2 py-0.5 rounded-full text-sm">
+                <span className="ml-2 bg-white text-primary-blue px-2 py-0.5 rounded-full text-xs sm:text-sm">
                   {activeFilterCount}
                 </span>
               )}
-              <ChevronDown className={`w-5 h-5 ml-2 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 sm:w-5 sm:h-5 ml-2 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
             </button>
           </div>
 
           {/* Collapsible Filters */}
           {showFilters && (
-            <div className="mt-4 pt-4 border-t border-gray-100 animate-slide-down">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {/* Category */}
+            <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100 animate-slide-down">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+                {/* Category - Simplified */}
                 <select
                   value={filters.category}
                   onChange={(e) => setFilters({...filters, category: e.target.value})}
-                  className="select-field"
+                  className="select-field text-xs sm:text-sm py-2 sm:py-3"
                 >
                   <option value="">Alla branscher</option>
-                  <optgroup label="Teknologi & IT">
-                    <option value="SaaS-företag">SaaS-företag</option>
-                    <option value="E-handel">E-handel</option>
-                    <option value="Konsultbolag">IT-konsult</option>
-                    <option value="Tech-support företag">Tech-support</option>
-                    <option value="Webbyrå">Webbyrå</option>
-                    <option value="E-learning plattform">E-learning</option>
-                    <option value="HR-tech SaaS">HR-tech</option>
-                    <option value="CRM-system SaaS">CRM/SaaS</option>
-                  </optgroup>
-                  <optgroup label="Tjänster">
-                    <option value="Redovisningsbyrå">Redovisning</option>
-                    <option value="Marknadsföringsbyrå">Marknadsföring</option>
-                    <option value="Städbolag">Städ</option>
-                    <option value="Frisörsalong">Frisör/Skönhet</option>
-                    <option value="Hundtrimning & djuraffär">Djur/Husdjur</option>
-                  </optgroup>
-                  <optgroup label="Bygg & Fastighet">
-                    <option value="Bygg & Fastighet">Bygg</option>
-                  </optgroup>
-                  <optgroup label="Restaurang & Mat">
-                    <option value="Restaurang">Restaurang</option>
-                    <option value="Café & Bageri">Café</option>
-                    <option value="Bageri & konditori">Bageri</option>
-                  </optgroup>
-                  <optgroup label="Detaljhandel">
-                    <option value="Möbelaffär">Möbler</option>
-                    <option value="Cykelbutik">Cykel</option>
-                    <option value="Frisörsalong">Frisörsalong</option>
-                  </optgroup>
-                  <optgroup label="Träning & Hälsa">
-                    <option value="Träningscenter">Gym/Träning</option>
-                  </optgroup>
+                  <option value="SaaS-företag">SaaS-företag</option>
+                  <option value="E-handel">E-handel</option>
+                  <option value="IT-konsult">IT-konsult</option>
+                  <option value="Restaurang">Restaurang</option>
+                  <option value="Träningscenter">Gym/Träning</option>
+                  <option value="Redovisningsbyrå">Redovisning</option>
                 </select>
 
                 {/* Price Range */}
                 <select
                   value={filters.priceRange}
                   onChange={(e) => setFilters({...filters, priceRange: e.target.value})}
-                  className="select-field"
+                  className="select-field text-xs sm:text-sm py-2 sm:py-3"
                 >
                   <option value="">Alla priser</option>
-                  <option value="0-2">0-2 MSEK</option>
-                  <option value="2-5">2-5 MSEK</option>
-                  <option value="5-10">5-10 MSEK</option>
-                  <option value="10-20">10-20 MSEK</option>
-                  <option value="20-30">20-30 MSEK</option>
-                  <option value="30-50">30-50 MSEK</option>
-                  <option value="50-75">50-75 MSEK</option>
-                  <option value="75-100">75-100 MSEK</option>
-                  <option value="100+">100+ MSEK</option>
-                </select>
-
-                {/* Revenue Range */}
-                <select
-                  value={filters.revenueRange}
-                  onChange={(e) => setFilters({...filters, revenueRange: e.target.value})}
-                  className="select-field"
-                >
-                  <option value="">All omsättning</option>
-                  <option value="0-5">0-5 MSEK</option>
-                  <option value="5-10">5-10 MSEK</option>
-                  <option value="10-25">10-25 MSEK</option>
-                  <option value="25-50">25-50 MSEK</option>
-                  <option value="50-75">50-75 MSEK</option>
-                  <option value="75-100">75-100 MSEK</option>
-                  <option value="100+">100+ MSEK</option>
-                </select>
-
-                {/* Location */}
-                <select
-                  value={filters.location}
-                  onChange={(e) => setFilters({...filters, location: e.target.value})}
-                  className="select-field"
-                >
-                  <option value="">Hela Sverige</option>
-                  <optgroup label="Storstäder">
-                    <option value="stockholm">Stockholm</option>
-                    <option value="göteborg">Göteborg</option>
-                    <option value="malmö">Malmö</option>
-                  </optgroup>
-                  <optgroup label="Större städer">
-                    <option value="uppsala">Uppsala</option>
-                    <option value="västerås">Västerås</option>
-                    <option value="örebro">Örebro</option>
-                    <option value="linköping">Linköping</option>
-                    <option value="helsingborg">Helsingborg</option>
-                    <option value="jönköping">Jönköping</option>
-                    <option value="norrköping">Norrköping</option>
-                    <option value="lund">Lund</option>
-                    <option value="umeå">Umeå</option>
-                    <option value="gävle">Gävle</option>
-                  </optgroup>
-                  <optgroup label="Regioner">
-                    <option value="stockholms län">Stockholms län</option>
-                    <option value="västra götaland">Västra Götaland</option>
-                    <option value="skåne">Skåne</option>
-                    <option value="uppsala län">Uppsala län</option>
-                    <option value="södermanland">Södermanland</option>
-                    <option value="östergötland">Östergötland</option>
-                    <option value="halland">Halland</option>
-                    <option value="värmland">Värmland</option>
-                    <option value="dalarna">Dalarna</option>
-                    <option value="gävleborg">Gävleborg</option>
-                  </optgroup>
+                  <option value="0-500">0-500k</option>
+                  <option value="500-1m">500k-1M</option>
+                  <option value="1m-5m">1M-5M</option>
+                  <option value="5m-10m">5M-10M</option>
+                  <option value="10m+">10M+</option>
                 </select>
 
                 {/* Sort By */}
                 <select
                   value={filters.sortBy}
                   onChange={(e) => setFilters({...filters, sortBy: e.target.value})}
-                  className="select-field"
+                  className="select-field text-xs sm:text-sm py-2 sm:py-3"
                 >
                   <option value="newest">Nyast först</option>
                   <option value="price-low">Lägsta pris</option>
@@ -389,10 +304,10 @@ export default function SearchPage() {
                 {activeFilterCount > 0 && (
                   <button
                     onClick={clearAllFilters}
-                    className="btn-ghost text-error hover:bg-error/10 flex items-center justify-center"
+                    className="btn-ghost text-error hover:bg-error/10 flex items-center justify-center text-xs sm:text-sm py-2 sm:py-3 col-span-1"
                   >
-                    <X className="w-4 h-4 mr-2" />
-                    Rensa filter
+                    <X className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                    Rensa
                   </button>
                 )}
               </div>
@@ -402,22 +317,22 @@ export default function SearchPage() {
       </div>
 
       {/* Results Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Results Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-text-dark">
-            {filteredObjects.length} företag {activeFilterCount > 0 && 'matchade din sökning'}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-text-dark">
+            {filteredObjects.length} företag {activeFilterCount > 0 && 'matchade'}
           </h2>
           {!loading && filteredObjects.length > 0 && (
-            <p className="text-sm text-text-gray hidden md:block">
-              Alla annonser är verifierade och uppdaterade
+            <p className="text-xs sm:text-sm text-text-gray hidden md:block">
+              Alla annonser är verifierade
             </p>
           )}
         </div>
 
         {/* Loading State */}
         {loading && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="card animate-pulse">
                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-4" />
@@ -434,7 +349,7 @@ export default function SearchPage() {
 
         {/* Results Grid */}
         {!loading && filteredObjects.length > 0 && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredObjects.map((object) => (
               <ObjectCard key={object.id} object={object} />
             ))}
