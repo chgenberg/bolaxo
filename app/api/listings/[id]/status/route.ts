@@ -3,15 +3,16 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-// PATCH /api/listings/[id]/status?action=pause|resume|delete
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params
+  const id = params.id
+
   try {
-    const params = await context.params
     const { searchParams } = new URL(request.url)
-    const action = searchParams.get('action') as 'pause' | 'resume' | 'delete' | null
+    const action = searchParams.get('action')
     const body = await request.json()
     const { userId } = body
 
@@ -21,7 +22,7 @@ export async function PATCH(
 
     // Verify ownership
     const listing = await prisma.listing.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
 
     if (!listing || listing.userId !== userId) {
@@ -30,14 +31,14 @@ export async function PATCH(
 
     if (action === 'delete') {
       await prisma.listing.delete({
-        where: { id: params.id }
+        where: { id }
       })
       return NextResponse.json({ success: true, message: 'Annons borttagen' })
     }
 
     if (action === 'pause') {
       const updated = await prisma.listing.update({
-        where: { id: params.id },
+        where: { id },
         data: { status: 'paused' }
       })
       return NextResponse.json({ success: true, listing: updated, message: 'Annons pausad' })
@@ -45,7 +46,7 @@ export async function PATCH(
 
     if (action === 'resume') {
       const updated = await prisma.listing.update({
-        where: { id: params.id },
+        where: { id },
         data: { status: 'active' }
       })
       return NextResponse.json({ success: true, listing: updated, message: 'Annons aktiv igen' })
