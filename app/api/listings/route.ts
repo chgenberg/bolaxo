@@ -3,6 +3,31 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+// Helper: Generera anonyma titlar baserat på typ och plats
+function generateAnonymousTitle(listing: any): string {
+  if (listing.anonymousTitle) return listing.anonymousTitle
+  
+  const typeMap: Record<string, string> = {
+    restaurang: 'Restaurang',
+    cafe: 'Café',
+    ehandel: 'E-handel',
+    handel: 'Butik',
+    webbtjanster: 'Webbtjänster',
+    konsult: 'Konsultbyrå',
+    tjanstefretag: 'Tjänsteföretag',
+    tillverkning: 'Tillverkning',
+    bygg: 'Byggföretag',
+    it: 'IT-företag',
+    service: 'Serviceföretag',
+    other: 'Företag'
+  }
+  
+  const type = typeMap[listing.type?.toLowerCase()] || 'Företag'
+  const region = listing.region || 'Sverige'
+  
+  return `${type} i ${region}`
+}
+
 // GET /api/listings - Fetch all published listings
 export async function GET(request: NextRequest) {
   try {
@@ -13,6 +38,7 @@ export async function GET(request: NextRequest) {
     const location = searchParams.get('location')
     const priceMin = searchParams.get('priceMin')
     const priceMax = searchParams.get('priceMax')
+    const currentUserId = searchParams.get('currentUserId') // För att veta vem som frågar
     
     const where: any = { status }
     if (userId) where.userId = userId
@@ -38,7 +64,28 @@ export async function GET(request: NextRequest) {
       }
     })
     
-    return NextResponse.json(listings)
+    // Anonymize listings om inte current user är ägaren
+    const anonymizedListings = listings.map(listing => {
+      const isOwner = listing.userId === currentUserId
+      
+      return {
+        ...listing,
+        companyName: isOwner ? listing.companyName : undefined,
+        orgNumber: isOwner ? listing.orgNumber : undefined,
+        address: isOwner ? listing.address : undefined,
+        website: isOwner ? listing.website : undefined,
+        title: generateAnonymousTitle(listing),
+        // För köpare: visa bara anonymtitel tills NDA är accepterad
+        ...(isOwner ? {} : {
+          companyName: undefined,
+          orgNumber: undefined,
+          address: undefined,
+          website: undefined
+        })
+      }
+    })
+    
+    return NextResponse.json(anonymizedListings)
   } catch (error) {
     console.error('Error fetching listings:', error)
     return NextResponse.json({ error: 'Failed to fetch listings' }, { status: 500 })
@@ -102,36 +149,107 @@ export async function POST(request: NextRequest) {
       data: {
         userId,
         companyName,
-        anonymousTitle,
-        type: type || 'Företag',
+        anonymousTitle: anonymousTitle || generateAnonymousTitle({ type, region }),
+        type,
         category,
         industry,
         orgNumber,
         website,
         location,
-        region: region || location,
+        region,
         address,
-        revenue: revenue || 0,
-        revenueRange: revenueRange || '0-1 MSEK',
-        priceMin: priceMin || 0,
-        priceMax: priceMax || 0,
-        ebitda,
-        employees: employees || 0,
-        foundedYear,
+        revenue: parseInt(revenue) || 0,
+        revenueRange,
+        priceMin: parseInt(priceMin) || 0,
+        priceMax: parseInt(priceMax) || 0,
+        ebitda: ebitda ? parseInt(ebitda) : null,
+        employees: parseInt(employees) || 0,
+        foundedYear: foundedYear ? parseInt(foundedYear) : null,
         description,
         image,
         images: images || [],
-        packageType: packageType || 'basic',
         status: autoPublish ? 'active' : 'draft',
+        packageType: packageType || 'basic',
         publishedAt: autoPublish ? new Date() : null,
         expiresAt
       }
     })
     
+    // Trigger matching algorithm after listing is created
+    if (autoPublish) {
+      triggerMatching(listing.id, listing)
+    }
+    
     return NextResponse.json(listing, { status: 201 })
   } catch (error) {
-    console.error('Error creating listing:', error)
+    console.error('Create listing error:', error)
     return NextResponse.json({ error: 'Failed to create listing' }, { status: 500 })
   }
+}
+
+// Helper: Matching algorithm - find buyers that match this listing
+async function triggerMatching(listingId: string, listing: any) {
+  try {
+    // Hitta alla köparprofiler som matchar denna listing
+    const buyerProfiles = await prisma.buyerProfile.findMany({
+      include: { user: true }
+    })
+    
+    for (const profile of buyerProfiles) {
+      // Beräkna matchningspoäng
+      const matchScore = calculateMatchScore(listing, profile)
+      
+      // Om matchningspoäng > 50, skapa en matchning och skicka notification
+      if (matchScore > 50) {
+        // TODO: Spara matchning i databas
+        // TODO: Skicka notification via email/in-app
+        console.log(`Match found: Listing ${listingId} matches buyer ${profile.userId} with score ${matchScore}`)
+      }
+    }
+  } catch (error) {
+    console.error('Matching error:', error)
+    // Fail silently - matching är inte kritisk för listing creation
+  }
+}
+
+// Helper: Beräkna matchningspoäng mellan listing och köparprofil
+function calculateMatchScore(listing: any, buyerProfile: any): number {
+  let score = 0
+  
+  // Region match (30 poäng)
+  if (buyerProfile.preferredRegions && buyerProfile.preferredRegions.length > 0) {
+    if (buyerProfile.preferredRegions.includes(listing.region) || buyerProfile.preferredRegions.includes('Hela Sverige')) {
+      score += 30
+    }
+  }
+  
+  // Industry match (30 poäng)
+  if (buyerProfile.preferredIndustries && buyerProfile.preferredIndustries.length > 0) {
+    if (buyerProfile.preferredIndustries.includes(listing.industry)) {
+      score += 30
+    }
+  }
+  
+  // Price range match (20 poäng)
+  const listingPrice = (listing.priceMin + listing.priceMax) / 2
+  if (buyerProfile.priceMin && buyerProfile.priceMax) {
+    if (listingPrice >= buyerProfile.priceMin && listingPrice <= buyerProfile.priceMax) {
+      score += 20
+    } else if (listingPrice >= buyerProfile.priceMin * 0.9 && listingPrice <= buyerProfile.priceMax * 1.1) {
+      // Partial match (близко)
+      score += 10
+    }
+  }
+  
+  // Revenue range match (20 poäng)
+  if (buyerProfile.revenueMin && buyerProfile.revenueMax) {
+    if (listing.revenue >= buyerProfile.revenueMin && listing.revenue <= buyerProfile.revenueMax) {
+      score += 20
+    } else if (listing.revenue >= buyerProfile.revenueMin * 0.8 && listing.revenue <= buyerProfile.revenueMax * 1.2) {
+      score += 10
+    }
+  }
+  
+  return Math.min(score, 100) // Max 100 poäng
 }
 

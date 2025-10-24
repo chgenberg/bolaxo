@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Menu, X, User, LogOut } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import NotificationCenter from './NotificationCenter'
 
 interface DropdownItem {
   label: string
@@ -161,6 +162,7 @@ export default function Header() {
                     </div>
                     Min sida
                   </Link>
+                  <NotificationCenter />
                   <button onClick={logout} className="btn-secondary flex items-center">
                     <LogOut className="w-4 h-4 mr-2" />
                     Logga ut
@@ -250,6 +252,7 @@ export default function Header() {
                     </div>
                     Min sida
                   </Link>
+                  <NotificationCenter />
                   <button 
                     onClick={() => { logout(); setMobileMenuOpen(false); }}
                     className="w-full btn-secondary text-center"

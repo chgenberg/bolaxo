@@ -32,6 +32,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       return [
         { label: 'Översikt', href: '/dashboard', icon: LayoutDashboard },
         { label: 'Mina annonser', href: '/dashboard/listings', icon: Building, badge: 3 },
+        { label: 'Matchade köpare', href: '/dashboard/matches', icon: Users, badge: 12 },
         { label: 'NDA-förfrågningar', href: '/dashboard/ndas', icon: Shield, badge: 5 },
         { label: 'Meddelanden', href: '/dashboard/messages', icon: MessageSquare, badge: 2 },
         { label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
