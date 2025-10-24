@@ -88,12 +88,12 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <Image 
-              src="/BOLAXO_logo.png" 
-              alt="BOLAXO" 
-              width={110} 
-              height={32}
-              className="h-6 sm:h-7 w-auto"
+            <Image
+              src="/BOLAXO_logo.png"
+              alt="BOLAXO"
+              width={180}
+              height={52}
+              className="h-12 sm:h-14 lg:h-16 w-auto"
               priority
             />
           </Link>

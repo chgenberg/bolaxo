@@ -12,7 +12,7 @@ export default function Home() {
       <section className="py-24 bg-neutral-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6">Varför BOLAXO?</h2>
+            <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Varför BOLAXO?</h2>
             <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
               Vi gör det enklare än någonsin att köpa eller sälja ett företag. Automatisering sparar veckor av arbete – följ allt i realtid.
             </p>
@@ -25,7 +25,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
                 <TrendingUp className="w-8 h-8 text-accent-pink" />
               </div>
-              <h3 className="text-2xl font-bold text-accent-orange mb-3">Smart matchning</h3>
+              <h3 className="text-2xl font-bold text-accent-orange mb-3 uppercase">Smart matchning</h3>
               <p className="text-gray-700 leading-relaxed">
                 AI matchar säljare och köpare baserat på faktiska kriterier. Ingen tid på irrelevanta möten.
               </p>
@@ -36,7 +36,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
                 <Shield className="w-8 h-8 text-accent-pink" />
               </div>
-              <h3 className="text-2xl font-bold text-accent-orange mb-3">100% säker process</h3>
+              <h3 className="text-2xl font-bold text-accent-orange mb-3 uppercase">100% säker process</h3>
               <p className="text-gray-700 leading-relaxed">
                 NDA-skyddad från dag ett. Alla dokument hanteras säkert med full revision.
               </p>
@@ -47,7 +47,7 @@ export default function Home() {
               <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
                 <Zap className="w-8 h-8 text-accent-pink" />
               </div>
-              <h3 className="text-2xl font-bold text-accent-orange mb-3">Snabb & smidig</h3>
+              <h3 className="text-2xl font-bold text-accent-orange mb-3 uppercase">Snabb & smidig</h3>
               <p className="text-gray-700 leading-relaxed">
                 Från första värdering till signerad affär på en plats. Inga gissningar, bara fakta och automatisering.
               </p>
@@ -60,7 +60,7 @@ export default function Home() {
       <section className="py-24 bg-neutral-off-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6">Så fungerar BOLAXO</h2>
+            <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Så fungerar BOLAXO</h2>
             <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
               En enkel process från start till mållinjen
             </p>
@@ -72,7 +72,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
                 1
               </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3">Registrera dig</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Registrera dig</h3>
               <p className="text-gray-700">
                 Skapa ett konto och berätta vad du letar efter eller vill sälja. Tar 2 minuter.
               </p>
@@ -83,7 +83,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
                 2
               </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3">Vi matchar</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Vi matchar</h3>
               <p className="text-gray-700">
                 AI matchar dig med relevanta företag eller köpare på din nivå.
               </p>
@@ -94,7 +94,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
                 3
               </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3">Mötas säkert</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Mötas säkert</h3>
               <p className="text-gray-700">
                 NDA är redan på plats. Börja diskutera detaljer med full sekretess.
               </p>
@@ -105,7 +105,7 @@ export default function Home() {
               <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
                 4
               </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3">Avsluta affär</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Avsluta affär</h3>
               <p className="text-gray-700">
                 Signera dokumenten digitalt på en säker plattform.
               </p>
@@ -138,7 +138,7 @@ export default function Home() {
       <section className="py-24 bg-neutral-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6">Det säger våra användare</h2>
+            <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Det säger våra användare</h2>
             <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
               Se vad köpare och säljare tycker om att använda BOLAXO
             </p>
@@ -195,7 +195,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-5xl font-bold text-accent-orange mb-6">Skapad för SME:er</h2>
+              <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Skapad för SME:er</h2>
               <p className="text-lg text-primary-navy leading-relaxed mb-8">
                 BOLAXO är byggd av M&A-proffs för att lösa de verkliga smärtpunkterna i köp och försäljning av små till mellanstora företag.
               </p>
@@ -219,7 +219,7 @@ export default function Home() {
             <div className="bg-white rounded-lg p-12 border border-gray-200">
               <div className="text-center space-y-6">
                 <Lightbulb className="w-16 h-16 text-accent-orange mx-auto" />
-                <h3 className="text-2xl font-bold text-primary-navy">Byggd av M&A-proffs</h3>
+                <h3 className="text-2xl font-bold text-primary-navy uppercase">Byggd av M&A-proffs</h3>
                 <p className="text-gray-700 leading-relaxed">
                   Vårt team har genomfört hundratals köp och försäljningar. Vi vet exakt vilka smärtpunkter vi behöver lösa.
                 </p>
@@ -232,7 +232,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-24 bg-accent-pink">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl font-bold text-primary-navy mb-6">Redo för nästa steg?</h2>
+          <h2 className="text-5xl font-bold text-primary-navy mb-6 uppercase">Redo för nästa steg?</h2>
           <p className="text-xl text-primary-navy leading-relaxed mb-10 max-w-2xl mx-auto">
             Oavsett om du vill sälja eller köpa ditt nästa företag, vi har allt du behöver.
           </p>
