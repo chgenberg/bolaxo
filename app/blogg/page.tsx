@@ -126,207 +126,157 @@ export default function BlogPage() {
   const featuredPosts = blogPosts.filter(post => post.featured)
 
   return (
-    <main className="min-h-screen bg-background-off-white py-6 sm:py-8 md:py-12">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="heading-1 mb-4">Kunskap & Insikter</h1>
-          <p className="text-lg text-text-gray max-w-2xl mx-auto">
-            Läs våra guider, nyheter och insikter om företagsöverlåtelser. 
-            Få kunskap som hjälper dig göra bättre affärer.
+    <main className="bg-neutral-white">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+            Kunskap & Insikter
+          </h1>
+          <p className="text-2xl text-primary-navy leading-relaxed">
+            Läs våra guider, nyheter och insikter om företagsöverlåtelser. Få kunskap som hjälper dig göra bättre affärer.
           </p>
         </div>
+      </section>
 
-        {/* Search */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-text-gray" />
-            <input
-              type="text"
-              placeholder="Sök artiklar, taggar..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all"
-            />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        {/* Featured Posts */}
+        <div className="mb-20">
+          <h2 className="text-4xl font-bold text-accent-orange mb-12 uppercase">Utvalda artiklar</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            {blogPosts.slice(0, 2).map((post) => (
+              <div
+                key={post.id}
+                className="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-all cursor-pointer group"
+              >
+                <div className="relative h-48 bg-gradient-to-br from-accent-pink/10 to-accent-orange/10 overflow-hidden">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-6xl opacity-20">📰</span>
+                  </div>
+                </div>
+
+                <div className="p-8">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-xs font-bold text-white bg-accent-pink px-3 py-1 rounded-full uppercase">
+                      {post.category}
+                    </span>
+                    <span className="text-xs text-gray-600">{post.readTime} min läsning</span>
+                  </div>
+
+                  <h3 className="text-2xl font-bold text-accent-orange mb-3 group-hover:text-accent-pink transition-colors">
+                    {post.title}
+                  </h3>
+
+                  <p className="text-gray-700 mb-6 line-clamp-2">{post.excerpt}</p>
+
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-600">
+                      <div className="font-semibold text-primary-navy">{post.author}</div>
+                      <div>{post.date.toLocaleDateString('sv-SE')}</div>
+                    </div>
+                    <span className="text-accent-pink text-lg">→</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Featured Posts */}
-        {!searchQuery && selectedCategory === 'all' && (
-          <div className="mb-16">
-            <h2 className="heading-2 mb-8">Utvalda artiklar</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
-              {featuredPosts.map(post => (
-                <article key={post.id} className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-all group">
-                  <div className="h-48 bg-gradient-to-br from-light-blue to-primary-blue/20"></div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 text-sm text-text-gray mb-3">
-                      <span className="px-3 py-1 bg-light-blue rounded-full text-primary-blue font-medium">
-                        {post.category === 'guide' ? 'Guide' : 
-                         post.category === 'news' ? 'Nyhet' :
-                         post.category === 'insights' ? 'Insikt' : 'Case Study'}
+        {/* Categories */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-primary-navy mb-6 uppercase">Kategorier</h2>
+          <div className="flex flex-wrap gap-3">
+            <div className="px-6 py-2 bg-accent-pink text-primary-navy font-bold rounded-full">
+              Alla artiklar
+            </div>
+            {['Guider', 'Nyheter', 'Insikter', 'Case Studies'].map((cat) => (
+              <div
+                key={cat}
+                className="px-6 py-2 border-2 border-gray-200 text-primary-navy font-semibold rounded-full hover:border-accent-pink transition-colors cursor-pointer"
+              >
+                {cat}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tags */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-primary-navy mb-6 uppercase">Populära taggar</h2>
+          <div className="flex flex-wrap gap-2">
+            {['värdering', 'due diligence', 'försäljning', 'köpare', 'tips', 'marknad'].map((tag) => (
+              <span
+                key={tag}
+                className="px-4 py-2 bg-neutral-off-white text-primary-navy rounded-full text-sm font-medium hover:bg-accent-pink/20 transition-colors cursor-pointer"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Newsletter */}
+        <div className="bg-accent-pink rounded-lg p-12 mb-16 text-center">
+          <h2 className="text-3xl font-bold text-primary-navy mb-4 uppercase">Nyhetsbrev</h2>
+          <p className="text-lg text-primary-navy mb-6">
+            Få våra bästa tips och senaste nyheter direkt i inkorgen.
+          </p>
+          <div className="flex gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="din@email.se"
+              className="flex-1 px-6 py-3 rounded-lg border-2 border-primary-navy text-primary-navy placeholder-gray-500 focus:outline-none focus:border-primary-navy"
+            />
+            <button className="px-8 py-3 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all">
+              Prenumerera
+            </button>
+          </div>
+        </div>
+
+        {/* All Articles */}
+        <div>
+          <h2 className="text-4xl font-bold text-accent-orange mb-12 uppercase">Senaste artiklarna</h2>
+
+          <div className="space-y-6">
+            {blogPosts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-white border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all cursor-pointer group"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="text-xs font-bold bg-accent-pink text-white px-3 py-1 rounded-full uppercase">
+                        {post.category}
                       </span>
-                      <span className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1" />
-                        {post.readTime} min läsning
+                      <span className="text-xs text-gray-600">{post.readTime} min</span>
+                      <span className="text-xs text-gray-600">
+                        {post.date.toLocaleDateString('sv-SE')}
                       </span>
                     </div>
-                    
-                    <h3 className="heading-3 mb-3 group-hover:text-primary-blue transition-colors">
+
+                    <h3 className="text-2xl font-bold text-accent-orange mb-3 group-hover:text-accent-pink transition-colors">
                       {post.title}
                     </h3>
-                    
-                    <p className="text-text-gray mb-4">
-                      {post.excerpt}
-                    </p>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center text-sm text-text-gray">
-                        <User className="w-4 h-4 mr-1" />
-                        <span>{post.author}</span>
-                      </div>
-                      <Link 
-                        href={`/blogg/${post.id}`}
-                        className="text-primary-blue font-medium flex items-center hover:gap-2 transition-all"
-                      >
-                        Läs mer <ArrowRight className="w-4 h-4 ml-1" />
-                      </Link>
+
+                    <p className="text-gray-700 mb-4">{post.excerpt}</p>
+
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <span key={tag} className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        )}
 
-        <div className="grid lg:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-3 sm:gap-4 md:gap-6">
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            {/* Categories */}
-            <div className="bg-white p-6 rounded-2xl shadow-card mb-6">
-              <h3 className="font-semibold text-text-dark mb-4">Kategorier</h3>
-              <div className="space-y-2">
-                {categories.map(category => (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategory(category.id)}
-                    className={`w-full text-left px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl transition-all flex items-center justify-between ${
-                      selectedCategory === category.id
-                        ? 'bg-primary-blue text-white'
-                        : 'hover:bg-gray-50 text-text-gray'
-                    }`}
-                  >
-                    <span>{category.label}</span>
-                    <span className={`text-sm ${
-                      selectedCategory === category.id ? 'text-white/80' : 'text-text-gray'
-                    }`}>
-                      {category.count}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Popular Tags */}
-            <div className="bg-white p-6 rounded-2xl shadow-card">
-              <h3 className="font-semibold text-text-dark mb-4">Populära taggar</h3>
-              <div className="flex flex-wrap gap-2">
-                {popularTags.map(tag => (
-                  <button
-                    key={tag}
-                    onClick={() => setSearchQuery(tag)}
-                    className="px-3 py-1 bg-gray-100 text-text-gray rounded-full text-sm hover:bg-primary-blue hover:text-white transition-all"
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Newsletter CTA */}
-            <div className="bg-primary-blue text-white p-6 rounded-2xl mt-6">
-              <h3 className="font-semibold mb-2">Nyhetsbrev</h3>
-              <p className="text-sm mb-4 opacity-90">
-                Få våra bästa tips och senaste nyheter direkt i inkorgen.
-              </p>
-              <button className="btn-secondary bg-white text-primary-blue hover:bg-gray-100 w-full text-sm">
-                Prenumerera
-              </button>
-            </div>
-          </aside>
-
-          {/* Blog Posts Grid */}
-          <div className="lg:col-span-3">
-            {filteredPosts.length === 0 ? (
-              <div className="bg-white p-12 rounded-2xl shadow-card text-center">
-                <p className="text-text-gray">
-                  Inga artiklar matchade din sökning. Prova att söka på något annat.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-                {filteredPosts.map(post => (
-                  <article key={post.id} className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-all group">
-                    <div className="h-40 bg-gradient-to-br from-light-blue to-primary-blue/20"></div>
-                    <div className="p-6">
-                      <div className="flex items-center gap-3 text-sm text-text-gray mb-3">
-                        <Calendar className="w-4 h-4" />
-                        <span>{post.date.toLocaleDateString('sv-SE')}</span>
-                        <span>•</span>
-                        <span>{post.readTime} min</span>
-                      </div>
-                      
-                      <h3 className="font-semibold text-text-dark mb-2 group-hover:text-primary-blue transition-colors">
-                        {post.title}
-                      </h3>
-                      
-                      <p className="text-sm text-text-gray mb-4 line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-2">
-                          {post.tags.slice(0, 2).map(tag => (
-                            <span key={tag} className="text-xs px-2 py-1 bg-gray-100 rounded-full text-text-gray">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <Link 
-                          href={`/blogg/${post.id}`}
-                          className="text-primary-blue text-sm font-medium flex items-center hover:gap-2 transition-all"
-                        >
-                          Läs mer <ArrowRight className="w-3 h-3 ml-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
-
-            {/* Pagination */}
-            {filteredPosts.length > 6 && (
-              <div className="flex justify-center mt-8">
-                <div className="flex gap-2">
-                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
-                    Föregående
-                  </button>
-                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-primary-blue text-white">
-                    1
-                  </button>
-                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
-                    2
-                  </button>
-                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
-                    3
-                  </button>
-                  <button className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto rounded-xl bg-white hover:bg-gray-50 transition-all">
-                    Nästa
-                  </button>
+                  <div className="text-primary-navy font-semibold">
+                    {post.author}
+                  </div>
                 </div>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>
