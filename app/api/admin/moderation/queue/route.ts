@@ -167,10 +167,10 @@ export async function GET(request: NextRequest) {
       stats: {
         total,
         pending: allFlags.filter(f => f.status === 'pending').length,
-        resolved: allFlags.filter(f => f.status === 'resolved').length,
-        dismissed: allFlags.filter(f => f.status === 'dismissed').length,
+        resolved: allFlags.filter(f => (f.status as string) === 'resolved').length,
+        dismissed: allFlags.filter(f => (f.status as string) === 'dismissed').length,
         high_severity: allFlags.filter(f => f.severity === 'high').length,
-        medium_severity: allFlags.filter(f => f.severity === 'medium').length,
+        medium_severity: allFlags.filter(f => (f.severity as string) === 'medium').length,
       },
       pagination: {
         page,
