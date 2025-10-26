@@ -361,13 +361,16 @@ model NDARequest {
   sellerId        String
   seller          User     @relation("SellerNDAs", fields: [sellerId], references: [id])
   
-  status          String   @default("pending") // pending, approved, rejected
+  status          String   @default("pending") // pending, approved, rejected, signed
   message         String?  @db.Text
   buyerProfile    Json?    // Snapshot of buyer info at time of request
+  documentUrl     String?  // URL to signed NDA document
   
   approvedAt      DateTime?
   rejectedAt      DateTime?
   viewedAt        DateTime?
+  signedAt        DateTime?
+  expiresAt       DateTime?
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

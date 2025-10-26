@@ -28,7 +28,33 @@ export async function GET(request: NextRequest) {
         buyerId: true,
         sellerId: true,
         listingId: true,
-        message: true
+        message: true,
+        expiresAt: true,
+        signedAt: true,
+        approvedAt: true,
+        rejectedAt: true,
+        viewedAt: true,
+        buyer: {
+          select: {
+            id: true,
+            email: true,
+            name: true
+          }
+        },
+        seller: {
+          select: {
+            id: true,
+            email: true,
+            name: true
+          }
+        },
+        listing: {
+          select: {
+            id: true,
+            companyName: true,
+            anonymousTitle: true
+          }
+        }
       },
     })
 
