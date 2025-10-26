@@ -48,11 +48,11 @@ export default function AdminLoginPage() {
       console.log('✅ Login successful! User:', data.user)
       setSuccess(true)
       
-      // Redirect directly to admin dashboard
+      // Wait a bit longer to ensure cookie is set, then redirect
       setTimeout(() => {
         console.log('🔄 Redirecting to /admin')
         window.location.href = '/admin'
-      }, 500)
+      }, 1000)
     } catch (err) {
       console.error('❌ Login error:', err)
       setError('Ett fel uppstod vid inloggning. Försök igen senare.')

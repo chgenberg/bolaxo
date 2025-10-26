@@ -50,17 +50,24 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/admin') && 
       !request.nextUrl.pathname.startsWith('/admin/login')) {
     
+    console.log('🔐 [MIDDLEWARE] Checking admin auth for:', request.nextUrl.pathname)
+    
     const adminToken = request.cookies.get('adminToken')?.value
     
     if (!adminToken) {
+      console.log('❌ [MIDDLEWARE] No adminToken cookie found, redirecting to login')
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
 
+    console.log('✅ [MIDDLEWARE] adminToken found, verifying...')
+
     // Verify JWT token
     try {
-      jwt.verify(adminToken, JWT_SECRET)
+      const decoded = jwt.verify(adminToken, JWT_SECRET)
+      console.log('✅ [MIDDLEWARE] Token valid, user authorized:', decoded)
     } catch (err) {
       // Token is invalid or expired
+      console.log('❌ [MIDDLEWARE] Token invalid or expired:', err)
       const loginUrl = new URL('/admin/login', request.url)
       const res = NextResponse.redirect(loginUrl)
       res.cookies.delete('adminToken')
