@@ -39,15 +39,6 @@ export async function GET(request: NextRequest) {
             revenueMax: true
           }
         },
-        transactions: {
-          where: { buyerId: undefined }, // Note: adjust based on actual schema
-          select: {
-            id: true,
-            stage: true,
-            totalValue: true,
-            createdAt: true
-          }
-        },
         _count: {
           select: { listings: true, valuations: true }
         }

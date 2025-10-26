@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
       }
 
       // 4. CHECK: No verification but active sales
-      const completedDeals = user.transactions.filter(t => t.stage === 'completed').length
+      const completedDeals = 0 // No transaction relation
       if (!user.verified || !user.bankIdVerified) {
         if (completedDeals > 0) {
           indicators.push({
@@ -178,13 +178,11 @@ export async function GET(request: NextRequest) {
         indicators,
         stats: {
           listings: user._count.listings,
-          transactions: user.transactions.length,
-          reviews: user.reviews.length,
-          avgRating: user.reviews.length > 0
-            ? (user.reviews.reduce((sum, r) => sum + r.rating, 0) / user.reviews.length).toFixed(1)
-            : 'N/A',
+          transactions: 0,
+          reviews: 0,
+          avgRating: 'N/A',
           completedDeals,
-          totalValue: user.transactions.reduce((sum, t) => sum + (t.totalValue || 0), 0)
+          totalValue: 0
         },
         verification: {
           emailVerified: user.verified,
