@@ -1,11 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function AdminLoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -49,11 +47,11 @@ export default function AdminLoginPage() {
 
       console.log('✅ Login successful! User:', data.user)
       setSuccess(true)
-      // Redirect to admin dashboard after short delay
+      // Redirect to admin dashboard after short delay using hard redirect
       setTimeout(() => {
-        console.log('🔄 Redirecting to /admin')
-        router.push('/admin')
-      }, 1000)
+        console.log('🔄 Hard redirect to /admin')
+        window.location.href = '/admin'
+      }, 500)
     } catch (err) {
       console.error('❌ Login error:', err)
       setError('Ett fel uppstod vid inloggning. Försök igen senare.')
