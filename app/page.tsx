@@ -19,11 +19,12 @@ export default function Home() {
     <main className="bg-black text-white overflow-x-hidden">
       {/* HERO SECTION WITH FULLSCREEN VIDEO */}
       <section className="relative h-screen w-full overflow-hidden">
-        {/* Vimeo Video Background */}
+        {/* Vimeo Video Background - Updated for full coverage */}
         <div className="absolute inset-0 w-full h-full">
           <iframe
             src="https://player.vimeo.com/video/1130638136?autoplay=1&loop=1&muted=1&controls=0&background=1"
-            className="absolute top-1/2 left-1/2 w-[177.77vh] min-w-full min-h-full -translate-x-1/2 -translate-y-1/2"
+            className="absolute top-0 left-0 w-full h-full object-cover scale-105"
+            style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
             frameBorder="0"
             allow="autoplay; fullscreen"
           />
@@ -134,18 +135,14 @@ export default function Home() {
               <div
                 key={index}
                 className="relative group"
-                style={{ 
-                  transform: `translateY(${Math.sin(scrollY * 0.001 + index) * 20}px)`,
-                  transition: 'transform 0.3s ease-out'
-                }}
               >
                 <div
-                  className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 h-full border border-gray-700 hover:border-pink-500 transition-all duration-500 group-hover:scale-105"
-                  style={{ borderRadius: step.borderRadius }}
+                  className="bg-gradient-to-br from-gray-800 to-gray-900 p-10 h-full border border-gray-700 hover:border-pink-500 transition-all duration-500 group-hover:scale-105 flex flex-col overflow-hidden"
+                  style={{ borderRadius: step.borderRadius, minHeight: '320px' }}
                 >
-                  <div className="text-6xl font-bold text-pink-500 mb-4 opacity-50">{step.number}</div>
-                  <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                  <p className="text-gray-400">{step.desc}</p>
+                  <div className="text-5xl font-bold text-pink-500 mb-6 opacity-50">{step.number}</div>
+                  <h3 className="text-lg font-bold mb-4 uppercase leading-tight">{step.title}</h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{step.desc}</p>
                 </div>
               </div>
             ))}

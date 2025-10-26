@@ -18,10 +18,15 @@ export default function ObjectCard({ object }: ObjectCardProps) {
   }
 
   const getDaysAgo = (date: Date) => {
-    const days = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24))
-    if (days === 0) return 'Idag'
-    if (days === 1) return 'Igår'
-    return `${days} dagar sedan`
+    try {
+      const dateObj = date instanceof Date ? date : new Date(date)
+      const days = Math.floor((Date.now() - dateObj.getTime()) / (1000 * 60 * 60 * 24))
+      if (days === 0) return 'Idag'
+      if (days === 1) return 'Igår'
+      return `${days} dagar sedan`
+    } catch (error) {
+      return 'Nyligen'
+    }
   }
 
   return (
