@@ -143,12 +143,7 @@ export async function GET(request: NextRequest) {
           createdAt: { gte: startDate }
         },
         select: {
-          seller: {
-            select: {
-              id: true,
-              createdAt: true
-            }
-          },
+          sellerId: true,
           createdAt: true
         }
       })
@@ -156,7 +151,7 @@ export async function GET(request: NextRequest) {
       // Group users by signup week and track repeat engagement
       const userEngagement: Record<string, any> = {}
       allTransactions.forEach(tx => {
-        const userId = tx.seller.id
+        const userId = tx.sellerId
         if (!userEngagement[userId]) {
           userEngagement[userId] = {
             signupDate: tx.seller.createdAt,
