@@ -115,9 +115,11 @@ export async function GET(request: NextRequest) {
       where: { role: 'seller' }
     })
 
-    const avgPerformanceScore = Math.round(
-      enrichedSellers.reduce((sum, s) => sum + s.performanceScore, 0) / enrichedSellers.length
-    )
+    const avgPerformanceScore = enrichedSellers.length > 0
+      ? Math.round(
+          enrichedSellers.reduce((sum, s) => sum + s.performanceScore, 0) / enrichedSellers.length
+        )
+      : 0
     const activeSellers = enrichedSellers.filter(s => s.status === 'active').length
 
     return NextResponse.json({

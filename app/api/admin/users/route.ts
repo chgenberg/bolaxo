@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { checkAdminAuth } from '@/lib/admin-auth'
 
 // GET - Lista alla användare med filter & sök
 export async function GET(request: NextRequest) {
   try {
-    // Auth check
-    const authHeader = request.headers.get('Authorization')
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
     }
 
     const searchParams = request.nextUrl.searchParams
@@ -92,6 +93,12 @@ export async function GET(request: NextRequest) {
 // PATCH - Uppdatera användardata (roll, status, etc)
 export async function PATCH(request: NextRequest) {
   try {
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const body = await request.json()
     const { userId, role, verified, bankIdVerified, disabled } = body
 
@@ -138,6 +145,12 @@ export async function PATCH(request: NextRequest) {
 // DELETE - Deaktivera/ta bort användare
 export async function DELETE(request: NextRequest) {
   try {
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const body = await request.json()
     const { userId } = body
 
