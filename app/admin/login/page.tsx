@@ -47,11 +47,30 @@ export default function AdminLoginPage() {
 
       console.log('✅ Login successful! User:', data.user)
       setSuccess(true)
-      // Redirect to admin dashboard after short delay using hard redirect
-      setTimeout(() => {
-        console.log('🔄 Hard redirect to /admin')
-        window.location.href = '/admin'
-      }, 500)
+      
+      // Wait a bit for cookie to be set, then verify and redirect
+      setTimeout(async () => {
+        console.log('⏳ Waiting for cookie to be set...')
+        
+        // Verify cookie was set by checking test endpoint
+        try {
+          const testRes = await fetch('/api/admin/test')
+          const testData = await testRes.json()
+          console.log('🍪 Cookie test result:', testData)
+          
+          if (testData.adminToken) {
+            console.log('✅ Cookie verified! Redirecting to /admin')
+            window.location.href = '/admin'
+          } else {
+            console.error('❌ Cookie not found after login!')
+            setError('Cookie not set. Försök igen.')
+          }
+        } catch (err) {
+          console.error('❌ Error checking cookie:', err)
+          // Try redirect anyway
+          window.location.href = '/admin'
+        }
+      }, 1000)
     } catch (err) {
       console.error('❌ Login error:', err)
       setError('Ett fel uppstod vid inloggning. Försök igen senare.')
