@@ -4,7 +4,7 @@ import { Bell, Plus, RefreshCw, Trash2, Edit, ToggleLeft, ToggleRight } from 'lu
 
 export default function CustomAlerts() {
   const [alerts, setAlerts] = useState<any[]>([])
-  const [stats, setStats] = useState({})
+  const [stats, setStats] = useState<any>({ total: 0, active: 0, triggered: 0 })
   const [showForm, setShowForm] = useState(false)
   const [metadata, setMetadata] = useState<any>(null)
   const [formData, setFormData] = useState({ name: '', trigger: '', threshold: '', channels: [] })
