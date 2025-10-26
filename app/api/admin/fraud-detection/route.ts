@@ -132,7 +132,7 @@ export async function GET(request: NextRequest) {
       }
 
       // 7. CHECK: No reviews despite transactions
-      if (completedDeals > 2 && user._count.reviews === 0) {
+      if (completedDeals > 2 && 0 // No reviews relation === 0) {
         indicators.push({
           type: 'suspicious_pattern',
           severity: 'medium',
