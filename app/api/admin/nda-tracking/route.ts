@@ -59,6 +59,63 @@ export async function GET(request: NextRequest) {
       },
     })
 
+    // If no NDAs in DB, return mock data for demo
+    if (ndas.length === 0) {
+      const mockNdas: any[] = [
+        {
+          id: '1',
+          status: 'signed',
+          createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+          signedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+          expiresAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000),
+          buyer: { id: '1', email: 'johan.andersson@example.com', name: 'Johan Andersson' },
+          seller: { id: '2', email: 'lisa.bergman@example.com', name: 'Lisa Bergman' },
+          listing: { id: '1', companyName: 'Tech Consulting AB', anonymousTitle: 'IT-konsultbolag Stockholm', revenue: 12500000 }
+        },
+        {
+          id: '2',
+          status: 'pending',
+          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+          signedAt: null,
+          expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+          buyer: { id: '3', email: 'maria.svensson@example.com', name: 'Maria Svensson' },
+          seller: { id: '4', email: 'erik.nilsson@example.com', name: 'Erik Nilsson' },
+          listing: { id: '2', companyName: 'E-handel Premium AB', anonymousTitle: 'E-handelsföretag', revenue: 8750000 }
+        },
+        {
+          id: '3',
+          status: 'signed',
+          createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
+          signedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+          expiresAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000),
+          buyer: { id: '5', email: 'karl.johansson@example.com', name: 'Karl Johansson' },
+          seller: { id: '6', email: 'anna.lundgren@example.com', name: 'Anna Lundgren' },
+          listing: { id: '3', companyName: 'SaaS Startup AB', anonymousTitle: 'SaaS-bolag med återkommande intäkter', revenue: 5200000 }
+        },
+        {
+          id: '4',
+          status: 'pending',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+          signedAt: null,
+          expiresAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+          buyer: { id: '7', email: 'peter.karlsson@example.com', name: 'Peter Karlsson' },
+          seller: { id: '8', email: 'sofia.eriksson@example.com', name: 'Sofia Eriksson' },
+          listing: { id: '4', companyName: null, anonymousTitle: 'Tjänsteföretag inom bygg', revenue: 15800000 }
+        },
+        {
+          id: '5',
+          status: 'signed',
+          createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
+          signedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
+          expiresAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
+          buyer: { id: '9', email: 'gustav.hansen@example.com', name: 'Gustav Hansen' },
+          seller: { id: '10', email: 'emma.persson@example.com', name: 'Emma Persson' },
+          listing: { id: '5', companyName: 'Restaurang Stockholm City AB', anonymousTitle: 'Restaurang i central Stockholm', revenue: 7300000 }
+        }
+      ]
+      ndas = mockNdas
+    }
+
     // Enrich with calculated fields
     let enrichedNdas = ndas.map(nda => {
       const now = new Date()
