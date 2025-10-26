@@ -131,16 +131,7 @@ export async function GET(request: NextRequest) {
         riskScore += 5
       }
 
-      // 7. CHECK: No reviews despite transactions
-      if (completedDeals > 2 && 0 // No reviews relation === 0) {
-        indicators.push({
-          type: 'suspicious_pattern',
-          severity: 'medium',
-          description: 'Multiple completed deals with no reviews',
-          score: 12
-        })
-        riskScore += 12
-      }
+      // 7. CHECK: No reviews despite transactions - REMOVED (no reviews relation)
 
       // 8. CHECK: Extreme numbers of listings
       if (user._count.listings > 50) {
