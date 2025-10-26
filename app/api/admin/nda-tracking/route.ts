@@ -19,47 +19,17 @@ export async function GET(request: NextRequest) {
     // Get all NDA requests
     let ndas = await prisma.nDARequest.findMany({
       where: {
-        ...(searchQuery && {
-          OR: [
-            { buyer: { email: { contains: searchQuery, mode: 'insensitive' } } },
-            { seller: { email: { contains: searchQuery, mode: 'insensitive' } } },
-            { listing: { companyName: { contains: searchQuery, mode: 'insensitive' } } }
-          ]
-        })
+        // Search removed - no buyer/seller/listing relations on NDARequest
       },
       select: {
         id: true,
         status: true,
         createdAt: true,
-        expiresAt: true,
-        signedAt: true,
-        buyer: {
-          select: {
-            id: true,
-            email: true,
-            name: true
-          }
-        },
-        seller: {
-          select: {
-            id: true,
-            email: true,
-            name: true
-          }
-        },
-        listing: {
-          select: {
-            id: true,
-            companyName: true,
-            revenue: true
-          }
-        }
+        buyerId: true,
+        sellerId: true,
+        listingId: true,
+        message: true
       },
-      orderBy: {
-        [sortBy]: sortOrder as 'asc' | 'desc'
-      },
-      take: limit,
-      skip
     })
 
     // Enrich with calculated fields
