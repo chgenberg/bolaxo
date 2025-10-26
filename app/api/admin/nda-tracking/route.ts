@@ -264,7 +264,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'NDA not found' }, { status: 404 })
       }
 
-      const newExpiry = new Date(nda.expiresAt)
+      const newExpiry = nda.expiresAt ? new Date(nda.expiresAt) : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
       newExpiry.setDate(newExpiry.getDate() + 14)
 
       await prisma.nDARequest.update({
