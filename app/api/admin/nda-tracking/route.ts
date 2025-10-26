@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     // Enrich with calculated fields
     let enrichedNdas = ndas.map(nda => {
       const now = new Date()
-      const expiresAt = new Date(nda.expiresAt)
+      const expiresAt = nda.expiresAt ? new Date(nda.expiresAt) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // Default 30 days
       const daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
       const isExpired = now > expiresAt
       const daysOld = Math.ceil((now.getTime() - new Date(nda.createdAt).getTime()) / (1000 * 60 * 60 * 24))
