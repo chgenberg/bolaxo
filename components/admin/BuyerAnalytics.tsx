@@ -166,13 +166,13 @@ export default function BuyerAnalytics() {
                 {/* Quality & Status */}
                 <div className="md:col-span-2">
                   <div className="space-y-2">
-                    <span className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(buyer['buyer quality'].status)}`}>
-                      {buyer['buyer quality'].status.toUpperCase()}
+                    <span className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(buyer.buyerQuality.status)}`}>
+                      {buyer.buyerQuality.status.toUpperCase()}
                     </span>
                     <div>
                       <p className="text-xs text-gray-600">Quality Score</p>
-                      <p className={`text-lg font-bold ${getQualityColor(buyer['buyer quality'].score)}`}>
-                        {buyer['buyer quality'].score}/100
+                      <p className={`text-lg font-bold ${getQualityColor(buyer.buyerQuality.score)}`}>
+                        {buyer.buyerQuality.score}/100
                       </p>
                     </div>
                   </div>
