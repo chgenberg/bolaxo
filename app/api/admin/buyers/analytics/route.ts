@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
           }
         },
         _count: {
-          select: { savedListings: true, messages: true, ndaRequests: true }
+          select: { listings: true, valuations: true }
         }
       },
       take: limit,
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
 
     // Enrich with calculated metrics
     const enrichedBuyers = buyers.map(buyer => {
-      const savedCount = buyer._count.savedListings
+      const savedCount = buyer._count.listings
       const matchCount = buyer.buyerMatches.length
       const avgMatchScore = matchCount > 0 
         ? Math.round(buyer.buyerMatches.reduce((sum, m) => sum + m.matchScore, 0) / matchCount)
@@ -102,9 +102,7 @@ export async function GET(request: NextRequest) {
         activity: {
           savedListings: savedCount,
           matches: matchCount,
-          avgMatchScore,
-          messages: buyer._count.messages,
-          ndaRequests: buyer._count.ndaRequests
+          avgMatchScore
         },
         deals: {
           total: buyer.transactions.length,
