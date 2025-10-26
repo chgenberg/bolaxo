@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         email: true,
         name: true,
         createdAt: true,
-        emailVerified: true,
+        verified: true,
         bankIdVerified: true,
         listings: {
           select: {
@@ -41,14 +41,8 @@ export async function GET(request: NextRequest) {
             images: true
           }
         },
-        transactions: {
-          select: { id: true, stage: true, createdAt: true, totalValue: true }
-        },
-        reviews: {
-          select: { rating: true }
-        },
         _count: {
-          select: { listings: true, transactions: true, reviews: true }
+          select: { listings: true }
         }
       },
       take: limit * 3, // Get more to analyze
@@ -99,7 +93,7 @@ export async function GET(request: NextRequest) {
 
       // 4. CHECK: No verification but active sales
       const completedDeals = user.transactions.filter(t => t.stage === 'completed').length
-      if (!user.emailVerified || !user.bankIdVerified) {
+      if (!user.verified || !user.bankIdVerified) {
         if (completedDeals > 0) {
           indicators.push({
             type: 'unverified_transactions',
@@ -127,7 +121,7 @@ export async function GET(request: NextRequest) {
       }
 
       // 6. CHECK: Low/no email verification
-      if (!user.emailVerified) {
+      if (!user.verified) {
         indicators.push({
           type: 'no_email_verification',
           severity: 'low',
@@ -184,8 +178,8 @@ export async function GET(request: NextRequest) {
         indicators,
         stats: {
           listings: user._count.listings,
-          transactions: user._count.transactions,
-          reviews: user._count.reviews,
+          transactions: user.transactions.length,
+          reviews: user.reviews.length,
           avgRating: user.reviews.length > 0
             ? (user.reviews.reduce((sum, r) => sum + r.rating, 0) / user.reviews.length).toFixed(1)
             : 'N/A',
@@ -193,7 +187,7 @@ export async function GET(request: NextRequest) {
           totalValue: user.transactions.reduce((sum, t) => sum + (t.totalValue || 0), 0)
         },
         verification: {
-          emailVerified: user.emailVerified,
+          emailVerified: user.verified,
           bankIdVerified: user.bankIdVerified
         }
       }

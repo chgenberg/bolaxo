@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
         email: true,
         name: true,
         createdAt: true,
-        emailVerified: true,
+        verified: true,
         bankIdVerified: true,
         buyerPreferences: {
           select: {
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
         email: buyer.email,
         name: buyer.name || 'N/A',
         createdAt: buyer.createdAt,
-        emailVerified: buyer.emailVerified,
+        verified: buyer.verified,
         bankIdVerified: buyer.bankIdVerified,
         status: isNew ? 'new' : isActive ? 'active' : 'inactive',
         preferences: {
@@ -120,10 +120,10 @@ export async function GET(request: NextRequest) {
             (completedTransactions * 20) +
             (matchCount * 5) +
             (savedCount * 2) +
-            (buyer.emailVerified ? 15 : 0) +
+            (buyer.verified ? 15 : 0) +
             (buyer.bankIdVerified ? 20 : 0)
           )),
-          status: completedTransactions > 0 ? 'verified' : buyer.emailVerified ? 'qualified' : 'new'
+          status: completedTransactions > 0 ? 'verified' : buyer.verified ? 'qualified' : 'new'
         }
       }
     })

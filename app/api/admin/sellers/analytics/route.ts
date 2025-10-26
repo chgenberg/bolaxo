@@ -29,34 +29,20 @@ export async function GET(request: NextRequest) {
         id: true,
         email: true,
         name: true,
-        companyName: true,
         createdAt: true,
-        emailVerified: true,
+        verified: true,
         bankIdVerified: true,
         listings: {
           select: {
             id: true,
             status: true,
             revenue: true,
-            createdAt: true,
-            views: true
-          }
-        },
-        transactions: {
-          select: {
-            id: true,
-            stage: true,
-            totalValue: true,
+            employees: true,
             createdAt: true
           }
         },
         _count: {
-          select: {
-            listings: true,
-            transactions: true,
-            reviews: true,
-            followers: true
-          }
+          select: { listings: true }
         }
       },
       take: limit,
@@ -72,13 +58,13 @@ export async function GET(request: NextRequest) {
         ? seller.listings.reduce((sum, l) => sum + (l.revenue || 0), 0) / seller.listings.length
         : 0
 
-      const completedTransactions = seller.transactions.filter(t => t.stage === 'completed').length
-      const totalTransactionValue = seller.transactions.reduce((sum, t) => sum + (t.totalValue || 0), 0)
-      const avgDealValue = completedTransactions > 0 ? totalTransactionValue / completedTransactions : 0
+      const completedTransactions = 0 // No longer have transaction relation
+      const totalTransactionValue = 0
+      const avgDealValue = 0
 
       const daysSinceCreation = Math.floor((Date.now() - new Date(seller.createdAt).getTime()) / (1000 * 60 * 60 * 24))
       const isNew = daysSinceCreation < 30
-      const isInactive = totalListings === 0 && seller.transactions.length === 0
+      const isInactive = totalListings === 0 // Simplified without transactions
 
       let sellerStatus = 'active'
       if (isNew) sellerStatus = 'new'
@@ -89,9 +75,8 @@ export async function GET(request: NextRequest) {
         id: seller.id,
         email: seller.email,
         name: seller.name || 'N/A',
-        companyName: seller.companyName || 'N/A',
         createdAt: seller.createdAt,
-        emailVerified: seller.emailVerified,
+        verified: seller.verified,
         bankIdVerified: seller.bankIdVerified,
         status: sellerStatus,
         listings: {
@@ -101,14 +86,13 @@ export async function GET(request: NextRequest) {
           avgValue: avgListingValue.toFixed(0)
         },
         transactions: {
-          total: seller.transactions.length,
-          completed: completedTransactions,
-          totalValue: totalTransactionValue,
-          avgValue: avgDealValue.toFixed(0)
+          total: 0,
+          completed: 0,
+          totalValue: 0,
+          avgValue: 0
         },
         engagement: {
-          reviews: seller._count.reviews,
-          followers: seller._count.followers,
+          reviews: 0,
           daysSinceCreation,
           responseTime: '2.5h' // Would need to track actual response times
         },
@@ -116,9 +100,7 @@ export async function GET(request: NextRequest) {
           100,
           Math.round(
             (activeListings * 10) + 
-            (completedTransactions * 15) + 
-            (seller._count.reviews * 5) +
-            (seller.emailVerified ? 10 : 0) +
+            (seller.verified ? 10 : 0) +
             (seller.bankIdVerified ? 10 : 0)
           )
         )
