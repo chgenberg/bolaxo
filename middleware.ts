@@ -31,7 +31,8 @@ export function middleware(request: NextRequest) {
         "style-src 'self' 'unsafe-inline'",
         "img-src 'self' data: https:",
         "font-src 'self' data:",
-        "connect-src 'self' https://api.openai.com https://api.resend.com",
+        "connect-src 'self' https://api.openai.com https://api.resend.com https://api.railway.app",
+        "frame-src https://player.vimeo.com https://vimeo.com",
         "frame-ancestors 'none'",
       ].join('; ')
     )

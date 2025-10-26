@@ -31,9 +31,14 @@ export default function NotificationCenter() {
           const data = await response.json()
           setNotifications(data.notifications || [])
           setUnreadCount(data.unreadCount || 0)
+        } else if (response.status === 401) {
+          console.log('User not authenticated for notifications')
+          setNotifications([])
+          setUnreadCount(0)
         }
       } catch (error) {
         console.error('Error fetching notifications:', error)
+        setNotifications([])
       }
     }
 
