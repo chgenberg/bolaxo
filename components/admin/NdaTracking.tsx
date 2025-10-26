@@ -6,6 +6,7 @@ import {
   AlertCircle, CheckCircle, Clock, MoreVertical, Send, RotateCw
 } from 'lucide-react'
 import { useNdaTracking } from '@/lib/api-hooks'
+import ModernSelect from './ModernSelect'
 
 export default function NdaTracking() {
   const { fetchNdas, updateNdaStatus, performNdaAction, loading, error } = useNdaTracking()
@@ -113,22 +114,22 @@ export default function NdaTracking() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <div className="text-xs text-yellow-700 font-semibold mb-1">PENDING</div>
-          <div className="text-3xl font-bold text-yellow-900">{stats.pending}</div>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <div className="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wide">PENDING</div>
+          <div className="text-3xl font-bold text-gray-900">{stats.pending}</div>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <div className="text-xs text-green-700 font-semibold mb-1">SIGNED</div>
-          <div className="text-3xl font-bold text-green-900">{stats.signed}</div>
-          <p className="text-xs text-green-600 mt-1">Sign rate: {stats.signRate}%</p>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <div className="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wide">SIGNED</div>
+          <div className="text-3xl font-bold text-gray-900">{stats.signed}</div>
+          <p className="text-xs text-gray-600 mt-1">Sign rate: {stats.signRate}%</p>
         </div>
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="text-xs text-red-700 font-semibold mb-1">URGENT</div>
-          <div className="text-3xl font-bold text-red-900">{stats.urgent}</div>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <div className="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wide">URGENT</div>
+          <div className="text-3xl font-bold text-gray-900">{stats.urgent}</div>
         </div>
-        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-          <div className="text-xs text-purple-700 font-semibold mb-1">AVG SIGN TIME</div>
-          <div className="text-3xl font-bold text-purple-900">{stats.avgDaysToSign}d</div>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <div className="text-xs text-gray-500 font-semibold mb-1 uppercase tracking-wide">AVG SIGN TIME</div>
+          <div className="text-3xl font-bold text-gray-900">{stats.avgDaysToSign}d</div>
         </div>
       </div>
 
