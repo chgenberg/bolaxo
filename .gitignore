@@ -35,3 +35,4 @@ next-env.d.ts
 .env.example
 
 /app/generated/prisma
+.env.production
