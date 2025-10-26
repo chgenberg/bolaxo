@@ -59,6 +59,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState<'seller' | 'buyer'>('seller')
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const { user, logout } = useAuth()
   const pathname = usePathname()
@@ -85,78 +86,64 @@ export default function Header() {
     }, 200)
   }
 
-  // Dynamic styling based on homepage and scroll
-  const headerBg = isHomepage && !scrolled 
-    ? 'bg-transparent' 
-    : 'bg-white border-b border-gray-200'
+  // Klarna-inspired clean design
+  const headerBg = scrolled 
+    ? 'bg-white/95 backdrop-blur-md shadow-sm' 
+    : 'bg-white'
   
-  const textColor = isHomepage && !scrolled
-    ? 'text-white hover:text-gray-200'
-    : 'text-gray-600 hover:text-gray-900'
-  
-  const logoColor = isHomepage && !scrolled
-    ? 'text-white'
-    : 'text-accent-orange'
-
-  const ctaStyle = isHomepage && !scrolled
-    ? 'bg-white text-black hover:bg-gray-100'
-    : 'bg-accent-pink text-primary-navy hover:shadow-lg'
+  const textColor = 'text-gray-700 hover:text-gray-900'
+  const logoColor = 'text-gray-900'
+  const ctaStyle = 'bg-gray-900 text-white hover:bg-gray-800'
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="w-full px-6 lg:px-12">
         <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <span className={`text-3xl font-bold uppercase tracking-tight transition-colors duration-300 ${logoColor}`}>
-              BOLAXO
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
-                onMouseLeave={handleMouseLeave}
+          {/* Left side with section switcher and logo */}
+          <div className="flex items-center space-x-8">
+            {/* Section Switcher - Klarna style */}
+            <div className="flex bg-gray-100 rounded-full p-1">
+              <button
+                onClick={() => setActiveSection('seller')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  activeSection === 'seller'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className={`font-medium transition-colors ${textColor}`}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <button className={`flex items-center space-x-1 font-medium transition-colors ${textColor}`}>
-                    <span>{item.label}</span>
-                    <ChevronDown className="w-4 h-4" />
-                  </button>
-                )}
+                För säljare
+              </button>
+              <button
+                onClick={() => setActiveSection('buyer')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  activeSection === 'buyer'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                För köpare
+              </button>
+            </div>
+            
+            {/* Logo */}
+            <Link href="/" className="flex items-center">
+              <span className={`text-2xl font-bold tracking-tight ${logoColor}`}>
+                BOLAXO
+              </span>
+            </Link>
+          </div>
 
-                {/* Dropdown Menu */}
-                {item.dropdown && openDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-2xl overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100">
-                    <div className="p-2">
-                      {item.dropdown.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.href}
-                          href={dropdownItem.href}
-                          className="block px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
-                        >
-                          <div className="font-semibold text-gray-900">{dropdownItem.label}</div>
-                          {dropdownItem.description && (
-                            <div className="text-sm text-gray-500 mt-0.5">{dropdownItem.description}</div>
-                          )}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+          {/* Center Navigation - Simplified */}
+          <div className="hidden lg:flex items-center space-x-8">
+            <Link href="/vardering" className={`font-medium transition-colors ${textColor}`}>
+              Värdering
+            </Link>
+            <Link href="/om-oss" className={`font-medium transition-colors ${textColor}`}>
+              Om oss
+            </Link>
+            <Link href="/kontakt" className={`font-medium transition-colors ${textColor}`}>
+              Kontakt
+            </Link>
           </div>
 
           {/* Right Side Actions */}
@@ -189,7 +176,7 @@ export default function Header() {
                 </Link>
                 <Link
                   href="/registrera"
-                  className={`hidden lg:block px-6 py-2.5 font-bold rounded-full transition-all ${ctaStyle}`}
+                  className={`hidden lg:block px-6 py-3 font-medium rounded-full transition-all ${ctaStyle}`}
                 >
                   Kom igång
                 </Link>
