@@ -137,12 +137,12 @@ export default function Home() {
                 className="relative group"
               >
                 <div
-                  className="bg-gradient-to-br from-gray-800 to-gray-900 p-10 h-full border border-gray-700 hover:border-pink-500 transition-all duration-500 group-hover:scale-105 flex flex-col overflow-hidden"
+                  className="bg-gradient-to-br from-gray-800 to-gray-900 p-10 h-full border border-gray-700 hover:border-pink-500 transition-all duration-500 group-hover:scale-105 flex flex-col relative overflow-hidden"
                   style={{ borderRadius: step.borderRadius, minHeight: '320px' }}
                 >
-                  <div className="text-5xl font-bold text-pink-500 mb-6 opacity-50">{step.number}</div>
+                  <div className="text-5xl font-bold text-pink-500 mb-6 opacity-50 flex-shrink-0">{step.number}</div>
                   <h3 className="text-lg font-bold mb-4 uppercase leading-tight">{step.title}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{step.desc}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed flex-grow">{step.desc}</p>
                 </div>
               </div>
             ))}

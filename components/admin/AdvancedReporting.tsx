@@ -134,7 +134,7 @@ export default function AdvancedReporting() {
               <div key={cat.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-2 flex-1">
                   <div className="w-3 h-3 rounded-full" style={{
-                    backgroundColor: cat.name === 'Tech' ? '#f97316' : cat.name === 'E-commerce' ? '#ec4899' : cat.name === 'Services' ? '#3b82f6' : '#6b7280'
+                    backgroundColor: cat.name === 'Tech' ? '#f97316' : cat.name === 'E-commerce' ? '#e8903d' : cat.name === 'Services' ? '#3b82f6' : '#6b7280'
                   }} />
                   <span className="text-sm text-gray-700">{cat.name}</span>
                 </div>

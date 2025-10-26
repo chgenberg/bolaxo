@@ -11,7 +11,7 @@ const config: Config = {
       colors: {
         // Brand colors from design manual
         'primary-navy': '#0B214A',
-        'accent-pink': '#FF9BC5',
+        'accent-pink': '#e8903d',
         'accent-orange': '#F68B1F',
         'neutral-white': '#FFFFFF',
         'neutral-off-white': '#F9F8F5',
