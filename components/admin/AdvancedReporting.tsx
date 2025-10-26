@@ -1,18 +1,18 @@
 'use client'
 import { useState } from 'react'
-import { BarChart3, LineChart as LineChartIcon, PieChart as PieChartIcon, TrendingUp, Download, Filter, Calendar } from 'lucide-react'
+import { BarChart3, LineChart as LineChartIcon, PieChart as PieChartIcon, TrendingUp, Download, Filter, Calendar, DollarSign, Users, FileText, CreditCard, BarChart2, RefreshCw } from 'lucide-react'
 
 export default function AdvancedReporting() {
   const [reportType, setReportType] = useState('revenue')
   const [dateRange, setDateRange] = useState('month')
 
   const reportTypes = [
-    { id: 'revenue', label: 'Revenue Report', icon: '💰' },
-    { id: 'users', label: 'User Analytics', icon: '👥' },
-    { id: 'listings', label: 'Listings Performance', icon: '📋' },
-    { id: 'transactions', label: 'Transaction Analysis', icon: '💳' },
-    { id: 'engagement', label: 'User Engagement', icon: '📊' },
-    { id: 'retention', label: 'Retention Cohorts', icon: '🔄' }
+    { id: 'revenue', label: 'Revenue Report', IconComponent: DollarSign },
+    { id: 'users', label: 'User Analytics', IconComponent: Users },
+    { id: 'listings', label: 'Listings Performance', IconComponent: FileText },
+    { id: 'transactions', label: 'Transaction Analysis', IconComponent: CreditCard },
+    { id: 'engagement', label: 'User Engagement', IconComponent: BarChart2 },
+    { id: 'retention', label: 'Retention Cohorts', IconComponent: RefreshCw }
   ]
 
   const revenueData = [
@@ -28,28 +28,31 @@ export default function AdvancedReporting() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-primary-navy flex items-center gap-2 mb-2">
-          <BarChart3 className="w-6 h-6" /> Advanced Reporting Suite
+        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2 mb-2">
+          <BarChart3 className="w-6 h-6" /> Avancerad rapportering
         </h2>
-        <p className="text-gray-600 text-sm">Comprehensive analytics and business intelligence reports</p>
+        <p className="text-gray-600 text-sm">Omfattande analys och affärsintelserapporter</p>
       </div>
 
       {/* Report Type Selector */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {reportTypes.map(type => (
-          <button
-            key={type.id}
-            onClick={() => setReportType(type.id)}
-            className={`p-4 rounded-lg border-2 transition-all text-left ${
-              reportType === type.id
-                ? 'border-accent-pink bg-accent-pink/5'
-                : 'border-gray-200 hover:border-accent-pink'
-            }`}
-          >
-            <span className="text-2xl mr-2">{type.icon}</span>
-            <p className="font-semibold text-gray-900">{type.label}</p>
-          </button>
-        ))}
+        {reportTypes.map(type => {
+          const Icon = type.IconComponent
+          return (
+            <button
+              key={type.id}
+              onClick={() => setReportType(type.id)}
+              className={`p-4 rounded-lg border-2 transition-all text-left flex items-start gap-3 ${
+                reportType === type.id
+                  ? 'border-gray-900 bg-gray-50'
+                  : 'border-gray-200 hover:border-gray-400'
+              }`}
+            >
+              <Icon className="w-6 h-6 text-gray-600 flex-shrink-0 mt-0.5" />
+              <p className="font-semibold text-gray-900">{type.label}</p>
+            </button>
+          )
+        })}
       </div>
 
       {/* Report Controls */}
@@ -57,34 +60,34 @@ export default function AdvancedReporting() {
         <div className="flex items-center gap-2">
           <Calendar className="w-5 h-5 text-gray-500" />
           <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} className="px-3 py-2 border border-gray-300 rounded-lg text-sm">
-            <option value="week">Last 7 Days</option>
-            <option value="month">Last 30 Days</option>
-            <option value="quarter">Last 90 Days</option>
-            <option value="year">Last Year</option>
+            <option value="week">Senaste 7 dagar</option>
+            <option value="month">Senaste 30 dagar</option>
+            <option value="quarter">Senaste 90 dagar</option>
+            <option value="year">Senaste året</option>
           </select>
         </div>
         <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2 text-sm font-medium">
-          <Filter className="w-4 h-4" /> Advanced Filters
+          <Filter className="w-4 h-4" /> Avancerade filter
         </button>
-        <button className="px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2 text-sm font-medium ml-auto">
-          <Download className="w-4 h-4" /> Export Report
+        <button className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 flex items-center gap-2 text-sm font-medium ml-auto border border-gray-900">
+          <Download className="w-4 h-4" /> Exportera rapport
         </button>
       </div>
 
       {/* Revenue Chart */}
       {reportType === 'revenue' && (
         <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
-          <h3 className="text-lg font-bold text-primary-navy">Revenue Trend</h3>
+          <h3 className="text-lg font-bold text-gray-900">Intäktstrender</h3>
           <div className="space-y-4">
             {revenueData.map(data => (
               <div key={data.month}>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-gray-700">{data.month}</span>
-                  <span className="text-sm font-semibold text-accent-pink">{(data.value / 1000000).toFixed(2)}M SEK</span>
+                  <span className="text-sm font-semibold text-gray-900">{(data.value / 1000000).toFixed(2)}M SEK</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div 
-                    className="bg-gradient-to-r from-accent-pink to-accent-orange h-3 rounded-full" 
+                    className="bg-gray-900 h-3 rounded-full" 
                     style={{ width: `${(data.value / maxRevenue) * 100}%` }}
                   />
                 </div>
@@ -96,33 +99,33 @@ export default function AdvancedReporting() {
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4">
-          <p className="text-xs text-blue-700 font-semibold uppercase mb-1">Total Revenue</p>
-          <p className="text-2xl font-bold text-blue-900">9.08M SEK</p>
-          <p className="text-xs text-blue-600 mt-2">↑ 12.5% from last period</p>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <p className="text-xs text-gray-500 font-semibold uppercase mb-1 tracking-wide">Total intäkter</p>
+          <p className="text-2xl font-bold text-gray-900">9.08M SEK</p>
+          <p className="text-xs text-gray-600 mt-2">↑ 12.5% från föregående period</p>
         </div>
-        <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-4">
-          <p className="text-xs text-green-700 font-semibold uppercase mb-1">Avg Deal Value</p>
-          <p className="text-2xl font-bold text-green-900">156.7K SEK</p>
-          <p className="text-xs text-green-600 mt-2">58 completed deals</p>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <p className="text-xs text-gray-500 font-semibold uppercase mb-1 tracking-wide">Genom snittligt affärsvärde</p>
+          <p className="text-2xl font-bold text-gray-900">156.7K SEK</p>
+          <p className="text-xs text-gray-600 mt-2">58 genomförda affärer</p>
         </div>
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-lg p-4">
-          <p className="text-xs text-purple-700 font-semibold uppercase mb-1">MRR Growth</p>
-          <p className="text-2xl font-bold text-purple-900">+8.5%</p>
-          <p className="text-xs text-purple-600 mt-2">Month-over-month</p>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <p className="text-xs text-gray-500 font-semibold uppercase mb-1 tracking-wide">Månatlig återkommande intäkt</p>
+          <p className="text-2xl font-bold text-gray-900">+8.5%</p>
+          <p className="text-xs text-gray-600 mt-2">Månad för månad</p>
         </div>
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-4">
-          <p className="text-xs text-orange-700 font-semibold uppercase mb-1">Conversion Rate</p>
-          <p className="text-2xl font-bold text-orange-900">12.3%</p>
-          <p className="text-xs text-orange-600 mt-2">Visitors to deals</p>
+        <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+          <p className="text-xs text-gray-500 font-semibold uppercase mb-1 tracking-wide">Konverteringsfrekvens</p>
+          <p className="text-2xl font-bold text-gray-900">12.3%</p>
+          <p className="text-xs text-gray-600 mt-2">Besökare till affärer</p>
         </div>
       </div>
 
       {/* Report Breakdowns */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-bold text-primary-navy mb-4 flex items-center gap-2">
-            <PieChartIcon className="w-5 h-5" /> Revenue by Category
+          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <PieChartIcon className="w-5 h-5" /> Intäkter per kategori
           </h3>
           <div className="space-y-3">
             {[
@@ -133,9 +136,7 @@ export default function AdvancedReporting() {
             ].map(cat => (
               <div key={cat.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-2 flex-1">
-                  <div className="w-3 h-3 rounded-full" style={{
-                    backgroundColor: cat.name === 'Tech' ? '#f97316' : cat.name === 'E-commerce' ? '#e8903d' : cat.name === 'Services' ? '#3b82f6' : '#6b7280'
-                  }} />
+                  <div className="w-3 h-3 rounded-full bg-gray-400" />
                   <span className="text-sm text-gray-700">{cat.name}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -148,8 +149,8 @@ export default function AdvancedReporting() {
         </div>
 
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-bold text-primary-navy mb-4 flex items-center gap-2">
-            <LineChartIcon className="w-5 h-5" /> Top Performers
+          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <LineChartIcon className="w-5 h-5" /> Top performing
           </h3>
           <div className="space-y-3">
             {[
@@ -161,9 +162,9 @@ export default function AdvancedReporting() {
               <div key={seller.name} className="pb-3 border-b border-gray-100 last:border-b-0">
                 <div className="flex justify-between items-start mb-1">
                   <p className="font-medium text-gray-900 text-sm">{seller.name}</p>
-                  <span className="text-sm font-semibold text-accent-pink">{(seller.revenue / 1000000).toFixed(2)}M</span>
+                  <span className="text-sm font-semibold text-gray-900">{(seller.revenue / 1000000).toFixed(2)}M</span>
                 </div>
-                <p className="text-xs text-gray-600">{seller.deals} closed deals</p>
+                <p className="text-xs text-gray-600">{seller.deals} genomförda affärer</p>
               </div>
             ))}
           </div>

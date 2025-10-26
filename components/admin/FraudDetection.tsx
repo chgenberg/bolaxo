@@ -76,9 +76,9 @@ export default function FraudDetection() {
   }
 
   const getTypeIcon = (type: string) => {
-    if (type === 'bot') return '🤖'
+    if (type === 'bot') return '🛡️'
     if (type === 'fraud') return '⚠️'
-    return '❓'
+    return '?'
   }
 
   return (
