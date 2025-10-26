@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
       // Get users in each stage of the funnel
       const allUsers = await prisma.user.count()
       const verifiedUsers = await prisma.user.count({
-        where: { emailVerified: true }
+        where: { verified: true }
       })
       const bankIdVerifiedUsers = await prisma.user.count({
         where: { bankIdVerified: true }
