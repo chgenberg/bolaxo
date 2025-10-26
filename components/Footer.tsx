@@ -16,11 +16,11 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
               <Image 
-                src="/BOLAXO_logo_white.png" 
+                src="/BOLAXO_logo.png" 
                 alt="BOLAXO" 
                 width={130} 
                 height={40}
-                className="h-8 w-auto"
+                className="h-8 w-auto brightness-0 invert"
               />
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed mb-6">

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkAdminAuth } from '@/lib/admin-auth'
 
 // Mock analytics data - in production this would come from Posthog, Mixpanel, or similar
 const generateMockAnalytics = () => {
@@ -82,11 +83,10 @@ const generateMockAnalytics = () => {
 
 export async function GET(request: NextRequest) {
   try {
-    // Check if user is authenticated
-    // In production, you would verify admin role
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
     }
 
     // Generate mock data - in production would query real databases
