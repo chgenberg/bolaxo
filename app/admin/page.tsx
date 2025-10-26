@@ -138,94 +138,158 @@ export default function AdminDashboard() {
     }, 500)
   }
 
-  const tabs: Array<{ id: TabType; label: string; icon: React.ReactNode }> = [
-    { id: 'overview', label: 'Overview', icon: <BarChart3 className="w-4 h-4" /> },
-    { id: 'users', label: 'Users', icon: <Users className="w-4 h-4" /> },
-    { id: 'listings', label: 'Listings', icon: <Search className="w-4 h-4" /> },
-    { id: 'transactions', label: 'Transactions', icon: <Activity className="w-4 h-4" /> },
-    { id: 'payments', label: 'Payments', icon: <DollarSign className="w-4 h-4" /> },
-    { id: 'financial', label: 'Finance', icon: <TrendingUp className="w-4 h-4" /> },
-    { id: 'moderation', label: 'Moderation', icon: <AlertCircle className="w-4 h-4" /> },
-    { id: 'audit', label: 'Audit Trail', icon: <Eye className="w-4 h-4" /> },
-    { id: 'analytics', label: 'Analytics', icon: <BarChart3 className="w-4 h-4" /> },
-    { id: 'sellers', label: 'Sellers', icon: <Users2 className="w-4 h-4" /> },
-    { id: 'buyers', label: 'Buyers', icon: <Users className="w-4 h-4" /> },
-    { id: 'fraud', label: 'Fraud Detection', icon: <AlertCircle className="w-4 h-4" /> },
-    { id: 'ndas', label: 'NDA Tracking', icon: <Flag className="w-4 h-4" /> },
-    { id: 'emails', label: 'Email Tracking', icon: <Mail className="w-4 h-4" /> },
-    { id: 'integrations', label: 'Integration Logs', icon: <Globe className="w-4 h-4" /> },
-    { id: 'messages', label: 'Message Moderation', icon: <Users className="w-4 h-4" /> },
-    { id: 'support', label: 'Support Tickets', icon: <Ticket className="w-4 h-4" /> },
-    { id: 'reports', label: 'Report Generation', icon: <Download className="w-4 h-4" /> },
-    { id: 'admins', label: 'Admin Management', icon: <Users className="w-4 h-4" /> },
-    { id: 'permissions', label: 'Permissions Matrix', icon: <Users2 className="w-4 h-4" /> },
-    { id: 'data', label: 'Data Export/Import', icon: <Download className="w-4 h-4" /> },
-    { id: 'sellerVerification', label: 'Seller Verification', icon: <Users2 className="w-4 h-4" /> },
-    { id: 'buyerOnboarding', label: 'Buyer Onboarding', icon: <Users2 className="w-4 h-4" /> },
-    { id: 'customAlerts', label: 'Custom Alerts', icon: <AlertCircle className="w-4 h-4" /> },
-    { id: 'advancedReporting', label: 'Advanced Reporting', icon: <BarChart3 className="w-4 h-4" /> },
+  const navGroups = [
+    {
+      title: 'Dashboard',
+      items: [
+        { id: 'overview' as TabType, label: 'Översikt', icon: <BarChart3 className="w-4 h-4" /> },
+        { id: 'analytics' as TabType, label: 'Analys', icon: <BarChart3 className="w-4 h-4" /> },
+        { id: 'advancedReporting' as TabType, label: 'Avancerad rapportering', icon: <BarChart3 className="w-4 h-4" /> },
+      ]
+    },
+    {
+      title: 'Användarhantering',
+      items: [
+        { id: 'users' as TabType, label: 'Alla användare', icon: <Users className="w-4 h-4" /> },
+        { id: 'sellers' as TabType, label: 'Säljare', icon: <Users2 className="w-4 h-4" /> },
+        { id: 'buyers' as TabType, label: 'Köpare', icon: <Users className="w-4 h-4" /> },
+        { id: 'sellerVerification' as TabType, label: 'Säljarverifiering', icon: <Users2 className="w-4 h-4" /> },
+        { id: 'buyerOnboarding' as TabType, label: 'Köparonboarding', icon: <Users2 className="w-4 h-4" /> },
+      ]
+    },
+    {
+      title: 'Affärer',
+      items: [
+        { id: 'listings' as TabType, label: 'Annonser', icon: <Search className="w-4 h-4" /> },
+        { id: 'transactions' as TabType, label: 'Transaktioner', icon: <Activity className="w-4 h-4" /> },
+        { id: 'ndas' as TabType, label: 'NDA-spårning', icon: <Flag className="w-4 h-4" /> },
+      ]
+    },
+    {
+      title: 'Ekonomi',
+      items: [
+        { id: 'payments' as TabType, label: 'Betalningar', icon: <DollarSign className="w-4 h-4" /> },
+        { id: 'financial' as TabType, label: 'Ekonomiöversikt', icon: <TrendingUp className="w-4 h-4" /> },
+      ]
+    },
+    {
+      title: 'Kommunikation',
+      items: [
+        { id: 'messages' as TabType, label: 'Meddelanden', icon: <MessageCircle className="w-4 h-4" /> },
+        { id: 'emails' as TabType, label: 'E-postspårning', icon: <Mail className="w-4 h-4" /> },
+        { id: 'support' as TabType, label: 'Supportärenden', icon: <Ticket className="w-4 h-4" /> },
+      ]
+    },
+    {
+      title: 'Säkerhet & Moderation',
+      items: [
+        { id: 'moderation' as TabType, label: 'Innehållsmoderation', icon: <AlertCircle className="w-4 h-4" /> },
+        { id: 'fraud' as TabType, label: 'Bedrägeridetektering', icon: <AlertCircle className="w-4 h-4" /> },
+        { id: 'audit' as TabType, label: 'Revisionslogg', icon: <Eye className="w-4 h-4" /> },
+      ]
+    },
+    {
+      title: 'System',
+      items: [
+        { id: 'integrations' as TabType, label: 'Integrationsloggar', icon: <Globe className="w-4 h-4" /> },
+        { id: 'reports' as TabType, label: 'Rapportgenerering', icon: <Download className="w-4 h-4" /> },
+        { id: 'data' as TabType, label: 'Data Export/Import', icon: <Download className="w-4 h-4" /> },
+        { id: 'customAlerts' as TabType, label: 'Anpassade varningar', icon: <AlertCircle className="w-4 h-4" /> },
+      ]
+    },
+    {
+      title: 'Administration',
+      items: [
+        { id: 'admins' as TabType, label: 'Administratörer', icon: <Users className="w-4 h-4" /> },
+        { id: 'permissions' as TabType, label: 'Behörigheter', icon: <Users2 className="w-4 h-4" /> },
+      ]
+    },
   ]
 
   return (
-    <main className="min-h-screen bg-neutral-white">
-      {/* Header */}
-      <div className="sticky top-0 z-40 bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-primary-navy uppercase">Admin Dashboard</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Last updated: {lastUpdated.toLocaleTimeString()}
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setAutoRefresh(!autoRefresh)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                autoRefresh
-                  ? 'bg-accent-pink text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              <RefreshCw className="w-4 h-4" />
-              Auto-refresh {autoRefresh ? 'ON' : 'OFF'}
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-accent-orange text-white rounded-lg hover:shadow-md transition-all">
-              <Download className="w-4 h-4" />
-              Export Report
-            </button>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all"
-            >
-              <Users className="w-4 h-4" />
-              Logout
-            </button>
-          </div>
+    <div className="flex h-screen bg-neutral-white">
+      {/* Sidebar */}
+      <aside className="w-64 bg-primary-navy text-white flex flex-col">
+        {/* Logo/Header */}
+        <div className="p-6 border-b border-white/10">
+          <h1 className="text-2xl font-bold">BOLAXO</h1>
+          <p className="text-xs text-white/60 mt-1">Administratörspanel</p>
         </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="border-b border-gray-200 bg-white sticky top-[73px] z-30">
-        <div className="max-w-7xl mx-auto px-6 flex gap-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-all ${
-                activeTab === tab.id
-                  ? 'border-accent-pink text-primary-navy'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              {tab.icon}
-              {tab.label}
-            </button>
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto py-4">
+          {navGroups.map((group, groupIdx) => (
+            <div key={groupIdx} className="mb-6">
+              <h3 className="px-6 text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">
+                {group.title}
+              </h3>
+              <div className="space-y-1">
+                {group.items.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`w-full flex items-center gap-3 px-6 py-2.5 text-sm transition-colors ${
+                      activeTab === item.id
+                        ? 'bg-accent-pink text-white font-medium'
+                        : 'text-white/70 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    {item.icon}
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
-        </div>
-      </div>
+        </nav>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Bottom Actions */}
+        <div className="p-4 border-t border-white/10">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all text-sm font-medium"
+          >
+            <Users className="w-4 h-4" />
+            Logga ut
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Header */}
+        <header className="bg-white border-b border-gray-200 px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-primary-navy">
+                {navGroups.flatMap(g => g.items).find(i => i.id === activeTab)?.label || 'Dashboard'}
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Senast uppdaterad: {lastUpdated.toLocaleTimeString('sv-SE')}
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setAutoRefresh(!autoRefresh)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${
+                  autoRefresh
+                    ? 'bg-accent-pink text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <RefreshCw className="w-4 h-4" />
+                Auto {autoRefresh ? 'PÅ' : 'AV'}
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2 bg-accent-orange text-white rounded-lg hover:shadow-md transition-all text-sm font-medium">
+                <Download className="w-4 h-4" />
+                Exportera
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-8">
         
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
@@ -235,24 +299,24 @@ export default function AdminDashboard() {
               {/* Visitors Card */}
               <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Today's Visitors</h3>
+                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Besökare idag</h3>
                   <Eye className="w-5 h-5 text-accent-pink" />
                 </div>
-                <p className="text-3xl font-bold text-primary-navy">{stats.totalVisitors.toLocaleString()}</p>
+                <p className="text-3xl font-bold text-primary-navy">{stats.totalVisitors.toLocaleString('sv-SE')}</p>
                 <p className="text-xs text-gray-500 mt-2">
-                  {stats.uniqueVisitors} unique ({((stats.uniqueVisitors / stats.totalVisitors) * 100).toFixed(1)}% unique)
+                  {stats.uniqueVisitors} unika ({((stats.uniqueVisitors / stats.totalVisitors) * 100).toFixed(1)}% unika)
                 </p>
               </div>
 
               {/* Real vs Bot */}
               <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Real vs Bot</h3>
+                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Riktiga vs Botar</h3>
                   <Flag className="w-5 h-5 text-accent-orange" />
                 </div>
-                <p className="text-3xl font-bold text-primary-navy">{botPercentage}% Bot</p>
+                <p className="text-3xl font-bold text-primary-navy">{botPercentage}% Botar</p>
                 <div className="text-xs text-gray-500 mt-2">
-                  Real: {stats.realVsBot.real} | Bot: {stats.realVsBot.bot}
+                  Riktiga: {stats.realVsBot.real} | Botar: {stats.realVsBot.bot}
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                   <div className="bg-accent-pink h-2 rounded-full" style={{ width: `${botPercentage}%` }} />
@@ -262,32 +326,32 @@ export default function AdminDashboard() {
               {/* Revenue */}
               <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Revenue Today</h3>
+                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Intäkter idag</h3>
                   <ShoppingCart className="w-5 h-5 text-accent-orange" />
                 </div>
                 <p className="text-3xl font-bold text-primary-navy">
                   {(stats.revenueToday / 1000).toFixed(1)}K SEK
                 </p>
-                <p className="text-xs text-green-600 mt-2">↑ 12% from yesterday</p>
+                <p className="text-xs text-green-600 mt-2">↑ 12% från igår</p>
               </div>
 
               {/* Active Listings */}
               <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Active Content</h3>
+                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Aktivt innehåll</h3>
                   <Activity className="w-5 h-5 text-accent-pink" />
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Listings</span>
+                    <span className="text-gray-600">Annonser</span>
                     <span className="font-bold text-primary-navy">{stats.activeListings}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">NDAs</span>
+                    <span className="text-gray-600">NDA:er</span>
                     <span className="font-bold text-primary-navy">{stats.ndaRequests}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Messages</span>
+                    <span className="text-gray-600">Meddelanden</span>
                     <span className="font-bold text-primary-navy">{stats.messages}</span>
                   </div>
                 </div>
@@ -298,21 +362,21 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Avg Session</h3>
+                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Genomsnittlig session</h3>
                   <Clock className="w-4 h-4 text-gray-400" />
                 </div>
                 <p className="text-2xl font-bold text-primary-navy">{formatTime(stats.avgSessionDuration)}</p>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Bounce Rate</h3>
+                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Avvisningsfrekvens</h3>
                   <TrendingUp className="w-4 h-4 text-gray-400" />
                 </div>
                 <p className="text-2xl font-bold text-primary-navy">{stats.bounceRate.toFixed(1)}%</p>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Conversion</h3>
+                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Konvertering</h3>
                   <Zap className="w-4 h-4 text-gray-400" />
                 </div>
                 <p className="text-2xl font-bold text-primary-navy">{stats.conversionRate.toFixed(2)}%</p>
@@ -326,7 +390,7 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-lg font-bold text-primary-navy mb-4 uppercase flex items-center gap-2">
                   <Search className="w-5 h-5 text-accent-pink" />
-                  Top Searches
+                  Populäraste sökningar
                 </h2>
                 <div className="space-y-3">
                   {stats.topSearches.map((search, idx) => (
@@ -350,7 +414,7 @@ export default function AdminDashboard() {
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-lg font-bold text-primary-navy mb-4 uppercase flex items-center gap-2">
                   <Globe className="w-5 h-5 text-accent-orange" />
-                  Top Pages
+                  Populäraste sidor
                 </h2>
                 <div className="space-y-3">
                   {stats.topPages.map((page, idx) => (
@@ -576,7 +640,8 @@ export default function AdminDashboard() {
           <AdvancedReporting />
         )}
 
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
   )
 }
