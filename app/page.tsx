@@ -66,7 +66,7 @@ export default function Home() {
         </div>
 
         {/* Minimalist Content Box */}
-        <div className="relative w-full flex items-center justify-center px-4 z-10">
+        <div className="relative w-full flex items-center justify-start px-4 md:px-12 lg:px-24 z-10">
           <div className="relative">
             {/* Pulsing shadow effect */}
             <div className="absolute -inset-4 bg-black/50 rounded-3xl blur-2xl animate-pulse-shadow" />
