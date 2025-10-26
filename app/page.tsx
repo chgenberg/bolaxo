@@ -103,6 +103,16 @@ export default function Home() {
                 <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
                 <span className="ml-1">500+ nöjda säljare</span>
               </div>
+              
+              {/* Small discreet buyer link */}
+              <div className="mt-4 text-center">
+                <Link 
+                  href="/kopare" 
+                  className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-navy transition-colors font-medium"
+                >
+                  Vill du köpa företag? <span className="text-gray-400">→</span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
