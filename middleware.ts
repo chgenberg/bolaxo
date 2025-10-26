@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import * as jwt from 'jsonwebtoken'
 
+// Use the same secret as admin-auth.ts
+const JWT_SECRET = process.env.JWT_SECRET || 'bolagsplatsen-admin-secret-key-2024'
+
 export function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
@@ -54,7 +57,7 @@ export function middleware(request: NextRequest) {
 
     // Verify JWT token
     try {
-      jwt.verify(adminToken, process.env.JWT_SECRET || 'your-secret-key')
+      jwt.verify(adminToken, JWT_SECRET)
     } catch (err) {
       // Token is invalid or expired
       const loginUrl = new URL('/admin/login', request.url)

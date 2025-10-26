@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as jwt from 'jsonwebtoken'
 
+// Generate a consistent JWT secret - use env var or a default
+const JWT_SECRET = process.env.JWT_SECRET || 'bolagsplatsen-admin-secret-key-2024'
+
 export interface AdminJWT {
   userId: string
   email: string
@@ -22,7 +25,7 @@ export function verifyAdminToken(request: NextRequest): AdminJWT | null {
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'your-secret-key'
+      JWT_SECRET
     ) as AdminJWT
 
     return decoded
@@ -59,7 +62,7 @@ export function createAdminToken(
 ): string {
   return jwt.sign(
     { userId, email, role },
-    process.env.JWT_SECRET || 'your-secret-key',
+    JWT_SECRET,
     { expiresIn: '7d' }
   )
 }
