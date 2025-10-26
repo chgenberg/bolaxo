@@ -17,7 +17,13 @@ export default function AdminLoginPage() {
     setLoading(true)
     setError(null)
 
+    console.log('🔐 Login attempt started')
+    console.log('Email:', email)
+    console.log('Password length:', password.length)
+
     try {
+      console.log('📤 Sending POST to /api/admin/login')
+      
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: {
@@ -27,22 +33,30 @@ export default function AdminLoginPage() {
         credentials: 'include' // Important for cookies
       })
 
+      console.log('📥 Response status:', response.status)
+      console.log('📥 Response ok:', response.ok)
+
       const data = await response.json()
+      
+      console.log('📊 Response data:', data)
 
       if (!response.ok) {
+        console.error('❌ Login failed:', data.error)
         setError(data.error || 'Inloggning misslyckades')
+        setLoading(false)
         return
       }
 
+      console.log('✅ Login successful! User:', data.user)
       setSuccess(true)
       // Redirect to admin dashboard after short delay
       setTimeout(() => {
+        console.log('🔄 Redirecting to /admin')
         router.push('/admin')
       }, 1000)
     } catch (err) {
-      console.error('Login error:', err)
+      console.error('❌ Login error:', err)
       setError('Ett fel uppstod vid inloggning. Försök igen senare.')
-    } finally {
       setLoading(false)
     }
   }
