@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { checkAdminAuth } from '@/lib/admin-auth'
 
 // Advanced Analytics API with Cohort, Funnel, and Retention Analysis
 
 // GET - Fetch advanced analytics data
 export async function GET(request: NextRequest) {
   try {
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const searchParams = request.nextUrl.searchParams
     const metric = searchParams.get('metric') || 'cohort' // cohort, funnel, retention, all
     const dateRange = searchParams.get('dateRange') || '30' // days

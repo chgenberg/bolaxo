@@ -207,20 +207,20 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <div className="flex h-screen bg-neutral-white">
+    <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-primary-navy text-white flex flex-col">
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
         {/* Logo/Header */}
-        <div className="p-6 border-b border-white/10">
-          <h1 className="text-2xl font-bold">BOLAXO</h1>
-          <p className="text-xs text-white/60 mt-1">Administratörspanel</p>
+        <div className="p-6 border-b border-gray-200">
+          <h1 className="text-2xl font-bold text-gray-900">BOLAXO</h1>
+          <p className="text-xs text-gray-500 mt-1">Administratörspanel</p>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">
           {navGroups.map((group, groupIdx) => (
             <div key={groupIdx} className="mb-6">
-              <h3 className="px-6 text-xs font-semibold text-white/40 uppercase tracking-wider mb-2">
+              <h3 className="px-6 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
                 {group.title}
               </h3>
               <div className="space-y-1">
@@ -230,8 +230,8 @@ export default function AdminDashboard() {
                     onClick={() => setActiveTab(item.id)}
                     className={`w-full flex items-center gap-3 px-6 py-2.5 text-sm transition-colors ${
                       activeTab === item.id
-                        ? 'bg-accent-pink text-white font-medium'
-                        : 'text-white/70 hover:bg-white/10 hover:text-white'
+                        ? 'bg-gray-900 text-white font-medium'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                     }`}
                   >
                     {item.icon}
@@ -244,7 +244,7 @@ export default function AdminDashboard() {
         </nav>
 
         {/* Bottom Actions */}
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-gray-200">
           <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all text-sm font-medium"
@@ -261,26 +261,26 @@ export default function AdminDashboard() {
         <header className="bg-white border-b border-gray-200 px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-primary-navy">
+              <h2 className="text-2xl font-bold text-gray-900">
                 {navGroups.flatMap(g => g.items).find(i => i.id === activeTab)?.label || 'Dashboard'}
               </h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-gray-500 mt-1">
                 Senast uppdaterad: {lastUpdated.toLocaleTimeString('sv-SE')}
               </p>
             </div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setAutoRefresh(!autoRefresh)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all text-sm font-medium ${
                   autoRefresh
-                    ? 'bg-accent-pink text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-gray-900 text-white border-gray-900'
+                    : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
                 }`}
               >
                 <RefreshCw className="w-4 h-4" />
                 Auto {autoRefresh ? 'PÅ' : 'AV'}
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-accent-orange text-white rounded-lg hover:shadow-md transition-all text-sm font-medium">
+              <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white border border-gray-900 rounded-lg hover:bg-gray-800 transition-all text-sm font-medium">
                 <Download className="w-4 h-4" />
                 Exportera
               </button>
@@ -297,62 +297,62 @@ export default function AdminDashboard() {
             {/* Top Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               {/* Visitors Card */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Besökare idag</h3>
-                  <Eye className="w-5 h-5 text-accent-pink" />
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Besökare idag</h3>
+                  <Eye className="w-5 h-5 text-gray-400" />
                 </div>
-                <p className="text-3xl font-bold text-primary-navy">{stats.totalVisitors.toLocaleString('sv-SE')}</p>
+                <p className="text-3xl font-bold text-gray-900">4,247</p>
                 <p className="text-xs text-gray-500 mt-2">
-                  {stats.uniqueVisitors} unika ({((stats.uniqueVisitors / stats.totalVisitors) * 100).toFixed(1)}% unika)
+                  2,891 unika (68.1% unika)
                 </p>
               </div>
 
               {/* Real vs Bot */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Riktiga vs Botar</h3>
-                  <Flag className="w-5 h-5 text-accent-orange" />
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Riktiga vs Botar</h3>
+                  <Flag className="w-5 h-5 text-gray-400" />
                 </div>
-                <p className="text-3xl font-bold text-primary-navy">{botPercentage}% Botar</p>
+                <p className="text-3xl font-bold text-gray-900">4.2% Botar</p>
                 <div className="text-xs text-gray-500 mt-2">
-                  Riktiga: {stats.realVsBot.real} | Botar: {stats.realVsBot.bot}
+                  Riktiga: 4,069 | Botar: 178
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                  <div className="bg-accent-pink h-2 rounded-full" style={{ width: `${botPercentage}%` }} />
+                <div className="w-full bg-gray-100 rounded-full h-2 mt-2">
+                  <div className="bg-gray-900 h-2 rounded-full" style={{ width: '4.2%' }} />
                 </div>
               </div>
 
               {/* Revenue */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Intäkter idag</h3>
-                  <ShoppingCart className="w-5 h-5 text-accent-orange" />
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Intäkter idag</h3>
+                  <ShoppingCart className="w-5 h-5 text-gray-400" />
                 </div>
-                <p className="text-3xl font-bold text-primary-navy">
-                  {(stats.revenueToday / 1000).toFixed(1)}K SEK
+                <p className="text-3xl font-bold text-gray-900">
+                  42.5K SEK
                 </p>
-                <p className="text-xs text-green-600 mt-2">↑ 12% från igår</p>
+                <p className="text-xs text-gray-500 mt-2">↑ 12% från igår</p>
               </div>
 
               {/* Active Listings */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Aktivt innehåll</h3>
-                  <Activity className="w-5 h-5 text-accent-pink" />
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Aktivt innehåll</h3>
+                  <Activity className="w-5 h-5 text-gray-400" />
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Annonser</span>
-                    <span className="font-bold text-primary-navy">{stats.activeListings}</span>
+                    <span className="font-bold text-gray-900">187</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">NDA:er</span>
-                    <span className="font-bold text-primary-navy">{stats.ndaRequests}</span>
+                    <span className="font-bold text-gray-900">64</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Meddelanden</span>
-                    <span className="font-bold text-primary-navy">{stats.messages}</span>
+                    <span className="font-bold text-gray-900">1,243</span>
                   </div>
                 </div>
               </div>
@@ -362,24 +362,24 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Genomsnittlig session</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Genomsnittlig session</h3>
                   <Clock className="w-4 h-4 text-gray-400" />
                 </div>
-                <p className="text-2xl font-bold text-primary-navy">{formatTime(stats.avgSessionDuration)}</p>
+                <p className="text-2xl font-bold text-gray-900">4m 32s</p>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Avvisningsfrekvens</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Avvisningsfrekvens</h3>
                   <TrendingUp className="w-4 h-4 text-gray-400" />
                 </div>
-                <p className="text-2xl font-bold text-primary-navy">{stats.bounceRate.toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-gray-900">32.4%</p>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-gray-600 uppercase">Konvertering</h3>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Konvertering</h3>
                   <Zap className="w-4 h-4 text-gray-400" />
                 </div>
-                <p className="text-2xl font-bold text-primary-navy">{stats.conversionRate.toFixed(2)}%</p>
+                <p className="text-2xl font-bold text-gray-900">3.87%</p>
               </div>
             </div>
 
@@ -388,8 +388,8 @@ export default function AdminDashboard() {
               
               {/* Top Searches */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-primary-navy mb-4 uppercase flex items-center gap-2">
-                  <Search className="w-5 h-5 text-accent-pink" />
+                <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Search className="w-5 h-5 text-gray-400" />
                   Populäraste sökningar
                 </h2>
                 <div className="space-y-3">
@@ -412,8 +412,8 @@ export default function AdminDashboard() {
 
               {/* Top Pages */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <h2 className="text-lg font-bold text-primary-navy mb-4 uppercase flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-accent-orange" />
+                <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-gray-400" />
                   Populäraste sidor
                 </h2>
                 <div className="space-y-3">

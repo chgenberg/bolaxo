@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { checkAdminAuth } from '@/lib/admin-auth'
 
 // Fraud Detection & Bot Management API
 
@@ -13,6 +14,12 @@ interface FraudIndicator {
 // GET - Fetch fraud alerts and suspicious users
 export async function GET(request: NextRequest) {
   try {
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
@@ -238,6 +245,12 @@ export async function GET(request: NextRequest) {
 // POST - Take action on suspicious user
 export async function POST(request: NextRequest) {
   try {
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const body = await request.json()
     const { userId, action, notes } = body // action: flag, suspend, investigate
 
