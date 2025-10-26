@@ -46,9 +46,9 @@ export default function Home() {
   return (
     <main className="bg-cream">
       {/* HERO SECTION - Fullscreen */}
-      <section className="relative min-h-screen flex items-center">
-        {/* Background Image - Fullscreen */}
-        <div className="absolute inset-0">
+      <section className="relative min-h-screen flex items-center bg-cover bg-center">
+        {/* Background Image - Fullscreen with no overlay */}
+        <div className="absolute inset-0 -z-10">
           <Image
             src="/hero.png"
             alt="Hero background"
@@ -63,14 +63,12 @@ export default function Home() {
             className="object-cover md:hidden"
             priority
           />
-          {/* Gradient overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/80 to-cream/40" />
         </div>
 
-        {/* Content */}
-        <div className="relative z-10 container-custom w-full py-20">
+        {/* Content with white semi-transparent background for readability */}
+        <div className="container-custom w-full py-20 z-10">
           <div className="max-w-2xl">
-            <h1 className="heading-xl mb-6 uppercase">
+            <h1 className="heading-xl mb-6 uppercase text-navy">
               DIGITAL PLATTFORM FÖR FÖRETAGSFÖRSÄLJNING.
             </h1>
             
@@ -111,7 +109,7 @@ export default function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10">
           <ChevronDown className="w-8 h-8 text-navy opacity-60" />
         </div>
       </section>
