@@ -9,6 +9,7 @@ import ValuationModal from '@/components/ValuationModal'
 export default function Home() {
   const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)
   const [activeReview, setActiveReview] = useState(0)
+  const [selectedStep, setSelectedStep] = useState<number | null>(null)
 
   // Auto-rotate reviews
   useEffect(() => {
@@ -45,94 +46,100 @@ export default function Home() {
   return (
     <main className="bg-white">
       {/* HERO SECTION - Klarna Inspired */}
-      <section className="relative min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/hero.png"
-            alt="Hero background"
-            fill
-            className="object-cover hidden md:block"
-            priority
-          />
-          <Image
-            src="/hero_mobile.png"
-            alt="Hero background mobile"
-            fill
-            className="object-cover md:hidden"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-20">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Digital plattform för företagsförsäljning.
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
-              Få en kostnadsfri företagsvärdering på 5 minuter baserad på professionella metoder.
-              Publicera din annons, ta emot NDA-förfrågningar och hantera hela försäljningsprocessen på ett ställe.
-            </p>
-            
-            {/* Interactive CTA Button */}
-            <button
-              onClick={() => setIsValuationModalOpen(true)}
-              className="group relative overflow-hidden bg-gray-900 text-white px-8 py-5 rounded-full font-medium text-lg transition-all hover:scale-105 hover:shadow-2xl"
-            >
-              <span className="relative z-10 flex items-center gap-3">
-                Starta värdering
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </button>
-
-            {/* Trust indicators */}
-            <div className="mt-8 flex items-center gap-8 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green-600" />
-                <span>500+ genomförda affärer</span>
+      <section className="relative flex items-center bg-gray-50 overflow-hidden">
+        <div className="container mx-auto px-6 lg:px-12 py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="relative z-10">
+              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight uppercase">
+                DIGITAL PLATTFORM FÖR FÖRETAGSFÖRSÄLJNING.
+              </h1>
+              
+              {/* Pulsing Box */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl animate-pulse" />
+                <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
+                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+                    Få en kostnadsfri företagsvärdering på 5 minuter baserad på professionella metoder. 
+                    Publicera din annons, ta emot NDA-förfrågningar och hantera hela försäljningsprocessen på ett ställe.
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-yellow-500" />
-                <span>4.9/5 i betyg</span>
+              
+              {/* Interactive CTA Button */}
+              <button
+                onClick={() => setIsValuationModalOpen(true)}
+                className="mt-8 group relative overflow-hidden bg-gray-900 text-white px-8 py-5 rounded-full font-medium text-lg transition-all hover:scale-105 hover:shadow-2xl"
+              >
+                <span className="relative z-10 flex items-center gap-3">
+                  Starta värdering
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+
+              {/* Trust indicators */}
+              <div className="mt-8 flex items-center gap-8 text-sm text-gray-600">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5 text-green-600" />
+                  <span>500+ genomförda affärer</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="w-5 h-5 text-yellow-500" />
+                  <span>4.9/5 i betyg</span>
+                </div>
               </div>
+            </div>
+
+            {/* Right Image */}
+            <div className="relative h-[600px] lg:h-[700px]">
+              <Image
+                src="/hero.png"
+                alt="Hero background"
+                fill
+                className="object-contain hidden md:block"
+                priority
+              />
+              <Image
+                src="/hero_mobile.png"
+                alt="Hero background mobile"
+                fill
+                className="object-contain md:hidden"
+                priority
+              />
             </div>
           </div>
         </div>
       </section>
 
       {/* FOUR IMAGES SECTION - Klarna Style */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((num) => (
+            {[
+              { num: 1, title: "REGISTRERA", desc: "Skapa ditt konto på 2 minuter" },
+              { num: 2, title: "VÄRDERA", desc: "Få professionell värdering direkt" },
+              { num: 3, title: "MATCHA", desc: "Vi hittar rätt köpare åt dig" },
+              { num: 4, title: "FÖRHANDLA", desc: "Säker process hela vägen" }
+            ].map((step) => (
               <div
-                key={num}
-                className="relative group cursor-pointer overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all duration-300"
+                key={step.num}
+                onClick={() => setSelectedStep(step.num)}
+                className="relative group cursor-pointer overflow-hidden rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition-all duration-300"
               >
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Image
-                    src={`/${num}.png`}
-                    alt={`Process steg ${num}`}
+                    src={`/${step.num}.png`}
+                    alt={`Process steg ${step.num}`}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   
-                  {/* Hover content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-xl font-bold mb-2">
-                      {num === 1 && "Registrera"}
-                      {num === 2 && "Värdera"}
-                      {num === 3 && "Matcha"}
-                      {num === 4 && "Förhandla"}
+                  {/* Bottom text bar */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm p-4">
+                    <h3 className="text-lg font-bold text-gray-900 uppercase tracking-wide">
+                      {step.title}
                     </h3>
-                    <p className="text-sm opacity-90">
-                      {num === 1 && "Skapa ditt konto på 2 minuter"}
-                      {num === 2 && "Få professionell värdering direkt"}
-                      {num === 3 && "Vi hittar rätt köpare åt dig"}
-                      {num === 4 && "Säker process hela vägen"}
-                    </p>
                   </div>
                 </div>
               </div>
@@ -232,6 +239,88 @@ export default function Home() {
         isOpen={isValuationModalOpen}
         onClose={() => setIsValuationModalOpen(false)}
       />
+
+      {/* Process Step Modal */}
+      {selectedStep && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75"
+              onClick={() => setSelectedStep(null)}
+            />
+            
+            <div className="inline-block w-full max-w-2xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-3xl">
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide mb-2">
+                  {selectedStep === 1 && "REGISTRERA"}
+                  {selectedStep === 2 && "VÄRDERA"}
+                  {selectedStep === 3 && "MATCHA"}
+                  {selectedStep === 4 && "FÖRHANDLA"}
+                </h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto" />
+              </div>
+
+              <div className="prose prose-lg max-w-none">
+                {selectedStep === 1 && (
+                  <>
+                    <p>Att registrera sig på BOLAXO är enkelt och tar bara några minuter:</p>
+                    <ul>
+                      <li>Skapa ett konto med e-post eller BankID</li>
+                      <li>Fyll i grundläggande information om ditt företag</li>
+                      <li>Välj om du vill sälja eller köpa</li>
+                      <li>Verifiera din identitet för säker handel</li>
+                    </ul>
+                    <p>När du är registrerad får du tillgång till alla våra tjänster och kan börja din resa mot en framgångsrik företagsaffär.</p>
+                  </>
+                )}
+                {selectedStep === 2 && (
+                  <>
+                    <p>Vår AI-drivna värderingsmodell ger dig en professionell uppskattning på 5 minuter:</p>
+                    <ul>
+                      <li>Baserad på branschstandard och marknadsjämförelser</li>
+                      <li>Analyserar omsättning, resultat och tillväxtpotential</li>
+                      <li>Jämför med liknande bolag som sålts nyligen</li>
+                      <li>Ger ett värdeintervall baserat på multiplar</li>
+                    </ul>
+                    <p>Värderingen är helt kostnadsfri och ger dig en bra utgångspunkt för prissättning.</p>
+                  </>
+                )}
+                {selectedStep === 3 && (
+                  <>
+                    <p>Vår intelligenta matchning hjälper dig hitta rätt motpart:</p>
+                    <ul>
+                      <li>AI analyserar köpares preferenser och budget</li>
+                      <li>Automatisk matchning baserat på bransch och storlek</li>
+                      <li>Endast verifierade och seriösa köpare</li>
+                      <li>Du behåller full kontroll över vem som ser din annons</li>
+                    </ul>
+                    <p>Vi presenterar endast de mest relevanta matchningarna för att spara tid för alla parter.</p>
+                  </>
+                )}
+                {selectedStep === 4 && (
+                  <>
+                    <p>BOLAXO säkerställer en trygg förhandlingsprocess:</p>
+                    <ul>
+                      <li>Automatisk NDA innan känslig information delas</li>
+                      <li>Säker datarum för due diligence</li>
+                      <li>Integrerad meddelandefunktion med kryptering</li>
+                      <li>Mallar för avsiktsförklaringar och avtal</li>
+                    </ul>
+                    <p>Vi guidar dig genom hela processen och ser till att allt går rätt till.</p>
+                  </>
+                )}
+              </div>
+
+              <button
+                onClick={() => setSelectedStep(null)}
+                className="mt-8 w-full bg-gray-900 text-white px-6 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors"
+              >
+                Stäng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

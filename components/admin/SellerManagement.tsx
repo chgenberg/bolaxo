@@ -33,11 +33,29 @@ export default function SellerManagement() {
         sortBy,
         sortOrder
       })
-      setSellers(result.data)
-      setPagination(result.pagination)
-      setStats(result.stats)
+      
+      // Handle API response structure
+      if (result && result.sellers) {
+        setSellers(result.sellers || [])
+        setPagination({
+          page,
+          limit: pagination.limit,
+          total: result.totalCount || 0,
+          pages: Math.ceil((result.totalCount || 0) / pagination.limit)
+        })
+        setStats({
+          totalSellers: result.stats?.total || 0,
+          activeSellers: result.stats?.active || 0,
+          newSellers: 0, // Not in API response
+          inactiveSellers: 0, // Not in API response
+          avgPerformanceScore: result.stats?.avgPerformanceScore || 0,
+          totalActiveListings: 0, // Not in API response
+          totalCompletedDeals: 0 // Not in API response
+        })
+      }
     } catch (err) {
       console.error('Error loading sellers:', err)
+      setSellers([])
     }
   }
 
@@ -168,12 +186,12 @@ export default function SellerManagement() {
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-full bg-accent-pink/20 flex items-center justify-center flex-shrink-0">
                       <span className="text-sm font-bold text-accent-pink">
-                        {seller.name.charAt(0).toUpperCase()}
+                        {seller.name ? seller.name.charAt(0).toUpperCase() : 'S'}
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 truncate">{seller.name}</p>
-                      <p className="text-xs text-gray-600 truncate">{seller.email}</p>
+                      <p className="font-semibold text-gray-900 truncate">{seller.name || 'Unknown'}</p>
+                      <p className="text-xs text-gray-600 truncate">{seller.email || 'No email'}</p>
                       {seller.companyName && seller.companyName !== 'N/A' && (
                         <p className="text-xs text-gray-500">{seller.companyName}</p>
                       )}

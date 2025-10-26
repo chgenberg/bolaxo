@@ -96,42 +96,39 @@ export default function Header() {
   const ctaStyle = 'bg-gray-900 text-white hover:bg-gray-800'
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}>
-      <nav className="w-full px-6 lg:px-12">
-        <div className="flex justify-between items-center h-20">
-          {/* Left side with section switcher and logo */}
-          <div className="flex items-center space-x-8">
-            {/* Section Switcher - Klarna style */}
-            <div className="flex bg-gray-100 rounded-full p-1">
-              <button
-                onClick={() => setActiveSection('seller')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeSection === 'seller'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                För säljare
-              </button>
-              <button
-                onClick={() => setActiveSection('buyer')}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeSection === 'buyer'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                För köpare
-              </button>
-            </div>
-            
+    <>
+      {/* Top bar with section switcher */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="flex items-center py-2 text-sm">
+            <Link 
+              href="/" 
+              className={`mr-4 ${activeSection === 'seller' ? 'text-gray-900 font-medium' : 'text-gray-600 hover:text-gray-900'}`}
+              onClick={() => setActiveSection('seller')}
+            >
+              För säljare
+            </Link>
+            <Link 
+              href="/kopare" 
+              className={`${activeSection === 'buyer' ? 'text-gray-900 font-medium' : 'text-gray-600 hover:text-gray-900'}`}
+              onClick={() => setActiveSection('buyer')}
+            >
+              För köpare
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Main header */}
+      <header className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}>
+        <nav className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <span className={`text-2xl font-bold tracking-tight ${logoColor}`}>
                 BOLAXO
               </span>
             </Link>
-          </div>
 
           {/* Center Navigation - Simplified */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -272,6 +269,7 @@ export default function Header() {
           </div>
         </div>
       )}
-    </header>
+      </header>
+    </>
   )
 }
