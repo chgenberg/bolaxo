@@ -14,9 +14,15 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
-    const sortBy = searchParams.get('sortBy') || 'deals'
+    let sortBy = searchParams.get('sortBy') || 'createdAt'
     const sortOrder = searchParams.get('sortOrder') || 'desc'
     const searchQuery = searchParams.get('search')
+
+    // Whitelist valid sort fields
+    const validSortFields = ['id', 'email', 'name', 'createdAt', 'verified', 'bankIdVerified']
+    if (!validSortFields.includes(sortBy)) {
+      sortBy = 'createdAt'
+    }
 
     const skip = (page - 1) * limit
 
@@ -51,7 +57,10 @@ export async function GET(request: NextRequest) {
         }
       },
       take: limit,
-      skip
+      skip,
+      orderBy: {
+        [sortBy]: sortOrder as 'asc' | 'desc'
+      }
     })
 
     // Enrich with calculated metrics

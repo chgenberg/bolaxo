@@ -13,9 +13,15 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '10')
     const skip = parseInt(searchParams.get('skip') || '0')
-    const sortBy = searchParams.get('sortBy') || 'createdAt'
+    let sortBy = searchParams.get('sortBy') || 'createdAt'
     const sortOrder = searchParams.get('sortOrder') || 'desc'
     const status = searchParams.get('status') // 'active', 'new', 'inactive', 'all'
+
+    // Whitelist valid sort fields
+    const validSortFields = ['id', 'email', 'name', 'createdAt', 'verified', 'bankIdVerified']
+    if (!validSortFields.includes(sortBy)) {
+      sortBy = 'createdAt'
+    }
 
     const sellers = await prisma.user.findMany({
       where: {
