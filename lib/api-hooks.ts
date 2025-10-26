@@ -27,8 +27,13 @@ export const useAdminUsers = () => {
       if (params.sortBy) queryParams.append('sortBy', params.sortBy)
       if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder)
 
-      const response = await fetch(`/api/admin/users?${queryParams.toString()}`)
-      if (!response.ok) throw new Error('Failed to fetch users')
+      const response = await fetch(`/api/admin/users?${queryParams.toString()}`, {
+        credentials: 'include'
+      })
+      if (!response.ok) {
+        if (response.status === 401) throw new Error('Unauthorized - please login again')
+        throw new Error('Failed to fetch users')
+      }
       return await response.json()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
@@ -647,8 +652,13 @@ export const useSellerManagement = () => {
       if (params?.sortBy) queryParams.append('sortBy', params.sortBy)
       if (params?.sortOrder) queryParams.append('sortOrder', params.sortOrder)
 
-      const response = await fetch(`/api/admin/sellers/analytics?${queryParams.toString()}`)
-      if (!response.ok) throw new Error('Failed to fetch seller analytics')
+      const response = await fetch(`/api/admin/sellers/analytics?${queryParams.toString()}`, {
+        credentials: 'include'
+      })
+      if (!response.ok) {
+        if (response.status === 401) throw new Error('Unauthorized - please login again')
+        throw new Error('Failed to fetch seller analytics')
+      }
       return await response.json()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
@@ -1076,8 +1086,13 @@ export const useSupportTickets = () => {
       Object.entries(params || {}).forEach(([k, v]) => {
         if (v) queryParams.append(k, String(v))
       })
-      const response = await fetch(`/api/admin/support-tickets?${queryParams}`)
-      if (!response.ok) throw new Error('Failed to fetch')
+      const response = await fetch(`/api/admin/support-tickets?${queryParams}`, {
+        credentials: 'include'
+      })
+      if (!response.ok) {
+        if (response.status === 401) throw new Error('Unauthorized - please login again')
+        throw new Error('Failed to fetch')
+      }
       return await response.json()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
@@ -1102,8 +1117,13 @@ export const useReports = () => {
       Object.entries(params || {}).forEach(([k, v]) => {
         if (v) queryParams.append(k, String(v))
       })
-      const response = await fetch(`/api/admin/reports?${queryParams}`)
-      if (!response.ok) throw new Error('Failed to fetch')
+      const response = await fetch(`/api/admin/reports?${queryParams}`, {
+        credentials: 'include'
+      })
+      if (!response.ok) {
+        if (response.status === 401) throw new Error('Unauthorized - please login again')
+        throw new Error('Failed to fetch')
+      }
       return await response.json()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
@@ -1147,8 +1167,13 @@ export const useAdminManagement = () => {
       Object.entries(params || {}).forEach(([k, v]) => {
         if (v) queryParams.append(k, String(v))
       })
-      const response = await fetch(`/api/admin/admins?${queryParams}`)
-      if (!response.ok) throw new Error('Failed to fetch')
+      const response = await fetch(`/api/admin/admins?${queryParams}`, {
+        credentials: 'include'
+      })
+      if (!response.ok) {
+        if (response.status === 401) throw new Error('Unauthorized - please login again')
+        throw new Error('Failed to fetch')
+      }
       return await response.json()
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'

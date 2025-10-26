@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { checkAdminAuth } from '@/lib/admin-auth'
 
 export async function GET(request: NextRequest) {
   try {
+    // Check admin authentication
+    const auth = await checkAdminAuth(request)
+    if (!auth.authorized) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '10')
     const skip = parseInt(searchParams.get('skip') || '0')
