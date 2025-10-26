@@ -494,7 +494,7 @@ function ReferralModal({ user, onClose }: { user: User; onClose: () => void }) {
             <div>
               <h4 className="font-semibold text-gray-700 mb-3">Direct Referrals ({directReferrals.length})</h4>
               <div className="space-y-2">
-                {directReferrals.map((referral) => (
+                {directReferrals.map((referral: any) => (
                   <div key={referral.id} className="bg-gray-50 rounded-lg p-3 text-sm">
                     <div className="font-mono text-gray-700">{referral.email}</div>
                     <div className="text-xs text-gray-500">{referral.name} • {referral.role}</div>
@@ -509,7 +509,7 @@ function ReferralModal({ user, onClose }: { user: User; onClose: () => void }) {
             <div>
               <h4 className="font-semibold text-gray-700 mb-3">Indirect Referrals ({indirectReferrals.length})</h4>
               <div className="space-y-2">
-                {indirectReferrals.map((referral) => (
+                {indirectReferrals.map((referral: any) => (
                   <div key={referral.id} className="bg-blue-50 rounded-lg p-3 text-sm border-l-2 border-blue-300">
                     <div className="font-mono text-gray-700">{referral.email}</div>
                     <div className="text-xs text-gray-500">{referral.name} • {referral.role}</div>
