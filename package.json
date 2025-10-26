@@ -8,7 +8,9 @@
     "start": "prisma migrate deploy && next start",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "create-admin": "tsx scripts/create-admin.ts",
+    "admin:create": "tsx scripts/create-admin.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -18,9 +20,11 @@
     "@react-pdf/renderer": "^4.3.1",
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.6",
+    "bcrypt": "^5.1.1",
     "cheerio": "^1.1.2",
     "dompurify": "^3.3.0",
     "isomorphic-dompurify": "^2.30.0",
+    "jsonwebtoken": "^9.0.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.546.0",
     "next": "^15.0.0",
@@ -36,6 +40,8 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/leaflet": "^1.9.21",
     "@types/node": "^20.11.0",
     "@types/react": "^18.3.0",
