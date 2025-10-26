@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   BarChart3, Users, TrendingUp, AlertCircle, RefreshCw, Download,
   Eye, Search, ShoppingCart, Flag, Activity, Clock, Zap, Globe, Users2, DollarSign, Mail, MessageCircle, Ticket
@@ -210,11 +211,11 @@ export default function AdminDashboard() {
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
-        {/* Logo/Header */}
-        <div className="p-6 border-b border-gray-200">
-          <h1 className="text-2xl font-bold text-gray-900">BOLAXO</h1>
+        {/* Logo/Header - Clickable link to home */}
+        <Link href="/" className="p-6 border-b border-gray-200 hover:bg-gray-50 transition-colors">
+          <h1 className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">BOLAXO</h1>
           <p className="text-xs text-gray-500 mt-1">Administratörspanel</p>
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4">

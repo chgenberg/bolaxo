@@ -64,6 +64,12 @@ export default function Header() {
   const { user, logout } = useAuth()
   const pathname = usePathname()
   const isHomepage = pathname === '/'
+  const isAdminPage = pathname?.startsWith('/admin')
+  
+  // Hide header on admin pages
+  if (isAdminPage) {
+    return null
+  }
 
   useEffect(() => {
     const handleScroll = () => {
