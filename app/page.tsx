@@ -1,28 +1,19 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, ChevronDown, Play, Volume2, VolumeX } from 'lucide-react'
+import { ArrowRight, ChevronDown } from 'lucide-react'
 import ObjectCarousel from '@/components/ObjectCarousel'
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0)
-  const [isMuted, setIsMuted] = useState(true)
-  const heroVideoRef = useRef<HTMLVideoElement>(null)
-  const secondVideoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted)
-    if (heroVideoRef.current) heroVideoRef.current.muted = !isMuted
-    if (secondVideoRef.current) secondVideoRef.current.muted = !isMuted
-  }
 
   return (
     <main className="bg-black text-white overflow-x-hidden">
@@ -87,23 +78,15 @@ export default function Home() {
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
             <ChevronDown className="w-8 h-8 text-white/60" />
           </div>
-
-          {/* Mute Button */}
-          <button
-            onClick={toggleMute}
-            className="absolute bottom-10 right-10 p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
-          >
-            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-          </button>
         </div>
       </section>
 
       {/* HOW IT WORKS SECTION */}
       <section className="relative py-32 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Dance Image with Parallax */}
+          {/* Dance Image Background */}
           <div 
-            className="absolute top-0 right-0 w-96 h-96 opacity-10"
+            className="absolute top-0 right-0 w-96 h-96 opacity-10 pointer-events-none"
             style={{ transform: `translateY(${scrollY * -0.2}px) rotate(${scrollY * 0.02}deg)` }}
           >
             <Image
