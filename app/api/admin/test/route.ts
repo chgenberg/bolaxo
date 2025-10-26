@@ -6,7 +6,6 @@ export async function GET(request: NextRequest) {
   console.log('🔍 [TEST] Cookie check:')
   console.log('adminToken present:', !!adminToken)
   console.log('adminToken value:', adminToken ? `${adminToken.substring(0, 20)}...` : 'NOT FOUND')
-  console.log('All cookies:', Array.from(request.cookies.getSetCookie?.() || []))
   
   return NextResponse.json({
     adminToken: !!adminToken,
