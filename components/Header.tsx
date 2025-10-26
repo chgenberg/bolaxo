@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Menu, X, User, LogOut } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { usePathname } from 'next/navigation'
 import NotificationCenter from './NotificationCenter'
 
 interface DropdownItem {
@@ -55,164 +56,235 @@ const navigation: NavItem[] = [
 ]
 
 export default function Header() {
-  const { user, logout } = useAuth()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [scrolled, setScrolled] = useState(false)
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const { user, logout } = useAuth()
+  const pathname = usePathname()
+  const isHomepage = pathname === '/'
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleMouseEnter = (label: string) => {
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current)
     }
-    setActiveDropdown(label)
+    setOpenDropdown(label)
   }
 
   const handleMouseLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
-      setActiveDropdown(null)
+      setOpenDropdown(null)
     }, 200)
   }
 
-  useEffect(() => {
-    return () => {
-      if (dropdownTimeoutRef.current) {
-        clearTimeout(dropdownTimeoutRef.current)
-      }
-    }
-  }, [])
+  // Dynamic styling based on homepage and scroll
+  const headerBg = isHomepage && !scrolled 
+    ? 'bg-transparent' 
+    : 'bg-white border-b border-gray-200'
+  
+  const textColor = isHomepage && !scrolled
+    ? 'text-white hover:text-gray-200'
+    : 'text-gray-600 hover:text-gray-900'
+  
+  const logoColor = isHomepage && !scrolled
+    ? 'text-white'
+    : 'text-accent-orange'
+
+  const ctaStyle = isHomepage && !scrolled
+    ? 'bg-white text-black hover:bg-gray-100'
+    : 'bg-accent-pink text-primary-navy hover:shadow-lg'
 
   return (
-    <header className="sticky top-0 z-50 bg-[#fdfbf9] border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main header content */}
-        <div className="flex items-center justify-between h-24 sm:h-28 lg:h-32">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}>
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/BOLAXO_logo.png"
-              alt="BOLAXO"
-              width={220}
-              height={64}
-              className="h-16 sm:h-20 lg:h-24 w-auto"
-              priority
-            />
+          <Link href="/" className="flex items-center space-x-2">
+            <span className={`text-3xl font-bold uppercase tracking-tight transition-colors duration-300 ${logoColor}`}>
+              BOLAXO
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-8">
             {navigation.map((item) => (
               <div
                 key={item.label}
-                className="relative group"
+                className="relative"
                 onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
                 onMouseLeave={handleMouseLeave}
               >
-                <Link
-                  href={item.href || '#'}
-                  className="text-sm font-medium text-gray-800 px-3 py-2 rounded-md hover:text-primary-blue transition-colors"
-                >
-                  {item.label}
-                  {item.dropdown && <ChevronDown className="inline w-4 h-4 ml-1" />}
-                </Link>
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className={`font-medium transition-colors ${textColor}`}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <button className={`flex items-center space-x-1 font-medium transition-colors ${textColor}`}>
+                    <span>{item.label}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                )}
 
-                {/* Desktop Dropdown */}
-                {item.dropdown && (
-                  <div className="absolute left-0 mt-0 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2">
-                    {item.dropdown.map((subitem) => (
-                      <Link
-                        key={subitem.href}
-                        href={subitem.href}
-                        className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-50 hover:text-primary-blue"
-                      >
-                        <div className="font-medium">{subitem.label}</div>
-                        {subitem.description && (
-                          <div className="text-xs text-gray-600">{subitem.description}</div>
-                        )}
-                      </Link>
-                    ))}
+                {/* Dropdown Menu */}
+                {item.dropdown && openDropdown === item.label && (
+                  <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-2xl overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100">
+                    <div className="p-2">
+                      {item.dropdown.map((dropdownItem) => (
+                        <Link
+                          key={dropdownItem.href}
+                          href={dropdownItem.href}
+                          className="block px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          <div className="font-semibold text-gray-900">{dropdownItem.label}</div>
+                          {dropdownItem.description && (
+                            <div className="text-sm text-gray-500 mt-0.5">{dropdownItem.description}</div>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
             ))}
-          </nav>
+          </div>
 
-          {/* Right side - Notifications, User, CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
-            {user && <NotificationCenter />}
-            
+          {/* Right Side Actions */}
+          <div className="flex items-center space-x-4">
             {user ? (
-              <div className="flex items-center space-x-4">
-                <Link href="/dashboard" className="text-sm text-gray-800 hover:text-primary-blue">
+              <>
+                <NotificationCenter />
+                <Link
+                  href="/dashboard"
+                  className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
+                >
                   <User className="w-5 h-5" />
+                  <span>Dashboard</span>
                 </Link>
                 <button
                   onClick={logout}
-                  className="text-sm text-gray-800 hover:text-primary-blue"
+                  className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
                 >
                   <LogOut className="w-5 h-5" />
+                  <span>Logga ut</span>
                 </button>
-              </div>
+              </>
             ) : (
-              <Link
-                href="/login"
-                className="inline-flex items-center px-6 py-2.5 bg-accent-pink text-primary-blue font-semibold rounded-lg hover:shadow-md transition-shadow"
-              >
-                Logga in
-              </Link>
+              <>
+                <Link
+                  href="/login"
+                  className={`hidden lg:block font-medium transition-colors ${textColor}`}
+                >
+                  Logga in
+                </Link>
+                <Link
+                  href="/registrera"
+                  className={`hidden lg:block px-6 py-2.5 font-bold rounded-full transition-all ${ctaStyle}`}
+                >
+                  Kom igång
+                </Link>
+              </>
             )}
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`lg:hidden ${isHomepage && !scrolled ? 'text-white' : 'text-gray-600'}`}
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
-
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-800 hover:bg-gray-100"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
         </div>
+      </nav>
 
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden pb-4 space-y-2">
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-200">
+          <div className="px-4 py-6 space-y-4">
             {navigation.map((item) => (
               <div key={item.label}>
-                <Link
-                  href={item.href || '#'}
-                  className="block px-3 py-2 text-base font-medium text-gray-800 hover:bg-gray-50 rounded-md"
-                >
-                  {item.label}
-                </Link>
-                {item.dropdown && (
-                  <div className="pl-4 space-y-1">
-                    {item.dropdown.map((subitem) => (
-                      <Link
-                        key={subitem.href}
-                        href={subitem.href}
-                        className="block px-3 py-2 text-sm text-gray-600 hover:text-primary-blue"
-                      >
-                        {subitem.label}
-                      </Link>
-                    ))}
-                  </div>
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className="block py-2 text-lg font-semibold text-gray-900"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <>
+                    <div className="py-2 text-lg font-semibold text-gray-900">{item.label}</div>
+                    {item.dropdown && (
+                      <div className="ml-4 mt-2 space-y-2">
+                        {item.dropdown.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.href}
+                            href={dropdownItem.href}
+                            className="block py-2 text-gray-600"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {dropdownItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             ))}
             
-            {!user && (
-              <Link
-                href="/login"
-                className="block w-full mt-4 px-3 py-2.5 bg-accent-pink text-primary-blue font-semibold rounded-lg text-center"
-              >
-                Logga in
-              </Link>
-            )}
+            <div className="pt-4 border-t border-gray-200">
+              {user ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="block py-2 text-lg font-semibold text-gray-900"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logout()
+                      setIsMenuOpen(false)
+                    }}
+                    className="block w-full text-left py-2 text-lg font-semibold text-gray-900"
+                  >
+                    Logga ut
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="block py-2 text-lg font-semibold text-gray-900"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Logga in
+                  </Link>
+                  <Link
+                    href="/registrera"
+                    className="block py-2 text-lg font-semibold text-accent-pink"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Kom igång
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   )
 }

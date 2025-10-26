@@ -1,282 +1,266 @@
-import HeroSection from '@/components/HeroSection'
-import { ArrowRight, TrendingUp, Shield, Users, Zap, Award, Lightbulb, CheckCircle } from 'lucide-react'
+'use client'
+
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import { ArrowRight, ChevronDown, Play, Volume2, VolumeX } from 'lucide-react'
+import ObjectCarousel from '@/components/ObjectCarousel'
 
 export default function Home() {
+  const [scrollY, setScrollY] = useState(0)
+  const [isMuted, setIsMuted] = useState(true)
+  const heroVideoRef = useRef<HTMLVideoElement>(null)
+  const secondVideoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted)
+    if (heroVideoRef.current) heroVideoRef.current.muted = !isMuted
+    if (secondVideoRef.current) secondVideoRef.current.muted = !isMuted
+  }
+
   return (
-    <main className="bg-neutral-white">
-      {/* Hero */}
-      <HeroSection />
+    <main className="bg-black text-white overflow-x-hidden">
+      {/* HERO SECTION WITH FULLSCREEN VIDEO */}
+      <section className="relative h-screen w-full overflow-hidden">
+        {/* Vimeo Video Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <iframe
+            src="https://player.vimeo.com/video/1130638136?autoplay=1&loop=1&muted=1&controls=0&background=1"
+            className="absolute top-1/2 left-1/2 w-[177.77vh] min-w-full min-h-full -translate-x-1/2 -translate-y-1/2"
+            frameBorder="0"
+            allow="autoplay; fullscreen"
+          />
+        </div>
 
-      {/* Features Section */}
-      <section className="py-24 bg-neutral-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Varför BOLAXO?</h2>
-            <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
-              Vi gör det enklare än någonsin att köpa eller sälja ett företag. Automatisering sparar veckor av arbete – följ allt i realtid.
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* Hero Content */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
+          <div className="text-center max-w-5xl mx-auto">
+            <h1 
+              className="text-6xl md:text-8xl font-bold mb-6 tracking-tight"
+              style={{ transform: `translateY(${scrollY * 0.3}px)`, opacity: 1 - scrollY / 600 }}
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
+                BOLAXO
+              </span>
+            </h1>
+            <p 
+              className="text-xl md:text-2xl mb-12 font-light opacity-90"
+              style={{ transform: `translateY(${scrollY * 0.2}px)`, opacity: 1 - scrollY / 800 }}
+            >
+              Sveriges moderna marknadsplats för företagsöverlåtelser
             </p>
-          </div>
 
-          {/* Feature Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-white rounded-lg p-8 border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
-                <TrendingUp className="w-8 h-8 text-accent-pink" />
-              </div>
-              <h3 className="text-2xl font-bold text-accent-orange mb-3 uppercase">Smart matchning</h3>
-              <p className="text-gray-700 leading-relaxed">
-                AI matchar säljare och köpare baserat på faktiska kriterier. Ingen tid på irrelevanta möten.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="bg-white rounded-lg p-8 border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
-                <Shield className="w-8 h-8 text-accent-pink" />
-              </div>
-              <h3 className="text-2xl font-bold text-accent-orange mb-3 uppercase">100% säker process</h3>
-              <p className="text-gray-700 leading-relaxed">
-                NDA-skyddad från dag ett. Alla dokument hanteras säkert med full revision.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="bg-white rounded-lg p-8 border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
-                <Zap className="w-8 h-8 text-accent-pink" />
-              </div>
-              <h3 className="text-2xl font-bold text-accent-orange mb-3 uppercase">Snabb & smidig</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Från första värdering till signerad affär på en plats. Inga gissningar, bara fakta och automatisering.
-              </p>
+            {/* CTA Buttons */}
+            <div 
+              className="flex flex-col sm:flex-row gap-6 items-center justify-center"
+              style={{ transform: `translateY(${scrollY * 0.1}px)`, opacity: 1 - scrollY / 1000 }}
+            >
+              <Link 
+                href="/salja" 
+                className="group relative px-8 py-4 bg-white text-black font-semibold rounded-full hover:scale-105 transition-all duration-300"
+              >
+                <span className="relative z-10">För säljare</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-orange-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  För säljare
+                </span>
+              </Link>
+              <Link 
+                href="/kopare" 
+                className="group px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-black transition-all duration-300"
+              >
+                För köpare
+              </Link>
             </div>
           </div>
+
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <ChevronDown className="w-8 h-8 text-white/60" />
+          </div>
+
+          {/* Mute Button */}
+          <button
+            onClick={toggleMute}
+            className="absolute bottom-10 right-10 p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
+          >
+            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+          </button>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-24 bg-neutral-off-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Så fungerar BOLAXO</h2>
-            <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
-              En enkel process från start till mållinjen
-            </p>
+      {/* HOW IT WORKS SECTION */}
+      <section className="relative py-32 bg-gradient-to-b from-black to-gray-900">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Dance Image with Parallax */}
+          <div 
+            className="absolute top-0 right-0 w-96 h-96 opacity-10"
+            style={{ transform: `translateY(${scrollY * -0.2}px) rotate(${scrollY * 0.02}deg)` }}
+          >
+            <Image
+              src="/Dance.png"
+              alt="Dance"
+              width={400}
+              height={400}
+              className="w-full h-full object-contain"
+            />
           </div>
 
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-bold mb-6">SÅ FUNGERAR BOLAXO</h2>
+            <p className="text-xl text-gray-400 font-light">En enkel process från start till mållinjen</p>
+          </div>
+
+          {/* Process Steps with Irregular Rounded Boxes */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Step 1 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
-                1
+            {[
+              {
+                number: "1",
+                title: "REGISTRERA DIG",
+                desc: "Skapa ett konto och berätta vad du letar efter eller vill sälja. Tar 2 minuter.",
+                borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%"
+              },
+              {
+                number: "2",
+                title: "VI MATCHAR",
+                desc: "AI matchar dig med relevanta företag eller köpare på din nivå.",
+                borderRadius: "70% 30% 30% 70% / 70% 70% 30% 30%"
+              },
+              {
+                number: "3",
+                title: "MÖTAS SÄKERT",
+                desc: "NDA är redan på plats. Börja diskutera detaljer med full sekretess.",
+                borderRadius: "50% 50% 30% 70% / 30% 70% 50% 50%"
+              },
+              {
+                number: "4",
+                title: "AVSLUTA AFFÄR",
+                desc: "Signera dokumenten digitalt på en säker plattform.",
+                borderRadius: "70% 30% 50% 50% / 50% 50% 30% 70%"
+              }
+            ].map((step, index) => (
+              <div
+                key={index}
+                className="relative group"
+                style={{ 
+                  transform: `translateY(${Math.sin(scrollY * 0.001 + index) * 20}px)`,
+                  transition: 'transform 0.3s ease-out'
+                }}
+              >
+                <div
+                  className="bg-gradient-to-br from-gray-800 to-gray-900 p-8 h-full border border-gray-700 hover:border-pink-500 transition-all duration-500 group-hover:scale-105"
+                  style={{ borderRadius: step.borderRadius }}
+                >
+                  <div className="text-6xl font-bold text-pink-500 mb-4 opacity-50">{step.number}</div>
+                  <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+                  <p className="text-gray-400">{step.desc}</p>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Registrera dig</h3>
-              <p className="text-gray-700">
-                Skapa ett konto och berätta vad du letar efter eller vill sälja. Tar 2 minuter.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
-                2
-              </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Vi matchar</h3>
-              <p className="text-gray-700">
-                AI matchar dig med relevanta företag eller köpare på din nivå.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
-                3
-              </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Mötas säkert</h3>
-              <p className="text-gray-700">
-                NDA är redan på plats. Börja diskutera detaljer med full sekretess.
-              </p>
-            </div>
-
-            {/* Step 4 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 bg-accent-pink text-white rounded-full flex items-center justify-center mb-6 text-3xl font-bold">
-                4
-              </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3 uppercase">Avsluta affär</h3>
-              <p className="text-gray-700">
-                Signera dokumenten digitalt på en säker plattform.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Statistics Section */}
-      <section className="py-24 bg-primary-navy text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="text-5xl font-bold text-accent-pink mb-2">500+</div>
-              <p className="text-lg text-gray-300">Framgångsrika affärer</p>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold text-accent-pink mb-2">4.8★</div>
-              <p className="text-lg text-gray-300">Betyg från användare</p>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold text-accent-pink mb-2">24h</div>
-              <p className="text-lg text-gray-300">Medeltid till första match</p>
-            </div>
-          </div>
+      {/* CAROUSEL SECTION */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 mb-12 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Utvalda företag till salu</h2>
+          <p className="text-xl text-gray-400">Handplockade möjligheter just nu</p>
         </div>
+        <ObjectCarousel />
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-24 bg-neutral-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Det säger våra användare</h2>
-            <p className="text-xl text-primary-navy leading-relaxed max-w-2xl mx-auto">
-              Se vad köpare och säljare tycker om att använda BOLAXO
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Testimonial 1 */}
-            <div className="bg-neutral-off-white rounded-lg p-8 border-l-4 border-accent-pink">
-              <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-accent-orange text-lg">★</span>
-                ))}
-              </div>
-              <p className="text-primary-navy leading-relaxed mb-6 italic">
-                "Jag trodde aldrig att sälja mitt företag skulle kunna vara så enkelt. BOLAXO sparade mig månader av arbete."
-              </p>
-              <div className="font-semibold text-primary-navy">Anna Bergström</div>
-              <div className="text-sm text-gray-600">Säljare, E-commerce</div>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div className="bg-neutral-off-white rounded-lg p-8 border-l-4 border-accent-pink">
-              <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-accent-orange text-lg">★</span>
-                ))}
-              </div>
-              <p className="text-primary-navy leading-relaxed mb-6 italic">
-                "Matchningen är så smart. Vi fick relevanta möjligheter direkt utan att slösa tid på olämpliga bud."
-              </p>
-              <div className="font-semibold text-primary-navy">Johan Svensson</div>
-              <div className="text-sm text-gray-600">Köpare, PE Fond</div>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="bg-neutral-off-white rounded-lg p-8 border-l-4 border-accent-pink">
-              <div className="flex mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-accent-orange text-lg">★</span>
-                ))}
-              </div>
-              <p className="text-primary-navy leading-relaxed mb-6 italic">
-                "Det känns tryggt från första stund. Processen är väl genomtänkt och säkerheten är uppenbar."
-              </p>
-              <div className="font-semibold text-primary-navy">Maria Garcia</div>
-              <div className="text-sm text-gray-600">Säljare, Tech</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Us Section */}
-      <section className="py-24 bg-neutral-off-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* SECOND VIDEO SECTION */}
+      <section className="relative py-32 bg-black">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-5xl font-bold text-accent-orange mb-6 uppercase">Skapad för SME:er</h2>
-              <p className="text-lg text-primary-navy leading-relaxed mb-8">
-                BOLAXO är byggd av M&A-proffs för att lösa de verkliga smärtpunkterna i köp och försäljning av små till mellanstora företag.
+            {/* Text Content */}
+            <div className="order-2 lg:order-1">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                Framtidens företagsaffärer
+              </h2>
+              <p className="text-xl text-gray-400 mb-8 leading-relaxed">
+                Vi revolutionerar hur företag byter ägare. Med AI-driven matchning, 
+                säker datahantering och transparent process gör vi det enkelt att 
+                fokusera på det som verkligen betyder något – att hitta rätt match.
               </p>
-              
-              <ul className="space-y-4">
-                {[
-                  'Ingen provision eller success fees',
-                  'Transparenta priser från dag ett',
-                  'NDA-skyddad från början',
-                  'Digital signering och dokumentation',
-                  'Dedikerat support-team'
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <CheckCircle className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
-                    <span className="text-primary-navy font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
+              <Link 
+                href="/om-oss"
+                className="inline-flex items-center gap-2 text-pink-500 hover:text-pink-400 transition-colors group"
+              >
+                Läs mer om vår vision
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
 
-            <div className="bg-white rounded-lg p-12 border border-gray-200">
-              <div className="text-center space-y-6">
-                <Lightbulb className="w-16 h-16 text-accent-orange mx-auto" />
-                <h3 className="text-2xl font-bold text-primary-navy uppercase">Byggd av M&A-proffs</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  Vårt team har genomfört hundratals köp och försäljningar. Vi vet exakt vilka smärtpunkter vi behöver lösa.
-                </p>
+            {/* Video */}
+            <div className="order-1 lg:order-2 relative rounded-2xl overflow-hidden">
+              <div className="aspect-video">
+                <iframe
+                  src="https://player.vimeo.com/video/1130638175?autoplay=1&loop=1&muted=1&controls=0&background=1"
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="autoplay; fullscreen"
+                />
               </div>
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-accent-pink">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl font-bold text-primary-navy mb-6 uppercase">Redo för nästa steg?</h2>
-          <p className="text-xl text-primary-navy leading-relaxed mb-10 max-w-2xl mx-auto">
-            Oavsett om du vill sälja eller köpa ditt nästa företag, vi har allt du behöver.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/kopare/start"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all"
-            >
-              Jag vill köpa
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              href="/salja/start"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all"
-            >
-              Jag vill sälja
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+      {/* STATS SECTION */}
+      <section className="py-24 bg-gradient-to-b from-gray-900 to-black">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { number: "500+", label: "Genomförda affärer" },
+              { number: "2.5M", label: "SEK i snitt affärsvärde" },
+              { number: "14", label: "Dagar i snitt till avslut" }
+            ].map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-500 mb-2">
+                  {stat.number}
+                </div>
+                <p className="text-gray-400">{stat.label}</p>
+              </div>
+            ))}
           </div>
-          
-          <p className="text-sm text-primary-navy mt-6 opacity-75">
-            Tar bara 2 minuter att registrera sig. Helt kostnadsfritt.
-          </p>
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section className="py-16 bg-neutral-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-gray-600 mb-8">Säkrat av de ledande säkerhetsleverantörerna</p>
-          <div className="flex flex-wrap justify-center items-center gap-12">
-            <div className="text-center">
-              <div className="text-sm font-semibold text-primary-navy">🔐 BankID</div>
-            </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-primary-navy">📋 GDPR</div>
-            </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-primary-navy">🛡️ SSL/TLS</div>
-            </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-primary-navy">✓ E-sign</div>
-            </div>
+      {/* FINAL CTA */}
+      <section className="py-32 bg-gradient-to-r from-pink-600 to-orange-600">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Redo att ta nästa steg?
+          </h2>
+          <p className="text-xl mb-12 opacity-90">
+            Starta din resa mot en framgångsrik företagsaffär idag
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 items-center justify-center">
+            <Link 
+              href="/salja/borja"
+              className="px-8 py-4 bg-white text-black font-semibold rounded-full hover:scale-105 transition-transform"
+            >
+              Sälja företag
+            </Link>
+            <Link 
+              href="/sok"
+              className="px-8 py-4 bg-black/20 text-white font-semibold rounded-full hover:bg-black/30 transition-colors"
+            >
+              Köpa företag
+            </Link>
           </div>
         </div>
       </section>
