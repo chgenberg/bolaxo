@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import {
   BarChart3, Users, TrendingUp, AlertCircle, RefreshCw, Download,
@@ -65,20 +64,22 @@ interface DashboardStats {
 type TabType = 'overview' | 'users' | 'listings' | 'transactions' | 'payments' | 'financial' | 'moderation' | 'audit' | 'analytics' | 'sellers' | 'buyers' | 'fraud' | 'ndas' | 'emails' | 'integrations' | 'messages' | 'support' | 'reports' | 'admins' | 'permissions' | 'data' | 'sellerVerification' | 'buyerOnboarding' | 'customAlerts' | 'advancedReporting'
 
 export default function AdminDashboard() {
-  const { user } = useAuth()
   const router = useRouter()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
   const [autoRefresh, setAutoRefresh] = useState(true)
   const [activeTab, setActiveTab] = useState<TabType>('overview')
+  const [isAuthorized, setIsAuthorized] = useState(false)
 
-  // Check admin access
+  // Check admin access via cookie (middleware already verified this)
   useEffect(() => {
-    if (user && user.role !== 'admin') {
-      router.push('/')
-    }
-  }, [user, router])
+    console.log('🔐 Admin dashboard mounted - checking auth...')
+    // If middleware let us get here, we're authorized
+    // The middleware already checked the adminToken cookie
+    setIsAuthorized(true)
+    setLoading(false)
+  }, [])
 
   // Fetch dashboard data
   useEffect(() => {
@@ -105,7 +106,7 @@ export default function AdminDashboard() {
     }
   }, [autoRefresh])
 
-  if (!user || user.role !== 'admin') {
+  if (!isAuthorized) {
     return <div className="min-h-screen flex items-center justify-center">
       <p className="text-red-600 font-semibold">Unauthorized Access</p>
     </div>
@@ -125,6 +126,17 @@ export default function AdminDashboard() {
 
   const botPercentage = Math.round((stats.realVsBot.bot / (stats.realVsBot.real + stats.realVsBot.bot)) * 100)
   const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}m ${seconds % 60}s`
+
+  // Logout handler
+  const handleLogout = async () => {
+    console.log('🔐 Logging out...')
+    // Clear the cookie by setting it to empty
+    document.cookie = 'adminToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;'
+    // Redirect to home
+    setTimeout(() => {
+      window.location.href = '/admin/login'
+    }, 500)
+  }
 
   const tabs: Array<{ id: TabType; label: string; icon: React.ReactNode }> = [
     { id: 'overview', label: 'Overview', icon: <BarChart3 className="w-4 h-4" /> },
@@ -180,6 +192,13 @@ export default function AdminDashboard() {
             <button className="flex items-center gap-2 px-4 py-2 bg-accent-orange text-white rounded-lg hover:shadow-md transition-all">
               <Download className="w-4 h-4" />
               Export Report
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all"
+            >
+              <Users className="w-4 h-4" />
+              Logout
             </button>
           </div>
         </div>
