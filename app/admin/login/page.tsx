@@ -48,10 +48,10 @@ export default function AdminLoginPage() {
       console.log('✅ Login successful! User:', data.user)
       setSuccess(true)
       
-      // Use server-side redirect endpoint for better reliability
+      // Redirect directly to admin dashboard
       setTimeout(() => {
-        console.log('🔄 Redirecting via /api/admin/redirect')
-        window.location.href = '/api/admin/redirect'
+        console.log('🔄 Redirecting to /admin')
+        window.location.href = '/admin'
       }, 500)
     } catch (err) {
       console.error('❌ Login error:', err)
