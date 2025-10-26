@@ -50,10 +50,8 @@ export async function GET(request: NextRequest) {
     // Enrich with calculated metrics
     const enrichedBuyers = buyers.map(buyer => {
       const savedCount = buyer._count.listings
-      const matchCount = buyer.buyerMatches.length
-      const avgMatchScore = matchCount > 0 
-        ? Math.round(buyer.buyerMatches.reduce((sum, m) => sum + m.matchScore, 0) / matchCount)
-        : 0
+      const matchCount = 0 // No buyerMatches relation
+      const avgMatchScore = 0
 
       const preferredIndustries = buyer.buyerProfile?.preferredIndustries || []
       const preferredLocations = buyer.buyerProfile?.preferredRegions || []
