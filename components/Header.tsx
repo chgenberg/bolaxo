@@ -22,16 +22,36 @@ interface NavItem {
 
 const navigation: NavItem[] = [
   {
-    label: 'Värdering',
-    href: '/vardering'
+    label: 'För säljare',
+    dropdown: [
+      { label: 'Gratis företagsvärdering', href: '/vardering', description: 'Automatisk värdering på 5 min' },
+      { label: 'Så funkar det', href: '/salja', description: 'Läs om säljprocessen' },
+      { label: 'Börja sälja', href: '/salja/start', description: 'Skapa din annons' },
+      { label: 'Priser', href: '/priser', description: 'Se våra paket' },
+    ]
+  },
+  {
+    label: 'För köpare',
+    dropdown: [
+      { label: 'Sök företag', href: '/sok', description: 'Hitta din nästa investering' },
+      { label: 'Så funkar det', href: '/kopare', description: 'Läs om köpprocessen' },
+      { label: 'Skapa konto', href: '/kopare/start', description: 'Börja söka' },
+    ]
+  },
+  {
+    label: 'För mäklare',
+    href: '/for-maklare'
   },
   {
     label: 'Om oss',
-    href: '/om-oss'
-  },
-  {
-    label: 'Kontakt',
-    href: '/kontakt'
+    dropdown: [
+      { label: 'Vårt företag', href: '/om-oss', description: 'Lär känna BOLAXO' },
+      { label: 'Success stories', href: '/success-stories', description: 'Lyckade affärer' },
+      { label: 'För investerare', href: '/investor', description: 'Investera i BOLAXO' },
+      { label: 'Blogg', href: '/blogg', description: 'Guider, nyheter och insikter' },
+      { label: 'FAQ', href: '/faq', description: 'Vanliga frågor och svar' },
+      { label: 'Kontakt', href: '/kontakt', description: 'Hör av dig till oss' },
+    ]
   }
 ]
 
