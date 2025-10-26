@@ -153,8 +153,8 @@ export async function GET(request: NextRequest) {
 
     // Sort
     filtered.sort((a, b) => {
-      const aVal = a.severity === 'high' ? 3 : a.severity === 'medium' ? 2 : 1
-      const bVal = b.severity === 'high' ? 3 : b.severity === 'medium' ? 2 : 1
+      const aVal = a.severity === 'high' ? 3 : (a.severity as string) === 'medium' ? 2 : 1
+      const bVal = b.severity === 'high' ? 3 : (b.severity as string) === 'medium' ? 2 : 1
       return sortOrder === 'desc' ? bVal - aVal : aVal - bVal
     })
 
