@@ -4,7 +4,7 @@ import { CheckCircle, AlertCircle, Clock, Trash2, Check, X } from 'lucide-react'
 
 export default function SellerVerification() {
   const [verifications, setVerifications] = useState<any[]>([])
-  const [stats, setStats] = useState({})
+  const [stats, setStats] = useState<any>({ total: 0, pending: 0, approved: 0, rejected: 0 })
   const [statusFilter, setStatusFilter] = useState('pending')
 
   useEffect(() => {
