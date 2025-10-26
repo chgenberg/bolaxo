@@ -22,36 +22,16 @@ interface NavItem {
 
 const navigation: NavItem[] = [
   {
-    label: 'För säljare',
-    dropdown: [
-      { label: 'Gratis företagsvärdering', href: '/vardering', description: 'Automatisk värdering på 5 min' },
-      { label: 'Så funkar det', href: '/salja', description: 'Läs om säljprocessen' },
-      { label: 'Börja sälja', href: '/salja/start', description: 'Skapa din annons' },
-      { label: 'Priser', href: '/priser', description: 'Se våra paket' },
-    ]
-  },
-  {
-    label: 'För köpare',
-    dropdown: [
-      { label: 'Sök företag', href: '/sok', description: 'Hitta din nästa investering' },
-      { label: 'Så funkar det', href: '/kopare', description: 'Läs om köpprocessen' },
-      { label: 'Skapa konto', href: '/kopare/start', description: 'Börja söka' },
-    ]
-  },
-  {
-    label: 'För mäklare',
-    href: '/for-maklare'
+    label: 'Värdering',
+    href: '/vardering'
   },
   {
     label: 'Om oss',
-    dropdown: [
-      { label: 'Vårt företag', href: '/om-oss', description: 'Lär känna BOLAXO' },
-      { label: 'Success stories', href: '/success-stories', description: 'Lyckade affärer' },
-      { label: 'För investerare', href: '/investor', description: 'Investera i BOLAXO' },
-      { label: 'Blogg', href: '/blogg', description: 'Guider, nyheter och insikter' },
-      { label: 'FAQ', href: '/faq', description: 'Vanliga frågor och svar' },
-      { label: 'Kontakt', href: '/kontakt', description: 'Hör av dig till oss' },
-    ]
+    href: '/om-oss'
+  },
+  {
+    label: 'Kontakt',
+    href: '/kontakt'
   }
 ]
 
@@ -130,17 +110,50 @@ export default function Header() {
               </span>
             </Link>
 
-          {/* Center Navigation - Simplified */}
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            <Link href="/vardering" className={`font-medium transition-colors ${textColor}`}>
-              Värdering
-            </Link>
-            <Link href="/om-oss" className={`font-medium transition-colors ${textColor}`}>
-              Om oss
-            </Link>
-            <Link href="/kontakt" className={`font-medium transition-colors ${textColor}`}>
-              Kontakt
-            </Link>
+            {navigation.map((item) => (
+              <div
+                key={item.label}
+                className="relative"
+                onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
+                onMouseLeave={handleMouseLeave}
+              >
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className={`font-medium transition-colors ${textColor}`}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <button className={`flex items-center space-x-1 font-medium transition-colors ${textColor}`}>
+                    <span>{item.label}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                )}
+
+                {/* Dropdown Menu */}
+                {item.dropdown && openDropdown === item.label && (
+                  <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-hover overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100 border border-gray-soft">
+                    <div className="p-2">
+                      {item.dropdown.map((dropdownItem) => (
+                        <Link
+                          key={dropdownItem.href}
+                          href={dropdownItem.href}
+                          className="block px-4 py-3 rounded-lg hover:bg-sand hover:bg-opacity-30 transition-colors"
+                        >
+                          <div className="font-semibold text-navy">{dropdownItem.label}</div>
+                          {dropdownItem.description && (
+                            <div className="text-sm text-graphite opacity-75 mt-0.5">{dropdownItem.description}</div>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
 
           {/* Right Side Actions */}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, ArrowRight, TrendingUp } from 'lucide-react'
+import { Star, ArrowRight, TrendingUp, ChevronDown } from 'lucide-react'
 import ValuationModal from '@/components/ValuationModal'
 
 export default function Home() {
@@ -45,69 +45,74 @@ export default function Home() {
 
   return (
     <main className="bg-cream">
-      {/* HERO SECTION - Klarna Inspired */}
-      <section className="section section-cream overflow-hidden">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="relative z-10">
-              <h1 className="heading-xl mb-6 uppercase">
-                DIGITAL PLATTFORM FÖR FÖRETAGSFÖRSÄLJNING.
-              </h1>
-              
-              {/* Pulsing Box */}
-              <div className="relative pulse-subtle">
-                <div className="absolute inset-0 gradient-rose-coral rounded-2xl opacity-20" />
-                <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-soft border border-sand">
-                  <p className="body-lg text-graphite">
-                    Få en kostnadsfri företagsvärdering på 5 minuter baserad på professionella metoder. 
-                    Publicera din annons, ta emot NDA-förfrågningar och hantera hela försäljningsprocessen på ett ställe.
-                  </p>
-                </div>
-              </div>
-              
-              {/* Interactive CTA Button */}
-              <button
-                onClick={() => setIsValuationModalOpen(true)}
-                className="btn-primary mt-8 text-lg px-8 py-4 group"
-              >
-                <span className="flex items-center gap-3">
-                  Starta värdering
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </span>
-              </button>
+      {/* HERO SECTION - Fullscreen */}
+      <section className="relative min-h-screen flex items-center">
+        {/* Background Image - Fullscreen */}
+        <div className="absolute inset-0">
+          <Image
+            src="/hero.png"
+            alt="Hero background"
+            fill
+            className="object-cover hidden md:block"
+            priority
+          />
+          <Image
+            src="/hero_mobile.png"
+            alt="Hero background mobile"
+            fill
+            className="object-cover md:hidden"
+            priority
+          />
+          {/* Gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-cream/95 via-cream/80 to-cream/40" />
+        </div>
 
-              {/* Trust indicators */}
-              <div className="mt-8 flex items-center gap-8 text-sm text-graphite">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-mint" />
-                  <span>500+ genomförda affärer</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-butter" />
-                  <span>4.9/5 i betyg</span>
-                </div>
+        {/* Content */}
+        <div className="relative z-10 container-custom w-full py-20">
+          <div className="max-w-2xl">
+            <h1 className="heading-xl mb-6 uppercase">
+              DIGITAL PLATTFORM FÖR FÖRETAGSFÖRSÄLJNING.
+            </h1>
+            
+            {/* Pulsing Box */}
+            <div className="relative pulse-subtle">
+              <div className="absolute inset-0 gradient-rose-coral rounded-2xl opacity-20" />
+              <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-soft border border-sand">
+                <p className="body-lg text-graphite">
+                  Få en kostnadsfri företagsvärdering på 5 minuter baserad på professionella metoder. 
+                  Publicera din annons, ta emot NDA-förfrågningar och hantera hela försäljningsprocessen på ett ställe.
+                </p>
               </div>
             </div>
+            
+            {/* Interactive CTA Button */}
+            <button
+              onClick={() => setIsValuationModalOpen(true)}
+              className="btn-primary mt-8 text-lg px-8 py-4 group"
+            >
+              <span className="flex items-center gap-3">
+                Starta värdering
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </span>
+            </button>
 
-            {/* Right Image */}
-            <div className="relative h-[600px] lg:h-[700px]">
-              <Image
-                src="/hero.png"
-                alt="Hero background"
-                fill
-                className="object-contain hidden md:block"
-                priority
-              />
-              <Image
-                src="/hero_mobile.png"
-                alt="Hero background mobile"
-                fill
-                className="object-contain md:hidden"
-                priority
-              />
+            {/* Trust indicators */}
+            <div className="mt-8 flex items-center gap-8 text-sm text-graphite">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-mint" />
+                <span>500+ genomförda affärer</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-butter" />
+                <span>4.9/5 i betyg</span>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+          <ChevronDown className="w-8 h-8 text-navy opacity-60" />
         </div>
       </section>
 
