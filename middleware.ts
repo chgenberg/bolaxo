@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import * as jwt from 'jsonwebtoken'
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next()
@@ -39,6 +40,28 @@ export function middleware(request: NextRequest) {
       'Strict-Transport-Security',
       'max-age=31536000; includeSubDomains; preload'
     )
+  }
+
+  // CHECK: Admin routes require authentication
+  if (request.nextUrl.pathname.startsWith('/admin') && 
+      !request.nextUrl.pathname.startsWith('/admin/login')) {
+    
+    const adminToken = request.cookies.get('adminToken')?.value
+    
+    if (!adminToken) {
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
+
+    // Verify JWT token
+    try {
+      jwt.verify(adminToken, process.env.JWT_SECRET || 'your-secret-key')
+    } catch (err) {
+      // Token is invalid or expired
+      const loginUrl = new URL('/admin/login', request.url)
+      const res = NextResponse.redirect(loginUrl)
+      res.cookies.delete('adminToken')
+      return res
+    }
   }
 
   return response
