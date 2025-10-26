@@ -154,7 +154,7 @@ export async function GET(request: NextRequest) {
         const userId = tx.sellerId
         if (!userEngagement[userId]) {
           userEngagement[userId] = {
-            signupDate: tx.seller.createdAt,
+            signupDate: tx.createdAt,
             transactions: 0,
             lastActive: tx.createdAt
           }
