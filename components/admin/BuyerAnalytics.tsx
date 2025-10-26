@@ -15,7 +15,7 @@ export default function BuyerAnalytics() {
   const [stats, setStats] = useState({ totalBuyers: 0, activeBuyers: 0, newBuyers: 0, avgQualityScore: 0, totalMatches: 0, totalDeals: 0, avgSavedListings: 0 })
   
   const [searchQuery, setSearchQuery] = useState('')
-  const [sortBy, setSortBy] = useState('quality')
+  const [sortBy, setSortBy] = useState('createdAt')
   const [sortOrder, setSortOrder] = useState('desc')
 
   useEffect(() => {
