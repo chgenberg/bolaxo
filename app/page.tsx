@@ -48,7 +48,7 @@ export default function Home() {
       {/* HERO SECTION - Fullscreen */}
       <section className="relative min-h-screen flex items-center bg-cover bg-center">
         {/* Background Image - Fullscreen with no overlay */}
-        <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 z-0">
           <Image
             src="/hero.png"
             alt="Hero background"
@@ -66,7 +66,7 @@ export default function Home() {
         </div>
 
         {/* Content with white semi-transparent background for readability */}
-        <div className="container-custom w-full py-20 z-10">
+        <div className="relative container-custom w-full py-20 z-10">
           <div className="max-w-2xl">
             <h1 className="heading-xl mb-6 uppercase text-navy">
               DIGITAL PLATTFORM FÖR FÖRETAGSFÖRSÄLJNING.
