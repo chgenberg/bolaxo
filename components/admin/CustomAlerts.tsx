@@ -7,7 +7,7 @@ export default function CustomAlerts() {
   const [stats, setStats] = useState<any>({ total: 0, active: 0, triggered: 0 })
   const [showForm, setShowForm] = useState(false)
   const [metadata, setMetadata] = useState<any>(null)
-  const [formData, setFormData] = useState({ name: '', trigger: '', threshold: '', channels: [] })
+  const [formData, setFormData] = useState<any>({ name: '', trigger: '', threshold: '', channels: [] as string[] })
 
   useEffect(() => {
     loadAlerts()
