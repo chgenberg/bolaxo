@@ -9,23 +9,32 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Brand colors from design manual
-        'primary-navy': '#0B214A',
-        'accent-pink': '#e8903d',
-        'accent-orange': '#F68B1F',
-        'neutral-white': '#FFFFFF',
-        'neutral-off-white': '#F9F8F5',
+        // 🎨 Primär färgpalett
+        'cream': '#F7F4F1',           // Basvit / Bakgrund
+        'navy': '#1F3C58',            // Marinblå (kontrast) - rubriker, logotyp
+        'sand': '#DCCBB6',            // Sandbeige - sektioner
+        'rose': '#EBCDC3',            // Puderrosa - accent i knappar
+        'sky': '#A9D2DA',             // Pastellblå - länkar, accenter
+        'butter': '#F5E7A1',          // Mjukt gult - detaljer
         
-        // Legacy colors for backward compatibility
-        'primary-blue': '#0B214A',
-        'light-blue': '#e6f0ff',
-        'text-dark': '#0B214A',
-        'text-gray': '#6b7280',
-        'success': '#10b981',
-        'background-white': '#ffffff',
-        'background-off-white': '#F9F8F5',
-        'error': '#dc3545',
-        'warning': '#ffc107',
+        // 💡 Komplementfärger
+        'mint': '#CBE3CF',            // Mintgrön - diagram, ikoner
+        'coral': '#F3B6A8',           // Ljus korall - CTA hover
+        'gray-soft': '#D9D9D9',       // Mjukt grå - linjer
+        'graphite': '#3A3A3A',        // Grafitgrå - brödtext
+        
+        // Semantic colors
+        'background': '#F7F4F1',
+        'text': '#3A3A3A',
+        'text-heading': '#1F3C58',
+        'primary': '#1F3C58',
+        'secondary': '#EBCDC3',
+        'accent': '#A9D2DA',
+        
+        // Legacy compatibility (mapped to new colors)
+        'primary-navy': '#1F3C58',
+        'accent-pink': '#EBCDC3',
+        'accent-orange': '#F3B6A8',
       },
       fontSize: {
         // Heading scale - per design manual

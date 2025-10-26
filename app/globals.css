@@ -9,119 +9,150 @@
   
   html {
     font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
   }
   
   body {
-    @apply bg-background-white text-text-dark;
+    @apply bg-cream text-graphite;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-navy;
   }
 }
 
 @layer components {
-  /* Buttons */
+  /* 🎨 Buttons - Klarna-inspirerad stil */
   .btn-primary {
-    @apply bg-primary-blue text-white px-6 py-3 rounded-button font-semibold 
-           shadow-soft hover:shadow-card-hover hover:bg-blue-800 
-           transition-all duration-300 transform hover:-translate-y-0.5;
+    @apply bg-navy text-white px-6 py-3 rounded-full font-medium 
+           hover:bg-opacity-90 hover:shadow-lg
+           transition-all duration-300;
   }
   
   .btn-secondary {
-    @apply bg-white text-primary-blue px-6 py-3 rounded-button font-semibold 
-           border border-primary-blue/20 shadow-soft hover:shadow-card 
-           hover:bg-light-blue/30 transition-all duration-300;
+    @apply bg-rose text-navy px-6 py-3 rounded-full font-medium 
+           hover:bg-coral hover:shadow-md
+           transition-all duration-300;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-navy text-navy px-6 py-3 rounded-full font-medium 
+           hover:bg-navy hover:text-white
+           transition-all duration-300;
   }
   
   .btn-ghost {
-    @apply text-primary-blue px-4 py-2 rounded-button font-medium 
-           hover:bg-light-blue/20 transition-all duration-300;
+    @apply text-sky px-4 py-2 rounded-full font-medium 
+           hover:bg-sky hover:bg-opacity-10
+           transition-all duration-300;
   }
   
-  /* Cards */
+  /* 🎴 Cards */
   .card {
-    @apply bg-white rounded-card shadow-card p-6 
-           hover:shadow-card-hover transition-all duration-300;
+    @apply bg-white rounded-2xl shadow-sm p-6 
+           hover:shadow-md border border-gray-soft
+           transition-all duration-300;
   }
   
   .card-interactive {
     @apply card cursor-pointer transform hover:-translate-y-1;
   }
   
-  .card-static {
-    @apply bg-white rounded-card shadow-card p-6;
+  .card-accent {
+    @apply bg-sand rounded-2xl p-6 shadow-sm
+           border border-sand;
   }
   
-  /* Form Elements */
-  .input-field {
-    @apply w-full px-4 py-3 rounded-input border border-gray-200 
-           focus:border-primary-blue focus:ring-2 focus:ring-primary-blue/10 
-           focus:outline-none transition-all duration-200;
-  }
-  
-  .select-field {
-    @apply input-field appearance-none bg-white cursor-pointer;
-  }
-  
-  /* Navigation */
-  .nav-link {
-    @apply text-text-dark font-medium hover:text-primary-blue 
-           transition-colors duration-200 relative;
-  }
-  
-  .nav-link::after {
-    @apply content-[''] absolute bottom-0 left-0 w-0 h-0.5 
-           bg-primary-blue transition-all duration-300;
-  }
-  
-  .nav-link:hover::after {
-    @apply w-full;
-  }
-  
-  /* Dropdowns */
-  .dropdown {
-    @apply absolute top-full mt-2 bg-white rounded-card shadow-dropdown 
-           border border-gray-100 overflow-hidden opacity-0 invisible 
-           transform scale-95 transition-all duration-200;
-  }
-  
-  .dropdown.open {
-    @apply opacity-100 visible scale-100;
-  }
-  
-  .dropdown-item {
-    @apply block px-4 py-3 text-text-dark hover:bg-light-blue/20 
+  /* 🔗 Links */
+  .link {
+    @apply text-sky font-medium hover:text-navy underline-offset-2
            transition-colors duration-200;
   }
   
-  /* Utilities */
-  .sticky-nav-shadow {
-    box-shadow: 0 -2px 20px rgba(0, 51, 102, 0.1);
+  .link-subtle {
+    @apply text-graphite hover:text-navy
+           transition-colors duration-200;
   }
   
-  .glass-effect {
-    @apply backdrop-blur-lg bg-white/95;
+  /* 📝 Inputs */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-soft
+           focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky focus:ring-opacity-20
+           bg-white text-graphite
+           transition-all duration-200;
   }
   
-  /* Typography */
-  .heading-1 {
-    @apply text-4xl md:text-5xl font-bold text-text-dark leading-tight uppercase;
+  .input-error {
+    @apply border-coral focus:border-coral focus:ring-coral;
   }
   
-  .heading-2 {
-    @apply text-3xl md:text-4xl font-bold text-text-dark leading-tight uppercase;
+  /* 🏷️ Badges */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
   }
   
-  .heading-3 {
-    @apply text-2xl md:text-3xl font-semibold text-text-dark uppercase;
+  .badge-primary {
+    @apply bg-navy bg-opacity-10 text-navy;
   }
   
-  .text-muted {
-    @apply text-text-gray text-sm;
+  .badge-success {
+    @apply bg-mint bg-opacity-50 text-navy;
   }
   
-  /* Animations */
-  @keyframes slide-down {
+  .badge-warning {
+    @apply bg-butter bg-opacity-50 text-navy;
+  }
+  
+  .badge-info {
+    @apply bg-sky bg-opacity-30 text-navy;
+  }
+  
+  /* 📊 Sections */
+  .section {
+    @apply py-16 md:py-24;
+  }
+  
+  .section-cream {
+    @apply bg-cream;
+  }
+  
+  .section-sand {
+    @apply bg-sand;
+  }
+  
+  .section-white {
+    @apply bg-white;
+  }
+  
+  /* 🎯 Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-6 lg:px-12;
+  }
+  
+  /* ✨ Animations */
+  .pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-subtle {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.95;
+      transform: scale(1.02);
+    }
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(10px);
     }
     to {
       opacity: 1;
@@ -129,68 +160,59 @@
     }
   }
   
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  /* 🎨 Gradients */
+  .gradient-cream-sand {
+    background: linear-gradient(135deg, #F7F4F1 0%, #DCCBB6 100%);
   }
   
-  .animate-slide-down {
-    animation: slide-down 0.3s ease-out;
+  .gradient-rose-coral {
+    background: linear-gradient(135deg, #EBCDC3 0%, #F3B6A8 100%);
   }
   
-  .animate-fade-in {
-    animation: fade-in 0.3s ease-out;
+  .gradient-sky-mint {
+    background: linear-gradient(135deg, #A9D2DA 0%, #CBE3CF 100%);
   }
   
-  @keyframes pulse-shadow {
-    0%, 100% {
-      opacity: 0.3;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.5;
-      transform: scale(1.05);
-    }
+  /* 📱 Responsive Typography */
+  .heading-xl {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold text-navy leading-tight;
   }
   
-  .animate-pulse-shadow {
-    animation: pulse-shadow 3s ease-in-out infinite;
+  .heading-lg {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-navy leading-tight;
   }
   
-  /* Valuation Hero Background */
-  .valuation-hero-bg {
-    background-image: url('/vardering_mobile.png');
+  .heading-md {
+    @apply text-2xl md:text-3xl font-bold text-navy leading-snug;
   }
   
-  @media (min-width: 768px) {
-    .valuation-hero-bg {
-      background-image: url('/vardering_desktop.png');
-    }
+  .heading-sm {
+    @apply text-xl md:text-2xl font-semibold text-navy leading-snug;
   }
   
-  /* Seller Hero Background */
-  .seller-hero-bg {
-    background-image: url('/hero_background_mobile.png');
+  .body-lg {
+    @apply text-lg md:text-xl text-graphite leading-relaxed;
   }
   
-  @media (min-width: 768px) {
-    .seller-hero-bg {
-      background-image: url('/hero_background_desktop.png');
-    }
+  .body-md {
+    @apply text-base md:text-lg text-graphite leading-relaxed;
   }
   
-  /* Galaxy Hero Background (Sellers & Buyers) */
-  .galaxy-hero-bg {
-    background-image: url('/galax_mobile.png');
+  .body-sm {
+    @apply text-sm md:text-base text-graphite leading-relaxed;
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   }
   
-  @media (min-width: 768px) {
-    .galaxy-hero-bg {
-      background-image: url('/galax.png');
-    }
+  .shadow-hover {
+    box-shadow: 0 8px 24px rgba(31, 60, 88, 0.12);
+  }
+  
+  .text-balance {
+    text-wrap: balance;
   }
 }

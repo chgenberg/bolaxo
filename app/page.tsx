@@ -44,22 +44,22 @@ export default function Home() {
   ]
 
   return (
-    <main className="bg-white">
+    <main className="bg-cream">
       {/* HERO SECTION - Klarna Inspired */}
-      <section className="relative flex items-center bg-gray-50 overflow-hidden">
-        <div className="container mx-auto px-6 lg:px-12 py-20">
+      <section className="section section-cream overflow-hidden">
+        <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="relative z-10">
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight uppercase">
+              <h1 className="heading-xl mb-6 uppercase">
                 DIGITAL PLATTFORM FÖR FÖRETAGSFÖRSÄLJNING.
               </h1>
               
               {/* Pulsing Box */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl animate-pulse" />
-                <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100">
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+              <div className="relative pulse-subtle">
+                <div className="absolute inset-0 gradient-rose-coral rounded-2xl opacity-20" />
+                <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-soft border border-sand">
+                  <p className="body-lg text-graphite">
                     Få en kostnadsfri företagsvärdering på 5 minuter baserad på professionella metoder. 
                     Publicera din annons, ta emot NDA-förfrågningar och hantera hela försäljningsprocessen på ett ställe.
                   </p>
@@ -69,23 +69,22 @@ export default function Home() {
               {/* Interactive CTA Button */}
               <button
                 onClick={() => setIsValuationModalOpen(true)}
-                className="mt-8 group relative overflow-hidden bg-gray-900 text-white px-8 py-5 rounded-full font-medium text-lg transition-all hover:scale-105 hover:shadow-2xl"
+                className="btn-primary mt-8 text-lg px-8 py-4 group"
               >
-                <span className="relative z-10 flex items-center gap-3">
+                <span className="flex items-center gap-3">
                   Starta värdering
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
 
               {/* Trust indicators */}
-              <div className="mt-8 flex items-center gap-8 text-sm text-gray-600">
+              <div className="mt-8 flex items-center gap-8 text-sm text-graphite">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
+                  <TrendingUp className="w-5 h-5 text-mint" />
                   <span>500+ genomförda affärer</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-yellow-500" />
+                  <Star className="w-5 h-5 text-butter" />
                   <span>4.9/5 i betyg</span>
                 </div>
               </div>
@@ -113,8 +112,8 @@ export default function Home() {
       </section>
 
       {/* FOUR IMAGES SECTION - Klarna Style */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="section section-white">
+        <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { num: 1, title: "REGISTRERA", desc: "Skapa ditt konto på 2 minuter" },
@@ -125,9 +124,9 @@ export default function Home() {
               <div
                 key={step.num}
                 onClick={() => setSelectedStep(step.num)}
-                className="relative group cursor-pointer overflow-hidden rounded-2xl bg-gray-50 shadow-md hover:shadow-xl transition-all duration-300"
+                className="card-interactive"
               >
-                <div className="aspect-[4/5] relative overflow-hidden">
+                <div className="aspect-[4/5] relative overflow-hidden rounded-xl">
                   <Image
                     src={`/${step.num}.png`}
                     alt={`Process steg ${step.num}`}
@@ -136,8 +135,8 @@ export default function Home() {
                   />
                   
                   {/* Bottom text bar */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm p-4">
-                    <h3 className="text-lg font-bold text-gray-900 uppercase tracking-wide">
+                  <div className="absolute bottom-0 left-0 right-0 bg-sand/95 backdrop-blur-sm p-4 border-t border-gray-soft">
+                    <h3 className="text-lg font-bold text-navy uppercase tracking-wide">
                       {step.title}
                     </h3>
                   </div>
@@ -149,13 +148,13 @@ export default function Home() {
       </section>
 
       {/* REVIEWS SECTION - Interactive & Animated */}
-      <section className="py-20 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="section section-sand overflow-hidden">
+        <div className="container-custom">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="heading-lg mb-4">
               Våra kunder älskar BOLAXO
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="body-lg text-graphite">
               98% av våra säljare rekommenderar oss
             </p>
           </div>
@@ -173,26 +172,26 @@ export default function Home() {
                     : 'opacity-0 scale-90 -translate-x-1/3 z-0'
                 }`}
               >
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-8 md:p-12 shadow-xl">
+                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-hover border border-sand">
                   {/* Stars */}
                   <div className="flex gap-1 mb-6">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-6 h-6 fill-butter text-butter" />
                     ))}
                   </div>
 
                   {/* Review Text */}
-                  <p className="text-xl md:text-2xl text-gray-800 mb-8 leading-relaxed">
+                  <p className="text-xl md:text-2xl text-graphite mb-8 leading-relaxed">
                     "{review.text}"
                   </p>
 
                   {/* Author */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-gray-900">{review.author}</p>
-                      <p className="text-gray-600">{review.company}</p>
+                      <p className="font-bold text-navy">{review.author}</p>
+                      <p className="text-graphite opacity-75">{review.company}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{review.date}</p>
+                    <p className="text-sm text-graphite opacity-60">{review.date}</p>
                   </div>
                 </div>
               </div>
@@ -207,8 +206,8 @@ export default function Home() {
                 onClick={() => setActiveReview(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === activeReview
-                    ? 'w-8 bg-gray-900'
-                    : 'w-2 bg-gray-300 hover:bg-gray-400'
+                    ? 'w-8 bg-navy'
+                    : 'w-2 bg-gray-soft hover:bg-sky'
                 }`}
               />
             ))}
@@ -217,17 +216,17 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 to-black text-white">
-        <div className="max-w-4xl mx-auto px-6 lg:px-12 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+      <section className="section gradient-sky-mint text-navy">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="heading-lg mb-6">
             Redo att sälja ditt företag?
           </h2>
-          <p className="text-xl mb-8 opacity-90">
+          <p className="body-lg mb-8 text-graphite">
             Börja med en gratis värdering och se vad ditt företag är värt idag
           </p>
           <button
             onClick={() => setIsValuationModalOpen(true)}
-            className="bg-white text-gray-900 px-8 py-4 rounded-full font-medium text-lg hover:scale-105 transition-transform"
+            className="btn-primary text-lg px-8 py-4"
           >
             Starta gratis värdering
           </button>

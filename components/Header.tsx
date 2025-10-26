@@ -86,31 +86,31 @@ export default function Header() {
     }, 200)
   }
 
-  // Klarna-inspired clean design
+  // Klarna-inspired clean design with new colors
   const headerBg = scrolled 
-    ? 'bg-white/95 backdrop-blur-md shadow-sm' 
+    ? 'bg-white/95 backdrop-blur-md shadow-soft' 
     : 'bg-white'
   
-  const textColor = 'text-gray-700 hover:text-gray-900'
-  const logoColor = 'text-gray-900'
-  const ctaStyle = 'bg-gray-900 text-white hover:bg-gray-800'
+  const textColor = 'text-graphite hover:text-navy'
+  const logoColor = 'text-navy'
+  const ctaStyle = 'btn-primary'
 
   return (
     <>
       {/* Top bar with section switcher */}
-      <div className="bg-gray-50 border-b border-gray-200">
+      <div className="bg-sand border-b border-gray-soft">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="flex items-center py-2 text-sm">
             <Link 
               href="/" 
-              className={`mr-4 ${activeSection === 'seller' ? 'text-gray-900 font-medium' : 'text-gray-600 hover:text-gray-900'}`}
+              className={`mr-4 transition-colors ${activeSection === 'seller' ? 'text-navy font-medium' : 'text-graphite hover:text-navy'}`}
               onClick={() => setActiveSection('seller')}
             >
               För säljare
             </Link>
             <Link 
               href="/kopare" 
-              className={`${activeSection === 'buyer' ? 'text-gray-900 font-medium' : 'text-gray-600 hover:text-gray-900'}`}
+              className={`transition-colors ${activeSection === 'buyer' ? 'text-navy font-medium' : 'text-graphite hover:text-navy'}`}
               onClick={() => setActiveSection('buyer')}
             >
               För köpare
@@ -173,7 +173,7 @@ export default function Header() {
                 </Link>
                 <Link
                   href="/registrera"
-                  className={`hidden lg:block px-6 py-3 font-medium rounded-full transition-all ${ctaStyle}`}
+                  className="hidden lg:block btn-primary"
                 >
                   Kom igång
                 </Link>
