@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
         where: {
           AND: [
             { role: 'seller' },
-            { transactions: { some: { stage: 'completed' } } }
+            { listings: { some: { status: 'sold' } } }
           ]
         }
       })
