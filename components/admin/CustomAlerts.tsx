@@ -130,7 +130,7 @@ export default function CustomAlerts() {
                       if (e.target.checked) {
                         setFormData({...formData, channels: [...formData.channels, channel]})
                       } else {
-                        setFormData({...formData, channels: formData.channels.filter(c => c !== channel)})
+                        setFormData({...formData, channels: formData.channels.filter((c: string) => c !== channel)})
                       }
                     }} className="w-4 h-4" />
                     <span className="text-sm text-gray-700">{channel.toUpperCase()}</span>
