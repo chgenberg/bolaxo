@@ -52,7 +52,8 @@ export async function GET(request: NextRequest) {
           select: {
             id: true,
             companyName: true,
-            anonymousTitle: true
+            anonymousTitle: true,
+            revenue: true
           }
         }
       },
