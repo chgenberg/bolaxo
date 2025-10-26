@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
 
     // Create JWT token
     console.log('🔐 [LOGIN] Creating JWT token...')
-    const token = createAdminToken(user.id, user.email, user.role)
+    const token = await createAdminToken(user.id, user.email, user.role)
     console.log('✅ [LOGIN] Token created')
 
     // Update lastLoginAt

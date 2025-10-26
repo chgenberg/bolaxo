@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import * as jwt from 'jsonwebtoken'
+import { jwtVerify } from 'jose'
 
 // Use the same secret as admin-auth.ts
 const JWT_SECRET = process.env.JWT_SECRET || 'bolagsplatsen-admin-secret-key-2024'
+const secret = new TextEncoder().encode(JWT_SECRET)
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
   // 1. CSRF Protection via SameSite cookies (redan satt i auth)
@@ -61,10 +62,10 @@ export function middleware(request: NextRequest) {
 
     console.log('✅ [MIDDLEWARE] adminToken found, verifying...')
 
-    // Verify JWT token
+    // Verify JWT token using jose (Edge Runtime compatible)
     try {
-      const decoded = jwt.verify(adminToken, JWT_SECRET)
-      console.log('✅ [MIDDLEWARE] Token valid, user authorized:', decoded)
+      const { payload } = await jwtVerify(adminToken, secret)
+      console.log('✅ [MIDDLEWARE] Token valid, user authorized:', payload)
     } catch (err) {
       // Token is invalid or expired
       console.log('❌ [MIDDLEWARE] Token invalid or expired:', err)

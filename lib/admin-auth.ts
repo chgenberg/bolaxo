@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
-import * as jwt from 'jsonwebtoken'
+import { SignJWT, jwtVerify } from 'jose'
 
 // Generate a consistent JWT secret - use env var or a default
 const JWT_SECRET = process.env.JWT_SECRET || 'bolagsplatsen-admin-secret-key-2024'
+const secret = new TextEncoder().encode(JWT_SECRET)
 
 export interface AdminJWT {
   userId: string
   email: string
   role: string
-  iat: number
-  exp: number
+  iat?: number
+  exp?: number
 }
 
 /**
  * Verifiera JWT-token från cookie
  */
-export function verifyAdminToken(request: NextRequest): AdminJWT | null {
+export async function verifyAdminToken(request: NextRequest): Promise<AdminJWT | null> {
   try {
     const token = request.cookies.get('adminToken')?.value
 
@@ -23,12 +24,15 @@ export function verifyAdminToken(request: NextRequest): AdminJWT | null {
       return null
     }
 
-    const decoded = jwt.verify(
-      token,
-      JWT_SECRET
-    ) as AdminJWT
+    const { payload } = await jwtVerify(token, secret)
 
-    return decoded
+    return {
+      userId: payload.userId as string,
+      email: payload.email as string,
+      role: payload.role as string,
+      iat: payload.iat,
+      exp: payload.exp
+    }
   } catch (error) {
     console.error('Token verification error:', error)
     return null
@@ -39,8 +43,8 @@ export function verifyAdminToken(request: NextRequest): AdminJWT | null {
  * Middleware för att skydda admin-routes
  * Returnerar error-respons om token är ogiltig
  */
-export function requireAdminAuth(request: NextRequest) {
-  const adminToken = verifyAdminToken(request)
+export async function requireAdminAuth(request: NextRequest) {
+  const adminToken = await verifyAdminToken(request)
 
   if (!adminToken || adminToken.role !== 'admin') {
     return NextResponse.json(
@@ -55,23 +59,25 @@ export function requireAdminAuth(request: NextRequest) {
 /**
  * Skapa JWT-token
  */
-export function createAdminToken(
+export async function createAdminToken(
   userId: string,
   email: string,
   role: string
-): string {
-  return jwt.sign(
-    { userId, email, role },
-    JWT_SECRET,
-    { expiresIn: '7d' }
-  )
+): Promise<string> {
+  const token = await new SignJWT({ userId, email, role })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('7d')
+    .sign(secret)
+
+  return token
 }
 
 /**
  * Verifiera admin-åtkomst för API-routes
  */
 export async function checkAdminAuth(request: NextRequest) {
-  const token = verifyAdminToken(request)
+  const token = await verifyAdminToken(request)
 
   if (!token || token.role !== 'admin') {
     return {
