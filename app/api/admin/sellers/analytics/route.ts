@@ -50,10 +50,10 @@ export async function GET(request: NextRequest) {
     })
 
     // Enrich with calculated metrics
-    const enrichedSellers = sellers.map(seller => {
+    let enrichedSellers = sellers.map(seller => {
       const activeListings = seller.listings.filter(l => l.status === 'active').length
       const totalListings = seller.listings.length
-      const totalListingViews = seller.listings.reduce((sum, l) => sum + (l.views || 0), 0)
+      const totalListingViews = seller.listings.reduce((sum, l) => sum + (l// views removed || 0), 0)
       const avgListingValue = seller.listings.length > 0 
         ? seller.listings.reduce((sum, l) => sum + (l.revenue || 0), 0) / seller.listings.length
         : 0

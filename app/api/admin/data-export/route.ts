@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       dataType,
       format,
       recordCount: Math.floor(Math.random() * 5000) + 100,
-      fileSize: (Math.random() * 15 + 0.5).toFixed(1),
+      fileSize: Math.floor(Math.random() * 15) + 1,
       createdAt: new Date(),
       status: 'completed'
     }

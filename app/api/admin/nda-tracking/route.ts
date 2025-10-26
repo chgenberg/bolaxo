@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit
 
     // Get all NDA requests
-    let ndas = await prisma.ndaRequest.findMany({
+    let ndas = await prisma.nDARequest.findMany({
       where: {
         ...(searchQuery && {
           OR: [
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
     })
 
     // Enrich with calculated fields
-    const enrichedNdas = ndas.map(nda => {
+    let enrichedNdas = ndas.map(nda => {
       const now = new Date()
       const expiresAt = new Date(nda.expiresAt)
       const daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
       enrichedNdas = enrichedNdas.filter(n => n.status === status)
     }
 
-    const total = await prisma.ndaRequest.count({
+    const total = await prisma.nDARequest.count({
       where: {
         ...(searchQuery && {
           OR: [
@@ -192,7 +192,7 @@ export async function PATCH(request: NextRequest) {
       updateData.signedAt = new Date()
     }
 
-    const updated = await prisma.ndaRequest.update({
+    const updated = await prisma.nDARequest.update({
       where: { id: ndaId },
       data: updateData,
       select: {
@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
 
     if (action === 'remind') {
       // In production, would send email reminder
-      const nda = await prisma.ndaRequest.findUnique({
+      const nda = await prisma.nDARequest.findUnique({
         where: { id: ndaId },
         select: { buyer: { select: { email: true } }, expiresAt: true }
       })
@@ -258,7 +258,7 @@ export async function POST(request: NextRequest) {
       })
     } else if (action === 'extend') {
       // Extend expiration by 14 days
-      const nda = await prisma.ndaRequest.findUnique({
+      const nda = await prisma.nDARequest.findUnique({
         where: { id: ndaId },
         select: { expiresAt: true }
       })
@@ -270,7 +270,7 @@ export async function POST(request: NextRequest) {
       const newExpiry = new Date(nda.expiresAt)
       newExpiry.setDate(newExpiry.getDate() + 14)
 
-      await prisma.ndaRequest.update({
+      await prisma.nDARequest.update({
         where: { id: ndaId },
         data: { expiresAt: newExpiry }
       })
