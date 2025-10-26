@@ -65,12 +65,10 @@ export async function GET(request: NextRequest) {
         },
         activities: {
           select: {
-            id: true,
-            type: true,
             title: true,
             createdAt: true,
             actorName: true,
-          }
+          },
           take: 5
         }
       },

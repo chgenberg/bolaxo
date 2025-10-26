@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
           lastActivityDaysAgo: Math.floor(Math.random() * 30), // Would track actual last activity
           responseRate: Math.floor(Math.random() * 100) // Would calculate from messages
         },
-        buyer quality: {
+        buyerQuality: {
           score: Math.min(100, Math.round(
             (completedTransactions * 20) +
             (matchCount * 5) +
@@ -152,7 +152,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate summary stats
     const avgQualityScore = Math.round(
-      enrichedBuyers.reduce((sum, b) => sum + b['buyer quality'].score, 0) / enrichedBuyers.length
+      enrichedBuyers.reduce((sum, b) => sum + b.buyerQuality.score, 0) / enrichedBuyers.length
     )
     const activeBuyers = enrichedBuyers.filter(b => b.status === 'active').length
     const totalMatches = enrichedBuyers.reduce((sum, b) => sum + b.activity.matches, 0)
