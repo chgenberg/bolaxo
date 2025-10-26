@@ -15,7 +15,9 @@ export default function CustomAlerts() {
 
   const loadAlerts = async () => {
     try {
-      const response = await fetch('/api/admin/custom-alerts')
+      const response = await fetch('/api/admin/custom-alerts', {
+        credentials: 'include'
+      })
       const data = await response.json()
       setAlerts(data.data)
       setStats(data.stats)
@@ -30,6 +32,7 @@ export default function CustomAlerts() {
       await fetch('/api/admin/custom-alerts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           name: formData.name,
           trigger: formData.trigger,
@@ -52,6 +55,7 @@ export default function CustomAlerts() {
       await fetch('/api/admin/custom-alerts', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           alertId,
           status: currentStatus === 'active' ? 'inactive' : 'active'

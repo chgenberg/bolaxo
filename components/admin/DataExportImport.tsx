@@ -14,7 +14,9 @@ export default function DataExportImport() {
 
   const loadExports = async () => {
     try {
-      const response = await fetch('/api/admin/data-export')
+      const response = await fetch('/api/admin/data-export', {
+        credentials: 'include'
+      })
       const data = await response.json()
       setExports(data.exports)
     } catch (error) {
@@ -28,6 +30,7 @@ export default function DataExportImport() {
       const response = await fetch('/api/admin/data-export', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ dataType, format })
       })
       const data = await response.json()

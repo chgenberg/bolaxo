@@ -13,7 +13,9 @@ export default function SellerVerification() {
 
   const loadVerifications = async () => {
     try {
-      const response = await fetch(`/api/admin/seller-verification?status=${statusFilter === 'all' ? '' : statusFilter}`)
+      const response = await fetch(`/api/admin/seller-verification?status=${statusFilter === 'all' ? '' : statusFilter}`, {
+        credentials: 'include'
+      })
       const data = await response.json()
       setVerifications(data.data)
       setStats(data.stats)
@@ -27,6 +29,7 @@ export default function SellerVerification() {
       await fetch('/api/admin/seller-verification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ verificationId, action, reason })
       })
       loadVerifications()

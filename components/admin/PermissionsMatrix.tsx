@@ -15,7 +15,9 @@ export default function PermissionsMatrix() {
 
   const fetchPermissions = async () => {
     try {
-      const response = await fetch('/api/admin/permissions')
+      const response = await fetch('/api/admin/permissions', {
+        credentials: 'include'
+      })
       const data = await response.json()
       setPermissions(data)
       setLocalPerms(data)
