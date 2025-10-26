@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -40,18 +43,9 @@ model User {
   lastLoginAt     DateTime?
   
   // Relations
-  valuations           Valuation[]
-  listings             Listing[]
-  buyerProfile         BuyerProfile?
-  savedListings        SavedListing[]
-  sentMessages         Message[]         @relation("SentMessages")
-  receivedMessages     Message[]         @relation("ReceivedMessages")
-  buyerNDARequests     NDARequest[]      @relation("BuyerNDAs")
-  sellerNDARequests    NDARequest[]      @relation("SellerNDAs")
-  buyerTransactions    Transaction[]     @relation("BuyerTransactions")
-  sellerTransactions   Transaction[]     @relation("SellerTransactions")
-  reviews              Review[]          @relation("ReviewsReceived")
-  givenReviews         Review[]          @relation("ReviewsGiven")
+  valuations      Valuation[]
+  listings        Listing[]
+  buyerProfile    BuyerProfile?
   
   @@index([email])
   @@index([magicLinkToken])
@@ -134,11 +128,6 @@ model Listing {
   publishedAt     DateTime?
   expiresAt       DateTime?
   
-  // Relations
-  savedBy         SavedListing[]
-  ndaRequests     NDARequest[]
-  messages        Message[]
-  
   @@index([userId])
   @@index([status])
   @@index([industry])
@@ -163,9 +152,7 @@ model Transaction {
   // Relations
   listingId       String
   buyerId         String
-  buyer           User      @relation("BuyerTransactions", fields: [buyerId], references: [id])
   sellerId        String
-  seller          User      @relation("SellerTransactions", fields: [sellerId], references: [id])
   advisorId       String?
   
   // Deal data
@@ -355,11 +342,8 @@ model BuyerProfile {
 model NDARequest {
   id              String   @id @default(cuid())
   listingId       String
-  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
   buyerId         String
-  buyer           User     @relation("BuyerNDAs", fields: [buyerId], references: [id])
   sellerId        String
-  seller          User     @relation("SellerNDAs", fields: [sellerId], references: [id])
   
   status          String   @default("pending") // pending, approved, rejected
   message         String?  @db.Text
@@ -381,11 +365,8 @@ model NDARequest {
 model Message {
   id              String   @id @default(cuid())
   listingId       String
-  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
   senderId        String
-  sender          User     @relation("SentMessages", fields: [senderId], references: [id])
   recipientId     String
-  recipient       User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
   
   subject         String?
   content         String   @db.Text
@@ -402,9 +383,7 @@ model Message {
 model SavedListing {
   id              String   @id @default(cuid())
   userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listingId       String
-  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
   notes           String?  @db.Text
   
   createdAt       DateTime @default(now())
@@ -413,24 +392,3 @@ model SavedListing {
   @@index([userId])
   @@index([listingId])
 }
-
-model Review {
-  id              String   @id @default(cuid())
-  rating          Int      // 1-5 stars
-  comment         String?  @db.Text
-  
-  reviewerId      String
-  reviewer        User     @relation("ReviewsGiven", fields: [reviewerId], references: [id])
-  reviewedUserId  String
-  reviewedUser    User     @relation("ReviewsReceived", fields: [reviewedUserId], references: [id])
-  
-  transactionId   String?  // Optional: Link to specific transaction
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
-  @@index([reviewerId])
-  @@index([reviewedUserId])
-  @@index([createdAt])
-}
-
