@@ -286,7 +286,7 @@ export default function UserManagement({ onUserSelect }: UserManagementProps) {
                   </td>
                 </tr>
               )}
-              {!loading && users.map((user) => (
+              {!loading && users.map((user: any) => (
                 <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3">
                     <input
