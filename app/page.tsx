@@ -65,44 +65,43 @@ export default function Home() {
           />
         </div>
 
-        {/* Content with white semi-transparent background for readability */}
-        <div className="relative container-custom w-full py-20 z-10">
-          <div className="max-w-2xl">
-            <h1 className="heading-xl mb-6 uppercase text-navy">
-              DIGITAL PLATTFORM FÖR FÖRETAGSFÖRSÄLJNING.
-            </h1>
+        {/* Minimalist Content Box */}
+        <div className="relative w-full flex items-center justify-center px-4 z-10">
+          <div className="relative">
+            {/* Pulsing shadow effect */}
+            <div className="absolute -inset-4 bg-black/50 rounded-3xl blur-2xl animate-pulse-shadow" />
             
-            {/* Pulsing Box */}
-            <div className="relative pulse-subtle">
-              <div className="absolute inset-0 gradient-rose-coral rounded-2xl opacity-20" />
-              <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-soft border border-sand">
-                <p className="body-lg text-graphite">
-                  Få en kostnadsfri företagsvärdering på 5 minuter baserad på professionella metoder. 
-                  Publicera din annons, ta emot NDA-förfrågningar och hantera hela försäljningsprocessen på ett ställe.
-                </p>
-              </div>
-            </div>
-            
-            {/* Interactive CTA Button */}
-            <button
-              onClick={() => setIsValuationModalOpen(true)}
-              className="btn-primary mt-8 text-lg px-8 py-4 group"
-            >
-              <span className="flex items-center gap-3">
-                Starta värdering
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </span>
-            </button>
-
-            {/* Trust indicators */}
-            <div className="mt-8 flex items-center gap-8 text-sm text-graphite">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-mint" />
-                <span>500+ genomförda affärer</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-butter" />
-                <span>4.9/5 i betyg</span>
+            {/* Main content box */}
+            <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-8 md:p-12 max-w-lg shadow-2xl">
+              <h1 className="text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-4">
+                Sälj ditt företag
+              </h1>
+              
+              <p className="text-center text-gray-700 mb-8 text-lg">
+                Professionell värdering på 5 minuter.
+                <br />
+                Smart matchning med rätt köpare.
+              </p>
+              
+              {/* CTA Button */}
+              <button
+                onClick={() => setIsValuationModalOpen(true)}
+                className="w-full bg-navy text-white font-bold py-4 px-8 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 text-lg group shadow-lg"
+              >
+                <span className="flex items-center justify-center gap-3">
+                  Starta här
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </span>
+              </button>
+              
+              {/* Minimal trust indicator */}
+              <div className="mt-6 flex items-center justify-center gap-1 text-sm text-gray-600">
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <span className="ml-1">500+ nöjda säljare</span>
               </div>
             </div>
           </div>

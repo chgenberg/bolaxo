@@ -1,200 +1,631 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { CheckCircle, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import { CheckCircle, ArrowRight, ChevronLeft, ChevronRight, MapPin, TrendingUp, Eye, Sparkles, Shield, Zap, Target, FileText, Handshake, CheckSquare } from 'lucide-react'
+import { mockObjects } from '@/data/mockObjects'
+
+// FAQ Item Component
+function FAQItem({ faq }: { faq: any }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const Icon = faq.icon
+  
+  return (
+    <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-8 py-6 flex items-center gap-4 text-left"
+      >
+        <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${faq.color} rounded-full flex items-center justify-center group-hover:scale-110 transition-transform`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+        <h3 className="flex-1 text-xl font-bold text-primary-navy group-hover:text-accent-orange transition-colors">
+          {faq.q}
+        </h3>
+        <ChevronRight className={`w-6 h-6 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} />
+      </button>
+      <div className={`px-8 overflow-hidden transition-all duration-300 ${isOpen ? 'pb-6' : 'max-h-0'}`}>
+        <p className="text-gray-600 leading-relaxed ml-16">
+          {faq.a}
+        </p>
+      </div>
+    </div>
+  )
+}
 
 export default function KopareInfoPage() {
+  const [currentObjectIndex, setCurrentObjectIndex] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null)
+  
+  // Filter only featured/new objects for carousel
+  const featuredObjects = mockObjects.filter(obj => obj.isNew || obj.verified).slice(0, 8)
+
+  useEffect(() => {
+    if (!isAutoPlaying) return
+
+    const interval = setInterval(() => {
+      setCurrentObjectIndex((prev) => (prev + 1) % featuredObjects.length)
+    }, 4000)
+
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, featuredObjects.length])
+
+  const goToPrevious = () => {
+    setIsAutoPlaying(false)
+    setCurrentObjectIndex((prev) => (prev - 1 + featuredObjects.length) % featuredObjects.length)
+  }
+
+  const goToNext = () => {
+    setIsAutoPlaying(false)
+    setCurrentObjectIndex((prev) => (prev + 1) % featuredObjects.length)
+  }
+
+  const formatCurrency = (amount: number) => {
+    if (amount >= 1000000) {
+      return `${(amount / 1000000).toFixed(1)} MSEK`
+    }
+    return `${(amount / 1000).toFixed(0)} KSEK`
+  }
+
+  const currentObject = featuredObjects[currentObjectIndex]
+
   return (
-    <main className="bg-neutral-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
-            SÅ KÖPER DU DITT NÄSTA FÖRETAG
-          </h1>
-          <p className="text-2xl text-primary-navy leading-relaxed">
-            Smarta matchningar, inte gissningar. Från första möte till signerad affär på en plats.
-          </p>
+    <main className="bg-gradient-to-b from-neutral-off-white to-neutral-white">
+      {/* Hero Section with Carousel */}
+      <section className="relative overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-accent-orange/20 via-accent-pink/10 to-primary-navy/5" />
+        
+        <div className="relative">
+          {/* Hero Text */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+            <div className="text-center mb-12">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-accent-orange mb-6 uppercase tracking-tight">
+                KÖPGUIDEN FÖR<br />
+                <span className="text-primary-navy">DITT NÄSTA FÖRETAG</span>
+              </h1>
+              <p className="text-xl sm:text-2xl text-primary-navy/80 max-w-3xl mx-auto leading-relaxed">
+                Smarta matchningar, verifierade säljare och säker process. 
+                Från första klick till signerad affär.
+              </p>
+            </div>
+          </div>
+
+          {/* Object Carousel */}
+          {currentObject && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div className="relative">
+                  {/* Navigation Buttons */}
+                  <button
+                    onClick={goToPrevious}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/90 backdrop-blur shadow-lg rounded-full flex items-center justify-center hover:bg-white transition-all hover:scale-110 group"
+                    aria-label="Föregående"
+                  >
+                    <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+                  </button>
+                  <button
+                    onClick={goToNext}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/90 backdrop-blur shadow-lg rounded-full flex items-center justify-center hover:bg-white transition-all hover:scale-110 group"
+                    aria-label="Nästa"
+                  >
+                    <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+
+                  <Link href={`/objekt/${currentObject.id}`} className="block group">
+                    <div className="grid lg:grid-cols-2">
+                      {/* Image Section */}
+                      <div className="relative h-80 lg:h-96 bg-gray-100 overflow-hidden">
+                        {currentObject.image ? (
+                          <Image
+                            src={currentObject.image}
+                            alt={currentObject.anonymousTitle}
+                            fill
+                            className="object-contain group-hover:scale-105 transition-transform duration-700"
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                            <div className="text-6xl font-bold text-gray-300">
+                              {currentObject.type.charAt(0)}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Status Badges */}
+                        <div className="absolute top-6 left-6 flex gap-3">
+                          {currentObject.isNew && (
+                            <span className="bg-accent-orange text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+                              <Sparkles className="w-4 h-4" />
+                              Nytt
+                            </span>
+                          )}
+                          {currentObject.verified && (
+                            <span className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+                              <Shield className="w-4 h-4" />
+                              Verifierad
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="p-8 lg:p-12 flex flex-col justify-center">
+                        <div className="space-y-6">
+                          <div>
+                            <span className="text-accent-pink font-bold text-sm uppercase tracking-wider">{currentObject.type}</span>
+                            <h3 className="text-3xl lg:text-4xl font-bold text-primary-navy mt-2 group-hover:text-accent-orange transition-colors">
+                              {currentObject.anonymousTitle}
+                            </h3>
+                            <p className="text-gray-600 mt-4 text-lg leading-relaxed line-clamp-3">
+                              {currentObject.description}
+                            </p>
+                          </div>
+
+                          {/* Metrics Grid */}
+                          <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-gradient-to-br from-accent-orange/10 to-accent-orange/5 rounded-xl p-4">
+                              <div className="flex items-center text-accent-orange text-sm font-semibold mb-2">
+                                <MapPin className="w-4 h-4 mr-1" />
+                                Plats
+                              </div>
+                              <div className="font-bold text-primary-navy text-lg">
+                                {currentObject.region}
+                              </div>
+                            </div>
+                            <div className="bg-gradient-to-br from-accent-pink/10 to-accent-pink/5 rounded-xl p-4">
+                              <div className="flex items-center text-accent-pink text-sm font-semibold mb-2">
+                                <TrendingUp className="w-4 h-4 mr-1" />
+                                Omsättning
+                              </div>
+                              <div className="font-bold text-primary-navy text-lg">
+                                {formatCurrency(currentObject.revenue)}
+                              </div>
+                            </div>
+                            <div className="bg-gradient-to-br from-primary-navy/10 to-primary-navy/5 rounded-xl p-4">
+                              <div className="flex items-center text-primary-navy text-sm font-semibold mb-2">
+                                <Eye className="w-4 h-4 mr-1" />
+                                Visningar
+                              </div>
+                              <div className="font-bold text-primary-navy text-lg">
+                                {currentObject.views}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Price */}
+                          <div className="pt-6 border-t border-gray-100">
+                            <div className="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-2">Prisindikation</div>
+                            <div className="text-3xl font-black bg-gradient-to-r from-accent-orange to-accent-pink text-transparent bg-clip-text">
+                              {formatCurrency(currentObject.priceMin)} - {formatCurrency(currentObject.priceMax)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+
+                {/* Dots Indicator */}
+                <div className="bg-gray-50 py-4">
+                  <div className="flex justify-center gap-2">
+                    {featuredObjects.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setIsAutoPlaying(false)
+                          setCurrentObjectIndex(index)
+                        }}
+                        className={`transition-all duration-300 ${
+                          index === currentObjectIndex
+                            ? 'w-12 h-3 bg-accent-orange rounded-full'
+                            : 'w-3 h-3 bg-gray-300 rounded-full hover:bg-gray-400'
+                        }`}
+                        aria-label={`Gå till företag ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* View All Button */}
+              <div className="flex justify-center mt-8">
+                <Link
+                  href="/sok"
+                  className="group inline-flex items-center gap-3 px-8 py-4 bg-primary-navy text-white font-bold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  <span>Utforska alla {mockObjects.length} företag till salu</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      {/* Process Steps Section */}
+      <section className="py-24 bg-gradient-to-b from-neutral-white to-neutral-off-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-orange mb-6 uppercase">
+              PROCESSEN I 7 STEG
+            </h2>
+            <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">
+              Från första klick till färdig affär. Varje steg är optimerat för din trygghet och framgång.
+            </p>
+          </div>
 
-        {/* Process Steps */}
-        <div className="mb-32">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">PROCESSEN I 7 STEG</h2>
-          <div className="space-y-8">
+          <div className="grid gap-8 lg:gap-12">
             {[
               {
                 step: 1,
+                icon: Zap,
                 title: 'Skapa konto & Smart Matching',
-                description: 'Passwordless login med magic link. Sätt preferenser: bransch, region, storlek. Systemet rekommenderar 3 bästa matchningar med 87-94% match score. Aktivera bevakningar för nya objekt.',
+                description: 'Passwordless login med magic link. Sätt preferenser: bransch, region, storlek. Systemet rekommenderar 3 bästa matchningar med 87-94% match score.',
                 time: '2 min',
+                color: 'from-accent-orange to-yellow-500',
               },
               {
                 step: 2,
+                icon: Shield,
                 title: 'Verifiera med BankID',
-                description: 'BankID-verifiering ger "Verified Buyer"-badge. Säljare prioriterar verifierade köpare → 3x snabbare svar. Koppla LinkedIn och bolagsinfo för extra trovärdighet.',
+                description: 'BankID-verifiering ger "Verified Buyer"-badge. Säljare prioriterar verifierade köpare → 3x snabbare svar.',
                 time: '3 min',
+                color: 'from-green-500 to-emerald-500',
               },
               {
                 step: 3,
+                icon: Target,
                 title: 'Sök & få rekommendationer',
-                description: 'Smart sök med filter: bransch, region, omsättning, EBITDA. Dashboard visar rekommenderade företag baserat på dina preferenser. Spara favoriter och jämför.',
+                description: 'Smart sök med filter: bransch, region, omsättning, EBITDA. Dashboard visar rekommenderade företag baserat på dina preferenser.',
                 time: 'Löpande',
+                color: 'from-blue-500 to-indigo-500',
               },
               {
                 step: 4,
+                icon: FileText,
                 title: 'Be om NDA',
-                description: 'Signera NDA digitalt med BankID. Säljare får notis och godkänner. Efter godkännande: företagsnamn, org.nr, ekonomi och datarum låses upp.',
+                description: 'Signera NDA digitalt med BankID. Efter godkännande: företagsnamn, org.nr, ekonomi och datarum låses upp.',
                 time: '1-2 dagar',
+                color: 'from-purple-500 to-pink-500',
               },
               {
                 step: 5,
+                icon: Eye,
                 title: 'Due Diligence',
-                description: 'Granska dokument i säkert datarum. Ställ frågor i Q&A-trådar. Allt loggas och organiserat. Typiskt 2-6 veckor.',
+                description: 'Granska dokument i säkert datarum. Ställ frågor i Q&A-trådar. Allt loggas och organiserat.',
                 time: '2-6 veckor',
+                color: 'from-accent-pink to-rose-500',
               },
               {
                 step: 6,
+                icon: Handshake,
                 title: 'Skapa LOI',
-                description: 'Strukturerat LOI-formulär: pris, villkor, timeline, finansiering. Ladda ner som PDF. När godkänt: starta formell transaktion.',
+                description: 'Strukturerat LOI-formulär: pris, villkor, timeline, finansiering. Ladda ner som PDF.',
                 time: '30 min',
+                color: 'from-amber-500 to-orange-500',
               },
               {
                 step: 7,
+                icon: CheckSquare,
                 title: 'Deal Management',
-                description: 'Transaktionsplattform guidar genom DD → SPA → Betalning → Closing. Bjud in revisorer och jurister. Spåra betalningar. Typiskt 60-90 dagar till avslut.',
+                description: 'Transaktionsplattform guidar genom DD → SPA → Betalning → Closing. Bjud in rådgivare.',
                 time: '60-90 dagar',
+                color: 'from-primary-navy to-indigo-600',
               },
-            ].map((item) => (
-              <div key={item.step} className="flex gap-6 sm:gap-8">
-                <div className="flex-shrink-0 w-20 h-20 bg-accent-pink text-white rounded-lg flex items-center justify-center text-3xl font-bold">
-                  {item.step}
-                </div>
-                <div className="flex-1 pt-2">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-2xl font-bold text-accent-orange">{item.title}</h3>
-                    <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-lg font-medium">{item.time}</span>
+            ].map((item, index) => {
+              const Icon = item.icon
+              return (
+                <div 
+                  key={item.step} 
+                  className="group relative"
+                  onMouseEnter={() => setHoveredStep(item.step)}
+                  onMouseLeave={() => setHoveredStep(null)}
+                >
+                  {/* Connecting line */}
+                  {index < 6 && (
+                    <div className="hidden lg:block absolute top-24 left-24 w-1 h-24 bg-gradient-to-b from-gray-300 to-transparent" />
+                  )}
+                  
+                  <div className={`relative flex flex-col lg:flex-row gap-6 p-8 rounded-2xl bg-white shadow-lg transition-all duration-500 ${
+                    hoveredStep === item.step ? 'shadow-2xl scale-[1.02] -translate-y-1' : ''
+                  }`}>
+                    {/* Pulsing background effect */}
+                    <div className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 rounded-2xl transition-opacity duration-500 ${
+                      hoveredStep === item.step ? 'opacity-10' : ''
+                    }`} />
+                    
+                    {/* Step number with pulsing effect */}
+                    <div className="relative flex-shrink-0">
+                      {/* Pulsing rings */}
+                      <div className={`absolute inset-0 rounded-full bg-gradient-to-r ${item.color} animate-pulse opacity-20 scale-125`} />
+                      <div className={`absolute inset-0 rounded-full bg-gradient-to-r ${item.color} animate-pulse opacity-10 scale-150`} style={{ animationDelay: '200ms' }} />
+                      
+                      <div className={`relative w-20 h-20 bg-gradient-to-r ${item.color} text-white rounded-full flex items-center justify-center shadow-lg`}>
+                        <span className="text-3xl font-black">{item.step}</span>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 relative">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-2xl font-bold text-primary-navy mb-1 group-hover:text-accent-orange transition-colors">
+                            {item.title}
+                          </h3>
+                          <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r ${item.color} text-white`}>
+                            <Icon className="w-4 h-4" />
+                            {item.time}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-gray-600 leading-relaxed text-lg">
+                        {item.description}
+                      </p>
+                      
+                      {/* Interactive hover effect */}
+                      <div className={`mt-4 flex items-center gap-2 text-accent-orange font-semibold opacity-0 transform translate-y-2 transition-all duration-300 ${
+                        hoveredStep === item.step ? 'opacity-100 translate-y-0' : ''
+                      }`}>
+                        <span>Läs mer</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-lg text-gray-700 leading-relaxed">{item.description}</p>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
+      </section>
 
-        {/* Benefits */}
-        <div className="mb-32 bg-neutral-off-white rounded-lg p-8 sm:p-12">
-          <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center uppercase">
-            Varför välja oss?
-          </h2>
+      {/* Benefits Section */}
+      <section className="py-24 bg-gradient-to-b from-neutral-off-white to-neutral-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-orange mb-6 uppercase">
+              Varför välja oss?
+            </h2>
+            <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">
+              Sveriges modernaste plattform för företagsförvärv. Byggd för att göra komplexa affärer enkla.
+            </p>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { title: 'Verifierade företag', desc: 'Se vilka säljare som verifierat sina uppgifter med BankID. Inga bedrägare.' },
-              { title: 'NDA-skydd', desc: 'Säljare delar känslig info först efter signerad NDA. Din data är säker.' },
-              { title: 'Säkert datarum', desc: 'Granska dokument och ställ frågor i digitalt utrymme. Allt loggas.' },
-              { title: 'LOI-verktyg', desc: 'Skapa indikativa bud direkt i plattformen. Strukturerat och enkelt.' },
-              { title: 'Smart Matching', desc: 'AI matchar dig med rätt företag. Ingen tid på irrelevanta objekt.' },
-              { title: 'Deal Management', desc: 'Från LOI till avslut - allt guidat med automatiska milestolpar.' },
-            ].map((benefit, idx) => (
-              <div key={idx} className="flex gap-4">
-                <CheckCircle className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="text-lg font-bold text-primary-navy mb-2">{benefit.title}</h3>
-                  <p className="text-gray-700">{benefit.desc}</p>
+              { 
+                icon: Shield,
+                title: 'Verifierade företag', 
+                desc: 'Alla säljare verifieras med BankID. Inga bedragare, bara seriösa affärer.',
+                color: 'from-green-500 to-emerald-500'
+              },
+              { 
+                icon: FileText,
+                title: 'NDA-skydd', 
+                desc: 'Digital signering skyddar känslig info. Se företagsnamn först efter NDA.',
+                color: 'from-purple-500 to-indigo-500'
+              },
+              { 
+                icon: Eye,
+                title: 'Säkert datarum', 
+                desc: 'Granska dokument i säkert digitalt datarum. Allt vattenmärkt och loggat.',
+                color: 'from-blue-500 to-cyan-500'
+              },
+              { 
+                icon: Handshake,
+                title: 'LOI-verktyg', 
+                desc: 'Skapa professionella indikativa bud direkt i plattformen. Strukturerat och enkelt.',
+                color: 'from-amber-500 to-orange-500'
+              },
+              { 
+                icon: Sparkles,
+                title: 'Smart Matching', 
+                desc: 'AI matchar dig med rätt företag. Slösa ingen tid på irrelevanta objekt.',
+                color: 'from-accent-pink to-rose-500'
+              },
+              { 
+                icon: CheckSquare,
+                title: 'Deal Management', 
+                desc: 'Från LOI till closing - hela processen guidat med automatiska milstolpar.',
+                color: 'from-primary-navy to-indigo-600'
+              },
+            ].map((benefit, idx) => {
+              const Icon = benefit.icon
+              return (
+                <div 
+                  key={idx} 
+                  className="group relative p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
+                >
+                  {/* Gradient background on hover */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${benefit.color} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-500`} />
+                  
+                  <div className="relative">
+                    {/* Icon with gradient background */}
+                    <div className={`inline-flex p-4 rounded-xl bg-gradient-to-r ${benefit.color} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    
+                    <h3 className="text-2xl font-bold text-primary-navy mb-3 group-hover:text-accent-orange transition-colors">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {benefit.desc}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
+      </section>
 
-        {/* Trust & Safety */}
-        <div className="mb-32 border-l-4 border-accent-orange bg-accent-orange/5 rounded-r-lg p-8 sm:p-12">
-          <h2 className="text-3xl font-bold text-accent-orange mb-8 uppercase">
-            Säkerhet & sekretess
-          </h2>
-          <ul className="space-y-4 text-gray-700">
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
-              <span>Alla dokument i datarummet är vattenmärkta med ditt användar-ID</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
-              <span>Säljaren ser vem som laddat ner vilka dokument och när</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
-              <span>NDA-avtal är juridiskt bindande och signeras digitalt</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
-              <span>Din profil kan vara anonym tills båda parter skrivit under NDA</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
-              <span>Två-faktor autentisering (BankID) för all kritisk information</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
-              <span>Kryptering av all data i transit och i vila (HTTPS + AES-256)</span>
-            </li>
-          </ul>
+      {/* Trust & Safety Section */}
+      <section className="py-24 bg-gradient-to-b from-neutral-white to-accent-orange/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Content */}
+            <div>
+              <h2 className="text-4xl sm:text-5xl font-black text-accent-orange mb-6 uppercase">
+                Säkerhet i varje steg
+              </h2>
+              <p className="text-xl text-primary-navy/80 mb-12 leading-relaxed">
+                Vi tar säkerhet på allvar. Varje detalj är genomtänkt för att skydda din information och säkerställa en trygg affärsprocess.
+              </p>
+              
+              <div className="space-y-6">
+                {[
+                  { 
+                    text: 'Alla dokument i datarummet är vattenmärkta med ditt användar-ID',
+                    icon: Shield
+                  },
+                  { 
+                    text: 'Säljaren ser vem som laddat ner vilka dokument och när',
+                    icon: Eye
+                  },
+                  { 
+                    text: 'NDA-avtal är juridiskt bindande och signeras digitalt med BankID',
+                    icon: FileText
+                  },
+                  { 
+                    text: 'Din profil kan vara anonym tills båda parter skrivit under NDA',
+                    icon: Sparkles
+                  },
+                  { 
+                    text: 'Två-faktor autentisering (BankID) för all kritisk information',
+                    icon: Shield
+                  },
+                  { 
+                    text: 'Kryptering av all data i transit och i vila (HTTPS + AES-256)',
+                    icon: Zap
+                  },
+                ].map((item, idx) => {
+                  const Icon = item.icon
+                  return (
+                    <div key={idx} className="group flex items-start gap-4 p-4 rounded-xl hover:bg-white hover:shadow-lg transition-all duration-300">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-accent-orange to-accent-pink rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <span className="text-lg text-gray-700 group-hover:text-primary-navy transition-colors leading-relaxed">
+                        {item.text}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            
+            {/* Right side - Visual element */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-accent-orange to-accent-pink rounded-3xl blur-3xl opacity-20 animate-pulse" />
+              <div className="relative bg-white rounded-3xl shadow-2xl p-12 text-center">
+                <Shield className="w-24 h-24 mx-auto text-accent-orange mb-6" />
+                <h3 className="text-3xl font-bold text-primary-navy mb-4">Bank-nivå säkerhet</h3>
+                <p className="text-gray-600 text-lg">
+                  Samma säkerhetsstandarder som svenska banker använder för att skydda din data.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* FAQ */}
-        <div className="mb-24">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">Vanliga frågor</h2>
+      {/* FAQ Section */}
+      <section className="py-24 bg-gradient-to-b from-neutral-off-white to-neutral-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-orange mb-6 uppercase">
+              Vanliga frågor
+            </h2>
+            <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">
+              Allt du behöver veta innan du börjar din resa mot ditt nästa företagsförvärv.
+            </p>
+          </div>
           
-          <div className="space-y-8">
+          <div className="space-y-4">
             {[
               {
                 q: 'Hur mycket kostar det att använda plattformen?',
                 a: 'Helt gratis för köpare! Vi tjänar på att säljare betalar för sina annonser och Deal Management-tjänster.',
+                icon: Sparkles,
+                color: 'from-green-500 to-emerald-500'
               },
               {
                 q: 'Hur mycket kan jag se innan jag signerar NDA?',
-                a: 'Du kan se: bransch, region, ungefärlig omsättning, antal anställda och en allmän beskrivning. Företagsnamn, exakta siffror och känslig info låses tills NDA är signerat.',
+                a: 'Du kan se: bransch, region, ungefärlig omsättning, antal anställda och en allmän beskrivning. Företagsnamn, exakta siffror och känslig info låses upp efter signerad NDA.',
+                icon: Eye,
+                color: 'from-blue-500 to-cyan-500'
               },
               {
                 q: 'Hur funkar matchningen?',
                 a: 'Vår AI analyserar dina preferenser och matchar dig med företag. Match score 87-94% betyder att företaget matchar dina kriterier väl. Du får också manuella rekommendationer.',
+                icon: Target,
+                color: 'from-purple-500 to-pink-500'
               },
               {
                 q: 'Hur lång tid tar processen från intresse till avslut?',
                 a: 'Typiskt 90-180 dagar. NDA-signing tar 1-2 dagar, due diligence 2-6 veckor, och transaktionen 60-90 dagar.',
+                icon: Zap,
+                color: 'from-amber-500 to-orange-500'
               },
               {
                 q: 'Kan jag bli bedrägd eller scammad?',
-                a: 'Vi minimerar risken genom att alla säljare verifieras med BankID och alla juridiska dokument signeras digitalt. Du kan också granska allt i säkert datarum innan du förbinder dig.',
+                a: 'Vi minimerar risken genom att alla säljare verifieras med BankID och alla juridiska dokument signeras digitalt. Du kan granska allt i säkert datarum innan du förbinder dig.',
+                icon: Shield,
+                color: 'from-red-500 to-rose-500'
               },
               {
                 q: 'Vilken finansiering accepteras?',
-                a: 'Du kan finansiera genom: eget kapital, banklån, private equity, mezzanin-finansiering eller kombinationer. Vi hjälper inte direkt men guidar processen.',
+                a: 'Du kan finansiera genom: eget kapital, banklån, private equity, mezzanin-finansiering eller kombinationer. Vi guidar processen men arrangerar inte finansiering.',
+                icon: Handshake,
+                color: 'from-indigo-500 to-purple-500'
               },
             ].map((faq, index) => (
-              <div key={index} className="pb-8 border-b border-gray-200 last:border-0">
-                <h3 className="text-xl font-bold text-primary-navy mb-3">{faq.q}</h3>
-                <p className="text-gray-700 leading-relaxed">{faq.a}</p>
-              </div>
+              <FAQItem key={index} faq={faq} />
             ))}
           </div>
         </div>
+      </section>
 
-        {/* CTA */}
-        <div className="bg-accent-pink rounded-lg p-12 text-center">
-          <h2 className="text-3xl font-bold text-primary-navy mb-6 uppercase">Redo att köpa?</h2>
-          <p className="text-lg text-primary-navy mb-8 max-w-2xl mx-auto">
-            Börja med att skapa en profil och sätt dina preferenser. Du får smarta matchningar direkt baserat på vad du söker.
-          </p>
-          <Link href="/kopare/start" className="inline-flex items-center gap-2 px-10 py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-lg">
-            Kom igång nu
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-          <p className="text-sm text-primary-navy mt-6 opacity-80">
-            Helt gratis för köpare. Inga dolda avgifter.
-          </p>
+      {/* CTA Section */}
+      <section className="py-24 bg-gradient-to-br from-accent-orange via-accent-pink to-primary-navy">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="relative">
+            {/* Decorative elements */}
+            <div className="absolute -top-20 -left-20 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+            <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-white/10 rounded-full blur-3xl" />
+            
+            <div className="relative">
+              <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6 uppercase">
+                Redo att köpa?
+              </h2>
+              <p className="text-xl sm:text-2xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed">
+                Börja med att skapa en profil och sätt dina preferenser. 
+                Du får smarta matchningar direkt baserat på vad du söker.
+              </p>
+              
+              <div className="inline-block">
+                {/* Pulsing button effect */}
+                <div className="relative">
+                  <div className="absolute inset-0 bg-white rounded-full blur-xl opacity-50 animate-pulse" />
+                  <Link 
+                    href="/kopare/start" 
+                    className="relative inline-flex items-center gap-3 px-12 py-6 bg-white text-primary-navy font-black rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all text-xl group"
+                  >
+                    <span>Kom igång nu</span>
+                    <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+              
+              <p className="text-white/80 mt-8 text-lg font-medium">
+                ✓ Helt gratis för köpare ✓ Inga dolda avgifter ✓ Avsluta när som helst
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   )
 }
