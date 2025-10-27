@@ -69,23 +69,7 @@ export default function AdminLoginPage() {
   }
 
   // Floating particles animation
-  useEffect(() => {
-    const generateParticles = () => {
-      const particles = []
-      for (let i = 0; i < 20; i++) {
-        particles.push({
-          id: i,
-          size: Math.random() * 3 + 1,
-          left: Math.random() * 100,
-          animationDuration: Math.random() * 20 + 10
-        })
-      }
-      return particles
-    }
-    
-    const [particles] = useState(generateParticles())
-    return () => {}
-  }, [])
+  // NOTE: Particles are rendered inline in JSX with mounted check to avoid hydration issues
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
