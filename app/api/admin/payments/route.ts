@@ -1,28 +1,65 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+// Helper function to verify admin authentication
+async function verifyAdminAuth(request: NextRequest) {
+  try {
+    const adminToken = request.cookies.get('adminToken')?.value
+    if (!adminToken) {
+      return { isValid: false, error: 'Unauthorized - No admin token' }
+    }
+    return { isValid: true }
+  } catch (error) {
+    return { isValid: false, error: 'Authentication failed' }
+  }
+}
 
 // GET - Lista alla betalningar med filter & sök
 export async function GET(request: NextRequest) {
   try {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const status = searchParams.get('status') // PENDING, ESCROWED, RELEASED, REFUNDED
-    const type = searchParams.get('type') // DEPOSIT, MAIN_PAYMENT, EARN_OUT, FEE
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
+    const limit = Math.min(100, parseInt(searchParams.get('limit') || '20'))
+    const status = searchParams.get('status')
+    const type = searchParams.get('type')
     const minAmount = searchParams.get('minAmount')
     const maxAmount = searchParams.get('maxAmount')
+    const search = searchParams.get('search') || ''
     const sortBy = searchParams.get('sortBy') || 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
+    const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc'
 
     const skip = (page - 1) * limit
 
     // Build filter
     const where: any = {}
-    if (status) where.status = status
-    if (type) where.type = type
-    if (minAmount) where.amount = { gte: parseInt(minAmount) }
-    if (maxAmount) where.amount = where.amount || {}
-    if (maxAmount) where.amount = { ...where.amount, lte: parseInt(maxAmount) }
+    if (status && status !== 'all') where.status = status
+    if (type && type !== 'all') where.type = type
+    
+    if (minAmount || maxAmount) {
+      where.amount = {}
+      if (minAmount) where.amount.gte = parseInt(minAmount)
+      if (maxAmount) where.amount.lte = parseInt(maxAmount)
+    }
+
+    if (search) {
+      where.OR = [
+        { description: { contains: search, mode: 'insensitive' } },
+        { transaction: {
+          OR: [
+            { buyer: { email: { contains: search, mode: 'insensitive' } } },
+            { seller: { email: { contains: search, mode: 'insensitive' } } }
+          ]
+        }}
+      ]
+    }
 
     const totalCount = await prisma.payment.count({ where })
 
@@ -44,16 +81,27 @@ export async function GET(request: NextRequest) {
             id: true,
             stage: true,
             agreedPrice: true,
-            listingId: true,
-            buyerId: true,
-            sellerId: true,
+            buyer: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            },
+            seller: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
           }
         }
       },
       skip,
       take: limit,
       orderBy: {
-        [sortBy]: sortOrder as 'asc' | 'desc'
+        [sortBy === 'amount' ? 'amount' : 'createdAt']: sortOrder
       }
     })
 
@@ -65,6 +113,7 @@ export async function GET(request: NextRequest) {
       _avg: {
         amount: true
       },
+      _count: true,
       where
     })
 
@@ -86,26 +135,50 @@ export async function GET(request: NextRequest) {
       return acc
     }, {} as Record<string, { count: number; totalAmount: number }>)
 
+    // Get type breakdown
+    const typeBreakdown = await prisma.payment.groupBy({
+      by: ['type'],
+      _sum: {
+        amount: true
+      },
+      _count: true,
+      where
+    })
+
+    const typeMap = typeBreakdown.reduce((acc, item) => {
+      acc[item.type] = {
+        count: item._count,
+        totalAmount: item._sum.amount || 0
+      }
+      return acc
+    }, {} as Record<string, { count: number; totalAmount: number }>)
+
+    const pages = Math.ceil(totalCount / limit)
+
     return NextResponse.json({
       success: true,
       data: payments,
       stats: {
         totalAmount: stats._sum.amount || 0,
         averageAmount: Math.round(stats._avg.amount || 0),
-        count: totalCount,
+        count: stats._count,
       },
-      statusBreakdown: statusMap,
+      breakdowns: {
+        byStatus: statusMap,
+        byType: typeMap
+      },
       pagination: {
         page,
         limit,
         total: totalCount,
-        pages: Math.ceil(totalCount / limit)
+        pages,
+        hasMore: page < pages
       }
     })
   } catch (error) {
     console.error('Error fetching payments:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch payments' },
+      { error: 'Failed to fetch payments', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
@@ -114,6 +187,12 @@ export async function GET(request: NextRequest) {
 // PATCH - Uppdatera betalning (status, dueDate, etc)
 export async function PATCH(request: NextRequest) {
   try {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const body = await request.json()
     const { paymentId, status, dueDate, paidAt } = body
 
@@ -128,6 +207,11 @@ export async function PATCH(request: NextRequest) {
     if (status !== undefined) updateData.status = status
     if (dueDate !== undefined) updateData.dueDate = new Date(dueDate)
     if (paidAt !== undefined) updateData.paidAt = paidAt ? new Date(paidAt) : null
+    
+    // Auto-set releasedAt when status is RELEASED
+    if (status === 'RELEASED') {
+      updateData.releasedAt = new Date()
+    }
 
     const payment = await prisma.payment.update({
       where: { id: paymentId },
@@ -136,6 +220,10 @@ export async function PATCH(request: NextRequest) {
         id: true,
         status: true,
         amount: true,
+        type: true,
+        dueDate: true,
+        paidAt: true,
+        releasedAt: true
       }
     })
 
@@ -146,8 +234,11 @@ export async function PATCH(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error updating payment:', error)
+    if (error instanceof Error && error.message.includes('not found')) {
+      return NextResponse.json({ error: 'Payment not found' }, { status: 404 })
+    }
     return NextResponse.json(
-      { error: 'Failed to update payment' },
+      { error: 'Failed to update payment', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
@@ -156,6 +247,12 @@ export async function PATCH(request: NextRequest) {
 // POST - Bulk status update
 export async function POST(request: NextRequest) {
   try {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const body = await request.json()
     const { paymentIds, status } = body
 
@@ -192,12 +289,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: `Updated ${result.count} payments`,
-      data: { count: result.count }
+      data: { count: result.count, updated: result.count }
     })
   } catch (error) {
     console.error('Error in bulk update:', error)
     return NextResponse.json(
-      { error: 'Failed to update payments' },
+      { error: 'Failed to update payments', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
