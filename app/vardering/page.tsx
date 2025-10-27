@@ -81,7 +81,7 @@ export default function ValuationPage() {
           {/* Background Image - Fullscreen with no overlay */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/kop_hero.png"
+              src="/hero_kop.png"
               alt="Hero background"
               fill
               className="object-cover hidden md:block"
