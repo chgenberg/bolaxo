@@ -651,7 +651,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="space-y-4">
                 <FormFieldPercent
                   label="Bruttovinstmarginal"
-                  value={data.grossMargin}
+                  value={data.grossMargin || ''}
                   onChange={(value) => setData({ ...data, grossMargin: value })}
                   placeholder="Ex: 45%"
                   required
@@ -659,7 +659,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
                 <FormFieldPercent
                   label="Kundberoende - Största kundens andel"
-                  value={data.customerConcentrationRisk}
+                  value={data.customerConcentrationRisk || ''}
                   onChange={(value) => setData({ ...data, customerConcentrationRisk: value })}
                   placeholder="Ex: 15%"
                   tooltip="Hur stor del av omsättningen kommer från er största kund?"
@@ -684,7 +684,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
                 <FormFieldCurrency
                   label="Total skuldsättning"
-                  value={data.totalDebt}
+                  value={data.totalDebt || ''}
                   onChange={(value) => setData({ ...data, totalDebt: value })}
                   placeholder="Ex: 500.000 kr"
                 />
@@ -725,7 +725,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="space-y-4">
                 <FormFieldCurrency
                   label="Årsomsättning"
-                  value={data.exactRevenue}
+                  value={data.exactRevenue || ''}
                   onChange={(value) => setData({ ...data, exactRevenue: value })}
                   placeholder="Ex: 12.000.000 kr"
                   required
@@ -733,7 +733,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
                 <FormFieldCurrency
                   label="Totala rörelsekostnader"
-                  value={data.operatingCosts}
+                  value={data.operatingCosts || ''}
                   onChange={(value) => setData({ ...data, operatingCosts: value })}
                   placeholder="Ex: 9.000.000 kr"
                   tooltip="Inkluderar alla kostnader utom skatt"
@@ -784,7 +784,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 <div>
                 <FormFieldPercent
                   label="Tillväxt senaste 3 åren"
-                  value={data.revenue3Years}
+                  value={data.revenue3Years || ''}
                   onChange={(value) => setData({ ...data, revenue3Years: value })}
                   placeholder="Ex: 25%"
                   tooltip="Total procentuell ökning från 3 år sedan"
@@ -796,7 +796,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   <div>
                     <FormFieldCurrency
                       label="Kostnad sålda varor/tjänster"
-                      value={data.cogs}
+                      value={data.cogs || ''}
                       onChange={(value) => setData({ ...data, cogs: value })}
                       placeholder="Ex: 4.000.000 kr"
                     />
