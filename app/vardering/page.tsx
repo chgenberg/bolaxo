@@ -154,7 +154,7 @@ export default function ValuationPage() {
                     <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
                       <Icon className="w-8 h-8 text-accent-pink" />
                     </div>
-                    <h3 className="text-xl font-bold text-accent-orange mb-2">{feature.title}</h3>
+                    <h3 className="text-xl font-bold text-primary-navy mb-2">{feature.title}</h3>
                     <p className="text-gray-700">{feature.description}</p>
                   </div>
                 )
@@ -167,7 +167,7 @@ export default function ValuationPage() {
         <section className="py-24 bg-neutral-off-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-accent-orange mb-6 uppercase">SÅ FUNKAR VÄRDERINGEN</h2>
+              <h2 className="text-4xl font-bold text-primary-navy mb-6 uppercase">SÅ FUNKAR VÄRDERINGEN</h2>
               <p className="text-xl text-primary-navy max-w-2xl mx-auto">
                 Följ dessa 4 enkla steg för att få din värdering
               </p>
@@ -201,7 +201,7 @@ export default function ValuationPage() {
         <section className="py-24 bg-neutral-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-accent-orange mb-6 uppercase">PROFESSIONELLA METODER</h2>
+              <h2 className="text-4xl font-bold text-primary-navy mb-6 uppercase">PROFESSIONELLA METODER</h2>
               <p className="text-lg text-primary-navy max-w-2xl mx-auto">
                 Vi kombinerar flera etablerade värderingsmetoder för en rättvisande bedömning
               </p>
@@ -224,7 +224,7 @@ export default function ValuationPage() {
             </div>
 
             <div className="bg-accent-orange/5 border border-accent-orange/20 rounded-lg p-8">
-              <h3 className="text-2xl font-bold text-accent-orange mb-6">Vad ingår i rapporten?</h3>
+              <h3 className="text-2xl font-bold text-primary-navy mb-6">Vad ingår i rapporten?</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {[
                   'Uppskattad värdering',
