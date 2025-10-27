@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { CheckCircle, ArrowRight, ChevronLeft, ChevronRight, MapPin, TrendingUp, Eye, Sparkles, Shield, Zap, Target, FileText, Handshake, CheckSquare } from 'lucide-react'
 import { mockObjects } from '@/data/mockObjects'
+import ProcessModal from '@/components/ProcessModal'
 
 // FAQ Item Component
 function FAQItem({ faq }: { faq: any }) {
@@ -38,6 +39,7 @@ export default function KopareInfoPage() {
   const [currentObjectIndex, setCurrentObjectIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [hoveredStep, setHoveredStep] = useState<number | null>(null)
+  const [isProcessModalOpen, setIsProcessModalOpen] = useState(false)
   
   // Filter only featured/new objects for carousel
   const featuredObjects = mockObjects.filter(obj => obj.isNew || obj.verified).slice(0, 8)
@@ -366,12 +368,14 @@ export default function KopareInfoPage() {
                       </p>
                       
                       {/* Interactive hover effect */}
-                      <div className={`mt-4 flex items-center gap-2 text-primary-navy font-semibold opacity-0 transform translate-y-2 transition-all duration-300 ${
-                        hoveredStep === item.step ? 'opacity-100 translate-y-0' : ''
-                      }`}>
+                      <button 
+                        onClick={() => setIsProcessModalOpen(true)}
+                        className={`mt-4 flex items-center gap-2 text-primary-navy font-semibold opacity-0 transform translate-y-2 transition-all duration-300 hover:text-accent-orange ${
+                          hoveredStep === item.step ? 'opacity-100 translate-y-0' : ''
+                        }`}>
                         <span>Läs mer</span>
                         <ArrowRight className="w-4 h-4" />
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -626,6 +630,9 @@ export default function KopareInfoPage() {
           </div>
         </div>
       </section>
+
+      {/* Process Modal */}
+      <ProcessModal isOpen={isProcessModalOpen} onClose={() => setIsProcessModalOpen(false)} />
     </main>
   )
 }
