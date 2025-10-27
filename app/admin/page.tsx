@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -66,7 +66,6 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('overview')
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
 
   // Check admin access via cookie (middleware already verified this)
   useEffect(() => {
@@ -202,59 +201,6 @@ export default function AdminDashboard() {
     },
   ]
 
-  // Interactive card component
-  const StatCard = ({ title, value, subtitle, icon: Icon, trend, color = 'blue' }: any) => {
-    const isHovered = hoveredCard === title
-    const colorClassMap: Record<string, string> = {
-      blue: 'from-blue-500 to-blue-600',
-      green: 'from-green-500 to-green-600',
-      purple: 'from-purple-500 to-purple-600',
-      amber: 'from-amber-500 to-amber-600',
-    }
-    const colorClasses = colorClassMap[color as keyof typeof colorClassMap] || colorClassMap['blue']
-
-    const handleMouseEnter = useCallback(() => {
-      setHoveredCard(title)
-    }, [title])
-
-    const handleMouseLeave = useCallback(() => {
-      setHoveredCard(null)
-    }, [])
-
-    return (
-      <div
-        className="relative group"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <div className={`absolute inset-0 bg-gradient-to-r ${colorClasses} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-        <div className="relative bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-200 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
-          <div className="flex items-start justify-between mb-4">
-            <div className={`p-3 rounded-xl bg-gradient-to-r ${colorClasses} bg-opacity-10`}>
-              <Icon className="w-6 h-6 text-gray-700" />
-            </div>
-            {trend && (
-              <div className={`flex items-center gap-1 text-sm font-medium ${trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {trend > 0 ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
-                {Math.abs(trend)}%
-              </div>
-            )}
-          </div>
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">{title}</h3>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
-          {subtitle && <p className="text-sm text-gray-500 mt-2">{subtitle}</p>}
-          
-          {/* Animated progress bar */}
-          {isHovered && (
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-100 rounded-b-2xl overflow-hidden">
-              <div className={`h-full bg-gradient-to-r ${colorClasses} animate-slide-in`} style={{ width: '100%' }} />
-            </div>
-          )}
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="flex h-screen bg-gray-50/50">
       {/* Modern Sidebar */}
@@ -375,41 +321,52 @@ export default function AdminDashboard() {
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <>
-            {/* Top Stats Grid with Interactive Cards */}
+            {/* Top Stats Grid with Simple Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <StatCard
-                title="Besökare idag"
-                value="4,247"
-                subtitle="2,891 unika"
-                icon={Eye}
-                trend={12}
-                color="blue"
-              />
-              <StatCard
-                title="Bot-trafik"
-                value={`${botPercentage}%`}
-                subtitle="178 av 4,247"
-                icon={Shield}
-                trend={-3}
-                color="green"
-              />
-              <StatCard
-                title="Intäkter"
-                value="42.5K"
-                subtitle="SEK idag"
-                icon={DollarSign}
-                trend={8}
-                color="purple"
-              />
-              <StatCard
-                title="Konvertering"
-                value="3.87%"
-                subtitle="164 konverteringar"
-                icon={TrendingUp}
-                trend={5}
-                color="amber"
-              />
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Besökare idag</h3>
+                  <Eye className="w-5 h-5 text-gray-400" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900">4,247</p>
+                <p className="text-xs text-gray-500 mt-2">2,891 unika (68.1%)</p>
               </div>
+
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Riktiga vs Botar</h3>
+                  <Shield className="w-5 h-5 text-gray-400" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900">4.2% Botar</p>
+                <p className="text-xs text-gray-500 mt-2">Riktiga: 4,069 | Botar: 178</p>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Intäkter idag</h3>
+                  <DollarSign className="w-5 h-5 text-gray-400" />
+                </div>
+                <p className="text-3xl font-bold text-gray-900">42.5K SEK</p>
+                <p className="text-xs text-gray-500 mt-2">↑ 12% från igår</p>
+              </div>
+
+              <div className="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-lg hover:border-gray-200 transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Aktivt innehål</h3>
+                  <Activity className="w-5 h-5 text-gray-400" />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Annonser</span>
+                    <span className="font-bold text-gray-900">187</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">NDA:er</span>
+                    <span className="font-bold text-gray-900">64</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* Interactive Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
