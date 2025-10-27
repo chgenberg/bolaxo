@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MessageSquare, User, Building, Shield, CheckCircle, XCircle, Clock } from 'lucide-react'
@@ -29,7 +29,7 @@ interface Conversation {
   approved: boolean
 }
 
-export default function SellerChatPage() {
+function SellerChatContent() {
   const searchParams = useSearchParams()
   const [currentUserId] = useState('seller-123') // TODO: Get from auth
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
@@ -270,5 +270,13 @@ export default function SellerChatPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SellerChatPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SellerChatContent />
+    </Suspense>
   )
 }

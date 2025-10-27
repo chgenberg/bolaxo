@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MessageSquare, User, Building } from 'lucide-react'
@@ -17,7 +17,7 @@ interface Conversation {
   unread: number
 }
 
-export default function BuyerChatPage() {
+function BuyerChatContent() {
   const searchParams = useSearchParams()
   const [currentUserId] = useState('buyer-123') // TODO: Get from auth
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
@@ -151,5 +151,13 @@ export default function BuyerChatPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function BuyerChatPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BuyerChatContent />
+    </Suspense>
   )
 }
