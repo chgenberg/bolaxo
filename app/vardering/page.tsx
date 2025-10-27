@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, Target } from 'lucide-react'
+import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, Target, Star } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
+import Image from 'next/image'
 
 export default function ValuationPage() {
   const [showWizard, setShowWizard] = useState(false)
@@ -75,42 +76,68 @@ export default function ValuationPage() {
   return (
     <>
       <main className="min-h-screen bg-neutral-white">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-orange/10 rounded-full mb-6 border border-accent-orange/20">
-              <Zap className="w-4 h-4 text-accent-orange" />
-              <span className="text-sm font-semibold text-accent-orange">10,000+ företag värderade</span>
-            </div>
-            
-            <h1 className="text-5xl sm:text-7xl font-bold text-accent-orange mb-6 uppercase">
-              GRATIS VÄRDERING
-            </h1>
-            
-            <p className="text-2xl text-primary-navy leading-relaxed mb-10 max-w-3xl mx-auto">
-              Få en professionell värdering av ditt företag på 5 minuter. Inga dolda avgifter.
-            </p>
-            
-            <button
-              onClick={() => setShowWizard(true)}
-              className="inline-flex items-center gap-2 px-10 py-4 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all text-lg"
-            >
-              Starta Värdering
-              <ArrowRight className="w-5 h-5" />
-            </button>
-            
-            <div className="mt-10 flex flex-wrap justify-center gap-8 text-base text-primary-navy">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-accent-pink" />
-                <span>5 minuter</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-accent-pink" />
-                <span>Helt gratis</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-accent-pink" />
-                <span>Ingen registrering</span>
+        {/* Hero Section - Same style as homepage */}
+        <section className="relative min-h-screen flex items-center bg-cover bg-center">
+          {/* Background Image - Fullscreen with no overlay */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/kop_hero.png"
+              alt="Hero background"
+              fill
+              className="object-cover hidden md:block"
+              priority
+            />
+            <Image
+              src="/kop_hero_mobile.png"
+              alt="Hero background mobile"
+              fill
+              className="object-cover md:hidden"
+              priority
+            />
+          </div>
+
+          {/* Minimalist Content Box - Right aligned */}
+          <div className="relative w-full flex items-center justify-end px-4 md:px-12 lg:px-24 z-10">
+            <div className="relative">
+              {/* Pulsing shadow effect */}
+              <div className="absolute -inset-4 bg-black/50 rounded-3xl blur-2xl animate-pulse-shadow" />
+              
+              {/* Main content box */}
+              <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-8 md:p-12 max-w-lg shadow-2xl">
+                <h1 className="text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-4">
+                  Gratis värdering
+                </h1>
+                
+                <p className="text-center text-gray-700 mb-8 text-lg">
+                  Få en professionell värdering av ditt företag på 5 minuter. Inga dolda avgifter.
+                </p>
+                
+                {/* CTA Button */}
+                <button
+                  onClick={() => setShowWizard(true)}
+                  className="w-full bg-navy text-white font-bold py-4 px-8 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 text-lg group shadow-lg"
+                >
+                  <span className="flex items-center justify-center gap-3">
+                    Starta värdering
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </button>
+                
+                {/* Features */}
+                <div className="mt-8 space-y-3">
+                  <div className="flex items-center gap-3 text-gray-600">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>5 minuter</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-gray-600">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>Helt gratis</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-gray-600">
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span>Ingen registrering</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

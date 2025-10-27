@@ -38,6 +38,7 @@ const config: Config = {
         'neutral-white': '#FFFFFF',
         'neutral-off-white': '#F9FAFB',
         'yellow-500': '#EAB308',
+        'green-500': '#22C55E',
       },
       fontSize: {
         // Heading scale - per design manual
