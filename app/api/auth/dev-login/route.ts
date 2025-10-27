@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import { serialize } from 'cookie'
 
 const prisma = new PrismaClient()
 
