@@ -104,30 +104,30 @@ export default function Header() {
   return (
     <>
       {/* Top bar with section switcher */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-center gap-3 py-1.5 text-sm">
+          <div className="flex items-center justify-start gap-6 py-1.5 text-sm">
             <Link 
               href="/" 
-              className={`px-3 py-1 rounded-md border-2 transition-all font-medium ${
+              className={`transition-colors font-medium ${
                 activeSection === 'seller' 
-                  ? 'border-gray-900 text-navy bg-gray-50' 
-                  : 'border-gray-300 text-graphite hover:border-gray-900'
+                  ? 'text-navy' 
+                  : 'text-graphite hover:text-navy'
               }`}
               onClick={() => setActiveSection('seller')}
             >
-              För säljare
+              säljare
             </Link>
             <Link 
               href="/kopare" 
-              className={`px-3 py-1 rounded-md border-2 transition-all font-medium ${
+              className={`transition-colors font-medium ${
                 activeSection === 'buyer' 
-                  ? 'border-gray-900 text-navy bg-gray-50' 
-                  : 'border-gray-300 text-graphite hover:border-gray-900'
+                  ? 'text-navy' 
+                  : 'text-graphite hover:text-navy'
               }`}
               onClick={() => setActiveSection('buyer')}
             >
-              För köpare
+              köpare
             </Link>
           </div>
         </div>
