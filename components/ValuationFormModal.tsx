@@ -27,8 +27,23 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
   }
 
   const handleStartValuation = () => {
-    // Redirect to valuation page with data
-    window.location.href = `/vardering?email=${encodeURIComponent(email)}&company=${encodeURIComponent(companyName)}`
+    // Store valuation data in localStorage for the results page
+    const valuationData = {
+      email,
+      companyName,
+      revenue: '',
+      employees: '',
+      profitMargin: '',
+      industry: '',
+      growth: '',
+      challenges: [],
+      strengths: [],
+      createdAt: new Date().toISOString()
+    }
+    localStorage.setItem('valuationData', JSON.stringify(valuationData))
+    
+    // Redirect to results page with data
+    window.location.href = `/vardering/resultat?email=${encodeURIComponent(email)}&company=${encodeURIComponent(companyName)}`
   }
 
   return (
