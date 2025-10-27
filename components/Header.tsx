@@ -200,7 +200,7 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <NotificationCenter />
+                {/* <NotificationCenter /> */}
                 <Link
                   href="/dashboard"
                   className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
