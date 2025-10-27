@@ -77,6 +77,11 @@ const config: Config = {
         'slide-in': 'slide-in 0.3s ease-out',
         'pulse-scale': 'pulse-scale 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-shadow': 'pulse-shadow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 20s ease-in-out infinite',
+        'shake': 'shake 0.5s ease-in-out',
+        'fade-in': 'fade-in 0.5s ease-out',
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'scale-in': 'scale-in 0.8s ease-out forwards'
       },
       keyframes: {
         'pulse-soft': {
@@ -114,6 +119,23 @@ const config: Config = {
             opacity: '0.6',
             transform: 'scale(1.05)',
           },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        'shake': {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(-5px)' },
+          '75%': { transform: 'translateX(5px)' },
+        },
+        'fade-in': {
+          'from': { opacity: '0' },
+          'to': { opacity: '1' },
+        },
+        'scale-in': {
+          '0%': { transform: 'scaleX(0)' },
+          '100%': { transform: 'scaleX(1)' },
         }
       }
     },

@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import {
   Search, ChevronDown, Users, Mail, CheckCircle, XCircle,
   MoreVertical, Eye, Lock, Trash2, ZoomIn, RefreshCw, Filter,
-  ChevronUp, ChevronLeft, ChevronRight, Copy, Send, Share2
+  ChevronUp, ChevronLeft, ChevronRight, Copy, Send, Share2,
+  Shield, Sparkles, User, Building, MapPin, Calendar, Activity, TrendingUp
 } from 'lucide-react'
 import { useAdminUsers } from '@/lib/api-hooks'
+import ModernSelect from './ModernSelect'
 
 interface User {
   id: string
@@ -45,61 +47,78 @@ export default function UserManagement({ onUserSelect }: UserManagementProps) {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set())
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [showReferralModal, setShowReferralModal] = useState<User | null>(null)
+  const [hoveredRow, setHoveredRow] = useState<string | null>(null)
 
   // Load users
   useEffect(() => {
-    loadUsers(1)
-  }, [])
-
-  const loadUsers = async (page: number) => {
-    try {
+    const loadUsers = async () => {
       const result = await fetchUsers({
-        page,
+        page: pagination.page,
         limit: pagination.limit,
-        role: roleFilter || undefined,
-        search: search || undefined,
-        verified: verifiedFilter === '' ? undefined : verifiedFilter === 'true',
+        search,
+        role: roleFilter,
+        verified: verifiedFilter === 'verified' ? true : verifiedFilter === 'unverified' ? false : undefined,
         sortBy,
-        sortOrder,
+        sortOrder
       })
-      setUsers(result.data)
-      setPagination(result.pagination)
-    } catch (err) {
-      console.error('Error loading users:', err)
+      
+      if (result) {
+        setUsers(result.users)
+        setPagination({
+          page: result.page,
+          limit: result.limit,
+          total: result.total,
+          pages: result.pages
+        })
+      }
+    }
+    
+    loadUsers()
+  }, [fetchUsers, pagination.page, search, roleFilter, verifiedFilter, sortBy, sortOrder])
+
+  // Handle user actions
+  const handleUpdateRole = async (userId: string, newRole: string) => {
+    await updateUser(userId, { role: newRole })
+    // Refresh users
+    const updatedUsers = users.map(u => u.id === userId ? { ...u, role: newRole } : u)
+    setUsers(updatedUsers)
+  }
+
+  const handleDeleteUser = async (userId: string) => {
+    if (confirm('Är du säker på att du vill ta bort denna användare?')) {
+      await deleteUser(userId)
+      setUsers(users.filter(u => u.id !== userId))
     }
   }
 
-  const handleSearch = (term: string) => {
-    setSearch(term)
-    loadUsers(1)
+  const handleResetPassword = async (userId: string) => {
+    if (confirm('Skicka lösenordsåterställning till användaren?')) {
+      await resetPassword(userId)
+      alert('Lösenordsåterställning skickad!')
+    }
   }
 
-  const handleFilterChange = (filter: string, value: string) => {
-    if (filter === 'role') setRoleFilter(value)
-    else if (filter === 'verified') setVerifiedFilter(value)
-    loadUsers(1)
+  const handleBulkDelete = async () => {
+    if (selectedUsers.size === 0) return
+    
+    if (confirm(`Ta bort ${selectedUsers.size} användare?`)) {
+      await bulkAction(Array.from(selectedUsers), 'delete')
+      setUsers(users.filter(u => !selectedUsers.has(u.id)))
+      setSelectedUsers(new Set())
+    }
   }
 
-  const handleSort = (field: string) => {
-    if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+  const toggleUserSelection = (userId: string) => {
+    const newSelection = new Set(selectedUsers)
+    if (newSelection.has(userId)) {
+      newSelection.delete(userId)
     } else {
-      setSortBy(field)
-      setSortOrder('desc')
+      newSelection.add(userId)
     }
+    setSelectedUsers(newSelection)
   }
 
-  const handleSelectUser = (userId: string) => {
-    const newSelected = new Set(selectedUsers)
-    if (newSelected.has(userId)) {
-      newSelected.delete(userId)
-    } else {
-      newSelected.add(userId)
-    }
-    setSelectedUsers(newSelected)
-  }
-
-  const handleSelectAll = () => {
+  const selectAllUsers = () => {
     if (selectedUsers.size === users.length) {
       setSelectedUsers(new Set())
     } else {
@@ -107,428 +126,442 @@ export default function UserManagement({ onUserSelect }: UserManagementProps) {
     }
   }
 
-  const handleBulkAction = async (action: string, data?: any) => {
-    if (selectedUsers.size === 0) {
-      alert('Please select users first')
-      return
-    }
-
-    if (confirm(`Are you sure you want to ${action} for ${selectedUsers.size} users?`)) {
-      try {
-        await bulkAction(Array.from(selectedUsers), action, data)
-        setSelectedUsers(new Set())
-        loadUsers(pagination.page)
-      } catch (err) {
-        console.error('Bulk action failed:', err)
-      }
-    }
+  const formatDate = (date: string | null) => {
+    if (!date) return 'Aldrig'
+    return new Date(date).toLocaleDateString('sv-SE', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
   }
 
-  const handleRoleChange = async (userId: string, newRole: string) => {
-    try {
-      await updateUser(userId, { role: newRole })
-      loadUsers(pagination.page)
-      setActiveMenu(null)
-    } catch (err) {
-      console.error('Error updating role:', err)
-    }
-  }
+  const roleOptions = [
+    { value: '', label: 'Alla roller', icon: <Users className="w-4 h-4" /> },
+    { value: 'buyer', label: 'Köpare', icon: <User className="w-4 h-4" />, description: 'Kan söka och köpa företag' },
+    { value: 'seller', label: 'Säljare', icon: <Building className="w-4 h-4" />, description: 'Kan lista företag för försäljning' },
+    { value: 'broker', label: 'Mäklare', icon: <Shield className="w-4 h-4" />, description: 'Professionell företagsmäklare' },
+    { value: 'admin', label: 'Admin', icon: <Sparkles className="w-4 h-4" />, description: 'Full systemaccess' }
+  ]
 
-  const handleDelete = async (userId: string) => {
-    if (confirm('Are you sure? This will delete the user account.')) {
-      try {
-        await deleteUser(userId)
-        loadUsers(pagination.page)
-        setActiveMenu(null)
-      } catch (err) {
-        console.error('Error deleting user:', err)
-      }
-    }
-  }
+  const verifiedOptions = [
+    { value: '', label: 'Alla användare' },
+    { value: 'verified', label: 'Verifierade', icon: <CheckCircle className="w-4 h-4 text-green-500" /> },
+    { value: 'unverified', label: 'Ej verifierade', icon: <XCircle className="w-4 h-4 text-gray-400" /> }
+  ]
 
-  const handleResetPassword = async (userId: string) => {
-    try {
-      const result = await resetPassword(userId)
-      alert(`Magic link generated: ${result.data.magicLink}\n\nIn production, this would be sent via email.`)
-      setActiveMenu(null)
-    } catch (err) {
-      console.error('Error resetting password:', err)
-    }
-  }
+  const sortOptions = [
+    { value: 'createdAt', label: 'Registreringsdatum' },
+    { value: 'lastLoginAt', label: 'Senaste inloggning' },
+    { value: 'email', label: 'E-post' },
+    { value: 'name', label: 'Namn' }
+  ]
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-primary-navy flex items-center gap-2 mb-2">
-          <Users className="w-6 h-6" />
-          User Management
-        </h2>
-        <p className="text-gray-600 text-sm">
-          Total users: {pagination.total} | Selected: {selectedUsers.size}
-        </p>
-      </div>
-
-      {/* Search & Filters */}
-      <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-center">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search by email, name, company..."
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink"
-          />
+      {/* Header Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Totalt användare</p>
+              <p className="text-2xl font-bold text-gray-900">{pagination.total}</p>
+            </div>
+            <Users className="w-8 h-8 text-blue-500" />
+          </div>
         </div>
-
-        <select
-          value={roleFilter}
-          onChange={(e) => handleFilterChange('role', e.target.value)}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink"
-        >
-          <option value="">All Roles</option>
-          <option value="seller">Sellers</option>
-          <option value="buyer">Buyers</option>
-          <option value="broker">Brokers</option>
-        </select>
-
-        <select
-          value={verifiedFilter}
-          onChange={(e) => handleFilterChange('verified', e.target.value)}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink"
-        >
-          <option value="">All Statuses</option>
-          <option value="true">Email Verified</option>
-          <option value="false">Not Verified</option>
-        </select>
-
-        <button
-          onClick={() => loadUsers(pagination.page)}
-          className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2"
-        >
-          <RefreshCw className="w-4 h-4" />
-          Refresh
-        </button>
+        <div className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Verifierade</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {users.filter(u => u.verified).length}
+              </p>
+            </div>
+            <CheckCircle className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Aktiva säljare</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {users.filter(u => u.role === 'seller' && u._count.listings > 0).length}
+              </p>
+            </div>
+            <TrendingUp className="w-8 h-8 text-purple-500" />
+          </div>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-100 p-4 hover:shadow-md transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-500">Nya idag</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {users.filter(u => new Date(u.createdAt).toDateString() === new Date().toDateString()).length}
+              </p>
+            </div>
+            <Activity className="w-8 h-8 text-amber-500" />
+          </div>
+        </div>
       </div>
 
-      {/* Bulk Actions */}
-      {selectedUsers.size > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
-          <span className="text-sm font-medium text-blue-900">
-            {selectedUsers.size} user(s) selected
-          </span>
-          <div className="flex gap-2">
+      {/* Filters and Search */}
+      <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          {/* Search */}
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Sök på namn, e-post, företag..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="flex gap-3">
+            <ModernSelect
+              options={roleOptions}
+              value={roleFilter}
+              onChange={setRoleFilter}
+              placeholder="Filtrera roll"
+              className="w-48"
+              searchable
+            />
+            
+            <ModernSelect
+              options={verifiedOptions}
+              value={verifiedFilter}
+              onChange={setVerifiedFilter}
+              placeholder="Verifiering"
+              className="w-48"
+            />
+
+            <ModernSelect
+              options={sortOptions}
+              value={sortBy}
+              onChange={setSortBy}
+              placeholder="Sortera efter"
+              className="w-48"
+            />
+
             <button
-              onClick={() => handleBulkAction('verify_email')}
-              className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
+              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+              className="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
             >
-              Verify Email
-            </button>
-            <button
-              onClick={() => handleBulkAction('change_role', { role: 'seller' })}
-              className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
-            >
-              Set as Seller
-            </button>
-            <button
-              onClick={() => handleBulkAction('change_role', { role: 'buyer' })}
-              className="px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600"
-            >
-              Set as Buyer
+              {sortOrder === 'asc' ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
             </button>
           </div>
         </div>
-      )}
 
-      {/* Users Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        {/* Bulk Actions */}
+        {selectedUsers.size > 0 && (
+          <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl mb-4">
+            <span className="text-sm font-medium text-blue-700">
+              {selectedUsers.size} användare valda
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={handleBulkDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+              >
+                Ta bort valda
+              </button>
+              <button
+                onClick={() => setSelectedUsers(new Set())}
+                className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              >
+                Avmarkera alla
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Users Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-4 py-3 text-left">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-100">
+                <th className="text-left p-4">
                   <input
                     type="checkbox"
                     checked={selectedUsers.size === users.length && users.length > 0}
-                    onChange={handleSelectAll}
-                    className="rounded"
+                    onChange={selectAllUsers}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                 </th>
-                <th className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100" onClick={() => handleSort('email')}>
-                  Email {sortBy === 'email' && (sortOrder === 'asc' ? '↑' : '↓')}
-                </th>
-                <th className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100" onClick={() => handleSort('name')}>
-                  Name {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
-                </th>
-                <th className="px-4 py-3 text-left">Role</th>
-                <th className="px-4 py-3 text-center">Verified</th>
-                <th className="px-4 py-3 text-center">BankID</th>
-                <th className="px-4 py-3 text-right">Listings</th>
-                <th className="px-4 py-3 text-left cursor-pointer hover:bg-gray-100" onClick={() => handleSort('createdAt')}>
-                  Joined {sortBy === 'createdAt' && (sortOrder === 'asc' ? '↑' : '↓')}
-                </th>
-                <th className="px-4 py-3 text-center">Actions</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Användare</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Roll</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Aktivitet</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Registrerad</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Åtgärder</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              {loading && (
+            <tbody>
+              {loading ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-gray-500">
-                    <div className="inline-block w-6 h-6 border-4 border-accent-pink/20 border-t-accent-pink rounded-full animate-spin" />
+                  <td colSpan={7} className="p-8 text-center">
+                    <div className="flex justify-center">
+                      <div className="w-8 h-8 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                    </div>
                   </td>
                 </tr>
-              )}
-              {!loading && users.length === 0 && (
+              ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-gray-500">
-                    No users found
+                  <td colSpan={7} className="p-8 text-center text-gray-500">
+                    Inga användare hittades
                   </td>
                 </tr>
-              )}
-              {!loading && users.map((user: any) => (
-                <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3">
-                    <input
-                      type="checkbox"
-                      checked={selectedUsers.has(user.id)}
-                      onChange={() => handleSelectUser(user.id)}
-                      className="rounded"
-                    />
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-gray-700">{user.email}</td>
-                  <td className="px-4 py-3">{user.name || '-'}</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-block px-2 py-1 text-xs font-semibold rounded ${
-                      user.role === 'seller' ? 'bg-blue-100 text-blue-800' :
-                      user.role === 'buyer' ? 'bg-green-100 text-green-800' :
-                      'bg-purple-100 text-purple-800'
-                    }`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    {user.verified ? (
-                      <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
-                    ) : (
-                      <XCircle className="w-4 h-4 text-red-500 mx-auto" />
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    {user.bankIdVerified ? (
-                      <CheckCircle className="w-4 h-4 text-green-500 mx-auto" />
-                    ) : (
-                      <XCircle className="w-4 h-4 text-red-500 mx-auto" />
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-right font-semibold">{user._count.listings}</td>
-                  <td className="px-4 py-3 text-xs text-gray-500">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-3 text-center relative">
-                    <button
-                      onClick={() => setActiveMenu(activeMenu === user.id ? null : user.id)}
-                      className="p-1 hover:bg-gray-100 rounded"
-                    >
-                      <MoreVertical className="w-4 h-4" />
-                    </button>
-                    {activeMenu === user.id && (
-                      <div className="absolute right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg z-50 min-w-[200px]">
-                        <button
-                          onClick={() => {
-                            onUserSelect?.(user)
-                            setShowReferralModal(user)
-                            setActiveMenu(null)
-                          }}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
-                        >
-                          <Share2 className="w-4 h-4" /> View Referrals
-                        </button>
-                        <button
-                          onClick={() => handleResetPassword(user.id)}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
-                        >
-                          <Lock className="w-4 h-4" /> Reset Password
-                        </button>
-                        <div className="border-t border-gray-200 my-1" />
-                        <button
-                          onClick={() => handleRoleChange(user.id, 'seller')}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-                        >
-                          Set as Seller
-                        </button>
-                        <button
-                          onClick={() => handleRoleChange(user.id, 'buyer')}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-                        >
-                          Set as Buyer
-                        </button>
-                        <button
-                          onClick={() => handleRoleChange(user.id, 'broker')}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-                        >
-                          Set as Broker
-                        </button>
-                        <div className="border-t border-gray-200 my-1" />
-                        <button
-                          onClick={() => handleDelete(user.id)}
-                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                        >
-                          <Trash2 className="w-4 h-4" /> Delete User
-                        </button>
+              ) : (
+                users.map((user) => (
+                  <tr 
+                    key={user.id} 
+                    className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
+                    onMouseEnter={() => setHoveredRow(user.id)}
+                    onMouseLeave={() => setHoveredRow(null)}
+                  >
+                    <td className="p-4">
+                      <input
+                        type="checkbox"
+                        checked={selectedUsers.has(user.id)}
+                        onChange={() => toggleUserSelection(user.id)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${
+                          user.verified ? 'from-green-400 to-green-500' : 'from-gray-400 to-gray-500'
+                        } flex items-center justify-center text-white font-semibold`}>
+                          {user.name ? user.name[0].toUpperCase() : user.email[0].toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900">{user.name || 'Ej angivet'}</div>
+                          <div className="text-sm text-gray-500">{user.email}</div>
+                          {user.companyName && (
+                            <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
+                              <Building className="w-3 h-3" />
+                              {user.companyName}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="p-4">
+                      <select
+                        value={user.role}
+                        onChange={(e) => handleUpdateRole(user.id, e.target.value)}
+                        className="px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                      >
+                        <option value="buyer">Köpare</option>
+                        <option value="seller">Säljare</option>
+                        <option value="broker">Mäklare</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        {user.verified ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                            <CheckCircle className="w-3 h-3" />
+                            Verifierad
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">
+                            <XCircle className="w-3 h-3" />
+                            Ej verifierad
+                          </span>
+                        )}
+                        {user.bankIdVerified && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                            <Shield className="w-3 h-3" />
+                            BankID
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="space-y-1">
+                        <div className="text-sm text-gray-600">
+                          Annonser: <span className="font-medium text-gray-900">{user._count.listings}</span>
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Värderingar: <span className="font-medium text-gray-900">{user._count.valuations}</span>
+                        </div>
+                        {user.lastLoginAt && (
+                          <div className="text-xs text-gray-400">
+                            Senast: {formatDate(user.lastLoginAt)}
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm text-gray-600">{formatDate(user.createdAt)}</div>
+                      {user.referralCode && (
+                        <button
+                          onClick={() => setShowReferralModal(user)}
+                          className="text-xs text-blue-600 hover:text-blue-700 mt-1 flex items-center gap-1"
+                        >
+                          <Share2 className="w-3 h-3" />
+                          Referenskod
+                        </button>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <div className="relative">
+                        <button
+                          onClick={() => setActiveMenu(activeMenu === user.id ? null : user.id)}
+                          className={`p-2 hover:bg-gray-100 rounded-lg transition-all ${
+                            hoveredRow === user.id ? 'opacity-100' : 'opacity-0'
+                          }`}
+                        >
+                          <MoreVertical className="w-5 h-5 text-gray-500" />
+                        </button>
+                        
+                        {activeMenu === user.id && (
+                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-10">
+                            <button
+                              onClick={() => {
+                                onUserSelect?.(user)
+                                setActiveMenu(null)
+                              }}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <Eye className="w-4 h-4" />
+                              Visa detaljer
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleResetPassword(user.id)
+                                setActiveMenu(null)
+                              }}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <Lock className="w-4 h-4" />
+                              Återställ lösenord
+                            </button>
+                            <button
+                              onClick={() => {
+                                navigator.clipboard.writeText(user.email)
+                                setActiveMenu(null)
+                              }}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              <Copy className="w-4 h-4" />
+                              Kopiera e-post
+                            </button>
+                            <hr className="my-1" />
+                            <button
+                              onClick={() => {
+                                handleDeleteUser(user.id)
+                                setActiveMenu(null)
+                              }}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-red-50 text-red-600 flex items-center gap-2"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Ta bort användare
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {pagination.pages > 1 && (
+          <div className="flex items-center justify-between mt-6">
+            <div className="text-sm text-gray-500">
+              Visar {(pagination.page - 1) * pagination.limit + 1} - {Math.min(pagination.page * pagination.limit, pagination.total)} av {pagination.total} användare
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+                disabled={pagination.page === 1}
+                className="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              
+              {Array.from({ length: Math.min(5, pagination.pages) }, (_, i) => {
+                const pageNum = i + 1
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPagination(prev => ({ ...prev, page: pageNum }))}
+                    className={`px-4 py-2 rounded-lg transition-all ${
+                      pagination.page === pageNum
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                )
+              })}
+              
+              <button
+                onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+                disabled={pagination.page === pagination.pages}
+                className="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Pagination */}
-      {pagination.pages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <button
-            onClick={() => loadUsers(Math.max(1, pagination.page - 1))}
-            disabled={pagination.page === 1}
-            className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-50"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <span className="text-sm font-medium">
-            Page {pagination.page} of {pagination.pages}
-          </span>
-          <button
-            onClick={() => loadUsers(Math.min(pagination.pages, pagination.page + 1))}
-            disabled={pagination.page === pagination.pages}
-            className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-50"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
-      )}
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800 text-sm">
-          Error: {error}
-        </div>
-      )}
 
       {/* Referral Modal */}
       {showReferralModal && (
-        <ReferralModal user={showReferralModal} onClose={() => setShowReferralModal(null)} />
-      )}
-    </div>
-  )
-}
-
-// Referral Modal Component
-function ReferralModal({ user, onClose }: { user: User; onClose: () => void }) {
-  const { getReferralTree, loading } = useAdminUsers()
-  const [referralData, setReferralData] = useState<any>(null)
-
-  useEffect(() => {
-    loadReferralData()
-  }, [user.id])
-
-  const loadReferralData = async () => {
-    try {
-      const result = await getReferralTree(user.id)
-      setReferralData(result.data)
-    } catch (err) {
-      console.error('Error loading referral tree:', err)
-    }
-  }
-
-  if (loading || !referralData) {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-8">
-          <div className="w-8 h-8 border-4 border-accent-pink/20 border-t-accent-pink rounded-full animate-spin" />
-        </div>
-      </div>
-    )
-  }
-
-  const { stats, referrer, directReferrals, indirectReferrals } = referralData
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
-          <h3 className="text-lg font-bold text-primary-navy">Referral Tree - {user.email}</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-        </div>
-
-        <div className="p-6 space-y-6">
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-primary-navy">{stats.directReferralCount}</div>
-              <div className="text-xs text-gray-600 mt-1">Direct Referrals</div>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setShowReferralModal(null)}>
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Referenskod</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-500">Användare</label>
+                <p className="font-medium text-gray-900">{showReferralModal.name || showReferralModal.email}</p>
+              </div>
+              <div>
+                <label className="text-sm text-gray-500">Referenskod</label>
+                <div className="flex items-center gap-2 mt-1">
+                  <code className="flex-1 px-4 py-2 bg-gray-100 rounded-lg font-mono">
+                    {showReferralModal.referralCode}
+                  </code>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(showReferralModal.referralCode || '')}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <Copy className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-gray-500">Referenslänk</label>
+                <div className="flex items-center gap-2 mt-1">
+                  <code className="flex-1 px-4 py-2 bg-gray-100 rounded-lg text-xs break-all">
+                    https://bolagsplatsen.se/ref/{showReferralModal.referralCode}
+                  </code>
+                </div>
+              </div>
             </div>
-            <div className="bg-purple-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-purple-600">{stats.indirectReferralCount}</div>
-              <div className="text-xs text-gray-600 mt-1">Indirect Referrals</div>
-            </div>
-            <div className="bg-green-50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{stats.totalReferrals}</div>
-              <div className="text-xs text-gray-600 mt-1">Total</div>
-            </div>
+            <button
+              onClick={() => setShowReferralModal(null)}
+              className="w-full mt-6 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              Stäng
+            </button>
           </div>
-
-          {/* Referrer */}
-          {referrer && (
-            <div>
-              <h4 className="font-semibold text-gray-700 mb-3">Referred By</h4>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="font-mono text-sm text-gray-700">{referrer.email}</div>
-                <div className="text-xs text-gray-500 mt-1">{referrer.name}</div>
-              </div>
-            </div>
-          )}
-
-          {/* Direct Referrals */}
-          {directReferrals.length > 0 && (
-            <div>
-              <h4 className="font-semibold text-gray-700 mb-3">Direct Referrals ({directReferrals.length})</h4>
-              <div className="space-y-2">
-                {directReferrals.map((referral: any) => (
-                  <div key={referral.id} className="bg-gray-50 rounded-lg p-3 text-sm">
-                    <div className="font-mono text-gray-700">{referral.email}</div>
-                    <div className="text-xs text-gray-500">{referral.name} • {referral.role}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Indirect Referrals */}
-          {indirectReferrals.length > 0 && (
-            <div>
-              <h4 className="font-semibold text-gray-700 mb-3">Indirect Referrals ({indirectReferrals.length})</h4>
-              <div className="space-y-2">
-                {indirectReferrals.map((referral: any) => (
-                  <div key={referral.id} className="bg-blue-50 rounded-lg p-3 text-sm border-l-2 border-blue-300">
-                    <div className="font-mono text-gray-700">{referral.email}</div>
-                    <div className="text-xs text-gray-500">{referral.name} • {referral.role}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-
-        <div className="border-t border-gray-200 p-4 bg-gray-50">
-          <button
-            onClick={onClose}
-            className="w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-medium"
-          >
-            Close
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   )
 }
