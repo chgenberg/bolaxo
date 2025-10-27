@@ -104,8 +104,7 @@ export async function GET(request: NextRequest) {
     // Get NDA stats for all sellers
     const ndaStats = await prisma.nDARequest.groupBy({
       by: ['sellerId'],
-      _count: true,
-      _sum: { }
+      _count: true
     })
 
     const ndaMap = ndaStats.reduce((acc, stat) => {
