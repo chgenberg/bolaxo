@@ -549,7 +549,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   </label>
                   <input
                 type="email"
-                value={data.email}
+                value={data.email || ''}
                     onChange={(e) => setData({ ...data, email: e.target.value })}
                 placeholder="din@email.se"
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
@@ -563,7 +563,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   </label>
                   <input
                     type="text"
-                value={data.companyName}
+                value={data.companyName || ''}
                     onChange={(e) => setData({ ...data, companyName: e.target.value })}
                 placeholder="Ditt Företag AB"
                     className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
@@ -576,7 +576,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     Bransch *
                   </label>
                   <CustomSelect
-                    value={data.industry}
+                    value={data.industry || ''}
                     onChange={(value) => setData({ ...data, industry: value })}
                     options={industries}
                     placeholder="Välj bransch"
@@ -590,7 +590,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     </label>
                     <input
                       type="url"
-                      value={data.website}
+                      value={data.website || ''}
                       onChange={(e) => setData({ ...data, website: e.target.value })}
                       placeholder="www.dittforetag.se"
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
@@ -603,7 +603,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     </label>
                     <input
                       type="text"
-                      value={data.orgNumber}
+                      value={data.orgNumber || ''}
                       onChange={(e) => setData({ ...data, orgNumber: e.target.value })}
                   placeholder="556123-4567"
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
@@ -671,7 +671,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     Har ni nödvändiga tillstånd/licenser? *
                   </label>
                   <CustomSelect
-                    value={data.regulatoryLicenses}
+                    value={data.regulatoryLicenses || ''}
                     onChange={(value) => setData({ ...data, regulatoryLicenses: value })}
                     options={[
                       { value: 'yes', label: 'Ja, alla tillstånd på plats' },
@@ -694,7 +694,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     Genomsnittlig betalningstid från kunder
                   </label>
                   <CustomSelect
-                    value={data.paymentTerms}
+                    value={data.paymentTerms || ''}
                     onChange={(value) => setData({ ...data, paymentTerms: value })}
                     options={[
                       { value: '0-15', label: '0-15 dagar' },
@@ -746,7 +746,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       Företagets ålder *
                     </label>
                     <CustomSelect
-                value={data.companyAge}
+                value={data.companyAge || ''}
                       onChange={(value) => setData({ ...data, companyAge: value })}
                 options={[
                         { value: '0-1', label: '0-1 år' },
@@ -765,7 +765,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       Antal anställda *
                     </label>
                     <CustomSelect
-                value={data.employees}
+                value={data.employees || ''}
                       onChange={(value) => setData({ ...data, employees: value })}
                 options={[
                   { value: '1-5', label: '1-5 anställda' },
@@ -808,7 +808,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     </label>
                     <input
                       type="text"
-                      value={data.salaries}
+                      value={data.salaries || ''}
                       onChange={(e) => setData({ ...data, salaries: e.target.value })}
                       placeholder="Ex: 3500000"
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
