@@ -130,18 +130,23 @@ export async function GET(request: NextRequest) {
     const industryStats = await prisma.listing.groupBy({
       by: ['industry'],
       _count: true,
-      where: { status: 'active' },
-      orderBy: { _count: { _max: 'desc' } },
-      take: 5
+      where: { status: 'active' }
     })
 
     const regionStats = await prisma.listing.groupBy({
       by: ['region'],
       _count: true,
-      where: { status: 'active' },
-      orderBy: { _count: { _max: 'desc' } },
-      take: 5
+      where: { status: 'active' }
     })
+
+    // Sort by count descending and take top 5
+    const topIndustriesSorted = industryStats
+      .sort((a, b) => b._count - a._count)
+      .slice(0, 5)
+
+    const topRegionsSorted = regionStats
+      .sort((a, b) => b._count - a._count)
+      .slice(0, 5)
 
     return NextResponse.json({
       timestamp: now.toISOString(),
@@ -189,11 +194,11 @@ export async function GET(request: NextRequest) {
         listingToNDA: listingToNDARate,
         ndaToTransaction: ndaToTransactionRate
       },
-      topIndustries: industryStats.map(i => ({
+      topIndustries: topIndustriesSorted.map(i => ({
         name: i.industry,
         count: i._count
       })),
-      topRegions: regionStats.map(r => ({
+      topRegions: topRegionsSorted.map(r => ({
         name: r.region,
         count: r._count
       })),
