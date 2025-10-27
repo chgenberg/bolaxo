@@ -116,7 +116,7 @@ export default function Header() {
               }`}
               onClick={() => setActiveSection('seller')}
             >
-              säljare
+              Säljare
             </Link>
             <Link 
               href="/kopare" 
@@ -127,7 +127,7 @@ export default function Header() {
               }`}
               onClick={() => setActiveSection('buyer')}
             >
-              köpare
+              Köpare
             </Link>
           </div>
         </div>
