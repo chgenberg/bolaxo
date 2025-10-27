@@ -77,7 +77,7 @@ export default function ObjectDetailPage() {
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
           <div className="flex flex-col lg:flex-row">
             {/* Image Section */}
-            <div className="lg:w-2/5 bg-gradient-to-br from-gray-100 to-gray-200">
+            <div className="lg:w-2/5 bg-white">
               {object.image ? (
                 <div className="relative w-full h-96 lg:h-full min-h-[500px] p-8">
                   {/* Organic shadow shape */}
@@ -428,8 +428,8 @@ export default function ObjectDetailPage() {
             
             {/* Content */}
             <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Intresserad av detta företag?</h2>
-              <p className="text-lg text-white/90 mb-8 max-w-2xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-primary-navy mb-4">Intresserad av detta företag?</h2>
+              <p className="text-lg text-primary-navy mb-8 max-w-2xl">
                 {hasNDA(objectId) 
                   ? 'Du har redan signerat NDA för detta objekt. Kontakta säljaren för att gå vidare i processen.'
                   : 'Signera NDA för att få tillgång till all information och komma i kontakt med säljaren.'}
@@ -437,7 +437,7 @@ export default function ObjectDetailPage() {
               {!hasNDA(objectId) && (
                 <Link
                   href={`/nda/${objectId}`}
-                  className="inline-flex items-center px-8 py-4 bg-white text-primary-blue rounded-xl font-bold text-lg hover:bg-gray-50 hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                  className="inline-flex items-center px-8 py-4 bg-primary-navy text-white rounded-xl font-bold text-lg hover:bg-primary-navy/90 hover:shadow-lg transition-all duration-200 transform hover:scale-105"
                 >
                   <Shield className="w-6 h-6 mr-3" />
                   Signera NDA och fortsätt

@@ -112,29 +112,37 @@ export default function Header() {
       {/* Top bar with section switcher */}
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-start gap-6 py-1.5 text-sm">
-            <Link 
-              href="/" 
-              className={`transition-colors font-medium ${
-                activeSection === 'seller' 
-                  ? 'text-navy' 
-                  : 'text-graphite hover:text-navy'
-              }`}
-              onClick={() => setActiveSection('seller')}
-            >
-              Säljare
-            </Link>
-            <Link 
-              href="/kopare" 
-              className={`transition-colors font-medium ${
-                activeSection === 'buyer' 
-                  ? 'text-navy' 
-                  : 'text-graphite hover:text-navy'
-              }`}
-              onClick={() => setActiveSection('buyer')}
-            >
-              Köpare
-            </Link>
+          <div className="flex items-center justify-between py-1.5 text-sm">
+            <div className="flex items-center gap-6">
+              <Link 
+                href="/" 
+                className={`transition-colors font-medium ${
+                  activeSection === 'seller' 
+                    ? 'text-navy' 
+                    : 'text-graphite hover:text-navy'
+                }`}
+                onClick={() => setActiveSection('seller')}
+              >
+                Säljare
+              </Link>
+              <Link 
+                href="/kopare" 
+                className={`transition-colors font-medium ${
+                  activeSection === 'buyer' 
+                    ? 'text-navy' 
+                    : 'text-graphite hover:text-navy'
+                }`}
+                onClick={() => setActiveSection('buyer')}
+              >
+                Köpare
+              </Link>
+            </div>
+            <div className="hidden md:block text-center flex-1">
+              <p className="text-navy font-medium italic">
+                "Vi håller dig i handen hela vägen till stranden // BOLAXO"
+              </p>
+            </div>
+            <div className="w-[120px]"></div>
           </div>
         </div>
       </div>
