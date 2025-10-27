@@ -66,7 +66,7 @@ export default function ContactPage() {
       {/* Hero */}
       <section className="bg-gradient-to-br from-primary-navy/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6">Kontakta oss</h1>
+          <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6">KONTAKTA OSS</h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
             Vi finns här för att hjälpa dig. Skicka ett meddelande så återkommer vi inom 24 timmar.
           </p>

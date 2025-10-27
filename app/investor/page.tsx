@@ -4,8 +4,8 @@ export default function InvestorPage() {
       {/* Hero */}
       <section className="py-32 bg-primary-navy text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold mb-6 uppercase">
-            Investera i framtidens företagsmarknadsplats
+          <h1 className="text-5xl sm:text-6xl font-bold mb-6 uppercase text-white">
+            INVESTERA I FRAMTIDENS FÖRETAGSMARKNADSPLATS
           </h1>
           <p className="text-2xl leading-relaxed mb-10 max-w-2xl mx-auto opacity-90">
             Vi digitaliserar en 50 miljarder SEK stor marknad där 10,000+ svenska företag byter ägare varje år.
