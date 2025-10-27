@@ -55,7 +55,7 @@ export default function SaljaInfoPage() {
               },
             ].map((item) => (
               <div key={item.step} className="flex gap-6 sm:gap-8">
-                <div className="flex-shrink-0 w-20 h-20 bg-accent-pink text-white rounded-lg flex items-center justify-center text-3xl font-bold">
+                <div className="flex-shrink-0 w-20 h-20 bg-primary-navy text-white rounded-lg flex items-center justify-center text-3xl font-bold">
                   {item.step}
                 </div>
                 <div className="flex-1 pt-2">
