@@ -1,39 +1,82 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { PrismaClient } from '@prisma/client'
 
-// NDA Tracking API
+const prisma = new PrismaClient()
+
+// Helper function to verify admin authentication
+async function verifyAdminAuth(request: NextRequest) {
+  try {
+    const adminToken = request.cookies.get('adminToken')?.value
+    if (!adminToken) {
+      return { isValid: false, error: 'Unauthorized - No admin token' }
+    }
+    return { isValid: true }
+  } catch (error) {
+    return { isValid: false, error: 'Authentication failed' }
+  }
+}
 
 // GET - Fetch all NDAs with detailed status
 export async function GET(request: NextRequest) {
   try {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    const status = searchParams.get('status') // pending, signed, rejected, expired
-    const searchQuery = searchParams.get('search')
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
+    const limit = Math.min(100, parseInt(searchParams.get('limit') || '20'))
+    const status = searchParams.get('status') // pending, signed, rejected
+    const search = searchParams.get('search') || ''
     const sortBy = searchParams.get('sortBy') || 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
+    const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc'
 
     const skip = (page - 1) * limit
 
-    // Get all NDA requests
-    let ndas = await prisma.nDARequest.findMany({
-      where: {
-        // Search removed - no buyer/seller/listing relations on NDARequest
-      },
+    // Build where clause
+    const where: any = {}
+
+    if (status && status !== 'all') {
+      where.status = status
+    }
+
+    if (search) {
+      where.OR = [
+        { buyer: { email: { contains: search, mode: 'insensitive' } } },
+        { buyer: { name: { contains: search, mode: 'insensitive' } } },
+        { seller: { email: { contains: search, mode: 'insensitive' } } },
+        { seller: { name: { contains: search, mode: 'insensitive' } } },
+        { listing: { companyName: { contains: search, mode: 'insensitive' } } },
+        { listing: { anonymousTitle: { contains: search, mode: 'insensitive' } } }
+      ]
+    }
+
+    // Build orderBy
+    const orderBy: any = {}
+    if (sortBy === 'createdAt' || sortBy === 'signedAt' || sortBy === 'expiresAt') {
+      orderBy[sortBy] = sortOrder
+    } else {
+      orderBy.createdAt = 'desc'
+    }
+
+    // Get total count
+    const total = await prisma.nDARequest.count({ where })
+
+    // Fetch NDAs with all relations
+    const ndas = await prisma.nDARequest.findMany({
+      where,
       select: {
         id: true,
         status: true,
         createdAt: true,
-        buyerId: true,
-        sellerId: true,
-        listingId: true,
-        message: true,
-        expiresAt: true,
         signedAt: true,
         approvedAt: true,
         rejectedAt: true,
+        expiresAt: true,
         viewedAt: true,
+        message: true,
         buyer: {
           select: {
             id: true,
@@ -53,77 +96,28 @@ export async function GET(request: NextRequest) {
             id: true,
             companyName: true,
             anonymousTitle: true,
-            revenue: true
+            revenue: true,
+            status: true
           }
         }
       },
+      orderBy,
+      skip,
+      take: limit
     })
 
-    // If no NDAs in DB, return mock data for demo
-    if (ndas.length === 0) {
-      const mockNdas: any[] = [
-        {
-          id: '1',
-          status: 'signed',
-          createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          signedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          expiresAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000),
-          buyer: { id: '1', email: 'johan.andersson@example.com', name: 'Johan Andersson' },
-          seller: { id: '2', email: 'lisa.bergman@example.com', name: 'Lisa Bergman' },
-          listing: { id: '1', companyName: 'Tech Consulting AB', anonymousTitle: 'IT-konsultbolag Stockholm', revenue: 12500000 }
-        },
-        {
-          id: '2',
-          status: 'pending',
-          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          signedAt: null,
-          expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-          buyer: { id: '3', email: 'maria.svensson@example.com', name: 'Maria Svensson' },
-          seller: { id: '4', email: 'erik.nilsson@example.com', name: 'Erik Nilsson' },
-          listing: { id: '2', companyName: 'E-handel Premium AB', anonymousTitle: 'E-handelsföretag', revenue: 8750000 }
-        },
-        {
-          id: '3',
-          status: 'signed',
-          createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
-          signedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
-          expiresAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000),
-          buyer: { id: '5', email: 'karl.johansson@example.com', name: 'Karl Johansson' },
-          seller: { id: '6', email: 'anna.lundgren@example.com', name: 'Anna Lundgren' },
-          listing: { id: '3', companyName: 'SaaS Startup AB', anonymousTitle: 'SaaS-bolag med återkommande intäkter', revenue: 5200000 }
-        },
-        {
-          id: '4',
-          status: 'pending',
-          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          signedAt: null,
-          expiresAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-          buyer: { id: '7', email: 'peter.karlsson@example.com', name: 'Peter Karlsson' },
-          seller: { id: '8', email: 'sofia.eriksson@example.com', name: 'Sofia Eriksson' },
-          listing: { id: '4', companyName: null, anonymousTitle: 'Tjänsteföretag inom bygg', revenue: 15800000 }
-        },
-        {
-          id: '5',
-          status: 'signed',
-          createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
-          signedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
-          expiresAt: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
-          buyer: { id: '9', email: 'gustav.hansen@example.com', name: 'Gustav Hansen' },
-          seller: { id: '10', email: 'emma.persson@example.com', name: 'Emma Persson' },
-          listing: { id: '5', companyName: 'Restaurang Stockholm City AB', anonymousTitle: 'Restaurang i central Stockholm', revenue: 7300000 }
-        }
-      ]
-      ndas = mockNdas
-    }
-
     // Enrich with calculated fields
-    let enrichedNdas = ndas.map(nda => {
+    const enrichedNdas = ndas.map(nda => {
       const now = new Date()
-      const expiresAt = nda.expiresAt ? new Date(nda.expiresAt) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // Default 30 days
+      const expiresAt = nda.expiresAt ? new Date(nda.expiresAt) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       const daysUntilExpiry = Math.ceil((expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
       const isExpired = now > expiresAt
       const daysOld = Math.ceil((now.getTime() - new Date(nda.createdAt).getTime()) / (1000 * 60 * 60 * 24))
+      const daysToSign = nda.signedAt
+        ? Math.ceil((new Date(nda.signedAt).getTime() - new Date(nda.createdAt).getTime()) / (1000 * 60 * 60 * 24))
+        : null
 
+      // Determine actual status
       let calculatedStatus = nda.status
       if (isExpired && nda.status === 'pending') {
         calculatedStatus = 'expired'
@@ -145,76 +139,68 @@ export async function GET(request: NextRequest) {
         },
         listing: {
           id: nda.listing.id,
-          company: nda.listing.companyName,
-          revenue: nda.listing.revenue
+          companyName: nda.listing.companyName,
+          anonymousTitle: nda.listing.anonymousTitle,
+          revenue: nda.listing.revenue,
+          status: nda.listing.status
         },
         status: calculatedStatus,
         urgency,
         timeline: {
-          createdAt: nda.createdAt,
-          signedAt: nda.signedAt,
-          expiresAt: nda.expiresAt,
+          createdAt: nda.createdAt.toISOString(),
+          signedAt: nda.signedAt?.toISOString() || null,
+          approvedAt: nda.approvedAt?.toISOString() || null,
+          rejectedAt: nda.rejectedAt?.toISOString() || null,
+          expiresAt: nda.expiresAt?.toISOString() || null,
+          viewedAt: nda.viewedAt?.toISOString() || null,
           daysOld,
+          daysToSign,
           daysUntilExpiry,
           isExpired
         }
       }
     })
 
-    // Apply status filter
-    if (status) {
-      enrichedNdas = enrichedNdas.filter(n => n.status === status)
+    // Calculate statistics
+    const stats = {
+      total,
+      pending: await prisma.nDARequest.count({ where: { ...where, status: 'pending' } }),
+      approved: await prisma.nDARequest.count({ where: { ...where, status: 'approved' } }),
+      signed: await prisma.nDARequest.count({ where: { ...where, status: 'signed' } }),
+      rejected: await prisma.nDARequest.count({ where: { ...where, status: 'rejected' } }),
+      urgent: enrichedNdas.filter(n => n.urgency === 'high').length,
+      expiring_soon: enrichedNdas.filter(n => n.timeline.daysUntilExpiry <= 7 && !n.timeline.isExpired).length
     }
 
-    const total = await prisma.nDARequest.count({
-      where: {
-        ...(searchQuery && {
-          OR: [
-            { buyer: { email: { contains: searchQuery } } },
-            { seller: { email: { contains: searchQuery } } }
-          ]
-        })
-      }
-    })
+    // Calculate conversion rate
+    const signedNdas = enrichedNdas.filter(n => n.status === 'signed')
+    const avgDaysToSign = signedNdas.length > 0
+      ? Math.round(signedNdas.reduce((sum, n) => sum + (n.timeline.daysToSign || 0), 0) / signedNdas.length)
+      : 0
 
-    // Calculate summary stats
-    const allNdas = enrichedNdas
-    const pending = allNdas.filter(n => n.status === 'pending').length
-    const signed = allNdas.filter(n => n.status === 'signed').length
-    const rejected = allNdas.filter(n => n.status === 'rejected').length
-    const expired = allNdas.filter(n => n.status === 'expired').length
-    const urgent = allNdas.filter(n => n.urgency === 'high').length
+    const signRate = stats.total > 0 ? Math.round(((stats.signed + stats.approved) / stats.total) * 100) : 0
+
+    const pages = Math.ceil(total / limit)
 
     return NextResponse.json({
-      success: true,
-      data: enrichedNdas,
-      stats: {
-        total,
-        pending,
-        signed,
-        rejected,
-        expired,
-        urgent,
-        signRate: total > 0 ? Math.round((signed / total) * 100) : 0,
-        avgDaysToSign: signed > 0
-          ? Math.round(
-              allNdas
-                .filter(n => n.status === 'signed')
-                .reduce((sum, n) => sum + n.timeline.daysOld, 0) / signed
-            )
-          : 0
-      },
+      ndas: enrichedNdas,
       pagination: {
         page,
         limit,
         total,
-        pages: Math.ceil(total / limit)
+        pages,
+        hasMore: page < pages
+      },
+      stats: {
+        ...stats,
+        signRate,
+        avgDaysToSign
       }
     })
   } catch (error) {
     console.error('Error fetching NDA tracking:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch NDA tracking data' },
+      { error: 'Failed to fetch NDA tracking data', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
@@ -223,8 +209,14 @@ export async function GET(request: NextRequest) {
 // PATCH - Update NDA status
 export async function PATCH(request: NextRequest) {
   try {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const body = await request.json()
-    const { ndaId, status, notes } = body
+    const { ndaId, status } = body
 
     if (!ndaId || !status) {
       return NextResponse.json(
@@ -233,7 +225,7 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const validStatuses = ['pending', 'signed', 'rejected', 'expired']
+    const validStatuses = ['pending', 'approved', 'rejected', 'signed']
     if (!validStatuses.includes(status)) {
       return NextResponse.json(
         { error: `status must be one of: ${validStatuses.join(', ')}` },
@@ -242,8 +234,14 @@ export async function PATCH(request: NextRequest) {
     }
 
     const updateData: any = { status }
-    if (status === 'signed') {
+    
+    // Set appropriate timestamp based on status
+    if (status === 'approved') {
+      updateData.approvedAt = new Date()
+    } else if (status === 'signed') {
       updateData.signedAt = new Date()
+    } else if (status === 'rejected') {
+      updateData.rejectedAt = new Date()
     }
 
     const updated = await prisma.nDARequest.update({
@@ -253,28 +251,38 @@ export async function PATCH(request: NextRequest) {
         id: true,
         status: true,
         signedAt: true,
-        buyer: { select: { email: true } },
-        seller: { select: { email: true } }
+        approvedAt: true,
+        rejectedAt: true,
+        buyer: { select: { email: true, name: true } },
+        seller: { select: { email: true, name: true } }
       }
     })
 
     return NextResponse.json({
-      success: true,
-      data: updated,
-      message: `NDA status updated to ${status}`
+      message: `NDA status updated to ${status}`,
+      data: updated
     })
   } catch (error) {
     console.error('Error updating NDA:', error)
+    if (error instanceof Error && error.message.includes('not found')) {
+      return NextResponse.json({ error: 'NDA not found' }, { status: 404 })
+    }
     return NextResponse.json(
-      { error: 'Failed to update NDA' },
+      { error: 'Failed to update NDA', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
 }
 
-// POST - Send NDA reminder
+// POST - Send NDA reminder or extend expiration
 export async function POST(request: NextRequest) {
   try {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
+      return NextResponse.json({ error: auth.error }, { status: 401 })
+    }
+
     const body = await request.json()
     const { ndaId, action } = body
 
@@ -285,43 +293,38 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const nda = await prisma.nDARequest.findUnique({
+      where: { id: ndaId },
+      select: { 
+        id: true,
+        buyer: { select: { email: true, name: true } }, 
+        expiresAt: true,
+        status: true
+      }
+    })
+
+    if (!nda) {
+      return NextResponse.json({ error: 'NDA not found' }, { status: 404 })
+    }
+
     if (action === 'remind') {
       // In production, would send email reminder
-      const nda = await prisma.nDARequest.findUnique({
-        where: { id: ndaId },
-        select: { buyer: { select: { email: true } }, expiresAt: true }
-      })
-
-      if (!nda) {
-        return NextResponse.json({ error: 'NDA not found' }, { status: 404 })
-      }
-
-      console.log(`Reminder sent to ${nda.buyer.email} - NDA expires ${nda.expiresAt}`)
-
+      console.log(`NDA reminder sent to ${nda.buyer.email} - Expires ${nda.expiresAt}`)
       return NextResponse.json({
-        success: true,
-        message: 'Reminder sent to buyer'
+        message: 'Reminder sent to buyer',
+        to: nda.buyer.email
       })
     } else if (action === 'resend') {
-      // In production, would resend NDA document
-      console.log(`NDA resent to buyer for ${ndaId}`)
-
+      // Resend NDA document
+      console.log(`NDA resent to buyer ${nda.buyer.email}`)
       return NextResponse.json({
-        success: true,
-        message: 'NDA resent to buyer'
+        message: 'NDA resent to buyer',
+        to: nda.buyer.email
       })
     } else if (action === 'extend') {
       // Extend expiration by 14 days
-      const nda = await prisma.nDARequest.findUnique({
-        where: { id: ndaId },
-        select: { expiresAt: true }
-      })
-
-      if (!nda) {
-        return NextResponse.json({ error: 'NDA not found' }, { status: 404 })
-      }
-
-      const newExpiry = nda.expiresAt ? new Date(nda.expiresAt) : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+      const currentExpiry = nda.expiresAt ? new Date(nda.expiresAt) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+      const newExpiry = new Date(currentExpiry)
       newExpiry.setDate(newExpiry.getDate() + 14)
 
       await prisma.nDARequest.update({
@@ -330,20 +333,20 @@ export async function POST(request: NextRequest) {
       })
 
       return NextResponse.json({
-        success: true,
         message: 'NDA expiration extended by 14 days',
-        newExpiry
+        oldExpiry: currentExpiry.toISOString(),
+        newExpiry: newExpiry.toISOString()
       })
     }
 
     return NextResponse.json(
-      { error: 'Invalid action' },
+      { error: 'Invalid action. Must be one of: remind, resend, extend' },
       { status: 400 }
     )
   } catch (error) {
     console.error('Error handling NDA action:', error)
     return NextResponse.json(
-      { error: 'Failed to handle NDA action' },
+      { error: 'Failed to handle NDA action', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
