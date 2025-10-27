@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -213,11 +213,19 @@ export default function AdminDashboard() {
     }
     const colorClasses = colorClassMap[color as keyof typeof colorClassMap] || colorClassMap['blue']
 
+    const handleMouseEnter = useCallback(() => {
+      setHoveredCard(title)
+    }, [title])
+
+    const handleMouseLeave = useCallback(() => {
+      setHoveredCard(null)
+    }, [])
+
     return (
       <div
         className="relative group"
-        onMouseEnter={() => setHoveredCard(title)}
-        onMouseLeave={() => setHoveredCard(null)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div className={`absolute inset-0 bg-gradient-to-r ${colorClasses} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
         <div className="relative bg-white rounded-2xl border border-gray-100 p-6 hover:border-gray-200 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
