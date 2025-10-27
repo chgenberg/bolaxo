@@ -40,72 +40,113 @@ function SellerChatContent() {
   
   // Mock data - TODO: Fetch from API
   useEffect(() => {
-    // Contact requests (NDA pending approval)
-    setContactRequests([
-      {
-        buyerId: 'buyer-3',
-        buyerName: 'Erik Nilsson',
-        buyerEmail: 'erik@investmentgroup.se',
-        listingId: 'listing-1',
-        listingTitle: 'Tech Consulting AB',
-        ndaStatus: 'signed',
-        requestDate: '2024-10-27T09:00:00',
-        message: 'Hej! Jag är mycket intresserad av ert företag och skulle vilja diskutera möjligheterna.'
+    if (!user) return
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/chat/conversations', {
+          headers: {
+            'x-user-id': user.id
+          }
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setConversations(data.conversations || [])
+          setContactRequests(data.contactRequests || [])
+        }
+      } catch (error) {
+        console.error('Error fetching conversations:', error)
+        setConversations([])
+        setContactRequests([])
       }
-    ])
-    
-    // Active conversations
-    setConversations([
-      {
-        peerId: 'buyer-1',
-        peerName: 'Karl Johansson',
+    }
+
+    fetchData()
+  }, [user])
+
+  const handleApproveContact = async (request: ContactRequest) => {
+    try {
+      // Find the NDA request and approve it
+      const ndaRequests = await fetch('/api/nda-requests', {
+        headers: {
+          'x-user-id': user?.id || ''
+        }
+      })
+      
+      const ndaData = await ndaRequests.json()
+      const ndaRequest = ndaData.requests?.find(
+        (n: any) => n.buyerId === request.buyerId && n.listingId === request.listingId
+      )
+
+      if (ndaRequest) {
+        // Approve the NDA
+        await fetch('/api/nda-requests', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': user?.id || ''
+          },
+          body: JSON.stringify({
+            id: ndaRequest.id,
+            status: 'approved'
+          })
+        })
+      }
+
+      // Move to conversations
+      const newConv: Conversation = {
+        peerId: request.buyerId,
+        peerName: request.buyerName,
         peerRole: 'buyer',
-        listingId: 'listing-1',
-        listingTitle: 'Tech Consulting AB',
-        lastMessage: 'Tack för informationen! När kan vi ses?',
-        lastMessageTime: '2024-10-27T11:30:00',
-        unread: 1,
-        approved: true
-      },
-      {
-        peerId: 'buyer-2',
-        peerName: 'Anna Lundgren',
-        peerRole: 'buyer',
-        listingId: 'listing-1',
-        listingTitle: 'Tech Consulting AB',
-        lastMessage: 'Har ni några finansiella prognoser?',
-        lastMessageTime: '2024-10-26T14:20:00',
+        listingId: request.listingId,
+        listingTitle: request.listingTitle,
         unread: 0,
         approved: true
       }
-    ])
-  }, [])
-
-  const handleApproveContact = async (request: ContactRequest) => {
-    // TODO: Call API to approve NDA and allow contact
-    console.log('Approving contact:', request)
-    
-    // Move to conversations
-    const newConv: Conversation = {
-      peerId: request.buyerId,
-      peerName: request.buyerName,
-      peerRole: 'buyer',
-      listingId: request.listingId,
-      listingTitle: request.listingTitle,
-      unread: 0,
-      approved: true
+      
+      setConversations([...conversations, newConv])
+      setContactRequests(contactRequests.filter(r => r.buyerId !== request.buyerId))
+      setSelectedConversation(newConv)
+      setActiveTab('conversations')
+    } catch (error) {
+      console.error('Error approving contact:', error)
     }
-    
-    setConversations([...conversations, newConv])
-    setContactRequests(contactRequests.filter(r => r.buyerId !== request.buyerId))
-    setSelectedConversation(newConv)
-    setActiveTab('conversations')
   }
 
   const handleRejectContact = async (request: ContactRequest) => {
-    // TODO: Call API to reject contact
-    console.log('Rejecting contact:', request)
-    setContactRequests(contactRequests.filter(r => r.buyerId !== request.buyerId))
+    try {
+      // Find the NDA request and reject it
+      const ndaRequests = await fetch('/api/nda-requests', {
+        headers: {
+          'x-user-id': user?.id || ''
+        }
+      })
+      
+      const ndaData = await ndaRequests.json()
+      const ndaRequest = ndaData.requests?.find(
+        (n: any) => n.buyerId === request.buyerId && n.listingId === request.listingId
+      )
+
+      if (ndaRequest) {
+        // Reject the NDA
+        await fetch('/api/nda-requests', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': user?.id || ''
+          },
+          body: JSON.stringify({
+            id: ndaRequest.id,
+            status: 'rejected'
+          })
+        })
+      }
+
+      setContactRequests(contactRequests.filter(r => r.buyerId !== request.buyerId))
+    } catch (error) {
+      console.error('Error rejecting contact:', error)
+    }
   }
 
   return (

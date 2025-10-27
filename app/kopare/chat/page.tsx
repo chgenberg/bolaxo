@@ -26,40 +26,38 @@ function BuyerChatContent() {
   
   // Mock conversations - TODO: Fetch from API
   useEffect(() => {
-    // In production, fetch actual conversations
-    setConversations([
-      {
-        peerId: 'seller-1',
-        peerName: 'Johan Andersson',
-        peerRole: 'seller',
-        listingId: 'listing-1',
-        listingTitle: 'Tech Consulting AB',
-        lastMessage: 'Tack för ditt intresse! Jag återkommer...',
-        lastMessageTime: '2024-10-27T10:30:00',
-        unread: 2
-      },
-      {
-        peerId: 'seller-2',
-        peerName: 'Maria Svensson',
-        peerRole: 'seller',
-        listingId: 'listing-2',
-        listingTitle: 'E-handel Premium AB',
-        lastMessage: 'Hej! Ja, vi kan diskutera priset.',
-        lastMessageTime: '2024-10-26T15:45:00',
-        unread: 0
-      }
-    ])
-    
-    // Check if specific conversation requested
-    const peerId = searchParams.get('peerId')
-    const listingId = searchParams.get('listingId')
-    if (peerId) {
-      const conv = conversations.find(c => c.peerId === peerId)
-      if (conv) {
-        setSelectedConversation(conv)
+    if (!user) return
+
+    const fetchConversations = async () => {
+      try {
+        const response = await fetch('/api/chat/conversations', {
+          headers: {
+            'x-user-id': user.id
+          }
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setConversations(data.conversations || [])
+          
+          // If peerId in query params, select that conversation
+          const peerId = searchParams.get('peerId')
+          if (peerId && data.conversations) {
+            const conv = data.conversations.find((c: Conversation) => c.peerId === peerId)
+            if (conv) {
+              setSelectedConversation(conv)
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching conversations:', error)
+        // Fallback to empty if API fails
+        setConversations([])
       }
     }
-  }, [searchParams])
+
+    fetchConversations()
+  }, [user, searchParams])
 
   if (!user) {
     return (
