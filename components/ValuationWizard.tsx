@@ -427,19 +427,21 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-hidden">
-      {/* Global Close (top-right) */}
-      <button
-        onClick={onClose}
-        aria-label="Stäng"
-        className="absolute top-6 right-6 p-3 bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-full transition-all z-[60] group"
-      >
-        <X className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" />
-      </button>
       <div ref={scrollRef} className="bg-white rounded-3xl shadow-2xl w-full max-w-3xl my-8 max-h-[85vh] overflow-y-auto overflow-x-hidden">
-        {/* Header */}
-        <div className="px-8 pt-8 pb-0">
-          <h2 className="text-3xl font-light tracking-tight text-text-dark">Gratis Företagsvärdering</h2>
-          <p className="text-text-gray mt-2 text-sm">Få en AI-driven värdering på 2 minuter</p>
+        {/* Header with Close Button */}
+        <div className="px-8 pt-8 pb-0 flex items-start justify-between">
+          <div>
+            <h2 className="text-3xl font-light tracking-tight text-text-dark">Gratis Företagsvärdering</h2>
+            <p className="text-text-gray mt-2 text-sm">Få en AI-driven värdering på 2 minuter</p>
+          </div>
+          {/* Close Button - Inside the box */}
+          <button
+            onClick={onClose}
+            aria-label="Stäng"
+            className="p-2 hover:bg-gray-100 rounded-full transition-all group flex-shrink-0 ml-4"
+          >
+            <X className="w-6 h-6 text-gray-400 group-hover:text-gray-600 group-hover:rotate-90 transition-transform duration-300" />
+          </button>
         </div>
 
         {/* Progress Bar */}
