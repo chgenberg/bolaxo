@@ -57,7 +57,8 @@ export default function SavedListingsPage() {
       ndaStatus: 'approved',
       lastViewed: '2024-06-19',
       notes: 'Mycket intressant. Väntar på Q2-siffror.',
-      hasNewActivity: true
+      hasNewActivity: true,
+      sellerId: 'seller-001'
     },
     {
       id: 'obj-002',
@@ -73,7 +74,8 @@ export default function SavedListingsPage() {
       ndaStatus: 'pending',
       lastViewed: '2024-06-17',
       notes: 'Väntar på NDA-godkännande.',
-      hasNewActivity: false
+      hasNewActivity: false,
+      sellerId: 'seller-002'
     },
     {
       id: 'obj-003',
@@ -89,7 +91,8 @@ export default function SavedListingsPage() {
       ndaStatus: 'none',
       lastViewed: '2024-06-12',
       notes: '',
-      hasNewActivity: false
+      hasNewActivity: false,
+      sellerId: 'seller-003'
     },
     {
       id: 'obj-004',
@@ -105,7 +108,8 @@ export default function SavedListingsPage() {
       ndaStatus: 'approved',
       lastViewed: '2024-06-08',
       notes: 'Intressant men osäker på marknaden.',
-      hasNewActivity: true
+      hasNewActivity: true,
+      sellerId: 'seller-004'
     }
   ]
 
