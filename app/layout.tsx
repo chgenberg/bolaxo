@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Header from '@/components/Header'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 
@@ -21,9 +22,10 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="antialiased">
-        {/* Minimal: Only essential providers, NO UI components */}
+        {/* Test: Only Header enabled */}
         <AuthProvider>
           <ToastProvider>
+            <Header />
             {children}
           </ToastProvider>
         </AuthProvider>
