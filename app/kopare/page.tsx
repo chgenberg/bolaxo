@@ -119,7 +119,7 @@ export default function KopareInfoPage() {
                   <Link href={`/objekt/${currentObject.id}`} className="block group">
                     <div className="grid lg:grid-cols-2">
                       {/* Image Section */}
-                      <div className="relative h-80 lg:h-96 bg-gradient-to-br from-gray-100 to-gray-200 p-8">
+                      <div className="relative h-80 lg:h-96 bg-white p-8">
                         {currentObject.image ? (
                           <div className="relative w-full h-full">
                             {/* Organic shadow shape */}
@@ -160,7 +160,7 @@ export default function KopareInfoPage() {
                               }}
                             />
                             <div 
-                              className="relative w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-inner"
+                              className="relative w-full h-full bg-white flex items-center justify-center shadow-inner"
                               style={{
                                 borderRadius: '30% 70% 70% 30% / 30% 70% 30% 70%',
                                 transform: 'rotate(-5deg)'
@@ -260,7 +260,7 @@ export default function KopareInfoPage() {
                 </div>
 
                 {/* Dots Indicator */}
-                <div className="bg-gradient-to-b from-gray-50 to-gray-100 py-6">
+                <div className="bg-white py-6">
                   <div className="flex justify-center items-center gap-3">
                     {featuredObjects.map((_, index) => (
                       <button
