@@ -73,6 +73,12 @@ export default function Home() {
             
             {/* Main content box */}
             <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-8 md:p-12 max-w-lg shadow-2xl">
+              <div className="flex justify-center mb-4">
+                <span className="inline-block px-4 py-1.5 bg-green-100 text-green-700 text-sm font-semibold rounded-full">
+                  ✓ 100% gratis
+                </span>
+              </div>
+              
               <h1 className="text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-4">
                 Sälj ditt företag
               </h1>
