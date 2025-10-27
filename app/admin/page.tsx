@@ -127,7 +127,7 @@ export default function AdminDashboard() {
 
   if (!isAuthorized) {
     return <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <p className="text-red-600 font-semibold">Unauthorized Access</p>
+      <p className="text-red-600 font-semibold">Obehörig åtkomst</p>
     </div>
   }
 
@@ -296,7 +296,7 @@ export default function AdminDashboard() {
         <div className="p-4 border-t border-gray-100">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl transition-all text-sm font-medium shadow-lg shadow-red-500/25"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white rounded-xl transition-all text-sm font-medium shadow-lg shadow-gray-900/25"
           >
             <LogOut className="w-4 h-4" />
             {sidebarOpen && 'Logga ut'}
@@ -464,7 +464,7 @@ export default function AdminDashboard() {
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-3xl font-bold text-gray-900">55%</span>
-                    <span className="text-sm text-gray-500">Mobile</span>
+                    <span className="text-sm text-gray-500">Mobil</span>
                   </div>
               </div>
 
@@ -472,21 +472,21 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-blue-600" />
-                      <span className="text-sm text-gray-600">Mobile</span>
+                      <span className="text-sm text-gray-600">Mobil</span>
                 </div>
                     <span className="text-sm font-semibold text-gray-900">55%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-500 to-green-600" />
-                      <span className="text-sm text-gray-600">Desktop</span>
+                      <span className="text-sm text-gray-600">Dator</span>
                     </div>
                     <span className="text-sm font-semibold text-gray-900">35%</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600" />
-                      <span className="text-sm text-gray-600">Tablet</span>
+                      <span className="text-sm text-gray-600">Surfplatta</span>
                     </div>
                     <span className="text-sm font-semibold text-gray-900">10%</span>
                   </div>

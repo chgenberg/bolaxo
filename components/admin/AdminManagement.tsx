@@ -86,7 +86,7 @@ export default function AdminManagement() {
 
       <div className="bg-white rounded-lg border border-gray-200 p-4 flex gap-2 flex-wrap">
         <select value={roleFilter} onChange={(e) => { setRoleFilter(e.target.value); loadAdmins(1); }} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
-          <option value="">All Roles</option>
+          <option value="">Alla roller</option>
           <option value="super_admin">Super Admin</option>
           <option value="admin">Admin</option>
           <option value="moderator">Moderator</option>
@@ -94,12 +94,12 @@ export default function AdminManagement() {
           <option value="support">Support</option>
         </select>
         <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); loadAdmins(1); }} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
+          <option value="">Alla status</option>
+          <option value="active">Aktiv</option>
+          <option value="inactive">Inaktiv</option>
         </select>
         <button onClick={() => loadAdmins(pagination.page)} className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2 text-sm font-medium">
-          <RefreshCw className="w-4 h-4" /> Refresh
+          <RefreshCw className="w-4 h-4" /> Uppdatera
         </button>
       </div>
 
@@ -107,14 +107,14 @@ export default function AdminManagement() {
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Name</th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Email</th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Role</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Namn</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">E-post</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Roll</th>
               <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Status</th>
               <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">2FA</th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Last Login</th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Activity</th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Senaste inloggning</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Aktivitet</th>
+              <th className="text-left px-4 py-3 text-sm font-semibold text-gray-600">Åtgärder</th>
             </tr>
           </thead>
           <tbody>
@@ -143,11 +143,11 @@ export default function AdminManagement() {
                   {admin.twoFactorEnabled ? (
                     <Lock className="w-4 h-4 text-green-600" />
                   ) : (
-                    <div className="text-gray-400 text-xs">disabled</div>
+                    <div className="text-gray-400 text-xs">inaktiverad</div>
                   )}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-600">
-                  {admin.lastLogin ? new Date(admin.lastLogin).toLocaleString().split(',')[0] : 'Never'}
+                  {admin.lastLogin ? new Date(admin.lastLogin).toLocaleString().split(',')[0] : 'Aldrig'}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-600">{admin.activityCount}</td>
                 <td className="px-4 py-3 text-sm flex gap-2">
@@ -167,9 +167,9 @@ export default function AdminManagement() {
       {editingAdmin && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 space-y-4">
-            <h3 className="text-lg font-bold text-primary-navy">Edit Admin: {editingAdmin.name}</h3>
+            <h3 className="text-lg font-bold text-primary-navy">Redigera Admin: {editingAdmin.name}</h3>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Role</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Roll</label>
               <select defaultValue={editingAdmin.role} onChange={(e) => setEditingAdmin({...editingAdmin, role: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg">
                 <option value="super_admin">Super Admin</option>
                 <option value="admin">Admin</option>
@@ -181,20 +181,20 @@ export default function AdminManagement() {
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
               <select defaultValue={editingAdmin.status} onChange={(e) => setEditingAdmin({...editingAdmin, status: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="active">Aktiv</option>
+                <option value="inactive">Inaktiv</option>
               </select>
             </div>
             <label className="flex items-center gap-2">
               <input type="checkbox" defaultChecked={editingAdmin.twoFactorEnabled} onChange={(e) => setEditingAdmin({...editingAdmin, twoFactorEnabled: e.target.checked})} />
-              <span className="text-sm font-medium">Enable 2FA</span>
+              <span className="text-sm font-medium">Aktivera 2FA</span>
             </label>
             <div className="flex gap-2 pt-4">
               <button onClick={() => handleUpdateAdmin(editingAdmin.id, editingAdmin)} className="flex-1 px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 font-medium">
-                Save
+                Spara
               </button>
               <button onClick={() => setEditingAdmin(null)} className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium">
-                Cancel
+                Avbryt
               </button>
             </div>
           </div>
@@ -206,7 +206,7 @@ export default function AdminManagement() {
           <button onClick={() => loadAdmins(Math.max(1, pagination.page - 1))} disabled={pagination.page === 1} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-50">
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <span className="text-sm font-medium">Page {pagination.page} of {pagination.pages}</span>
+          <span className="text-sm font-medium">Sida {pagination.page} av {pagination.pages}</span>
           <button onClick={() => loadAdmins(Math.min(pagination.pages, pagination.page + 1))} disabled={pagination.page === pagination.pages} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-50">
             <ChevronRight className="w-5 h-5" />
           </button>

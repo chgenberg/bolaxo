@@ -5,8 +5,10 @@ import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, Fi
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from './FormField'
-import FormSelectMinimal from './FormSelectMinimal'
 import FormTextarea from './FormTextarea'
+import CustomSelect from './CustomSelect'
+import FormFieldCurrency from './FormFieldCurrency'
+import FormFieldPercent from './FormFieldPercent'
 import { calculateQuickValuation, getValuationColor } from '@/utils/quickValuation'
 
 interface ValuationData {
@@ -58,7 +60,7 @@ const industries = [
 ]
 
 // Branschspecifika frågor
-const industryQuestions: Record<string, Array<{ key: string; label: string; type: 'text' | 'select' | 'textarea'; options?: {value: string; label: string}[]; tooltip?: string }>> = {
+const industryQuestions: Record<string, Array<{ key: string; label: string; type: 'text' | 'select' | 'textarea'; options?: {value: string; label: string}[]; tooltip?: string; fieldType?: 'currency' | 'percent' }>> = {
   tech: [
     { key: 'businessModel', label: 'Affärsmodell', type: 'select', options: [
       { value: 'saas', label: 'SaaS (Software as a Service)' },
@@ -67,13 +69,19 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
       { value: 'marketplace', label: 'Marketplace/plattform' },
       { value: 'hybrid', label: 'Hybrid' }
     ]},
-    { key: 'recurringRevenue', label: 'Andel återkommande intäkter / MRR (%)', type: 'text', tooltip: 'T.ex. prenumerationer, support-avtal. För SaaS: ange MRR/ARR-andel.' },
-    { key: 'monthlyRecurringRevenue', label: 'MRR - Monthly Recurring Revenue (SEK)', type: 'text', tooltip: 'Endast för SaaS: månatliga återkommande intäkter' },
-    { key: 'customerChurn', label: 'Årlig kundavgång (churn rate %)', type: 'text', tooltip: 'Andel kunder som slutar per år. <5% är excellent för SaaS' },
-    { key: 'netRevenueRetention', label: 'NRR - Net Revenue Retention (%)', type: 'text', tooltip: 'För SaaS: intäkter från befintliga kunder vs förra året. >100% = expansion!' },
+    { key: 'recurringRevenue', label: 'Andel återkommande intäkter / MRR', type: 'text', tooltip: 'T.ex. prenumerationer, support-avtal. För SaaS: ange MRR/ARR-andel.', fieldType: 'percent' },
+    { key: 'monthlyRecurringRevenue', label: 'MRR - Monthly Recurring Revenue', type: 'text', tooltip: 'Endast för SaaS: månatliga återkommande intäkter', fieldType: 'currency' },
+    { key: 'customerChurn', label: 'Årlig kundavgång (churn rate)', type: 'text', tooltip: 'Andel kunder som slutar per år. <5% är excellent för SaaS', fieldType: 'percent' },
+    { key: 'netRevenueRetention', label: 'NRR - Net Revenue Retention', type: 'text', tooltip: 'För SaaS: intäkter från befintliga kunder vs förra året. >100% = expansion!', fieldType: 'percent' },
     { key: 'customerAcquisitionCost', label: 'CAC - Customer Acquisition Cost (kr)', type: 'text', tooltip: 'Kostnad för att värva en ny kund' },
     { key: 'lifetimeValue', label: 'LTV - Lifetime Value per kund (kr)', type: 'text', tooltip: 'Total intäkt från en genomsnittlig kund' },
-    { key: 'cacPaybackMonths', label: 'CAC Payback Period (månader)', type: 'text', tooltip: 'Hur många månader för att tjäna tillbaka kundanskaffningskostnad? <12 mån excellent' },
+    { key: 'cacPaybackMonths', label: 'CAC Payback Period', type: 'select', tooltip: 'Hur många månader för att tjäna tillbaka kundanskaffningskostnad? <12 mån excellent', options: [
+      { value: '0-6', label: '0-6 månader' },
+      { value: '7-12', label: '7-12 månader' },
+      { value: '13-18', label: '13-18 månader' },
+      { value: '19-24', label: '19-24 månader' },
+      { value: '24+', label: 'Över 24 månader' }
+    ]},
     { key: 'techStack', label: 'Beskriv er tekniska plattform', type: 'textarea' },
     { key: 'scalability', label: 'Hur skalbar är er lösning?', type: 'select', options: [
       { value: 'high', label: 'Hög - kan lätt växa utan extra kostnad' },
@@ -92,13 +100,32 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
       { value: 'good', label: 'Bra läge' },
       { value: 'average', label: 'Genomsnittligt läge' }
     ]},
-    { key: 'leaseLength', label: 'Hur långt hyresavtal återstår (år)?', type: 'text', tooltip: 'Långt hyresavtal = mer värt (mindre risk)' },
-    { key: 'monthlyRent', label: 'Månadshyra (kr)', type: 'text', tooltip: 'Total lokalkostnad per månad' },
-    { key: 'footTraffic', label: 'Uppskattat antal kunder per dag', type: 'text' },
-    { key: 'avgTransactionSize', label: 'Genomsnittligt köp per kund (kr)', type: 'text' },
-    { key: 'inventoryTurnover', label: 'Lageromsättning per år', type: 'text', tooltip: 'Hur många gånger per år säljs lagret. Högre = bättre cash flow' },
-    { key: 'inventoryValue', label: 'Genomsnittligt lagervärde (kr)', type: 'text', tooltip: 'Värde på lager i butik. Påverkar working capital' },
-    { key: 'sameStoreSalesGrowth', label: 'Årlig försäljningstillväxt (%)', type: 'text', tooltip: 'Tillväxt för befintlig butik' },
+    { key: 'leaseLength', label: 'Hur långt hyresavtal återstår?', type: 'select', tooltip: 'Långt hyresavtal = mer värt (mindre risk)', options: [
+      { value: '0-1', label: '0-1 år' },
+      { value: '2-3', label: '2-3 år' },
+      { value: '4-5', label: '4-5 år' },
+      { value: '6-10', label: '6-10 år' },
+      { value: '10+', label: 'Över 10 år' }
+    ]},
+    { key: 'monthlyRent', label: 'Månadshyra', type: 'text', tooltip: 'Total lokalkostnad per månad', fieldType: 'currency' },
+    { key: 'footTraffic', label: 'Uppskattat antal kunder per dag', type: 'select', options: [
+      { value: '0-50', label: '0-50 kunder' },
+      { value: '51-100', label: '51-100 kunder' },
+      { value: '101-200', label: '101-200 kunder' },
+      { value: '201-500', label: '201-500 kunder' },
+      { value: '501-1000', label: '501-1000 kunder' },
+      { value: '1000+', label: 'Över 1000 kunder' }
+    ]},
+    { key: 'avgTransactionSize', label: 'Genomsnittligt köp per kund', type: 'text', fieldType: 'currency' },
+    { key: 'inventoryTurnover', label: 'Lageromsättning per år', type: 'select', tooltip: 'Hur många gånger per år säljs lagret. Högre = bättre cash flow', options: [
+      { value: '0-2', label: '0-2 gånger' },
+      { value: '3-4', label: '3-4 gånger' },
+      { value: '5-6', label: '5-6 gånger' },
+      { value: '7-10', label: '7-10 gånger' },
+      { value: '10+', label: 'Över 10 gånger' }
+    ]},
+    { key: 'inventoryValue', label: 'Genomsnittligt lagervärde', type: 'text', tooltip: 'Värde på lager i butik. Påverkar working capital', fieldType: 'currency' },
+    { key: 'sameStoreSalesGrowth', label: 'Årlig försäljningstillväxt', type: 'text', tooltip: 'Tillväxt för befintlig butik', fieldType: 'percent' },
     { key: 'onlinePresence', label: 'Har ni e-handel?', type: 'select', options: [
       { value: 'yes-integrated', label: 'Ja, integrerad med butik' },
       { value: 'yes-separate', label: 'Ja, separat e-handel' },
@@ -111,19 +138,19 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
     ]},
   ],
   manufacturing: [
-    { key: 'productionCapacity', label: 'Kapacitetsutnyttjande (%)', type: 'text', tooltip: 'Hur mycket av produktionskapaciteten används?' },
+    { key: 'productionCapacity', label: 'Kapacitetsutnyttjande', type: 'text', tooltip: 'Hur mycket av produktionskapaciteten används?', fieldType: 'percent' },
     { key: 'equipmentAge', label: 'Genomsnittlig ålder på maskiner (år)', type: 'text' },
-    { key: 'equipmentValue', label: 'Bokfört värde på maskiner (kr)', type: 'text', tooltip: 'Sammanlagt värde på produktionsutrustning' },
-    { key: 'depreciation', label: 'Årlig avskrivning (kr)', type: 'text' },
+    { key: 'equipmentValue', label: 'Bokfört värde på maskiner', type: 'text', tooltip: 'Sammanlagt värde på produktionsutrustning', fieldType: 'currency' },
+    { key: 'depreciation', label: 'Årlig avskrivning', type: 'text', fieldType: 'currency' },
     { key: 'productMix', label: 'Antal produktlinjer', type: 'text' },
-    { key: 'rawMaterialCosts', label: 'Råvarukostnader (% av omsättning)', type: 'text' },
+    { key: 'rawMaterialCosts', label: 'Råvarukostnader (% av omsättning)', type: 'text', fieldType: 'percent' },
     { key: 'productionStaff', label: 'Antal produktionsanställda', type: 'text' },
     { key: 'qualityCertifications', label: 'Har ni kvalitetscertifieringar?', type: 'select', options: [
       { value: 'iso9001', label: 'Ja, ISO 9001 eller liknande' },
       { value: 'other', label: 'Ja, andra certifieringar' },
       { value: 'no', label: 'Nej' }
     ]},
-    { key: 'exportShare', label: 'Exportandel (%)', type: 'text', tooltip: 'Hur stor del av försäljningen är export?' },
+    { key: 'exportShare', label: 'Exportandel', type: 'text', tooltip: 'Hur stor del av försäljningen är export?', fieldType: 'percent' },
     { key: 'supplierDependency', label: 'Beroende av enskilda leverantörer?', type: 'select', options: [
       { value: 'low', label: 'Lågt - flera alternativ' },
       { value: 'medium', label: 'Medel - 2-3 huvudleverantörer' },
@@ -229,6 +256,35 @@ const qualitativeQuestions = [
   { key: 'whySelling', label: 'Varför överväger ni försäljning?', type: 'textarea' as const },
 ]
 
+// Formateringsfunktioner
+const formatCurrency = (value: string): string => {
+  // Ta bort allt utom siffror
+  const numbers = value.replace(/\D/g, '')
+  if (!numbers) return ''
+  
+  // Formatera med tusentalsavgränsare
+  const formatted = parseInt(numbers).toLocaleString('sv-SE')
+  return formatted + ' kr'
+}
+
+const formatPercent = (value: string): string => {
+  // Ta bort allt utom siffror
+  const numbers = value.replace(/\D/g, '')
+  if (!numbers) return ''
+  
+  return numbers + '%'
+}
+
+const parseCurrency = (value: string): string => {
+  // Extrahera bara siffror
+  return value.replace(/\D/g, '')
+}
+
+const parsePercent = (value: string): string => {
+  // Extrahera bara siffror
+  return value.replace(/\D/g, '')
+}
+
 export default function ValuationWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user, login } = useAuth()
@@ -260,18 +316,18 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     // Services (tjänsteföretag)
     serviceType: 'Ex: redovisning, juridik, marknadsföring',
     clientRetention: 'Ex: 5',
-    contractRenewalRate: 'Ex: 85',
-    billableHours: 'Ex: 72',
+    contractRenewalRate: 'Ex: 85%',
+    billableHours: 'Ex: 72%',
     avgRevenuePerCustomer: 'Ex: 120.000 kr',
-    customerGrowthRate: 'Ex: 12',
+    customerGrowthRate: 'Ex: 12%',
     keyPersonDependency: '',
     // Consulting
     consultantCount: 'Ex: 8',
-    utilizationRate: 'Ex: 75',
+    utilizationRate: 'Ex: 75%',
     avgHourlyRate: 'Ex: 1.250 kr',
     clientDiversity: 'Ex: 12',
     avgProjectValue: 'Ex: 240.000 kr',
-    grossMarginPerConsultant: 'Ex: 40',
+    grossMarginPerConsultant: 'Ex: 40%',
     // Retail examples
     leaseLength: 'Ex: 3',
     monthlyRent: 'Ex: 35.000 kr',
@@ -519,17 +575,12 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
                     Bransch *
                   </label>
-                  <select
+                  <CustomSelect
                     value={data.industry}
-                    onChange={(e) => setData({ ...data, industry: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
-                    required
-                  >
-                    <option value="">Välj bransch</option>
-                    {industries.map(ind => (
-                      <option key={ind.value} value={ind.value}>{ind.label}</option>
-                    ))}
-                  </select>
+                    onChange={(value) => setData({ ...data, industry: value })}
+                    options={industries}
+                    placeholder="Välj bransch"
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -598,77 +649,62 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               </div>
 
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Bruttovinstmarginal (%) *
-                  </label>
-                  <input
-                    type="text"
-                    value={data.grossMargin}
-                    onChange={(e) => setData({ ...data, grossMargin: e.target.value })}
-                    placeholder="Ex: 45"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                <FormFieldPercent
+                  label="Bruttovinstmarginal"
+                  value={data.grossMargin}
+                  onChange={(value) => setData({ ...data, grossMargin: value })}
+                  placeholder="Ex: 45%"
                   required
                 />
-                </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Kundberoende - Största kundens andel (%) *
-                  </label>
-                  <input
-                    type="text"
-                    value={data.customerConcentrationRisk}
-                    onChange={(e) => setData({ ...data, customerConcentrationRisk: e.target.value })}
-                    placeholder="Ex: 15"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
-                    required
-                  />
-                  <p className="text-xs mt-1" style={{ color: '#666666' }}>
-                    Hur stor del av omsättningen kommer från er största kund?
-                  </p>
-                </div>
+                <FormFieldPercent
+                  label="Kundberoende - Största kundens andel"
+                  value={data.customerConcentrationRisk}
+                  onChange={(value) => setData({ ...data, customerConcentrationRisk: value })}
+                  placeholder="Ex: 15%"
+                  tooltip="Hur stor del av omsättningen kommer från er största kund?"
+                  required
+                />
 
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
                     Har ni nödvändiga tillstånd/licenser? *
                   </label>
-                  <select
+                  <CustomSelect
                     value={data.regulatoryLicenses}
-                    onChange={(e) => setData({ ...data, regulatoryLicenses: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
-                    required
-                  >
-                    <option value="">Välj alternativ</option>
-                    <option value="yes">Ja, alla tillstånd på plats</option>
-                    <option value="partial">Delvis, vissa saknas</option>
-                    <option value="no">Nej/Ej tillämpligt</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Total skuldsättning (kr)
-                  </label>
-                  <input
-                    type="text"
-                    value={data.totalDebt}
-                    onChange={(e) => setData({ ...data, totalDebt: e.target.value })}
-                    placeholder="Ex: 500000"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                    onChange={(value) => setData({ ...data, regulatoryLicenses: value })}
+                    options={[
+                      { value: 'yes', label: 'Ja, alla tillstånd på plats' },
+                      { value: 'partial', label: 'Delvis, vissa saknas' },
+                      { value: 'no', label: 'Nej/Ej tillämpligt' }
+                    ]}
+                    placeholder="Välj alternativ"
                   />
                 </div>
 
+                <FormFieldCurrency
+                  label="Total skuldsättning"
+                  value={data.totalDebt}
+                  onChange={(value) => setData({ ...data, totalDebt: value })}
+                  placeholder="Ex: 500.000 kr"
+                />
+
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Genomsnittlig betalningstid från kunder (dagar)
+                    Genomsnittlig betalningstid från kunder
                   </label>
-                  <input
-                    type="text"
+                  <CustomSelect
                     value={data.paymentTerms}
-                    onChange={(e) => setData({ ...data, paymentTerms: e.target.value })}
-                    placeholder="Ex: 30"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                    onChange={(value) => setData({ ...data, paymentTerms: value })}
+                    options={[
+                      { value: '0-15', label: '0-15 dagar' },
+                      { value: '16-30', label: '16-30 dagar' },
+                      { value: '31-45', label: '31-45 dagar' },
+                      { value: '46-60', label: '46-60 dagar' },
+                      { value: '61-90', label: '61-90 dagar' },
+                      { value: '91+', label: 'Över 90 dagar' }
+                    ]}
+                    placeholder="Välj betalningsvillkor"
                   />
                 </div>
               </div>
@@ -687,97 +723,84 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               </div>
 
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Årsomsättning (kr) *
-                  </label>
-                  <input
-                    type="text"
-                    value={data.exactRevenue}
-                    onChange={(e) => setData({ ...data, exactRevenue: e.target.value })}
-                    placeholder="Ex: 12000000"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                <FormFieldCurrency
+                  label="Årsomsättning"
+                  value={data.exactRevenue}
+                  onChange={(value) => setData({ ...data, exactRevenue: value })}
+                  placeholder="Ex: 12.000.000 kr"
                   required
                 />
-                </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Totala rörelsekostnader (kr) *
-                  </label>
-                  <input
-                    type="text"
-                    value={data.operatingCosts}
-                    onChange={(e) => setData({ ...data, operatingCosts: e.target.value })}
-                    placeholder="Ex: 9000000"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                <FormFieldCurrency
+                  label="Totala rörelsekostnader"
+                  value={data.operatingCosts}
+                  onChange={(value) => setData({ ...data, operatingCosts: value })}
+                  placeholder="Ex: 9.000.000 kr"
+                  tooltip="Inkluderar alla kostnader utom skatt"
                     required
                   />
-                  <p className="text-xs mt-1" style={{ color: '#666666' }}>
-                    Inkluderar alla kostnader utom skatt
-                  </p>
-                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                      Företagets ålder (år) *
+                      Företagets ålder *
                     </label>
-                    <input
-                      type="text"
-                      value={data.companyAge}
-                      onChange={(e) => setData({ ...data, companyAge: e.target.value })}
-                      placeholder="Ex: 8"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
-                      required
-                  />
-                </div>
+                    <CustomSelect
+                value={data.companyAge}
+                      onChange={(value) => setData({ ...data, companyAge: value })}
+                options={[
+                        { value: '0-1', label: '0-1 år' },
+                        { value: '2-3', label: '2-3 år' },
+                        { value: '4-5', label: '4-5 år' },
+                  { value: '6-10', label: '6-10 år' },
+                  { value: '11-20', label: '11-20 år' },
+                        { value: '21+', label: 'Över 20 år' }
+                ]}
+                placeholder="Välj ålder"
+                    />
+                  </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
                       Antal anställda *
                     </label>
-                    <input
-                      type="text"
-                      value={data.employees}
-                      onChange={(e) => setData({ ...data, employees: e.target.value })}
-                      placeholder="Ex: 15"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
-                      required
-                  />
+                    <CustomSelect
+                value={data.employees}
+                      onChange={(value) => setData({ ...data, employees: value })}
+                options={[
+                  { value: '1-5', label: '1-5 anställda' },
+                  { value: '6-10', label: '6-10 anställda' },
+                  { value: '11-25', label: '11-25 anställda' },
+                        { value: '26-50', label: '26-50 anställda' },
+                        { value: '51-100', label: '51-100 anställda' },
+                        { value: '101-250', label: '101-250 anställda' },
+                        { value: '251+', label: 'Över 250 anställda' }
+                ]}
+                placeholder="Välj antal"
+                    />
+                  </div>
                 </div>
-              </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Tillväxt senaste 3 åren (%) *
-                  </label>
-                  <input
-                    type="text"
-                value={data.revenue3Years}
-                onChange={(e) => setData({ ...data, revenue3Years: e.target.value })}
-                    placeholder="Ex: 25"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                <FormFieldPercent
+                  label="Tillväxt senaste 3 åren"
+                  value={data.revenue3Years}
+                  onChange={(value) => setData({ ...data, revenue3Years: value })}
+                  placeholder="Ex: 25%"
+                  tooltip="Total procentuell ökning från 3 år sedan"
                 required
               />
-                  <p className="text-xs mt-1" style={{ color: '#666666' }}>
-                    Total procentuell ökning från 3 år sedan
-                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                      Kostnad sålda varor/tjänster (kr)
-                    </label>
-                    <input
-                      type="text"
+                    <FormFieldCurrency
+                      label="Kostnad sålda varor/tjänster"
                       value={data.cogs}
-                      onChange={(e) => setData({ ...data, cogs: e.target.value })}
-                      placeholder="Ex: 4000000"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                      onChange={(value) => setData({ ...data, cogs: value })}
+                      placeholder="Ex: 4.000.000 kr"
                     />
-                  </div>
+                    </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
@@ -790,9 +813,9 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       placeholder="Ex: 3500000"
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
                     />
-                    </div>
                   </div>
                   </div>
+                </div>
             </div>
           )}
 
@@ -815,17 +838,12 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                         <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
                           {question.label} *
                         </label>
-                        <select
+                        <CustomSelect
                       value={data[question.key] as string || ''}
-                      onChange={(e) => setData({ ...data, [question.key]: e.target.value })}
-                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
-                      required
-                        >
-                          <option value="">Välj alternativ</option>
-                          {question.options?.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                          ))}
-                        </select>
+                          onChange={(value) => setData({ ...data, [question.key]: value })}
+                          options={question.options || []}
+                          placeholder="Välj alternativ"
+                        />
                         {question.tooltip && (
                           <p className="text-xs mt-1" style={{ color: '#666666' }}>{question.tooltip}</p>
                         )}
@@ -851,24 +869,51 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       </div>
                   )
                 } else {
+                  // Text input with formatting
+                  if (question.fieldType === 'currency') {
                   return (
+                      <FormFieldCurrency
+                      key={question.key}
+                      label={question.label}
+                      value={data[question.key] as string || ''}
+                        onChange={(value) => setData({ ...data, [question.key]: value })}
+                      placeholder={getExamplePlaceholder(question)}
+                      tooltip={question.tooltip}
+                      required
+                    />
+                  )
+                  } else if (question.fieldType === 'percent') {
+                  return (
+                      <FormFieldPercent
+                      key={question.key}
+                      label={question.label}
+                      value={data[question.key] as string || ''}
+                        onChange={(value) => setData({ ...data, [question.key]: value })}
+                      placeholder={getExamplePlaceholder(question)}
+                      tooltip={question.tooltip}
+                      required
+                    />
+                  )
+                  } else {
+                    return (
                       <div key={question.key}>
                         <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
                           {question.label} *
                         </label>
                         <input
                           type="text"
-                      value={data[question.key] as string || ''}
+                          value={data[question.key] as string || ''}
                           onChange={(e) => setData({ ...data, [question.key]: e.target.value })}
-                      placeholder={getExamplePlaceholder(question)}
+                          placeholder={getExamplePlaceholder(question)}
                           className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
-                      required
-                    />
+                          required
+                        />
                         {question.tooltip && (
                           <p className="text-xs mt-1" style={{ color: '#666666' }}>{question.tooltip}</p>
                         )}
                       </div>
-                  )
+                    )
+                  }
                 }
               })}
               </div>

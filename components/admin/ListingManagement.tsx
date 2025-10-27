@@ -106,11 +106,11 @@ export default function ListingManagement() {
 
   const handleBulkAction = async (action: string, data?: any) => {
     if (selectedListings.size === 0) {
-      alert('Please select listings first')
+      alert('Välj objekt först')
       return
     }
 
-    if (confirm(`Are you sure you want to ${action} for ${selectedListings.size} listings?`)) {
+    if (confirm(`Är du säker på att du vill ${action === 'activate' ? 'aktivera' : action === 'pause' ? 'pausa' : action === 'renew' ? 'förnya' : action === 'verify' ? 'verifiera' : action} ${selectedListings.size} objekt?`)) {
       try {
         await bulkAction(Array.from(selectedListings), action, data)
         setSelectedListings(new Set())
@@ -132,7 +132,7 @@ export default function ListingManagement() {
   }
 
   const handleDelete = async (listingId: string) => {
-    if (confirm('Are you sure? This will permanently delete the listing.')) {
+    if (confirm('Är du säker? Detta kommer permanent ta bort objektet.')) {
       try {
         await deleteListing(listingId)
         loadListings(pagination.page)
@@ -168,10 +168,10 @@ export default function ListingManagement() {
       <div>
         <h2 className="text-2xl font-bold text-primary-navy flex items-center gap-2 mb-2">
           <Search className="w-6 h-6" />
-          Listing Management
+          Objekthantering
         </h2>
         <p className="text-gray-600 text-sm">
-          Total listings: {pagination.total} | Selected: {selectedListings.size}
+          Totalt antal objekt: {pagination.total} | Valda: {selectedListings.size}
         </p>
       </div>
 
@@ -181,7 +181,7 @@ export default function ListingManagement() {
           <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search listings..."
+            placeholder="Sök objekt..."
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink text-sm"
@@ -193,11 +193,11 @@ export default function ListingManagement() {
           onChange={(e) => handleFilterChange('status', e.target.value)}
           className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink text-sm"
         >
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="draft">Draft</option>
-          <option value="paused">Paused</option>
-          <option value="sold">Sold</option>
+          <option value="">Alla status</option>
+          <option value="active">Aktiv</option>
+          <option value="draft">Utkast</option>
+          <option value="paused">Pausad</option>
+          <option value="sold">Såld</option>
         </select>
 
         <select
@@ -205,7 +205,7 @@ export default function ListingManagement() {
           onChange={(e) => handleFilterChange('package', e.target.value)}
           className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink text-sm"
         >
-          <option value="">All Packages</option>
+          <option value="">Alla paket</option>
           <option value="basic">Basic</option>
           <option value="pro">Pro</option>
           <option value="pro_plus">Pro Plus</option>
@@ -216,7 +216,7 @@ export default function ListingManagement() {
           className="px-3 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center justify-center gap-2 text-sm font-medium"
         >
           <RefreshCw className="w-4 h-4" />
-          Refresh
+          Uppdatera
         </button>
       </div>
 
@@ -224,32 +224,32 @@ export default function ListingManagement() {
       {selectedListings.size > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between flex-wrap gap-4">
           <span className="text-sm font-medium text-blue-900">
-            {selectedListings.size} listing(s) selected
+            {selectedListings.size} objekt valda
           </span>
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => handleBulkAction('activate')}
               className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600 flex items-center gap-1"
             >
-              <Check className="w-3 h-3" /> Activate
+              <Check className="w-3 h-3" /> Aktivera
             </button>
             <button
               onClick={() => handleBulkAction('pause')}
               className="px-3 py-1 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600 flex items-center gap-1"
             >
-              <Clock className="w-3 h-3" /> Pause
+              <Clock className="w-3 h-3" /> Pausa
             </button>
             <button
               onClick={() => handleBulkAction('renew')}
               className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 flex items-center gap-1"
             >
-              <Calendar className="w-3 h-3" /> Renew
+              <Calendar className="w-3 h-3" /> Förnya
             </button>
             <button
               onClick={() => handleBulkAction('verify')}
               className="px-3 py-1 bg-purple-500 text-white text-sm rounded hover:bg-purple-600 flex items-center gap-1"
             >
-              <Check className="w-3 h-3" /> Verify
+              <Check className="w-3 h-3" /> Verifiera
             </button>
           </div>
         </div>
@@ -269,13 +269,13 @@ export default function ListingManagement() {
                     className="rounded"
                   />
                 </th>
-                <th className="px-4 py-3 text-left">Title</th>
-                <th className="px-4 py-3 text-left hidden md:table-cell">Seller</th>
+                <th className="px-4 py-3 text-left">Titel</th>
+                <th className="px-4 py-3 text-left hidden md:table-cell">Säljare</th>
                 <th className="px-4 py-3 text-center">Status</th>
-                <th className="px-4 py-3 text-center hidden lg:table-cell">Package</th>
-                <th className="px-4 py-3 text-right">Price</th>
-                <th className="px-4 py-3 text-right hidden md:table-cell">Views</th>
-                <th className="px-4 py-3 text-center">Actions</th>
+                <th className="px-4 py-3 text-center hidden lg:table-cell">Paket</th>
+                <th className="px-4 py-3 text-right">Pris</th>
+                <th className="px-4 py-3 text-right hidden md:table-cell">Visningar</th>
+                <th className="px-4 py-3 text-center">Åtgärder</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -289,7 +289,7 @@ export default function ListingManagement() {
               {!loading && listings.length === 0 && (
                 <tr>
                   <td colSpan={8} className="px-4 py-8 text-center text-gray-500">
-                    No listings found
+                    Inga objekt hittades
                   </td>
                 </tr>
               )}
@@ -352,7 +352,7 @@ export default function ListingManagement() {
                             onClick={() => handleStatusChange(listing.id, 'active')}
                             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
                           >
-                            <Check className="w-3 h-3" /> Activate
+                            <Check className="w-3 h-3" /> Aktivera
                           </button>
                         )}
                         {listing.status !== 'paused' && (
@@ -360,7 +360,7 @@ export default function ListingManagement() {
                             onClick={() => handleStatusChange(listing.id, 'paused')}
                             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
                           >
-                            <Clock className="w-3 h-3" /> Pause
+                            <Clock className="w-3 h-3" /> Pausa
                           </button>
                         )}
                         <button
@@ -374,7 +374,7 @@ export default function ListingManagement() {
                           onClick={() => handleDelete(listing.id)}
                           className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
                         >
-                          <Trash2 className="w-3 h-3" /> Delete
+                          <Trash2 className="w-3 h-3" /> Ta bort
                         </button>
                       </div>
                     )}
@@ -397,7 +397,7 @@ export default function ListingManagement() {
             <ChevronLeft className="w-5 h-5" />
           </button>
           <span className="text-sm font-medium">
-            Page {pagination.page} of {pagination.pages}
+            Sida {pagination.page} av {pagination.pages}
           </span>
           <button
             onClick={() => loadListings(Math.min(pagination.pages, pagination.page + 1))}
