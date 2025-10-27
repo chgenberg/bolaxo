@@ -92,8 +92,8 @@ export default function SearchPage() {
           }))
           
           // Combine with mock objects for now (mock objects have more data)
-          setAllObjects([...transformedListings, ...mockObjects])
-          setFilteredObjects([...transformedListings, ...mockObjects])
+          setAllObjects([...transformedListings])
+          setFilteredObjects([...transformedListings])
         }
       } catch (error) {
         console.error('Error fetching listings:', error)
