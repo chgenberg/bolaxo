@@ -11,6 +11,36 @@ export default function SavedListingsPage() {
   const { user } = useAuth()
   const [filter, setFilter] = useState('all')
   const [saved, setSaved] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState<any>(null)
+
+  // Fetch real data from API
+  useEffect(() => {
+    const fetchSavedListings = async () => {
+      if (!user) return
+      
+      try {
+        setLoading(true)
+        const response = await fetch('/api/buyer/saved', {
+          headers: {
+            'x-user-id': user.id
+          }
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setSaved(data.savedListings)
+          setStats(data.stats)
+        }
+      } catch (error) {
+        console.error('Error fetching saved listings:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchSavedListings()
+  }, [user])
   
   const savedListings = [
     {
@@ -80,20 +110,25 @@ export default function SavedListingsPage() {
   ]
 
   const data = saved.length ? saved.map(s => ({
-    id: s.listingId,
-    title: 'Objekt',
-    description: 'Sparad annons',
-    category: '—',
-    location: '—',
-    revenue: '—',
-    employees: '—',
-    price: '—',
-    matchScore: 0,
-    savedAt: s.createdAt || new Date().toISOString(),
-    ndaStatus: 'none',
+    id: s.listing.id,
+    title: s.listing.companyName || s.listing.anonymousTitle,
+    description: s.listing.anonymousTitle,
+    category: s.listing.industry,
+    location: s.listing.location,
+    revenue: s.listing.revenueRange || `${(s.listing.revenue / 1_000_000).toFixed(1)} MSEK`,
+    employees: `${s.listing.employees}`,
+    price: s.listing.priceMin && s.listing.priceMax
+      ? `${(s.listing.priceMin / 1_000_000).toFixed(1)}-${(s.listing.priceMax / 1_000_000).toFixed(1)} MSEK`
+      : 'Ej angiven',
+    matchScore: 0, // TODO: Calculate match score
+    savedAt: new Date(s.savedAt).toISOString().split('T')[0],
+    ndaStatus: s.ndaStatus || 'none',
     lastViewed: new Date().toISOString(),
     notes: s.notes || '',
-    hasNewActivity: false
+    hasNewActivity: false,
+    canContact: s.canContact,
+    sellerId: s.listing.user.id,
+    sellerName: s.listing.user.name
   })) : savedListings
 
   const filteredListings = data.filter(listing => {
@@ -284,10 +319,14 @@ export default function SavedListingsPage() {
                       >
                         Visa objekt
                       </Link>
-                      {listing.ndaStatus === 'approved' && (
-                        <button className="px-3 py-1.5 text-sm text-accent-pink hover:bg-accent-pink/10 rounded-lg transition-colors">
-                          Kontakta säljare
-                        </button>
+                      {listing.canContact && (
+                        <Link
+                          href={`/kopare/chat?peerId=${listing.sellerId}&listingId=${listing.id}`}
+                          className="px-3 py-1.5 text-sm bg-primary-navy text-white hover:bg-primary-navy/90 rounded-lg transition-colors flex items-center gap-1"
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                          Chatta med säljare
+                        </Link>
                       )}
                     </div>
                   </div>

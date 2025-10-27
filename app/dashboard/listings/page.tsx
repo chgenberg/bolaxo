@@ -446,23 +446,32 @@ export default function ListingsPage() {
                   <span className="whitespace-nowrap">Senast: {listing.lastActivity}</span>
                 </div>
 
-                {/* Quick actions bar - Mobile */}
-                {listing.status === 'active' && (
-                  <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                    <Link 
-                      href={`/objekt/${listing.id}`}
-                      className="text-sm text-blue-600 hover:underline"
-                    >
-                      Visa annons →
-                    </Link>
-                    <Link 
-                      href={`/dashboard/analytics`}
-                      className="text-sm text-blue-600 hover:underline hidden sm:block"
-                    >
-                      Analys
-                    </Link>
-                  </div>
-                )}
+                     {/* Quick actions bar - Mobile */}
+                     {listing.status === 'active' && (
+                       <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                         <Link 
+                           href={`/objekt/${listing.id}`}
+                           className="text-sm text-blue-600 hover:underline"
+                         >
+                           Visa annons →
+                         </Link>
+                         <Link 
+                           href={`/dashboard/analytics`}
+                           className="text-sm text-blue-600 hover:underline hidden sm:block"
+                         >
+                           Analys
+                         </Link>
+                         {listing.messages > 0 && (
+                           <Link 
+                             href={`/salja/chat?listingId=${listing.id}`}
+                             className="text-sm bg-primary-navy text-white px-3 py-1 rounded-lg hover:bg-primary-navy/90 inline-flex items-center gap-1"
+                           >
+                             <MessageSquare className="w-3 h-3" />
+                             {listing.messages} meddelanden
+                           </Link>
+                         )}
+                       </div>
+                     )}
               </div>
             ))
           )}
