@@ -109,8 +109,7 @@ export async function GET(request: NextRequest) {
           select: {
             id: true,
             type: true,
-            status: true,
-            _count: true
+            status: true
           }
         },
         milestones: {
