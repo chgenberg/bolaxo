@@ -398,19 +398,22 @@ export async function POST(request: NextRequest) {
     })
 
     // Log the response in Activity model for audit trail
-    await prisma.activity.create({
-      data: {
-        type: 'SUPPORT_RESPONSE',
-        description: `Support response added to ticket: ${ticket.id}`,
-        userId: responderId,
-        metadata: {
-          ticketId,
-          message: message.substring(0, 500),
-          responderId,
-          responderEmail
-        }
-      }
-    })
+    // TODO: Implement SupportTicketActivity model for non-transaction auditing
+    // await prisma.activity.create({
+    //   data: {
+    //     type: 'SUPPORT_RESPONSE',
+    //     description: `Support response added to ticket: ${ticket.id}`,
+    //     actorId: responderId,
+    //     actorName: responderEmail,
+    //     actorRole: 'admin',
+    //     metadata: {
+    //       ticketId,
+    //       message: message.substring(0, 500),
+    //       responderId,
+    //       responderEmail
+    //     }
+    //   }
+    // })
 
     return NextResponse.json({
       message: 'Response added successfully',
