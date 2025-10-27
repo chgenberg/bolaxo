@@ -24,9 +24,11 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="antialiased">
-        {/* TEST: Only AuthProvider, NO ToastProvider */}
+        {/* TEST: Both providers enabled but NO UI components */}
         <AuthProvider>
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </AuthProvider>
       </body>
     </html>
