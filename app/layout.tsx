@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
-// import Header from '@/components/Header'
-// import Footer from '@/components/Footer'
-// import CookieConsent from '@/components/CookieConsent'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import CookieConsent from '@/components/CookieConsent'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 
@@ -24,10 +24,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="antialiased">
-        {/* TEST: NO UI components, just providers and children */}
+        {/* FULL LAYOUT - All components re-enabled after fixing admin login color issue */}
         <AuthProvider>
           <ToastProvider>
+            <Header />
             {children}
+            <Footer />
+            <CookieConsent />
           </ToastProvider>
         </AuthProvider>
       </body>
