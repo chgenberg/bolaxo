@@ -56,64 +56,88 @@ export async function GET(request: NextRequest) {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
     thirtyDaysAgo.setHours(0, 0, 0, 0)
 
-    // User statistics
-    const totalUsers = await prisma.user.count()
-    const sellers = await prisma.user.count({ where: { role: 'seller' } })
-    const buyers = await prisma.user.count({ where: { role: 'buyer' } })
-    const verifiedUsers = await prisma.user.count({ where: { verified: true } })
-    const bankIdVerified = await prisma.user.count({ where: { bankIdVerified: true } })
-
-    // Listing statistics
-    const totalListings = await prisma.listing.count()
-    const activeListings = await prisma.listing.count({ where: { status: 'active' } })
-    const draftListings = await prisma.listing.count({ where: { status: 'draft' } })
-    const soldListings = await prisma.listing.count({ where: { status: 'sold' } })
-    const verifiedListings = await prisma.listing.count({ where: { verified: true } })
-
-    // NDA statistics
-    const totalNDARequests = await prisma.nDARequest.count()
-    const pendingNDAs = await prisma.nDARequest.count({ where: { status: 'pending' } })
-    const approvedNDAs = await prisma.nDARequest.count({ where: { status: 'approved' } })
-    const rejectedNDAs = await prisma.nDARequest.count({ where: { status: 'rejected' } })
-    const signedNDAs = await prisma.nDARequest.count({ where: { status: 'signed' } })
-
-    // Message statistics
-    const totalMessages = await prisma.message.count()
-    const unreadMessages = await prisma.message.count({ where: { read: false } })
-    const todayMessages = await prisma.message.count({
-      where: { createdAt: { gte: today } }
-    })
-
-    // Transaction statistics
-    const totalTransactions = await prisma.transaction.count()
-    const completedTransactions = await prisma.transaction.count({
-      where: { stage: 'COMPLETED' }
-    })
-    const inProgressTransactions = await prisma.transaction.count({
-      where: { stage: { in: ['LOI_SIGNED', 'DD_IN_PROGRESS', 'SPA_NEGOTIATION'] } }
-    })
-
-    // Transaction value stats
-    const transactionStats = await prisma.transaction.aggregate({
-      _sum: { agreedPrice: true },
-      _avg: { agreedPrice: true },
-      _count: true
-    })
-
-    // Payment statistics
-    const totalPayments = await prisma.payment.count()
-    const pendingPayments = await prisma.payment.count({
-      where: { status: { in: ['PENDING', 'ESCROWED'] } }
-    })
-    const releasedPayments = await prisma.payment.count({
-      where: { status: 'RELEASED' }
-    })
-
-    // Payment amounts
-    const paymentStats = await prisma.payment.aggregate({
-      _sum: { amount: true },
-      _avg: { amount: true }
-    })
+    // Batch all count queries together for better performance
+    const [
+      totalUsers,
+      sellers,
+      buyers,
+      verifiedUsers,
+      bankIdVerified,
+      totalListings,
+      activeListings,
+      draftListings,
+      soldListings,
+      verifiedListings,
+      totalNDARequests,
+      pendingNDAs,
+      approvedNDAs,
+      rejectedNDAs,
+      signedNDAs,
+      totalMessages,
+      unreadMessages,
+      todayMessages,
+      totalTransactions,
+      completedTransactions,
+      inProgressTransactions,
+      transactionStats,
+      totalPayments,
+      pendingPayments,
+      releasedPayments,
+      paymentStats,
+      reviews
+    ] = await Promise.all([
+      // User stats
+      prisma.user.count(),
+      prisma.user.count({ where: { role: 'seller' } }),
+      prisma.user.count({ where: { role: 'buyer' } }),
+      prisma.user.count({ where: { verified: true } }),
+      prisma.user.count({ where: { bankIdVerified: true } }),
+      
+      // Listing stats
+      prisma.listing.count(),
+      prisma.listing.count({ where: { status: 'active' } }),
+      prisma.listing.count({ where: { status: 'draft' } }),
+      prisma.listing.count({ where: { status: 'sold' } }),
+      prisma.listing.count({ where: { verified: true } }),
+      
+      // NDA stats
+      prisma.nDARequest.count(),
+      prisma.nDARequest.count({ where: { status: 'pending' } }),
+      prisma.nDARequest.count({ where: { status: 'approved' } }),
+      prisma.nDARequest.count({ where: { status: 'rejected' } }),
+      prisma.nDARequest.count({ where: { status: 'signed' } }),
+      
+      // Message stats
+      prisma.message.count(),
+      prisma.message.count({ where: { read: false } }),
+      prisma.message.count({ where: { createdAt: { gte: today } } }),
+      
+      // Transaction stats
+      prisma.transaction.count(),
+      prisma.transaction.count({ where: { stage: 'COMPLETED' } }),
+      prisma.transaction.count({ where: { stage: { in: ['LOI_SIGNED', 'DD_IN_PROGRESS', 'SPA_NEGOTIATION'] } } }),
+      prisma.transaction.aggregate({
+        _sum: { agreedPrice: true },
+        _avg: { agreedPrice: true },
+        _count: true
+      }),
+      
+      // Payment stats
+      prisma.payment.count(),
+      prisma.payment.count({ where: { status: { in: ['PENDING', 'ESCROWED'] } } }),
+      prisma.payment.count({ where: { status: 'RELEASED' } }),
+      prisma.payment.aggregate({
+        _sum: { amount: true },
+        _avg: { amount: true }
+      }),
+      
+      // Reviews
+      prisma.review.findMany({
+        select: { rating: true },
+        orderBy: { createdAt: 'desc' },
+        take: 100
+      })
+    ])
 
     // Activity statistics (last 7 days)
     const sevenDaysAgo = new Date(now)
@@ -149,18 +173,19 @@ export async function GET(request: NextRequest) {
       ? Math.round((totalNDARequests / totalListings) * 100)
       : 0
 
-    // Top statistics by type/industry
-    const industryStats = await prisma.listing.groupBy({
-      by: ['industry'],
-      _count: true,
-      where: { status: 'active' }
-    })
-
-    const regionStats = await prisma.listing.groupBy({
-      by: ['region'],
-      _count: true,
-      where: { status: 'active' }
-    })
+    // Top statistics by type/industry - batch these queries
+    const [industryStats, regionStats] = await Promise.all([
+      prisma.listing.groupBy({
+        by: ['industry'],
+        _count: true,
+        where: { status: 'active' }
+      }),
+      prisma.listing.groupBy({
+        by: ['region'],
+        _count: true,
+        where: { status: 'active' }
+      })
+    ])
 
     // Sort by count descending and take top 5
     const topIndustriesSorted = industryStats
