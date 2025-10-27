@@ -173,13 +173,13 @@ export default function HeroSection() {
                 <Link href={`/objekt/${currentObject.id}`} className="block w-full pointer-events-auto">
                   <div className="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-300 h-fit">
                   {/* Object Image */}
-                  <div className="relative h-72 bg-gray-100 overflow-hidden">
+                  <div className="relative h-72 bg-gray-100 overflow-hidden flex items-center justify-center">
                     {currentObject.image ? (
                       <Image
                         src={currentObject.image}
                         alt={currentObject.anonymousTitle || currentObject.title || 'Företag till salu'}
                         fill
-                        className="object-cover hover:scale-105 transition-transform duration-300"
+                        className="object-cover object-center hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent-pink/20 to-primary-navy/20">

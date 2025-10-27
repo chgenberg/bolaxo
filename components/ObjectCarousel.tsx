@@ -67,13 +67,13 @@ export default function ObjectCarousel({ onMapClick }: ObjectCarouselProps) {
           <Link href={`/objekt/${currentObject.id}`} className="block">
             <div className="grid md:grid-cols-2 gap-6 items-center">
               {/* Image Section */}
-              <div className="relative h-64 md:h-80 bg-gray-100 rounded-xl overflow-hidden">
+              <div className="relative h-64 md:h-80 bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center">
                 {currentObject.image ? (
                   <Image
                     src={currentObject.image}
                     alt={currentObject.anonymousTitle}
                     fill
-                    className="object-cover"
+                    className="object-cover object-center"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 ) : (
