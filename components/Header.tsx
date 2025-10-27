@@ -137,10 +137,21 @@ export default function Header() {
                 Köpare
               </Link>
             </div>
-            <div className="hidden md:block text-center flex-1">
-              <p className="text-navy font-medium italic">
-                "Vi håller dig i handen hela vägen till stranden // BOLAXO"
-              </p>
+            <div className="hidden md:block text-center flex-1 overflow-hidden">
+              <div className="relative inline-block">
+                <p className="relative text-navy font-medium italic text-sm tracking-wider animate-gentle-pulse">
+                  <span className="inline-block">
+                    Vi håller dig i handen hela vägen till stranden
+                  </span>
+                  <span className="mx-3 inline-block">
+                    <span className="text-primary-blue text-lg">✦</span>
+                  </span>
+                  <span className="font-bold bg-gradient-to-r from-navy via-primary-blue to-navy bg-clip-text text-transparent bg-300% animate-gradient">
+                    BOLAXO
+                  </span>
+                </p>
+                <div className="absolute -inset-x-4 -inset-y-2 bg-gradient-to-r from-transparent via-primary-blue/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-700 rounded-2xl blur-xl"></div>
+              </div>
             </div>
             <div className="w-[120px]"></div>
           </div>

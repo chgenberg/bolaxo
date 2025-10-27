@@ -337,3 +337,40 @@
     border-color: rgba(31, 60, 88, 0.3) !important;
   }
 }
+
+@layer utilities {
+  /* Custom animation for header quote */
+  @keyframes gentle-pulse {
+    0%, 100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.02);
+    }
+  }
+  
+  .animate-gentle-pulse {
+    animation: gentle-pulse 4s ease-in-out infinite;
+  }
+  
+  /* Animated gradient text */
+  @keyframes gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .animate-gradient {
+    animation: gradient 4s ease infinite;
+    background-size: 300% 300%;
+  }
+  
+  .bg-300\% {
+    background-size: 300% 300%;
+  }
+}
