@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Header from '@/components/Header'
-// import Footer from '@/components/Footer'
+// import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 // import CookieConsent from '@/components/CookieConsent'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
@@ -24,11 +24,11 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="antialiased">
-        {/* TEST: Add Header back to isolate */}
+        {/* TEST: Header disabled, Footer enabled */}
         <AuthProvider>
           <ToastProvider>
-            <Header />
             {children}
+            <Footer />
           </ToastProvider>
         </AuthProvider>
       </body>
