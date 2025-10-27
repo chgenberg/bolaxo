@@ -98,46 +98,83 @@ export default function KopareInfoPage() {
           {/* Object Carousel */}
           {currentObject && (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:shadow-3xl transition-all duration-500">
                 <div className="relative">
                   {/* Navigation Buttons */}
                   <button
                     onClick={goToPrevious}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/90 backdrop-blur shadow-lg rounded-full flex items-center justify-center hover:bg-white transition-all hover:scale-110 group"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white/95 backdrop-blur-md shadow-xl rounded-full flex items-center justify-center hover:bg-white transition-all hover:scale-110 group border border-gray-200"
                     aria-label="Föregående"
                   >
-                    <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+                    <ChevronLeft className="w-7 h-7 text-primary-navy group-hover:-translate-x-1 transition-transform" />
                   </button>
                   <button
                     onClick={goToNext}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white/90 backdrop-blur shadow-lg rounded-full flex items-center justify-center hover:bg-white transition-all hover:scale-110 group"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 bg-white/95 backdrop-blur-md shadow-xl rounded-full flex items-center justify-center hover:bg-white transition-all hover:scale-110 group border border-gray-200"
                     aria-label="Nästa"
                   >
-                    <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
+                    <ChevronRight className="w-7 h-7 text-primary-navy group-hover:translate-x-1 transition-transform" />
                   </button>
 
                   <Link href={`/objekt/${currentObject.id}`} className="block group">
                     <div className="grid lg:grid-cols-2">
                       {/* Image Section */}
-                      <div className="relative h-80 lg:h-96 bg-gray-100 overflow-hidden">
+                      <div className="relative h-80 lg:h-96 bg-gradient-to-br from-gray-100 to-gray-200 p-8">
                         {currentObject.image ? (
-                          <Image
-                            src={currentObject.image}
-                            alt={currentObject.anonymousTitle}
-                            fill
-                            className="object-contain group-hover:scale-105 transition-transform duration-700"
-                            sizes="(max-width: 1024px) 100vw, 50vw"
-                          />
+                          <div className="relative w-full h-full">
+                            {/* Organic shadow shape */}
+                            <div 
+                              className="absolute inset-0 bg-gray-800/10 blur-xl animate-pulse"
+                              style={{
+                                borderRadius: '30% 70% 70% 30% / 30% 70% 30% 70%',
+                                transform: 'rotate(-5deg)'
+                              }}
+                            />
+                            {/* Image with organic border */}
+                            <div 
+                              className="relative w-full h-full overflow-hidden shadow-2xl"
+                              style={{
+                                borderRadius: '30% 70% 70% 30% / 30% 70% 30% 70%',
+                                transform: 'rotate(-5deg)'
+                              }}
+                            >
+                              <Image
+                                src={currentObject.image}
+                                alt={currentObject.anonymousTitle}
+                                fill
+                                className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                style={{
+                                  transform: 'rotate(5deg) scale(1.1)'
+                                }}
+                              />
+                            </div>
+                          </div>
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                            <div className="text-6xl font-bold text-gray-300">
-                              {currentObject.type.charAt(0)}
+                          <div className="relative w-full h-full">
+                            <div 
+                              className="absolute inset-0 bg-gray-800/10 blur-xl"
+                              style={{
+                                borderRadius: '30% 70% 70% 30% / 30% 70% 30% 70%',
+                                transform: 'rotate(-5deg)'
+                              }}
+                            />
+                            <div 
+                              className="relative w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-inner"
+                              style={{
+                                borderRadius: '30% 70% 70% 30% / 30% 70% 30% 70%',
+                                transform: 'rotate(-5deg)'
+                              }}
+                            >
+                              <div className="text-6xl font-bold text-gray-300" style={{ transform: 'rotate(5deg)' }}>
+                                {currentObject.type.charAt(0)}
+                              </div>
                             </div>
                           </div>
                         )}
                         
                         {/* Status Badges */}
-                        <div className="absolute top-6 left-6 flex gap-3">
+                        <div className="absolute top-6 left-6 flex gap-3 z-10">
                           {currentObject.isNew && (
                             <span className="bg-accent-orange text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
                               <Sparkles className="w-4 h-4" />
@@ -157,51 +194,63 @@ export default function KopareInfoPage() {
                       <div className="p-8 lg:p-12 flex flex-col justify-center">
                         <div className="space-y-6">
                           <div>
-                            <span className="text-accent-pink font-bold text-sm uppercase tracking-wider">{currentObject.type}</span>
-                            <h3 className="text-3xl lg:text-4xl font-bold text-primary-navy mt-2 group-hover:text-primary-navy transition-colors">
+                            <span className="text-accent-pink font-black text-xs uppercase tracking-wider bg-accent-pink/10 px-3 py-1 rounded-full inline-block">{currentObject.type}</span>
+                            <h3 className="text-3xl lg:text-4xl font-black text-primary-navy mt-3 group-hover:text-primary-navy transition-colors leading-tight">
                               {currentObject.anonymousTitle}
                             </h3>
-                            <p className="text-gray-600 mt-4 text-lg leading-relaxed line-clamp-3">
+                            <p className="text-text-gray mt-4 text-lg leading-relaxed line-clamp-3">
                               {currentObject.description}
                             </p>
                           </div>
 
                           {/* Metrics Grid */}
                           <div className="grid grid-cols-3 gap-4">
-                            <div className="bg-gradient-to-br from-primary-navy/10 to-primary-navy/5 rounded-xl p-4">
-                              <div className="flex items-center text-primary-navy text-sm font-semibold mb-2">
+                            <div className="bg-gradient-to-br from-primary-navy/10 to-primary-navy/5 rounded-2xl p-4 border border-primary-navy/10">
+                              <div className="flex items-center text-primary-navy text-xs font-bold mb-2 opacity-70">
                                 <MapPin className="w-4 h-4 mr-1" />
-                                Plats
+                                PLATS
                               </div>
-                              <div className="font-bold text-primary-navy text-lg">
+                              <div className="font-black text-primary-navy text-xl">
                                 {currentObject.region}
                               </div>
                             </div>
-                            <div className="bg-gradient-to-br from-accent-pink/10 to-accent-pink/5 rounded-xl p-4">
-                              <div className="flex items-center text-accent-pink text-sm font-semibold mb-2">
+                            <div className="bg-gradient-to-br from-accent-pink/10 to-accent-pink/5 rounded-2xl p-4 border border-accent-pink/10">
+                              <div className="flex items-center text-accent-pink text-xs font-bold mb-2 opacity-70">
                                 <TrendingUp className="w-4 h-4 mr-1" />
-                                Omsättning
+                                OMSÄTTNING
                               </div>
-                              <div className="font-bold text-primary-navy text-lg">
+                              <div className="font-black text-primary-navy text-xl">
                                 {formatCurrency(currentObject.revenue)}
                               </div>
                             </div>
-                            <div className="bg-gradient-to-br from-primary-navy/10 to-primary-navy/5 rounded-xl p-4">
-                              <div className="flex items-center text-primary-navy text-sm font-semibold mb-2">
+                            <div className="bg-gradient-to-br from-accent-orange/10 to-accent-orange/5 rounded-2xl p-4 border border-accent-orange/10">
+                              <div className="flex items-center text-accent-orange text-xs font-bold mb-2 opacity-70">
                                 <Eye className="w-4 h-4 mr-1" />
-                                Visningar
+                                VISNINGAR
                               </div>
-                              <div className="font-bold text-primary-navy text-lg">
+                              <div className="font-black text-primary-navy text-xl">
                                 {currentObject.views}
                               </div>
                             </div>
                           </div>
 
                           {/* Price */}
-                          <div className="pt-6 border-t border-gray-100">
-                            <div className="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-2">Prisindikation</div>
-                            <div className="text-3xl font-black bg-gradient-to-r from-accent-orange to-accent-pink text-transparent bg-clip-text">
-                              {formatCurrency(currentObject.priceMin)} - {formatCurrency(currentObject.priceMax)}
+                          <div className="pt-6 border-t-2 border-dashed border-gray-200">
+                            <div className="text-xs text-text-gray font-black uppercase tracking-wider mb-3 opacity-60">PRISINDIKATION</div>
+                            <div className="flex items-baseline gap-2">
+                              <div className="text-4xl font-black bg-gradient-to-r from-accent-orange to-accent-pink text-transparent bg-clip-text">
+                                {formatCurrency(currentObject.priceMin)}
+                              </div>
+                              <span className="text-2xl font-bold text-gray-400">-</span>
+                              <div className="text-4xl font-black bg-gradient-to-r from-accent-orange to-accent-pink text-transparent bg-clip-text">
+                                {formatCurrency(currentObject.priceMax)}
+                              </div>
+                            </div>
+                            <div className="mt-4">
+                              <div className="flex items-center gap-2 text-sm text-text-gray">
+                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                <span>Aktivt söker köpare</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -211,8 +260,8 @@ export default function KopareInfoPage() {
                 </div>
 
                 {/* Dots Indicator */}
-                <div className="bg-gray-50 py-4">
-                  <div className="flex justify-center gap-2">
+                <div className="bg-gradient-to-b from-gray-50 to-gray-100 py-6">
+                  <div className="flex justify-center items-center gap-3">
                     {featuredObjects.map((_, index) => (
                       <button
                         key={index}
@@ -220,14 +269,19 @@ export default function KopareInfoPage() {
                           setIsAutoPlaying(false)
                           setCurrentObjectIndex(index)
                         }}
-                        className={`transition-all duration-300 ${
+                        className={`transition-all duration-500 ${
                           index === currentObjectIndex
-                            ? 'w-12 h-3 bg-accent-orange rounded-full'
-                            : 'w-3 h-3 bg-gray-300 rounded-full hover:bg-gray-400'
+                            ? 'w-16 h-4 bg-gradient-to-r from-accent-orange to-accent-pink rounded-full shadow-lg'
+                            : 'w-4 h-4 bg-gray-300 rounded-full hover:bg-gray-400 hover:scale-125'
                         }`}
                         aria-label={`Gå till företag ${index + 1}`}
                       />
                     ))}
+                  </div>
+                  <div className="text-center mt-3">
+                    <span className="text-sm text-gray-500 font-medium">
+                      {currentObjectIndex + 1} av {featuredObjects.length} utvalda företag
+                    </span>
                   </div>
                 </div>
               </div>
