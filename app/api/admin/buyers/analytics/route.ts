@@ -1,47 +1,65 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { checkAdminAuth } from '@/lib/admin-auth'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+// Helper function to verify admin authentication
+async function verifyAdminAuth(request: NextRequest) {
+  try {
+    const adminToken = request.cookies.get('adminToken')?.value
+    if (!adminToken) {
+      return { isValid: false, error: 'Unauthorized - No admin token' }
+    }
+    return { isValid: true }
+  } catch (error) {
+    return { isValid: false, error: 'Authentication failed' }
+  }
+}
 
 // GET - Fetch buyer profiles analytics
 export async function GET(request: NextRequest) {
   try {
-    // Check admin authentication
-    const auth = await checkAdminAuth(request)
-    if (!auth.authorized) {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
       return NextResponse.json({ error: auth.error }, { status: 401 })
     }
 
     const searchParams = request.nextUrl.searchParams
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '20')
-    let sortBy = searchParams.get('sortBy') || 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
-    const searchQuery = searchParams.get('search')
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
+    const limit = Math.min(100, parseInt(searchParams.get('limit') || '20'))
+    const sortBy = searchParams.get('sortBy') || 'createdAt'
+    const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc'
+    const search = searchParams.get('search') || ''
+    const status = searchParams.get('status') // 'new', 'active', 'inactive'
 
     // Whitelist valid sort fields
-    const validSortFields = ['id', 'email', 'name', 'createdAt', 'verified', 'bankIdVerified']
-    if (!validSortFields.includes(sortBy)) {
-      sortBy = 'createdAt'
-    }
+    const validSortFields = ['createdAt', 'email', 'name']
+    const sortField = validSortFields.includes(sortBy) ? sortBy : 'createdAt'
 
     const skip = (page - 1) * limit
 
-    // Get all buyers with their preferences and activity
-    let buyers = await prisma.user.findMany({
-      where: {
-        role: 'buyer',
-        ...(searchQuery && {
-          OR: [
-            { email: { contains: searchQuery, mode: 'insensitive' } },
-            { name: { contains: searchQuery, mode: 'insensitive' } }
-          ]
-        })
-      },
+    // Build where clause
+    const where: any = {
+      role: 'buyer'
+    }
+
+    if (search) {
+      where.OR = [
+        { email: { contains: search, mode: 'insensitive' } },
+        { name: { contains: search, mode: 'insensitive' } }
+      ]
+    }
+
+    // Get all buyers with their profiles and activities
+    const buyers = await prisma.user.findMany({
+      where,
       select: {
         id: true,
         email: true,
         name: true,
         createdAt: true,
+        lastLoginAt: true,
         verified: true,
         bankIdVerified: true,
         buyerProfile: {
@@ -49,134 +67,185 @@ export async function GET(request: NextRequest) {
             preferredRegions: true,
             preferredIndustries: true,
             revenueMin: true,
-            revenueMax: true
+            revenueMax: true,
+            investmentType: true,
+            buyerType: true,
+            investmentExperience: true,
+            timeframe: true
+          }
+        },
+        savedListings: {
+          select: { id: true }
+        },
+        buyerNDARequests: {
+          select: {
+            id: true,
+            status: true,
+            createdAt: true
+          }
+        },
+        sentMessages: {
+          select: { id: true, createdAt: true }
+        },
+        buyerTransactions: {
+          select: {
+            id: true,
+            stage: true,
+            agreedPrice: true,
+            createdAt: true
           }
         },
         _count: {
-          select: { listings: true, valuations: true }
+          select: {
+            savedListings: true,
+            buyerNDARequests: true,
+            sentMessages: true,
+            buyerTransactions: true
+          }
         }
       },
-      take: limit,
-      skip,
       orderBy: {
-        [sortBy]: sortOrder as 'asc' | 'desc'
-      }
+        [sortField]: sortOrder
+      },
+      skip,
+      take: limit
     })
+
+    // Get total count for pagination
+    const totalCount = await prisma.user.count({ where })
 
     // Enrich with calculated metrics
     const enrichedBuyers = buyers.map(buyer => {
-      const savedCount = buyer._count.listings
-      const matchCount = 0 // No buyerMatches relation
-      const avgMatchScore = 0
+      const savedListings = buyer._count.savedListings
+      const ndaRequests = buyer._count.buyerNDARequests
+      const messages = buyer._count.sentMessages
+      const transactions = buyer.buyerTransactions
 
-      const preferredIndustries = buyer.buyerProfile?.preferredIndustries || []
-      const preferredLocations = buyer.buyerProfile?.preferredRegions || []
-      const minRevenue = buyer.buyerProfile?.revenueMin || 0
-      const maxRevenue = buyer.buyerProfile?.revenueMax || 0
-
-      const completedTransactions = 0 // No transaction relation on User
-      const totalSpent = 0
-      const avgDealValue = 0
+      const completedTransactions = transactions.filter(t => t.stage === 'COMPLETED').length
+      const inProgressTransactions = transactions.filter(
+        t => ['LOI_SIGNED', 'DD_IN_PROGRESS', 'SPA_NEGOTIATION'].includes(t.stage)
+      ).length
+      const totalSpent = transactions.reduce((sum, t) => sum + (t.agreedPrice || 0), 0)
+      const avgDealValue = transactions.length > 0 ? totalSpent / transactions.length : 0
 
       const daysSinceCreation = Math.floor((Date.now() - new Date(buyer.createdAt).getTime()) / (1000 * 60 * 60 * 24))
-      const isNew = daysSinceCreation < 30
-      const isActive = true // Simplified
+      const daysLastActive = buyer.lastLoginAt
+        ? Math.floor((Date.now() - new Date(buyer.lastLoginAt).getTime()) / (1000 * 60 * 60 * 24))
+        : daysSinceCreation
+
+      // Status determination
+      let buyerStatus = 'active'
+      if (daysSinceCreation < 30) buyerStatus = 'new'
+      else if (daysLastActive > 180) buyerStatus = 'inactive'
+
+      // Calculate buyer quality score (0-100)
+      let qualityScore = 0
+      qualityScore += Math.min(30, completedTransactions * 10) // Up to 30 for completed deals
+      qualityScore += Math.min(20, inProgressTransactions * 5) // Up to 20 for active deals
+      qualityScore += Math.min(15, savedListings * 2) // Up to 15 for engagement
+      qualityScore += buyer.verified ? 10 : 0
+      qualityScore += buyer.bankIdVerified ? 15 : 0
+      qualityScore += ndaRequests > 0 ? 10 : 0
+
+      // Average NDA to transaction conversion
+      const ndaToTransactionRate = ndaRequests > 0
+        ? Math.round((completedTransactions / ndaRequests) * 100)
+        : 0
 
       return {
         id: buyer.id,
         email: buyer.email,
         name: buyer.name || 'N/A',
-        createdAt: buyer.createdAt,
+        createdAt: buyer.createdAt.toISOString(),
+        lastLoginAt: buyer.lastLoginAt?.toISOString() || null,
         verified: buyer.verified,
         bankIdVerified: buyer.bankIdVerified,
-        status: isNew ? 'new' : 'active',
+        status: buyerStatus,
         preferences: {
-          industries: preferredIndustries,
-          locations: preferredLocations,
-          minRevenue,
-          maxRevenue,
-          revenueRange: `${minRevenue}M - ${maxRevenue}M SEK`
+          industries: buyer.buyerProfile?.preferredIndustries || [],
+          regions: buyer.buyerProfile?.preferredRegions || [],
+          revenueMin: buyer.buyerProfile?.revenueMin || 0,
+          revenueMax: buyer.buyerProfile?.revenueMax || 0,
+          investmentType: buyer.buyerProfile?.investmentType,
+          buyerType: buyer.buyerProfile?.buyerType,
+          investmentExperience: buyer.buyerProfile?.investmentExperience,
+          timeframe: buyer.buyerProfile?.timeframe
         },
         activity: {
-          savedListings: 0,
-          matches: 0,
-          avgMatchScore: 0
+          savedListings,
+          ndaRequests,
+          messages,
+          transactions: transactions.length
         },
         deals: {
-          total: 0,
-          completed: 0,
-          totalSpent: 0,
-          avgValue: '0'
+          total: transactions.length,
+          completed: completedTransactions,
+          inProgress: inProgressTransactions,
+          totalSpent: totalSpent,
+          avgValue: Math.round(avgDealValue),
+          ndaConversionRate: ndaToTransactionRate
         },
         engagement: {
           daysSinceCreation,
-          lastActivityDaysAgo: Math.floor(Math.random() * 30), // Would track actual last activity
-          responseRate: Math.floor(Math.random() * 100) // Would calculate from messages
+          daysLastActive,
+          messageCount: messages
         },
         buyerQuality: {
-          score: Math.min(100, Math.round(
-            (completedTransactions * 20) +
-            (matchCount * 5) +
-            (savedCount * 2) +
-            (buyer.verified ? 15 : 0) +
-            (buyer.bankIdVerified ? 20 : 0)
-          )),
-          status: completedTransactions > 0 ? 'verified' : buyer.verified ? 'qualified' : 'new'
+          score: Math.min(100, Math.round(qualityScore)),
+          status: completedTransactions > 0 ? 'verified_buyer' : buyer.verified ? 'qualified_buyer' : 'new_buyer'
         }
       }
     })
 
-    // Sort
-    enrichedBuyers.sort((a, b) => {
-      let aVal: any = a[sortBy as keyof typeof a]
-      let bVal: any = b[sortBy as keyof typeof b]
-
-      // Handle nested properties
-      if (typeof aVal === 'object') aVal = aVal.total || aVal.score || 0
-      if (typeof bVal === 'object') bVal = bVal.total || bVal.score || 0
-
-      if (sortOrder === 'desc') {
-        return Number(bVal) - Number(aVal)
-      } else {
-        return Number(aVal) - Number(bVal)
-      }
-    })
-
-    const total = await prisma.user.count({
-      where: { role: 'buyer' }
-    })
+    // Filter by status if provided
+    let filteredBuyers = enrichedBuyers
+    if (status && status !== 'all') {
+      filteredBuyers = filteredBuyers.filter(b => b.status === status)
+    }
 
     // Calculate summary stats
-    const avgQualityScore = Math.round(
-      enrichedBuyers.reduce((sum, b) => sum + b.buyerQuality.score, 0) / enrichedBuyers.length
-    )
-    const activeBuyers = enrichedBuyers.filter(b => b.status === 'active').length
-    const totalMatches = enrichedBuyers.reduce((sum, b) => sum + b.activity.matches, 0)
-    const totalDeals = enrichedBuyers.reduce((sum, b) => sum + b.deals.total, 0)
+    const avgQualityScore = filteredBuyers.length > 0
+      ? Math.round(filteredBuyers.reduce((sum, b) => sum + b.buyerQuality.score, 0) / filteredBuyers.length)
+      : 0
+
+    const activeBuyers = filteredBuyers.filter(b => b.status === 'active').length
+    const newBuyers = filteredBuyers.filter(b => b.status === 'new').length
+    const inactiveBuyers = filteredBuyers.filter(b => b.status === 'inactive').length
+
+    const totalDeals = filteredBuyers.reduce((sum, b) => sum + b.deals.total, 0)
+    const completedDeals = filteredBuyers.reduce((sum, b) => sum + b.deals.completed, 0)
+    const totalSpentByBuyers = filteredBuyers.reduce((sum, b) => sum + b.deals.totalSpent, 0)
+    const avgSavedListings = filteredBuyers.length > 0
+      ? (filteredBuyers.reduce((sum, b) => sum + b.activity.savedListings, 0) / filteredBuyers.length).toFixed(1)
+      : '0'
+
+    const pages = Math.ceil(totalCount / limit)
 
     return NextResponse.json({
-      success: true,
-      data: enrichedBuyers,
-      stats: {
-        totalBuyers: total,
-        activeBuyers,
-        newBuyers: enrichedBuyers.filter(b => b.status === 'new').length,
-        avgQualityScore,
-        totalMatches,
-        totalDeals,
-        avgSavedListings: (enrichedBuyers.reduce((sum, b) => sum + b.activity.savedListings, 0) / enrichedBuyers.length).toFixed(1)
-      },
+      buyers: filteredBuyers,
       pagination: {
         page,
         limit,
-        total,
-        pages: Math.ceil(total / limit)
+        total: totalCount,
+        pages,
+        hasMore: page < pages
+      },
+      stats: {
+        totalBuyers: totalCount,
+        activeBuyers,
+        newBuyers,
+        inactiveBuyers,
+        avgQualityScore,
+        totalDeals,
+        completedDeals,
+        totalSpentByBuyers,
+        avgSavedListings
       }
     })
   } catch (error) {
     console.error('Error fetching buyer analytics:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch buyer analytics' },
+      { error: 'Failed to fetch buyer analytics', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
