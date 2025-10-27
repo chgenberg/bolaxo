@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, Target, Star } from 'lucide-react'
-import ValuationFormModal from '@/components/ValuationFormModal'
+import ValuationWizard from '@/components/ValuationWizard'
 import Image from 'next/image'
 
 export default function ValuationPage() {
@@ -286,7 +286,7 @@ export default function ValuationPage() {
       </main>
 
       {/* Valuation Form Modal */}
-      <ValuationFormModal 
+      <ValuationWizard 
         isOpen={showWizard}
         onClose={() => setShowWizard(false)}
       />

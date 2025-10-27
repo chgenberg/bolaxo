@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, ArrowRight, TrendingUp, ChevronDown, X } from 'lucide-react'
-import ValuationFormModal from '@/components/ValuationFormModal'
+import ValuationWizard from '@/components/ValuationWizard'
 
 export default function Home() {
   const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)
@@ -246,7 +246,7 @@ export default function Home() {
       </section>
 
       {/* Valuation Form Modal */}
-      <ValuationFormModal 
+      <ValuationWizard 
         isOpen={isValuationModalOpen}
         onClose={() => setIsValuationModalOpen(false)}
       />
