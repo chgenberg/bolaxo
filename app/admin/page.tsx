@@ -8,6 +8,30 @@ import {
   Eye, Search, ShoppingCart, Flag, Activity, Clock, Zap, Globe, Users2, DollarSign, Mail, MessageCircle, Ticket,
   ChevronRight, ArrowUp, ArrowDown, Sparkles, Database, Shield, Settings, LogOut, Menu, X, ChartBar, PieChart
 } from 'lucide-react'
+import UserManagement from '@/components/admin/UserManagement'
+import ListingManagement from '@/components/admin/ListingManagement'
+import TransactionPipeline from '@/components/admin/TransactionPipeline'
+import PaymentManagement from '@/components/admin/PaymentManagement'
+import FinancialDashboard from '@/components/admin/FinancialDashboard'
+import ContentModeration from '@/components/admin/ContentModeration'
+import AuditTrail from '@/components/admin/AuditTrail'
+import AdvancedAnalytics from '@/components/admin/AdvancedAnalytics'
+import SellerManagement from '@/components/admin/SellerManagement'
+import BuyerAnalytics from '@/components/admin/BuyerAnalytics'
+import FraudDetection from '@/components/admin/FraudDetection'
+import NdaTracking from '@/components/admin/NdaTracking'
+import EmailTracking from '@/components/admin/EmailTracking'
+import IntegrationLogs from '@/components/admin/IntegrationLogs'
+import MessageModeration from '@/components/admin/MessageModeration'
+import SupportTickets from '@/components/admin/SupportTickets'
+import ReportGeneration from '@/components/admin/ReportGeneration'
+import AdminManagement from '@/components/admin/AdminManagement'
+import PermissionsMatrix from '@/components/admin/PermissionsMatrix'
+import DataExportImport from '@/components/admin/DataExportImport'
+import SellerVerification from '@/components/admin/SellerVerification'
+import BuyerOnboarding from '@/components/admin/BuyerOnboarding'
+import CustomAlerts from '@/components/admin/CustomAlerts'
+import AdvancedReporting from '@/components/admin/AdvancedReporting'
 
 interface DashboardStats {
   totalVisitors: number
@@ -571,30 +595,30 @@ export default function AdminDashboard() {
         )}
 
         {/* Other tabs remain the same but with updated styling */}
-        {activeTab === 'users' && <div className="p-8 text-center text-gray-500">User Management - Loading...</div>}
-        {activeTab === 'listings' && <div className="p-8 text-center text-gray-500">Listing Management - Loading...</div>}
-        {activeTab === 'transactions' && <div className="p-8 text-center text-gray-500">Transaction Pipeline - Loading...</div>}
-        {activeTab === 'payments' && <div className="p-8 text-center text-gray-500">Payment Management - Loading...</div>}
-        {activeTab === 'financial' && <div className="p-8 text-center text-gray-500">Financial Dashboard - Loading...</div>}
-        {activeTab === 'moderation' && <div className="p-8 text-center text-gray-500">Content Moderation - Loading...</div>}
-        {activeTab === 'audit' && <div className="p-8 text-center text-gray-500">Audit Trail - Loading...</div>}
-        {activeTab === 'analytics' && <div className="p-8 text-center text-gray-500">Advanced Analytics - Loading...</div>}
-        {activeTab === 'sellers' && <div className="p-8 text-center text-gray-500">Seller Management - Loading...</div>}
-        {activeTab === 'buyers' && <div className="p-8 text-center text-gray-500">Buyer Analytics - Loading...</div>}
-        {activeTab === 'fraud' && <div className="p-8 text-center text-gray-500">Fraud Detection - Loading...</div>}
-        {activeTab === 'ndas' && <div className="p-8 text-center text-gray-500">NDA Tracking - Loading...</div>}
-        {activeTab === 'emails' && <div className="p-8 text-center text-gray-500">Email Tracking - Loading...</div>}
-        {activeTab === 'integrations' && <div className="p-8 text-center text-gray-500">Integration Logs - Loading...</div>}
-        {activeTab === 'messages' && <div className="p-8 text-center text-gray-500">Message Moderation - Loading...</div>}
-        {activeTab === 'support' && <div className="p-8 text-center text-gray-500">Support Tickets - Loading...</div>}
-        {activeTab === 'reports' && <div className="p-8 text-center text-gray-500">Report Generation - Loading...</div>}
-        {activeTab === 'admins' && <div className="p-8 text-center text-gray-500">Admin Management - Loading...</div>}
-        {activeTab === 'permissions' && <div className="p-8 text-center text-gray-500">Permissions Matrix - Loading...</div>}
-        {activeTab === 'data' && <div className="p-8 text-center text-gray-500">Data Export/Import - Loading...</div>}
-        {activeTab === 'sellerVerification' && <div className="p-8 text-center text-gray-500">Seller Verification - Loading...</div>}
-        {activeTab === 'buyerOnboarding' && <div className="p-8 text-center text-gray-500">Buyer Onboarding - Loading...</div>}
-        {activeTab === 'customAlerts' && <div className="p-8 text-center text-gray-500">Custom Alerts - Loading...</div>}
-        {activeTab === 'advancedReporting' && <div className="p-8 text-center text-gray-500">Advanced Reporting - Loading...</div>}
+        {activeTab === 'users' && <UserManagement />}
+        {activeTab === 'listings' && <ListingManagement />}
+        {activeTab === 'transactions' && <TransactionPipeline />}
+        {activeTab === 'payments' && <PaymentManagement />}
+        {activeTab === 'financial' && <FinancialDashboard />}
+        {activeTab === 'moderation' && <ContentModeration />}
+        {activeTab === 'audit' && <AuditTrail />}
+        {activeTab === 'analytics' && <AdvancedAnalytics />}
+        {activeTab === 'sellers' && <SellerManagement />}
+        {activeTab === 'buyers' && <BuyerAnalytics />}
+        {activeTab === 'fraud' && <FraudDetection />}
+        {activeTab === 'ndas' && <NdaTracking />}
+        {activeTab === 'emails' && <EmailTracking />}
+        {activeTab === 'integrations' && <IntegrationLogs />}
+        {activeTab === 'messages' && <MessageModeration />}
+        {activeTab === 'support' && <SupportTickets />}
+        {activeTab === 'reports' && <ReportGeneration />}
+        {activeTab === 'admins' && <AdminManagement />}
+        {activeTab === 'permissions' && <PermissionsMatrix />}
+        {activeTab === 'data' && <DataExportImport />}
+        {activeTab === 'sellerVerification' && <SellerVerification />}
+        {activeTab === 'buyerOnboarding' && <BuyerOnboarding />}
+        {activeTab === 'customAlerts' && <CustomAlerts />}
+        {activeTab === 'advancedReporting' && <AdvancedReporting />}
 
         </div>
       </main>
