@@ -33,6 +33,37 @@ function LoginForm() {
     setIsSubmitting(true)
     setError(null)
 
+    // In development: use direct login (no magic link needed)
+    if (process.env.NODE_ENV === 'development') {
+      try {
+        const response = await fetch('/api/auth/dev-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            role: selectedRole,
+            name: email.split('@')[0] // Use email prefix as name if not provided
+          })
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          // Redirect to appropriate dashboard based on role
+          window.location.href = selectedRole === 'seller' ? '/salja/start' : '/kopare/start'
+          return
+        } else {
+          const data = await response.json()
+          setError(data.error || 'Kunde inte logga in')
+        }
+      } catch (err) {
+        setError('Anslutningsfel')
+        console.error(err)
+      }
+      setIsSubmitting(false)
+      return
+    }
+
+    // Production: use magic link
     const result = await login(email, selectedRole, acceptedPrivacy, referralCode || undefined)
 
     if (result.success) {

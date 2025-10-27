@@ -65,6 +65,19 @@ export default function RegisterPage() {
 
     setUser(user)
 
+    // In development: also save to database via dev-login endpoint
+    if (process.env.NODE_ENV === 'development') {
+      fetch('/api/auth/dev-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          role: selectedRole,
+          name: name || email.split('@')[0]
+        })
+      }).catch(err => console.error('Failed to sync user to DB:', err))
+    }
+
     if (selectedRole === 'seller') {
       router.push('/salja/start')
     } else if (selectedRole === 'broker') {

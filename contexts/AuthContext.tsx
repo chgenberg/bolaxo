@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUser = async () => {
     try {
-      // Check for dev login first
+      // Check for dev login first (localStorage)
       if (typeof window !== 'undefined') {
         const devUserStr = localStorage.getItem('dev-auth-user')
         if (devUserStr) {
@@ -65,10 +65,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
       
-      // Fall back to regular auth API
+      // Fall back to regular auth API (checks session cookie)
       const response = await fetch('/api/auth/me')
-      const data = await response.json()
-      setUser(data.user)
+      if (response.ok) {
+        const data = await response.json()
+        setUser(data.user)
+      } else {
+        setUser(null)
+      }
     } catch (error) {
       console.error('Failed to fetch user:', error)
       setUser(null)
