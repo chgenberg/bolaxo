@@ -20,7 +20,7 @@ function FAQItem({ faq }: { faq: any }) {
         <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${faq.color} rounded-full flex items-center justify-center group-hover:scale-110 transition-transform`}>
           <Icon className="w-6 h-6 text-white" />
         </div>
-        <h3 className="flex-1 text-xl font-bold text-primary-navy group-hover:text-accent-orange transition-colors">
+        <h3 className="flex-1 text-xl font-bold text-primary-navy group-hover:text-primary-navy transition-colors">
           {faq.q}
         </h3>
         <ChevronRight className={`w-6 h-6 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} />
@@ -76,13 +76,13 @@ export default function KopareInfoPage() {
       {/* Hero Section with Carousel */}
       <section className="relative overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-orange/20 via-accent-pink/10 to-primary-navy/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-navy/20 via-accent-pink/10 to-primary-navy/5" />
         
         <div className="relative">
           {/* Hero Text */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
             <div className="text-center mb-12">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-accent-orange mb-6 uppercase tracking-tight">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-primary-navy mb-6 uppercase tracking-tight">
                 KÖPGUIDEN FÖR<br />
                 <span className="text-primary-navy">DITT NÄSTA FÖRETAG</span>
               </h1>
@@ -156,7 +156,7 @@ export default function KopareInfoPage() {
                         <div className="space-y-6">
                           <div>
                             <span className="text-accent-pink font-bold text-sm uppercase tracking-wider">{currentObject.type}</span>
-                            <h3 className="text-3xl lg:text-4xl font-bold text-primary-navy mt-2 group-hover:text-accent-orange transition-colors">
+                            <h3 className="text-3xl lg:text-4xl font-bold text-primary-navy mt-2 group-hover:text-primary-navy transition-colors">
                               {currentObject.anonymousTitle}
                             </h3>
                             <p className="text-gray-600 mt-4 text-lg leading-relaxed line-clamp-3">
@@ -166,8 +166,8 @@ export default function KopareInfoPage() {
 
                           {/* Metrics Grid */}
                           <div className="grid grid-cols-3 gap-4">
-                            <div className="bg-gradient-to-br from-accent-orange/10 to-accent-orange/5 rounded-xl p-4">
-                              <div className="flex items-center text-accent-orange text-sm font-semibold mb-2">
+                            <div className="bg-gradient-to-br from-primary-navy/10 to-primary-navy/5 rounded-xl p-4">
+                              <div className="flex items-center text-primary-navy text-sm font-semibold mb-2">
                                 <MapPin className="w-4 h-4 mr-1" />
                                 Plats
                               </div>
@@ -249,7 +249,7 @@ export default function KopareInfoPage() {
       <section className="py-24 bg-gradient-to-b from-neutral-white to-neutral-off-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-orange mb-6 uppercase">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-primary-navy mb-6 uppercase">
               PROCESSEN I 7 STEG
             </h2>
             <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">
@@ -352,7 +352,7 @@ export default function KopareInfoPage() {
                     <div className="flex-1 relative">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h3 className="text-2xl font-bold text-primary-navy mb-1 group-hover:text-accent-orange transition-colors">
+                          <h3 className="text-2xl font-bold text-primary-navy mb-1 group-hover:text-primary-navy transition-colors">
                             {item.title}
                           </h3>
                           <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r ${item.color} text-white`}>
@@ -366,7 +366,7 @@ export default function KopareInfoPage() {
                       </p>
                       
                       {/* Interactive hover effect */}
-                      <div className={`mt-4 flex items-center gap-2 text-accent-orange font-semibold opacity-0 transform translate-y-2 transition-all duration-300 ${
+                      <div className={`mt-4 flex items-center gap-2 text-primary-navy font-semibold opacity-0 transform translate-y-2 transition-all duration-300 ${
                         hoveredStep === item.step ? 'opacity-100 translate-y-0' : ''
                       }`}>
                         <span>Läs mer</span>
@@ -385,7 +385,7 @@ export default function KopareInfoPage() {
       <section className="py-24 bg-gradient-to-b from-neutral-off-white to-neutral-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-orange mb-6 uppercase">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-primary-navy mb-6 uppercase">
               Varför välja oss?
             </h2>
             <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">
@@ -447,7 +447,7 @@ export default function KopareInfoPage() {
                       <Icon className="w-8 h-8 text-white" />
                     </div>
                     
-                    <h3 className="text-2xl font-bold text-primary-navy mb-3 group-hover:text-accent-orange transition-colors">
+                    <h3 className="text-2xl font-bold text-primary-navy mb-3 group-hover:text-primary-navy transition-colors">
                       {benefit.title}
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
@@ -462,12 +462,12 @@ export default function KopareInfoPage() {
       </section>
 
       {/* Trust & Safety Section */}
-      <section className="py-24 bg-gradient-to-b from-neutral-white to-accent-orange/5">
+      <section className="py-24 bg-gradient-to-b from-neutral-white to-primary-navy/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left side - Content */}
             <div>
-              <h2 className="text-4xl sm:text-5xl font-black text-accent-orange mb-6 uppercase">
+              <h2 className="text-4xl sm:text-5xl font-black text-primary-navy mb-6 uppercase">
                 Säkerhet i varje steg
               </h2>
               <p className="text-xl text-primary-navy/80 mb-12 leading-relaxed">
@@ -520,7 +520,7 @@ export default function KopareInfoPage() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-accent-orange to-accent-pink rounded-3xl blur-3xl opacity-20 animate-pulse" />
               <div className="relative bg-white rounded-3xl shadow-2xl p-12 text-center">
-                <Shield className="w-24 h-24 mx-auto text-accent-orange mb-6" />
+                <Shield className="w-24 h-24 mx-auto text-primary-navy mb-6" />
                 <h3 className="text-3xl font-bold text-primary-navy mb-4">Bank-nivå säkerhet</h3>
                 <p className="text-gray-600 text-lg">
                   Samma säkerhetsstandarder som svenska banker använder för att skydda din data.
@@ -535,7 +535,7 @@ export default function KopareInfoPage() {
       <section className="py-24 bg-gradient-to-b from-neutral-off-white to-neutral-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-accent-orange mb-6 uppercase">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-primary-navy mb-6 uppercase">
               Vanliga frågor
             </h2>
             <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">

@@ -80,7 +80,7 @@ export default function RegisterPage() {
         {step === 1 && (
           <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card border border-gray-200">
             <div className="text-center mb-10">
-              <h1 className="text-4xl font-bold text-accent-orange mb-2 uppercase">SKAPA KONTO</h1>
+              <h1 className="text-4xl font-bold text-primary-navy mb-2 uppercase">SKAPA KONTO</h1>
               <p className="text-lg text-primary-navy">
                 Välj din roll för att komma igång
               </p>
@@ -108,7 +108,7 @@ export default function RegisterPage() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Building className="w-6 h-6 text-accent-orange" />
+                      <Building className="w-6 h-6 text-primary-navy" />
                       <h3 className="text-lg font-bold text-primary-navy">Jag vill sälja</h3>
                     </div>
                     <p className="text-gray-700">
@@ -138,7 +138,7 @@ export default function RegisterPage() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Handshake className="w-6 h-6 text-accent-orange" />
+                      <Handshake className="w-6 h-6 text-primary-navy" />
                       <h3 className="text-lg font-bold text-primary-navy">Jag är mäklare</h3>
                     </div>
                     <p className="text-gray-700">
@@ -168,7 +168,7 @@ export default function RegisterPage() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Search className="w-6 h-6 text-accent-orange" />
+                      <Search className="w-6 h-6 text-primary-navy" />
                       <h3 className="text-lg font-bold text-primary-navy">Jag är köpare</h3>
                     </div>
                     <p className="text-gray-700">
@@ -181,7 +181,7 @@ export default function RegisterPage() {
 
             {selectedRole && (
               <div className="space-y-6 border-t border-gray-200 pt-8">
-                <h2 className="text-2xl font-bold text-accent-orange">Logga in eller skapa konto</h2>
+                <h2 className="text-2xl font-bold text-primary-navy">Logga in eller skapa konto</h2>
                 
                 <FormField
                   label="E-postadress"
@@ -223,7 +223,7 @@ export default function RegisterPage() {
 
                 <button 
                   onClick={handleBankId} 
-                  className="w-full py-3 px-6 border-2 border-accent-orange text-primary-navy font-bold rounded-lg hover:bg-accent-orange/5 transition-all inline-flex items-center justify-center gap-2"
+                  className="w-full py-3 px-6 border-2 border-accent-orange text-primary-navy font-bold rounded-lg hover:bg-primary-navy/5 transition-all inline-flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -242,7 +242,7 @@ export default function RegisterPage() {
         {step === 2 && selectedRole && (
           <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card border border-gray-200">
             <div className="text-center mb-10">
-              <h1 className="text-4xl font-bold text-accent-orange mb-2">Komplettera profil</h1>
+              <h1 className="text-4xl font-bold text-primary-navy mb-2">Komplettera profil</h1>
               <p className="text-lg text-primary-navy">
                 {selectedRole === 'seller' && 'Berätta kort om dig och ditt företag'}
                 {selectedRole === 'broker' && 'Uppgifter om din mäklarverksamhet'}
@@ -327,8 +327,8 @@ export default function RegisterPage() {
                     onValueChange={setBrokerWebsite}
                   />
 
-                  <div className="bg-accent-orange/5 border border-accent-orange/20 p-5 rounded-lg flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                  <div className="bg-primary-navy/5 border border-primary-navy/20 p-5 rounded-lg flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-primary-navy flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-primary-navy">
                       BankID-verifiering krävs för mäklarlicens (personlig licensiering)
                     </p>
@@ -373,24 +373,24 @@ export default function RegisterPage() {
               </svg>
             </div>
 
-            <h1 className="text-4xl font-bold text-accent-orange mb-3">BankID-verifiering</h1>
+            <h1 className="text-4xl font-bold text-primary-navy mb-3">BankID-verifiering</h1>
             <p className="text-lg text-primary-navy mb-8">
               Mäklarlicenser är personbundna och kräver BankID-verifiering för att säkerställa legitimitet.
             </p>
 
-            <div className="bg-accent-orange/5 p-6 rounded-lg mb-8 text-left border border-accent-orange/20">
+            <div className="bg-primary-navy/5 p-6 rounded-lg mb-8 text-left border border-primary-navy/20">
               <h3 className="font-bold text-primary-navy mb-4">Vad som verifieras:</h3>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-primary-navy flex-shrink-0 mt-0.5" />
                   <span>Personlig identitet (personnummer)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-primary-navy flex-shrink-0 mt-0.5" />
                   <span>Koppling till mäklarföretaget</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-primary-navy flex-shrink-0 mt-0.5" />
                   <span>Behörighet att teckna avtal</span>
                 </li>
               </ul>

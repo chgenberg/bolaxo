@@ -76,7 +76,7 @@ export default function DataExportImport() {
             </select>
           </div>
           <div className="flex items-end">
-            <button onClick={handleExport} disabled={exporting} className="w-full px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50 font-medium flex items-center justify-center gap-2">
+            <button onClick={handleExport} disabled={exporting} className="w-full px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50 font-medium flex items-center justify-center gap-2">
               {exporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
               {exporting ? 'Exporting...' : 'Export'}
             </button>

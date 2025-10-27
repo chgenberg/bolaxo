@@ -128,9 +128,9 @@ export default function BlogPage() {
   return (
     <main className="bg-neutral-white">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
+      <section className="bg-gradient-to-br from-primary-navy/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+          <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
             Kunskap & Insikter
           </h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
@@ -142,7 +142,7 @@ export default function BlogPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         {/* Featured Posts */}
         <div className="mb-20">
-          <h2 className="text-4xl font-bold text-accent-orange mb-12 uppercase">Utvalda artiklar</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-12 uppercase">Utvalda artiklar</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             {blogPosts.slice(0, 2).map((post) => (
@@ -150,7 +150,7 @@ export default function BlogPage() {
                 key={post.id}
                 className="bg-white rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-all cursor-pointer group"
               >
-                <div className="relative h-48 bg-gradient-to-br from-accent-pink/10 to-accent-orange/10 overflow-hidden">
+                <div className="relative h-48 bg-gradient-to-br from-accent-pink/10 to-primary-navy/10 overflow-hidden">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-6xl opacity-20">📰</span>
                   </div>
@@ -164,7 +164,7 @@ export default function BlogPage() {
                     <span className="text-xs text-gray-600">{post.readTime} min läsning</span>
                   </div>
 
-                  <h3 className="text-2xl font-bold text-accent-orange mb-3 group-hover:text-accent-pink transition-colors">
+                  <h3 className="text-2xl font-bold text-primary-navy mb-3 group-hover:text-accent-pink transition-colors">
                     {post.title}
                   </h3>
 
@@ -236,7 +236,7 @@ export default function BlogPage() {
 
         {/* All Articles */}
         <div>
-          <h2 className="text-4xl font-bold text-accent-orange mb-12 uppercase">Senaste artiklarna</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-12 uppercase">Senaste artiklarna</h2>
 
           <div className="space-y-6">
             {blogPosts.map((post) => (
@@ -256,7 +256,7 @@ export default function BlogPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-2xl font-bold text-accent-orange mb-3 group-hover:text-accent-pink transition-colors">
+                    <h3 className="text-2xl font-bold text-primary-navy mb-3 group-hover:text-accent-pink transition-colors">
                       {post.title}
                     </h3>
 

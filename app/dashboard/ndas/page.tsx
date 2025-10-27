@@ -192,7 +192,7 @@ export default function NDAsPage() {
           </div>
           <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-accent-orange" />
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
             </div>
             <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.filter(n => n.status === 'approved').length}</p>
             <p className="text-xs text-gray-600 font-medium">Godkända</p>

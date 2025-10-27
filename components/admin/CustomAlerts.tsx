@@ -105,7 +105,7 @@ export default function CustomAlerts() {
       </div>
 
       {showForm && metadata && (
-        <div className="bg-gradient-to-br from-accent-pink/10 to-accent-orange/10 border-2 border-accent-pink rounded-lg p-6 space-y-4">
+        <div className="bg-gradient-to-br from-accent-pink/10 to-primary-navy/10 border-2 border-accent-pink rounded-lg p-6 space-y-4">
           <h3 className="text-lg font-bold text-primary-navy">Create New Alert</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -144,7 +144,7 @@ export default function CustomAlerts() {
             </div>
           </div>
           <div className="flex gap-2 pt-4">
-            <button onClick={handleCreateAlert} className="flex-1 px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 font-medium">Create Alert</button>
+            <button onClick={handleCreateAlert} className="flex-1 px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 font-medium">Create Alert</button>
             <button onClick={() => setShowForm(false)} className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Cancel</button>
           </div>
         </div>

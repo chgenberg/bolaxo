@@ -4,9 +4,9 @@ export default function AboutPage() {
   return (
     <main className="bg-neutral-white">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
+      <section className="bg-gradient-to-br from-primary-navy/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6">
+          <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6">
             Vi förenklar företagsförsäljning
           </h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
@@ -23,7 +23,7 @@ export default function AboutPage() {
               <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
                 <Target className="w-8 h-8 text-accent-pink" />
               </div>
-              <h2 className="text-2xl font-bold text-accent-orange mb-4">Vår mission</h2>
+              <h2 className="text-2xl font-bold text-primary-navy mb-4">Vår mission</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 Att demokratisera företagsförsäljning genom att göra processen transparent, säker och tillgänglig för alla svenska företagare.
               </p>
@@ -33,7 +33,7 @@ export default function AboutPage() {
               <div className="w-16 h-16 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
                 <Eye className="w-8 h-8 text-accent-pink" />
               </div>
-              <h2 className="text-2xl font-bold text-accent-orange mb-4">Vår vision</h2>
+              <h2 className="text-2xl font-bold text-primary-navy mb-4">Vår vision</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 Att bli Nordens ledande plattform för företagstransaktioner där varje företagare kan sälja och köpa företag digitalt.
               </p>
@@ -48,10 +48,10 @@ export default function AboutPage() {
           <div className="bg-white p-12 rounded-lg border border-gray-200">
             <div className="flex gap-6">
               <div className="flex-shrink-0">
-                <Lightbulb className="w-12 h-12 text-accent-orange" />
+                <Lightbulb className="w-12 h-12 text-primary-navy" />
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-accent-orange mb-4">Varför vi startade</h2>
+                <h2 className="text-3xl font-bold text-primary-navy mb-4">Varför vi startade</h2>
                 <p className="text-lg text-gray-700 leading-relaxed mb-4">
                   Vi såg hur många små och medelstora företagare som ville sälja sitt livsverk, men saknade en modern, digital plattform för det. De flesta tvingades att engagera dyra traditionella mäklare eller leta långt och brett utan struktur.
                 </p>
@@ -68,7 +68,7 @@ export default function AboutPage() {
       <section className="py-24 bg-neutral-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-accent-orange mb-6">Teamet bakom Bolagsplatsen</h2>
+            <h2 className="text-4xl font-bold text-primary-navy mb-6">Teamet bakom Bolagsplatsen</h2>
             <p className="text-xl text-primary-navy">
               Erfarna entreprenörer och tech-builders med passion för M&A
             </p>
@@ -100,7 +100,7 @@ export default function AboutPage() {
                   {member.initials}
                 </div>
                 <h3 className="text-xl font-bold text-primary-navy mb-1">{member.name}</h3>
-                <div className="text-sm font-semibold text-accent-orange mb-4">{member.title}</div>
+                <div className="text-sm font-semibold text-primary-navy mb-4">{member.title}</div>
                 <p className="text-gray-700">{member.desc}</p>
               </div>
             ))}

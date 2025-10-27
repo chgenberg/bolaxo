@@ -41,7 +41,7 @@ export default function ContactPage() {
             <div className="w-20 h-20 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
               <Send className="w-10 h-10 text-accent-pink" />
             </div>
-            <h1 className="text-4xl font-bold text-accent-orange mb-4">Tack för ditt meddelande!</h1>
+            <h1 className="text-4xl font-bold text-primary-navy mb-4">Tack för ditt meddelande!</h1>
             <p className="text-lg text-primary-navy leading-relaxed mb-10">
               Vi har tagit emot ditt meddelande och återkommer inom 24 timmar.
             </p>
@@ -64,9 +64,9 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-neutral-white">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
+      <section className="bg-gradient-to-br from-primary-navy/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6">Kontakta oss</h1>
+          <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6">Kontakta oss</h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
             Vi finns här för att hjälpa dig. Skicka ett meddelande så återkommer vi inom 24 timmar.
           </p>
@@ -77,7 +77,7 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Contact Info */}
           <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold text-accent-orange mb-8">Kontaktinformation</h2>
+            <h2 className="text-2xl font-bold text-primary-navy mb-8">Kontaktinformation</h2>
             
             <div className="space-y-6">
               <div className="flex gap-4">

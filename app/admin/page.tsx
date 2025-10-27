@@ -495,7 +495,7 @@ export default function AdminDashboard() {
             {/* Recent Activities */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-primary-navy mb-4 uppercase flex items-center gap-2">
-                <Activity className="w-5 h-5 text-accent-orange" />
+                <Activity className="w-5 h-5 text-primary-navy" />
                 Recent Activities
               </h2>
               <div className="space-y-2">

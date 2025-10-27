@@ -93,7 +93,7 @@ export default function PricingPage() {
       <section className="bg-neutral-white py-16 sm:py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+            <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
               TRANSPARENT PRISSÄTTNING
             </h1>
             <p className="text-2xl text-primary-navy leading-relaxed max-w-3xl mx-auto">
@@ -126,7 +126,7 @@ export default function PricingPage() {
                   
                   {/* Price */}
                   <div className="flex items-baseline mb-6">
-                    <span className="text-5xl font-bold text-accent-orange">{plan.price}</span>
+                    <span className="text-5xl font-bold text-primary-navy">{plan.price}</span>
                     <span className="text-gray-700 ml-2">kr</span>
                     {plan.subtitle && (
                       <span className="text-gray-700 ml-1 text-lg">{plan.subtitle}</span>
@@ -166,7 +166,7 @@ export default function PricingPage() {
                           </span>
                           {'value' in feature && feature.value && (
                             <span className={`text-sm font-semibold ml-2 ${
-                              'highlight' in feature && feature.highlight ? 'text-accent-orange' : 'text-primary-navy'
+                              'highlight' in feature && feature.highlight ? 'text-primary-navy' : 'text-primary-navy'
                             }`}>
                               {feature.value}
                             </span>
@@ -186,17 +186,17 @@ export default function PricingPage() {
               Alla priser är exklusive moms. Fakturering sker månadsvis.
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-base">
-              <Link href="/faq" className="text-accent-orange font-semibold hover:underline inline-flex items-center gap-2">
+              <Link href="/faq" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2">
                 Vanliga frågor
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <span className="text-gray-300">•</span>
-              <Link href="/kontakt" className="text-accent-orange font-semibold hover:underline inline-flex items-center gap-2">
+              <Link href="/kontakt" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2">
                 Kontakta oss
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <span className="text-gray-300">•</span>
-              <Link href="/juridiskt/anvandarvillkor" className="text-accent-orange font-semibold hover:underline inline-flex items-center gap-2">
+              <Link href="/juridiskt/anvandarvillkor" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2">
                 Villkor
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -205,7 +205,7 @@ export default function PricingPage() {
 
           {/* FAQ Section */}
           <div className="mt-32 bg-neutral-off-white rounded-lg p-12">
-            <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center">Vanliga frågor om prissättning</h2>
+            <h2 className="text-4xl font-bold text-primary-navy mb-12 text-center">Vanliga frågor om prissättning</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <div>
                 <h3 className="text-xl font-bold text-primary-navy mb-3">Kan jag byta plan senare?</h3>

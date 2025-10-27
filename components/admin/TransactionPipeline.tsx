@@ -122,7 +122,7 @@ export default function TransactionPipeline() {
           </div>
           <button
             onClick={loadTransactions}
-            className="px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2"
+            className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh

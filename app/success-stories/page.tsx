@@ -5,9 +5,9 @@ export default function SuccessStoriesPage() {
   return (
     <main className="bg-neutral-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-accent-orange/10 to-accent-pink/10 py-20 sm:py-32">
+      <section className="bg-gradient-to-br from-primary-navy/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+          <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
             Success Stories
           </h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
@@ -25,7 +25,7 @@ export default function SuccessStoriesPage() {
               <span className="inline-block bg-accent-pink text-primary-navy text-xs font-bold px-4 py-2 rounded-full mb-6">
                 DESTACAT
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-accent-orange mb-6 uppercase">
+              <h2 className="text-3xl sm:text-4xl font-bold text-primary-navy mb-6 uppercase">
                 "Från annons till avslut på 45 dagar"
               </h2>
               <p className="text-lg text-primary-navy leading-relaxed mb-8">
@@ -35,7 +35,7 @@ export default function SuccessStoriesPage() {
               <div className="space-y-4 mb-10 pb-10 border-b border-gray-200">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-accent-pink/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl font-bold text-accent-orange">12</span>
+                    <span className="text-2xl font-bold text-primary-navy">12</span>
                   </div>
                   <div>
                     <div className="font-bold text-primary-navy">NDA-förfrågningar</div>
@@ -44,7 +44,7 @@ export default function SuccessStoriesPage() {
                 </div>
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-accent-pink/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-2xl font-bold text-accent-orange">5</span>
+                    <span className="text-2xl font-bold text-primary-navy">5</span>
                   </div>
                   <div>
                     <div className="font-bold text-primary-navy">Seriösa budgivare</div>
@@ -53,7 +53,7 @@ export default function SuccessStoriesPage() {
                 </div>
                 <div className="flex gap-4">
                   <div className="w-12 h-12 bg-accent-pink/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-xl font-bold text-accent-orange">14M</span>
+                    <span className="text-xl font-bold text-primary-navy">14M</span>
                   </div>
                   <div>
                     <div className="font-bold text-primary-navy">Slutpris</div>
@@ -92,20 +92,20 @@ export default function SuccessStoriesPage() {
             </div>
 
             {/* Stats Sidebar */}
-            <div className="bg-gradient-to-br from-accent-orange/5 to-accent-pink/5 p-10 lg:p-12 flex flex-col justify-center">
+            <div className="bg-gradient-to-br from-primary-navy/5 to-accent-pink/5 p-10 lg:p-12 flex flex-col justify-center">
               <div className="space-y-8">
                 <div>
-                  <div className="text-5xl font-bold text-accent-orange mb-2">14</div>
+                  <div className="text-5xl font-bold text-primary-navy mb-2">14</div>
                   <div className="text-xl font-semibold text-primary-navy mb-1">MSEK</div>
                   <p className="text-gray-600">Försäljningspris</p>
                 </div>
                 <div>
-                  <div className="text-5xl font-bold text-accent-orange mb-2">45</div>
+                  <div className="text-5xl font-bold text-primary-navy mb-2">45</div>
                   <div className="text-xl font-semibold text-primary-navy mb-1">dagar</div>
                   <p className="text-gray-600">Från annons till avslut</p>
                 </div>
                 <div>
-                  <div className="text-5xl font-bold text-accent-orange mb-2">3</div>
+                  <div className="text-5xl font-bold text-primary-navy mb-2">3</div>
                   <div className="text-xl font-semibold text-primary-navy mb-1">veckor</div>
                   <p className="text-gray-600">Till första erbjudande</p>
                 </div>
@@ -116,15 +116,15 @@ export default function SuccessStoriesPage() {
 
         {/* More Stories */}
         <div className="mb-16">
-          <h2 className="text-4xl font-bold text-accent-orange mb-12 uppercase">Fler Success Stories</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-12 uppercase">Fler Success Stories</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Story 1 */}
             <div className="bg-white rounded-lg p-8 border border-gray-200 hover:shadow-lg transition-all">
               <div className="w-12 h-12 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
-                <span className="text-2xl font-bold text-accent-orange">18</span>
+                <span className="text-2xl font-bold text-primary-navy">18</span>
               </div>
-              <h3 className="text-xl font-bold text-accent-orange mb-3">Hittade mitt drömobjekt</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-3">Hittade mitt drömobjekt</h3>
               <p className="text-gray-700 mb-6">
                 "Jag hade sökt efter e-handelsföretag i över ett år utan resultat. På BOLAXO hittade jag perfekt match på första dagen."
               </p>
@@ -142,9 +142,9 @@ export default function SuccessStoriesPage() {
             {/* Story 2 */}
             <div className="bg-white rounded-lg p-8 border border-gray-200 hover:shadow-lg transition-all">
               <div className="w-12 h-12 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
-                <span className="text-2xl font-bold text-accent-orange">12</span>
+                <span className="text-2xl font-bold text-primary-navy">12</span>
               </div>
-              <h3 className="text-xl font-bold text-accent-orange mb-3">NDA-förfrågningar första veckan</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-3">NDA-förfrågningar första veckan</h3>
               <p className="text-gray-700 mb-6">
                 "Trodde det skulle ta år att sälja min restaurang. Fick 12 NDA-förfrågningar första veckan och sålde efter 8 veckor."
               </p>
@@ -162,9 +162,9 @@ export default function SuccessStoriesPage() {
             {/* Story 3 */}
             <div className="bg-white rounded-lg p-8 border border-gray-200 hover:shadow-lg transition-all">
               <div className="w-12 h-12 bg-accent-pink/10 rounded-lg flex items-center justify-center mb-6">
-                <span className="text-2xl font-bold text-accent-orange">5</span>
+                <span className="text-2xl font-bold text-primary-navy">5</span>
               </div>
-              <h3 className="text-xl font-bold text-accent-orange mb-3">Seriösa budgivare på första veckan</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-3">Seriösa budgivare på första veckan</h3>
               <p className="text-gray-700 mb-6">
                 "Dataroom-funktionen gjorde det enkelt att dela dokument säkert. Processen var transparent från start."
               </p>
@@ -206,7 +206,7 @@ export default function SuccessStoriesPage() {
 
         {/* CTA */}
         <div className="text-center mt-16">
-          <h2 className="text-4xl font-bold text-accent-orange mb-6 uppercase">Vill du bli nästa success story?</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-6 uppercase">Vill du bli nästa success story?</h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/salja/start" className="inline-block px-8 py-4 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all">
               Börja sälja

@@ -55,7 +55,7 @@ function LoginForm() {
             <Mail className="w-10 h-10 text-accent-pink" />
           </div>
           
-          <h1 className="text-3xl sm:text-4xl font-bold text-accent-orange mb-2">Kolla din inkorg!</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-primary-navy mb-2">Kolla din inkorg!</h1>
           <p className="text-lg text-primary-navy mb-6">
             Vi har skickat en inloggningslänk till <strong>{email}</strong>
           </p>
@@ -64,7 +64,7 @@ function LoginForm() {
           </p>
           
           {magicLink && (
-            <div className="bg-accent-orange/5 border-2 border-accent-orange/30 p-6 rounded-lg mb-6 animate-fade-in">
+            <div className="bg-primary-navy/5 border-2 border-primary-navy/30 p-6 rounded-lg mb-6 animate-fade-in">
               <p className="text-sm font-semibold text-primary-navy mb-3 flex items-center justify-center">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Demo-läge – magisk länk genererad
@@ -89,7 +89,7 @@ function LoginForm() {
               setLinkSent(false)
               setEmail('')
             }}
-            className="text-accent-orange font-semibold hover:text-accent-orange/80 transition-colors"
+            className="text-primary-navy font-semibold hover:text-primary-navy/80 transition-colors"
           >
             ← Skicka ny länk
           </button>
@@ -104,7 +104,7 @@ function LoginForm() {
         <div className="bg-white p-8 sm:p-10 rounded-lg shadow-card border border-gray-200">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-accent-orange mb-2 uppercase">LOGGA IN</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary-navy mb-2 uppercase">LOGGA IN</h1>
             <p className="text-lg text-primary-navy">
               Ingen lösenord behövs – vi skickar en magisk länk
             </p>
@@ -152,7 +152,7 @@ function LoginForm() {
                       onChange={() => setSelectedRole('seller')}
                       className="w-5 h-5 accent-accent-pink mr-3"
                     />
-                    <Building className="w-5 h-5 text-accent-orange mr-2" />
+                    <Building className="w-5 h-5 text-primary-navy mr-2" />
                     <span className="font-semibold text-primary-navy">Säljare</span>
                   </div>
                 </div>
@@ -173,7 +173,7 @@ function LoginForm() {
                       onChange={() => setSelectedRole('buyer')}
                       className="w-5 h-5 accent-accent-pink mr-3"
                     />
-                    <Search className="w-5 h-5 text-accent-orange mr-2" />
+                    <Search className="w-5 h-5 text-primary-navy mr-2" />
                     <span className="font-semibold text-primary-navy">Köpare</span>
                   </div>
                 </div>
@@ -194,7 +194,7 @@ function LoginForm() {
                       onChange={() => setSelectedRole('broker')}
                       className="w-5 h-5 accent-accent-pink mr-3"
                     />
-                    <Handshake className="w-5 h-5 text-accent-orange mr-2" />
+                    <Handshake className="w-5 h-5 text-primary-navy mr-2" />
                     <span className="font-semibold text-primary-navy">Mäklare</span>
                   </div>
                 </div>
@@ -222,11 +222,11 @@ function LoginForm() {
               />
               <label htmlFor="privacy" className="text-sm text-gray-700 leading-relaxed">
                 Jag godkänner{' '}
-                <Link href="/juridiskt/integritetspolicy" className="text-accent-orange hover:underline font-semibold" target="_blank">
+                <Link href="/juridiskt/integritetspolicy" className="text-primary-navy hover:underline font-semibold" target="_blank">
                   integritetspolicyn
                 </Link>{' '}
                 och{' '}
-                <Link href="/juridiskt/anvandarvillkor" className="text-accent-orange hover:underline font-semibold" target="_blank">
+                <Link href="/juridiskt/anvandarvillkor" className="text-primary-navy hover:underline font-semibold" target="_blank">
                   användarvillkoren
                 </Link>
               </label>
@@ -245,11 +245,11 @@ function LoginForm() {
 
           {/* Info Box */}
           <div className="mt-8 pt-8 border-t border-gray-200">
-            <div className="bg-accent-orange/5 p-5 rounded-lg border border-accent-orange/20">
+            <div className="bg-primary-navy/5 p-5 rounded-lg border border-primary-navy/20">
               <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-accent-orange mt-0.5 flex-shrink-0" />
+                <CheckCircle className="w-5 h-5 text-primary-navy mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-primary-navy">
-                  <strong className="text-accent-orange">Säkert och enkelt.</strong> Vi skickar en magisk inloggningslänk direkt till din inkorg. Du behöver aldrig komma ihåg ett lösenord.
+                  <strong className="text-primary-navy">Säkert och enkelt.</strong> Vi skickar en magisk inloggningslänk direkt till din inkorg. Du behöver aldrig komma ihåg ett lösenord.
                 </div>
               </div>
             </div>
@@ -259,7 +259,7 @@ function LoginForm() {
           <div className="mt-6 text-center text-sm">
             <p className="text-gray-600">
               Ny användare?{' '}
-              <Link href="/registrera" className="text-accent-orange font-semibold hover:underline">
+              <Link href="/registrera" className="text-primary-navy font-semibold hover:underline">
                 Registrera dig här
               </Link>
             </p>

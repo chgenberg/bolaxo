@@ -5,9 +5,9 @@ export default function SaljaInfoPage() {
   return (
     <main className="bg-neutral-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-accent-pink/10 to-accent-orange/10 py-20 sm:py-32">
+      <section className="bg-gradient-to-br from-accent-pink/10 to-primary-navy/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl sm:text-6xl font-bold text-accent-orange mb-6 uppercase">
+          <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
             SÅ SÄLJER DU DITT FÖRETAG
           </h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
@@ -20,7 +20,7 @@ export default function SaljaInfoPage() {
 
         {/* Steps */}
         <div className="mb-32">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">PROCESSEN I 5 STEG</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-16 text-center uppercase">PROCESSEN I 5 STEG</h2>
           <div className="space-y-8">
             {[
               {
@@ -60,7 +60,7 @@ export default function SaljaInfoPage() {
                 </div>
                 <div className="flex-1 pt-2">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-2xl font-bold text-accent-orange">{item.title}</h3>
+                    <h3 className="text-2xl font-bold text-primary-navy">{item.title}</h3>
                     <span className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-lg font-medium">{item.time}</span>
                   </div>
                   <p className="text-lg text-gray-700 leading-relaxed">{item.description}</p>
@@ -72,7 +72,7 @@ export default function SaljaInfoPage() {
 
         {/* Before/After NDA Comparison */}
         <div className="mb-32 bg-neutral-off-white rounded-lg p-8 sm:p-12">
-          <h2 className="text-4xl font-bold text-accent-orange mb-12 text-center uppercase">
+          <h2 className="text-4xl font-bold text-primary-navy mb-12 text-center uppercase">
             FÖRE VS Efter NDA
           </h2>
           
@@ -93,7 +93,7 @@ export default function SaljaInfoPage() {
                   'Allmän beskrivning'
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-gray-700">
-                    <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -127,7 +127,7 @@ export default function SaljaInfoPage() {
 
         {/* Pricing Overview */}
         <div className="mb-32">
-          <h2 className="text-4xl font-bold text-accent-orange mb-6 text-center uppercase">PRISÖVERSIKT</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-6 text-center uppercase">PRISÖVERSIKT</h2>
           <p className="text-center text-lg text-gray-700 mb-16 max-w-2xl mx-auto">
             Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.
           </p>
@@ -137,7 +137,7 @@ export default function SaljaInfoPage() {
             <div className="bg-white border-2 border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all">
               <div className="text-center mb-8">
                 <div className="text-sm font-semibold text-gray-600 mb-2">Utkast</div>
-                <div className="text-5xl font-bold text-accent-orange mb-2">0 kr</div>
+                <div className="text-5xl font-bold text-primary-navy mb-2">0 kr</div>
                 <div className="text-sm text-gray-600">Gratis</div>
               </div>
               <div className="space-y-4 mb-8">
@@ -157,7 +157,7 @@ export default function SaljaInfoPage() {
             <div className="bg-white border-2 border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all">
               <div className="text-center mb-8">
                 <div className="text-sm font-semibold text-primary-navy mb-2">Basic</div>
-                <div className="text-5xl font-bold text-accent-orange mb-2">495 kr</div>
+                <div className="text-5xl font-bold text-primary-navy mb-2">495 kr</div>
                 <div className="text-sm text-gray-600">/ mån</div>
               </div>
               <div className="space-y-4 mb-8">
@@ -182,7 +182,7 @@ export default function SaljaInfoPage() {
               </div>
               <div className="text-center mb-8">
                 <div className="text-sm font-semibold text-primary-navy mb-2">Pro</div>
-                <div className="text-5xl font-bold text-accent-orange mb-2">895 kr</div>
+                <div className="text-5xl font-bold text-primary-navy mb-2">895 kr</div>
                 <div className="text-sm text-gray-600">/ mån</div>
               </div>
               <div className="space-y-4 mb-8">
@@ -201,7 +201,7 @@ export default function SaljaInfoPage() {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/priser" className="text-accent-orange font-semibold hover:underline inline-flex items-center gap-2 text-lg">
+            <Link href="/priser" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2 text-lg">
               Se detaljerad jämförelse
               <ArrowRight className="w-5 h-5" />
             </Link>
@@ -210,7 +210,7 @@ export default function SaljaInfoPage() {
 
         {/* FAQ */}
         <div className="mb-24">
-          <h2 className="text-4xl font-bold text-accent-orange mb-16 text-center uppercase">VANLIGA FRÅGOR</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-16 text-center uppercase">VANLIGA FRÅGOR</h2>
           
           <div className="space-y-8">
             {[

@@ -90,7 +90,7 @@ export default function ReportGeneration() {
       </div>
 
       {showGenerator && (
-        <div className="bg-gradient-to-br from-accent-pink/10 to-accent-orange/10 border-2 border-accent-pink rounded-lg p-6">
+        <div className="bg-gradient-to-br from-accent-pink/10 to-primary-navy/10 border-2 border-accent-pink rounded-lg p-6">
           <h3 className="text-lg font-bold text-primary-navy mb-4">Create New Report</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
@@ -111,7 +111,7 @@ export default function ReportGeneration() {
               </select>
             </div>
             <div className="flex items-end gap-2">
-              <button onClick={handleGenerateReport} disabled={generating} className="flex-1 px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50 font-medium flex items-center justify-center gap-2">
+              <button onClick={handleGenerateReport} disabled={generating} className="flex-1 px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 disabled:opacity-50 font-medium flex items-center justify-center gap-2">
                 {generating ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                 {generating ? 'Generating...' : 'Generate'}
               </button>

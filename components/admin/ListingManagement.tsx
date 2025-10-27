@@ -213,7 +213,7 @@ export default function ListingManagement() {
 
         <button
           onClick={() => loadListings(pagination.page)}
-          className="px-3 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 flex items-center justify-center gap-2 text-sm font-medium"
+          className="px-3 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center justify-center gap-2 text-sm font-medium"
         >
           <RefreshCw className="w-4 h-4" />
           Refresh

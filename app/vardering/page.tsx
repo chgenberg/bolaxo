@@ -223,7 +223,7 @@ export default function ValuationPage() {
               ))}
             </div>
 
-            <div className="bg-accent-orange/5 border border-accent-orange/20 rounded-lg p-8">
+            <div className="bg-primary-navy/5 border border-primary-navy/20 rounded-lg p-8">
               <h3 className="text-2xl font-bold text-primary-navy mb-6">Vad ingår i rapporten?</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {[
@@ -235,7 +235,7 @@ export default function ValuationPage() {
                   'Tillväxtpotential'
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-accent-orange flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-primary-navy">{item}</span>
                   </div>
                 ))}
@@ -269,16 +269,16 @@ export default function ValuationPage() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
               <div>
-                <div className="text-4xl font-bold text-accent-orange mb-2">10,000+</div>
-                <div className="text-gray-700">Värderingar genomförda</div>
+                <div className="text-4xl font-bold text-primary-navy mb-2">10,000+</div>
+                <div className="text-sm text-gray-600">Värderingar genomförda</div>
               </div>
               <div>
-                <div className="text-4xl font-bold text-accent-orange mb-2">4.9/5</div>
-                <div className="text-gray-700">Genomsnittligt betyg</div>
+                <div className="text-4xl font-bold text-primary-navy mb-2">4.9/5</div>
+                <div className="text-sm text-gray-600">Genomsnittligt betyg</div>
               </div>
               <div>
-                <div className="text-4xl font-bold text-accent-orange mb-2">5 min</div>
-                <div className="text-gray-700">Genomsnittlig tid</div>
+                <div className="text-4xl font-bold text-primary-navy mb-2">5 min</div>
+                <div className="text-sm text-gray-600">Genomsnittlig tid</div>
               </div>
             </div>
           </div>

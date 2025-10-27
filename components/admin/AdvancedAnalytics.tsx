@@ -58,7 +58,7 @@ export default function AdvancedAnalytics() {
 
         <button
           onClick={loadAnalytics}
-          className="px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2"
+          className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2"
         >
           <RefreshCw className="w-4 h-4" />
           Refresh
@@ -131,7 +131,7 @@ export default function AdvancedAnalytics() {
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-gradient-to-r from-accent-pink to-accent-orange h-2 rounded-full transition-all"
+                            className="bg-gradient-to-r from-accent-pink to-primary-navy h-2 rounded-full transition-all"
                             style={{ width: `${width}%` }}
                           />
                         </div>

@@ -205,7 +205,7 @@ export default function UserManagement({ onUserSelect }: UserManagementProps) {
 
         <button
           onClick={() => loadUsers(pagination.page)}
-          className="px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2"
+          className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2"
         >
           <RefreshCw className="w-4 h-4" />
           Refresh

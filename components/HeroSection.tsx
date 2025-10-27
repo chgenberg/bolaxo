@@ -100,7 +100,7 @@ export default function HeroSection() {
               {/* Main Headline */}
               {activeTab === 'seller' ? (
                 <>
-                  <h1 className="text-6xl lg:text-7xl font-bold text-accent-orange leading-tight mb-6 uppercase">
+                  <h1 className="text-6xl lg:text-7xl font-bold text-primary-navy leading-tight mb-6 uppercase">
                     Sälj ditt företag.
                     <br />
                     Enkelt & säkert.
@@ -118,13 +118,13 @@ export default function HeroSection() {
                   <div className="flex gap-6 mt-8">
                     <Link
                       href="/vardering"
-                      className="text-primary-navy font-semibold hover:text-accent-orange transition-colors"
+                      className="text-primary-navy font-semibold hover:text-primary-navy transition-colors"
                     >
                       Gratis värdering →
                     </Link>
                     <Link
                       href="/salja"
-                      className="text-primary-navy font-semibold hover:text-accent-orange transition-colors"
+                      className="text-primary-navy font-semibold hover:text-primary-navy transition-colors"
                     >
                       Så funkar det →
                     </Link>
@@ -132,7 +132,7 @@ export default function HeroSection() {
                 </>
               ) : (
                 <>
-                  <h1 className="text-6xl lg:text-7xl font-bold text-accent-orange leading-tight mb-6 uppercase">
+                  <h1 className="text-6xl lg:text-7xl font-bold text-primary-navy leading-tight mb-6 uppercase">
                     Hitta rätt företag
                     <br />
                     att köpa.
@@ -150,13 +150,13 @@ export default function HeroSection() {
                   <div className="flex gap-6 mt-8">
                     <Link
                       href="/sok"
-                      className="text-primary-navy font-semibold hover:text-accent-orange transition-colors"
+                      className="text-primary-navy font-semibold hover:text-primary-navy transition-colors"
                     >
                       Sök företag →
                     </Link>
                     <Link
                       href="/kopare"
-                      className="text-primary-navy font-semibold hover:text-accent-orange transition-colors"
+                      className="text-primary-navy font-semibold hover:text-primary-navy transition-colors"
                     >
                       Så funkar det →
                     </Link>
@@ -182,8 +182,8 @@ export default function HeroSection() {
                         className="object-cover hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent-pink/20 to-accent-orange/20">
-                        <div className="text-6xl font-bold text-accent-orange/30">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent-pink/20 to-primary-navy/20">
+                        <div className="text-6xl font-bold text-primary-navy/30">
                           {currentObject.type.charAt(0)}
                         </div>
                       </div>
@@ -197,7 +197,7 @@ export default function HeroSection() {
                         </span>
                       )}
                       {currentObject.verified && (
-                        <span className="bg-accent-orange text-white px-3 py-1 rounded-full text-xs font-bold">
+                        <span className="bg-primary-navy text-white px-3 py-1 rounded-full text-xs font-bold">
                           VERIFIERAD
                         </span>
                       )}
@@ -248,7 +248,7 @@ export default function HeroSection() {
 
                   {/* Object Details */}
                   <div className="p-6">
-                    <h3 className="text-2xl font-bold text-accent-orange mb-2">
+                    <h3 className="text-2xl font-bold text-primary-navy mb-2">
                       {currentObject.anonymousTitle || currentObject.title || 'Företag till salu'}
                     </h3>
                     <p className="text-sm text-gray-600 mb-4 flex items-center gap-1">
@@ -275,7 +275,7 @@ export default function HeroSection() {
                     {/* Price */}
                     <div className="mb-6">
                       <p className="text-xs text-gray-500 mb-1">Prisidé</p>
-                      <p className="text-2xl font-bold text-accent-orange">
+                      <p className="text-2xl font-bold text-primary-navy">
                         {formatCurrency(currentObject.priceMin)} - {formatCurrency(currentObject.priceMax)}
                       </p>
                     </div>
@@ -343,7 +343,7 @@ export default function HeroSection() {
         <div className="px-4 py-8 relative z-10">
           {activeTab === 'seller' ? (
             <>
-              <h1 className="text-4xl font-bold text-accent-orange leading-tight mb-4 uppercase">
+              <h1 className="text-4xl font-bold text-primary-navy leading-tight mb-4 uppercase">
                 Sälj ditt företag. Enkelt & säkert.
               </h1>
               <p className="text-lg text-primary-navy leading-relaxed mb-6">
@@ -358,13 +358,13 @@ export default function HeroSection() {
               <div className="space-y-3">
                 <Link
                   href="/vardering"
-                  className="block text-center text-primary-navy font-semibold hover:text-accent-orange transition-colors py-3 border border-primary-navy rounded-lg"
+                  className="block text-center text-primary-navy font-semibold hover:text-primary-navy transition-colors py-3 border border-primary-navy rounded-lg"
                 >
                   Gratis värdering
                 </Link>
                 <Link
                   href="/salja"
-                  className="block text-center text-primary-navy font-semibold hover:text-accent-orange transition-colors py-3 border border-primary-navy rounded-lg"
+                  className="block text-center text-primary-navy font-semibold hover:text-primary-navy transition-colors py-3 border border-primary-navy rounded-lg"
                 >
                   Så funkar det
                 </Link>
@@ -372,7 +372,7 @@ export default function HeroSection() {
             </>
           ) : (
             <>
-              <h1 className="text-4xl font-bold text-accent-orange leading-tight mb-4 uppercase">
+              <h1 className="text-4xl font-bold text-primary-navy leading-tight mb-4 uppercase">
                 Hitta rätt företag att köpa.
               </h1>
               <p className="text-lg text-primary-navy leading-relaxed mb-6">
@@ -392,8 +392,8 @@ export default function HeroSection() {
                           className="object-cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent-pink/20 to-accent-orange/20">
-                          <div className="text-4xl font-bold text-accent-orange/30">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent-pink/20 to-primary-navy/20">
+                          <div className="text-4xl font-bold text-primary-navy/30">
                             {currentObject.type.charAt(0)}
                           </div>
                         </div>
@@ -403,19 +403,19 @@ export default function HeroSection() {
                           <span className="bg-accent-pink text-white px-2 py-1 rounded text-xs font-bold">NY</span>
                         )}
                         {currentObject.verified && (
-                          <span className="bg-accent-orange text-white px-2 py-1 rounded text-xs font-bold">VERIFIERAD</span>
+                          <span className="bg-primary-navy text-white px-2 py-1 rounded text-xs font-bold">VERIFIERAD</span>
                         )}
                       </div>
                     </div>
                     <div className="p-4">
-                      <h3 className="text-lg font-bold text-accent-orange mb-2">
+                      <h3 className="text-lg font-bold text-primary-navy mb-2">
                         {currentObject.anonymousTitle || currentObject.title || 'Företag till salu'}
                       </h3>
                       <p className="text-xs text-gray-600 mb-3 flex items-center gap-1">
                         <MapPin className="w-3 h-3 text-accent-pink" />
                         {currentObject.region}
                       </p>
-                      <p className="text-lg font-bold text-accent-orange mb-3">
+                      <p className="text-lg font-bold text-primary-navy mb-3">
                         {formatCurrency(currentObject.priceMin)}
                       </p>
                       <button className="w-full py-2 bg-accent-pink text-primary-navy font-bold rounded text-sm">
@@ -451,13 +451,13 @@ export default function HeroSection() {
               <div className="space-y-3">
                 <Link
                   href="/sok"
-                  className="block text-center text-primary-navy font-semibold hover:text-accent-orange transition-colors py-3 border border-primary-navy rounded-lg"
+                  className="block text-center text-primary-navy font-semibold hover:text-primary-navy transition-colors py-3 border border-primary-navy rounded-lg"
                 >
                   Sök företag
                 </Link>
                 <Link
                   href="/kopare"
-                  className="block text-center text-primary-navy font-semibold hover:text-accent-orange transition-colors py-3 border border-primary-navy rounded-lg"
+                  className="block text-center text-primary-navy font-semibold hover:text-primary-navy transition-colors py-3 border border-primary-navy rounded-lg"
                 >
                   Så funkar det
                 </Link>

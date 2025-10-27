@@ -98,7 +98,7 @@ export default function AdminManagement() {
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>
-        <button onClick={() => loadAdmins(pagination.page)} className="px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2 text-sm font-medium">
+        <button onClick={() => loadAdmins(pagination.page)} className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2 text-sm font-medium">
           <RefreshCw className="w-4 h-4" /> Refresh
         </button>
       </div>
@@ -190,7 +190,7 @@ export default function AdminManagement() {
               <span className="text-sm font-medium">Enable 2FA</span>
             </label>
             <div className="flex gap-2 pt-4">
-              <button onClick={() => handleUpdateAdmin(editingAdmin.id, editingAdmin)} className="flex-1 px-4 py-2 bg-accent-orange text-white rounded-lg hover:bg-opacity-90 font-medium">
+              <button onClick={() => handleUpdateAdmin(editingAdmin.id, editingAdmin)} className="flex-1 px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 font-medium">
                 Save
               </button>
               <button onClick={() => setEditingAdmin(null)} className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium">

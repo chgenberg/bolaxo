@@ -154,7 +154,7 @@ export default function ListingsPage() {
                     </span>
                     <span className={`px-2 py-1 text-xs font-bold rounded-full uppercase ${
                       listing.package === 'pro_plus'
-                        ? 'bg-accent-orange/10 text-accent-orange'
+                        ? 'bg-primary-navy/10 text-primary-navy'
                         : listing.package === 'pro'
                         ? 'bg-accent-pink/10 text-accent-pink'
                         : 'bg-gray-100 text-gray-700'
@@ -228,10 +228,10 @@ export default function ListingsPage() {
                     <button
                       onClick={() => handleListingAction(listing.id, 'pause')}
                       disabled={processing === listing.id}
-                      className="p-2 hover:bg-accent-orange/10 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
+                      className="p-2 hover:bg-primary-navy/10 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
                       title="Pausa annons"
                     >
-                      <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-accent-orange" />
+                      <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
                     </button>
                   ) : listing.status === 'paused' ? (
                     <button
