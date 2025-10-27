@@ -6,7 +6,6 @@ import { Mail, Phone, MapPin, Facebook, Linkedin, Twitter } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 export default function Footer() {
-  console.log('🔵 [FOOTER] Rendering...')
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear())
 
   useEffect(() => {

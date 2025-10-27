@@ -5,7 +5,6 @@ import { Cookie, X } from 'lucide-react'
 import Link from 'next/link'
 
 export default function CookieConsent() {
-  console.log('🔵 [COOKIECONSENT] Rendering...')
   const [showBanner, setShowBanner] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [preferences, setPreferences] = useState({
