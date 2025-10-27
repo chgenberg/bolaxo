@@ -56,6 +56,7 @@ const navigation: NavItem[] = [
 ]
 
 export default function Header() {
+  console.log('🔵 [HEADER] Rendering...')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)

@@ -17,6 +17,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  if (typeof window !== 'undefined') {
+    console.log('🔵 [LAYOUT] RootLayout rendering on client')
+  }
+
   return (
     <html lang="sv">
       <head>
@@ -25,11 +29,17 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <AuthProvider>
+          {typeof window !== 'undefined' && console.log('🟢 [LAYOUT] AuthProvider mounted')}
           <ToastProvider>
+            {typeof window !== 'undefined' && console.log('🟡 [LAYOUT] ToastProvider mounted')}
             <Header />
+            {typeof window !== 'undefined' && console.log('🟣 [LAYOUT] Header rendered')}
             {children}
+            {typeof window !== 'undefined' && console.log('🔵 [LAYOUT] Children rendered')}
             <Footer />
+            {typeof window !== 'undefined' && console.log('🟠 [LAYOUT] Footer rendered')}
             <CookieConsent />
+            {typeof window !== 'undefined' && console.log('🟤 [LAYOUT] CookieConsent rendered')}
           </ToastProvider>
         </AuthProvider>
       </body>
