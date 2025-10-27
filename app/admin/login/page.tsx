@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-navy/10 rounded-full blur-3xl animate-pulse-slow animation-delay-2000" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-900/10 rounded-full blur-3xl animate-pulse-slow animation-delay-2000" />
       </div>
 
       {/* Floating particles */}
@@ -109,7 +109,7 @@ export default function AdminLoginPage() {
         {/* Logo/Header with animation */}
         <div className="text-center mb-8 relative">
           <div className="relative inline-block">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary-navy blur-lg opacity-50 animate-pulse" />
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-900 blur-lg opacity-50 animate-pulse" />
             <h1 className="relative text-5xl font-black bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">
               BOLAXO
             </h1>
@@ -123,7 +123,7 @@ export default function AdminLoginPage() {
         <div className="backdrop-blur-xl bg-white/5 rounded-2xl shadow-2xl p-8 border border-white/10 relative overflow-hidden">
           {/* Decorative corner accents */}
           <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-blue-500/30 rounded-tl-2xl" />
-          <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-primary-navy/30 rounded-br-2xl" />
+          <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-blue-900/30 rounded-br-2xl" />
 
           {/* Shield icon with glow effect */}
           <div className="flex justify-center mb-6">
@@ -172,7 +172,7 @@ export default function AdminLoginPage() {
                   disabled={loading || success}
                   className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 backdrop-blur"
                 />
-                <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 to-primary-navy/20 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300 ${
+                <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 to-blue-900/20 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300 ${
                   focusedField === 'email' ? 'opacity-100' : ''
                 }`} />
               </div>
@@ -208,7 +208,7 @@ export default function AdminLoginPage() {
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
-                <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 to-primary-navy/20 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300 ${
+                <div className={`absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/20 to-blue-900/20 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300 ${
                   focusedField === 'password' ? 'opacity-100' : ''
                 }`} />
               </div>
@@ -220,7 +220,7 @@ export default function AdminLoginPage() {
               disabled={loading || success || !email || !password}
               className="relative w-full group overflow-hidden rounded-xl disabled:cursor-not-allowed transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-primary-navy group-hover:from-blue-500 group-hover:to-blue-700 transition-all duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-900 group-hover:from-blue-500 group-hover:to-blue-700 transition-all duration-300" />
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
               </div>
