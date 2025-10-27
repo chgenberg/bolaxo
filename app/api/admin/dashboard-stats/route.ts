@@ -1,102 +1,215 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { checkAdminAuth } from '@/lib/admin-auth'
+import { PrismaClient } from '@prisma/client'
 
-// Mock analytics data - in production this would come from Posthog, Mixpanel, or similar
-const generateMockAnalytics = () => {
-  const now = new Date()
-  const timestamp = now.toISOString()
+const prisma = new PrismaClient()
 
-  return {
-    totalVisitors: Math.floor(Math.random() * 5000) + 2000,
-    uniqueVisitors: Math.floor(Math.random() * 3000) + 800,
-    realVsBot: {
-      real: Math.floor(Math.random() * 3000) + 1500,
-      bot: Math.floor(Math.random() * 2000) + 200
-    },
-    avgSessionDuration: Math.floor(Math.random() * 600) + 120, // seconds
-    bounceRate: Math.random() * 60 + 25, // percentage
-    topSearches: [
-      { query: 'it-konsult stockholm', count: 342 },
-      { query: 'e-handel företag', count: 287 },
-      { query: 'saas startup', count: 215 },
-      { query: 'tjänsteföretag köpa', count: 156 },
-      { query: 'restaurang franchise', count: 134 }
-    ],
-    topPages: [
-      { path: '/sok', views: 1240 },
-      { path: '/objekt/[id]', views: 982 },
-      { path: '/', views: 845 },
-      { path: '/kopare', views: 672 },
-      { path: '/salja', views: 521 }
-    ],
-    revenueToday: Math.floor(Math.random() * 50000) + 10000, // SEK
-    activeListings: Math.floor(Math.random() * 200) + 50,
-    ndaRequests: Math.floor(Math.random() * 100) + 20,
-    messages: Math.floor(Math.random() * 500) + 100,
-    conversionRate: (Math.random() * 5) + 1.5, // percentage
-    deviceBreakdown: {
-      mobile: Math.floor(Math.random() * 3000) + 1000,
-      desktop: Math.floor(Math.random() * 2000) + 800,
-      tablet: Math.floor(Math.random() * 500) + 100
-    },
-    trafficSources: [
-      { source: 'Organic Search', count: 1250 },
-      { source: 'Direct', count: 1100 },
-      { source: 'Social Media', count: 650 },
-      { source: 'Referral', count: 420 },
-      { source: 'Email', count: 180 }
-    ],
-    recentActivities: [
-      {
-        id: '1',
-        type: 'listing' as const,
-        description: 'Ny annons skapad: "E-handel med 2M revenue"',
-        timestamp: new Date(Date.now() - 5 * 60000).toISOString()
-      },
-      {
-        id: '2',
-        type: 'nda' as const,
-        description: 'NDA godkänd för "IT-konsultbolag Stockholm"',
-        timestamp: new Date(Date.now() - 12 * 60000).toISOString()
-      },
-      {
-        id: '3',
-        type: 'message' as const,
-        description: '3 nya meddelanden mellan köpare och säljare',
-        timestamp: new Date(Date.now() - 18 * 60000).toISOString()
-      },
-      {
-        id: '4',
-        type: 'payment' as const,
-        description: 'Premium listing purchased för 4500 kr',
-        timestamp: new Date(Date.now() - 25 * 60000).toISOString()
-      },
-      {
-        id: '5',
-        type: 'listing' as const,
-        description: 'Annons uppdaterad: "SaaS startup"',
-        timestamp: new Date(Date.now() - 32 * 60000).toISOString()
-      }
-    ]
+// Helper function to verify admin authentication
+async function verifyAdminAuth(request: NextRequest) {
+  try {
+    const adminToken = request.cookies.get('adminToken')?.value
+    if (!adminToken) {
+      return { isValid: false, error: 'Unauthorized - No admin token' }
+    }
+    return { isValid: true }
+  } catch (error) {
+    return { isValid: false, error: 'Authentication failed' }
   }
 }
 
 export async function GET(request: NextRequest) {
   try {
-    // Check admin authentication
-    const auth = await checkAdminAuth(request)
-    if (!auth.authorized) {
+    // Verify admin auth
+    const auth = await verifyAdminAuth(request)
+    if (!auth.isValid) {
       return NextResponse.json({ error: auth.error }, { status: 401 })
     }
 
-    // Generate mock data - in production would query real databases
-    const stats = generateMockAnalytics()
+    // Get time periods
+    const now = new Date()
+    const today = new Date(now)
+    today.setHours(0, 0, 0, 0)
+    
+    const thirtyDaysAgo = new Date(now)
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    thirtyDaysAgo.setHours(0, 0, 0, 0)
 
-    return NextResponse.json(stats)
+    // User statistics
+    const totalUsers = await prisma.user.count()
+    const sellers = await prisma.user.count({ where: { role: 'seller' } })
+    const buyers = await prisma.user.count({ where: { role: 'buyer' } })
+    const verifiedUsers = await prisma.user.count({ where: { verified: true } })
+    const bankIdVerified = await prisma.user.count({ where: { bankIdVerified: true } })
+
+    // Listing statistics
+    const totalListings = await prisma.listing.count()
+    const activeListings = await prisma.listing.count({ where: { status: 'active' } })
+    const draftListings = await prisma.listing.count({ where: { status: 'draft' } })
+    const soldListings = await prisma.listing.count({ where: { status: 'sold' } })
+    const verifiedListings = await prisma.listing.count({ where: { verified: true } })
+
+    // NDA statistics
+    const totalNDARequests = await prisma.nDARequest.count()
+    const pendingNDAs = await prisma.nDARequest.count({ where: { status: 'pending' } })
+    const approvedNDAs = await prisma.nDARequest.count({ where: { status: 'approved' } })
+    const rejectedNDAs = await prisma.nDARequest.count({ where: { status: 'rejected' } })
+    const signedNDAs = await prisma.nDARequest.count({ where: { status: 'signed' } })
+
+    // Message statistics
+    const totalMessages = await prisma.message.count()
+    const unreadMessages = await prisma.message.count({ where: { read: false } })
+    const todayMessages = await prisma.message.count({
+      where: { createdAt: { gte: today } }
+    })
+
+    // Transaction statistics
+    const totalTransactions = await prisma.transaction.count()
+    const completedTransactions = await prisma.transaction.count({
+      where: { stage: 'COMPLETED' }
+    })
+    const inProgressTransactions = await prisma.transaction.count({
+      where: { stage: { in: ['LOI_SIGNED', 'DD_IN_PROGRESS', 'SPA_NEGOTIATION'] } }
+    })
+
+    // Transaction value stats
+    const transactionStats = await prisma.transaction.aggregate({
+      _sum: { agreedPrice: true },
+      _avg: { agreedPrice: true },
+      _count: true
+    })
+
+    // Payment statistics
+    const totalPayments = await prisma.payment.count()
+    const pendingPayments = await prisma.payment.count({
+      where: { status: { in: ['PENDING', 'ESCROWED'] } }
+    })
+    const releasedPayments = await prisma.payment.count({
+      where: { status: 'RELEASED' }
+    })
+
+    // Payment amounts
+    const paymentStats = await prisma.payment.aggregate({
+      _sum: { amount: true },
+      _avg: { amount: true }
+    })
+
+    // Activity statistics (last 7 days)
+    const sevenDaysAgo = new Date(now)
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
+
+    const recentActivities = await prisma.activity.findMany({
+      where: { createdAt: { gte: sevenDaysAgo } },
+      select: {
+        id: true,
+        type: true,
+        title: true,
+        description: true,
+        actorName: true,
+        createdAt: true,
+        transaction: {
+          select: {
+            id: true,
+            buyer: { select: { name: true } },
+            seller: { select: { name: true } }
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 10
+    })
+
+    // Conversion rates calculation
+    const ndaToTransactionRate = totalNDARequests > 0 
+      ? Math.round((totalTransactions / totalNDARequests) * 100)
+      : 0
+
+    const listingToNDARate = totalListings > 0
+      ? Math.round((totalNDARequests / totalListings) * 100)
+      : 0
+
+    // Top statistics by type/industry
+    const industryStats = await prisma.listing.groupBy({
+      by: ['industry'],
+      _count: true,
+      where: { status: 'active' },
+      orderBy: { _count: { _max: 'desc' } },
+      take: 5
+    })
+
+    const regionStats = await prisma.listing.groupBy({
+      by: ['region'],
+      _count: true,
+      where: { status: 'active' },
+      orderBy: { _count: { _max: 'desc' } },
+      take: 5
+    })
+
+    return NextResponse.json({
+      timestamp: now.toISOString(),
+      users: {
+        total: totalUsers,
+        sellers,
+        buyers,
+        verified: verifiedUsers,
+        bankIdVerified
+      },
+      listings: {
+        total: totalListings,
+        active: activeListings,
+        draft: draftListings,
+        sold: soldListings,
+        verified: verifiedListings
+      },
+      nda: {
+        total: totalNDARequests,
+        pending: pendingNDAs,
+        approved: approvedNDAs,
+        rejected: rejectedNDAs,
+        signed: signedNDAs
+      },
+      messages: {
+        total: totalMessages,
+        unread: unreadMessages,
+        today: todayMessages
+      },
+      transactions: {
+        total: totalTransactions,
+        completed: completedTransactions,
+        inProgress: inProgressTransactions,
+        totalValue: transactionStats._sum.agreedPrice || 0,
+        averageValue: Math.round(transactionStats._avg.agreedPrice || 0)
+      },
+      payments: {
+        total: totalPayments,
+        pending: pendingPayments,
+        released: releasedPayments,
+        totalAmount: paymentStats._sum.amount || 0,
+        averageAmount: Math.round(paymentStats._avg.amount || 0)
+      },
+      conversionRates: {
+        listingToNDA: listingToNDARate,
+        ndaToTransaction: ndaToTransactionRate
+      },
+      topIndustries: industryStats.map(i => ({
+        name: i.industry,
+        count: i._count
+      })),
+      topRegions: regionStats.map(r => ({
+        name: r.region,
+        count: r._count
+      })),
+      recentActivities: recentActivities.map(a => ({
+        id: a.id,
+        type: a.type,
+        title: a.title,
+        description: a.description,
+        actor: a.actorName,
+        timestamp: a.createdAt.toISOString()
+      }))
+    })
   } catch (error) {
     console.error('Error fetching dashboard stats:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch dashboard stats' },
+      { error: 'Failed to fetch dashboard stats', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
