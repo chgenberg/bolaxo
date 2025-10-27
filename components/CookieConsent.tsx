@@ -6,6 +6,7 @@ import Link from 'next/link'
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [preferences, setPreferences] = useState({
     necessary: true, // Alltid true
     analytics: false,
@@ -14,6 +15,9 @@ export default function CookieConsent() {
   const [showDetails, setShowDetails] = useState(false)
 
   useEffect(() => {
+    // Mark component as mounted to enable client-side operations
+    setMounted(true)
+    
     // Kolla om användaren redan accepterat
     const consent = localStorage.getItem('bolaxo_cookie_consent')
     if (!consent) {
@@ -59,6 +63,9 @@ export default function CookieConsent() {
   }
 
   if (!showBanner) return null
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!mounted) return null
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-slide-up">

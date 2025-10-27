@@ -60,6 +60,7 @@ export default function Header() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState<'seller' | 'buyer'>('seller')
+  const [mounted, setMounted] = useState(false)
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const { user, logout } = useAuth()
   const pathname = usePathname()
@@ -72,12 +73,17 @@ export default function Header() {
   }
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [mounted])
 
   const handleMouseEnter = (label: string) => {
     if (dropdownTimeoutRef.current) {
