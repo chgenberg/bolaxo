@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { getClientIp, checkRateLimit, RATE_LIMIT_CONFIGS } from '@/app/lib/rate-limiter'
 
 const prisma = new PrismaClient()
 
@@ -16,9 +17,30 @@ async function verifyAdminAuth(request: NextRequest) {
   }
 }
 
-// GET - Lista alla betalningar med filter & sök
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(request)
+    const rateLimitCheck = checkRateLimit(ip, RATE_LIMIT_CONFIGS.admin)
+    
+    if (!rateLimitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_CONFIGS.admin.maxRequests.toString(),
+            'X-RateLimit-Remaining': rateLimitCheck.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitCheck.resetTime.toString()
+          }
+        }
+      )
+    }
+    
     // Verify admin auth
     const auth = await verifyAdminAuth(request)
     if (!auth.isValid) {

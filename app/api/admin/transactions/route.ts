@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { getClientIp, checkRateLimit, RATE_LIMIT_CONFIGS } from '@/app/lib/rate-limiter'
 
 const prisma = new PrismaClient()
 
@@ -16,14 +17,44 @@ async function verifyAdminAuth(request: NextRequest) {
   }
 }
 
-// Calculate transaction progress based on milestones
-function calculateProgress(completedMilestones: number, totalMilestones: number): number {
-  if (totalMilestones === 0) return 0
-  return Math.round((completedMilestones / totalMilestones) * 100)
+// Helper function to calculate transaction progress
+function calculateProgress(transaction: any): number {
+  const stageOrder: { [key: string]: number } = {
+    CREATED: 10,
+    NDA_SIGNED: 25,
+    DOCUMENTS_SHARED: 40,
+    MILESTONES_CREATED: 60,
+    IN_NEGOTIATION: 75,
+    READY_FOR_CLOSING: 85,
+    COMPLETED: 100
+  }
+  return stageOrder[transaction.stage] || 0
 }
 
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(request)
+    const rateLimitCheck = checkRateLimit(ip, RATE_LIMIT_CONFIGS.admin)
+    
+    if (!rateLimitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_CONFIGS.admin.maxRequests.toString(),
+            'X-RateLimit-Remaining': rateLimitCheck.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitCheck.resetTime.toString()
+          }
+        }
+      )
+    }
+    
     // Verify admin auth
     const auth = await verifyAdminAuth(request)
     if (!auth.isValid) {
@@ -138,7 +169,7 @@ export async function GET(request: NextRequest) {
     const enrichedTransactions = transactions.map(tx => {
       const completedMilestones = tx.milestones.filter(m => m.completed).length
       const totalMilestones = tx.milestones.length
-      const progress = calculateProgress(completedMilestones, totalMilestones)
+      const progress = calculateProgress(tx)
 
       return {
         id: tx.id,
@@ -179,6 +210,28 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(request)
+    const rateLimitCheck = checkRateLimit(ip, RATE_LIMIT_CONFIGS.admin)
+    
+    if (!rateLimitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_CONFIGS.admin.maxRequests.toString(),
+            'X-RateLimit-Remaining': rateLimitCheck.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitCheck.resetTime.toString()
+          }
+        }
+      )
+    }
+    
     // Verify admin auth
     const auth = await verifyAdminAuth(request)
     if (!auth.isValid) {

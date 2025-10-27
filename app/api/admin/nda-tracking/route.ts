@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { getClientIp, checkRateLimit, RATE_LIMIT_CONFIGS } from '@/app/lib/rate-limiter'
 
 const prisma = new PrismaClient()
+
+interface FraudIndicator {
+  type: string
+  severity: 'low' | 'medium' | 'high' | 'critical'
+  description: string
+  score: number
+}
 
 // Helper function to verify admin authentication
 async function verifyAdminAuth(request: NextRequest) {
@@ -19,6 +27,28 @@ async function verifyAdminAuth(request: NextRequest) {
 // GET - Fetch all NDAs with detailed status
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(request)
+    const rateLimitCheck = checkRateLimit(ip, RATE_LIMIT_CONFIGS.admin)
+    
+    if (!rateLimitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_CONFIGS.admin.maxRequests.toString(),
+            'X-RateLimit-Remaining': rateLimitCheck.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitCheck.resetTime.toString()
+          }
+        }
+      )
+    }
+    
     // Verify admin auth
     const auth = await verifyAdminAuth(request)
     if (!auth.isValid) {
@@ -209,6 +239,28 @@ export async function GET(request: NextRequest) {
 // PATCH - Update NDA status
 export async function PATCH(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(request)
+    const rateLimitCheck = checkRateLimit(ip, RATE_LIMIT_CONFIGS.admin)
+    
+    if (!rateLimitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_CONFIGS.admin.maxRequests.toString(),
+            'X-RateLimit-Remaining': rateLimitCheck.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitCheck.resetTime.toString()
+          }
+        }
+      )
+    }
+    
     // Verify admin auth
     const auth = await verifyAdminAuth(request)
     if (!auth.isValid) {
@@ -277,6 +329,28 @@ export async function PATCH(request: NextRequest) {
 // POST - Send NDA reminder or extend expiration
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const ip = getClientIp(request)
+    const rateLimitCheck = checkRateLimit(ip, RATE_LIMIT_CONFIGS.admin)
+    
+    if (!rateLimitCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please try again later.',
+          retryAfter: Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000)
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimitCheck.resetTime - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': RATE_LIMIT_CONFIGS.admin.maxRequests.toString(),
+            'X-RateLimit-Remaining': rateLimitCheck.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitCheck.resetTime.toString()
+          }
+        }
+      )
+    }
+    
     // Verify admin auth
     const auth = await verifyAdminAuth(request)
     if (!auth.isValid) {
