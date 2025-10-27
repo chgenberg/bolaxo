@@ -87,7 +87,7 @@ export default function KopareInfoPage() {
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-primary-navy mb-6 uppercase tracking-tight">
                 KÖPGUIDEN FÖR<br />
                 <span className="text-primary-navy">DITT NÄSTA FÖRETAG</span>
-              </h1>
+          </h1>
               <p className="text-xl sm:text-2xl text-primary-navy/80 max-w-3xl mx-auto leading-relaxed">
                 Smarta matchningar, verifierade säljare och säker process. 
                 Från första klick till signerad affär.
@@ -376,7 +376,7 @@ export default function KopareInfoPage() {
                         <span>Läs mer</span>
                         <ArrowRight className="w-4 h-4" />
                       </button>
-                    </div>
+                </div>
                   </div>
                 </div>
               )
@@ -390,8 +390,8 @@ export default function KopareInfoPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-primary-navy mb-6 uppercase">
-              Varför välja oss?
-            </h2>
+            Varför välja oss?
+          </h2>
             <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">
               Sveriges modernaste plattform för företagsförvärv. Byggd för att göra komplexa affärer enkla.
             </p>
@@ -541,11 +541,11 @@ export default function KopareInfoPage() {
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-primary-navy mb-6 uppercase">
               Vanliga frågor
-            </h2>
+          </h2>
             <p className="text-xl text-primary-navy/80 max-w-3xl mx-auto">
               Allt du behöver veta innan du börjar din resa mot ditt nästa företagsförvärv.
             </p>
-          </div>
+        </div>
           
           <div className="space-y-4">
             {[
@@ -619,15 +619,15 @@ export default function KopareInfoPage() {
                   >
                     <span>Kom igång nu</span>
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                  </Link>
+          </Link>
                 </div>
               </div>
               
               <p className="text-white/80 mt-8 text-lg font-medium">
                 ✓ Helt gratis för köpare ✓ Inga dolda avgifter ✓ Avsluta när som helst
-              </p>
-            </div>
-          </div>
+          </p>
+        </div>
+      </div>
         </div>
       </section>
 
