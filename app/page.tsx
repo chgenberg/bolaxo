@@ -246,10 +246,11 @@ export default function Home() {
       </section>
 
       {/* Valuation Form Modal */}
-      <ValuationWizard 
-        isOpen={isValuationModalOpen}
-        onClose={() => setIsValuationModalOpen(false)}
-      />
+      {isValuationModalOpen && (
+        <ValuationWizard 
+          onClose={() => setIsValuationModalOpen(false)}
+        />
+      )}
 
       {/* Process Step Modal */}
       {selectedStep && (

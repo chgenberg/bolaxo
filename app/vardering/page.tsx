@@ -286,10 +286,11 @@ export default function ValuationPage() {
       </main>
 
       {/* Valuation Form Modal */}
-      <ValuationWizard 
-        isOpen={showWizard}
-        onClose={() => setShowWizard(false)}
-      />
+      {showWizard && (
+        <ValuationWizard 
+          onClose={() => setShowWizard(false)}
+        />
+      )}
     </>
   )
 }
