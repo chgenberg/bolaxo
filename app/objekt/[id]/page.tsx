@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
+import { mockObjects } from '@/data/mockObjects'
 import { Building, MapPin, Users, TrendingUp, Lock, CheckCircle, Clock, Mail, MessageSquare, Share2, Heart } from 'lucide-react'
 import Link from 'next/link'
 
@@ -67,9 +68,68 @@ export default function ListingDetailPage() {
           } catch (e) {
             console.error('Error incrementing views:', e)
           }
+        } else {
+          // Fallback to mock objects
+          const mockObject = mockObjects.find(obj => obj.id === listingId)
+          if (mockObject) {
+            const transformedData: ListingDetail = {
+              id: mockObject.id,
+              companyName: mockObject.companyName,
+              anonymousTitle: mockObject.anonymousTitle,
+              industry: mockObject.type,
+              location: mockObject.location || mockObject.region,
+              region: mockObject.region,
+              address: mockObject.address,
+              description: mockObject.description,
+              revenue: mockObject.revenue,
+              revenueRange: mockObject.revenueRange,
+              ebitda: mockObject.ebitda,
+              employees: parseInt(mockObject.employees?.split('-')[0] || '1'),
+              priceMin: mockObject.priceMin,
+              priceMax: mockObject.priceMax,
+              strengths: mockObject.strengths,
+              risks: mockObject.risks,
+              whySelling: mockObject.whySelling,
+              image: mockObject.image,
+              views: mockObject.views,
+              verified: mockObject.verified,
+              userId: 'owner-' + mockObject.id
+            }
+            setListing(transformedData)
+          }
         }
       } catch (error) {
         console.error('Error fetching listing:', error)
+        // Fallback to mock objects
+        const mockObject = mockObjects.find(obj => obj.id === listingId)
+        if (mockObject) {
+          const transformedData: ListingDetail = {
+            id: mockObject.id,
+            companyName: mockObject.companyName,
+            anonymousTitle: mockObject.anonymousTitle,
+            industry: mockObject.type,
+            location: mockObject.location || mockObject.region,
+            region: mockObject.region,
+            address: mockObject.address,
+            description: mockObject.description,
+            revenue: mockObject.revenue,
+            revenueRange: mockObject.revenueRange,
+            ebitda: mockObject.ebitda,
+            employees: parseInt(mockObject.employees?.split('-')[0] || '1'),
+            priceMin: mockObject.priceMin,
+            priceMax: mockObject.priceMax,
+            strengths: mockObject.strengths,
+            risks: mockObject.risks,
+            whySelling: mockObject.whySelling,
+            image: mockObject.image,
+            views: mockObject.views,
+            verified: mockObject.verified,
+            userId: 'owner-' + mockObject.id
+          }
+          setListing(transformedData)
+        }
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -78,7 +138,10 @@ export default function ListingDetailPage() {
 
   // Check NDA status if user is logged in
   useEffect(() => {
-    if (!user || !listing) return
+    if (!user || !listing) {
+      setLoading(false)
+      return
+    }
 
     const checkNDAStatus = async () => {
       try {
