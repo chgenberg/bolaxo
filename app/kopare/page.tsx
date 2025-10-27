@@ -119,7 +119,7 @@ export default function KopareInfoPage() {
                   <Link href={`/objekt/${currentObject.id}`} className="block group">
                     <div className="grid lg:grid-cols-2">
                       {/* Image Section */}
-                      <div className="relative h-80 lg:h-96 bg-white p-8">
+                      <div className="relative h-80 lg:h-96 bg-white p-8 flex items-center justify-center">
                         {currentObject.image ? (
                           <div className="relative w-full h-full">
                             {/* Organic shadow shape */}
