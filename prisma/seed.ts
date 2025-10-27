@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { mockObjects } from '../data/mockObjects'
 
 const prisma = new PrismaClient()
 
@@ -326,38 +327,98 @@ async function main() {
 
   console.log('✓ Created 1 demo transaction (DD in progress)')
 
-  // 4. Skapa demo-listing
-  await prisma.listing.create({
-    data: {
-      userId: demoSeller.id,
-      companyName: 'Digital Konsult AB',
-      anonymousTitle: 'Etablerat IT-konsultbolag i Stockholm',
-      type: 'Konsult',
-      category: 'IT',
-      industry: 'tech',
-      revenue: 7000000,
-      revenueRange: '5-10 MSEK',
-      employees: 8,
-      location: 'Stockholm',
-      region: 'Stockholm, Sverige',
-      priceMin: 6000000,
-      priceMax: 9000000,
-      description: 'Digitalt konsultbolag med stabila kundavtal och stark efterfrågan i Stockholm. Skalbar leveransmodell och hög kundnöjdhet.',
-      image: '/Annonsbilder/konsult_1.png',
-      status: 'active',
-      packageType: 'featured',
-      publishedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-      expiresAt: new Date(Date.now() + 150 * 24 * 60 * 60 * 1000)
-    }
-  })
+  // 4. Skapa säljare och listings för alla 20 mock-objekt
+  console.log('\n🏢 Seeding 20 listings from mock objects...')
+  
+  for (const mockObj of mockObjects) {
+    // Skapa en unik säljare för varje objekt
+    const seller = await prisma.user.upsert({
+      where: { email: `seller-${mockObj.id}@bolaxo.se` },
+      update: {},
+      create: {
+        email: `seller-${mockObj.id}@bolaxo.se`,
+        name: mockObj.companyName,
+        role: 'seller',
+        verified: mockObj.verified,
+        bankIdVerified: mockObj.verified,
+        phone: '070-' + Math.floor(Math.random() * 9000000 + 1000000),
+        companyName: mockObj.companyName,
+        orgNumber: mockObj.orgNumber,
+        region: mockObj.region
+      }
+    })
 
-  console.log('✓ Created 1 demo listing')
+    // Skapa listing från mock-objektet
+    await prisma.listing.upsert({
+      where: { id: mockObj.id },
+      update: {
+        // Uppdatera befintlig med nya värden
+        userId: seller.id,
+        companyName: mockObj.companyName,
+        anonymousTitle: mockObj.anonymousTitle,
+        type: mockObj.type,
+        industry: mockObj.type.toLowerCase().replace(/\s+/g, '-'),
+        revenue: mockObj.revenue,
+        revenueRange: mockObj.revenueRange,
+        employees: parseInt(mockObj.employees?.split('-')[0] || '1'),
+        location: mockObj.location || mockObj.region,
+        region: mockObj.region,
+        address: mockObj.address,
+        priceMin: mockObj.priceMin,
+        priceMax: mockObj.priceMax,
+        description: mockObj.description,
+        strengths: mockObj.strengths,
+        risks: mockObj.risks,
+        whySelling: mockObj.whySelling,
+        image: mockObj.image,
+        verified: mockObj.verified,
+        broker: mockObj.broker,
+        isNew: mockObj.isNew,
+        status: 'active',
+        packageType: 'pro',
+        publishedAt: new Date(mockObj.createdAt),
+        expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+      },
+      create: {
+        id: mockObj.id,
+        userId: seller.id,
+        companyName: mockObj.companyName,
+        anonymousTitle: mockObj.anonymousTitle,
+        type: mockObj.type,
+        industry: mockObj.type.toLowerCase().replace(/\s+/g, '-'),
+        revenue: mockObj.revenue,
+        revenueRange: mockObj.revenueRange,
+        employees: parseInt(mockObj.employees?.split('-')[0] || '1'),
+        location: mockObj.location || mockObj.region,
+        region: mockObj.region,
+        address: mockObj.address,
+        priceMin: mockObj.priceMin,
+        priceMax: mockObj.priceMax,
+        description: mockObj.description,
+        strengths: mockObj.strengths,
+        risks: mockObj.risks,
+        whySelling: mockObj.whySelling,
+        image: mockObj.image,
+        verified: mockObj.verified,
+        broker: mockObj.broker,
+        isNew: mockObj.isNew,
+        status: 'active',
+        packageType: 'pro',
+        publishedAt: new Date(mockObj.createdAt),
+        expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+      }
+    })
+  }
+
+  console.log(`✓ Created/updated ${mockObjects.length} listings from mock objects`)
 
   console.log('\n✅ Seed completed!')
   console.log('\n📊 Demo accounts:')
   console.log('   Säljare: demo.seller@bolaxo.se')
   console.log('   Köpare:  demo.buyer@bolaxo.se')
   console.log('   Advisor: advisor@bolaxo.se')
+  console.log('\n🏢 Plus 20 seller accounts created for mock objects:')
+  console.log('   Format: seller-obj-XXX@bolaxo.se (same password as above)')
   console.log('\n🔗 Direct URLs för investor demo:')
   console.log('   Transaction: /transaktion/demo-transaction-001')
   console.log('   Full URL: https://bolaxo-production.up.railway.app/transaktion/demo-transaction-001')

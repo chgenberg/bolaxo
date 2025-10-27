@@ -71,14 +71,64 @@ export default function SearchPage() {
     (filters.broker !== 'all' ? 1 : 0) +
     (searchQuery ? 1 : 0)
 
-  // Initialize with mock objects on mount
+  // Initialize with listings from database on mount
   useEffect(() => {
     if (!profileChecked) return
 
-    // Use all mock objects directly
-    setAllObjects(mockObjects)
-    setFilteredObjects(mockObjects)
-    setLoading(false)
+    const fetchListings = async () => {
+      try {
+        const response = await fetch('/api/listings?status=active')
+        if (response.ok) {
+          const listings = await response.json()
+          
+          // Transform API listings to BusinessObject format
+          const transformedListings: BusinessObject[] = listings.map((listing: any) => ({
+            id: listing.id,
+            title: listing.companyName,
+            anonymousTitle: listing.anonymousTitle,
+            type: listing.type,
+            category: listing.category,
+            description: listing.description,
+            region: listing.region,
+            location: listing.location,
+            revenue: listing.revenue,
+            revenueRange: listing.revenueRange,
+            priceMin: listing.priceMin,
+            priceMax: listing.priceMax,
+            employees: listing.employees?.toString() || '0',
+            image: listing.image,
+            verified: listing.verified,
+            isNew: listing.isNew,
+            broker: listing.broker,
+            views: listing.views || 0,
+            createdAt: new Date(listing.createdAt),
+            ebitda: listing.ebitda || 0,
+            ownerRole: '',
+            strengths: listing.strengths || [],
+            risks: listing.risks || [],
+            whySelling: listing.whySelling || '',
+            companyName: listing.companyName,
+            orgNumber: listing.orgNumber || '',
+            address: listing.address || '',
+            detailedFinancials: {},
+            customers: [],
+            ndaRequired: false
+          }))
+          
+          setAllObjects(transformedListings)
+          setFilteredObjects(transformedListings)
+        }
+      } catch (error) {
+        console.error('Error fetching listings:', error)
+        // Fallback to mock objects if API fails
+        setAllObjects(mockObjects)
+        setFilteredObjects(mockObjects)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchListings()
   }, [profileChecked])
 
   const applyFilters = () => {
