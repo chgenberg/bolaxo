@@ -122,49 +122,56 @@ export default function AdminDashboard() {
     </div>
   }
 
+  // Set default mock data if no stats loaded
+  useEffect(() => {
+    if (!stats && !loading) {
+      setStats({
+        totalVisitors: 4247,
+        uniqueVisitors: 2891,
+        realVsBot: { real: 4069, bot: 178 },
+        avgSessionDuration: 272,
+        bounceRate: 32.4,
+        topSearches: [
+          { query: 'IT-konsultbolag Stockholm', count: 234 },
+          { query: 'E-handel företag till salu', count: 189 },
+          { query: 'Restaurang Göteborg', count: 156 },
+          { query: 'Bygg & Entreprenad', count: 134 },
+          { query: 'Hälsa & Skönhet', count: 112 }
+        ],
+        topPages: [
+          { path: '/kopare', views: 1823 },
+          { path: '/salja', views: 1542 },
+          { path: '/vardering', views: 1234 },
+          { path: '/objekt/123', views: 987 },
+          { path: '/priser', views: 756 }
+        ],
+        revenueToday: 42500,
+        activeListings: 187,
+        ndaRequests: 64,
+        messages: 1243,
+        conversionRate: 3.87,
+        deviceBreakdown: { mobile: 2345, desktop: 1678, tablet: 224 },
+        trafficSources: [
+          { source: 'Google', count: 2102 },
+          { source: 'Direct', count: 1345 },
+          { source: 'LinkedIn', count: 456 },
+          { source: 'Facebook', count: 234 },
+          { source: 'Other', count: 110 }
+        ],
+        recentActivities: [
+          { id: '1', type: 'listing', description: 'Ny annons: IT-konsultbolag i Stockholm', timestamp: new Date().toISOString() },
+          { id: '2', type: 'nda', description: 'NDA signerat för objekt #234', timestamp: new Date().toISOString() },
+          { id: '3', type: 'message', description: 'Nytt meddelande mellan köpare och säljare', timestamp: new Date().toISOString() },
+          { id: '4', type: 'payment', description: 'Betalning mottagen: 5,000 SEK', timestamp: new Date().toISOString() },
+        ]
+      })
+    }
+  }, [stats, loading])
+
   if (!stats) {
-    // Default mock data for demo
-    setStats({
-      totalVisitors: 4247,
-      uniqueVisitors: 2891,
-      realVsBot: { real: 4069, bot: 178 },
-      avgSessionDuration: 272,
-      bounceRate: 32.4,
-      topSearches: [
-        { query: 'IT-konsultbolag Stockholm', count: 234 },
-        { query: 'E-handel företag till salu', count: 189 },
-        { query: 'Restaurang Göteborg', count: 156 },
-        { query: 'Bygg & Entreprenad', count: 134 },
-        { query: 'Hälsa & Skönhet', count: 112 }
-      ],
-      topPages: [
-        { path: '/kopare', views: 1823 },
-        { path: '/salja', views: 1542 },
-        { path: '/vardering', views: 1234 },
-        { path: '/objekt/123', views: 987 },
-        { path: '/priser', views: 756 }
-      ],
-      revenueToday: 42500,
-      activeListings: 187,
-      ndaRequests: 64,
-      messages: 1243,
-      conversionRate: 3.87,
-      deviceBreakdown: { mobile: 2345, desktop: 1678, tablet: 224 },
-      trafficSources: [
-        { source: 'Google', count: 2102 },
-        { source: 'Direct', count: 1345 },
-        { source: 'LinkedIn', count: 456 },
-        { source: 'Facebook', count: 234 },
-        { source: 'Other', count: 110 }
-      ],
-      recentActivities: [
-        { id: '1', type: 'listing', description: 'Ny annons: IT-konsultbolag i Stockholm', timestamp: new Date().toISOString() },
-        { id: '2', type: 'nda', description: 'NDA signerat för objekt #234', timestamp: new Date().toISOString() },
-        { id: '3', type: 'message', description: 'Nytt meddelande mellan köpare och säljare', timestamp: new Date().toISOString() },
-        { id: '4', type: 'payment', description: 'Betalning mottagen: 5,000 SEK', timestamp: new Date().toISOString() },
-      ]
-    })
-    return null
+    return <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-8 h-8 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+    </div>
   }
 
   const botPercentage = Math.round((stats.realVsBot.bot / (stats.realVsBot.real + stats.realVsBot.bot)) * 100)
