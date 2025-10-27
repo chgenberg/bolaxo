@@ -453,44 +453,38 @@ async function main() {
 
     if (seller) {
       // Skapa en pending NDA request
-      await prisma.nDARequest.upsert({
-        where: {
-          listingId_buyerId: {
+      try {
+        await prisma.nDARequest.create({
+          data: {
             listingId: mockObj.id,
-            buyerId: testBuyer1.id
+            buyerId: testBuyer1.id,
+            sellerId: seller.id,
+            status: 'pending',
+            message: 'Jag är intresserad av denna verksamhet och skulle vilja få mer information.',
+            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           }
-        },
-        update: {},
-        create: {
-          listingId: mockObj.id,
-          buyerId: testBuyer1.id,
-          sellerId: seller.id,
-          status: 'pending',
-          message: 'Jag är intresserad av denna verksamhet och skulle vilja få mer information.',
-          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-        }
-      })
+        })
+      } catch (e) {
+        // Already exists, ignore
+      }
 
       // Skapa en approved NDA request för andra köparen
-      await prisma.nDARequest.upsert({
-        where: {
-          listingId_buyerId: {
+      try {
+        await prisma.nDARequest.create({
+          data: {
             listingId: mockObj.id,
-            buyerId: testBuyer2.id
+            buyerId: testBuyer2.id,
+            sellerId: seller.id,
+            status: 'approved',
+            message: 'Intresserad av att köpa denna verksamhet.',
+            signedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+            approvedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            expiresAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000)
           }
-        },
-        update: {},
-        create: {
-          listingId: mockObj.id,
-          buyerId: testBuyer2.id,
-          sellerId: seller.id,
-          status: 'approved',
-          message: 'Intresserad av att köpa denna verksamhet.',
-          signedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          approvedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          expiresAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000)
-        }
-      })
+        })
+      } catch (e) {
+        // Already exists, ignore
+      }
     }
   }
 
