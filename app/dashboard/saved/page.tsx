@@ -319,7 +319,7 @@ export default function SavedListingsPage() {
                       >
                         Visa objekt
                       </Link>
-                      {listing.canContact && (
+                      {listing.ndaStatus === 'approved' && (
                         <Link
                           href={`/kopare/chat?peerId=${listing.sellerId}&listingId=${listing.id}`}
                           className="px-3 py-1.5 text-sm bg-primary-navy text-white hover:bg-primary-navy/90 rounded-lg transition-colors flex items-center gap-1"

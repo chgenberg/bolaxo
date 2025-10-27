@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MessageSquare, User, Building } from 'lucide-react'
 import Chat from '@/components/Chat'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface Conversation {
   peerId: string
@@ -19,7 +20,7 @@ interface Conversation {
 
 function BuyerChatContent() {
   const searchParams = useSearchParams()
-  const [currentUserId] = useState('buyer-123') // TODO: Get from auth
+  const { user } = useAuth()
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [conversations, setConversations] = useState<Conversation[]>([])
   
@@ -59,6 +60,19 @@ function BuyerChatContent() {
       }
     }
   }, [searchParams])
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Du måste logga in för att chatta</p>
+          <Link href="/login" className="text-primary-blue hover:underline">
+            Gå till inloggning
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -132,7 +146,7 @@ function BuyerChatContent() {
           <div className="lg:col-span-2">
             {selectedConversation ? (
               <Chat
-                currentUserId={currentUserId}
+                currentUserId={user.id}
                 peerId={selectedConversation.peerId}
                 peerName={selectedConversation.peerName}
                 peerRole={selectedConversation.peerRole}

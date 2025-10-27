@@ -412,11 +412,99 @@ async function main() {
 
   console.log(`✓ Created/updated ${mockObjects.length} listings from mock objects`)
 
+  // 5. Skapa NDA requests för test
+  console.log('\n📋 Seeding NDA requests...')
+  
+  // Skapa ett par test-köpare
+  const testBuyer1 = await prisma.user.upsert({
+    where: { email: 'testbuyer1@bolaxo.se' },
+    update: {},
+    create: {
+      email: 'testbuyer1@bolaxo.se',
+      name: 'Test Köpare 1',
+      role: 'buyer',
+      verified: true,
+      bankIdVerified: true,
+      phone: '070-111 11 11',
+      region: 'Stockholm'
+    }
+  })
+
+  const testBuyer2 = await prisma.user.upsert({
+    where: { email: 'testbuyer2@bolaxo.se' },
+    update: {},
+    create: {
+      email: 'testbuyer2@bolaxo.se',
+      name: 'Test Köpare 2',
+      role: 'buyer',
+      verified: true,
+      bankIdVerified: true,
+      phone: '070-222 22 22',
+      region: 'Göteborg'
+    }
+  })
+
+  // Skapa NDA requests för första två listings
+  const firstTwoListings = mockObjects.slice(0, 2)
+  for (const mockObj of firstTwoListings) {
+    const seller = await prisma.user.findFirst({
+      where: { email: `seller-${mockObj.id}@bolaxo.se` }
+    })
+
+    if (seller) {
+      // Skapa en pending NDA request
+      await prisma.nDARequest.upsert({
+        where: {
+          listingId_buyerId: {
+            listingId: mockObj.id,
+            buyerId: testBuyer1.id
+          }
+        },
+        update: {},
+        create: {
+          listingId: mockObj.id,
+          buyerId: testBuyer1.id,
+          sellerId: seller.id,
+          status: 'pending',
+          message: 'Jag är intresserad av denna verksamhet och skulle vilja få mer information.',
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        }
+      })
+
+      // Skapa en approved NDA request för andra köparen
+      await prisma.nDARequest.upsert({
+        where: {
+          listingId_buyerId: {
+            listingId: mockObj.id,
+            buyerId: testBuyer2.id
+          }
+        },
+        update: {},
+        create: {
+          listingId: mockObj.id,
+          buyerId: testBuyer2.id,
+          sellerId: seller.id,
+          status: 'approved',
+          message: 'Intresserad av att köpa denna verksamhet.',
+          signedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+          approvedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+          expiresAt: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000)
+        }
+      })
+    }
+  }
+
+  console.log('✓ Created NDA requests for testing')
+
   console.log('\n✅ Seed completed!')
   console.log('\n📊 Demo accounts:')
   console.log('   Säljare: demo.seller@bolaxo.se')
   console.log('   Köpare:  demo.buyer@bolaxo.se')
   console.log('   Advisor: advisor@bolaxo.se')
+  console.log('\n👥 Test users for dev-login:')
+  console.log(`   Test Buyer 1 ID: ${testBuyer1.id}`)
+  console.log(`   Test Buyer 2 ID: ${testBuyer2.id}`)
+  console.log('   (Use these IDs in /dev-login page)')
   console.log('\n🏢 Plus 20 seller accounts created for mock objects:')
   console.log('   Format: seller-obj-XXX@bolaxo.se (same password as above)')
   console.log('\n🔗 Direct URLs för investor demo:')

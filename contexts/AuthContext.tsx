@@ -35,6 +35,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUser = async () => {
     try {
+      // Check for dev login first
+      if (typeof window !== 'undefined') {
+        const devUserStr = localStorage.getItem('dev-auth-user')
+        if (devUserStr) {
+          try {
+            const devUser = JSON.parse(devUserStr)
+            setUser({
+              id: devUser.id,
+              email: devUser.email,
+              name: devUser.name,
+              role: devUser.role,
+              verified: true,
+              bankIdVerified: true,
+              phone: null,
+              companyName: null,
+              orgNumber: null,
+              region: null,
+              referralCode: null,
+              referredBy: null,
+              createdAt: devUser.loginTime,
+              lastLoginAt: devUser.loginTime
+            })
+            setLoading(false)
+            return
+          } catch (e) {
+            console.log('Dev user parse error:', e)
+          }
+        }
+      }
+      
+      // Fall back to regular auth API
       const response = await fetch('/api/auth/me')
       const data = await response.json()
       setUser(data.user)
@@ -76,6 +107,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
+      // Clear dev auth
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('dev-auth-user')
+        localStorage.removeItem('dev-auth-token')
+      }
+      
       await fetch('/api/auth/logout', { method: 'POST' })
       setUser(null)
       window.location.href = '/'

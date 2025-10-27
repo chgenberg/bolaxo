@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MessageSquare, User, Building, Shield, CheckCircle, XCircle, Clock } from 'lucide-react'
 import Chat from '@/components/Chat'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface ContactRequest {
   buyerId: string
@@ -31,7 +32,7 @@ interface Conversation {
 
 function SellerChatContent() {
   const searchParams = useSearchParams()
-  const [currentUserId] = useState('seller-123') // TODO: Get from auth
+  const { user } = useAuth()
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null)
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [contactRequests, setContactRequests] = useState<ContactRequest[]>([])
@@ -250,7 +251,7 @@ function SellerChatContent() {
           <div className="lg:col-span-2">
             {selectedConversation ? (
               <Chat
-                currentUserId={currentUserId}
+                currentUserId={user?.id || 'seller-123'}
                 peerId={selectedConversation.peerId}
                 peerName={selectedConversation.peerName}
                 peerRole={selectedConversation.peerRole}

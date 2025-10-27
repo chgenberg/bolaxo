@@ -7,16 +7,58 @@ import Image from 'next/image'
 import { ArrowLeft, MapPin, TrendingUp, Users, Eye, Bookmark, Shield, AlertCircle, Calendar, FileText, BarChart, CheckCircle } from 'lucide-react'
 import { mockObjects } from '@/data/mockObjects'
 import { useBuyerStore } from '@/stores/buyerStore'
+import { useAuth } from '@/contexts/AuthContext'
 import InfoPopup from '@/components/InfoPopup'
 
 export default function ObjectDetailPage() {
   const params = useParams()
   const objectId = params.id as string
   const object = mockObjects.find(obj => obj.id === objectId)
+  const { user } = useAuth()
   
   const [activeTab, setActiveTab] = useState('overview')
+  const [isSyncingToDb, setIsSyncingToDb] = useState(false)
   const { savedObjects, toggleSaved, hasNDA } = useBuyerStore()
   const isSaved = savedObjects.includes(objectId)
+  
+  // Sync save to database when it changes
+  const handleToggleSaved = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault()
+    }
+    
+    // Update local state immediately
+    toggleSaved(objectId)
+    
+    // Sync to database
+    if (user) {
+      setIsSyncingToDb(true)
+      try {
+        const newIsSaved = savedObjects.includes(objectId)
+        
+        if (newIsSaved) {
+          // Remove from database
+          await fetch(`/api/saved-listings?userId=${user.id}&listingId=${objectId}`, {
+            method: 'DELETE'
+          })
+        } else {
+          // Add to database
+          await fetch('/api/saved-listings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: user.id,
+              listingId: objectId
+            })
+          })
+        }
+      } catch (error) {
+        console.error('Failed to sync saved listing:', error)
+      } finally {
+        setIsSyncingToDb(false)
+      }
+    }
+  }
   
   if (!object) {
     return (
@@ -58,15 +100,16 @@ export default function ObjectDetailPage() {
               Tillbaka till sök
             </Link>
             <button
-              onClick={() => toggleSaved(objectId)}
+              onClick={handleToggleSaved}
               className={`inline-flex items-center px-4 py-2 rounded-full font-medium transition-all ${
                 isSaved
                   ? 'bg-primary-blue text-white'
                   : 'bg-gray-100 text-text-dark hover:bg-gray-200'
               }`}
+              disabled={isSyncingToDb}
             >
               <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
-              {isSaved ? 'Sparad' : 'Spara'}
+              {isSyncingToDb ? 'Sparar...' : (isSaved ? 'Sparad' : 'Spara')}
             </button>
           </div>
         </div>

@@ -5,11 +5,13 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
+import { useAuth } from '@/contexts/AuthContext'
 import InfoPopup from '@/components/InfoPopup'
 
 export default function NDASigningPage() {
   const params = useParams()
   const router = useRouter()
+  const { user, loading } = useAuth()
   const { ndaSignedObjects, signNDA } = useBuyerStore()
   
   const objectId = params.id as string
@@ -19,6 +21,34 @@ export default function NDASigningPage() {
   const [step, setStep] = useState(1)
   const [agreed, setAgreed] = useState(false)
   const [interestReason, setInterestReason] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
+        <div className="max-w-2xl w-full card text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
+            Du måste logga in först
+          </h1>
+          <p className="text-text-gray mb-8">
+            För att signera NDA måste du vara inloggad.
+          </p>
+          <Link href="/login" className="btn-primary inline-block">
+            Gå till inloggning
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   if (!object) {
     return <div>Objekt ej hittat</div>
@@ -76,14 +106,67 @@ export default function NDASigningPage() {
     )
   }
 
-  const handleBankIdSign = () => {
-    signNDA(objectId)
-    setStep(3)
+  const handleBankIdSign = async () => {
+    await submitNDA()
   }
 
-  const handleManualSign = () => {
-    signNDA(objectId)
-    setStep(3)
+  const handleManualSign = async () => {
+    await submitNDA()
+  }
+
+  const submitNDA = async () => {
+    if (!user) return
+    
+    setIsSubmitting(true)
+    setError('')
+
+    try {
+      // Get seller info from the object
+      const response = await fetch(`/api/listings?id=${objectId}`)
+      const listingData = await response.json()
+      const listing = listingData.listings?.[0] || listingData.listing
+      
+      if (!listing) {
+        setError('Kunde inte hitta uppgifter om säljaren')
+        setIsSubmitting(false)
+        return
+      }
+
+      // Create NDA request in database
+      const ndaResponse = await fetch('/api/nda-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listingId: objectId,
+          buyerId: user.id,
+          sellerId: listing.userId,
+          message: interestReason || 'Intresserad av denna verksamhet'
+        })
+      })
+
+      if (!ndaResponse.ok) {
+        const errorData = await ndaResponse.json()
+        if (errorData.existing) {
+          // NDA already exists, just update local state and continue
+          signNDA(objectId)
+          setStep(3)
+          return
+        }
+        throw new Error(errorData.error || 'Kunde inte skapa NDA-förfrågan')
+      }
+
+      const ndaData = await ndaResponse.json()
+      console.log('NDA created:', ndaData)
+
+      // Update local state
+      signNDA(objectId)
+      setStep(3)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Något gick fel')
+      console.error('NDA submission error:', err)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -108,6 +191,12 @@ export default function NDASigningPage() {
                 För {object.anonymousTitle}
               </p>
             </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
 
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Steg 1: Sammanfattning av NDA-villkor</h2>
@@ -192,14 +281,14 @@ export default function NDASigningPage() {
 
             <button
               onClick={() => setStep(2)}
-              disabled={!agreed}
+              disabled={!agreed || isSubmitting}
               className={`w-full py-4 rounded-xl font-semibold transition-all ${
                 agreed
                   ? 'bg-primary-blue text-white hover:bg-blue-800'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
-              Fortsätt till signering →
+              {isSubmitting ? 'Skickar NDA...' : 'Fortsätt till signering →'}
             </button>
           </div>
         )}
@@ -246,8 +335,8 @@ export default function NDASigningPage() {
                     </div>
                   </div>
                 </div>
-                <button onClick={handleBankIdSign} className="btn-primary w-full mt-4">
-                  Signera med BankID
+                <button onClick={handleBankIdSign} className="btn-primary w-full mt-4" disabled={isSubmitting}>
+                  {isSubmitting ? 'Skickar NDA...' : 'Signera med BankID'}
                 </button>
               </div>
 
@@ -268,8 +357,8 @@ export default function NDASigningPage() {
                     </div>
                   </div>
                 </div>
-                <button onClick={handleManualSign} className="btn-secondary w-full mt-4">
-                  Signera manuellt
+                <button onClick={handleManualSign} className="btn-secondary w-full mt-4" disabled={isSubmitting}>
+                  {isSubmitting ? 'Skickar NDA...' : 'Signera manuellt'}
                 </button>
               </div>
             </div>

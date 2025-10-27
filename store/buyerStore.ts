@@ -84,7 +84,35 @@ export const useBuyerStore = create<BuyerStore>((set, get) => ({
         ? state.savedObjects.filter(id => id !== objectId)
         : [...state.savedObjects, objectId]
     }))
-    setTimeout(() => get().saveToLocalStorage(), 100)
+    
+    // Also save to database if user is authenticated
+    setTimeout(async () => {
+      const { savedObjects } = get()
+      const isSaved = savedObjects.includes(objectId)
+      
+      try {
+        if (isSaved) {
+          // Save to database
+          await fetch('/api/saved-listings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: 'temp', // Will be replaced with auth user ID
+              listingId: objectId
+            })
+          })
+        } else {
+          // Delete from database
+          await fetch(`/api/saved-listings?userId=temp&listingId=${objectId}`, {
+            method: 'DELETE'
+          })
+        }
+      } catch (error) {
+        console.error('Failed to sync saved listing:', error)
+      }
+      
+      get().saveToLocalStorage()
+    }, 100)
   },
 
   toggleCompare: (objectId) => {
