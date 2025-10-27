@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       name: 'bolaxo_user_id',
       value: user.id,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV !== 'development',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60, // 7 days
       path: '/'
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
       name: 'bolaxo_user_email',
       value: user.email,
       httpOnly: false, // Allow client to read
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV !== 'development',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60,
       path: '/'
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       name: 'bolaxo_user_role',
       value: user.role,
       httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV !== 'development',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60,
       path: '/'
