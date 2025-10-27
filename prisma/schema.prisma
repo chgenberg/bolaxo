@@ -23,6 +23,7 @@ model User {
   companyName     String?
   orgNumber       String?
   region          String?
+  avatarUrl       String?   // Profile picture URL
   
   // Referral system
   referralCode    String?   @unique

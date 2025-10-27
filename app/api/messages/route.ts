@@ -99,7 +99,8 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
-              role: true
+              role: true,
+              avatarUrl: true
             }
           },
           recipient: {
@@ -107,7 +108,8 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
-              role: true
+              role: true,
+              avatarUrl: true
             }
           }
         },
@@ -215,7 +217,8 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
-            role: true
+            role: true,
+            avatarUrl: true
           }
         },
         recipient: {
@@ -223,7 +226,8 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             email: true,
-            role: true
+            role: true,
+            avatarUrl: true
           }
         }
       }

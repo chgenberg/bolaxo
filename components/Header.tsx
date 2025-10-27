@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown, Menu, X, User, LogOut } from 'lucide-react'
+import { ChevronDown, Menu, X, User, LogOut, MessageSquare, Settings } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { usePathname } from 'next/navigation'
 import NotificationCenter from './NotificationCenter'
@@ -204,6 +204,28 @@ export default function Header() {
             {user ? (
               <>
                 {/* <NotificationCenter /> */}
+                {/* Chat link for buyers and sellers */}
+                {(user.role === 'buyer' || user.role === 'seller') && (
+                  <Link
+                    href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
+                    className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
+                  >
+                    <MessageSquare className="w-5 h-5" />
+                    <span>Meddelanden</span>
+                  </Link>
+                )}
+                
+                {/* Settings link */}
+                {(user.role === 'buyer' || user.role === 'seller') && (
+                  <Link
+                    href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
+                    className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
+                  >
+                    <Settings className="w-5 h-5" />
+                    <span>Profil</span>
+                  </Link>
+                )}
+                
                 <Link
                   href="/dashboard"
                   className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
@@ -286,6 +308,25 @@ export default function Header() {
             <div className="pt-4 border-t border-gray-200">
               {user ? (
                 <>
+                  {/* Mobile chat and settings links */}
+                  {(user.role === 'buyer' || user.role === 'seller') && (
+                    <>
+                      <Link
+                        href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
+                        className="block py-2 text-lg font-semibold text-gray-900"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Meddelanden
+                      </Link>
+                      <Link
+                        href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
+                        className="block py-2 text-lg font-semibold text-gray-900"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Profilinställningar
+                      </Link>
+                    </>
+                  )}
                   <Link
                     href="/dashboard"
                     className="block py-2 text-lg font-semibold text-gray-900"

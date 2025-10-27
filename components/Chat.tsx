@@ -16,25 +16,29 @@ interface Message {
     name: string
     email: string
     role: string
+    avatarUrl?: string
   }
   recipient: {
     id: string
     name: string
     email: string
     role: string
+    avatarUrl?: string
   }
 }
 
 interface ChatProps {
   currentUserId: string
+  currentUserAvatar?: string
   peerId: string
   peerName: string
+  peerAvatar?: string
   peerRole: string
   listingId?: string
   listingTitle?: string
 }
 
-export default function Chat({ currentUserId, peerId, peerName, peerRole, listingId, listingTitle }: ChatProps) {
+export default function Chat({ currentUserId, currentUserAvatar, peerId, peerName, peerAvatar, peerRole, listingId, listingTitle }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [loading, setLoading] = useState(true)
@@ -187,9 +191,19 @@ export default function Chat({ currentUserId, peerId, peerName, peerRole, listin
       {/* Header */}
       <div className="bg-primary-navy text-white px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-            {peerName.charAt(0).toUpperCase()}
-          </div>
+          {peerAvatar ? (
+            <Image
+              src={peerAvatar}
+              alt={peerName}
+              width={40}
+              height={40}
+              className="rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-semibold">
+              {peerName.charAt(0).toUpperCase()}
+            </div>
+          )}
           <div>
             <h3 className="font-semibold">{peerName}</h3>
             <p className="text-xs text-white/70">
@@ -250,9 +264,19 @@ export default function Chat({ currentUserId, peerId, peerName, peerRole, listin
                     className={`flex gap-2 ${isOwn ? 'justify-end' : 'justify-start'}`}
                   >
                     {!isOwn && showAvatar && (
-                      <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-medium">
-                        {message.sender.name.charAt(0).toUpperCase()}
-                      </div>
+                      message.sender.avatarUrl ? (
+                        <Image
+                          src={message.sender.avatarUrl}
+                          alt={message.sender.name}
+                          width={32}
+                          height={32}
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm font-medium">
+                          {message.sender.name.charAt(0).toUpperCase()}
+                        </div>
+                      )
                     )}
                     {!isOwn && !showAvatar && <div className="w-8" />}
                     
