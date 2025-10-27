@@ -437,3 +437,36 @@ model Review {
   @@index([createdAt])
 }
 
+model SupportTicket {
+  id              String   @id @default(cuid())
+  subject         String
+  description     String   @db.Text
+  category        String   // technical, billing, account, payment, listing
+  priority        String   // critical, high, medium, low
+  status          String   @default("open") // open, in_progress, resolved, closed
+  
+  // Creator info
+  userId          String?
+  createdByEmail  String
+  createdByName   String?
+  
+  // Assignment
+  assignedTo      String?  // Admin user ID
+  assignedToEmail String?
+  
+  // Engagement
+  responses       Int      @default(0)
+  lastResponse    DateTime?
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([status])
+  @@index([priority])
+  @@index([category])
+  @@index([assignedTo])
+  @@index([userId])
+  @@index([createdAt])
+}
+
