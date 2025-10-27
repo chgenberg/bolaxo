@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import CookieConsent from '@/components/CookieConsent'
-import { AuthProvider } from '@/contexts/AuthContext'
-import { ToastProvider } from '@/contexts/ToastContext'
+// import Header from '@/components/Header'
+// import Footer from '@/components/Footer'
+// import CookieConsent from '@/components/CookieConsent'
+// import { AuthProvider } from '@/contexts/AuthContext'
+// import { ToastProvider } from '@/contexts/ToastContext'
 
 export const metadata: Metadata = {
   title: 'Bolagsplatsen - Sälj ditt företag tryggt och enkelt',
@@ -24,14 +24,8 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="antialiased">
-        <AuthProvider>
-          <ToastProvider>
-            <Header />
-            {children}
-            <Footer />
-            <CookieConsent />
-          </ToastProvider>
-        </AuthProvider>
+        {/* MINIMAL TEST - EVERYTHING DISABLED TO ISOLATE REACT ERROR #321 */}
+        {children}
       </body>
     </html>
   )
