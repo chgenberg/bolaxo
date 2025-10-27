@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, ArrowRight, TrendingUp, ChevronDown } from 'lucide-react'
+import { Star, ArrowRight, TrendingUp, ChevronDown, X } from 'lucide-react'
 import ValuationFormModal from '@/components/ValuationFormModal'
 
 export default function Home() {
@@ -256,78 +256,200 @@ export default function Home() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
             <div
-              className="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75"
+              className="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-sm"
               onClick={() => setSelectedStep(null)}
             />
             
-            <div className="inline-block w-full max-w-2xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-3xl">
-              <div className="text-center mb-6">
-                <h2 className="text-3xl font-bold text-gray-900 uppercase tracking-wide mb-2">
-                  {selectedStep === 1 && "REGISTRERA"}
-                  {selectedStep === 2 && "VÄRDERA"}
-                  {selectedStep === 3 && "MATCHA"}
-                  {selectedStep === 4 && "FÖRHANDLA"}
-                </h2>
-                <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-600 mx-auto" />
-              </div>
-
-              <div className="prose prose-lg max-w-none">
-                {selectedStep === 1 && (
-                  <>
-                    <p>Att registrera sig på BOLAXO är enkelt och tar bara några minuter:</p>
-                    <ul>
-                      <li>Skapa ett konto med e-post eller BankID</li>
-                      <li>Fyll i grundläggande information om ditt företag</li>
-                      <li>Välj om du vill sälja eller köpa</li>
-                      <li>Verifiera din identitet för säker handel</li>
-                    </ul>
-                    <p>När du är registrerad får du tillgång till alla våra tjänster och kan börja din resa mot en framgångsrik företagsaffär.</p>
-                  </>
-                )}
-                {selectedStep === 2 && (
-                  <>
-                    <p>Vår AI-drivna värderingsmodell ger dig en professionell uppskattning på 5 minuter:</p>
-                    <ul>
-                      <li>Baserad på branschstandard och marknadsjämförelser</li>
-                      <li>Analyserar omsättning, resultat och tillväxtpotential</li>
-                      <li>Jämför med liknande bolag som sålts nyligen</li>
-                      <li>Ger ett värdeintervall baserat på multiplar</li>
-                    </ul>
-                    <p>Värderingen är helt kostnadsfri och ger dig en bra utgångspunkt för prissättning.</p>
-                  </>
-                )}
-                {selectedStep === 3 && (
-                  <>
-                    <p>Vår intelligenta matchning hjälper dig hitta rätt motpart:</p>
-                    <ul>
-                      <li>AI analyserar köpares preferenser och budget</li>
-                      <li>Automatisk matchning baserat på bransch och storlek</li>
-                      <li>Endast verifierade och seriösa köpare</li>
-                      <li>Du behåller full kontroll över vem som ser din annons</li>
-                    </ul>
-                    <p>Vi presenterar endast de mest relevanta matchningarna för att spara tid för alla parter.</p>
-                  </>
-                )}
-                {selectedStep === 4 && (
-                  <>
-                    <p>BOLAXO säkerställer en trygg förhandlingsprocess:</p>
-                    <ul>
-                      <li>Automatisk NDA innan känslig information delas</li>
-                      <li>Säker datarum för due diligence</li>
-                      <li>Integrerad meddelandefunktion med kryptering</li>
-                      <li>Mallar för avsiktsförklaringar och avtal</li>
-                    </ul>
-                    <p>Vi guidar dig genom hela processen och ser till att allt går rätt till.</p>
-                  </>
-                )}
-              </div>
-
+            <div className="inline-block w-full max-w-4xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-3xl max-h-[85vh] overflow-y-auto">
+              {/* Close Button */}
               <button
                 onClick={() => setSelectedStep(null)}
-                className="mt-8 w-full bg-gray-900 text-white px-6 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors"
+                className="absolute top-6 right-6 p-2 hover:bg-gray-100 rounded-full transition-all"
               >
-                Stäng
+                <X className="w-6 h-6 text-gray-400" />
               </button>
+
+              <div className="text-center mb-8">
+                <h2 className="text-4xl font-black text-primary-navy uppercase tracking-wide mb-4">
+                  {selectedStep === 1 && "STEG 1: REGISTRERA"}
+                  {selectedStep === 2 && "STEG 2: VÄRDERA"}
+                  {selectedStep === 3 && "STEG 3: MATCHA"}
+                  {selectedStep === 4 && "STEG 4: FÖRHANDLA"}
+                </h2>
+                <div className="w-24 h-1 bg-gradient-to-r from-accent-pink to-primary-navy mx-auto" />
+              </div>
+
+              <div className="space-y-6">
+                {selectedStep === 1 && (
+                  <>
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">Börja din resa på BOLAXO</h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        Registrering på BOLAXO är helt enkelt och tar bara 2-3 minuter. Du behöver bara fylla i några grundläggande uppgifter om dig själv och ditt företag för att komma igång.
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                        <div>
+                          <h4 className="font-bold text-primary-navy mb-1">Skapa ditt konto</h4>
+                          <p className="text-gray-600 text-sm">Använd e-post eller BankID för att registrera dig. BankID ger dig extra säkerhet och verifiering från start.</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                        <div>
+                          <h4 className="font-bold text-primary-navy mb-1">Fyll i företagsinformation</h4>
+                          <p className="text-gray-600 text-sm">Berätta om ditt företag: namn, bransch, storlek och vad du söker. Du kan alltid uppdatera denna senare.</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                        <div>
+                          <h4 className="font-bold text-primary-navy mb-1">Verifiera din identitet</h4>
+                          <p className="text-gray-600 text-sm">Genomför en snabb BankID-verifiering för att låsa upp alla funktioner och få "Verifierad säljare"-badge.</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
+                        <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">4</div>
+                        <div>
+                          <h4 className="font-bold text-primary-navy mb-1">Du är redo!</h4>
+                          <p className="text-gray-600 text-sm">Nu kan du värdera ditt företag, skapa annonser, få matchningar och börja förhandla med köpare.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                      <p className="text-sm text-green-800"><strong>✓ Helt kostnadsfritt</strong> - Du betalar ingenting för registrering eller för att använda plattformen för att söka köpare.</p>
+                    </div>
+                  </>
+                )}
+
+                {selectedStep === 2 && (
+                  <>
+                    <div className="bg-gradient-to-br from-yellow-50 to-amber-100 rounded-2xl p-6 border border-amber-200">
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">AI-driven värdering på 5 minuter</h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        Vår avancerade värderingsalgoritm analyserar ditt företag från flera vinklar och ger dig ett professionellt värdeintervall - helt gratis. Lämpligt för allt från små startups till etablerade mittenföretag.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-primary-navy mb-4">Hur fungerar värderingen?</h4>
+                      <div className="space-y-3">
+                        <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
+                          <h5 className="font-bold text-primary-navy mb-1">Finansiell analys</h5>
+                          <p className="text-gray-600 text-sm">Vi analyserar din omsättning, resultat, kassaflöde och tillväxttakt över senaste 3 åren för att skapa en solid grund.</p>
+                        </div>
+                        <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
+                          <h5 className="font-bold text-primary-navy mb-1">Branschjämförelse</h5>
+                          <p className="text-gray-600 text-sm">Vi jämför ditt företag med liknande bolag som sålts nyligen för att sätta rätt multipel baserat på marknaden.</p>
+                        </div>
+                        <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
+                          <h5 className="font-bold text-primary-navy mb-1">Värderingsmetoder</h5>
+                          <p className="text-gray-600 text-sm">Vi använder EBITDA-multipel, avkastningsvärdering och omsättningsmultipel för att triangulera ett rättvist värde.</p>
+                        </div>
+                        <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
+                          <h5 className="font-bold text-primary-navy mb-1">Detaljerad rapport</h5>
+                          <p className="text-gray-600 text-sm">Du får en PDF-rapport med värdeintervall, antaganden, diagrammar och konkreta tips för att höja värdet.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                      <p className="text-sm text-amber-900"><strong>💡 Tips:</strong> Använd värderingen för att sätta rimligt pris på din annons och ha som utgångspunkt i förhandlingar.</p>
+                    </div>
+                  </>
+                )}
+
+                {selectedStep === 3 && (
+                  <>
+                    <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-6 border border-pink-200">
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">Intelligent matchning med rätt köpare</h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        Vår AI-algoritm analyserar profiler och behov för att hitta de bästa matchningarna. Vi presenterar bara seriösa, verifierade köpare som faktiskt passar ditt företag.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-bold text-primary-navy mb-4">Så funkar matchningen</h4>
+                      <div className="bg-white p-6 rounded-2xl border-2 border-pink-200 mb-4">
+                        <div className="flex gap-4 mb-4">
+                          <div className="text-3xl">🎯</div>
+                          <div>
+                            <h5 className="font-bold text-primary-navy mb-2">AI-analys av köpare</h5>
+                            <p className="text-gray-600">Systemet analyserar vad varje köpare söker: bransch, region, storlek, EBITDA-nivå och andra kriterier.</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-4 mb-4">
+                          <div className="text-3xl">⚡</div>
+                          <div>
+                            <h5 className="font-bold text-primary-navy mb-2">Automatisk matchning</h5>
+                            <p className="text-gray-600">Din annons matchas automatiskt med köpare vars kriterier stämmer överens med din profil.</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-4 mb-4">
+                          <div className="text-3xl">✓</div>
+                          <div>
+                            <h5 className="font-bold text-primary-navy mb-2">Verifierade köpare</h5>
+                            <p className="text-gray-600">Alla köpare är verifierade med BankID, vilket garanterar att de är seriösa och relevanta.</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-4">
+                          <div className="text-3xl">🔒</div>
+                          <div>
+                            <h5 className="font-bold text-primary-navy mb-2">Din kontroll bevaras</h5>
+                            <p className="text-gray-600">Du bestämmer vad matchningar får se innan de signerar NDA - du kan vara helt anonym om du vill.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-pink-50 border border-pink-200 rounded-xl p-4">
+                      <p className="text-sm text-pink-900"><strong>⚡ Spara tid:</strong> Istället för att vänta på slumpmässiga förfrågningar får du relevanta köpare presenterade automatiskt.</p>
+                    </div>
+                  </>
+                )}
+
+                {selectedStep === 4 && (
+                  <>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200">
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">Säker förhandling från start till mål</h3>
+                      <p className="text-gray-700 leading-relaxed">
+                        BOLAXO säkerställer en trygg och professionell förhandlingsprocess med automatisk NDA, säkert datarum och juridiska verktyg som sparar både tid och pengar.
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <h5 className="font-bold text-primary-navy mb-2">🔐 Automatisk NDA</h5>
+                        <p className="text-gray-600 text-sm">Innan köparen ser känslig information måste de signera digitalt sekretesspakt med BankID. Du är alltid skyddad.</p>
+                      </div>
+                      <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <h5 className="font-bold text-primary-navy mb-2">📂 Säkert datarum</h5>
+                        <p className="text-gray-600 text-sm">Dela böcker, kontrakt, kunddokumentation och annat känsligt material i vattenmärkt datarum. Allt loggas - du ser vem som såg vad och när.</p>
+                      </div>
+                      <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <h5 className="font-bold text-primary-navy mb-2">💬 Krypterad kommunikation</h5>
+                        <p className="text-gray-600 text-sm">Diskutera detaljer genom plattformens inbyggda meddelandesystem med end-to-end kryptering. Ingen osäkerhet.</p>
+                      </div>
+                      <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <h5 className="font-bold text-primary-navy mb-2">📝 Juridiska mallar</h5>
+                        <p className="text-gray-600 text-sm">Få mallar för LOI, SPA och andra kritiska dokument - sparar massiva advokatkostnader och accelererar processen.</p>
+                      </div>
+                      <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
+                        <h5 className="font-bold text-primary-navy mb-2">📊 Deal Management</h5>
+                        <p className="text-gray-600 text-sm">Spåra progress, milestolpar, dokument och betalningar på ett ställe. Allt organiserat och transparent.</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+                      <p className="text-sm text-emerald-900"><strong>🎯 Resultat:</strong> Typiskt 60-90 dagar från LOI till avslut - mycket snabbare än traditionell väg med externa mäklare.</p>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
