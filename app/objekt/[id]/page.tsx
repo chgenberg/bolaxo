@@ -235,7 +235,7 @@ export default function ObjectDetailPage() {
                   <h2 className="text-2xl font-bold text-text-dark mb-4">Om företaget</h2>
                   <div className="prose prose-gray max-w-none">
                     <p className="text-text-gray leading-relaxed mb-4">
-                      {object.longDescription || `Detta ${object.type.toLowerCase()} har varit verksamt i över ${Math.floor(Math.random() * 10 + 5)} år och har byggt upp en stark position på den lokala marknaden. Verksamheten drivs med fokus på kvalitet och kundnöjdhet.`}
+                      {object.description}
                     </p>
                     <p className="text-text-gray leading-relaxed">
                       Företaget har en etablerad kundbas och goda relationer med leverantörer. Det finns goda möjligheter för tillväxt genom expansion till närliggande marknader eller genom att bredda tjänsteutbudet.
