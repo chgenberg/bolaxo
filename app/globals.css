@@ -215,4 +215,81 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Legacy color utilities - using bracket notation to force generation */
+  .bg-primary-navy {
+    @apply bg-\[#1F3C58\];
+  }
+  .text-primary-navy {
+    @apply text-\[#1F3C58\];
+  }
+  .border-primary-navy {
+    @apply border-\[#1F3C58\];
+  }
+  .from-primary-navy {
+    @apply from-\[#1F3C58\];
+  }
+  .to-primary-navy {
+    @apply to-\[#1F3C58\];
+  }
+  .via-primary-navy {
+    @apply via-\[#1F3C58\];
+  }
+  
+  .bg-accent-pink {
+    @apply bg-\[#EBCDC3\];
+  }
+  .text-accent-pink {
+    @apply text-\[#EBCDC3\];
+  }
+  .border-accent-pink {
+    @apply border-\[#EBCDC3\];
+  }
+  .from-accent-pink {
+    @apply from-\[#EBCDC3\];
+  }
+  .to-accent-pink {
+    @apply to-\[#EBCDC3\];
+  }
+  
+  .bg-accent-orange {
+    @apply bg-\[#F3B6A8\];
+  }
+  .text-accent-orange {
+    @apply text-\[#F3B6A8\];
+  }
+  
+  .bg-neutral-white {
+    @apply bg-white;
+  }
+  .text-neutral-white {
+    @apply text-white;
+  }
+  
+  .bg-neutral-off-white {
+    @apply bg-\[#F9FAFB\];
+  }
+  .text-neutral-off-white {
+    @apply text-\[#F9FAFB\];
+  }
+
+  /* Opacity variants for primary-navy */
+  .bg-primary-navy\/5 {
+    @apply bg-\[rgba\(31,60,88,0.05\)\];
+  }
+  .bg-primary-navy\/10 {
+    @apply bg-\[rgba\(31,60,88,0.1\)\];
+  }
+  .bg-primary-navy\/20 {
+    @apply bg-\[rgba\(31,60,88,0.2\)\];
+  }
+  .bg-primary-navy\/30 {
+    @apply bg-\[rgba\(31,60,88,0.3\)\];
+  }
+  .border-primary-navy\/20 {
+    @apply border-\[rgba\(31,60,88,0.2\)\];
+  }
+  .border-primary-navy\/30 {
+    @apply border-\[rgba\(31,60,88,0.3\)\];
+  }
 }
