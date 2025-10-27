@@ -12,6 +12,11 @@ export default function AdminLoginPage() {
   const [success, setSuccess] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -92,7 +97,7 @@ export default function AdminLoginPage() {
 
       {/* Floating particles */}
       <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 15 }).map((_, i) => (
+        {mounted && Array.from({ length: 15 }).map((_, i) => (
           <div
             key={i}
             className="absolute w-1 h-1 bg-white/20 rounded-full animate-float"
