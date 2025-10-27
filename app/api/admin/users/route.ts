@@ -177,13 +177,21 @@ export async function GET(request: NextRequest) {
       if (aVal === null) aVal = ''
       if (bVal === null) bVal = ''
 
-      if (typeof aVal === 'string') {
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
         return sortOrder === 'asc'
-          ? aVal.localeCompare(bVal as string)
-          : (bVal as string).localeCompare(aVal)
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal)
       }
 
-      return sortOrder === 'asc' ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number)
+      // For dates and other comparable types
+      if (aVal instanceof Date && bVal instanceof Date) {
+        return sortOrder === 'asc' ? aVal.getTime() - bVal.getTime() : bVal.getTime() - aVal.getTime()
+      }
+
+      // Fallback to string comparison
+      const aStr = String(aVal)
+      const bStr = String(bVal)
+      return sortOrder === 'asc' ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr)
     })
 
     // Paginate
