@@ -216,80 +216,80 @@
     text-wrap: balance;
   }
 
-  /* Legacy color utilities - using bracket notation to force generation */
+  /* Legacy color utilities - direct CSS */
   .bg-primary-navy {
-    @apply bg-\[#1F3C58\];
+    background-color: #1F3C58 !important;
   }
   .text-primary-navy {
-    @apply text-\[#1F3C58\];
+    color: #1F3C58 !important;
   }
   .border-primary-navy {
-    @apply border-\[#1F3C58\];
+    border-color: #1F3C58 !important;
   }
   .from-primary-navy {
-    @apply from-\[#1F3C58\];
+    --tw-gradient-from: #1F3C58 var(--tw-gradient-from-position) !important;
   }
   .to-primary-navy {
-    @apply to-\[#1F3C58\];
+    --tw-gradient-to: #1F3C58 var(--tw-gradient-to-position) !important;
   }
   .via-primary-navy {
-    @apply via-\[#1F3C58\];
+    --tw-gradient-via: #1F3C58 var(--tw-gradient-via-position) !important;
   }
   
   .bg-accent-pink {
-    @apply bg-\[#EBCDC3\];
+    background-color: #EBCDC3 !important;
   }
   .text-accent-pink {
-    @apply text-\[#EBCDC3\];
+    color: #EBCDC3 !important;
   }
   .border-accent-pink {
-    @apply border-\[#EBCDC3\];
+    border-color: #EBCDC3 !important;
   }
   .from-accent-pink {
-    @apply from-\[#EBCDC3\];
+    --tw-gradient-from: #EBCDC3 var(--tw-gradient-from-position) !important;
   }
   .to-accent-pink {
-    @apply to-\[#EBCDC3\];
+    --tw-gradient-to: #EBCDC3 var(--tw-gradient-to-position) !important;
   }
   
   .bg-accent-orange {
-    @apply bg-\[#F3B6A8\];
+    background-color: #F3B6A8 !important;
   }
   .text-accent-orange {
-    @apply text-\[#F3B6A8\];
+    color: #F3B6A8 !important;
   }
   
   .bg-neutral-white {
-    @apply bg-white;
+    background-color: white !important;
   }
   .text-neutral-white {
-    @apply text-white;
+    color: white !important;
   }
   
   .bg-neutral-off-white {
-    @apply bg-\[#F9FAFB\];
+    background-color: #F9FAFB !important;
   }
   .text-neutral-off-white {
-    @apply text-\[#F9FAFB\];
+    color: #F9FAFB !important;
   }
 
   /* Opacity variants for primary-navy */
   .bg-primary-navy\/5 {
-    @apply bg-\[rgba\(31,60,88,0.05\)\];
+    background-color: rgba(31, 60, 88, 0.05) !important;
   }
   .bg-primary-navy\/10 {
-    @apply bg-\[rgba\(31,60,88,0.1\)\];
+    background-color: rgba(31, 60, 88, 0.1) !important;
   }
   .bg-primary-navy\/20 {
-    @apply bg-\[rgba\(31,60,88,0.2\)\];
+    background-color: rgba(31, 60, 88, 0.2) !important;
   }
   .bg-primary-navy\/30 {
-    @apply bg-\[rgba\(31,60,88,0.3\)\];
+    background-color: rgba(31, 60, 88, 0.3) !important;
   }
   .border-primary-navy\/20 {
-    @apply border-\[rgba\(31,60,88,0.2\)\];
+    border-color: rgba(31, 60, 88, 0.2) !important;
   }
   .border-primary-navy\/30 {
-    @apply border-\[rgba\(31,60,88,0.3\)\];
+    border-color: rgba(31, 60, 88, 0.3) !important;
   }
 }
