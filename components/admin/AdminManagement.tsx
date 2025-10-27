@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Shield, Plus, RefreshCw, ChevronLeft, ChevronRight, Search, Lock, Eye, Trash2, Edit, CheckCircle, AlertCircle } from 'lucide-react'
 import { useAdminManagement } from '@/lib/api-hooks'
+import AdminCustomSelect from './AdminCustomSelect'
 
 export default function AdminManagement() {
   const { fetchAdmins, updateAdmin, loading, error } = useAdminManagement()
@@ -85,19 +86,29 @@ export default function AdminManagement() {
       </div>
 
       <div className="bg-white rounded-lg border border-gray-200 p-4 flex gap-2 flex-wrap">
-        <select value={roleFilter} onChange={(e) => { setRoleFilter(e.target.value); loadAdmins(1); }} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
-          <option value="">Alla roller</option>
-          <option value="super_admin">Super Admin</option>
-          <option value="admin">Admin</option>
-          <option value="moderator">Moderator</option>
-          <option value="analyst">Analyst</option>
-          <option value="support">Support</option>
-        </select>
-        <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); loadAdmins(1); }} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
-          <option value="">Alla status</option>
-          <option value="active">Aktiv</option>
-          <option value="inactive">Inaktiv</option>
-        </select>
+        <AdminCustomSelect
+          value={roleFilter}
+          onChange={(value) => { setRoleFilter(value); loadAdmins(1); }}
+          options={[
+            { value: '', label: 'Alla roller' },
+            { value: 'super_admin', label: 'Super Admin' },
+            { value: 'admin', label: 'Admin' },
+            { value: 'moderator', label: 'Moderator' },
+            { value: 'analyst', label: 'Analyst' },
+            { value: 'support', label: 'Support' }
+          ]}
+          placeholder="Välj roll"
+        />
+        <AdminCustomSelect
+          value={statusFilter}
+          onChange={(value) => { setStatusFilter(value); loadAdmins(1); }}
+          options={[
+            { value: '', label: 'Alla status' },
+            { value: 'active', label: 'Aktiv' },
+            { value: 'inactive', label: 'Inaktiv' }
+          ]}
+          placeholder="Välj status"
+        />
         <button onClick={() => loadAdmins(pagination.page)} className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 flex items-center gap-2 text-sm font-medium">
           <RefreshCw className="w-4 h-4" /> Uppdatera
         </button>
@@ -170,20 +181,30 @@ export default function AdminManagement() {
             <h3 className="text-lg font-bold text-primary-navy">Redigera Admin: {editingAdmin.name}</h3>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Roll</label>
-              <select defaultValue={editingAdmin.role} onChange={(e) => setEditingAdmin({...editingAdmin, role: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option value="super_admin">Super Admin</option>
-                <option value="admin">Admin</option>
-                <option value="moderator">Moderator</option>
-                <option value="analyst">Analyst</option>
-                <option value="support">Support</option>
-              </select>
+              <AdminCustomSelect
+                value={editingAdmin.role}
+                onChange={(value) => setEditingAdmin({...editingAdmin, role: value})}
+                options={[
+                  { value: 'super_admin', label: 'Super Admin' },
+                  { value: 'admin', label: 'Admin' },
+                  { value: 'moderator', label: 'Moderator' },
+                  { value: 'analyst', label: 'Analyst' },
+                  { value: 'support', label: 'Support' }
+                ]}
+                placeholder="Välj roll"
+              />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
-              <select defaultValue={editingAdmin.status} onChange={(e) => setEditingAdmin({...editingAdmin, status: e.target.value})} className="w-full px-3 py-2 border border-gray-300 rounded-lg">
-                <option value="active">Aktiv</option>
-                <option value="inactive">Inaktiv</option>
-              </select>
+              <AdminCustomSelect
+                value={editingAdmin.status}
+                onChange={(value) => setEditingAdmin({...editingAdmin, status: value})}
+                options={[
+                  { value: 'active', label: 'Aktiv' },
+                  { value: 'inactive', label: 'Inaktiv' }
+                ]}
+                placeholder="Välj status"
+              />
             </div>
             <label className="flex items-center gap-2">
               <input type="checkbox" defaultChecked={editingAdmin.twoFactorEnabled} onChange={(e) => setEditingAdmin({...editingAdmin, twoFactorEnabled: e.target.checked})} />

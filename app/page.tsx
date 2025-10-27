@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, ArrowRight, TrendingUp, ChevronDown, X } from 'lucide-react'
+import { Star, ArrowRight, TrendingUp, ChevronDown, X, CheckCircle, Lightbulb, Zap, Lock, MessageCircle } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
 
 export default function Home() {
@@ -322,7 +322,10 @@ export default function Home() {
                     </div>
 
                     <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-                      <p className="text-sm text-green-800"><strong>✓ Helt kostnadsfritt</strong> - Du betalar ingenting för registrering eller för att använda plattformen för att söka köpare.</p>
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                        <p className="text-sm text-green-800"><strong>Helt kostnadsfritt</strong> - Du betalar ingenting för registrering eller för att använda plattformen för att söka köpare.</p>
+                      </div>
                     </div>
                   </>
                 )}
@@ -359,7 +362,10 @@ export default function Home() {
                     </div>
 
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                      <p className="text-sm text-amber-900"><strong>💡 Tips:</strong> Använd värderingen för att sätta rimligt pris på din annons och ha som utgångspunkt i förhandlingar.</p>
+                      <div className="flex items-center gap-3">
+                        <Lightbulb className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                        <p className="text-sm text-amber-900"><strong>Tips:</strong> Använd värderingen för att sätta rimligt pris på din annons och ha som utgångspunkt i förhandlingar.</p>
+                      </div>
                     </div>
                   </>
                 )}
@@ -376,32 +382,34 @@ export default function Home() {
                     <div>
                       <h4 className="font-bold text-primary-navy mb-4">Så funkar matchningen</h4>
                       <div className="bg-white p-6 rounded-2xl border-2 border-pink-200 mb-4">
-                        <div className="flex gap-4 mb-4">
-                          <div className="text-3xl">🎯</div>
-                          <div>
-                            <h5 className="font-bold text-primary-navy mb-2">AI-analys av köpare</h5>
-                            <p className="text-gray-600">Systemet analyserar vad varje köpare söker: bransch, region, storlek, EBITDA-nivå och andra kriterier.</p>
+                        <div className="space-y-3">
+                          <div className="flex gap-4 mb-4">
+                            <Zap className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
+                            <div>
+                              <h5 className="font-bold text-primary-navy mb-2">AI-analys av köpare</h5>
+                              <p className="text-gray-600">Systemet analyserar vad varje köpare söker: bransch, region, storlek, EBITDA-nivå och andra kriterier.</p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex gap-4 mb-4">
-                          <div className="text-3xl">⚡</div>
-                          <div>
-                            <h5 className="font-bold text-primary-navy mb-2">Automatisk matchning</h5>
-                            <p className="text-gray-600">Din annons matchas automatiskt med köpare vars kriterier stämmer överens med din profil.</p>
+                          <div className="flex gap-4 mb-4">
+                            <Zap className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
+                            <div>
+                              <h5 className="font-bold text-primary-navy mb-2">Automatisk matchning</h5>
+                              <p className="text-gray-600">Din annons matchas automatiskt med köpare vars kriterier stämmer överens med din profil.</p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex gap-4 mb-4">
-                          <div className="text-3xl">✓</div>
-                          <div>
-                            <h5 className="font-bold text-primary-navy mb-2">Verifierade köpare</h5>
-                            <p className="text-gray-600">Alla köpare är verifierade med BankID, vilket garanterar att de är seriösa och relevanta.</p>
+                          <div className="flex gap-4 mb-4">
+                            <CheckCircle className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
+                            <div>
+                              <h5 className="font-bold text-primary-navy mb-2">Verifierade köpare</h5>
+                              <p className="text-gray-600">Alla köpare är verifierade med BankID, vilket garanterar att de är seriösa och relevanta.</p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex gap-4">
-                          <div className="text-3xl">🔒</div>
-                          <div>
-                            <h5 className="font-bold text-primary-navy mb-2">Din kontroll bevaras</h5>
-                            <p className="text-gray-600">Du bestämmer vad matchningar får se innan de signerar NDA - du kan vara helt anonym om du vill.</p>
+                          <div className="flex gap-4">
+                            <Lock className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
+                            <div>
+                              <h5 className="font-bold text-primary-navy mb-2">Din kontroll bevaras</h5>
+                              <p className="text-gray-600">Du bestämmer vad matchningar får se innan de signerar NDA - du kan vara helt anonym om du vill.</p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -424,29 +432,40 @@ export default function Home() {
 
                     <div className="space-y-4">
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
-                        <h5 className="font-bold text-primary-navy mb-2">🔐 Automatisk NDA</h5>
+                        <div className="flex items-center gap-3 mb-2">
+                          <Lock className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                          <h5 className="font-bold text-primary-navy">Automatisk NDA</h5>
+                        </div>
                         <p className="text-gray-600 text-sm">Innan köparen ser känslig information måste de signera digitalt sekretesspakt med BankID. Du är alltid skyddad.</p>
                       </div>
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
-                        <h5 className="font-bold text-primary-navy mb-2">📂 Säkert datarum</h5>
-                        <p className="text-gray-600 text-sm">Dela böcker, kontrakt, kunddokumentation och annat känsligt material i vattenmärkt datarum. Allt loggas - du ser vem som såg vad och när.</p>
-                      </div>
-                      <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
-                        <h5 className="font-bold text-primary-navy mb-2">💬 Krypterad kommunikation</h5>
+                        <div className="flex items-center gap-3 mb-2">
+                          <MessageCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                          <h5 className="font-bold text-primary-navy">Krypterad kommunikation</h5>
+                        </div>
                         <p className="text-gray-600 text-sm">Diskutera detaljer genom plattformens inbyggda meddelandesystem med end-to-end kryptering. Ingen osäkerhet.</p>
                       </div>
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
-                        <h5 className="font-bold text-primary-navy mb-2">📝 Juridiska mallar</h5>
+                        <div className="flex items-center gap-3 mb-2">
+                          <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                          <h5 className="font-bold text-primary-navy">Juridiska mallar</h5>
+                        </div>
                         <p className="text-gray-600 text-sm">Få mallar för LOI, SPA och andra kritiska dokument - sparar massiva advokatkostnader och accelererar processen.</p>
                       </div>
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
-                        <h5 className="font-bold text-primary-navy mb-2">📊 Deal Management</h5>
+                        <div className="flex items-center gap-3 mb-2">
+                          <TrendingUp className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                          <h5 className="font-bold text-primary-navy">Deal Management</h5>
+                        </div>
                         <p className="text-gray-600 text-sm">Spåra progress, milestolpar, dokument och betalningar på ett ställe. Allt organiserat och transparent.</p>
                       </div>
                     </div>
 
                     <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-                      <p className="text-sm text-emerald-900"><strong>🎯 Resultat:</strong> Typiskt 60-90 dagar från LOI till avslut - mycket snabbare än traditionell väg med externa mäklare.</p>
+                      <div className="flex items-center gap-3">
+                        <Zap className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                        <p className="text-sm text-emerald-900"><strong>Resultat:</strong> Typiskt 60-90 dagar från LOI till avslut - mycket snabbare än traditionell väg med externa mäklare.</p>
+                      </div>
                     </div>
                   </>
                 )}

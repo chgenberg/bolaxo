@@ -8,6 +8,7 @@ import {
   Shield, Sparkles, User, Building, MapPin, Calendar, Activity, TrendingUp
 } from 'lucide-react'
 import { useAdminUsers } from '@/lib/api-hooks'
+import AdminCustomSelect from './AdminCustomSelect'
 import ModernSelect from './ModernSelect'
 
 interface User {
@@ -352,16 +353,17 @@ export default function UserManagement({ onUserSelect }: UserManagementProps) {
                       </div>
                     </td>
                     <td className="p-4">
-                      <select
+                      <AdminCustomSelect
                         value={user.role}
-                        onChange={(e) => handleUpdateRole(user.id, e.target.value)}
-                        className="px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
-                      >
-                        <option value="buyer">Köpare</option>
-                        <option value="seller">Säljare</option>
-                        <option value="broker">Mäklare</option>
-                        <option value="admin">Admin</option>
-                      </select>
+                        onChange={(value) => handleUpdateRole(user.id, value)}
+                        options={[
+                          { value: 'buyer', label: 'Köpare' },
+                          { value: 'seller', label: 'Säljare' },
+                          { value: 'broker', label: 'Mäklare' },
+                          { value: 'admin', label: 'Admin' }
+                        ]}
+                        placeholder="Välj roll"
+                      />
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-2">

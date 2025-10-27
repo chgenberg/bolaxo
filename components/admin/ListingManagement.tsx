@@ -6,6 +6,7 @@ import {
   Check, X, Clock, Package, Eye, MapPin, DollarSign, Users, Calendar
 } from 'lucide-react'
 import { useAdminListings } from '@/lib/api-hooks'
+import AdminCustomSelect from './AdminCustomSelect'
 
 interface Listing {
   id: string
@@ -188,28 +189,30 @@ export default function ListingManagement() {
           />
         </div>
 
-        <select
+        <AdminCustomSelect
           value={statusFilter}
-          onChange={(e) => handleFilterChange('status', e.target.value)}
-          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink text-sm"
-        >
-          <option value="">Alla status</option>
-          <option value="active">Aktiv</option>
-          <option value="draft">Utkast</option>
-          <option value="paused">Pausad</option>
-          <option value="sold">Såld</option>
-        </select>
+          onChange={(value) => handleFilterChange('status', value)}
+          options={[
+            { value: '', label: 'Alla status' },
+            { value: 'active', label: 'Aktiv' },
+            { value: 'draft', label: 'Utkast' },
+            { value: 'paused', label: 'Pausad' },
+            { value: 'sold', label: 'Såld' }
+          ]}
+          placeholder="Välj status"
+        />
 
-        <select
+        <AdminCustomSelect
           value={packageFilter}
-          onChange={(e) => handleFilterChange('package', e.target.value)}
-          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink text-sm"
-        >
-          <option value="">Alla paket</option>
-          <option value="basic">Basic</option>
-          <option value="pro">Pro</option>
-          <option value="pro_plus">Pro Plus</option>
-        </select>
+          onChange={(value) => handleFilterChange('package', value)}
+          options={[
+            { value: '', label: 'Alla paket' },
+            { value: 'basic', label: 'Basic' },
+            { value: 'pro', label: 'Pro' },
+            { value: 'pro_plus', label: 'Pro Plus' }
+          ]}
+          placeholder="Välj paket"
+        />
 
         <button
           onClick={() => loadListings(pagination.page)}

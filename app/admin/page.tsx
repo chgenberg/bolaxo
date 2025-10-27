@@ -231,7 +231,10 @@ export default function AdminDashboard() {
       <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-white border-r border-gray-100 flex flex-col transition-all duration-300 shadow-sm`}>
         {/* Logo/Header - Clickable link to home */}
         <div className="p-6 border-b border-gray-100">
-          <Link href="/" className="block">
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="block w-full text-left hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-primary-navy blur-lg opacity-20" />
@@ -243,7 +246,7 @@ export default function AdminDashboard() {
                 <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Admin</span>
               )}
             </div>
-          </Link>
+          </button>
         </div>
 
         {/* Toggle Sidebar Button */}
