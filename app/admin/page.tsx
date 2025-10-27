@@ -252,12 +252,13 @@ export default function AdminDashboard() {
   // Interactive card component
   const StatCard = ({ title, value, subtitle, icon: Icon, trend, color = 'blue' }: any) => {
     const isHovered = hoveredCard === title
-    const colorClasses = {
+    const colorClassMap: Record<string, string> = {
       blue: 'from-blue-500 to-blue-600',
       green: 'from-green-500 to-green-600',
       purple: 'from-purple-500 to-purple-600',
       amber: 'from-amber-500 to-amber-600',
-    }[color]
+    }
+    const colorClasses = colorClassMap[color as keyof typeof colorClassMap] || colorClassMap['blue']
 
     return (
       <div
