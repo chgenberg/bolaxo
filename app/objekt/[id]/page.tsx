@@ -385,12 +385,12 @@ export default function ObjectDetailPage() {
                 <section>
                   <h3 className="text-xl font-semibold text-text-dark mb-4">Utvecklingsmöjligheter</h3>
                   <ul className="space-y-3">
-                    {(object.opportunities || [
+                    {[
                       'Expansion till närliggande geografiska marknader',
                       'Digitalisering av försäljningskanaler',
                       'Utökning av produkt/tjänsteutbud',
                       'Strategiska partnerskap och samarbeten'
-                    ]).map((opportunity, index) => (
+                    ].map((opportunity, index) => (
                       <li key={index} className="flex items-start">
                         <TrendingUp className="w-5 h-5 text-primary-blue flex-shrink-0 mt-0.5 mr-3" />
                         <span className="text-text-gray">{opportunity}</span>
