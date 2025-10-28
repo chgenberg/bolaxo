@@ -38,9 +38,6 @@ interface ListingData {
   marketingCosts?: string
   rentCosts?: string
   
-  // Step 3: Branschspecifika frågor
-  [key: string]: string | number | undefined
-  
   // Step 4: Annonsinformation
   anonymousTitle: string
   description: string
@@ -54,6 +51,9 @@ interface ListingData {
   
   // Step 5: Bilder
   images: string[]
+  
+  // Step 3: Branschspecifika frågor (dynamic)
+  [key: string]: any
 }
 
 interface WizardProps {
