@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { TrendingUp, Eye, Users, CheckCircle, XCircle, Clock, Edit, Pause, Play, MessageSquare } from 'lucide-react'
+import { TrendingUp, Eye, Users, CheckCircle, XCircle, Clock, Edit, Pause, Play, MessageSquare, BarChart3, HelpCircle, FileText, Target } from 'lucide-react'
 
 interface SellerDashboardProps {
   userId: string
@@ -129,6 +129,40 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
             <MessageSquare className="w-4 h-4 text-primary-blue" />
           </div>
           <div className="text-2xl font-bold text-text-dark">{unreadMessages.length}</div>
+        </div>
+      </div>
+
+      {/* Quick Actions for Listings */}
+      <div>
+        <h2 className="text-xl font-bold text-text-dark mb-4">Snabblänkar för säljare</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <Link href="/salja/sme-kit" className="bg-accent-pink/10 border border-accent-pink/30 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+            <FileText className="w-8 h-8 text-accent-pink mx-auto mb-2" />
+            <p className="font-semibold text-primary-navy">SME Kit</p>
+            <p className="text-xs text-gray-600">Förbered försäljning</p>
+          </Link>
+          
+          {activeListings[0] && (
+            <>
+              <Link href={`/salja/heat-map/${activeListings[0].id}`} className="bg-blue-50 border border-blue-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+                <BarChart3 className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                <p className="font-semibold text-primary-navy">Heat Map</p>
+                <p className="text-xs text-gray-600">Se köparengagemang</p>
+              </Link>
+              
+              <Link href={`/kopare/qa/${activeListings[0].id}`} className="bg-green-50 border border-green-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+                <HelpCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                <p className="font-semibold text-primary-navy">Q&A Center</p>
+                <p className="text-xs text-gray-600">Svara på frågor</p>
+              </Link>
+              
+              <Link href={`/salja/earnout/${activeListings[0].id}`} className="bg-purple-50 border border-purple-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+                <Target className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                <p className="font-semibold text-primary-navy">Earnout</p>
+                <p className="text-xs text-gray-600">Spåra KPI</p>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle } from 'lucide-react'
+import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle, MessageSquare, FileText, ClipboardCheck } from 'lucide-react'
 
 interface BuyerDashboardProps {
   userId: string
@@ -182,6 +182,34 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
           </div>
         )}
       </div>
+
+      {/* Quick Actions for Approved NDAs */}
+      {approvedNDAs.length > 0 && (
+        <div>
+          <h2 className="text-xl font-bold text-text-dark mb-4">Hantera dina affärer</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+            {approvedNDAs.slice(0, 3).map((nda) => (
+              <div key={nda.id} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <h3 className="font-semibold text-primary-navy mb-3 truncate">{nda.listing?.anonymousTitle || 'Objekt'}</h3>
+                <div className="space-y-2">
+                  <Link href={`/kopare/qa/${nda.listingId}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-blue">
+                    <MessageSquare className="w-4 h-4" />
+                    Q&A Center
+                  </Link>
+                  <Link href={`/kopare/loi/${nda.listingId}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-blue">
+                    <FileText className="w-4 h-4" />
+                    LoI Editor
+                  </Link>
+                  <Link href={`/kopare/dd/${nda.listingId}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-blue">
+                    <ClipboardCheck className="w-4 h-4" />
+                    DD Manager
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* NDA Status */}
       <div className="bg-white p-6 rounded-xl border border-gray-100">
