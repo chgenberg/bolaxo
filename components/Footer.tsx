@@ -93,17 +93,17 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
           {/* Legal Links */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-xs text-gray-400">
-            <Link href="/juridiskt" className="hover:text-white transition-colors">
-              Juridiskt
-            </Link>
-            <Link href="/integritet" className="hover:text-white transition-colors">
+            <Link href="/juridiskt/integritetspolicy" className="hover:text-white transition-colors">
               Integritetspolicy
             </Link>
-            <Link href="/användarvillkor" className="hover:text-white transition-colors">
+            <Link href="/juridiskt/anvandarvillkor" className="hover:text-white transition-colors">
               Användarvillkor
             </Link>
-            <Link href="/cookies" className="hover:text-white transition-colors">
+            <Link href="/juridiskt/cookies" className="hover:text-white transition-colors">
               Cookies
+            </Link>
+            <Link href="/juridiskt/gdpr" className="hover:text-white transition-colors">
+              GDPR
             </Link>
           </div>
 
