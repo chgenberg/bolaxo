@@ -177,7 +177,7 @@ export default function ChatWidget() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-accent-pink to-navy text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 group"
+        className="fixed bottom-6 right-6 z-40 bg-navy text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 group"
       >
         <div className="flex items-center gap-2 px-4 py-4 md:px-6">
           <MessageCircle className="w-6 h-6" />
@@ -185,7 +185,7 @@ export default function ChatWidget() {
         </div>
         
         {/* Pulsing effect */}
-        <div className="absolute inset-0 rounded-full bg-accent-pink animate-ping opacity-20" />
+        <div className="absolute inset-0 rounded-full bg-navy animate-ping opacity-20" />
       </button>
     )
   }
@@ -195,7 +195,7 @@ export default function ChatWidget() {
       {/* Chat Window */}
       <div className="fixed bottom-6 right-6 z-40 w-[380px] md:w-[440px] h-[600px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-accent-pink to-navy text-white p-6 flex items-center justify-between">
+        <div className="bg-navy text-white p-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
               <Sparkles className="w-6 h-6" />
@@ -268,7 +268,7 @@ export default function ChatWidget() {
             
             <button
               onClick={() => setShowContactForm(true)}
-              className="w-full text-left text-sm px-3 py-2 bg-gradient-to-r from-accent-pink to-navy text-white rounded-lg hover:shadow-md transition-all flex items-center gap-2"
+              className="w-full text-left text-sm px-3 py-2 bg-navy text-white rounded-lg hover:shadow-md transition-all flex items-center gap-2"
             >
               <Phone className="w-4 h-4" />
               Jag vill bli kontaktad
@@ -293,7 +293,7 @@ export default function ChatWidget() {
             <button
               type="submit"
               disabled={!inputValue.trim()}
-              className="p-3 bg-gradient-to-r from-accent-pink to-navy text-white rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 bg-navy text-white rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Send className="w-5 h-5" />
             </button>
@@ -308,7 +308,7 @@ export default function ChatWidget() {
             {!contactFormSubmitted ? (
               <>
                 {/* Header */}
-                <div className="bg-gradient-to-r from-accent-pink to-navy text-white p-6">
+                <div className="bg-navy text-white p-6">
                   <h3 className="text-2xl font-bold mb-2">Vi kontaktar dig!</h3>
                   <p className="text-white/90">Fyll i dina uppgifter så ringer vi upp</p>
                 </div>
@@ -378,7 +378,7 @@ export default function ChatWidget() {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 px-6 py-3 bg-gradient-to-r from-accent-pink to-navy text-white rounded-xl hover:shadow-lg transition-all font-medium"
+                      className="flex-1 px-6 py-3 bg-navy text-white rounded-xl hover:shadow-lg transition-all font-medium"
                     >
                       Skicka
                     </button>
