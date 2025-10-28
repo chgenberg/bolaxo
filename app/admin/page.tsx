@@ -536,7 +536,7 @@ export default function AdminDashboard() {
                         <div 
                           className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transform origin-left scale-x-0 animate-scale-in"
                           style={{ 
-                            width: `${(search.count / stats.topSearches[0].count) * 100}%`,
+                            width: `${(search.count / Math.max(1, stats.topSearches[0]?.count ?? 1)) * 100}%`,
                             animationDelay: `${idx * 100}ms`
                           }}
                         />
