@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, Target, Star } from 'lucide-react'
+import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, Target } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
 import Image from 'next/image'
 
@@ -34,23 +34,23 @@ export default function ValuationPage() {
   const steps = [
     {
       number: '1',
-      title: 'Grunduppgifter',
-      description: 'E-post och bransch'
+      title: 'Om bolaget',
+      description: 'Bransch, omsättning, EBIT/EBITDA, ägarstruktur'
     },
     {
       number: '2',
-      title: 'Företagsdata',
-      description: 'Branschspecifika frågor'
+      title: 'Kunder & kanaler',
+      description: 'Churn, koncentration, säsong'
     },
     {
       number: '3',
-      title: 'Analys',
-      description: 'Systemet analyserar'
+      title: 'Tillgångar & risk',
+      description: 'Lager, IP, avtal, beroenden'
     },
     {
       number: '4',
-      title: 'Rapport',
-      description: 'Din värdering och tips'
+      title: 'Tillväxt & plan',
+      description: 'Pipeline, CAPEX, expansionsplaner'
     }
   ]
 
@@ -76,9 +76,9 @@ export default function ValuationPage() {
   return (
     <>
       <main className="min-h-screen bg-neutral-white">
-        {/* Hero Section - Same style as homepage */}
+        {/* Hero Section */}
         <section className="relative min-h-screen flex items-center bg-cover bg-center">
-          {/* Background Image - Fullscreen with no overlay */}
+          {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/hero_kop.png"
@@ -96,23 +96,20 @@ export default function ValuationPage() {
             />
           </div>
 
-          {/* Minimalist Content Box - Right aligned */}
+          {/* Content Box */}
           <div className="relative w-full flex items-center justify-end px-4 md:px-12 lg:px-24 z-10">
             <div className="relative">
-              {/* Pulsing shadow effect */}
               <div className="absolute -inset-4 bg-black/50 rounded-3xl blur-2xl animate-pulse-shadow" />
               
-              {/* Main content box */}
               <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-8 md:p-12 max-w-lg shadow-2xl">
                 <h1 className="text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-4">
-                  Gratis värdering
+                  Vad är ditt bolag värt just nu?
                 </h1>
                 
                 <p className="text-center text-gray-700 mb-8 text-lg">
-                  Få en professionell värdering av ditt företag på 5 minuter. Inga dolda avgifter.
+                  Få en indikativ värdering på några minuter – samma metodik som i riktiga affärer, anpassad för snabb överblick.
                 </p>
                 
-                {/* CTA Button */}
                 <button
                   onClick={() => setShowWizard(true)}
                   className="w-full bg-navy text-white font-bold py-4 px-8 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 text-lg group shadow-lg"
@@ -123,7 +120,6 @@ export default function ValuationPage() {
                   </span>
                 </button>
                 
-                {/* Features */}
                 <div className="mt-8 space-y-3">
                   <div className="flex items-center gap-3 text-gray-600">
                     <CheckCircle className="w-5 h-5 text-green-500" />
@@ -167,9 +163,9 @@ export default function ValuationPage() {
         <section className="py-24 bg-neutral-off-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-primary-navy mb-6 uppercase">SÅ FUNKAR VÄRDERINGEN</h2>
+              <h2 className="text-4xl font-bold text-primary-navy mb-6 uppercase">SÅ FUNGERAR VÄRDERINGEN</h2>
               <p className="text-xl text-primary-navy max-w-2xl mx-auto">
-                Följ dessa 4 enkla steg för att få din värdering
+                Följ dessa 4 steg för att få din indikativa värdering
               </p>
             </div>
 
@@ -180,7 +176,7 @@ export default function ValuationPage() {
                     {step.number}
                   </div>
                   <h3 className="text-lg font-bold text-primary-navy mb-2">{step.title}</h3>
-                  <p className="text-gray-700">{step.description}</p>
+                  <p className="text-gray-700 text-sm">{step.description}</p>
                 </div>
               ))}
             </div>
@@ -224,21 +220,36 @@ export default function ValuationPage() {
             </div>
 
             <div className="bg-primary-navy/5 border border-primary-navy/20 rounded-lg p-8">
-              <h3 className="text-2xl font-bold text-primary-navy mb-6">Vad ingår i rapporten?</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {[
-                  'Uppskattad värdering',
-                  'Detaljerat underlag',
-                  'Konkreta förbättringstips',
-                  'Branschgenomsnitt',
-                  'Styrkor & svagheter',
-                  'Tillväxtpotential'
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-primary-navy">{item}</span>
-                  </div>
-                ))}
+              <h3 className="text-2xl font-bold text-primary-navy mb-6">Resultat</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-primary-navy">Indikativ multipel</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-primary-navy">Värderingsintervall med jämförelse</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Disclaimer */}
+        <section className="py-12 bg-amber-50 border-t border-amber-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white border-l-4 border-amber-500 p-6 rounded-lg shadow-sm">
+              <div className="flex gap-4">
+                <div className="text-amber-600 text-2xl flex-shrink-0">⚠️</div>
+                <div>
+                  <h3 className="text-primary-navy font-bold mb-2 text-lg">Viktigt: Ansvarsfriskrivning</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed mb-3">
+                    <strong>Värdet är indikativt och utgör inte finansiell rådgivning.</strong> För en fördjupad värdering rekommenderar vi en genomgång med värderingsspecialist (30 min kostnadsfritt för Pro/Enterprise).
+                  </p>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    Denna värdering baseras på uppgifter du själv matar in och allmän marknadsdata. För en bindande värdering rekommenderar vi att du konsulterar en auktoriserad värderare eller finansiell rådgivare.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -261,46 +272,6 @@ export default function ValuationPage() {
               Starta Värdering Nu
               <ArrowRight className="w-5 h-5" />
             </button>
-          </div>
-        </section>
-
-        {/* Disclaimer Section */}
-        <section className="py-12 bg-amber-50 border-t border-amber-200">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white border-l-4 border-amber-500 p-6 rounded-lg shadow-sm">
-              <div className="flex gap-4">
-                <div className="text-amber-600 text-2xl flex-shrink-0">⚠️</div>
-                <div>
-                  <h3 className="text-primary-navy font-bold mb-2 text-lg">Viktigt: Ansvarsfriskrivning</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    <strong>Denna värdering är indikativ och utgör inte finansiell rådgivning.</strong> Den baseras på 
-                    uppgifter du själv matar in och allmän marknadsdata. För en bindande värdering rekommenderar vi att 
-                    du konsulterar en auktoriserad värderare eller finansiell rådgivare. BOLAXO AB ansvarar inte för 
-                    investeringsbeslut baserade på denna värdering.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Trust indicators */}
-        <section className="py-16 bg-neutral-white border-t border-gray-200">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="text-4xl font-bold text-primary-navy mb-2">5,000+</div>
-                <div className="text-sm text-gray-600">Företag värderade</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold text-primary-navy mb-2">Säker</div>
-                <div className="text-sm text-gray-600">Bank-nivå kryptering</div>
-              </div>
-              <div>
-                <div className="text-4xl font-bold text-primary-navy mb-2">5 min</div>
-                <div className="text-sm text-gray-600">Genomsnittlig tid</div>
-              </div>
-            </div>
           </div>
         </section>
       </main>

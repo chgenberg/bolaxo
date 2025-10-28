@@ -4,38 +4,19 @@ import Link from 'next/link'
 export default function PricingPage() {
   const plans = [
     {
-      name: 'Free',
-      price: '0',
-      description: 'För dig som vill testa plattformen och få en värdering av ditt bolag samt förberede en skarp annons',
-      features: [
-        { text: 'Automatisk företagsvärdering', included: true },
-        { text: 'Förbered annons (publiceras ej)', included: true },
-        { text: 'Grundläggande marknadsanalys', included: true },
-        { text: 'E-post support', included: true },
-        { text: 'Publicera annons', included: false },
-        { text: 'NDA-hantering', included: false },
-        { text: 'Datarum', included: false },
-        { text: 'Köparkontakt', included: false },
-      ],
-      cta: 'Kom igång gratis',
-      ctaLink: '/login',
-      popular: false,
-    },
-    {
       name: 'Basic',
       price: '495',
       subtitle: '/ mån',
-      description: 'För dig som har en mindre icke komplex verksamhet och vill sälja det mesta på egen hand',
+      description: 'Annons i 90 dagar (förlängningsbar) • Upp till 5 bilder • Standardplacering i listor • Standard-NDA och enkel statistik • E-postsupport',
       features: [
-        { text: 'Allt i Free', included: true },
-        { text: 'Annonstid 90 dagar', value: '90 dagar' },
-        { text: 'Antal bilder', value: 'Upp till 5' },
-        { text: 'Placering', value: 'Standard' },
-        { text: 'NDA-hantering', included: true, value: 'Standard' },
-        { text: 'Statistik', included: false },
-        { text: 'Marknadsföring', included: false },
-        { text: 'Support', value: 'E-post' },
-        { text: 'Värderingshjälp', included: false },
+        { text: 'Annons i 90 dagar', included: true, highlight: true },
+        { text: 'Upp till 5 bilder', included: true },
+        { text: 'Standardplacering i listor', included: true },
+        { text: 'Standard-NDA', included: true },
+        { text: 'Enkel statistik', included: true },
+        { text: 'E-postsupport', included: true },
+        { text: 'Framhävning', included: false },
+        { text: 'Telefonstöd', included: false },
       ],
       cta: 'Välj Basic',
       ctaLink: '/checkout?package=basic',
@@ -43,21 +24,18 @@ export default function PricingPage() {
     },
     {
       name: 'Pro',
-      price: '895',
+      price: '995',
       subtitle: '/ mån',
-      description: 'Vår mest populära tjänst - här får du nyttja alla funktioner och hjälp med pitchdeck',
+      description: 'Annons i 180 dagar • Upp till 20 bilder • Framhävning + Boost 7 dagar/mån • Prioriterad NDA-hantering • Pitchdeck-mallar • Telefonstöd vardagar 9–16 • Due diligence-checklista',
       features: [
-        { text: 'Allt i Basic', included: true },
-        { text: 'Annonstid', value: '180 dagar' },
-        { text: 'Antal bilder', value: 'Upp till 20' },
-        { text: 'Placering', value: 'Framhävd', highlight: true },
-        { text: 'NDA-hantering', included: true, value: 'Prioriterad' },
-        { text: 'Statistik', included: true },
-        { text: 'Marknadsföring', included: true },
-        { text: 'Support', value: 'Prioriterad / Telefon' },
-        { text: 'Värderingshjälp', included: true },
-        { text: 'Pitchdeck-mallar', included: true },
-        { text: 'Due diligence förberedelse', included: true },
+        { text: 'Annons i 180 dagar', included: true, highlight: true },
+        { text: 'Upp till 20 bilder', included: true },
+        { text: 'Framhävning + Boost 7 dagar/mån', included: true },
+        { text: 'Prioriterad NDA-hantering', included: true },
+        { text: 'Pitchdeck-mallar (1–5 sidor)', included: true },
+        { text: 'Telefonstöd vardagar 9–16', included: true },
+        { text: '1 st due diligence-checklista', included: true },
+        { text: 'Dedikerad rådgivare', included: false },
       ],
       cta: 'Välj Pro',
       ctaLink: '/checkout?package=pro',
@@ -65,21 +43,18 @@ export default function PricingPage() {
     },
     {
       name: 'Enterprise',
-      price: '1 495',
+      price: '1 995',
       subtitle: '/ mån',
-      description: 'Mäklare eller storföretag? Vi erbjuder skräddarsydd lösning med dedikerad support',
+      description: 'Annons tills såld • Obegränsat bildmaterial • Topplacering och först i bevakningar • Dedikerad rådgivare • Juridiska dokumentmallar • CRM/API-integration',
       features: [
-        { text: 'Allt i Pro', included: true },
-        { text: 'Annonstid', value: 'Tills såld' },
-        { text: 'Antal bilder', value: 'Obegränsat' },
-        { text: 'Placering', value: 'Topplacering', highlight: true },
+        { text: 'Annons tills såld', included: true, highlight: true },
+        { text: 'Obegränsat bildmaterial', included: true },
+        { text: 'Topplacering och först i bevakningar', included: true },
         { text: 'Dedikerad rådgivare', included: true },
-        { text: 'Juridisk granskning', included: true },
-        { text: 'Full marknadsföring', included: true },
+        { text: 'Juridiska dokumentmallar (NDA, LOI, Term Sheet, Överlåtelseavtal)', included: true },
+        { text: 'CRM/API-integration', included: true },
+        { text: 'Månatlig marknadsrapporteringsvy', included: true },
         { text: 'Prioriterad matchning', included: true },
-        { text: 'Mäklarvarumärkning', included: true },
-        { text: 'Egen landningssida', included: true },
-        { text: 'API-integration', included: true },
       ],
       cta: 'Kontakta oss',
       ctaLink: '/kontakt?plan=enterprise',
@@ -94,15 +69,15 @@ export default function PricingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
-              TRANSPARENT PRISSÄTTNING
+              Prisplaner för snabbare, tryggare affärer
             </h1>
-            <p className="text-2xl text-primary-navy leading-relaxed max-w-3xl mx-auto">
-              Från gratis värdering till fullservice. Inga dolda avgifter, ingen provision.
+            <p className="text-xl text-primary-navy leading-relaxed max-w-3xl mx-auto">
+              Välj den nivå som passar ditt upplägg. Alla planer kan avslutas när som helst – du behåller din data.
             </p>
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {plans.map((plan, index) => (
               <div
                 key={index}
@@ -120,117 +95,81 @@ export default function PricingPage() {
                   </div>
                 )}
 
-                <div className="p-8">
-                  {/* Plan Name */}
-                  <h3 className="text-2xl font-bold text-primary-navy mb-3">{plan.name}</h3>
-                  
-                  {/* Price */}
-                  <div className="flex items-baseline mb-6">
-                    <span className="text-5xl font-bold text-primary-navy">{plan.price}</span>
-                    <span className="text-gray-700 ml-2">kr</span>
-                    {plan.subtitle && (
-                      <span className="text-gray-700 ml-1 text-lg">{plan.subtitle}</span>
-                    )}
+                {/* Plan Header */}
+                <div className="p-8 border-b border-gray-100">
+                  <h3 className="text-2xl font-bold text-primary-navy mb-2">{plan.name}</h3>
+                  <div className="flex items-baseline gap-1 mb-4">
+                    <span className="text-4xl font-bold text-primary-navy">{plan.price}</span>
+                    <span className="text-text-gray">{plan.subtitle}</span>
                   </div>
-
-                  {/* Description */}
-                  <p className="text-sm text-gray-700 mb-8 min-h-[50px] leading-relaxed">
-                    {plan.description}
-                  </p>
-
-                  {/* CTA Button */}
-                  <Link
-                    href={plan.ctaLink}
-                    className={`block w-full text-center py-3 px-6 rounded-lg font-bold transition-all duration-200 mb-8 inline-flex items-center justify-center gap-2 ${
+                  <p className="text-sm text-text-gray mb-6">{plan.description}</p>
+                  <Link href={plan.ctaLink}>
+                    <button className={`w-full py-3 px-6 rounded-lg font-bold transition-all ${
                       plan.popular
                         ? 'bg-accent-pink text-primary-navy hover:shadow-lg'
-                        : 'border-2 border-primary-navy text-primary-navy hover:bg-primary-navy/5'
-                    }`}
-                  >
-                    {plan.cta}
-                    <ArrowRight className="w-5 h-5" />
+                        : 'bg-primary-navy text-white hover:bg-primary-navy/90'
+                    }`}>
+                      {plan.cta}
+                      <ArrowRight className="w-4 h-4 inline ml-2" />
+                    </button>
                   </Link>
+                </div>
 
-                  {/* Features */}
-                  <div className="space-y-4 border-t border-gray-200 pt-8">
-                    {plan.features.map((feature, fIndex) => (
-                      <div key={fIndex} className="flex items-start gap-3">
-                        {feature.included === false ? (
-                          <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
-                        ) : (
-                          <Check className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
-                        )}
-                        <div className="flex-1">
-                          <span className={`text-sm ${feature.included === false ? 'text-gray-400' : 'text-gray-700'}`}>
-                            {feature.text}
-                          </span>
-                          {'value' in feature && feature.value && (
-                            <span className={`text-sm font-semibold ml-2 ${
-                              'highlight' in feature && feature.highlight ? 'text-primary-navy' : 'text-primary-navy'
-                            }`}>
-                              {feature.value}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                {/* Features List */}
+                <div className="p-8 space-y-4">
+                  {plan.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      {feature.included !== false ? (
+                        <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      ) : (
+                        <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
+                      )}
+                      <span className={feature.included === false ? 'text-text-gray line-through' : 'text-text-dark'}>
+                        {feature.text}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Additional Info */}
-          <div className="mt-24 text-center">
-            <p className="text-lg text-gray-700 mb-8">
-              Alla priser är exklusive moms. Fakturering sker månadsvis.
-            </p>
-            <div className="flex flex-wrap justify-center gap-6 text-base">
-              <Link href="/faq" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2">
-                Vanliga frågor
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <span className="text-gray-300">•</span>
-              <Link href="/kontakt" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2">
-                Kontakta oss
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <span className="text-gray-300">•</span>
-              <Link href="/juridiskt/anvandarvillkor" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2">
-                Villkor
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+          {/* Terms Section */}
+          <div className="bg-neutral-off-white rounded-lg p-8 border border-gray-200">
+            <h3 className="text-xl font-bold text-primary-navy mb-4">Villkor i korthet</h3>
+            <div className="space-y-3 text-text-gray">
+              <p>✓ <strong>Månadsdebitering</strong>, ingen bindningstid</p>
+              <p>✓ <strong>15% rabatt vid årsbetalning</strong></p>
+              <p>✓ <strong>Success-fee light (frivillig)</strong>: 0,75–1,5% vid genomförd affär via plattformen</p>
+              <p className="text-sm mt-4 pt-4 border-t border-gray-300">
+                Alla prisplaner inkluderar tillgång till våra marknadsverktyg, statistik och support för att säkerställa en framgångsrik försäljning.
+              </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* FAQ Section */}
-          <div className="mt-32 bg-neutral-off-white rounded-lg p-12">
-            <h2 className="text-4xl font-bold text-primary-navy mb-12 text-center">Vanliga frågor om prissättning</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div>
-                <h3 className="text-xl font-bold text-primary-navy mb-3">Kan jag byta plan senare?</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  Ja, du kan när som helst uppgradera eller nedgradera din plan. Nya priset gäller från nästa faktureringscykel.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-primary-navy mb-3">Vad ingår inte i priserna?</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  Provision från slutpriset. Vi tar ingen del av försäljningen - bara ett fast månadsbetalt.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-primary-navy mb-3">Finns det rabatt för långtidskontrakt?</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  Kontakta vår säljteam för skräddarsydd offert på Enterprise-planen. Rabatt för årskontrakt är möjligt.
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-primary-navy mb-3">Kan jag avbryta när som helst?</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  Ja, utan bindningstid. Du kan säga upp din plan när som helst. Sista dagen gäller för denna månad.
-                </p>
-              </div>
+      {/* FAQ Section */}
+      <section className="py-16 sm:py-24 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-center text-primary-navy mb-12">Vanliga frågor</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div>
+              <h4 className="font-bold text-primary-navy mb-2">Kan jag byta plan senare?</h4>
+              <p className="text-text-gray">Ja, du kan uppgradera eller nedgradera din plan när som helst.</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-primary-navy mb-2">Vad händer om jag avslutar?</h4>
+              <p className="text-text-gray">Du behåller all din data och kan logga in för att hämta den när som helst.</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-primary-navy mb-2">Finns det setup-avgift?</h4>
+              <p className="text-text-gray">Nej, det finns inga setup-avgifter eller dolda kostnader.</p>
+            </div>
+            <div>
+              <h4 className="font-bold text-primary-navy mb-2">Hur fungerar success-fee?</h4>
+              <p className="text-text-gray">Det är frivilligt och betalas endast när affären är genomförd via vår plattform.</p>
             </div>
           </div>
         </div>
