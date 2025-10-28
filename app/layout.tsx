@@ -3,6 +3,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
+import ChatWidget from '@/components/ChatWidget'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 
@@ -30,6 +31,7 @@ export default function RootLayout({
             {children}
             <Footer />
             <CookieConsent />
+            <ChatWidget />
           </ToastProvider>
         </AuthProvider>
       </body>
