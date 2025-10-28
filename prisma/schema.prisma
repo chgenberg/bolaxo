@@ -64,6 +64,16 @@ model User {
   // LoI relations
   buyerLOIs            LOI[]             @relation("BuyerLOI")
   
+  // DD relations
+  buyerDDProjects      DDProject[]       @relation("BuyerDD")
+  
+  // SPA relations
+  buyerSPAs            SPA[]             @relation("BuyerSPA")
+  
+  // Earnout relations
+  sellerEarnouts       EarnOut[]         @relation("SellerEarnout")
+  buyerEarnouts        EarnOut[]         @relation("BuyerEarnout")
+  
   @@index([email])
   @@index([magicLinkToken])
   @@index([referralCode])
@@ -162,6 +172,11 @@ model Listing {
   questions       Question[]       @relation("ListingQuestions")
   documentEngagement DocumentEngagement[] @relation("ListingEngagement")
   lois            LOI[]            @relation("ListingLOI")
+  
+  // DD & Closing relations
+  ddProjects      DDProject[]      @relation("ListingDD")
+  spas            SPA[]            @relation("ListingSPA")
+  earnouts        EarnOut[]        @relation("ListingEarnout")
   
   @@index([userId])
   @@index([status])
@@ -870,5 +885,227 @@ model LOIRevision {
   
   @@index([loiId])
   @@index([version])
+}
+
+// ===== DUE DILIGENCE MODELS =====
+
+model DDProject {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation("ListingDD", fields: [listingId], references: [id], onDelete: Cascade)
+  
+  buyerId         String
+  buyer           User     @relation("BuyerDD", fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  loiId           String?  // Link to LoI if exists
+  
+  // Timeline
+  startDate       DateTime @default(now())
+  targetCompleteDate DateTime
+  actualCompleteDate DateTime?
+  
+  // Status & completion
+  status          String   @default("planning") // planning, in-progress, complete, issues_found, cancelled
+  completionPercent Int    @default(0)
+  
+  // Summary
+  summary         String?  @db.Text
+  overallRiskLevel String? // low, medium, high, critical
+  goNogo          String?  // "go", "no-go", "pending"
+  
+  // Relations
+  tasks           DDTask[]
+  findings        DDFinding[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([status])
+}
+
+model DDTask {
+  id              String   @id @default(cuid())
+  ddProjectId     String
+  ddProject       DDProject @relation(fields: [ddProjectId], references: [id], onDelete: Cascade)
+  
+  title           String
+  description     String?  @db.Text
+  category        String   // accounting, legal, it, hr, operations, financial, tax, other
+  priority        String   @default("medium") // low, medium, high, critical
+  
+  assignee        String?  // Advisor email/name
+  dueDate         DateTime
+  
+  status          String   @default("open") // open, in-progress, complete, blocked, na
+  completedAt     DateTime?
+  
+  notes           String?  @db.Text
+  linkedDocuments Json?    // File references
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([ddProjectId])
+  @@index([status])
+  @@index([category])
+  @@index([dueDate])
+}
+
+model DDFinding {
+  id              String   @id @default(cuid())
+  ddProjectId     String
+  ddProject       DDProject @relation(fields: [ddProjectId], references: [id], onDelete: Cascade)
+  
+  title           String
+  description     String   @db.Text
+  category        String   // accounting, legal, it, hr, operations, financial, tax, other
+  severity        String   // low, medium, high, critical
+  
+  relatedTask     String?  // Task ID
+  linkedDocuments Json?    // File references
+  
+  riskAssessment  String?  @db.Text
+  resolution      String?  @db.Text
+  resolved        Boolean  @default(false)
+  resolvedAt      DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([ddProjectId])
+  @@index([severity])
+  @@index([category])
+  @@index([resolved])
+}
+
+// ===== SPA & EARNOUT MODELS =====
+
+model SPA {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation("ListingSPA", fields: [listingId], references: [id], onDelete: Cascade)
+  
+  loiId           String?  // Link to LoI
+  buyerId         String
+  buyer           User     @relation("BuyerSPA", fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  // Template
+  template        String   @default("standard") // standard, tech, services, retail
+  
+  // Key terms
+  purchasePrice   Int      // in SEK
+  closingDate     DateTime
+  
+  // Payment structure
+  cashAtClosing   Int
+  escrowHoldback  Int
+  earnOutStructure Json?
+  sellerFinancing Int?
+  
+  // Legal terms
+  representations Json?    // Array of representations & warranties
+  warranties      Json?
+  indemnification Json?
+  closingConditions Json?
+  
+  // Status & versions
+  status          String   @default("draft") // draft, negotiation, signed, executed, cancelled
+  version         Int      @default(1)
+  revisions       SPARevision[]
+  
+  signedAt        DateTime?
+  executedAt      DateTime?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([status])
+}
+
+model SPARevision {
+  id              String   @id @default(cuid())
+  spaId           String
+  spa             SPA      @relation(fields: [spaId], references: [id], onDelete: Cascade)
+  
+  version         Int
+  changedBy       String
+  changedByRole   String   // buyer, seller, advisor
+  changes         String   @db.Text
+  
+  createdAt       DateTime @default(now())
+  
+  @@index([spaId])
+  @@index([version])
+}
+
+model EarnOut {
+  id              String   @id @default(cuid())
+  spaId           String
+  spa             SPA?     @relation(fields: [spaId], references: [id], onDelete: SetNull)
+  
+  listingId       String
+  listing         Listing  @relation("ListingEarnout", fields: [listingId], references: [id], onDelete: Cascade)
+  
+  sellerId        String
+  seller          User     @relation("SellerEarnout", fields: [sellerId], references: [id], onDelete: Cascade)
+  
+  buyerId         String
+  buyer           User     @relation("BuyerEarnout", fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  // Earnout structure
+  totalEarnoutAmount Int   // Max earnout in SEK
+  period          Int      // Months (e.g., 36)
+  startDate       DateTime
+  endDate         DateTime
+  
+  // KPIs
+  kpiType         String   // revenue, ebitda, gross_profit, etc
+  kpiTarget       Json     // {year1: 10000000, year2: 12000000, year3: 14000000}
+  
+  // Status & tracking
+  status          String   @default("active") // active, completed, disputed, paid
+  
+  // Payments
+  payments        EarnoutPayment[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([sellerId])
+  @@index([buyerId])
+  @@index([status])
+}
+
+model EarnoutPayment {
+  id              String   @id @default(cuid())
+  earnOutId       String
+  earnOut         EarnOut  @relation(fields: [earnOutId], references: [id], onDelete: Cascade)
+  
+  period          Int      // Period number (1, 2, 3, etc)
+  year            Int      // Calendar year
+  
+  // Actual performance
+  actualKPI       Float    // Actual KPI value
+  targetKPI       Float    // Target KPI value
+  achievementPercent Float  // % of target achieved
+  
+  // Payment
+  earnedAmount    Int      // Amount earned (in SEK)
+  status          String   @default("pending") // pending, approved, paid, disputed
+  paidDate        DateTime?
+  
+  notes           String?  @db.Text
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([earnOutId])
+  @@index([status])
+  @@index([year])
 }
 
