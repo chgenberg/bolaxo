@@ -120,7 +120,11 @@ export async function POST(request: NextRequest) {
       image,
       images,
       packageType,
-      autoPublish
+      autoPublish,
+      strengths,
+      risks,
+      whySelling,
+      whatIncluded
     } = body
     
     // Validate required fields
@@ -171,7 +175,11 @@ export async function POST(request: NextRequest) {
         status: autoPublish ? 'active' : 'draft',
         packageType: packageType || 'basic',
         publishedAt: autoPublish ? new Date() : null,
-        expiresAt
+        expiresAt,
+        strengths: strengths && Array.isArray(strengths) ? strengths.filter(s => s) : [],
+        risks: risks && Array.isArray(risks) ? risks.filter(r => r) : [],
+        whySelling: whySelling || null,
+        whatIncluded: whatIncluded || null
       }
     })
     

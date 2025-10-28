@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles, AlertCircle, CheckCircle, Eye, Zap, Package, ImageIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { useToast } from '@/contexts/ToastContext'
 import FormField from './FormField'
 import FormTextarea from './FormTextarea'
 import CustomSelect from './CustomSelect'
@@ -286,6 +287,7 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
 export default function CreateListingWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user } = useAuth()
+  const { showToast } = useToast()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const formRef = useRef<HTMLDivElement>(null)
@@ -387,11 +389,14 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
       if (response.ok) {
         const listing = await response.json()
         router.push(`/dashboard/listings?success=published&id=${listing.id}`)
+        showToast('success', 'Annonsen har publicerats!')
       } else {
         console.error('Failed to publish listing')
+        showToast('error', 'Kunde inte publicera annonsen. Försök igen senare.')
       }
     } catch (error) {
       console.error('Error publishing listing:', error)
+      showToast('error', 'Ett fel uppstod vid publiceringen av annonsen.')
     } finally {
       setLoading(false)
     }
@@ -644,7 +649,9 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
 
             {/* Om ingen branschspecifika frågor, hoppa direkt till steg 4 */}
             {step === 3 && currentIndustryQuestions.length === 0 && (
-              <>{setStep(4)}</>
+              <>
+                {setStep(4)}
+              </>
             )}
 
             {/* Step 4: Annonsinformation */}
