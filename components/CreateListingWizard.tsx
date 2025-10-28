@@ -260,7 +260,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 <div className="flex-1">
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
-                      className="bg-gradient-to-r from-accent-pink to-navy h-2 rounded-full transition-all duration-500"
+                      className="bg-navy h-3 rounded-full transition-all duration-500"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
@@ -278,7 +278,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
             {step === 1 && (
               <div className="space-y-6">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-sky-100 to-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
+                  <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
                     <Building className="w-8 h-8 text-navy" />
                   </div>
                   <h3 className="text-2xl font-bold text-navy mb-2">Låt oss börja med grunderna</h3>
@@ -333,7 +333,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
             {step === 2 && (
               <div className="space-y-6">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-3">
+                  <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-3">
                     <TrendingUp className="w-8 h-8 text-navy" />
                   </div>
                   <h3 className="text-2xl font-bold text-navy mb-2">Företagets nyckeltal</h3>
@@ -409,7 +409,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
             {step === 3 && currentIndustryQuestions.length > 0 && (
               <div className="space-y-6">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-6">
+                  <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-6">
                     <Target className="w-8 h-8 text-navy" />
                   </div>
                   <h3 className="text-2xl font-bold text-navy mb-2">Branschspecifika detaljer</h3>
@@ -480,7 +480,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
             {step === 4 && (
               <div className="space-y-6">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-3">
+                  <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-3">
                     <FileText className="w-8 h-8 text-navy" />
                   </div>
                   <h3 className="text-2xl font-bold text-navy mb-2">Beskriv ditt företag</h3>
@@ -567,7 +567,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
             {step === 5 && (
               <div className="space-y-6">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-indigo-100 to-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
+                  <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
                     <ImageIcon className="w-8 h-8 text-navy" />
                   </div>
                   <h3 className="text-2xl font-bold text-navy mb-2">Lägg till bilder (valfritt)</h3>
@@ -603,7 +603,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
             {step === 6 && (
               <div className="space-y-6">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-6">
+                  <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-6">
                     <Eye className="w-8 h-8 text-navy" />
                   </div>
                   <h3 className="text-2xl font-bold text-navy mb-2">Så här kommer din annons se ut</h3>
@@ -613,7 +613,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 {/* Annonsförhandsvisning */}
                 <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-accent-pink/30 transition-all">
                   {/* Header med badges */}
-                  <div className="relative h-48 bg-gradient-to-br from-navy via-navy/90 to-accent-pink/30">
+                  <div className="relative h-48 bg-navy">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center">
                         <h2 className="text-3xl font-black text-white mb-2">{data.anonymousTitle}</h2>
@@ -699,7 +699,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 </div>
 
                 {/* Paketval */}
-                <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border border-amber-200">
+                <div className="bg-gray-50 rounded-2xl p-6 border border-amber-200">
                   <div className="flex items-center gap-3 mb-4">
                     <Package className="w-6 h-6 text-amber-600" />
                     <h3 className="text-lg font-bold text-navy">Rekommenderat paket</h3>
@@ -750,7 +750,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   disabled={!canProceed()}
                   className={`flex items-center gap-2 px-8 py-3 font-medium rounded-full transition-all ${
                     canProceed()
-                      ? 'bg-gradient-to-r from-accent-pink to-navy text-white hover:shadow-lg transform hover:scale-105'
+                      ? 'bg-navy text-white hover:shadow-lg transform hover:scale-105'
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }`}
                 >
@@ -761,7 +761,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 <button
                   onClick={handlePublish}
                   disabled={loading}
-                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-full hover:shadow-lg transform hover:scale-105 transition-all"
+                  className="flex items-center gap-2 px-8 py-3 bg-green-600 text-white font-medium rounded-full hover:shadow-lg transform hover:scale-105 transition-all"
                 >
                   {loading ? (
                     <>
