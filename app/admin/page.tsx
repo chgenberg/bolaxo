@@ -107,7 +107,24 @@ export default function AdminDashboard() {
         const response = await fetch('/api/admin/dashboard-stats')
         if (response.ok) {
           const data = await response.json()
-          setStats(data)
+          // Merge incoming data with safe defaults to avoid undefined nesting
+          setStats(prev => ({
+            ...prev,
+            ...data,
+            realVsBot: {
+              real: data?.realVsBot?.real ?? prev.realVsBot.real ?? 0,
+              bot: data?.realVsBot?.bot ?? prev.realVsBot.bot ?? 0
+            },
+            topSearches: Array.isArray(data?.topSearches) ? data.topSearches : prev.topSearches,
+            topPages: Array.isArray(data?.topPages) ? data.topPages : prev.topPages,
+            deviceBreakdown: {
+              mobile: data?.deviceBreakdown?.mobile ?? prev.deviceBreakdown.mobile ?? 0,
+              desktop: data?.deviceBreakdown?.desktop ?? prev.deviceBreakdown.desktop ?? 0,
+              tablet: data?.deviceBreakdown?.tablet ?? prev.deviceBreakdown.tablet ?? 0
+            },
+            trafficSources: Array.isArray(data?.trafficSources) ? data.trafficSources : prev.trafficSources,
+            recentActivities: Array.isArray(data?.recentActivities) ? data.recentActivities : prev.recentActivities
+          }))
           setLastUpdated(new Date())
         }
       } catch (error) {
@@ -143,7 +160,10 @@ export default function AdminDashboard() {
     </div>
   }
 
-  const botPercentage = Math.round((stats.realVsBot.bot / (stats.realVsBot.real + stats.realVsBot.bot)) * 100)
+  const totalTrafficForBotRatio = (stats?.realVsBot?.real ?? 0) + (stats?.realVsBot?.bot ?? 0)
+  const botPercentage = totalTrafficForBotRatio > 0
+    ? Math.round(((stats?.realVsBot?.bot ?? 0) / totalTrafficForBotRatio) * 100)
+    : 0
   const formatTime = (seconds: number) => `${Math.floor(seconds / 60)}m ${seconds % 60}s`
 
   // Logout handler
