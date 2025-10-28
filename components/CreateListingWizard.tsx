@@ -426,7 +426,6 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           value={data[question.key] as string || ''}
                           onChange={(value) => updateField(question.key as keyof ListingData, value)}
                           options={question.options}
-                          tooltip={question.tooltip}
                         />
                       )
                     } else if (question.fieldType === 'currency') {
@@ -436,7 +435,6 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           label={question.label}
                           value={data[question.key] as string || ''}
                           onChange={(value) => updateField(question.key as keyof ListingData, value)}
-                          tooltip={question.tooltip}
                         />
                       )
                     } else if (question.fieldType === 'percent') {
@@ -446,7 +444,6 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           label={question.label}
                           value={data[question.key] as string || ''}
                           onChange={(value) => updateField(question.key as keyof ListingData, value)}
-                          tooltip={question.tooltip}
                         />
                       )
                     } else if (question.type === 'textarea') {
