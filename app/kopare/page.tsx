@@ -13,21 +13,21 @@ function FAQItem({ faq }: { faq: any }) {
   const Icon = faq.icon
   
   return (
-    <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+    <div className="group bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-8 py-6 flex items-center gap-4 text-left"
+        className="w-full px-4 sm:px-6 md:px-8 py-4 sm:py-6 flex items-center gap-3 sm:gap-4 text-left"
       >
-        <div className={`flex-shrink-0 w-12 h-12 bg-gradient-to-r ${faq.color} rounded-full flex items-center justify-center group-hover:scale-110 transition-transform`}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className={`flex-shrink-0 w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r ${faq.color} rounded-full flex items-center justify-center group-hover:scale-110 transition-transform`}>
+          <Icon className="w-5 sm:w-6 h-5 sm:h-6 text-white" />
         </div>
-        <h3 className="flex-1 text-xl font-bold text-primary-navy group-hover:text-primary-navy transition-colors">
+        <h3 className="flex-1 text-base sm:text-lg md:text-xl font-bold text-primary-navy group-hover:text-primary-navy transition-colors">
           {faq.q}
         </h3>
-        <ChevronRight className={`w-6 h-6 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} />
+        <ChevronRight className={`w-5 sm:w-6 h-5 sm:h-6 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`} />
       </button>
-      <div className={`px-8 overflow-hidden transition-all duration-300 ${isOpen ? 'pb-6' : 'max-h-0'}`}>
-        <p className="text-gray-600 leading-relaxed ml-16">
+      <div className={`px-4 sm:px-6 md:px-8 overflow-hidden transition-all duration-300 ${isOpen ? 'pb-4 sm:pb-6' : 'max-h-0'}`}>
+        <p className="text-sm sm:text-base text-gray-600 leading-relaxed ml-0 sm:ml-14 md:ml-16">
           {faq.a}
         </p>
       </div>
@@ -91,13 +91,13 @@ export default function KopareInfoPage() {
         
         <div className="relative">
           {/* Hero Text */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
-            <div className="text-center mb-12">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-primary-navy mb-6 uppercase tracking-tight">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-6 sm:pb-8">
+            <div className="text-center mb-8 sm:mb-12">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-primary-navy mb-4 sm:mb-6 uppercase tracking-tight">
                 KÖPGUIDEN FÖR<br />
                 <span className="text-primary-navy">DITT NÄSTA FÖRETAG</span>
           </h1>
-              <p className="text-xl sm:text-2xl text-primary-navy/80 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-primary-navy/80 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
                 Smarta matchningar, verifierade säljare och säker process. 
                 Från första klick till signerad affär.
               </p>

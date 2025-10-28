@@ -246,11 +246,11 @@ export default function SearchPage() {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="sticky top-20 sm:top-28 md:top-32 z-20 bg-gradient-to-b from-white to-gray-50/50 backdrop-blur-md border-b border-gray-200 shadow-lg">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex flex-col gap-4">
+      <div className="sticky top-16 sm:top-20 md:top-24 z-20 bg-gradient-to-b from-white to-gray-50/50 backdrop-blur-md border-b border-gray-200 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 md:py-6">
+          <div className="flex flex-col gap-3 sm:gap-4">
             {/* Search and Filter Toggle Row */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4">
               {/* Enhanced Search Input */}
               <div className="flex-1">
                 <div className="relative group">
@@ -258,10 +258,10 @@ export default function SearchPage() {
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-gray group-focus-within:text-primary-blue transition-colors z-10" />
                   <input
                     type="text"
-                    placeholder="Sök bland företag, branscher, beskrivningar..."
+                    placeholder="Sök företag..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="relative w-full pl-12 pr-12 py-3.5 bg-white border-2 border-gray-200 rounded-button text-text-dark placeholder-text-gray
+                    className="relative w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-3.5 bg-white border-2 border-gray-200 rounded-button text-sm sm:text-base text-text-dark placeholder-text-gray
                       focus:border-primary-blue focus:outline-none focus:shadow-lg focus:shadow-primary-blue/10
                       transition-all duration-300"
                   />
@@ -280,36 +280,37 @@ export default function SearchPage() {
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`
-                  relative px-6 py-3.5 rounded-button font-medium
+                  relative px-4 sm:px-6 py-3 sm:py-3.5 rounded-button font-medium text-sm sm:text-base
                   transition-all duration-300 transform
-                  flex items-center justify-center gap-2
+                  flex items-center justify-center gap-2 whitespace-nowrap
                   ${showFilters 
                     ? 'bg-gradient-to-r from-primary-blue to-primary-dark text-white shadow-xl scale-105' 
                     : 'bg-white text-text-dark border-2 border-gray-200 hover:border-primary-blue hover:shadow-lg'
                   }
                 `}
               >
-                <Filter className={`w-5 h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-                <span>Avancerade filter</span>
+                <Filter className={`w-4 sm:w-5 h-4 sm:h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                <span className="hidden sm:inline">Avancerade filter</span>
+                <span className="sm:hidden">Filter</span>
                 {activeFilterCount > 0 && (
                   <span className={`
-                    px-2 py-0.5 rounded-full text-sm font-bold
+                    px-1.5 sm:px-2 py-0.5 rounded-full text-xs sm:text-sm font-bold
                     ${showFilters ? 'bg-white text-primary-blue' : 'bg-primary-blue text-white'}
                     animate-pulse
                   `}>
                     {activeFilterCount}
                   </span>
                 )}
-                <ChevronDown className={`w-5 h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 sm:w-5 h-4 sm:h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
               </button>
             </div>
 
             {/* Enhanced Collapsible Filters */}
             {showFilters && (
               <div className="animate-slide-down">
-                <div className="bg-white rounded-button border border-gray-200 p-6 shadow-inner">
+                <div className="bg-white rounded-button border border-gray-200 p-4 sm:p-6 shadow-inner">
                   {/* Primary Filters Row */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
                     {/* Industries Multi-Select */}
                     <div className="col-span-1 md:col-span-2 lg:col-span-1">
                       <MultiSelect
@@ -395,7 +396,7 @@ export default function SearchPage() {
                   </div>
 
                   {/* Price Range Slider */}
-                  <div className="mb-6 bg-gray-50 rounded-button p-4">
+                  <div className="mb-4 sm:mb-6 bg-gray-50 rounded-button p-3 sm:p-4">
                     <PriceRangeSlider
                       min={0}
                       max={150000000}
@@ -406,7 +407,7 @@ export default function SearchPage() {
                   </div>
 
                   {/* Secondary Filters Row */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                     {/* Employees */}
                     <AdvancedFilterDropdown
                       label="Antal anställda"
@@ -453,10 +454,11 @@ export default function SearchPage() {
                       {activeFilterCount > 0 && (
                         <button
                           onClick={clearAllFilters}
-                          className="w-full px-4 py-3 bg-error/10 text-error rounded-button hover:bg-error hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
+                          className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-error/10 text-error rounded-button hover:bg-error hover:text-white transition-all duration-300 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
                         >
-                          <X className="w-4 h-4" />
-                          <span>Rensa alla filter</span>
+                          <X className="w-3 sm:w-4 h-3 sm:h-4" />
+                          <span className="hidden sm:inline">Rensa alla filter</span>
+                          <span className="sm:hidden">Rensa</span>
                         </button>
                       )}
                     </div>
@@ -480,10 +482,10 @@ export default function SearchPage() {
       </div>
 
       {/* Results Section */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Results Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-6 sm:mb-8">
-          <h2 className="text-lg sm:text-xl font-semibold text-text-dark">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-4 sm:mb-6 md:mb-8">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-text-dark">
             {filteredObjects.length} företag {activeFilterCount > 0 && 'matchade'}
           </h2>
           {!loading && filteredObjects.length > 0 && (
@@ -495,13 +497,13 @@ export default function SearchPage() {
 
         {/* Loading State */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="card animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4" />
+              <div key={i} className="card animate-pulse p-4 sm:p-6">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-3 sm:mb-4" />
                 <div className="h-4 bg-gray-200 rounded w-full mb-2" />
                 <div className="h-4 bg-gray-200 rounded w-full md:w-2/3" />
-                <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="mt-3 sm:mt-4 grid grid-cols-2 gap-3 sm:gap-4">
                   <div className="h-8 bg-gray-200 rounded" />
                   <div className="h-8 bg-gray-200 rounded" />
                 </div>
@@ -512,7 +514,7 @@ export default function SearchPage() {
 
         {/* Results Grid */}
         {!loading && filteredObjects.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-3 sm:gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {filteredObjects.map((object) => (
               <ObjectCard key={object.id} object={object} />
             ))}
@@ -522,16 +524,16 @@ export default function SearchPage() {
         {/* No Results */}
         {!loading && filteredObjects.length === 0 && (
           <div className="card text-center py-6 sm:py-8 md:py-12 max-w-md mx-auto">
-            <AlertCircle className="w-16 h-16 text-text-gray/50 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-text-dark mb-2">
+            <AlertCircle className="w-12 sm:w-16 h-12 sm:h-16 text-text-gray/50 mx-auto mb-3 sm:mb-4" />
+            <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-2">
               Inga företag hittades
             </h3>
-            <p className="text-text-gray mb-6">
+            <p className="text-sm sm:text-base text-text-gray mb-4 sm:mb-6 px-4">
               Prova att justera dina filter eller sökord för att se fler resultat
             </p>
             <button 
               onClick={clearAllFilters}
-              className="btn-secondary mx-auto"
+              className="btn-secondary mx-auto text-sm sm:text-base"
             >
               Rensa alla filter
             </button>

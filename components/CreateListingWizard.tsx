@@ -100,16 +100,185 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
     { key: 'recurringRevenue', label: 'Andel återkommande intäkter / MRR', type: 'text', tooltip: 'T.ex. prenumerationer, support-avtal. För SaaS: ange MRR/ARR-andel.', fieldType: 'percent' },
     { key: 'monthlyRecurringRevenue', label: 'MRR - Monthly Recurring Revenue', type: 'text', tooltip: 'Endast för SaaS: månatliga återkommande intäkter', fieldType: 'currency' },
     { key: 'customerChurn', label: 'Årlig kundavgång (churn rate)', type: 'text', tooltip: 'Andel kunder som slutar per år. <5% är excellent för SaaS', fieldType: 'percent' },
+    { key: 'netRevenueRetention', label: 'NRR - Net Revenue Retention', type: 'text', tooltip: 'För SaaS: intäkter från befintliga kunder vs förra året. >100% = expansion!', fieldType: 'percent' },
+    { key: 'customerAcquisitionCost', label: 'CAC - Customer Acquisition Cost (kr)', type: 'text', tooltip: 'Kostnad för att värva en ny kund' },
+    { key: 'lifetimeValue', label: 'LTV - Lifetime Value per kund (kr)', type: 'text', tooltip: 'Total intäkt från en genomsnittlig kund' },
+    { key: 'cacPaybackMonths', label: 'CAC Payback Period', type: 'select', tooltip: 'Hur många månader för att tjäna tillbaka kundanskaffningskostnad? <12 mån excellent', options: [
+      { value: '0-6', label: '0-6 månader' },
+      { value: '7-12', label: '7-12 månader' },
+      { value: '13-18', label: '13-18 månader' },
+      { value: '19-24', label: '19-24 månader' },
+      { value: '24+', label: 'Över 24 månader' }
+    ]},
+    { key: 'techStack', label: 'Beskriv er tekniska plattform', type: 'textarea' },
+    { key: 'scalability', label: 'Hur skalbar är er lösning?', type: 'select', options: [
+      { value: 'high', label: 'Hög - kan lätt växa utan extra kostnad' },
+      { value: 'medium', label: 'Medel - viss skalbarhet' },
+      { value: 'low', label: 'Låg - resurskrävande att växa' }
+    ]},
+    { key: 'ipRights', label: 'Har ni patent eller unik teknologi?', type: 'select', options: [
+      { value: 'yes', label: 'Ja, patent eller skyddad IP' },
+      { value: 'partial', label: 'Delvis, varumärken/copyright' },
+      { value: 'no', label: 'Nej' }
+    ]},
   ],
   retail: [
     { key: 'storeLocation', label: 'Butiksläge', type: 'select', options: [
       { value: 'prime', label: 'Toppläge (centrum, galleria)' },
       { value: 'good', label: 'Bra läge' },
-      { value: 'average', label: 'Medelläge' }
+      { value: 'average', label: 'Genomsnittligt läge' }
     ]},
-    { key: 'leaseTerms', label: 'Hyresavtal löper ut', type: 'text' },
-    { key: 'inventoryValue', label: 'Lagervärde', type: 'text', fieldType: 'currency' },
-    { key: 'sameStoreSales', label: 'Försäljningsutveckling senaste året', type: 'text', fieldType: 'percent' },
+    { key: 'leaseLength', label: 'Hur långt hyresavtal återstår?', type: 'select', tooltip: 'Långt hyresavtal = mer värt (mindre risk)', options: [
+      { value: '0-1', label: '0-1 år' },
+      { value: '2-3', label: '2-3 år' },
+      { value: '4-5', label: '4-5 år' },
+      { value: '6-10', label: '6-10 år' },
+      { value: '10+', label: 'Över 10 år' }
+    ]},
+    { key: 'monthlyRent', label: 'Månadshyra', type: 'text', tooltip: 'Total lokalkostnad per månad', fieldType: 'currency' },
+    { key: 'footTraffic', label: 'Uppskattat antal kunder per dag', type: 'select', options: [
+      { value: '0-50', label: '0-50 kunder' },
+      { value: '51-100', label: '51-100 kunder' },
+      { value: '101-200', label: '101-200 kunder' },
+      { value: '201-500', label: '201-500 kunder' },
+      { value: '501-1000', label: '501-1000 kunder' },
+      { value: '1000+', label: 'Över 1000 kunder' }
+    ]},
+    { key: 'avgTransactionSize', label: 'Genomsnittligt köp per kund', type: 'text', fieldType: 'currency' },
+    { key: 'inventoryTurnover', label: 'Lageromsättning per år', type: 'select', tooltip: 'Hur många gånger per år säljs lagret. Högre = bättre cash flow', options: [
+      { value: '0-2', label: '0-2 gånger' },
+      { value: '3-4', label: '3-4 gånger' },
+      { value: '5-6', label: '5-6 gånger' },
+      { value: '7-10', label: '7-10 gånger' },
+      { value: '10+', label: 'Över 10 gånger' }
+    ]},
+    { key: 'inventoryValue', label: 'Genomsnittligt lagervärde', type: 'text', tooltip: 'Värde på lager i butik. Påverkar working capital', fieldType: 'currency' },
+    { key: 'sameStoreSalesGrowth', label: 'Årlig försäljningstillväxt', type: 'text', tooltip: 'Tillväxt för befintlig butik', fieldType: 'percent' },
+    { key: 'onlinePresence', label: 'Har ni e-handel?', type: 'select', options: [
+      { value: 'yes-integrated', label: 'Ja, integrerad med butik' },
+      { value: 'yes-separate', label: 'Ja, separat e-handel' },
+      { value: 'no', label: 'Nej, endast fysisk butik' }
+    ]},
+    { key: 'brandStrength', label: 'Varumärkesstyrka', type: 'select', options: [
+      { value: 'strong', label: 'Starkt - välkänt lokalt/nationellt' },
+      { value: 'medium', label: 'Medel - etablerat bland stamkunder' },
+      { value: 'weak', label: 'Svagt - nytt/okänt' }
+    ]},
+  ],
+  manufacturing: [
+    { key: 'productionCapacity', label: 'Kapacitetsutnyttjande', type: 'text', tooltip: 'Hur mycket av produktionskapaciteten används?', fieldType: 'percent' },
+    { key: 'equipmentAge', label: 'Genomsnittlig ålder på maskiner (år)', type: 'text' },
+    { key: 'equipmentValue', label: 'Bokfört värde på maskiner', type: 'text', tooltip: 'Sammanlagt värde på produktionsutrustning', fieldType: 'currency' },
+    { key: 'depreciation', label: 'Årlig avskrivning', type: 'text', fieldType: 'currency' },
+    { key: 'productMix', label: 'Antal produktlinjer', type: 'text' },
+    { key: 'rawMaterialCosts', label: 'Råvarukostnader (% av omsättning)', type: 'text', fieldType: 'percent' },
+    { key: 'productionStaff', label: 'Antal produktionsanställda', type: 'text' },
+    { key: 'qualityCertifications', label: 'Har ni kvalitetscertifieringar?', type: 'select', options: [
+      { value: 'iso9001', label: 'Ja, ISO 9001 eller liknande' },
+      { value: 'other', label: 'Ja, andra certifieringar' },
+      { value: 'no', label: 'Nej' }
+    ]},
+    { key: 'exportShare', label: 'Exportandel', type: 'text', tooltip: 'Hur stor del av försäljningen är export?', fieldType: 'percent' },
+    { key: 'supplierDependency', label: 'Beroende av enskilda leverantörer?', type: 'select', options: [
+      { value: 'low', label: 'Lågt - flera alternativ' },
+      { value: 'medium', label: 'Medel - 2-3 huvudleverantörer' },
+      { value: 'high', label: 'Högt - en kritisk leverantör' }
+    ]},
+  ],
+  services: [
+    { key: 'serviceType', label: 'Typ av tjänst', type: 'text', tooltip: 'Ex: redovisning, städning, konsult' },
+    { key: 'contractRenewalRate', label: 'Förnyelserate på kontrakt (%)', type: 'text', tooltip: 'Andel kunder som förnyas årligen', fieldType: 'percent' },
+    { key: 'avgRevenuePerCustomer', label: 'Genomsnittlig intäkt per kund/år (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'billableHours', label: 'Debiteringsgrad (%)', type: 'text', tooltip: 'Andel av arbetstid som kan faktureras', fieldType: 'percent' },
+    { key: 'clientRetention', label: 'Genomsnittlig kundlivslängd (år)', type: 'text' },
+    { key: 'customerGrowthRate', label: 'Årlig kundtillväxt (%)', type: 'text', fieldType: 'percent' },
+    { key: 'keyPersonDependency', label: 'Beroende av nyckelpersoner?', type: 'select', options: [
+      { value: 'low', label: 'Lågt - processer på plats' },
+      { value: 'medium', label: 'Medel - viss nyckelperson' },
+      { value: 'high', label: 'Högt - kritiskt beroende' }
+    ]},
+  ],
+  restaurant: [
+    { key: 'seatingCapacity', label: 'Antal sittplatser', type: 'text' },
+    { key: 'avgCheckSize', label: 'Genomsnittlig nota (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'monthlyCovers', label: 'Antal gäster per månad', type: 'text' },
+    { key: 'foodCostPercentage', label: 'Råvarukostnad (% av försäljning)', type: 'text', tooltip: 'Typiskt 25-35% för restaurang', fieldType: 'percent' },
+    { key: 'liquorLicense', label: 'Alkoholtillstånd', type: 'select', options: [
+      { value: 'full', label: 'Fullständiga rättigheter' },
+      { value: 'beer-wine', label: 'Öl och vin' },
+      { value: 'none', label: 'Inget alkoholtillstånd' }
+    ]},
+    { key: 'leaseYearsRemaining', label: 'År kvar på hyresavtal', type: 'text' },
+    { key: 'deliveryRevenue', label: 'Andel take-away/delivery (%)', type: 'text', fieldType: 'percent' },
+    { key: 'peakSeasonVariation', label: 'Säsongsvariationer', type: 'select', options: [
+      { value: 'low', label: 'Låg - jämn beläggning året om' },
+      { value: 'medium', label: 'Medel - viss säsongsvariation' },
+      { value: 'high', label: 'Hög - stark säsongsberoende' }
+    ]},
+  ],
+  construction: [
+    { key: 'projectBacklog', label: 'Orderstock (kr)', type: 'text', tooltip: 'Värde av bekräftade projekt', fieldType: 'currency' },
+    { key: 'avgProjectSize', label: 'Genomsnittlig projektstorlek (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'projectCompletionRate', label: 'Projekt i tid (%)', type: 'text', tooltip: 'Andel projekt som slutförs enligt plan', fieldType: 'percent' },
+    { key: 'equipmentValue', label: 'Värde på maskiner/utrustning (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'subcontractorShare', label: 'Andel underentreprenörer (%)', type: 'text', fieldType: 'percent' },
+    { key: 'publicPrivateMix', label: 'Fördelning offentlig/privat (%)', type: 'text', tooltip: 'Ex: 60/40' },
+    { key: 'geographicReach', label: 'Geografisk räckvidd', type: 'select', options: [
+      { value: 'local', label: 'Lokal - inom kommunen' },
+      { value: 'regional', label: 'Regional - inom länet' },
+      { value: 'national', label: 'Nationell' }
+    ]},
+    { key: 'specializations', label: 'Specialiseringar', type: 'textarea', tooltip: 'Ex: ROT, nybyggnation, kommersiellt' },
+  ],
+  healthcare: [
+    { key: 'patientBase', label: 'Antal aktiva patienter/klienter', type: 'text' },
+    { key: 'avgRevenuePerPatient', label: 'Genomsnittlig intäkt per patient/år (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'appointmentCapacity', label: 'Behandlingar per dag', type: 'text' },
+    { key: 'insuranceRevenue', label: 'Andel försäkringsintäkter (%)', type: 'text', fieldType: 'percent' },
+    { key: 'privatePayRevenue', label: 'Andel privata betalningar (%)', type: 'text', fieldType: 'percent' },
+    { key: 'specializations', label: 'Specialiseringar', type: 'textarea' },
+    { key: 'staffingModel', label: 'Personalmodell', type: 'select', options: [
+      { value: 'employed', label: 'Anställda behandlare' },
+      { value: 'contractors', label: 'Inhyrda/konsulter' },
+      { value: 'mixed', label: 'Blandad modell' }
+    ]},
+    { key: 'equipmentValue', label: 'Värde på medicinsk utrustning', type: 'text', fieldType: 'currency' },
+  ],
+  ecommerce: [
+    { key: 'platformType', label: 'E-handelsplattform', type: 'select', options: [
+      { value: 'custom', label: 'Egen utvecklad plattform' },
+      { value: 'shopify', label: 'Shopify' },
+      { value: 'woocommerce', label: 'WooCommerce' },
+      { value: 'other-saas', label: 'Annan SaaS-lösning' }
+    ]},
+    { key: 'avgOrderValue', label: 'Genomsnittligt ordervärde (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'conversionRate', label: 'Konverteringsgrad (%)', type: 'text', tooltip: 'Besökare som blir kunder', fieldType: 'percent' },
+    { key: 'returnRate', label: 'Returgrad (%)', type: 'text', fieldType: 'percent' },
+    { key: 'customerAcquisitionCost', label: 'Kostnad per ny kund (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'repeatPurchaseRate', label: 'Andel återköpande kunder (%)', type: 'text', fieldType: 'percent' },
+    { key: 'inventoryModel', label: 'Lagermodell', type: 'select', options: [
+      { value: 'own-inventory', label: 'Eget lager' },
+      { value: 'dropshipping', label: 'Dropshipping' },
+      { value: 'hybrid', label: 'Kombinerad modell' }
+    ]},
+    { key: 'marketplacePresence', label: 'Säljer ni på marknadsplatser?', type: 'select', options: [
+      { value: 'no', label: 'Nej, endast egen e-handel' },
+      { value: 'yes-minor', label: 'Ja, <20% av försäljning' },
+      { value: 'yes-major', label: 'Ja, >20% av försäljning' }
+    ]},
+  ],
+  consulting: [
+    { key: 'consultantCount', label: 'Antal konsulter', type: 'text' },
+    { key: 'seniorityMix', label: 'Andel seniora konsulter (%)', type: 'text', fieldType: 'percent' },
+    { key: 'billableRate', label: 'Genomsnittlig timtaxa (kr)', type: 'text', fieldType: 'currency' },
+    { key: 'utilizationRate', label: 'Beläggningsgrad (%)', type: 'text', tooltip: 'Debiterbara timmar / totala timmar', fieldType: 'percent' },
+    { key: 'clientConcentration', label: 'Största kundens andel av intäkter (%)', type: 'text', fieldType: 'percent' },
+    { key: 'contractLength', label: 'Genomsnittlig kontraktslängd', type: 'select', options: [
+      { value: 'spot', label: 'Korta uppdrag (<3 mån)' },
+      { value: 'medium', label: 'Medellånga (3-12 mån)' },
+      { value: 'long', label: 'Långa kontrakt (>12 mån)' }
+    ]},
+    { key: 'serviceLines', label: 'Tjänsteområden', type: 'textarea', tooltip: 'Lista era konsultområden' },
   ],
   // Lägg till fler branscher här vid behov
 }
@@ -144,7 +313,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
     images: []
   })
 
-  const totalSteps = 6
+  const totalSteps = 7 // Added preview step
   const progress = (step / totalSteps) * 100
 
   // Auto-generate anonymous title
@@ -182,6 +351,8 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
         return true // Bilder är valfria
       case 6:
         return true // Förhandsvisning
+      case 7:
+        return true // Bekräftelse
       default:
         return false
     }
@@ -606,121 +777,200 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-6">
                     <Eye className="w-8 h-8 text-navy" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Så här kommer din annons se ut</h3>
-                  <p className="text-gray-600">Granska och publicera när du är nöjd</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">Förhandsgranska din annons</h3>
+                  <p className="text-gray-600">Se hur din annons kommer att visas för potentiella köpare</p>
                 </div>
 
-                {/* Annonsförhandsvisning */}
-                <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-accent-pink/30 transition-all">
-                  {/* Header med badges */}
-                  <div className="relative h-48 bg-navy">
+                {/* Annonsförhandsvisning - detaljerad som objektsidan */}
+                <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+                  {/* Hero Image Section */}
+                  <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-navy to-accent-pink">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center">
-                        <h2 className="text-3xl font-black text-white mb-2">{data.anonymousTitle}</h2>
-                        <p className="text-white/80">{data.location}</p>
+                        <Building className="w-20 h-20 text-white/30 mb-4" />
+                        <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">{data.anonymousTitle}</h1>
+                        <p className="text-xl text-white/80">{data.location}</p>
                       </div>
                     </div>
-                    <div className="absolute top-4 right-4 flex gap-2">
-                      <span className="px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">NY</span>
-                      <span className="px-3 py-1 bg-blue-500 text-white text-xs font-bold rounded-full">PRO</span>
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      <span className="px-3 py-1.5 bg-green-500 text-white text-xs font-bold rounded-full">NYTT</span>
+                      <span className="px-3 py-1.5 bg-blue-500 text-white text-xs font-bold rounded-full">PRO-ANNONS</span>
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    {/* Nyckeltal */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                      <div className="text-center p-4 bg-gray-50 rounded-xl">
-                        <p className="text-sm text-gray-600 mb-1">Omsättning</p>
-                        <p className="text-lg font-bold text-navy">
-                          {data.revenue ? `${(parseInt(data.revenue) / 1_000_000).toFixed(1)} MSEK` : 'Ej angett'}
+                  {/* Main Content */}
+                  <div className="p-4 sm:p-6 md:p-8">
+                    {/* Key Metrics */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                        <div className="flex items-center gap-2 text-gray-600 mb-1">
+                          <TrendingUp className="w-4 h-4" />
+                          <span className="text-xs sm:text-sm">Omsättning</span>
+                        </div>
+                        <p className="text-base sm:text-lg font-bold text-navy">
+                          {data.revenue ? `${parseInt(data.revenue).toLocaleString('sv-SE')} kr` : 'Ej angiven'}
                         </p>
                       </div>
-                      <div className="text-center p-4 bg-gray-50 rounded-xl">
-                        <p className="text-sm text-gray-600 mb-1">EBITDA</p>
-                        <p className="text-lg font-bold text-navy">{data.profitMargin || '0'}%</p>
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                        <div className="flex items-center gap-2 text-gray-600 mb-1">
+                          <Users className="w-4 h-4" />
+                          <span className="text-xs sm:text-sm">Anställda</span>
                       </div>
-                      <div className="text-center p-4 bg-gray-50 rounded-xl">
-                        <p className="text-sm text-gray-600 mb-1">Anställda</p>
-                        <p className="text-lg font-bold text-navy">{data.employees || '0'}</p>
+                        <p className="text-base sm:text-lg font-bold text-navy">{data.employees || 'Ej angiven'}</p>
                       </div>
-                      <div className="text-center p-4 bg-gray-50 rounded-xl">
-                        <p className="text-sm text-gray-600 mb-1">Pris</p>
-                        <p className="text-lg font-bold text-accent-pink">
-                          {data.priceMin && data.priceMax 
-                            ? `${(parseInt(data.priceMin) / 1_000_000).toFixed(1)}-${(parseInt(data.priceMax) / 1_000_000).toFixed(1)} MSEK`
-                            : 'Förhandlingsbart'}
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                        <div className="flex items-center gap-2 text-gray-600 mb-1">
+                          <Target className="w-4 h-4" />
+                          <span className="text-xs sm:text-sm">Marginal</span>
+                        </div>
+                        <p className="text-base sm:text-lg font-bold text-navy">
+                          {data.profitMargin ? `${data.profitMargin}%` : 'Ej angiven'}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                        <div className="flex items-center gap-2 text-gray-600 mb-1">
+                          <Package className="w-4 h-4" />
+                          <span className="text-xs sm:text-sm">Prisintervall</span>
+                        </div>
+                        <p className="text-base sm:text-lg font-bold text-accent-pink">
+                          {data.priceMin && data.priceMax ? 
+                            `${parseInt(data.priceMin).toLocaleString('sv-SE')} - ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr` 
+                            : 'Ej angiven'}
                         </p>
                       </div>
                     </div>
 
-                    {/* Beskrivning */}
+                    {/* Description */}
                     <div className="mb-6">
-                      <h3 className="text-lg font-bold text-navy mb-2">Om företaget</h3>
-                      <p className="text-gray-700">{data.description || 'Ingen beskrivning angiven'}</p>
+                      <h3 className="text-lg font-bold text-navy mb-3">Om företaget</h3>
+                      <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                        {data.description || 'Ingen beskrivning angiven'}
+                      </p>
                     </div>
 
-                    {/* Styrkor */}
-                    {data.strengths.filter(s => s).length > 0 && (
-                      <div className="mb-6">
-                        <h3 className="text-lg font-bold text-navy mb-2">Styrkor</h3>
+                    {/* Strengths & Risks */}
+                    <div className="grid md:grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <h3 className="text-lg font-bold text-navy mb-3 flex items-center gap-2">
+                          <CheckCircle className="w-5 h-5 text-green-500" />
+                          Styrkor
+                        </h3>
                         <ul className="space-y-2">
                           {data.strengths.filter(s => s).map((strength, index) => (
                             <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                              <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                               <span className="text-gray-700">{strength}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
-                    )}
-
-                    {/* Anledning till försäljning */}
-                    <div className="p-4 bg-blue-50 rounded-xl">
-                      <h3 className="text-sm font-bold text-navy mb-1">Anledning till försäljning</h3>
-                      <p className="text-sm text-gray-700">{data.whySelling || 'Ej angiven'}</p>
+                      <div>
+                        <h3 className="text-lg font-bold text-navy mb-3 flex items-center gap-2">
+                          <AlertCircle className="w-5 h-5 text-amber-500" />
+                          Risker & utmaningar
+                        </h3>
+                        <ul className="space-y-2">
+                          {data.risks.filter(r => r).map((risk, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <AlertCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700">{risk}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
 
-                    {/* CTA */}
-                    <div className="mt-6 flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <span className="flex items-center gap-1">
-                          <Eye className="w-4 h-4" /> 0 visningar
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Users className="w-4 h-4" /> 0 intresserade
-                        </span>
+                    {/* Why Selling */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                      <h3 className="text-lg font-bold text-navy mb-2">Anledning till försäljning</h3>
+                      <p className="text-gray-700">{data.whySelling || 'Ej angiven'}</p>
                       </div>
-                      <button className="px-6 py-2 bg-navy text-white font-medium rounded-full hover:bg-opacity-90 transition-all">
-                        Visa mer
-                      </button>
                     </div>
                   </div>
+                      </div>
+                    )}
+
+            {/* Step 7: Bekräftelse och publicering */}
+            {step === 7 && (
+              <div className="space-y-6">
+                <div className="text-center mb-8">
+                  <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
+                    <Sparkles className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-navy mb-2">Redo att publicera!</h3>
+                  <p className="text-gray-600">Din annons är klar att visas för tusentals kvalificerade köpare</p>
                 </div>
 
                 {/* Paketval */}
-                <div className="bg-gray-50 rounded-2xl p-6 border border-amber-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Package className="w-6 h-6 text-amber-600" />
-                    <h3 className="text-lg font-bold text-navy">Rekommenderat paket</h3>
+                <div className="bg-gradient-to-br from-accent-pink/10 to-navy/10 rounded-2xl p-6">
+                  <h4 className="text-lg font-bold text-navy mb-4">Valt paket: Pro-annons</h4>
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span className="text-gray-700">Topplacering i sökresultat</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span className="text-gray-700">Framhävd i nyhetsbrev</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span className="text-gray-700">Detaljerad statistik</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span className="text-gray-700">Prioriterad support</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold text-navy">4 990 kr</p>
+                      <p className="text-sm text-gray-600">Engångskostnad, ingen bindningstid</p>
+                    </div>
+                    <Link href="/priser" className="text-accent-pink hover:underline text-sm">
+                      Byt paket
+                    </Link>
+                  </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-                      <h4 className="font-bold text-navy mb-1">Basic</h4>
-                      <p className="text-2xl font-bold text-gray-900 mb-2">2 000 kr</p>
-                      <p className="text-sm text-gray-600">90 dagar • Grundläggande</p>
+                {/* Sammanfattning */}
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <h4 className="font-bold text-navy mb-3">Sammanfattning</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Företagsnamn:</span>
+                      <span className="font-medium">{data.companyName}</span>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border-2 border-accent-pink relative">
-                      <span className="absolute -top-3 right-4 px-3 py-1 bg-accent-pink text-white text-xs font-bold rounded-full">POPULÄR</span>
-                      <h4 className="font-bold text-navy mb-1">Pro</h4>
-                      <p className="text-2xl font-bold text-accent-pink mb-2">5 000 kr</p>
-                      <p className="text-sm text-gray-600">180 dagar • Prioriterad</p>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Bransch:</span>
+                      <span className="font-medium">{industries.find(i => i.value === data.industry)?.label}</span>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-                      <h4 className="font-bold text-navy mb-1">Pro+</h4>
-                      <p className="text-2xl font-bold text-gray-900 mb-2">15 000 kr</p>
-                      <p className="text-sm text-gray-600">Obegränsat • Premium</p>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Plats:</span>
+                      <span className="font-medium">{data.location}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Prisintervall:</span>
+                      <span className="font-medium">
+                        {parseInt(data.priceMin).toLocaleString('sv-SE')} - {parseInt(data.priceMax).toLocaleString('sv-SE')} kr
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                {/* Villkor */}
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <div className="flex gap-3">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm">
+                      <p className="font-medium text-yellow-800 mb-1">Viktig information</p>
+                      <p className="text-yellow-700">
+                        Genom att publicera godkänner du våra{' '}
+                        <Link href="/juridiskt/anvandarvillkor" className="underline">
+                          användarvillkor
+                        </Link>{' '}
+                        och bekräftar att all information är korrekt. Annonsen granskas innan publicering.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -744,7 +994,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 Tillbaka
               </button>
 
-              {step < totalSteps ? (
+              {step < totalSteps - 1 ? (
                 <button
                   onClick={handleNext}
                   disabled={!canProceed()}
@@ -754,7 +1004,15 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }`}
                 >
-                  Nästa
+                  {step === 6 ? 'Gå till publicering' : 'Nästa'}
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              ) : step === totalSteps - 1 ? (
+                <button
+                  onClick={handleNext}
+                  className="flex items-center gap-2 px-8 py-3 bg-green-600 text-white font-medium rounded-full hover:shadow-lg transform hover:scale-105 transition-all"
+                >
+                  Gå till publicering
                   <ArrowRight className="w-5 h-5" />
                 </button>
               ) : (
@@ -770,7 +1028,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     </>
                   ) : (
                     <>
-                      <Zap className="w-5 h-5" />
+                      <Sparkles className="w-5 h-5" />
                       Publicera annons
                     </>
                   )}

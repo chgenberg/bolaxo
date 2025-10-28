@@ -90,42 +90,43 @@ export default function ObjectDetailPage() {
     <main className="min-h-screen bg-background">
       {/* Navigation */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <Link 
               href="/sok" 
-              className="inline-flex items-center text-text-gray hover:text-text-dark transition-colors"
+              className="inline-flex items-center text-sm sm:text-base text-text-gray hover:text-text-dark transition-colors"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Tillbaka till sök
+              <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Tillbaka till sök</span>
+              <span className="sm:hidden">Tillbaka</span>
             </Link>
             <button
               onClick={handleToggleSaved}
-              className={`inline-flex items-center px-4 py-2 rounded-full font-medium transition-all ${
+              className={`inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-medium transition-all text-sm sm:text-base ${
                 isSaved
                   ? 'bg-primary-blue text-white'
                   : 'bg-gray-100 text-text-dark hover:bg-gray-200'
               }`}
               disabled={isSyncingToDb}
             >
-              <Bookmark className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
+              <Bookmark className={`w-4 h-4 mr-1 sm:mr-2 ${isSaved ? 'fill-current' : ''}`} />
               {isSyncingToDb ? 'Sparar...' : (isSaved ? 'Sparad' : 'Spara')}
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
         {/* Main Content with Image and Info Side by Side */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden mb-6 sm:mb-8">
           <div className="flex flex-col lg:flex-row">
             {/* Image Section */}
             <div className="lg:w-2/5 bg-white">
               {object.image ? (
-                <div className="relative w-full h-96 lg:h-full min-h-[500px] p-8">
+                <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-full lg:min-h-[500px] p-4 sm:p-6 md:p-8">
                   {/* Organic shadow shape */}
                   <div 
-                    className="absolute inset-8 bg-gray-800/20 blur-xl animate-pulse"
+                    className="absolute inset-4 sm:inset-6 md:inset-8 bg-gray-800/20 blur-xl animate-pulse"
                     style={{
                       borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
                       transform: 'rotate(-8deg)'
@@ -151,9 +152,9 @@ export default function ObjectDetailPage() {
                   </div>
                 </div>
               ) : (
-                <div className="w-full h-96 lg:h-full min-h-[500px] flex items-center justify-center">
+                <div className="w-full h-64 sm:h-80 md:h-96 lg:h-full lg:min-h-[500px] flex items-center justify-center">
                   <div 
-                    className="w-48 h-48 flex items-center justify-center bg-gray-200 text-6xl font-bold text-gray-400"
+                    className="w-32 sm:w-40 md:w-48 h-32 sm:h-40 md:h-48 flex items-center justify-center bg-gray-200 text-4xl sm:text-5xl md:text-6xl font-bold text-gray-400"
                     style={{
                       borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%'
                     }}
@@ -165,82 +166,82 @@ export default function ObjectDetailPage() {
             </div>
 
             {/* Info Section */}
-            <div className="lg:w-3/5 p-6 md:p-8">
+            <div className="lg:w-3/5 p-4 sm:p-6 md:p-8">
               {/* Badges */}
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                 {object.isNew && (
-                  <span className="bg-primary-blue text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+                  <span className="bg-primary-blue text-white text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
                     Ny
                   </span>
                 )}
                 {object.verified && (
-                  <span className="bg-success text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+                  <span className="bg-success text-white text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
                     ✓ Verifierad
                   </span>
                 )}
                 {object.broker && (
-                  <span className="bg-light-blue text-primary-blue text-xs font-semibold px-3 py-1.5 rounded-full">
+                  <span className="bg-light-blue text-primary-blue text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
                     Mäklare
                   </span>
                 )}
-                <span className="bg-gray-100 text-text-dark text-xs font-semibold px-3 py-1.5 rounded-full">
+                <span className="bg-gray-100 text-text-dark text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
                   {object.category || object.type}
                 </span>
               </div>
               
               {/* Title and Location */}
-              <h1 className="text-3xl md:text-4xl font-bold text-text-dark mb-3">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-text-dark mb-2 sm:mb-3">
                 {hasNDA(objectId) && !object.anonymousTitle ? object.companyName : object.anonymousTitle}
               </h1>
               
-              <div className="flex items-center text-text-gray mb-6">
-                <MapPin className="w-5 h-5 mr-2" />
-                <span className="text-lg">
+              <div className="flex items-center text-text-gray mb-4 sm:mb-6">
+                <MapPin className="w-4 sm:w-5 h-4 sm:h-5 mr-1.5 sm:mr-2" />
+                <span className="text-sm sm:text-base md:text-lg">
                   {hasNDA(objectId) && object.address ? object.address : `${object.type} • ${object.region}`}
                 </span>
               </div>
 
               {/* Key Metrics Grid */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center text-text-gray mb-2">
-                    <TrendingUp className="w-4 h-4 mr-1.5" />
-                    <span className="text-sm">Omsättning</span>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                  <div className="flex items-center text-text-gray mb-1 sm:mb-2">
+                    <TrendingUp className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
+                    <span className="text-xs sm:text-sm">Omsättning</span>
                   </div>
-                  <div className="text-xl font-bold text-text-dark">{object.revenueRange}</div>
+                  <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">{object.revenueRange}</div>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center text-text-gray mb-2">
-                    <Users className="w-4 h-4 mr-1.5" />
-                    <span className="text-sm">Anställda</span>
+                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                  <div className="flex items-center text-text-gray mb-1 sm:mb-2">
+                    <Users className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
+                    <span className="text-xs sm:text-sm">Anställda</span>
                   </div>
-                  <div className="text-xl font-bold text-text-dark">{object.employees}</div>
+                  <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">{object.employees}</div>
                 </div>
-                <div className="bg-primary-blue/10 rounded-xl p-4">
-                  <div className="text-text-gray text-sm mb-2">Prisidé</div>
-                  <div className="text-xl font-bold text-primary-blue">
+                <div className="bg-primary-blue/10 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                  <div className="text-text-gray text-xs sm:text-sm mb-1 sm:mb-2">Prisidé</div>
+                  <div className="text-base sm:text-lg md:text-xl font-bold text-primary-blue">
                     {(object.priceMin / 1000000).toFixed(1)}-{(object.priceMax / 1000000).toFixed(1)} MSEK
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <div className="flex items-center text-text-gray mb-2">
-                    <Eye className="w-4 h-4 mr-1.5" />
-                    <span className="text-sm">Visningar</span>
+                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                  <div className="flex items-center text-text-gray mb-1 sm:mb-2">
+                    <Eye className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
+                    <span className="text-xs sm:text-sm">Visningar</span>
                   </div>
-                  <div className="text-xl font-bold text-text-dark">{object.views}</div>
+                  <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">{object.views}</div>
                 </div>
               </div>
               
               {/* Description */}
               <div className="prose prose-gray max-w-none">
-                <p className="text-text-gray leading-relaxed">
+                <p className="text-sm sm:text-base text-text-gray leading-relaxed">
                   {object.description}
                 </p>
               </div>
 
               {/* Created Date */}
-              <div className="mt-6 flex items-center text-sm text-text-gray">
-                <Calendar className="w-4 h-4 mr-1.5" />
+              <div className="mt-4 sm:mt-6 flex items-center text-xs sm:text-sm text-text-gray">
+                <Calendar className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
                 <span>Publicerad {new Date(object.createdAt).toLocaleDateString('sv-SE')}</span>
               </div>
             </div>
@@ -248,7 +249,7 @@ export default function ObjectDetailPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
           {/* Tab Navigation */}
           <div className="border-b border-gray-200">
             <nav className="flex -mb-px">
@@ -256,31 +257,32 @@ export default function ObjectDetailPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 border-b-2 font-medium text-sm transition-colors ${
+                  className={`flex-1 inline-flex items-center justify-center gap-1 sm:gap-2 py-3 sm:py-4 px-3 sm:px-6 border-b-2 font-medium text-xs sm:text-sm transition-colors ${
                     activeTab === tab.id
                       ? 'border-primary-blue text-primary-blue'
                       : 'border-transparent text-text-gray hover:text-text-dark hover:border-gray-300'
                   }`}
                 >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
+                  <tab.icon className="w-3 sm:w-4 h-3 sm:h-4" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
                 </button>
               ))}
             </nav>
           </div>
 
           {/* Tab Content */}
-          <div className="p-6 md:p-8">
+          <div className="p-4 sm:p-6 md:p-8">
             {activeTab === 'overview' && (
               <div className="space-y-8">
                 {/* Company Info */}
                 <section>
-                  <h2 className="text-2xl font-bold text-text-dark mb-4">Om företaget</h2>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-text-dark mb-3 sm:mb-4">Om företaget</h2>
                   <div className="prose prose-gray max-w-none">
-                    <p className="text-text-gray leading-relaxed mb-4">
+                    <p className="text-sm sm:text-base text-text-gray leading-relaxed mb-3 sm:mb-4">
                       {object.description}
                     </p>
-                    <p className="text-text-gray leading-relaxed">
+                    <p className="text-sm sm:text-base text-text-gray leading-relaxed">
                       Företaget har en etablerad kundbas och goda relationer med leverantörer. Det finns goda möjligheter för tillväxt genom expansion till närliggande marknader eller genom att bredda tjänsteutbudet.
                     </p>
                   </div>
@@ -288,34 +290,34 @@ export default function ObjectDetailPage() {
 
                 {/* Key Facts */}
                 <section>
-                  <h2 className="text-2xl font-bold text-text-dark mb-4">Nyckeltal</h2>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-3">
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-text-dark mb-3 sm:mb-4">Nyckeltal</h2>
+                  <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="space-y-2 sm:space-y-3">
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Bransch</span>
-                        <span className="text-text-dark font-medium">{object.category || object.type}</span>
+                        <span className="text-sm sm:text-base text-text-gray">Bransch</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium">{object.category || object.type}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Etablerat</span>
-                        <span className="text-text-dark font-medium">{2024 - Math.floor(Math.random() * 10 + 5)}</span>
+                        <span className="text-sm sm:text-base text-text-gray">Etablerat</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium">{2024 - Math.floor(Math.random() * 10 + 5)}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Antal kunder</span>
-                        <span className="text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)}+</span>
+                        <span className="text-sm sm:text-base text-text-gray">Antal kunder</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)}+</span>
                       </div>
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Tillväxt (YoY)</span>
-                        <span className="text-text-dark font-medium text-success">+{Math.floor(Math.random() * 20 + 5)}%</span>
+                        <span className="text-sm sm:text-base text-text-gray">Tillväxt (YoY)</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium text-success">+{Math.floor(Math.random() * 20 + 5)}%</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Lokalyta</span>
-                        <span className="text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)} kvm</span>
+                        <span className="text-sm sm:text-base text-text-gray">Lokalyta</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)} kvm</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-text-gray">Hyresavtal</span>
-                        <span className="text-text-dark font-medium">{Math.floor(Math.random() * 5 + 2)} år kvar</span>
+                        <span className="text-sm sm:text-base text-text-gray">Hyresavtal</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium">{Math.floor(Math.random() * 5 + 2)} år kvar</span>
                       </div>
                     </div>
                   </div>
@@ -326,25 +328,25 @@ export default function ObjectDetailPage() {
             {activeTab === 'economics' && (
               <div className="space-y-6">
                 {!hasNDA(objectId) ? (
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
-                    <div className="flex items-start space-x-3">
-                      <Shield className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                    <div className="flex items-start space-x-2 sm:space-x-3">
+                      <Shield className="w-5 sm:w-6 h-5 sm:h-6 text-amber-600 flex-shrink-0 mt-1" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold text-amber-900">Vissa uppgifter är låsta</h3>
+                          <h3 className="text-base sm:text-lg font-semibold text-amber-900">Vissa uppgifter är låsta</h3>
                           <InfoPopup
                             title="Varför är vissa uppgifter låsta?"
                             content="För att få tillgång till detaljerad finansiell information behöver du signera ett NDA (sekretessavtal). Detta skyddar säljarens känsliga affärsinformation och säkerställer att endast seriösa köpare får tillgång. Efter att du signerat NDA:n kommer säljaren att granska din ansökan och om den godkänns får du full tillgång till all information."
                           />
                         </div>
-                        <p className="text-amber-800 mb-4">
+                        <p className="text-sm sm:text-base text-amber-800 mb-3 sm:mb-4">
                           Signera NDA för att se detaljerad finansiell information
                         </p>
                         <Link
                           href={`/nda/${objectId}`}
-                          className="inline-flex items-center px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+                          className="inline-flex items-center px-3 sm:px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm sm:text-base"
                         >
-                          <Shield className="w-4 h-4 mr-2" />
+                          <Shield className="w-3 sm:w-4 h-3 sm:h-4 mr-1.5 sm:mr-2" />
                           Signera NDA
                         </Link>
                       </div>
@@ -354,17 +356,17 @@ export default function ObjectDetailPage() {
 
                 {/* Financial Overview - Always visible but with ranges */}
                 <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Finansiell översikt</h3>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-gray-50 rounded-xl p-6">
-                      <h4 className="text-text-gray text-sm mb-2">Omsättning</h4>
-                      <p className="text-2xl font-bold text-text-dark mb-1">{object.revenueRange}</p>
-                      <p className="text-sm text-text-gray">Senaste 12 månaderna</p>
+                  <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-3 sm:mb-4">Finansiell översikt</h3>
+                  <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                      <h4 className="text-text-gray text-xs sm:text-sm mb-1 sm:mb-2">Omsättning</h4>
+                      <p className="text-lg sm:text-xl md:text-2xl font-bold text-text-dark mb-1">{object.revenueRange}</p>
+                      <p className="text-xs sm:text-sm text-text-gray">Senaste 12 månaderna</p>
                     </div>
-                    <div className="bg-gray-50 rounded-xl p-6">
-                      <h4 className="text-text-gray text-sm mb-2">EBITDA (uppskattad)</h4>
-                      <p className="text-2xl font-bold text-text-dark mb-1">{calculateEBITDARange()}</p>
-                      <p className="text-sm text-text-gray">Baserat på branschsnitt</p>
+                    <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                      <h4 className="text-text-gray text-xs sm:text-sm mb-1 sm:mb-2">EBITDA (uppskattad)</h4>
+                      <p className="text-lg sm:text-xl md:text-2xl font-bold text-text-dark mb-1">{calculateEBITDARange()}</p>
+                      <p className="text-xs sm:text-sm text-text-gray">Baserat på branschsnitt</p>
                     </div>
                   </div>
                 </section>
@@ -406,10 +408,10 @@ export default function ObjectDetailPage() {
             )}
 
             {activeTab === 'strengths' && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Styrkor</h3>
-                  <ul className="space-y-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-3 sm:mb-4">Styrkor</h3>
+                  <ul className="space-y-2 sm:space-y-3">
                     {(object.strengths || [
                       'Etablerat varumärke på lokal marknad',
                       'Lojal och återkommande kundbas',
@@ -418,16 +420,16 @@ export default function ObjectDetailPage() {
                       'Starka kassaflöden och god lönsamhet'
                     ]).map((strength, index) => (
                       <li key={index} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5 mr-3" />
-                        <span className="text-text-gray">{strength}</span>
+                        <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-success flex-shrink-0 mt-0.5 mr-2 sm:mr-3" />
+                        <span className="text-sm sm:text-base text-text-gray">{strength}</span>
                       </li>
                     ))}
                   </ul>
                 </section>
 
                 <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Utvecklingsmöjligheter</h3>
-                  <ul className="space-y-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-3 sm:mb-4">Utvecklingsmöjligheter</h3>
+                  <ul className="space-y-2 sm:space-y-3">
                     {[
                       'Expansion till närliggande geografiska marknader',
                       'Digitalisering av försäljningskanaler',
@@ -435,24 +437,24 @@ export default function ObjectDetailPage() {
                       'Strategiska partnerskap och samarbeten'
                     ].map((opportunity, index) => (
                       <li key={index} className="flex items-start">
-                        <TrendingUp className="w-5 h-5 text-primary-blue flex-shrink-0 mt-0.5 mr-3" />
-                        <span className="text-text-gray">{opportunity}</span>
+                        <TrendingUp className="w-4 sm:w-5 h-4 sm:h-5 text-primary-blue flex-shrink-0 mt-0.5 mr-2 sm:mr-3" />
+                        <span className="text-sm sm:text-base text-text-gray">{opportunity}</span>
                       </li>
                     ))}
                   </ul>
                 </section>
 
                 <section>
-                  <h3 className="text-xl font-semibold text-text-dark mb-4">Att beakta</h3>
-                  <ul className="space-y-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-3 sm:mb-4">Att beakta</h3>
+                  <ul className="space-y-2 sm:space-y-3">
                     {(object.risks || [
                       'Behov av fortsatt marknadsföringssatsningar',
                       'Beroende av nyckelpersoner i organisationen',
                       'Konkurrenssituation på lokal marknad'
                     ]).map((risk, index) => (
                       <li key={index} className="flex items-start">
-                        <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5 mr-3" />
-                        <span className="text-text-gray">{risk}</span>
+                        <AlertCircle className="w-4 sm:w-5 h-4 sm:h-5 text-amber-600 flex-shrink-0 mt-0.5 mr-2 sm:mr-3" />
+                        <span className="text-sm sm:text-base text-text-gray">{risk}</span>
                       </li>
                     ))}
                   </ul>
@@ -463,16 +465,16 @@ export default function ObjectDetailPage() {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-8 bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-primary-blue">
-          <div className="bg-gradient-to-r from-primary-blue via-primary-blue to-primary-dark p-10 md:p-12 relative overflow-hidden">
+        <div className="mt-6 sm:mt-8 bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border-2 border-primary-blue">
+          <div className="bg-gradient-to-r from-primary-blue via-primary-blue to-primary-dark p-6 sm:p-8 md:p-10 lg:p-12 relative overflow-hidden">
             {/* Background accent */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20"></div>
             <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16"></div>
             
             {/* Content */}
             <div className="relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary-navy mb-4">Intresserad av detta företag?</h2>
-              <p className="text-lg text-primary-navy mb-8 max-w-2xl">
+              <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-primary-navy mb-3 sm:mb-4">Intresserad av detta företag?</h2>
+              <p className="text-sm sm:text-base md:text-lg text-primary-navy mb-6 sm:mb-8 max-w-2xl">
                 {hasNDA(objectId) 
                   ? 'Du har redan signerat NDA för detta objekt. Kontakta säljaren för att gå vidare i processen.'
                   : 'Signera NDA för att få tillgång till all information och komma i kontakt med säljaren.'}
@@ -480,9 +482,9 @@ export default function ObjectDetailPage() {
               {!hasNDA(objectId) && (
                 <Link
                   href={`/nda/${objectId}`}
-                  className="inline-flex items-center px-8 py-4 bg-primary-navy text-white rounded-xl font-bold text-lg hover:bg-primary-navy/90 hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                  className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-primary-navy text-white rounded-lg sm:rounded-xl font-bold text-base sm:text-lg hover:bg-primary-navy/90 hover:shadow-lg transition-all duration-200 transform hover:scale-105"
                 >
-                  <Shield className="w-6 h-6 mr-3" />
+                  <Shield className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
                   Signera NDA och fortsätt
                 </Link>
               )}

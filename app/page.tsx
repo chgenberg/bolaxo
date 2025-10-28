@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <main className="bg-cream">
       {/* HERO SECTION - Fullscreen */}
-      <section className="relative min-h-screen flex items-center bg-cover bg-center">
+      <section className="relative min-h-screen flex items-start md:items-center bg-cover bg-center pt-20 md:pt-0">
         {/* Background Image - Fullscreen with no overlay */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -66,24 +66,24 @@ export default function Home() {
         </div>
 
         {/* Minimalist Content Box */}
-        <div className="relative w-full flex items-center justify-start px-4 md:px-12 lg:px-24 z-10">
-          <div className="relative">
+        <div className="relative w-full flex items-center justify-center md:justify-start px-4 sm:px-6 md:px-12 lg:px-24 z-10">
+          <div className="relative w-full max-w-sm md:max-w-lg">
             {/* Pulsing shadow effect */}
             <div className="absolute -inset-4 bg-black/50 rounded-3xl blur-2xl animate-pulse-shadow" />
             
             {/* Main content box */}
-            <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-8 md:p-12 max-w-lg shadow-2xl">
-              <div className="flex justify-center mb-4">
-                <span className="inline-block px-4 py-1.5 bg-green-100 text-green-700 text-sm font-semibold rounded-full">
+            <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 md:p-12 shadow-2xl">
+              <div className="flex justify-center mb-3 sm:mb-4">
+                <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 bg-green-100 text-green-700 text-xs sm:text-sm font-semibold rounded-full">
                   ✓ 100% gratis
                 </span>
               </div>
               
-              <h1 className="text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-4">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-3 sm:mb-4">
                 Sälj ditt företag
               </h1>
               
-              <p className="text-center text-gray-700 mb-8 text-lg">
+              <p className="text-center text-gray-700 mb-6 sm:mb-8 text-base sm:text-lg">
                 Professionell värdering på 5 minuter.
                 <br />
                 Smart matchning med rätt köpare.
@@ -92,26 +92,26 @@ export default function Home() {
               {/* CTA Button */}
               <button
                 onClick={() => setIsValuationModalOpen(true)}
-                className="w-full bg-navy text-white font-bold py-4 px-8 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 text-lg group shadow-lg"
+                className="w-full bg-navy text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 text-base sm:text-lg group shadow-lg"
               >
-                <span className="flex items-center justify-center gap-3">
+                <span className="flex items-center justify-center gap-2 sm:gap-3">
                   Starta här
-                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5 transition-transform group-hover:translate-x-1" />
                 </span>
               </button>
               
               {/* Minimal trust indicator */}
-              <div className="mt-6 flex items-center justify-center gap-1 text-sm text-gray-600">
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+              <div className="mt-4 sm:mt-6 flex items-center justify-center gap-1 text-xs sm:text-sm text-gray-600">
+                <Star className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-500 fill-yellow-500" />
+                <Star className="w-3 sm:w-4 h-3 sm:h-4 text-yellow-500 fill-yellow-500" />
                 <span className="ml-1">500+ nöjda säljare</span>
               </div>
               
               {/* Small discreet buyer link */}
-              <div className="mt-4 text-center">
+              <div className="mt-3 sm:mt-4 text-center">
                 <Link 
                   href="/kopare" 
                   className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-navy transition-colors font-medium"
@@ -130,14 +130,14 @@ export default function Home() {
       </section>
 
       {/* FOUR IMAGES SECTION - Interactive Floating Cards */}
-      <section className="section section-white overflow-hidden">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="heading-lg mb-4">Så enkelt säljer du ditt företag</h2>
-            <p className="body-lg text-graphite">Från registrering till avslut på rekordtid</p>
+      <section className="section section-white overflow-hidden py-12 sm:py-16 md:py-20">
+        <div className="container-custom px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Så enkelt säljer du ditt företag</h2>
+            <p className="text-base sm:text-lg text-graphite">Från registrering till avslut på rekordtid</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {[
               { 
                 num: 1, 
@@ -177,7 +177,7 @@ export default function Home() {
                 href={step.link}
                 className="group relative"
               >
-                <div className="relative overflow-hidden rounded-[2rem] aspect-[3/4] bg-gray-100 transform transition-all duration-500 ease-out group-hover:scale-[1.02] group-hover:shadow-2xl">
+                <div className="relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[2rem] aspect-[3/4] bg-gray-100 transform transition-all duration-500 ease-out group-hover:scale-[1.02] group-hover:shadow-2xl">
                   {/* Background Image */}
                   <div className="absolute inset-0">
                     <Image
@@ -190,21 +190,21 @@ export default function Home() {
                   </div>
                   
                   {/* Floating Badge */}
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
-                    <span className="text-xs font-bold text-gray-900">{step.cashback}</span>
+                  <div className="absolute top-2 right-2 sm:top-3 md:top-4 sm:right-3 md:right-4 bg-white/90 backdrop-blur-md px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                    <span className="text-[10px] sm:text-xs font-bold text-gray-900">{step.cashback}</span>
                   </div>
                   
                   {/* Logo/Icon */}
-                  <div className="absolute top-4 left-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6">
-                    <span className="text-xl font-black text-accent-pink">{step.num}</span>
+                  <div className="absolute top-2 left-2 sm:top-3 md:top-4 sm:left-3 md:left-4 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6">
+                    <span className="text-sm sm:text-lg md:text-xl font-black text-accent-pink">{step.num}</span>
                   </div>
                   
                   {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-2xl font-black mb-2 text-white transform transition-all duration-500 group-hover:translate-y-[-4px]">
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6">
+                    <h3 className="text-base sm:text-xl md:text-2xl font-black mb-1 sm:mb-2 text-white transform transition-all duration-500 group-hover:translate-y-[-4px]">
                       {step.title}
                     </h3>
-                    <p className="text-sm text-white/90 transform transition-all duration-500 group-hover:translate-y-[-2px]">
+                    <p className="text-xs sm:text-sm text-white/90 transform transition-all duration-500 group-hover:translate-y-[-2px] line-clamp-2">
                       {step.desc}
                     </p>
                   </div>
@@ -222,27 +222,27 @@ export default function Home() {
           </div>
           
           {/* CTA Button */}
-          <div className="text-center mt-12">
+          <div className="text-center mt-8 sm:mt-12">
             <Link
               href="/salja/start"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-accent-pink text-primary-navy font-bold rounded-xl hover:shadow-xl transition-all transform hover:scale-105"
+              className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-accent-pink text-primary-navy font-bold rounded-xl hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base"
             >
               Kom igång nu
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
             </Link>
           </div>
         </div>
       </section>
 
       {/* NEW INTERACTIVE CARDS SECTION - Klarna Cashback Style */}
-      <section className="section section-sand overflow-hidden">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="heading-lg mb-4">Upptäck alla möjligheter</h2>
-            <p className="body-lg text-graphite">Utforska våra tjänster och verktyg för att maximera din affär</p>
+      <section className="section section-sand overflow-hidden py-12 sm:py-16 md:py-20">
+        <div className="container-custom px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Upptäck alla möjligheter</h2>
+            <p className="text-base sm:text-lg text-graphite">Utforska våra tjänster och verktyg för att maximera din affär</p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-auto">
             {[
               {
                 link: "/sok",
@@ -314,7 +314,7 @@ export default function Home() {
                   animationDelay: `${index * 0.1}s`
                 }}
               >
-                <div className="relative overflow-hidden rounded-[2rem] h-full min-h-[200px] bg-gray-100 transform transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:shadow-2xl">
+                <div className="relative overflow-hidden rounded-xl sm:rounded-2xl md:rounded-[2rem] h-full min-h-[150px] sm:min-h-[180px] md:min-h-[200px] bg-gray-100 transform transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:shadow-2xl">
                   {/* Background Image */}
                   <div className="absolute inset-0">
                     <Image
@@ -340,19 +340,19 @@ export default function Home() {
       </section>
 
       {/* REVIEWS SECTION - Interactive & Animated */}
-      <section className="section section-sand overflow-hidden">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="heading-lg mb-4">
+      <section className="section section-sand overflow-hidden py-12 sm:py-16 md:py-20">
+        <div className="container-custom px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
               Våra kunder älskar BOLAXO
             </h2>
-            <p className="body-lg text-graphite">
+            <p className="text-base sm:text-lg text-graphite">
               98% av våra säljare rekommenderar oss
             </p>
           </div>
 
           {/* Review Cards - Animated */}
-          <div className="relative h-[400px] flex items-center justify-center">
+          <div className="relative h-[350px] sm:h-[400px] flex items-center justify-center">
             {reviews.map((review, index) => (
               <div
                 key={index}
@@ -364,26 +364,26 @@ export default function Home() {
                     : 'opacity-0 scale-90 -translate-x-1/3 z-0'
                 }`}
               >
-                <div className="bg-white rounded-3xl p-8 md:p-12 shadow-hover border border-sand">
+                <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 shadow-hover border border-sand">
                   {/* Stars */}
-                  <div className="flex gap-1 mb-6">
+                  <div className="flex gap-1 mb-4 sm:mb-6">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-6 h-6 fill-butter text-butter" />
+                      <Star key={i} className="w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6 fill-butter text-butter" />
                     ))}
                   </div>
 
                   {/* Review Text */}
-                  <p className="text-xl md:text-2xl text-graphite mb-8 leading-relaxed">
+                  <p className="text-base sm:text-xl md:text-2xl text-graphite mb-6 sm:mb-8 leading-relaxed">
                     "{review.text}"
                   </p>
 
                   {/* Author */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
-                      <p className="font-bold text-navy">{review.author}</p>
-                      <p className="text-graphite opacity-75">{review.company}</p>
+                      <p className="font-bold text-navy text-sm sm:text-base">{review.author}</p>
+                      <p className="text-graphite opacity-75 text-sm">{review.company}</p>
                     </div>
-                    <p className="text-sm text-graphite opacity-60">{review.date}</p>
+                    <p className="text-xs sm:text-sm text-graphite opacity-60">{review.date}</p>
                   </div>
                 </div>
               </div>
@@ -408,17 +408,17 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="section gradient-sky-mint text-navy">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="heading-lg mb-6">
+      <section className="section gradient-sky-mint text-navy py-12 sm:py-16 md:py-20">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
             Redo att sälja ditt företag?
           </h2>
-          <p className="body-lg mb-8 text-graphite">
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 text-graphite">
             Börja med en gratis värdering och se vad ditt företag är värt idag
           </p>
           <button
             onClick={() => setIsValuationModalOpen(true)}
-            className="btn-primary text-lg px-8 py-4"
+            className="btn-primary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4"
           >
             Starta gratis värdering
           </button>
@@ -441,7 +441,7 @@ export default function Home() {
               onClick={() => setSelectedStep(null)}
             />
             
-            <div className="inline-block w-full max-w-4xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-3xl max-h-[85vh] overflow-y-auto">
+            <div className="inline-block w-full max-w-4xl p-6 sm:p-8 my-4 sm:my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl sm:rounded-3xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto">
               {/* Close Button */}
               <button
                 onClick={() => setSelectedStep(null)}

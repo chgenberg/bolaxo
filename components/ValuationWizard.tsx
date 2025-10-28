@@ -491,29 +491,29 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-[90vh] md:h-[85vh] flex flex-col">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-3xl h-[95vh] sm:h-[90vh] md:h-[85vh] flex flex-col">
         {/* Header - Fixed */}
-        <div className="px-6 md:px-8 pt-6 md:pt-8 pb-4 border-b border-gray-100 flex-shrink-0">
+        <div className="px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-3 sm:pb-4 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-start justify-between">
-          <div>
-              <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#1F3C58' }}>
+          <div className="flex-1 mr-2">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ color: '#1F3C58' }}>
                 Gratis Företagsvärdering
               </h2>
-              <p className="text-sm md:text-base mt-1" style={{ color: '#666666' }}>
+              <p className="text-xs sm:text-sm md:text-base mt-1" style={{ color: '#666666' }}>
                 Få en AI-driven värdering på 5 minuter
               </p>
           </div>
           <button
             onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
-              <X className="w-5 h-5 text-gray-400 hover:text-gray-600" />
+              <X className="w-4 sm:w-5 h-4 sm:h-5 text-gray-400 hover:text-gray-600" />
           </button>
         </div>
 
         {/* Progress Bar */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2 text-sm">
+          <div className="mt-3 sm:mt-4">
+            <div className="flex items-center justify-between mb-1.5 sm:mb-2 text-xs sm:text-sm">
               <span style={{ color: '#1F3C58' }}>Steg {step} av {totalSteps}</span>
               <span style={{ color: '#666666' }}>{Math.round(progress)}% klart</span>
           </div>
