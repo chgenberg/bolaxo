@@ -521,13 +521,14 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   {data.strengths.map((strength, index) => (
                     <FormField
                       key={index}
+                      label={`Styrka ${index + 1}`}
                       value={strength}
                       onChange={(e) => {
                         const newStrengths = [...data.strengths]
                         newStrengths[index] = e.target.value
                         updateField('strengths', newStrengths)
                       }}
-                      placeholder={`Styrka ${index + 1}`}
+                      placeholder="Beskriv en styrka i ert företag"
                       className="mb-2"
                     />
                   ))}
