@@ -205,6 +205,14 @@ export default function ValuationResultPage() {
                 Ladda ner som PDF
               </button>
             </div>
+            
+            {/* CTA to Create Listing */}
+            <div className="mt-6">
+              <Link href="/salja/start" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-button font-semibold bg-accent-pink text-white hover:bg-opacity-90 transition-all shadow-md">
+                Skapa annons nu
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -408,12 +416,12 @@ export default function ValuationResultPage() {
             Vill du sälja ditt företag? Vi hjälper dig att hitta rätt köpare och få bästa möjliga pris.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/salja/start" className="btn-secondary bg-white text-primary-blue hover:bg-gray-100 inline-flex items-center justify-center">
-              Skapa annons
+            <Link href="/salja/start" className="btn-primary bg-accent-pink text-white hover:bg-opacity-90 inline-flex items-center justify-center order-first">
+              Skapa annons och starta försäljning
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
             </Link>
             <Link href="/kontakt" className="btn-secondary bg-white/20 text-white hover:bg-white/30 inline-flex items-center justify-center">
-              Kontakta rådgivare
+              Prata med en rådgivare
             </Link>
           </div>
         </div>
