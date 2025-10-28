@@ -237,10 +237,10 @@ export default function ChatWidget() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 bg-navy text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 group"
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 bg-navy text-white rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 group"
       >
-        <div className="flex items-center gap-2 px-4 py-4 md:px-6">
-          <MessageCircle className="w-6 h-6" />
+        <div className="flex items-center gap-2 px-4 py-3 md:px-6 md:py-4">
+          <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
           <span className="hidden md:block font-bold">Chatt</span>
         </div>
         
@@ -253,16 +253,16 @@ export default function ChatWidget() {
   return (
     <>
       {/* Chat Window */}
-      <div className="fixed bottom-6 right-6 z-40 w-[380px] md:w-[440px] h-[600px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+      <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-40 w-full md:w-[440px] h-screen md:h-[600px] bg-white md:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-navy text-white p-6 flex items-center justify-between">
+        <div className="bg-navy text-white p-4 md:p-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-              <Sparkles className="w-6 h-6" />
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center">
+              <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-lg text-white">BOLAXO Support</h3>
-              <p className="text-sm opacity-90">Alltid redo att hjälpa</p>
+              <h3 className="font-bold text-base md:text-lg text-white">BOLAXO Support</h3>
+              <p className="text-xs md:text-sm opacity-90">Alltid redo att hjälpa</p>
             </div>
           </div>
           <button
@@ -274,14 +274,14 @@ export default function ChatWidget() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+        <div className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4 bg-gray-50">
           {messages.map((message) => (
             <div
               key={message.id}
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[80%] px-4 py-3 rounded-2xl ${
+                className={`max-w-[85%] md:max-w-[80%] px-3 md:px-4 py-2 md:py-3 rounded-2xl ${
                   message.sender === 'user'
                     ? 'bg-navy text-white rounded-br-sm'
                     : 'bg-white text-gray-800 rounded-bl-sm shadow-sm'
@@ -313,7 +313,7 @@ export default function ChatWidget() {
         </div>
 
         {/* Common Questions */}
-        <div className="px-4 py-3 bg-white border-t border-gray-100">
+        <div className="px-3 md:px-4 py-2 md:py-3 bg-white border-t border-gray-100">
           <p className="text-xs text-gray-500 mb-2">Vanliga frågor:</p>
           <div className="space-y-2">
             {commonQuestions.map((q, index) => (
@@ -337,7 +337,7 @@ export default function ChatWidget() {
         </div>
 
         {/* Input */}
-        <div className="p-4 bg-white border-t border-gray-100">
+        <div className="p-3 md:p-4 bg-white border-t border-gray-100">
           <form onSubmit={(e) => {
             e.preventDefault()
             handleSendMessage(inputValue)
@@ -348,14 +348,14 @@ export default function ChatWidget() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Skriv ditt meddelande..."
-              className="flex-1 px-4 py-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-accent-pink"
+              className="flex-1 px-3 md:px-4 py-2 md:py-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-accent-pink text-sm"
             />
             <button
               type="submit"
               disabled={!inputValue.trim()}
-              className="p-3 bg-navy text-white rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 md:p-3 bg-navy text-white rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-4 h-4 md:w-5 md:h-5" />
             </button>
           </form>
         </div>
@@ -363,15 +363,15 @@ export default function ChatWidget() {
 
       {/* Contact Form Modal */}
       {showContactForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-xl w-full overflow-hidden max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center md:p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-t-3xl md:rounded-3xl shadow-2xl max-w-full md:max-w-xl w-full overflow-hidden max-h-[85vh] md:max-h-[90vh] overflow-y-auto">
             {!contactFormSubmitted ? (
               <>
                 {/* Header */}
-                <div className="bg-navy text-white p-6 flex items-start justify-between">
+                <div className="bg-navy text-white p-4 md:p-6 flex items-start justify-between">
                   <div>
-                    <h3 className="text-2xl font-bold mb-2 text-white">Vi kontaktar dig!</h3>
-                    <p className="text-white/90">Välj hur du vill bli kontaktad</p>
+                    <h3 className="text-xl md:text-2xl font-bold mb-1 md:mb-2 text-white">Vi kontaktar dig!</h3>
+                    <p className="text-sm md:text-base text-white/90">Välj hur du vill bli kontaktad</p>
                   </div>
                   <button
                     type="button"
@@ -383,14 +383,14 @@ export default function ChatWidget() {
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleContactSubmit} className="p-6 space-y-6">
+                <form onSubmit={handleContactSubmit} className="p-4 md:p-6 space-y-4 md:space-y-6">
                   {/* Contact Method Selection */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
                       Hur vill du bli kontaktad? *
                     </label>
                     <div className="space-y-2">
-                      <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                      <label className="flex items-center p-3 md:p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
                              style={{ borderColor: contactForm.contactMethod === 'email' ? '#1F3C58' : '#E5E7EB' }}>
                         <input
                           type="radio"
@@ -398,18 +398,18 @@ export default function ChatWidget() {
                           value="email"
                           checked={contactForm.contactMethod === 'email'}
                           onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'email' })}
-                          className="mr-3"
+                          className="mr-2 md:mr-3"
                         />
-                        <div className="flex items-center gap-3">
-                          <Mail className="w-5 h-5 text-gray-600" />
+                        <div className="flex items-center gap-2 md:gap-3">
+                          <Mail className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                           <div>
-                            <p className="font-medium">E-post</p>
-                            <p className="text-sm text-gray-500">Få svar inom 24 timmar</p>
+                            <p className="text-sm md:text-base font-medium">E-post</p>
+                            <p className="text-xs md:text-sm text-gray-500">Få svar inom 24 timmar</p>
                           </div>
                         </div>
                       </label>
                       
-                      <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                      <label className="flex items-center p-3 md:p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
                              style={{ borderColor: contactForm.contactMethod === 'phone' ? '#1F3C58' : '#E5E7EB' }}>
                         <input
                           type="radio"
@@ -417,13 +417,13 @@ export default function ChatWidget() {
                           value="phone"
                           checked={contactForm.contactMethod === 'phone'}
                           onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'phone' })}
-                          className="mr-3"
+                          className="mr-2 md:mr-3"
                         />
-                        <div className="flex items-center gap-3">
-                          <Phone className="w-5 h-5 text-gray-600" />
+                        <div className="flex items-center gap-2 md:gap-3">
+                          <Phone className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                           <div>
-                            <p className="font-medium">Telefon</p>
-                            <p className="text-sm text-gray-500">Boka tid för uppringning</p>
+                            <p className="text-sm md:text-base font-medium">Telefon</p>
+                            <p className="text-xs md:text-sm text-gray-500">Boka tid för uppringning</p>
                           </div>
                         </div>
                       </label>
@@ -575,16 +575,16 @@ export default function ChatWidget() {
                   </div>
                 </form>
               </>
-            ) : (
-              <div className="p-12 text-center">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle2 className="w-10 h-10 text-green-600" />
+              ) : (
+                <div className="p-8 md:p-12 text-center">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+                    <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10 text-green-600" />
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Tack!</h3>
+                  <p className="text-sm md:text-base text-gray-600">
+                    Vi kontaktar dig {contactForm.contactMethod === 'email' ? 'via e-post inom 24 timmar' : 'på vald tid'}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Tack!</h3>
-                <p className="text-gray-600">
-                  Vi kontaktar dig {contactForm.contactMethod === 'email' ? 'via e-post inom 24 timmar' : 'på vald tid'}
-                </p>
-              </div>
             )}
           </div>
         </div>
