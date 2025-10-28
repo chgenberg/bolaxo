@@ -203,9 +203,8 @@ export default function ChatWidget() {
     if (!contactForm.name || !contactForm.contactMethod) return
     
     if (contactForm.contactMethod === 'email' && !contactForm.email) return
-    if (contactForm.contactMethod === 'email' if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) returnif (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) return !contactForm.email) return
-    if (contactForm.contactMethod === 'phone' if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) returnif (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) return (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime || !contactForm.subject)) return
-
+    if (contactForm.contactMethod === 'email' && !contactForm.email) return
+    if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime || !contactForm.subject)) return
     // Here you would normally send the contact form to your backend
     console.log('Contact form submitted:', contactForm)
     
@@ -369,9 +368,18 @@ export default function ChatWidget() {
             {!contactFormSubmitted ? (
               <>
                 {/* Header */}
-                <div className="bg-navy text-white p-6">
-                  <h3 className="text-2xl font-bold mb-2 text-white">Vi kontaktar dig!</h3>
-                  <p className="text-white/90">Välj hur du vill bli kontaktad</p>
+                <div className="bg-navy text-white p-6 flex items-start justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold mb-2 text-white">Vi kontaktar dig!</h3>
+                    <p className="text-white/90">Välj hur du vill bli kontaktad</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowContactForm(false)}
+                    className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
                 </div>
 
                 {/* Form */}
