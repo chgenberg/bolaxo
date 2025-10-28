@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Phone, Mail, User, Sparkles } from 'lucide-react'
+import { MessageCircle, X, Send, Phone, Mail, User, Sparkles, Calendar, CheckCircle2 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 interface Message {
@@ -15,6 +15,10 @@ interface ContactFormData {
   name: string
   phone: string
   email: string
+  subject: string
+  contactMethod: 'email' | 'phone' | ''
+  preferredDate?: string
+  preferredTime?: string
 }
 
 export default function ChatWidget() {
@@ -33,13 +37,56 @@ export default function ChatWidget() {
   const [contactForm, setContactForm] = useState<ContactFormData>({
     name: '',
     phone: '',
-    email: ''
+    email: '',
+    subject: '',
+    contactMethod: ''
   })
   const [contactFormSubmitted, setContactFormSubmitted] = useState(false)
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const pathname = usePathname()
+
+  // Generate available time slots for the next 7 days
+  const getAvailableTimeSlots = () => {
+    const slots = []
+    const today = new Date()
+    
+    for (let i = 1; i <= 7; i++) {
+      const date = new Date(today)
+      date.setDate(today.getDate() + i)
+      
+      // Skip weekends
+      if (date.getDay() === 0 || date.getDay() === 6) continue
+      
+      const dateStr = date.toLocaleDateString('sv-SE', { 
+        weekday: 'long', 
+        month: 'long', 
+        day: 'numeric' 
+      })
+      
+      slots.push({
+        date: date.toISOString().split('T')[0],
+        label: dateStr.charAt(0).toUpperCase() + dateStr.slice(1)
+      })
+    }
+    
+    return slots
+  }
+
+  const timeSlots = [
+    { value: '09:00', label: '09:00 - 09:30' },
+    { value: '09:30', label: '09:30 - 10:00' },
+    { value: '10:00', label: '10:00 - 10:30' },
+    { value: '10:30', label: '10:30 - 11:00' },
+    { value: '11:00', label: '11:00 - 11:30' },
+    { value: '13:00', label: '13:00 - 13:30' },
+    { value: '13:30', label: '13:30 - 14:00' },
+    { value: '14:00', label: '14:00 - 14:30' },
+    { value: '14:30', label: '14:30 - 15:00' },
+    { value: '15:00', label: '15:00 - 15:30' },
+    { value: '15:30', label: '15:30 - 16:00' },
+  ]
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -151,7 +198,12 @@ export default function ChatWidget() {
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!contactForm.name || (!contactForm.phone && !contactForm.email)) return
+    
+    // Validate based on contact method
+    if (!contactForm.name || !contactForm.subject || !contactForm.contactMethod) return
+    
+    if (contactForm.contactMethod === 'email' && !contactForm.email) return
+    if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) return
 
     // Here you would normally send the contact form to your backend
     console.log('Contact form submitted:', contactForm)
@@ -162,7 +214,15 @@ export default function ChatWidget() {
     setTimeout(() => {
       setShowContactForm(false)
       setContactFormSubmitted(false)
-      setContactForm({ name: '', phone: '', email: '' })
+      setContactForm({ 
+        name: '', 
+        phone: '', 
+        email: '', 
+        subject: '',
+        contactMethod: '',
+        preferredDate: '',
+        preferredTime: ''
+      })
     }, 3000)
   }
 
@@ -304,17 +364,80 @@ export default function ChatWidget() {
       {/* Contact Form Modal */}
       {showContactForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-xl w-full overflow-hidden max-h-[90vh] overflow-y-auto">
             {!contactFormSubmitted ? (
               <>
                 {/* Header */}
                 <div className="bg-navy text-white p-6">
                   <h3 className="text-2xl font-bold mb-2">Vi kontaktar dig!</h3>
-                  <p className="text-white/90">Fyll i dina uppgifter så ringer vi upp</p>
+                  <p className="text-white/90">Välj hur du vill bli kontaktad</p>
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleContactSubmit} className="p-6 space-y-4">
+                <form onSubmit={handleContactSubmit} className="p-6 space-y-6">
+                  {/* Contact Method Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Hur vill du bli kontaktad? *
+                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                             style={{ borderColor: contactForm.contactMethod === 'email' ? '#1F3C58' : '#E5E7EB' }}>
+                        <input
+                          type="radio"
+                          name="contactMethod"
+                          value="email"
+                          checked={contactForm.contactMethod === 'email'}
+                          onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'email' })}
+                          className="mr-3"
+                        />
+                        <div className="flex items-center gap-3">
+                          <Mail className="w-5 h-5 text-gray-600" />
+                          <div>
+                            <p className="font-medium">E-post</p>
+                            <p className="text-sm text-gray-500">Få svar inom 24 timmar</p>
+                          </div>
+                        </div>
+                      </label>
+                      
+                      <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                             style={{ borderColor: contactForm.contactMethod === 'phone' ? '#1F3C58' : '#E5E7EB' }}>
+                        <input
+                          type="radio"
+                          name="contactMethod"
+                          value="phone"
+                          checked={contactForm.contactMethod === 'phone'}
+                          onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'phone' })}
+                          className="mr-3"
+                        />
+                        <div className="flex items-center gap-3">
+                          <Phone className="w-5 h-5 text-gray-600" />
+                          <div>
+                            <p className="font-medium">Telefon</p>
+                            <p className="text-sm text-gray-500">Boka tid för uppringning</p>
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Subject */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Vad vill du prata om? (1 mening) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={contactForm.subject}
+                      onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
+                      placeholder="T.ex. Jag vill sälja mitt IT-företag"
+                      maxLength={100}
+                    />
+                  </div>
+
+                  {/* Name */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Namn *
@@ -332,41 +455,96 @@ export default function ChatWidget() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Telefonnummer
-                    </label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="tel"
-                        value={contactForm.phone}
-                        onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
-                        placeholder="+46 70 123 45 67"
-                      />
+                  {/* Email (shown if email contact method selected) */}
+                  {contactForm.contactMethod === 'email' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        E-post *
+                      </label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="email"
+                          required
+                          value={contactForm.email}
+                          onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                          className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
+                          placeholder="din@email.se"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      E-post
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="email"
-                        value={contactForm.email}
-                        onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
-                        placeholder="din@email.se"
-                      />
-                    </div>
-                  </div>
+                  {/* Phone and Calendar (shown if phone contact method selected) */}
+                  {contactForm.contactMethod === 'phone' && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Telefonnummer *
+                        </label>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                          <input
+                            type="tel"
+                            required
+                            value={contactForm.phone}
+                            onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
+                            placeholder="+46 70 123 45 67"
+                          />
+                        </div>
+                      </div>
 
-                  <p className="text-xs text-gray-500">
-                    * Ange minst ett kontaktsätt (telefon eller e-post)
-                  </p>
+                      {/* Date Selection */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <Calendar className="inline w-4 h-4 mr-1" />
+                          När passar det att vi ringer? *
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {getAvailableTimeSlots().map((slot) => (
+                            <button
+                              key={slot.date}
+                              type="button"
+                              onClick={() => setContactForm({ ...contactForm, preferredDate: slot.date })}
+                              className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                                contactForm.preferredDate === slot.date
+                                  ? 'border-navy bg-navy text-white'
+                                  : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                            >
+                              {slot.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Time Selection (shown after date is selected) */}
+                      {contactForm.preferredDate && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Välj tid *
+                          </label>
+                          <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
+                            {timeSlots.map((slot) => (
+                              <button
+                                key={slot.value}
+                                type="button"
+                                onClick={() => setContactForm({ ...contactForm, preferredTime: slot.value })}
+                                className={`p-2 border-2 rounded-lg text-sm transition-all ${
+                                  contactForm.preferredTime === slot.value
+                                    ? 'border-navy bg-navy text-white'
+                                    : 'border-gray-200 hover:border-gray-300'
+                                }`}
+                              >
+                                {slot.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
 
                   <div className="flex gap-3 pt-4">
                     <button
@@ -388,11 +566,11 @@ export default function ChatWidget() {
             ) : (
               <div className="p-12 text-center">
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-10 h-10 text-green-600" />
+                  <CheckCircle2 className="w-10 h-10 text-green-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Tack!</h3>
                 <p className="text-gray-600">
-                  Vi kontaktar dig så snart vi har möjlighet
+                  Vi kontaktar dig {contactForm.contactMethod === 'email' ? 'via e-post inom 24 timmar' : 'på vald tid'}
                 </p>
               </div>
             )}
