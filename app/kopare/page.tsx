@@ -74,7 +74,7 @@ export default function KopareInfoPage() {
   const currentObject = featuredObjects[currentObjectIndex]
 
   return (
-    <main style={{ backgroundColor: '#e4dbc6' }}>
+    <main className="bg-cream">
       {/* Hero Section with Carousel */}
       <section className="relative overflow-hidden">
         {/* Background gradient */}
@@ -302,7 +302,7 @@ export default function KopareInfoPage() {
       </section>
 
       {/* Process Steps Section */}
-      <section className="py-24" style={{ backgroundColor: '#e4dbc6' }}>
+      <section className="py-24 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-primary-navy mb-6 uppercase">
