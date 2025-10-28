@@ -245,88 +245,64 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-auto">
             {[
               {
-                title: "Sök företag",
                 link: "/sok",
-                image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=500&fit=crop",
-                gradient: "from-blue-900/80 to-blue-900/40",
-                shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2" // Tall
+                image: "/Badringar/badring1.png",
+                shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2"
               },
               {
-                title: "Börja sälja",
                 link: "/salja",
-                image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=500&fit=crop",
-                gradient: "from-purple-900/80 to-purple-900/40",
-                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1" // Wide
+                image: "/Badringar/badring2.png",
+                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
               },
               {
-                title: "För köpare",
                 link: "/kopare",
-                image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=400&h=500&fit=crop",
-                gradient: "from-indigo-900/80 to-indigo-900/40",
-                shape: "col-span-1 row-span-1" // Square
+                image: "/Badringar/badring3.png",
+                shape: "col-span-1 row-span-1"
               },
               {
-                title: "Se priser",
                 link: "/priser",
-                image: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=400&h=500&fit=crop",
-                gradient: "from-amber-900/80 to-amber-900/40",
-                shape: "col-span-1 row-span-1" // Square
+                image: "/Badringar/badring4.png",
+                shape: "col-span-1 row-span-1"
               },
               {
-                title: "Våra partners",
                 link: "/partners",
-                image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=500&fit=crop",
-                gradient: "from-pink-900/80 to-pink-900/40",
-                shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2" // Tall
+                image: "/Badringar/badring5.png",
+                shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2"
               },
               {
-                title: "Värdering",
                 link: "/vardering",
-                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=500&fit=crop",
-                gradient: "from-teal-900/80 to-teal-900/40",
-                shape: "col-span-1 row-span-1" // Square
+                image: "/Badringar/badring6.png",
+                shape: "col-span-1 row-span-1"
               },
               {
-                title: "För investerare",
                 link: "/investor",
-                image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=500&fit=crop",
-                gradient: "from-orange-900/80 to-orange-900/40",
-                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1" // Wide
+                image: "/Badringar/badring7.png",
+                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
               },
               {
-                title: "Success stories",
                 link: "/success-stories",
-                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=500&fit=crop",
-                gradient: "from-red-900/80 to-red-900/40",
-                shape: "col-span-1 row-span-1" // Square
+                image: "/Badringar/badring8.png",
+                shape: "col-span-1 row-span-1"
               },
               {
-                title: "Blogg & nyheter",
                 link: "/blogg",
-                image: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=500&fit=crop",
-                gradient: "from-cyan-900/80 to-cyan-900/40",
-                shape: "col-span-1 row-span-1" // Square
+                image: "/Badringar/badring9.png",
+                shape: "col-span-1 row-span-1"
               },
               {
-                title: "FAQ",
                 link: "/faq",
-                image: "https://images.unsplash.com/photo-1633613286991-611fe299c4be?w=400&h=500&fit=crop",
-                gradient: "from-gray-900/80 to-gray-900/40",
-                shape: "col-span-1 row-span-1" // Square
+                image: "/Badringar/badring10.png",
+                shape: "col-span-1 row-span-1"
               },
               {
-                title: "Kontakt",
                 link: "/kontakt",
-                image: "https://images.unsplash.com/photo-1596524430615-b46475ddff6e?w=400&h=500&fit=crop",
-                gradient: "from-slate-900/80 to-slate-900/40",
-                shape: "col-span-1 row-span-1" // Square
+                image: "/Badringar/badring11.png",
+                shape: "col-span-1 row-span-1"
               },
               {
-                title: "För mäklare",
                 link: "/for-maklare",
-                image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=500&fit=crop",
-                gradient: "from-emerald-900/80 to-emerald-900/40",
-                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1" // Wide
+                image: "/Badringar/badring12.png",
+                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
               }
             ].map((card, index) => (
               <Link
@@ -343,18 +319,10 @@ export default function Home() {
                   <div className="absolute inset-0">
                     <Image
                       src={card.image}
-                      alt={card.title}
+                      alt="Card"
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className={`absolute inset-0 bg-gradient-to-t ${card.gradient}`} />
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <h3 className="text-xl font-bold text-white transform transition-all duration-500 group-hover:translate-y-[-4px]">
-                      {card.title}
-                    </h3>
                   </div>
                   
                   {/* Hover Pulse Effect */}
