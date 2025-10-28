@@ -7,7 +7,6 @@ export default function PricingPage() {
       name: 'Basic',
       price: '495',
       subtitle: '/ mån',
-      description: 'Annons i 90 dagar (förlängningsbar) • Upp till 5 bilder • Standardplacering i listor • Standard-NDA och enkel statistik • E-postsupport',
       features: [
         { text: 'Annons i 90 dagar', included: true, highlight: true },
         { text: 'Upp till 5 bilder', included: true },
@@ -26,7 +25,6 @@ export default function PricingPage() {
       name: 'Pro',
       price: '995',
       subtitle: '/ mån',
-      description: 'Annons i 180 dagar • Upp till 20 bilder • Framhävning + Boost 7 dagar/mån • Prioriterad NDA-hantering • Pitchdeck-mallar • Telefonstöd vardagar 9–16 • Due diligence-checklista',
       features: [
         { text: 'Annons i 180 dagar', included: true, highlight: true },
         { text: 'Upp till 20 bilder', included: true },
@@ -45,7 +43,6 @@ export default function PricingPage() {
       name: 'Enterprise',
       price: '1 995',
       subtitle: '/ mån',
-      description: 'Annons tills såld • Obegränsat bildmaterial • Topplacering och först i bevakningar • Dedikerad rådgivare • Juridiska dokumentmallar • CRM/API-integration',
       features: [
         { text: 'Annons tills såld', included: true, highlight: true },
         { text: 'Obegränsat bildmaterial', included: true },
@@ -102,7 +99,6 @@ export default function PricingPage() {
                     <span className="text-4xl font-bold text-primary-navy">{plan.price}</span>
                     <span className="text-text-gray">{plan.subtitle}</span>
                   </div>
-                  <p className="text-sm text-text-gray mb-6">{plan.description}</p>
                   <Link href={plan.ctaLink}>
                     <button className={`w-full py-3 px-6 rounded-lg font-bold transition-all ${
                       plan.popular
