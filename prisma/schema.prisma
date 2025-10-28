@@ -54,6 +54,16 @@ model User {
   reviews              Review[]          @relation("ReviewsReceived")
   givenReviews         Review[]          @relation("ReviewsGiven")
   
+  // Q&A relations
+  buyerQuestions       Question[]        @relation("BuyerQuestions")
+  sellerAnswers        Answer[]          @relation("SellerAnswers")
+  
+  // Engagement relations
+  documentEngagement   DocumentEngagement[] @relation("BuyerEngagement")
+  
+  // LoI relations
+  buyerLOIs            LOI[]             @relation("BuyerLOI")
+  
   @@index([email])
   @@index([magicLinkToken])
   @@index([referralCode])
@@ -139,6 +149,19 @@ model Listing {
   savedBy         SavedListing[]
   ndaRequests     NDARequest[]
   messages        Message[]
+  
+  // SME Automation relations
+  financialData   FinancialData?
+  agreements      Agreement[]
+  dataroom        DataRoom?
+  teaserIM        TeaserIM[]
+  ndaSignatures   NDASignature[]
+  handoffPack     HandoffPack?
+  
+  // Deal Flow relations
+  questions       Question[]       @relation("ListingQuestions")
+  documentEngagement DocumentEngagement[] @relation("ListingEngagement")
+  lois            LOI[]            @relation("ListingLOI")
   
   @@index([userId])
   @@index([status])
@@ -469,5 +492,383 @@ model SupportTicket {
   @@index([assignedTo])
   @@index([userId])
   @@index([createdAt])
+}
+
+// ===== SME SALES AUTOMATION MODELS =====
+
+model FinancialData {
+  id              String   @id @default(cuid())
+  listingId       String   @unique
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  // Upload info
+  fileName        String?
+  fileUrl         String?
+  uploadedAt      DateTime @default(now())
+  
+  // Years of data (JSON array for flexibility)
+  years           FinancialYear[]
+  
+  // Normalization
+  normalizedEBITDA Float?   // Normalized EBITDA
+  addBacks        Json?    // Array of add-backs {category, amount, description}
+  workingCapital  Float?   // Calculated working capital
+  
+  // Metadata
+  lastReviewedAt  DateTime?
+  reviewedByAdvisor String?
+  dataQuality     String   @default("pending") // pending, reviewed, approved
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([dataQuality])
+}
+
+model FinancialYear {
+  id              String   @id @default(cuid())
+  financialDataId String
+  financialData   FinancialData @relation(fields: [financialDataId], references: [id], onDelete: Cascade)
+  
+  year            Int
+  revenue         Float
+  costs           Float
+  ebitda          Float
+  ebit            Float
+  netIncome       Float
+  
+  // Balance sheet
+  assets          Float?
+  liabilities     Float?
+  equity          Float?
+  
+  // Cash flow
+  operatingCF     Float?
+  investingCF     Float?
+  financingCF     Float?
+  
+  createdAt       DateTime @default(now())
+  
+  @@unique([financialDataId, year])
+  @@index([financialDataId])
+}
+
+model Agreement {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  name            String   // Ex: "Kundsupplying med ACME AB"
+  type            String   // customer, supplier, employment, lease, ip, other
+  importance      String   @default("medium") // low, medium, high, critical
+  
+  // Document
+  fileUrl         String?
+  fileName        String?
+  fileSize        Int?
+  
+  // Details
+  description     String?  @db.Text
+  counterparty    String?  // Namn på motpart
+  startDate       DateTime?
+  endDate         DateTime?
+  terminationNotice String? // Termination notice period
+  
+  // Risk assessment
+  riskLevel       String   @default("low") // low, medium, high
+  riskDescription String?  @db.Text
+  
+  uploadedAt      DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([type])
+  @@index([riskLevel])
+}
+
+model DataRoom {
+  id              String   @id @default(cuid())
+  listingId       String   @unique
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  // Structure (JSON tree)
+  structure       Json     // {folders: [{id, name, children: [...]}]}
+  
+  // Access rules
+  accessRules     Json     // {buyerId: {canView: true, canDownload: false, expiresAt: ...}}
+  
+  // Audit & logging
+  accessLogs      DataRoomAccess[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+}
+
+model DataRoomAccess {
+  id              String   @id @default(cuid())
+  dataRoomId      String
+  dataRoom        DataRoom @relation(fields: [dataRoomId], references: [id], onDelete: Cascade)
+  
+  buyerId         String   // Buyer email or ID
+  action          String   // view, download, preview
+  filePath        String?
+  fileName        String?
+  
+  ipAddress       String?
+  userAgent       String?
+  
+  createdAt       DateTime @default(now())
+  
+  @@index([dataRoomId])
+  @@index([buyerId])
+  @@index([createdAt])
+}
+
+model TeaserIM {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  type            String   // teaser, im (information memorandum)
+  
+  // Content (responses to questionnaire)
+  questionnaire   Json     // Responses from Q&A flow
+  
+  // Generated exports
+  pdfUrl          String?
+  pptxUrl         String?
+  generatedAt     DateTime?
+  
+  // Version control
+  version         Int      @default(1)
+  status          String   @default("draft") // draft, final, distributed
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([type])
+  @@index([status])
+}
+
+model NDASignature {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  buyerId         String   // Buyer email (pre-NDA, not yet registered)
+  buyerName       String?
+  
+  // NDA terms
+  templateVersion String   @default("v1")
+  customTerms     Json?    // Additional custom terms
+  
+  // Signing status
+  status          String   @default("sent") // sent, viewed, signed, rejected, expired
+  signedAt        DateTime?
+  signedUrl       String?  // URL to signed PDF
+  
+  // BankID mock
+  bankIdRef       String?  // Reference for BankID signing
+  
+  // Timeline
+  sentAt          DateTime @default(now())
+  viewedAt        DateTime?
+  expiresAt       DateTime // NDA expires after 30 days
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([status])
+}
+
+model HandoffPack {
+  id              String   @id @default(cuid())
+  listingId       String   @unique
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  // Content summary
+  overview        Json     // {teaser, im, financials, agreements, dataroom}
+  
+  // Generated zip
+  zipUrl          String?
+  zipGeneratedAt  DateTime?
+  
+  // For advisor handoff
+  advisorEmail    String?
+  advisorName     String?
+  handoffAt       DateTime?
+  
+  // Status
+  status          String   @default("draft") // draft, ready, distributed, archived
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([status])
+}
+
+// ===== Q&A CENTER MODELS =====
+
+model Question {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation("ListingQuestions", fields: [listingId], references: [id], onDelete: Cascade)
+  
+  buyerId         String
+  buyer           User     @relation("BuyerQuestions", fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  title           String
+  description     String   @db.Text
+  category        String   // financial, legal, commercial, it, hr, other
+  priority        String   @default("medium") // low, medium, high, critical
+  status          String   @default("open") // open, in-progress, answered, closed
+  
+  // SLA Tracking
+  slaHours        Int      @default(48) // Expected response time
+  slaDeadline     DateTime
+  answeredAt      DateTime?
+  
+  // Linking
+  linkedDocuments Json?    // File URLs or dataroom paths
+  
+  // Responses
+  answers         Answer[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([status])
+  @@index([category])
+  @@index([slaDeadline])
+}
+
+model Answer {
+  id              String   @id @default(cuid())
+  questionId      String
+  question        Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  sellerId        String
+  seller          User     @relation("SellerAnswers", fields: [sellerId], references: [id], onDelete: Cascade)
+  
+  content         String   @db.Text
+  isStandard      Boolean  @default(false) // Is this from template
+  templateId      String?  // Reference to standard answer template
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([questionId])
+  @@index([sellerId])
+}
+
+// ===== DOCUMENT ENGAGEMENT MODELS =====
+
+model DocumentEngagement {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation("ListingEngagement", fields: [listingId], references: [id], onDelete: Cascade)
+  
+  buyerId         String
+  buyer           User     @relation("BuyerEngagement", fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  // Document info
+  documentPath    String   // e.g., /Finansiell_data/Bokslut_2024.xlsx
+  documentName    String
+  documentType    String?  // pdf, excel, docx, etc
+  
+  // Engagement metrics
+  viewCount       Int      @default(0)
+  firstViewedAt   DateTime?
+  lastViewedAt    DateTime?
+  timeSpentSeconds Int     @default(0)
+  downloaded      Boolean  @default(false)
+  downloadedAt    DateTime?
+  
+  // Scoring
+  engagementScore Float    @default(0) // 0-100
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([documentPath])
+  @@unique([listingId, buyerId, documentPath])
+}
+
+// ===== LoI MODELS =====
+
+model LOI {
+  id              String   @id @default(cuid())
+  listingId       String
+  listing         Listing  @relation("ListingLOI", fields: [listingId], references: [id], onDelete: Cascade)
+  
+  buyerId         String
+  buyer           User     @relation("BuyerLOI", fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  // Deal terms
+  proposedPrice   Int      // in SEK
+  priceBasis      String   // "multiple", "fixed", "revenue-based"
+  multiple        Float?   // e.g., 6.5 for 6.5x EBITDA
+  multipleBase    String?  // "EBITDA", "Revenue", "Discretionary_Earnings"
+  
+  // Payment structure
+  cashAtClosing   Int      // % of price at closing
+  escrowHoldback  Int      // % held in escrow
+  earnOutAmount   Int?     // Maximum earnout amount (in SEK)
+  earnOutStructure Json?   // {year1: 0.25, year2: 0.35, year3: 0.40}
+  sellerFinancing Int?     // % seller finances
+  
+  // Timeline
+  proposedClosingDate DateTime?
+  earnOutPeriod   Int?     // Months
+  
+  // Additional terms
+  exclusivityPeriod Int?   // Days (e.g., 120)
+  nonCompete      Int?     // Months
+  workingCapitalTarget Float? // Target WC in millions
+  keyEmployeeRetention Json? // Names and terms
+  
+  // Status & versions
+  status          String   @default("draft") // draft, proposed, negotiation, signed, rejected, expired
+  version         Int      @default(1)
+  revisions       LOIRevision[]
+  
+  signedAt        DateTime?
+  expiresAt       DateTime? // 30 days from creation default
+  rejectedReason  String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([listingId])
+  @@index([buyerId])
+  @@index([status])
+}
+
+model LOIRevision {
+  id              String   @id @default(cuid())
+  loiId           String
+  loi             LOI      @relation(fields: [loiId], references: [id], onDelete: Cascade)
+  
+  version         Int
+  changedBy       String   // User ID who made change
+  changedByRole   String   // "buyer" or "seller"
+  changes         String   @db.Text // Description of what changed
+  
+  createdAt       DateTime @default(now())
+  
+  @@index([loiId])
+  @@index([version])
 }
 

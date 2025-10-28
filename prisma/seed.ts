@@ -490,6 +490,117 @@ async function main() {
 
   console.log('✓ Created NDA requests for testing')
 
+  // 6. Skapa chat-meddelanden mellan köpare och säljare (efter godkända NDA:er)
+  console.log('Creating chat messages...')
+  
+  // Hämta godkända NDA:er för att skapa chat-historik
+  const approvedNDAs = await prisma.nDARequest.findMany({
+    where: { status: 'approved' },
+    take: 5 // Skapa chat för de första 5 godkända NDA:erna
+  })
+
+  for (const nda of approvedNDAs) {
+    const listing = await prisma.listing.findUnique({
+      where: { id: nda.listingId }
+    })
+
+    if (!listing) continue
+
+    // Skapa en realistisk chat-konversation
+    const chatMessages = [
+      {
+        senderId: nda.buyerId,
+        recipientId: nda.sellerId,
+        content: 'Hej! Tack för att du godkände NDA:n. Jag är mycket intresserad av verksamheten.',
+        createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000), // 2 dagar sen
+        read: true
+      },
+      {
+        senderId: nda.sellerId,
+        recipientId: nda.buyerId,
+        content: 'Hej och välkommen! Vad roligt att du är intresserad. Vad skulle du vilja veta mer om?',
+        createdAt: new Date(Date.now() - 47 * 60 * 60 * 1000),
+        read: true
+      },
+      {
+        senderId: nda.buyerId,
+        recipientId: nda.sellerId,
+        content: 'Jag undrar över personalstyrkan - hur är kompetensen och hur lång tid har nyckelmedarbetarna varit i företaget?',
+        createdAt: new Date(Date.now() - 46 * 60 * 60 * 1000),
+        read: true
+      },
+      {
+        senderId: nda.sellerId,
+        recipientId: nda.buyerId,
+        content: 'Vi har 8 medarbetare totalt. Våra nyckelmedarbetare har varit här i snitt 5+ år och är mycket kunniga. Två seniora konsulter som är ryggraden i verksamheten.',
+        createdAt: new Date(Date.now() - 45 * 60 * 60 * 1000),
+        read: true
+      },
+      {
+        senderId: nda.buyerId,
+        recipientId: nda.sellerId,
+        content: 'Låter bra! Hur ser kundbasen ut? Är det många återkommande kunder eller projektbaserat?',
+        createdAt: new Date(Date.now() - 44 * 60 * 60 * 1000),
+        read: true
+      },
+      {
+        senderId: nda.sellerId,
+        recipientId: nda.buyerId,
+        content: 'Ca 70% är återkommande kunder med längre ramavtal. De senaste 3 åren har omsättningen varit stabil tack vare detta. Resten är nya projekt.',
+        createdAt: new Date(Date.now() - 43 * 60 * 60 * 1000),
+        read: true
+      },
+      {
+        senderId: nda.buyerId,
+        recipientId: nda.sellerId,
+        content: 'Perfekt. Skulle det vara möjligt att få se lite mer detaljerad finansiell info och kanske en kundlista (anonymiserad)?',
+        createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 dag sen
+        read: true
+      },
+      {
+        senderId: nda.sellerId,
+        recipientId: nda.buyerId,
+        content: 'Absolut! Jag kan skicka över finansiella rapporter för senaste 3 åren samt en översikt över kundbasen. Kan vi boka ett möte för att gå igenom allt?',
+        createdAt: new Date(Date.now() - 23 * 60 * 60 * 1000),
+        read: true
+      },
+      {
+        senderId: nda.buyerId,
+        recipientId: nda.sellerId,
+        content: 'Ja gärna! Jag är ledig nästa vecka. Tisdag eller onsdag passar bra för mig.',
+        createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12h sen
+        read: true
+      },
+      {
+        senderId: nda.sellerId,
+        recipientId: nda.buyerId,
+        content: 'Tisdag kl 10:00 passar utmärkt! Jag skickar över ett Teams-möte. Ser fram emot att prata mer!',
+        createdAt: new Date(Date.now() - 10 * 60 * 60 * 1000), // 10h sen
+        read: false // Oläst för att visa funktionalitet
+      }
+    ]
+
+    // Skapa alla meddelanden för denna konversation
+    for (const msg of chatMessages) {
+      try {
+        await prisma.message.create({
+          data: {
+            listingId: nda.listingId,
+            senderId: msg.senderId,
+            recipientId: msg.recipientId,
+            content: msg.content,
+            createdAt: msg.createdAt,
+            read: msg.read
+          }
+        })
+      } catch (e) {
+        // Meddelande finns redan, fortsätt
+      }
+    }
+  }
+
+  console.log(`✓ Created chat conversations for ${approvedNDAs.length} approved NDAs`)
+
   console.log('\n✅ Seed completed!')
   console.log('\n📊 Demo accounts:')
   console.log('   Säljare: demo.seller@bolaxo.se')
