@@ -144,7 +144,7 @@ export default function Home() {
                 title: "REGISTRERA", 
                 desc: "Skapa ditt konto på 2 minuter",
                 link: "/registrera",
-                image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=1000&fit=crop",
+                image: "/1.png",
                 cashback: "Gratis"
               },
               { 
@@ -152,7 +152,7 @@ export default function Home() {
                 title: "VÄRDERA", 
                 desc: "Få professionell värdering direkt",
                 link: "/vardering",
-                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1000&fit=crop",
+                image: "/2.png",
                 cashback: "5 min"
               },
               { 
@@ -160,7 +160,7 @@ export default function Home() {
                 title: "MATCHA", 
                 desc: "Vi hittar rätt köpare åt dig",
                 link: "/salja",
-                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=1000&fit=crop",
+                image: "/3.png",
                 cashback: "87% match"
               },
               { 
@@ -168,7 +168,7 @@ export default function Home() {
                 title: "FÖRHANDLA", 
                 desc: "Säker process hela vägen",
                 link: "/salja/start",
-                image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&h=1000&fit=crop",
+                image: "/4.png",
                 cashback: "100% säkert"
               }
             ].map((step, index) => (
@@ -230,6 +230,177 @@ export default function Home() {
               Kom igång nu
               <ArrowRight className="w-5 h-5" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW INTERACTIVE CARDS SECTION - Klarna Cashback Style */}
+      <section className="section section-sand overflow-hidden">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="heading-lg mb-4">Upptäck alla möjligheter</h2>
+            <p className="body-lg text-graphite">Utforska våra tjänster och verktyg för att maximera din affär</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                title: "Sök företag",
+                badge: "Populär",
+                badgeColor: "bg-green-500",
+                link: "/sok",
+                icon: "🔍",
+                image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=500&fit=crop",
+                gradient: "from-blue-900/80 to-blue-900/40"
+              },
+              {
+                title: "Börja sälja",
+                badge: "Kom igång",
+                badgeColor: "bg-blue-500",
+                link: "/salja",
+                icon: "💼",
+                image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=500&fit=crop",
+                gradient: "from-purple-900/80 to-purple-900/40"
+              },
+              {
+                title: "För köpare",
+                badge: "87% match",
+                badgeColor: "bg-purple-500",
+                link: "/kopare",
+                icon: "🤝",
+                image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=400&h=500&fit=crop",
+                gradient: "from-indigo-900/80 to-indigo-900/40"
+              },
+              {
+                title: "Se priser",
+                badge: "Transparent",
+                badgeColor: "bg-yellow-500",
+                link: "/priser",
+                icon: "💰",
+                image: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?w=400&h=500&fit=crop",
+                gradient: "from-amber-900/80 to-amber-900/40"
+              },
+              {
+                title: "Våra partners",
+                badge: "Nytt",
+                badgeColor: "bg-pink-500",
+                link: "/partners",
+                icon: "🏢",
+                image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=500&fit=crop",
+                gradient: "from-pink-900/80 to-pink-900/40"
+              },
+              {
+                title: "Värdering",
+                badge: "5 min",
+                badgeColor: "bg-teal-500",
+                link: "/vardering",
+                icon: "📊",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=500&fit=crop",
+                gradient: "from-teal-900/80 to-teal-900/40"
+              },
+              {
+                title: "För investerare",
+                badge: "Premium",
+                badgeColor: "bg-orange-500",
+                link: "/investor",
+                icon: "📈",
+                image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=500&fit=crop",
+                gradient: "from-orange-900/80 to-orange-900/40"
+              },
+              {
+                title: "Success stories",
+                badge: "Inspiration",
+                badgeColor: "bg-red-500",
+                link: "/success-stories",
+                icon: "⭐",
+                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=500&fit=crop",
+                gradient: "from-red-900/80 to-red-900/40"
+              },
+              {
+                title: "Blogg & nyheter",
+                badge: "Läs mer",
+                badgeColor: "bg-cyan-500",
+                link: "/blogg",
+                icon: "📰",
+                image: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=500&fit=crop",
+                gradient: "from-cyan-900/80 to-cyan-900/40"
+              },
+              {
+                title: "FAQ",
+                badge: "Hjälp",
+                badgeColor: "bg-gray-500",
+                link: "/faq",
+                icon: "❓",
+                image: "https://images.unsplash.com/photo-1633613286991-611fe299c4be?w=400&h=500&fit=crop",
+                gradient: "from-gray-900/80 to-gray-900/40"
+              },
+              {
+                title: "Kontakt",
+                badge: "Support",
+                badgeColor: "bg-indigo-500",
+                link: "/kontakt",
+                icon: "📞",
+                image: "https://images.unsplash.com/photo-1596524430615-b46475ddff6e?w=400&h=500&fit=crop",
+                gradient: "from-slate-900/80 to-slate-900/40"
+              },
+              {
+                title: "För mäklare",
+                badge: "Partner",
+                badgeColor: "bg-emerald-500",
+                link: "/for-maklare",
+                icon: "🏠",
+                image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=500&fit=crop",
+                gradient: "from-emerald-900/80 to-emerald-900/40"
+              }
+            ].map((card, index) => (
+              <Link
+                key={index}
+                href={card.link}
+                className="group relative block"
+                style={{
+                  animation: `float ${3 + index * 0.2}s ease-in-out infinite`,
+                  animationDelay: `${index * 0.1}s`
+                }}
+              >
+                <div className="relative overflow-hidden rounded-[2rem] aspect-[3/4] bg-gray-100 transform transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:shadow-2xl">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={card.image}
+                      alt={card.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t ${card.gradient}`} />
+                  </div>
+                  
+                  {/* Badge */}
+                  <div className={`absolute top-4 right-4 ${card.badgeColor} text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3`}>
+                    {card.badge}
+                  </div>
+                  
+                  {/* Icon Circle */}
+                  <div className="absolute top-4 left-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6">
+                    <span className="text-2xl">{card.icon}</span>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-xl font-bold transform transition-all duration-500 group-hover:translate-y-[-4px]">
+                      {card.title}
+                    </h3>
+                  </div>
+                  
+                  {/* Hover Pulse Effect */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-[3] transition-all duration-1000 ease-out animate-pulse" />
+                  </div>
+                  
+                  {/* Animated Border */}
+                  <div className="absolute inset-0 rounded-[2rem] border-2 border-white/0 group-hover:border-white/30 transition-all duration-500" />
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
