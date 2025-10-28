@@ -200,10 +200,11 @@ export default function ChatWidget() {
     e.preventDefault()
     
     // Validate based on contact method
-    if (!contactForm.name || !contactForm.subject || !contactForm.contactMethod) return
+    if (!contactForm.name || !contactForm.contactMethod) return
     
     if (contactForm.contactMethod === 'email' && !contactForm.email) return
-    if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) return
+    if (contactForm.contactMethod === 'email' if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) returnif (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) return !contactForm.email) return
+    if (contactForm.contactMethod === 'phone' if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) returnif (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime)) return (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime || !contactForm.subject)) return
 
     // Here you would normally send the contact form to your backend
     console.log('Contact form submitted:', contactForm)
@@ -421,21 +422,24 @@ export default function ChatWidget() {
                     </div>
                   </div>
 
-                  {/* Subject */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Vad vill du prata om? (1 mening) *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={contactForm.subject}
-                      onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
-                      placeholder="T.ex. Jag vill sälja mitt IT-företag"
-                      maxLength={100}
-                    />
-                  </div>
+                  {/* Subject - Only show for phone */}
+                  {contactForm.contactMethod === 'phone' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Vad vill du prata om? (1 mening) *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={contactForm.subject}
+                        onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
+                        placeholder="T.ex. Jag vill sälja mitt IT-företag"
+                        maxLength={100}
+                      />
+                    </div>
+                  )}
+
 
                   {/* Name */}
                   <div>
