@@ -287,7 +287,7 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
 export default function CreateListingWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user } = useAuth()
-  const { showToast } = useToast()
+  const { success, error } = useToast()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const formRef = useRef<HTMLDivElement>(null)
@@ -389,14 +389,14 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
       if (response.ok) {
         const listing = await response.json()
         router.push(`/dashboard/listings?success=published&id=${listing.id}`)
-        showToast('success', 'Annonsen har publicerats!')
+        success('Annonsen har publicerats!')
       } else {
         console.error('Failed to publish listing')
-        showToast('error', 'Kunde inte publicera annonsen. Försök igen senare.')
+        error('Kunde inte publicera annonsen. Försök igen senare.')
       }
-    } catch (error) {
-      console.error('Error publishing listing:', error)
-      showToast('error', 'Ett fel uppstod vid publiceringen av annonsen.')
+    } catch (err) {
+      console.error('Error publishing listing:', err)
+      error('Ett fel uppstod vid publiceringen av annonsen.')
     } finally {
       setLoading(false)
     }
