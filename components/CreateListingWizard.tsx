@@ -293,7 +293,6 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     onChange={(e) => updateField('email', e.target.value)}
                     placeholder="namn@foretag.se"
                     required
-                    icon={<Mail className="w-5 h-5 text-gray-400" />}
                   />
 
                   <FormField
@@ -302,7 +301,6 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     onChange={(e) => updateField('companyName', e.target.value)}
                     placeholder="AB Exempel"
                     required
-                    icon={<Building className="w-5 h-5 text-gray-400" />}
                   />
 
                   <FormField
