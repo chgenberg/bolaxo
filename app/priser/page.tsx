@@ -2,6 +2,7 @@ import { Check, X, Star, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 export default function PricingPage() {
+  // Updated pricing plans with features
   const plans = [
     {
       name: 'Basic',
