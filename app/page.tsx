@@ -129,38 +129,107 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOUR IMAGES SECTION - Klarna Style */}
-      <section className="section section-white">
+      {/* FOUR IMAGES SECTION - Interactive Floating Cards */}
+      <section className="section section-white overflow-hidden">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="text-center mb-12">
+            <h2 className="heading-lg mb-4">Så enkelt säljer du ditt företag</h2>
+            <p className="body-lg text-graphite">Från registrering till avslut på rekordtid</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { num: 1, title: "REGISTRERA", desc: "Skapa ditt konto på 2 minuter" },
-              { num: 2, title: "VÄRDERA", desc: "Få professionell värdering direkt" },
-              { num: 3, title: "MATCHA", desc: "Vi hittar rätt köpare åt dig" },
-              { num: 4, title: "FÖRHANDLA", desc: "Säker process hela vägen" }
-            ].map((step) => (
-              <div
+              { 
+                num: 1, 
+                title: "REGISTRERA", 
+                desc: "Skapa ditt konto på 2 minuter",
+                link: "/registrera",
+                image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=1000&fit=crop",
+                cashback: "Gratis"
+              },
+              { 
+                num: 2, 
+                title: "VÄRDERA", 
+                desc: "Få professionell värdering direkt",
+                link: "/vardering",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1000&fit=crop",
+                cashback: "5 min"
+              },
+              { 
+                num: 3, 
+                title: "MATCHA", 
+                desc: "Vi hittar rätt köpare åt dig",
+                link: "/salja",
+                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=1000&fit=crop",
+                cashback: "87% match"
+              },
+              { 
+                num: 4, 
+                title: "FÖRHANDLA", 
+                desc: "Säker process hela vägen",
+                link: "/salja/start",
+                image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&h=1000&fit=crop",
+                cashback: "100% säkert"
+              }
+            ].map((step, index) => (
+              <Link
                 key={step.num}
-                onClick={() => setSelectedStep(step.num)}
-                className="card-interactive"
+                href={step.link}
+                className="group relative"
               >
-                <div className="aspect-[4/5] relative overflow-hidden rounded-xl">
-                  <Image
-                    src={`/${step.num}.png`}
-                    alt={`Process steg ${step.num}`}
-                    fill
-                    className="object-cover"
-                  />
+                <div className="relative overflow-hidden rounded-[2rem] aspect-[3/4] bg-gray-100 transform transition-all duration-500 ease-out group-hover:scale-[1.02] group-hover:shadow-2xl">
+                  {/* Background Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  </div>
                   
-                  {/* Bottom text bar */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-sand/95 backdrop-blur-sm p-4 border-t border-gray-soft">
-                    <h3 className="text-lg font-bold text-navy uppercase tracking-wide">
+                  {/* Floating Badge */}
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                    <span className="text-xs font-bold text-gray-900">{step.cashback}</span>
+                  </div>
+                  
+                  {/* Logo/Icon */}
+                  <div className="absolute top-4 left-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6">
+                    <span className="text-xl font-black text-accent-pink">{step.num}</span>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-2xl font-black mb-2 transform transition-all duration-500 group-hover:translate-y-[-4px]">
                       {step.title}
                     </h3>
+                    <p className="text-sm opacity-90 transform transition-all duration-500 group-hover:translate-y-[-2px]">
+                      {step.desc}
+                    </p>
                   </div>
+                  
+                  {/* Hover Pulse Effect */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-[3] transition-all duration-1000 ease-out" />
+                  </div>
+                  
+                  {/* Animated Border */}
+                  <div className="absolute inset-0 rounded-[2rem] border-2 border-white/0 group-hover:border-white/30 transition-all duration-500" />
                 </div>
-              </div>
+              </Link>
             ))}
+          </div>
+          
+          {/* CTA Button */}
+          <div className="text-center mt-12">
+            <Link
+              href="/salja/start"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-accent-pink text-primary-navy font-bold rounded-xl hover:shadow-xl transition-all transform hover:scale-105"
+            >
+              Kom igång nu
+              <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>

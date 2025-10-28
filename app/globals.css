@@ -373,4 +373,60 @@
   .bg-300\% {
     background-size: 300% 300%;
   }
+  
+  /* 🎯 Interactive card animations */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(255, 126, 182, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 20px 10px rgba(255, 126, 182, 0.2);
+    }
+  }
+  
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .pulse-animation {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}
+
+/* 🎯 Floating card styles for home page */
+.floating-card {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.floating-card:nth-child(1) {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.floating-card:nth-child(2) {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.floating-card:nth-child(3) {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.floating-card:nth-child(4) {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+.floating-card:hover {
+  animation-play-state: paused;
 }

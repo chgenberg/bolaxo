@@ -4,8 +4,9 @@ import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from '@/components/FormField'
-import { Mail, CheckCircle, AlertCircle, Building, Search, Handshake, ArrowRight } from 'lucide-react'
+import { Mail, CheckCircle, AlertCircle, Building, Search, Handshake, ArrowRight, Shield, Zap, Lock } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 function LoginForm() {
   const searchParams = useSearchParams()
@@ -80,9 +81,9 @@ function LoginForm() {
 
   if (linkSent) {
     return (
-      <main className="min-h-screen bg-neutral-white py-12 sm:py-16 md:py-24 flex items-center justify-center px-4">
-        <div className="bg-white p-8 sm:p-12 rounded-lg shadow-card max-w-md w-full text-center border border-gray-200">
-          <div className="w-20 h-20 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+      <main className="min-h-screen bg-gradient-to-br from-accent-pink/5 via-neutral-white to-primary-navy/5 py-12 sm:py-16 md:py-24 flex items-center justify-center px-4">
+        <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl max-w-md w-full text-center border border-gray-100">
+          <div className="w-20 h-20 bg-accent-pink/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <Mail className="w-10 h-10 text-accent-pink" />
           </div>
           
@@ -95,7 +96,7 @@ function LoginForm() {
           </p>
           
           {magicLink && (
-            <div className="bg-primary-navy/5 border-2 border-primary-navy/30 p-6 rounded-lg mb-6 animate-fade-in">
+            <div className="bg-primary-navy/5 border-2 border-primary-navy/30 p-6 rounded-xl mb-6 animate-fade-in">
               <p className="text-sm font-semibold text-primary-navy mb-3 flex items-center justify-center">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Demo-läge – magisk länk genererad
@@ -105,7 +106,7 @@ function LoginForm() {
               </p>
               <a 
                 href={magicLink}
-                className="block w-full bg-accent-pink text-primary-navy py-3 px-6 rounded-lg font-bold text-center hover:shadow-lg transition-all text-base"
+                className="block w-full bg-accent-pink text-primary-navy py-3 px-6 rounded-xl font-bold text-center hover:shadow-lg transition-all text-base transform hover:scale-105"
               >
                 Logga in direkt
               </a>
@@ -130,170 +131,192 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-white py-8 sm:py-12 md:py-16">
-      <div className="max-w-md mx-auto px-4 sm:px-6">
-        <div className="bg-white p-8 sm:p-10 rounded-lg shadow-card border border-gray-200">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-primary-navy mb-2 uppercase">LOGGA IN</h1>
-            <p className="text-lg text-primary-navy">
-              Ingen lösenord behövs – vi skickar en magisk länk
-            </p>
-          </div>
+    <main className="min-h-screen bg-gradient-to-br from-accent-pink/5 via-neutral-white to-primary-navy/5 py-16 px-4 flex items-center justify-center">
+      <div className="w-full max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side - Login Form */}
+          <div className="bg-white p-10 lg:p-12 rounded-2xl shadow-2xl border border-gray-100">
+            {/* Header */}
+            <div className="mb-10">
+              <h1 className="text-4xl lg:text-5xl font-black text-primary-navy mb-3 uppercase">VÄLKOMMEN</h1>
+              <p className="text-xl text-gray-600">
+                Logga in med säker e-postverifiering
+              </p>
+            </div>
 
-          {/* Errors */}
-          {urlError && (
-            <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6 flex items-start">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-red-800">
-                {urlError === 'invalid_token' && 'Ogiltig eller redan använd inloggningslänk'}
-                {urlError === 'expired_token' && 'Inloggningslänken har gått ut. Begär en ny.'}
-                {urlError === 'server_error' && 'Ett fel uppstod. Försök igen.'}
+            {/* Errors */}
+            {urlError && (
+              <div className="bg-red-50 border border-red-200 p-4 rounded-xl mb-6 flex items-start">
+                <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-red-800">
+                  {urlError === 'invalid_token' && 'Ogiltig eller redan använd inloggningslänk'}
+                  {urlError === 'expired_token' && 'Inloggningslänken har gått ut. Begär en ny.'}
+                  {urlError === 'server_error' && 'Ett fel uppstod. Försök igen.'}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 p-4 rounded-lg mb-6 flex items-start">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-red-800">{error}</div>
-            </div>
-          )}
+            {error && (
+              <div className="bg-red-50 border border-red-200 p-4 rounded-xl mb-6 flex items-start">
+                <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-red-800">{error}</div>
+              </div>
+            )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Role Selection */}
-            <div>
-              <label className="block text-sm font-semibold text-primary-navy mb-4">
-                Du är:
-              </label>
-              <div className="space-y-3">
-                {/* Seller */}
-                <div
-                  onClick={() => setSelectedRole('seller')}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    selectedRole === 'seller'
-                      ? 'border-accent-pink bg-accent-pink/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      checked={selectedRole === 'seller'}
-                      onChange={() => setSelectedRole('seller')}
-                      className="w-5 h-5 accent-accent-pink mr-3"
-                    />
-                    <Building className="w-5 h-5 text-primary-navy mr-2" />
-                    <span className="font-semibold text-primary-navy">Säljare</span>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Role Selection */}
+              <div>
+                <label className="block text-sm font-bold text-primary-navy mb-4 uppercase tracking-wide">
+                  Jag är
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {/* Seller */}
+                  <div
+                    onClick={() => setSelectedRole('seller')}
+                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all text-center ${
+                      selectedRole === 'seller'
+                        ? 'border-accent-pink bg-accent-pink/10 shadow-lg transform scale-105'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                    }`}
+                  >
+                    <Building className="w-8 h-8 text-primary-navy mx-auto mb-2" />
+                    <span className="font-bold text-primary-navy text-sm">Säljare</span>
                   </div>
-                </div>
 
-                {/* Buyer */}
-                <div
-                  onClick={() => setSelectedRole('buyer')}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    selectedRole === 'buyer'
-                      ? 'border-accent-pink bg-accent-pink/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      checked={selectedRole === 'buyer'}
-                      onChange={() => setSelectedRole('buyer')}
-                      className="w-5 h-5 accent-accent-pink mr-3"
-                    />
-                    <Search className="w-5 h-5 text-primary-navy mr-2" />
-                    <span className="font-semibold text-primary-navy">Köpare</span>
+                  {/* Buyer */}
+                  <div
+                    onClick={() => setSelectedRole('buyer')}
+                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all text-center ${
+                      selectedRole === 'buyer'
+                        ? 'border-accent-pink bg-accent-pink/10 shadow-lg transform scale-105'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                    }`}
+                  >
+                    <Search className="w-8 h-8 text-primary-navy mx-auto mb-2" />
+                    <span className="font-bold text-primary-navy text-sm">Köpare</span>
                   </div>
-                </div>
 
-                {/* Broker */}
-                <div
-                  onClick={() => setSelectedRole('broker')}
-                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                    selectedRole === 'broker'
-                      ? 'border-accent-pink bg-accent-pink/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      checked={selectedRole === 'broker'}
-                      onChange={() => setSelectedRole('broker')}
-                      className="w-5 h-5 accent-accent-pink mr-3"
-                    />
-                    <Handshake className="w-5 h-5 text-primary-navy mr-2" />
-                    <span className="font-semibold text-primary-navy">Mäklare</span>
+                  {/* Broker */}
+                  <div
+                    onClick={() => setSelectedRole('broker')}
+                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all text-center ${
+                      selectedRole === 'broker'
+                        ? 'border-accent-pink bg-accent-pink/10 shadow-lg transform scale-105'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                    }`}
+                  >
+                    <Handshake className="w-8 h-8 text-primary-navy mx-auto mb-2" />
+                    <span className="font-bold text-primary-navy text-sm">Mäklare</span>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Email */}
-            <FormField
-              label="E-postadress"
-              type="email"
-              value={email}
-              onValueChange={setEmail}
-              placeholder="din@email.se"
-              required
-            />
+              {/* Email with enhanced styling */}
+              <div>
+                <label className="block text-sm font-bold text-primary-navy mb-2 uppercase tracking-wide">
+                  E-postadress
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="din@email.se"
+                  required
+                  className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-accent-pink transition-colors text-lg"
+                />
+              </div>
 
-            {/* Privacy Policy */}
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                id="privacy"
-                checked={acceptedPrivacy}
-                onChange={(e) => setAcceptedPrivacy(e.target.checked)}
-                className="mt-1 w-5 h-5 accent-accent-pink border-gray-300 rounded"
-              />
-              <label htmlFor="privacy" className="text-sm text-gray-700 leading-relaxed">
-                Jag godkänner{' '}
-                <Link href="/juridiskt/integritetspolicy" className="text-primary-navy hover:underline font-semibold" target="_blank">
-                  integritetspolicyn
-                </Link>{' '}
-                och{' '}
-                <Link href="/juridiskt/anvandarvillkor" className="text-primary-navy hover:underline font-semibold" target="_blank">
-                  användarvillkoren
+              {/* Privacy Policy */}
+              <div className="flex items-start gap-3 bg-gray-50 p-4 rounded-xl">
+                <input
+                  type="checkbox"
+                  id="privacy"
+                  checked={acceptedPrivacy}
+                  onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                  className="mt-1 w-5 h-5 accent-accent-pink border-gray-300 rounded cursor-pointer"
+                />
+                <label htmlFor="privacy" className="text-sm text-gray-700 leading-relaxed cursor-pointer">
+                  Jag godkänner{' '}
+                  <Link href="/juridiskt/integritetspolicy" className="text-primary-navy hover:underline font-bold" target="_blank">
+                    integritetspolicyn
+                  </Link>{' '}
+                  och{' '}
+                  <Link href="/juridiskt/anvandarvillkor" className="text-primary-navy hover:underline font-bold" target="_blank">
+                    användarvillkoren
+                  </Link>
+                </label>
+              </div>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={!email || !acceptedPrivacy || isSubmitting}
+                className="w-full py-4 px-6 bg-accent-pink text-primary-navy font-black rounded-xl hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-3 text-lg transform hover:scale-105 uppercase tracking-wide"
+              >
+                {isSubmitting ? 'Skickar...' : 'Logga in'}
+                {!isSubmitting && <ArrowRight className="w-5 h-5" />}
+              </button>
+            </form>
+
+            {/* Sign Up Link */}
+            <div className="mt-8 text-center">
+              <p className="text-gray-600">
+                Ny användare?{' '}
+                <Link href="/registrera" className="text-primary-navy font-bold hover:underline">
+                  Skapa konto här →
                 </Link>
-              </label>
-            </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={!email || !acceptedPrivacy || isSubmitting}
-              className="w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
-            >
-              {isSubmitting ? 'Skickar...' : 'Skicka inloggningslänk'}
-              {!isSubmitting && <ArrowRight className="w-5 h-5" />}
-            </button>
-          </form>
-
-          {/* Info Box */}
-          <div className="mt-8 pt-8 border-t border-gray-200">
-            <div className="bg-primary-navy/5 p-5 rounded-lg border border-primary-navy/20">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-primary-navy mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-primary-navy">
-                  <strong className="text-primary-navy">Säkert och enkelt.</strong> Vi skickar en magisk inloggningslänk direkt till din inkorg. Du behöver aldrig komma ihåg ett lösenord.
-                </div>
-              </div>
+              </p>
             </div>
           </div>
 
-          {/* Sign Up Link */}
-          <div className="mt-6 text-center text-sm">
-            <p className="text-gray-600">
-              Ny användare?{' '}
-              <Link href="/registrera" className="text-primary-navy font-semibold hover:underline">
-                Registrera dig här
-              </Link>
-            </p>
+          {/* Right Side - Info */}
+          <div className="hidden lg:block">
+            <div className="space-y-8">
+              {/* Security Features */}
+              <div>
+                <h2 className="text-3xl font-bold text-primary-navy mb-6">Säker inloggning utan lösenord</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-accent-pink/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-6 h-6 text-accent-pink" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-primary-navy mb-1">Magic Link</h3>
+                      <p className="text-gray-600">Vi skickar en säker inloggningslänk direkt till din e-post</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-primary-navy/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-6 h-6 text-primary-navy" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-primary-navy mb-1">Ingen lösenord</h3>
+                      <p className="text-gray-600">Slipp komma ihåg komplicerade lösenord</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-accent-orange/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-6 h-6 text-accent-orange" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-primary-navy mb-1">Snabbt & enkelt</h3>
+                      <p className="text-gray-600">Logga in med ett klick från din inkorg</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="bg-primary-navy/5 p-8 rounded-2xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <Lock className="w-5 h-5 text-primary-navy" />
+                  <h3 className="font-bold text-primary-navy">Bank-nivå säkerhet</h3>
+                </div>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  Alla dina uppgifter är krypterade och säkert lagrade. Vi använder samma säkerhetsstandarder som banker och finansiella institutioner.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -304,7 +327,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-neutral-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-accent-pink/5 via-neutral-white to-primary-navy/5 flex items-center justify-center">
         <div className="w-16 h-16 border-4 border-accent-pink border-t-transparent rounded-full animate-spin"></div>
       </div>
     }>
@@ -312,4 +335,3 @@ export default function LoginPage() {
     </Suspense>
   )
 }
-
