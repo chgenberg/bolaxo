@@ -77,7 +77,16 @@ export default function KopareInfoPage() {
     <main className="bg-cream">
       {/* Hero Section with Carousel */}
       <section className="relative overflow-hidden">
-        {/* Background gradient */}
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/hero_kopare.png)',
+            opacity: 0.9
+          }}
+        />
+        
+        {/* Background gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary-navy/20 via-accent-pink/10 to-primary-navy/5" />
         
         <div className="relative">
