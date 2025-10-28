@@ -22,7 +22,7 @@ export default function ValuationPage() {
     {
       icon: BarChart3,
       title: 'Professionell',
-      description: 'Same metoder som experter använder'
+      description: 'Samma metoder som experter använder'
     },
     {
       icon: FileText,
@@ -264,17 +264,37 @@ export default function ValuationPage() {
           </div>
         </section>
 
+        {/* Disclaimer Section */}
+        <section className="py-12 bg-amber-50 border-t border-amber-200">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white border-l-4 border-amber-500 p-6 rounded-lg shadow-sm">
+              <div className="flex gap-4">
+                <div className="text-amber-600 text-2xl flex-shrink-0">⚠️</div>
+                <div>
+                  <h3 className="text-primary-navy font-bold mb-2 text-lg">Viktigt: Ansvarsfriskrivning</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    <strong>Denna värdering är indikativ och utgör inte finansiell rådgivning.</strong> Den baseras på 
+                    uppgifter du själv matar in och allmän marknadsdata. För en bindande värdering rekommenderar vi att 
+                    du konsulterar en auktoriserad värderare eller finansiell rådgivare. BOLAXO AB ansvarar inte för 
+                    investeringsbeslut baserade på denna värdering.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Trust indicators */}
         <section className="py-16 bg-neutral-white border-t border-gray-200">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
               <div>
-                <div className="text-4xl font-bold text-primary-navy mb-2">10,000+</div>
-                <div className="text-sm text-gray-600">Värderingar genomförda</div>
+                <div className="text-4xl font-bold text-primary-navy mb-2">5,000+</div>
+                <div className="text-sm text-gray-600">Företag värderade</div>
               </div>
               <div>
-                <div className="text-4xl font-bold text-primary-navy mb-2">4.9/5</div>
-                <div className="text-sm text-gray-600">Genomsnittligt betyg</div>
+                <div className="text-4xl font-bold text-primary-navy mb-2">Säker</div>
+                <div className="text-sm text-gray-600">Bank-nivå kryptering</div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-primary-navy mb-2">5 min</div>

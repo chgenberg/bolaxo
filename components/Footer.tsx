@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, Phone, MapPin, Facebook, Linkedin, Twitter } from 'lucide-react'
+import { Mail, Phone, MapPin, Facebook, Linkedin, Twitter, Shield, Users, Building2 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 export default function Footer() {
@@ -34,17 +34,17 @@ export default function Footer() {
             
             {/* Contact Info */}
             <div className="space-y-3 text-sm">
-              <a href="tel:+46123456789" className="flex items-center gap-3 text-gray-300 hover:text-accent-pink transition-colors">
+              <a href="tel:+46812345678" className="flex items-center gap-3 text-gray-300 hover:text-accent-pink transition-colors">
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                <span>+46 (0) 123 456 789</span>
+                <span>+46 (0)8 123 456 78</span>
               </a>
-              <a href="mailto:hej@bolaxo.se" className="flex items-center gap-3 text-gray-300 hover:text-accent-pink transition-colors">
+              <a href="mailto:kontakt@bolaxo.se" className="flex items-center gap-3 text-gray-300 hover:text-accent-pink transition-colors">
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                <span>hej@bolaxo.se</span>
+                <span>kontakt@bolaxo.se</span>
               </a>
               <div className="flex items-start gap-3 text-gray-300">
                 <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>Norrmälarstrand 10<br />Stockholm, 111 19<br />Sverige</span>
+                <span>Norrmälarstrand 10<br />114 62 Stockholm<br />Sverige</span>
               </div>
             </div>
           </div>
@@ -84,6 +84,45 @@ export default function Footer() {
               <li><Link href="/press" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Press</Link></li>
             </ul>
           </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-white/10 mb-12"></div>
+
+        {/* Trust Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {/* How it works */}
+          <Link href="/salja" className="group">
+            <div className="flex items-start gap-4 p-6 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+              <Users className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="text-white font-bold mb-2 group-hover:text-accent-pink transition-colors">Så funkar Bolaxo</h4>
+                <p className="text-gray-400 text-sm">Lär dig hur vår plattform förenar säljare och köpare</p>
+              </div>
+            </div>
+          </Link>
+
+          {/* Security */}
+          <Link href="/juridiskt/integritetspolicy" className="group">
+            <div className="flex items-start gap-4 p-6 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+              <Shield className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="text-white font-bold mb-2 group-hover:text-accent-pink transition-colors">Säkerhet & Integritet</h4>
+                <p className="text-gray-400 text-sm">Bank-nivå säkerhet för dina uppgifter och data</p>
+              </div>
+            </div>
+          </Link>
+
+          {/* Partners */}
+          <Link href="/partners" className="group">
+            <div className="flex items-start gap-4 p-6 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+              <Building2 className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+              <div>
+                <h4 className="text-white font-bold mb-2 group-hover:text-accent-pink transition-colors">Våra partners</h4>
+                <p className="text-gray-400 text-sm">Samarbeten med ledande aktörer i finansvärlden</p>
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Divider */}
