@@ -261,7 +261,7 @@ export default function ChatWidget() {
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-lg">BOLAXO Support</h3>
+              <h3 className="font-bold text-lg text-white">BOLAXO Support</h3>
               <p className="text-sm opacity-90">Alltid redo att hjälpa</p>
             </div>
           </div>
