@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle, MessageSquare, FileText, ClipboardCheck } from 'lucide-react'
+import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle, MessageSquare, FileText, ClipboardCheck, Scale } from 'lucide-react'
 
 interface BuyerDashboardProps {
   userId: string
@@ -203,6 +203,10 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                   <Link href={`/kopare/dd/${nda.listingId}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-blue">
                     <ClipboardCheck className="w-4 h-4" />
                     DD Manager
+                  </Link>
+                  <Link href={`/kopare/spa/${nda.listingId}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-blue">
+                    <Scale className="w-4 h-4" />
+                    SPA Editor
                   </Link>
                 </div>
               </div>
