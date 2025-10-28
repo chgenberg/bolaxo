@@ -8,10 +8,10 @@ export default function SaljaInfoPage() {
       <section className="bg-gradient-to-br from-accent-pink/10 to-primary-navy/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
-            SÅ SÄLJER DU DITT FÖRETAG
+            Från annons till avslut – steg för steg
           </h1>
           <p className="text-2xl text-primary-navy leading-relaxed">
-            Från värdering till affär avslutad. Vi automatiserar det komplicerade och ger dig full kontroll.
+            Vi automatiserar det komplicerade och ger dig full kontroll över processen.
           </p>
         </div>
       </section>
@@ -20,37 +20,37 @@ export default function SaljaInfoPage() {
 
         {/* Steps */}
         <div className="mb-32">
-          <h2 className="text-4xl font-bold text-primary-navy mb-16 text-center uppercase">PROCESSEN I 5 STEG</h2>
+          <h2 className="text-4xl font-bold text-primary-navy mb-16 text-center uppercase">Processen i 5 steg</h2>
           <div className="space-y-8">
             {[
               {
                 step: 1,
-                title: 'Gratis värdering',
-                description: 'Börja med vår automatiska företagsvärdering. Få värdering, PDF-rapport och tips på 5 minuter. Vi hämtar data från 10 källor: Allabolag, Ratsit, Proff, LinkedIn, Google Search, Trustpilot, Bolagsverket, SCB och din hemsida.',
-                time: '5 min',
-              },
-              {
-                step: 2,
                 title: 'Skapa annons',
-                description: '7-stegs wizard guidar dig genom processen. Bestäm själv vad som ska synas före och efter NDA. Auto-sparning så du kan fortsätta senare. Se live-analys av ditt företagsvärde.',
+                description: 'Ladda upp siffror, bilder och kort beskrivning. Vi hjälper dig att polera copy. 7-stegs wizard guidar dig genom processen. Se live-analys av ditt företagsvärde.',
                 time: '8-12 min',
               },
               {
-                step: 3,
-                title: 'Få förfrågningar',
-                description: 'Kvalificerade köpare kontaktar dig. Se visningar, NDA-förfrågningar och konvertering i realtid via analytics. Geografisk fördelning av intressenter. Mail-notiser när någon vill signera NDA.',
+                step: 2,
+                title: 'Publicera och nå köpare',
+                description: 'Vi matchar mot bevakningar och visar i listor. Kvalificerade köpare kontaktar dig. Se visningar, NDA-förfrågningar och konvertering i realtid via analytics.',
                 time: 'Löpande',
               },
               {
+                step: 3,
+                title: 'NDA & frågor',
+                description: 'Köpare signerar NDA och kan ställa frågor anonymt. Digital signering med BankID. Mail-notiser när någon vill signera NDA.',
+                time: 'Efter behov',
+              },
+              {
                 step: 4,
-                title: 'NDA & Datarum',
-                description: 'Köpare signerar NDA digitalt (BankID). Dela känsliga dokument säkert i datarum. Ta emot indikativa bud (LOI) med strukturerat formulär.',
+                title: 'Datarum & DD',
+                description: 'Dela rätt dokument till rätt person, spåra intresse. Säker dokumentlagring med versionskontroll. Ta emot indikativa bud (LOI) med strukturerat formulär.',
                 time: 'Efter behov',
               },
               {
                 step: 5,
-                title: 'Deal Management',
-                description: 'Starta formell transaktion med automatiska milestolpar (60-90 dagar). Spåra betalningar, bjud in rådgivare/revisorer med rollbaserade rättigheter. Full aktivitetslogg.',
+                title: 'LOI till avslut',
+                description: 'Använd våra mallar och boka rådgivning vid behov. Starta formell transaktion med automatiska milestolpar (60-90 dagar). Spåra betalningar och bjud in rådgivare.',
                 time: '60-90 dagar',
               },
             ].map((item) => (
@@ -161,7 +161,7 @@ export default function SaljaInfoPage() {
                 <div className="text-sm text-gray-600">/ mån</div>
               </div>
               <div className="space-y-4 mb-8">
-                {['Publicering i marknadsplats', 'Standardexponering', 'Köparchatt', 'KPI-PDF'].map((f, i) => (
+                {['Annons i 90 dagar', 'Upp till 5 bilder', 'Standardplacering', 'Standard-NDA', 'E-postsupport'].map((f, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700">{f}</span>
@@ -182,11 +182,11 @@ export default function SaljaInfoPage() {
               </div>
               <div className="text-center mb-8">
                 <div className="text-sm font-semibold text-primary-navy mb-2">Pro</div>
-                <div className="text-5xl font-bold text-primary-navy mb-2">895 kr</div>
+                <div className="text-5xl font-bold text-primary-navy mb-2">995 kr</div>
                 <div className="text-sm text-gray-600">/ mån</div>
               </div>
               <div className="space-y-4 mb-8">
-                {['Prioriterad placering', 'Anonym kontaktväxel', 'E-sign för NDA/LOI', '3 bevakningstaggar', 'Featured boost'].map((f, i) => (
+                {['Annons i 180 dagar', 'Upp till 20 bilder', 'Framhävning + Boost', 'Prioriterad NDA', 'Telefonstöd 9-16'].map((f, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700">{f}</span>
@@ -253,16 +253,15 @@ export default function SaljaInfoPage() {
           <p className="text-lg text-primary-navy mb-8 max-w-2xl mx-auto">
             Börja med en gratis värdering. Det tar 5 minuter och du får en detaljerad rapport direkt.
           </p>
-          <Link href="/vardering" className="inline-flex items-center gap-2 px-10 py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-lg">
-            Kom igång nu
+          <Link href="/salja/start" className="inline-flex items-center gap-2 px-10 py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-lg">
+            Kom igång gratis
             <ArrowRight className="w-5 h-5" />
           </Link>
           <p className="text-sm text-primary-navy mt-6 opacity-80">
-            Inte säker än? Börja med ett utkast helt gratis.
+            Börja med att skapa din första annons.
           </p>
         </div>
       </div>
     </main>
   )
 }
-
