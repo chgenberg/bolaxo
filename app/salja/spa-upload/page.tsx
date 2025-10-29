@@ -2,416 +2,383 @@
 'use client'
 
 import { useState } from 'react'
-import { Upload, CheckCircle2, AlertCircle, FileText, DollarSign, Users, Scale, Building2, Lock, ChevronDown } from 'lucide-react'
+import { Upload, CheckCircle, AlertCircle, FileText, HelpCircle } from 'lucide-react'
 import Link from 'next/link'
 
-interface UploadedFile {
+interface DocumentRequirement {
+  id: string
+  category: string
   name: string
-  type: string
-  size: number
+  description: string
+  required: boolean
+  examples: string[]
+  whyNeeded: string
+  gpePurpose: string
+  fileTypes: string[]
 }
 
-export default function SPAUploadPage() {
-  const [step, setStep] = useState<'instructions' | 'upload'>('instructions')
-  const [uploads, setUploads] = useState<Record<string, UploadedFile[]>>({})
-  const [expandedCategory, setExpandedCategory] = useState<string>('company')
-  const [loading, setLoading] = useState(false)
+const SPA_DOCUMENT_REQUIREMENTS: DocumentRequirement[] = [
+  {
+    id: 'company_info',
+    category: 'Företagsinformation',
+    name: 'Företagsregistrering',
+    description: 'Bevis på företagets lagliga existens och ägande',
+    required: true,
+    examples: [
+      'Bolagsverkets registreringsbevis',
+      'Aktieboken (senaste version)',
+      'Bolagsordningen'
+    ],
+    whyNeeded: 'Köparen behöver verifiera att bolaget är juridiskt lagligt registrerat och vilka som äger det',
+    gpePurpose: 'GPT extraherar: Org-nummer, ägarstruktur, grundandet, aktiekapital',
+    fileTypes: ['PDF', 'Image (JPG/PNG)']
+  },
+  {
+    id: 'financial_3y',
+    category: 'Finansiell Information',
+    name: 'Årsredovisningar (3 år)',
+    description: 'Resultaträkningar, balansräkningar från senaste 3 räkenskapsår',
+    required: true,
+    examples: [
+      'Årsredovisning 2024',
+      'Årsredovisning 2023',
+      'Årsredovisning 2022',
+      'Revisionsberättelse'
+    ],
+    whyNeeded: 'Köparen behöver se företagets ekonomiska utveckling och lönsamhet',
+    gpePurpose: 'GPT extraherar: Omsättning, EBITDA, marginaler, trend, skuldsättning, kassaflöde',
+    fileTypes: ['PDF']
+  },
+  {
+    id: 'tax_declaration',
+    category: 'Finansiell Information',
+    name: 'Skattedeklarationer',
+    description: 'Skattedeklarationer för senaste 3 år från Skatteverket',
+    required: true,
+    examples: [
+      'Deklaration 2024',
+      'Deklaration 2023',
+      'Deklaration 2022'
+    ],
+    whyNeeded: 'Bekräftar att finansiell rapportering matchar skattemyndigheternas register',
+    gpePurpose: 'GPT extraherar: Rapporterad inkomst, skatt betald, eventuella förluster',
+    fileTypes: ['PDF']
+  },
+  {
+    id: 'organizational',
+    category: 'Organisation & Personal',
+    name: 'Organisationsstruktur',
+    description: 'Orgschema, styrelse- och ledningssamansättning, anställda per roll',
+    required: true,
+    examples: [
+      'Organisationsschema (diagram)',
+      'Lista över styrelseledamöter',
+      'Lista över ledningsgrupp',
+      'Antal anställda per avdelning'
+    ],
+    whyNeeded: 'Köparen vill förstå ledningen och om det finns nyckelpersoner',
+    gpePurpose: 'GPT extraherar: Org-struktur, nyckelpersoner, rapporteringsvägar',
+    fileTypes: ['PDF', 'Excel', 'Image (JPG/PNG)']
+  },
+  {
+    id: 'customer_analysis',
+    category: 'Kunder & Försäljning',
+    name: 'Kundanalys',
+    description: 'Top 10 kunder, omsättningsfördelning, kontraktsinformation',
+    required: true,
+    examples: [
+      'Lista över top 10 kunder med omsättning',
+      'Kundbaser (CRM export)',
+      'Exempelpunkter från kundkontrakt',
+      'Försäljningskanal-fördelning'
+    ],
+    whyNeeded: 'Köparen behöver veta om bolaget är beroende av få kunder',
+    gpePurpose: 'GPT extraherar: Kundkoncentration, top 10 lista, retention risk',
+    fileTypes: ['Excel', 'PDF', 'CSV']
+  },
+  {
+    id: 'key_contracts',
+    category: 'Juridik & Kontrakt',
+    name: 'Viktiga Kontrakt',
+    description: 'Alla material kontrakt som kan påverkas av ägarbyte',
+    required: true,
+    examples: [
+      'Kundkontrakt (2-3 största)',
+      'Leverantörskontrakt',
+      'Hyresavtal för lokaler',
+      'Låneavtal',
+      'Partiell uppsättning för struktur'
+    ],
+    whyNeeded: 'Köparen måste veta om någon kan säga upp eller höja priser vid ägarbyte',
+    gpePurpose: 'GPT extraherar: Change-of-control klausuler, uppsägningsmöjligheter',
+    fileTypes: ['PDF']
+  },
+  {
+    id: 'ip_assets',
+    category: 'Immateriella Rättigheter',
+    name: 'Immateriella Tillgångar',
+    description: 'Patent, varumärken, licenser, know-how',
+    required: false,
+    examples: [
+      'Patent-registerutdrag',
+      'Varumärkes-registreringar',
+      'Licens-avtal',
+      'IP-listan (vad äger bolaget)'
+    ],
+    whyNeeded: 'Köparen vill veta vad bolaget äger intellektuellt',
+    gpePurpose: 'GPT extraherar: IP-porföljen, äganderätt, licensier',
+    fileTypes: ['PDF']
+  },
+  {
+    id: 'hr_docs',
+    category: 'Personal & HR',
+    name: 'HR-dokumentation',
+    description: 'Anställningsavtal, pensionsplan, bonus-program, turnover-data',
+    required: false,
+    examples: [
+      'HR-policy',
+      'Exempel-anställningsavtal',
+      'Pensionsprogram-beskrivning',
+      'Personalomsättning (turnover % per år)'
+    ],
+    whyNeeded: 'Köparen behöver veta om det finns dolda HR-kostnader eller retention-risker',
+    gpePurpose: 'GPT extraherar: HR-policyer, nyckelperson-risker, pensionsskulder',
+    fileTypes: ['PDF', 'Word', 'Excel']
+  },
+  {
+    id: 'it_systems',
+    category: 'IT & Teknologi',
+    name: 'IT-dokumentation',
+    description: 'IT-infrastruktur, system-lista, cybersecurity-status',
+    required: false,
+    examples: [
+      'IT-system lista (program, versioner)',
+      'Säkerhetspolicy',
+      'Data-backup strategi',
+      'GDPR compliance-status'
+    ],
+    whyNeeded: 'Köparen behöver veta om det finns teknik-skulder eller modernisering-behov',
+    gpePurpose: 'GPT extraherar: System-ålder, modernitet, säkerhetsberedskap',
+    fileTypes: ['PDF', 'Excel']
+  },
+  {
+    id: 'environmental',
+    category: 'Miljö & Reglering',
+    name: 'Miljötillstånd & Licenser',
+    description: 'Miljötillstånd, reglerings-licenser, compliance-status',
+    required: false,
+    examples: [
+      'Miljötillstånd (om applicerbart)',
+      'Lagstadgade licenser',
+      'Inspektionsrapporter',
+      'Compliance-checklist'
+    ],
+    whyNeeded: 'Köparen behöver veta om det finns miljörisker eller regelefterlevnads-kostnader',
+    gpePurpose: 'GPT extraherar: Miljörisker, compliance-status, framtida krav',
+    fileTypes: ['PDF']
+  }
+]
 
-  const documentCategories = [
-    {
-      id: 'company',
-      name: '🏢 Företagsinformation',
-      icon: Building2,
-      color: 'blue',
-      description: 'Grundläggande information om bolaget',
-      documents: [
-        {
-          id: 'bolagsverket',
-          title: 'Bolagsverket-utdrag (Aktiebrev)',
-          required: true,
-          why: 'Verifierar ägarskapsförhållanden, aktiekapital och att aktierna är fria från belastningar',
-          examples: 'Senaste aktiebok, aktiebrev, aktieägarprotokoll från Bolagsverket'
-        },
-        {
-          id: 'bolagsordning',
-          title: 'Bolagsordning',
-          required: true,
-          why: 'Definierar företagets regler, aktieöverföringsbegränsningar och styrningsstruktur',
-          examples: 'Nuvarande bolagsordning (registrerad hos Bolagsverket)'
-        },
-        {
-          id: 'styrelseprot',
-          title: 'Styrelseprokoll (senaste 12 mån)',
-          required: true,
-          why: 'Visar tidigare beslut, transaktioner och företagets ledning',
-          examples: 'Alla styrelseprokoll från senaste året'
-        }
-      ]
-    },
-    {
-      id: 'financial',
-      name: '💰 Finansiell information',
-      icon: DollarSign,
-      color: 'green',
-      description: 'Bokslut, resultat och finansiell status',
-      documents: [
-        {
-          id: 'bokslut',
-          title: 'Reviderad bokslut (senaste 3 år)',
-          required: true,
-          why: 'GPT kommer extrahera: Omsättning, EBITDA, vinst, tillgångar, skulder, arbetska pital',
-          examples: 'Årsbokslut för 2024, 2023, 2022 - balansräkning + resultaträkning'
-        },
-        {
-          id: 'skatter',
-          title: 'Skattedeklaration & betalningsintyg',
-          required: true,
-          why: 'Verifierar att alla skatter och myndighetsavgifter är betalade',
-          examples: 'K10-inkomstdeklaration, F-skattedeklaration, momsdeklaration senaste 2 år'
-        },
-        {
-          id: 'pengar',
-          title: 'Bankuppgifter & likvida medel',
-          required: false,
-          why: 'Visar kassaflöde och likviditet',
-          examples: 'Senaste 3 månaderskontoutdrag'
-        },
-        {
-          id: 'skulder',
-          title: 'Skuld & åtagande-lista',
-          required: false,
-          why: 'Listar alla lån, kassakrediter och andra finansiella åtaganden',
-          examples: 'Lista över alla skulder, räntesatser och återbetalningsterminer'
-        }
-      ]
-    },
-    {
-      id: 'legal',
-      name: '⚖️ Juridisk information',
-      icon: Scale,
-      color: 'amber',
-      description: 'Kontrakt, IP och juridisk status',
-      documents: [
-        {
-          id: 'kundenkontrakt',
-          title: 'Huvudsakliga kundkontrakt',
-          required: true,
-          why: 'GPT extraherar: Top 10 kunder, värde, löptid, uppsägningsklausuler och risker',
-          examples: 'Ramavtal med de 5-10 största kunderna (anonymiserade namn OK)'
-        },
-        {
-          id: 'leverantorer',
-          title: 'Leverantörskontrakt',
-          required: false,
-          why: 'Visar leverantörsberoende och försörjningsrisker',
-          examples: 'Avtal med kritiska leverantörer'
-        },
-        {
-          id: 'ip',
-          title: 'IP-dokumentation (Patent, varumärken)',
-          required: false,
-          why: 'Listar egendom av intellektuell egendom och rättigheter',
-          examples: 'Patent, registrerade varumärken, källkod-licenser'
-        },
-        {
-          id: 'tvister',
-          title: 'Juridisk status (tvister, försäkring)',
-          required: false,
-          why: 'Avslöjar pågående juridiska risker',
-          examples: 'Försäkringsöversikt, lista över pågående tvister eller tvister senaste 3 år'
-        }
-      ]
-    },
-    {
-      id: 'operational',
-      name: '👥 Operationell information',
-      icon: Users,
-      color: 'purple',
-      description: 'Personal, processer och drift',
-      documents: [
-        {
-          id: 'personal',
-          title: 'HR-data & anställningsavtal',
-          required: true,
-          why: 'GPT extraherar: Antal anställda, lönesumma, pensionsförpliktelser, nyckelpersoner',
-          examples: 'Lista över anställda (namn, roll, lön anonymiserat OK), ITP-försäkring info'
-        },
-        {
-          id: 'ledning',
-          title: 'Ledningsgrupp & nyckelkompetenser',
-          required: true,
-          why: 'Identifierar kritiska nyckelpersoner och arvskesrisker',
-          examples: 'CV för CEO, CTO eller andra nyckelpersoner. Hur länge varit i företaget?'
-        },
-        {
-          id: 'organ isationsstruktur',
-          title: 'Organisationsstruktur & processöversikt',
-          required: false,
-          why: 'Visar verksamhetens komplexitet och processberoenden',
-          examples: 'Org chart, beskrivning av viktigaste affärsprocesser'
-        }
-      ]
-    },
-    {
-      id: 'compliance',
-      name: '🔒 Compliance & dataskydd',
-      icon: Lock,
-      color: 'red',
-      description: 'GDPR, miljö, regler',
-      documents: [
-        {
-          id: 'gdpr',
-          title: 'GDPR & Dataskydd-dokumentation',
-          required: false,
-          why: 'Verifierar dataskyddsöverensstämmelse',
-          examples: 'Personuppgiftsbilaga, integritetspolicy, datarotorologg'
-        },
-        {
-          id: 'miljo',
-          title: 'Miljötillstånd & compliance',
-          required: false,
-          why: 'Verifierar miljömässig compliance',
-          examples: 'Miljötillstånd, avfallsdisposition, kemikalieregister'
-        }
-      ]
-    }
-  ]
+export default function SpaUploadPage() {
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
+  const [completedDocs, setCompletedDocs] = useState<Set<string>>(new Set())
 
-  const handleFileSelect = (categoryId: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files).map(file => ({
-        name: file.name,
-        type: categoryId,
-        size: file.size
-      }))
-      
-      setUploads(prev => ({
-        ...prev,
-        [categoryId]: [...(prev[categoryId] || []), ...newFiles]
-      }))
+  const toggleDoc = (id: string) => {
+    const updated = new Set(completedDocs)
+    if (updated.has(id)) {
+      updated.delete(id)
+    } else {
+      updated.add(id)
     }
+    setCompletedDocs(updated)
   }
 
-  const handleGenerateSPA = async () => {
-    setLoading(true)
-    try {
-      // Call API to extract data and generate SPA
-      const response = await fetch('/api/sme/spa/generate-from-documents', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          uploads,
-          documentCategories
-        })
-      })
+  const categories = Array.from(new Set(SPA_DOCUMENT_REQUIREMENTS.map(d => d.category)))
+  const progress = Math.round((completedDocs.size / SPA_DOCUMENT_REQUIREMENTS.length) * 100)
+  const requiredDocs = SPA_DOCUMENT_REQUIREMENTS.filter(d => d.required)
+  const requiredCompleted = requiredDocs.filter(d => completedDocs.has(d.id)).length
 
-      if (response.ok) {
-        const data = await response.json()
-        // Redirect to SPA preview/editor
-        window.location.href = `/salja/spa-editor/${data.spaId}`
-      }
-    } catch (error) {
-      console.error('Error generating SPA:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <Link href="/salja" className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-4">
+            ← Tillbaka
+          </Link>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">📄 Förbered ditt SPA-avtal</h1>
+          <p className="text-lg text-gray-600 mb-4">
+            Genom att ladda upp dessa dokument kommer GPT automatiskt extrahera nödvändig information och skapa ett professionellt SPA-avtal
+          </p>
+        </div>
 
-  if (step === 'instructions') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <Link href="/salja" className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-4">
-              ← Tillbaka
-            </Link>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">📋 SPA-Avtalet - Steg för steg</h1>
-            <p className="text-lg text-gray-700">
-              Vi hjälper dig att skapa ett professionellt, juridiskt bindande Share Purchase Agreement (Aktieöverlåtelseavtal)
-            </p>
-          </div>
-
-          {/* Overview Cards */}
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-white rounded-lg p-6 border-2 border-blue-200">
-              <div className="text-3xl mb-2">🤖</div>
-              <h3 className="font-bold text-lg mb-2">AI-driven</h3>
-              <p className="text-sm text-gray-600">GPT analyserar dina dokument och fyller automatiskt i SPA:n</p>
+        {/* Progress */}
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-sm font-semibold text-gray-600">Framsteg</p>
+              <p className="text-3xl font-bold text-gray-900">{progress}%</p>
             </div>
-            <div className="bg-white rounded-lg p-6 border-2 border-green-200">
-              <div className="text-3xl mb-2">✍️</div>
-              <h3 className="font-bold text-lg mb-2">Redigerbar</h3>
-              <p className="text-sm text-gray-600">Du kan justera alla termer innan du skickar till köparen</p>
-            </div>
-            <div className="bg-white rounded-lg p-6 border-2 border-purple-200">
-              <div className="text-3xl mb-2">📄</div>
-              <h3 className="font-bold text-lg mb-2">Juridiskt Bindande</h3>
-              <p className="text-sm text-gray-600">Skrivens enligt svensk lag och branschstandard</p>
+            <div className="flex-1 ml-6">
+              <div className="w-full bg-gray-200 rounded-full h-4">
+                <div 
+                  className="bg-gradient-to-r from-blue-500 to-indigo-600 h-4 rounded-full transition-all"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
             </div>
           </div>
+          
+          <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="bg-red-50 p-4 rounded-lg border-2 border-red-200">
+              <p className="text-sm text-red-700 font-semibold">🔴 Obligatoriska: {requiredCompleted}/{requiredDocs.length}</p>
+            </div>
+            <div className="bg-green-50 p-4 rounded-lg border-2 border-green-200">
+              <p className="text-sm text-green-700 font-semibold">✅ Totalt: {completedDocs.size}/{SPA_DOCUMENT_REQUIREMENTS.length}</p>
+            </div>
+          </div>
+        </div>
 
-          {/* Main Instructions */}
-          <div className="space-y-4 mb-8">
-            {documentCategories.map((category, idx) => (
-              <div key={category.id} className="bg-white rounded-lg border-2 border-gray-200 overflow-hidden">
+        {/* Info Box */}
+        <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-8">
+          <div className="flex gap-4">
+            <HelpCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+            <div>
+              <h3 className="font-bold text-blue-900 mb-2">Hur fungerar det?</h3>
+              <ol className="text-sm text-blue-800 space-y-2 ml-4 list-decimal">
+                <li><strong>Ladda upp dokumenten</strong> som listas nedan</li>
+                <li><strong>GPT analyserar</strong> dokumenten och extraherar nödvändig data</li>
+                <li><strong>SPA-avtalet genereras</strong> automatiskt med all information</li>
+                <li><strong>Du granskar</strong> avtalet och kan redigera vilka termer du vill</li>
+                <li><strong>Du skickar</strong> till köparen för signering</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        {/* Document Categories */}
+        <div className="space-y-6">
+          {categories.map(category => {
+            const categoryDocs = SPA_DOCUMENT_REQUIREMENTS.filter(d => d.category === category)
+            const categoryRequired = categoryDocs.filter(d => d.required)
+            const categoryCompleted = categoryDocs.filter(d => completedDocs.has(d.id))
+            const isExpanded = expandedCategory === category
+
+            return (
+              <div key={category} className="bg-white rounded-xl shadow-md overflow-hidden border-2 border-gray-200">
+                {/* Category Header */}
                 <button
-                  onClick={() => setExpandedCategory(expandedCategory === category.id ? '' : category.id)}
-                  className={`w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors ${
-                    category.color === 'blue' ? 'bg-blue-50' :
-                    category.color === 'green' ? 'bg-green-50' :
-                    category.color === 'amber' ? 'bg-amber-50' :
-                    category.color === 'purple' ? 'bg-purple-50' :
-                    'bg-red-50'
-                  }`}
+                  onClick={() => setExpandedCategory(isExpanded ? null : category)}
+                  className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors"
                 >
-                  <div className="flex items-center gap-4 text-left">
-                    <div className="text-3xl">{category.name.split(' ')[0]}</div>
-                    <div>
-                      <h3 className="font-bold text-lg">{category.name}</h3>
-                      <p className="text-sm text-gray-600">{category.description}</p>
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="text-2xl">📋</div>
+                    <div className="text-left">
+                      <h3 className="text-lg font-bold text-gray-900">{category}</h3>
+                      <p className="text-sm text-gray-600">
+                        {categoryCompleted.length}/{categoryDocs.length} dokument (
+                        {categoryRequired.length > 0 && `${categoryRequired.filter(d => completedDocs.has(d.id)).length}/${categoryRequired.length} obligatoriska`}
+                        )
+                      </p>
                     </div>
                   </div>
-                  <ChevronDown
-                    className={`w-6 h-6 transition-transform ${
-                      expandedCategory === category.id ? 'rotate-180' : ''
-                    }`}
-                  />
+                  <div className="text-gray-400">{isExpanded ? '▼' : '▶'}</div>
                 </button>
 
-                {expandedCategory === category.id && (
-                  <div className="border-t border-gray-200 p-6 space-y-4">
-                    {category.documents.map(doc => (
-                      <div key={doc.id} className="bg-gray-50 p-4 rounded-lg">
-                        <div className="flex items-start gap-3 mb-2">
-                          <div className={`mt-1 ${doc.required ? 'text-red-500' : 'text-gray-400'}`}>
-                            {doc.required ? <AlertCircle className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
-                          </div>
+                {/* Expanded Content */}
+                {isExpanded && (
+                  <div className="bg-gray-50 border-t-2 border-gray-200 p-6 space-y-6">
+                    {categoryDocs.map(doc => (
+                      <div key={doc.id} className="bg-white p-5 rounded-lg border-2 border-gray-200">
+                        {/* Document Header */}
+                        <div className="flex items-start gap-4 mb-4">
+                          <input
+                            type="checkbox"
+                            checked={completedDocs.has(doc.id)}
+                            onChange={() => toggleDoc(doc.id)}
+                            className="w-6 h-6 rounded border-gray-300 mt-1 cursor-pointer"
+                          />
                           <div className="flex-1">
-                            <h4 className="font-bold text-gray-900">
-                              {doc.title}
-                              {doc.required && <span className="text-red-500 ml-2">*</span>}
-                            </h4>
-                            <p className="text-sm text-gray-700 mt-1"><strong>Varför:</strong> {doc.why}</p>
-                            <p className="text-sm text-gray-600 mt-1"><strong>Exempel:</strong> {doc.examples}</p>
+                            <div className="flex items-center gap-2 mb-1">
+                              <h4 className="text-lg font-bold text-gray-900">{doc.name}</h4>
+                              {doc.required && (
+                                <span className="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded">
+                                  OBLIGATORISK
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-gray-600">{doc.description}</p>
                           </div>
+                        </div>
+
+                        {/* Details Grid */}
+                        <div className="grid md:grid-cols-2 gap-4 ml-10">
+                          {/* Examples */}
+                          <div className="bg-blue-50 p-4 rounded border-l-4 border-blue-400">
+                            <p className="text-sm font-semibold text-blue-900 mb-2">📄 Exempel på vad du ska ladda upp:</p>
+                            <ul className="text-sm text-blue-800 space-y-1">
+                              {doc.examples.map((ex, i) => (
+                                <li key={i}>• {ex}</li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* Why Needed */}
+                          <div className="bg-purple-50 p-4 rounded border-l-4 border-purple-400">
+                            <p className="text-sm font-semibold text-purple-900 mb-2">🎯 Varför behövs detta:</p>
+                            <p className="text-sm text-purple-800">{doc.whyNeeded}</p>
+                          </div>
+
+                          {/* File Types */}
+                          <div className="bg-green-50 p-4 rounded border-l-4 border-green-400">
+                            <p className="text-sm font-semibold text-green-900 mb-2">✅ Tillåtna filformat:</p>
+                            <p className="text-sm text-green-800">{doc.fileTypes.join(', ')}</p>
+                          </div>
+
+                          {/* GPT Purpose */}
+                          <div className="bg-amber-50 p-4 rounded border-l-4 border-amber-400">
+                            <p className="text-sm font-semibold text-amber-900 mb-2">🤖 GPT extraherar:</p>
+                            <p className="text-sm text-amber-800">{doc.gpePurpose}</p>
+                          </div>
+                        </div>
+
+                        {/* Upload Area */}
+                        <div className="ml-10 mt-4 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer">
+                          <div className="flex items-center justify-center gap-3 text-gray-600">
+                            <Upload className="w-5 h-5" />
+                            <span className="font-semibold">Klicka för att ladda upp eller dra filer hit</span>
+                          </div>
+                          <p className="text-xs text-gray-500 text-center mt-1">(Ännu inte implementerad - detta är instruktioner för säljaren)</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
-            ))}
-          </div>
-
-          {/* Instructions Box */}
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8">
-            <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-              <CheckCircle2 className="w-6 h-6 text-blue-600" />
-              Vad hänt er härnäst?
-            </h3>
-            <ol className="space-y-2 text-gray-700 list-decimal list-inside">
-              <li>Du laddar upp dokument enligt instruktionerna ovan</li>
-              <li>Vi kör GPT för att extrahera data automatiskt</li>
-              <li>En professionell SPA-PDF genereras med din information</li>
-              <li>Du kan redigera vilka termer som helst innan skickning</li>
-              <li>Du skickar SPA:n till köparen för förhandling</li>
-              <li>Båda parter undertecknar digitalt med BankID</li>
-            </ol>
-          </div>
-
-          {/* Start Button */}
-          <button
-            onClick={() => setStep('upload')}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors mb-4"
-          >
-            ▶ Börja ladda upp dokument →
-          </button>
-
-          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
-            <p className="text-sm text-gray-700">
-              <strong>💡 Tips:</strong> Ju fler dokument du laddar upp, desto bättre kommer SPA:n att bli. Om du inte har ett dokument, kan du fortfarande skapa en SPA-mall manuellt.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // UPLOAD STEP
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto">
-        <button
-          onClick={() => setStep('instructions')}
-          className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-6"
-        >
-          ← Tillbaka till instruktioner
-        </button>
-
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">📤 Ladda upp dokument</h1>
-        <p className="text-gray-700 mb-8">Ladda upp dina dokument för SPA-generering</p>
-
-        <div className="space-y-4">
-          {documentCategories.map(category => (
-            <div key={category.id} className="bg-white rounded-lg border-2 border-gray-200 p-6">
-              <h3 className="font-bold text-lg mb-4">{category.name}</h3>
-
-              <div className="space-y-3">
-                {category.documents.map(doc => (
-                  <div key={doc.id} className="bg-gray-50 p-4 rounded-lg">
-                    <label className="flex items-center cursor-pointer">
-                      <input
-                        type="file"
-                        multiple
-                        onChange={(e) => handleFileSelect(category.id, e)}
-                        className="hidden"
-                        accept=".pdf,.doc,.docx,.xlsx,.xls,.txt,.jpg,.png"
-                      />
-                      <div className="flex-1">
-                        <p className="font-semibold text-gray-900">{doc.title}</p>
-                        <p className="text-sm text-gray-600">{doc.why}</p>
-                        <div className="mt-2 flex items-center gap-2 text-blue-600 hover:text-blue-800">
-                          <Upload className="w-4 h-4" />
-                          <span>Klicka för att ladda upp eller dra-och-släpp</span>
-                        </div>
-                      </div>
-                    </label>
-                  </div>
-                ))}
-              </div>
-
-              {uploads[category.id] && uploads[category.id].length > 0 && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">Uppladdade filer:</p>
-                  <div className="space-y-1">
-                    {uploads[category.id].map((file, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm text-green-600">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <span>{file.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            )
+          })}
         </div>
 
+        {/* Action Buttons */}
         <div className="mt-8 flex gap-4">
-          <button
-            onClick={() => setStep('instructions')}
-            className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors"
-          >
-            ← Tillbaka
+          <button className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 px-6 rounded-xl hover:shadow-lg transition-shadow">
+            📤 Ladda upp alla dokument
           </button>
-          <button
-            onClick={handleGenerateSPA}
-            disabled={loading}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-          >
-            {loading ? '⏳ Genererar SPA-avtal...' : '✓ Generera SPA-avtal'}
+          <button className="flex-1 bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-xl hover:bg-gray-300 transition-colors">
+            ← Gå tillbaka
           </button>
+        </div>
+
+        {/* Info Footer */}
+        <div className="mt-8 bg-indigo-50 border-2 border-indigo-200 rounded-xl p-6">
+          <h3 className="font-bold text-indigo-900 mb-3">💡 Tips för bästa resultat</h3>
+          <ul className="text-sm text-indigo-800 space-y-2 ml-4 list-disc">
+            <li><strong>Dokumentkvalitet:</strong> Ladda upp tydliga scans eller PDF-filer (inte lågupplösta bilder)</li>
+            <li><strong>Aktuella dokument:</strong> Se till att årsredovisningar och kontrakt är från rätt period</li>
+            <li><strong>Fullständighet:</strong> Ju fler dokument, desto bättre SPA-avtal kan GPT generera</li>
+            <li><strong>Sekretess:</strong> Känsliga data som lösenord behöver inte tas med - GPT extraherar bara nödvändig info</li>
+            <li><strong>Tid:</strong> Processningen tar ca 1-2 minuter per dokument set</li>
+          </ul>
         </div>
       </div>
     </div>
