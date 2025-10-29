@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Download, Send, RotateCcw, Eye, Edit2, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 interface SPAVersion {
   version: number
@@ -13,7 +14,10 @@ interface SPAVersion {
   pdfUrl: string
 }
 
-export default function SPAEditorPage({ params }: { params: { spaId: string } }) {
+export default function SPAEditorPage() {
+  const params = useParams()
+  const spaId = params.spaId as string
+  
   const [spa, setSpa] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
@@ -62,7 +66,7 @@ export default function SPAEditorPage({ params }: { params: { spaId: string } })
   useEffect(() => {
     // Simulate fetching SPA
     setSpa({
-      id: params.spaId,
+      id: spaId,
       listing: 'IT-konsultbolag',
       companyName: 'Målbolaget AB',
       buyerName: 'Tech Invest AB',
@@ -72,7 +76,7 @@ export default function SPAEditorPage({ params }: { params: { spaId: string } })
       updatedAt: '2025-10-25'
     })
     setLoading(false)
-  }, [params.spaId])
+  }, [spaId])
 
   const handleFieldChange = (field: string, value: any) => {
     setFormData(prev => ({

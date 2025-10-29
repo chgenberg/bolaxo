@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateSPAPdf } from '@/lib/spa-pdf-generator'
+import { generateSPAPDF } from '@/lib/spa-pdf-generator'
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     // Step 2: Generate professional PDF with provided data
     console.log('Generating SPA PDF...')
-    const pdfBuffer = await generateSPAPdf(spaData)
+    const pdfBuffer = await generateSPAPDF(spaData)
 
     // Step 3: Return PDF
     return new NextResponse(pdfBuffer, {
