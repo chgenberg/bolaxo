@@ -18,7 +18,7 @@ export interface DDPdfData {
     title: string
     severity: 'Critical' | 'High' | 'Medium' | 'Low'
     description: string
-    recommendation: string
+    recommendation?: string
   }>
   
   // Legal findings
@@ -26,7 +26,7 @@ export interface DDPdfData {
     title: string
     severity: 'Critical' | 'High' | 'Medium' | 'Low'
     description: string
-    recommendation: string
+    recommendation?: string
   }>
   
   // Commercial findings
@@ -34,7 +34,7 @@ export interface DDPdfData {
     title: string
     severity: 'Critical' | 'High' | 'Medium' | 'Low'
     description: string
-    recommendation: string
+    recommendation?: string
   }>
   
   // HR findings
@@ -42,7 +42,7 @@ export interface DDPdfData {
     title: string
     severity: 'Critical' | 'High' | 'Medium' | 'Low'
     description: string
-    recommendation: string
+    recommendation?: string
   }>
   
   // IT findings
@@ -50,7 +50,7 @@ export interface DDPdfData {
     title: string
     severity: 'Critical' | 'High' | 'Medium' | 'Low'
     description: string
-    recommendation: string
+    recommendation?: string
   }>
   
   // Tax findings
@@ -58,7 +58,7 @@ export interface DDPdfData {
     title: string
     severity: 'Critical' | 'High' | 'Medium' | 'Low'
     description: string
-    recommendation: string
+    recommendation?: string
   }>
   
   // Environmental findings
@@ -66,10 +66,10 @@ export interface DDPdfData {
     title: string
     severity: 'Critical' | 'High' | 'Medium' | 'Low'
     description: string
-    recommendation: string
+    recommendation?: string
   }>
   
-  // Executive summary
+  // Overall assessment
   overallRiskLevel?: 'Low' | 'Medium' | 'High' | 'Critical'
   dealRecommendation?: string
   topThreeRisks?: string[]
