@@ -1,12 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown, Menu, X, User, LogOut, MessageSquare, Settings } from 'lucide-react'
+import { ChevronDown, Menu, X, User, LogOut, MessageSquare, LayoutDashboard } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { usePathname } from 'next/navigation'
-import NotificationCenter from './NotificationCenter'
 
 interface DropdownItem {
   label: string
@@ -24,18 +22,18 @@ const navigation: NavItem[] = [
   {
     label: 'För säljare',
     dropdown: [
-      { label: 'Gratis företagsvärdering', href: '/vardering', description: 'Automatisk värdering på 5 min' },
-      { label: 'Så funkar det', href: '/salja', description: 'Läs om säljprocessen' },
-      { label: 'Börja sälja', href: '/salja/start', description: 'Skapa din annons' },
-      { label: 'Priser', href: '/priser', description: 'Se våra paket' },
+      { label: 'Gratis företagsvärdering', href: '/vardering' },
+      { label: 'Så funkar det', href: '/salja' },
+      { label: 'Börja sälja', href: '/salja/start' },
+      { label: 'Priser', href: '/priser' },
     ]
   },
   {
     label: 'För köpare',
     dropdown: [
-      { label: 'Sök företag', href: '/sok', description: 'Hitta din nästa investering' },
-      { label: 'Så funkar det', href: '/kopare', description: 'Läs om köpprocessen' },
-      { label: 'Skapa konto', href: '/kopare/start', description: 'Börja söka' },
+      { label: 'Sök företag', href: '/sok' },
+      { label: 'Så funkar det', href: '/kopare' },
+      { label: 'Skapa konto', href: '/kopare/start' },
     ]
   },
   {
@@ -45,12 +43,10 @@ const navigation: NavItem[] = [
   {
     label: 'Om oss',
     dropdown: [
-      { label: 'Vårt företag', href: '/om-oss', description: 'Lär känna BOLAXO' },
-      { label: 'Success stories', href: '/success-stories', description: 'Lyckade affärer' },
-      { label: 'För investerare', href: '/investor', description: 'Investera i BOLAXO' },
-      { label: 'Blogg', href: '/blogg', description: 'Guider, nyheter och insikter' },
-      { label: 'FAQ', href: '/faq', description: 'Vanliga frågor och svar' },
-      { label: 'Kontakt', href: '/kontakt', description: 'Hör av dig till oss' },
+      { label: 'Vårt företag', href: '/om-oss' },
+      { label: 'Success stories', href: '/success-stories' },
+      { label: 'För investerare', href: '/investor' },
+      { label: 'Kontakt', href: '/kontakt' },
     ]
   }
 ]
@@ -59,12 +55,10 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState<'seller' | 'buyer'>('seller')
   const [mounted, setMounted] = useState(false)
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const { user, logout } = useAuth()
   const pathname = usePathname()
-  const isHomepage = pathname === '/'
   const isAdminPage = pathname?.startsWith('/admin')
   
   // Hide header on admin pages
@@ -79,9 +73,10 @@ export default function Header() {
   useEffect(() => {
     if (!mounted) return
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
+      setScrolled(window.scrollY > 10)
     }
     window.addEventListener('scroll', handleScroll)
+    handleScroll() // Check initial scroll position
     return () => window.removeEventListener('scroll', handleScroll)
   }, [mounted])
 
@@ -95,63 +90,21 @@ export default function Header() {
   const handleMouseLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => {
       setOpenDropdown(null)
-    }, 200)
+    }, 150)
   }
 
-  // Klarna-inspired clean design with new colors
-  const headerBg = scrolled 
-    ? 'bg-white/95 backdrop-blur-md shadow-soft' 
-    : 'bg-white'
-  
-  const textColor = 'text-graphite hover:text-navy'
-  const logoColor = 'text-navy'
-  const ctaStyle = 'btn-primary'
-
   return (
-    <>
-      {/* Top bar with section switcher */}
-      <div className="bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex items-center justify-between py-1.5 text-sm">
-            <div className="flex items-center gap-6">
-              <Link 
-                href="/" 
-                className={`transition-colors font-medium ${
-                  activeSection === 'seller' 
-                    ? 'text-navy' 
-                    : 'text-graphite hover:text-navy'
-                }`}
-                onClick={() => setActiveSection('seller')}
-              >
-                Säljare
-              </Link>
-              <Link 
-                href="/kopare" 
-                className={`transition-colors font-medium ${
-                  activeSection === 'buyer' 
-                    ? 'text-navy' 
-                    : 'text-graphite hover:text-navy'
-                }`}
-                onClick={() => setActiveSection('buyer')}
-              >
-                Köpare
-              </Link>
-            </div>
-            <div className="w-[120px]"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main header */}
-      <header className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}>
-        <nav className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <span className={`text-2xl font-bold tracking-tight ${logoColor}`}>
-                BOLAXO
-              </span>
-            </Link>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'
+    }`}>
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center">
+            <span className="text-2xl font-bold tracking-tight text-primary-navy">
+              BOLAXO
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -165,31 +118,30 @@ export default function Header() {
                 {item.href ? (
                   <Link
                     href={item.href}
-                    className={`font-medium transition-colors ${textColor}`}
+                    className="text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
                   >
                     {item.label}
                   </Link>
                 ) : (
-                  <button className={`flex items-center space-x-1 font-medium transition-colors ${textColor}`}>
+                  <button className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200">
                     <span>{item.label}</span>
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${
+                      openDropdown === item.label ? 'rotate-180' : ''
+                    }`} />
                   </button>
                 )}
 
                 {/* Dropdown Menu */}
                 {item.dropdown && openDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-hover overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100 border border-gray-soft">
-                    <div className="p-2">
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100">
+                    <div className="py-2">
                       {item.dropdown.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.href}
                           href={dropdownItem.href}
-                          className="block px-4 py-3 rounded-lg hover:bg-sand hover:bg-opacity-30 transition-colors"
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
                         >
-                          <div className="font-semibold text-navy">{dropdownItem.label}</div>
-                          {dropdownItem.description && (
-                            <div className="text-sm text-graphite opacity-75 mt-0.5">{dropdownItem.description}</div>
-                          )}
+                          {dropdownItem.label}
                         </Link>
                       ))}
                     </div>
@@ -200,58 +152,73 @@ export default function Header() {
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {user ? (
               <>
-                {/* <NotificationCenter /> */}
-                {/* Chat link for buyers and sellers */}
-                {(user.role === 'buyer' || user.role === 'seller') && (
+                {/* Desktop user menu */}
+                <div className="hidden lg:flex items-center space-x-1">
+                  {/* Chat link */}
+                  {(user.role === 'buyer' || user.role === 'seller') && (
+                    <Link
+                      href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
+                      className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
+                      title="Meddelanden"
+                    >
+                      <MessageSquare className="w-5 h-5" />
+                    </Link>
+                  )}
+                  
+                  {/* Dashboard link */}
                   <Link
-                    href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
-                    className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
+                    href="/dashboard"
+                    className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
+                    title="Dashboard"
                   >
-                    <MessageSquare className="w-5 h-5" />
-                    <span>Meddelanden</span>
+                    <LayoutDashboard className="w-5 h-5" />
                   </Link>
-                )}
-                
-                {/* Settings link */}
-                {(user.role === 'buyer' || user.role === 'seller') && (
-                  <Link
-                    href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
-                    className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
+                  
+                  {/* Profile menu */}
+                  <div 
+                    className="relative"
+                    onMouseEnter={() => handleMouseEnter('profile')}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    <Settings className="w-5 h-5" />
-                    <span>Profil</span>
-                  </Link>
-                )}
-                
-                <Link
-                  href="/dashboard"
-                  className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
-                >
-                  <User className="w-5 h-5" />
-                  <span>Dashboard</span>
-                </Link>
-                <button
-                  onClick={logout}
-                  className={`hidden lg:flex items-center space-x-2 font-medium transition-colors ${textColor}`}
-                >
-                  <LogOut className="w-5 h-5" />
-                  <span>Logga ut</span>
-                </button>
+                    <button className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200">
+                      <User className="w-5 h-5" />
+                    </button>
+                    
+                    {openDropdown === 'profile' && (
+                      <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div className="py-2">
+                          <Link
+                            href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
+                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
+                          >
+                            Profil & Inställningar
+                          </Link>
+                          <button
+                            onClick={logout}
+                            className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
+                          >
+                            Logga ut
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </>
             ) : (
               <>
                 <Link
                   href="/login"
-                  className={`hidden lg:block font-medium transition-colors ${textColor}`}
+                  className="hidden lg:block text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
                 >
                   Logga in
                 </Link>
                 <Link
                   href="/registrera"
-                  className="hidden lg:block btn-primary"
+                  className="hidden lg:block px-4 py-2 bg-primary-navy text-white rounded-lg font-medium text-sm hover:bg-primary-navy/90 transition-all duration-200 hover:shadow-md"
                 >
                   Kom igång
                 </Link>
@@ -261,7 +228,7 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`lg:hidden ${isHomepage && !scrolled ? 'text-white' : 'text-gray-600'}`}
+              className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -270,29 +237,37 @@ export default function Header() {
       </nav>
 
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-200">
-          <div className="px-4 py-6 space-y-4">
+      <div className={`lg:hidden fixed inset-x-0 top-16 bottom-0 bg-black/50 backdrop-blur-sm transition-all duration-300 ${
+        isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`} onClick={() => setIsMenuOpen(false)}>
+        <div 
+          className={`bg-white h-full overflow-y-auto transform transition-transform duration-300 ${
+            isMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-6 space-y-6">
+            {/* Mobile navigation */}
             {navigation.map((item) => (
               <div key={item.label}>
                 {item.href ? (
                   <Link
                     href={item.href}
-                    className="block py-2 text-lg font-semibold text-gray-900"
+                    className="block text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}
                   </Link>
                 ) : (
-                  <>
-                    <div className="py-2 text-lg font-semibold text-gray-900">{item.label}</div>
+                  <div>
+                    <div className="text-base font-medium text-gray-900 mb-3">{item.label}</div>
                     {item.dropdown && (
-                      <div className="ml-4 mt-2 space-y-2">
+                      <div className="space-y-2 pl-4">
                         {item.dropdown.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.href}
                             href={dropdownItem.href}
-                            className="block py-2 text-gray-600"
+                            className="block text-sm text-gray-600 hover:text-primary-navy transition-colors py-1"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {dropdownItem.label}
@@ -300,73 +275,76 @@ export default function Header() {
                         ))}
                       </div>
                     )}
-                  </>
+                  </div>
                 )}
               </div>
             ))}
             
-            <div className="pt-4 border-t border-gray-200">
+            {/* Mobile user menu */}
+            <div className="pt-6 border-t border-gray-200">
               {user ? (
-                <>
-                  {/* Mobile chat and settings links */}
+                <div className="space-y-4">
                   {(user.role === 'buyer' || user.role === 'seller') && (
                     <>
                       <Link
                         href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
-                        className="block py-2 text-lg font-semibold text-gray-900"
+                        className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        Meddelanden
+                        <MessageSquare className="w-5 h-5" />
+                        <span>Meddelanden</span>
                       </Link>
                       <Link
                         href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
-                        className="block py-2 text-lg font-semibold text-gray-900"
+                        className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        Profilinställningar
+                        <User className="w-5 h-5" />
+                        <span>Profil & Inställningar</span>
                       </Link>
                     </>
                   )}
                   <Link
                     href="/dashboard"
-                    className="block py-2 text-lg font-semibold text-gray-900"
+                    className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Dashboard
+                    <LayoutDashboard className="w-5 h-5" />
+                    <span>Dashboard</span>
                   </Link>
                   <button
                     onClick={() => {
                       logout()
                       setIsMenuOpen(false)
                     }}
-                    className="block w-full text-left py-2 text-lg font-semibold text-gray-900"
+                    className="flex items-center space-x-3 text-base font-medium text-red-600 hover:text-red-700 transition-colors w-full"
                   >
-                    Logga ut
+                    <LogOut className="w-5 h-5" />
+                    <span>Logga ut</span>
                   </button>
-                </>
+                </div>
               ) : (
-                <>
+                <div className="space-y-4">
                   <Link
                     href="/login"
-                    className="block py-2 text-lg font-semibold text-gray-900"
+                    className="block text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Logga in
                   </Link>
                   <Link
                     href="/registrera"
-                    className="block py-2 text-lg font-semibold text-accent-pink"
+                    className="block w-full text-center px-4 py-3 bg-primary-navy text-white rounded-lg font-medium hover:bg-primary-navy/90 transition-all"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Kom igång
                   </Link>
-                </>
+                </div>
               )}
             </div>
           </div>
         </div>
-      )}
-      </header>
-    </>
+      </div>
+    </header>
   )
 }

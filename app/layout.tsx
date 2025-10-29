@@ -32,7 +32,9 @@ export default function RootLayout({
             <AuthProvider>
               <ToastProvider>
                 <Header />
-                {children}
+                <div className="pt-16">
+                  {children}
+                </div>
                 <Footer />
                 <CookieConsent />
                 <ChatWidget />
