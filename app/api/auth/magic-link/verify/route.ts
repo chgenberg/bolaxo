@@ -69,14 +69,16 @@ export async function GET(request: Request) {
       redirectUrl = '/dashboard'
     }
 
-    // Skapa redirect response
-    const response = NextResponse.redirect(new URL(redirectUrl, baseUrl), {
+    // Skapa full URL för redirect
+    const fullRedirectUrl = new URL(redirectUrl, baseUrl)
+
+    // Skapa redirect response FÖRST
+    const response = NextResponse.redirect(fullRedirectUrl, {
       status: 302,
     })
 
-    // Sätt session cookies
-    const cookieStore = await cookies()
-    cookieStore.set('bolaxo_user_id', user.id, {
+    // Sätt session cookies PÅ response-objektet
+    response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -84,7 +86,7 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    cookieStore.set('bolaxo_user_email', user.email, {
+    response.cookies.set('bolaxo_user_email', user.email, {
       httpOnly: false, // Behöver läsas client-side
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -92,7 +94,7 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    cookieStore.set('bolaxo_user_role', user.role, {
+    response.cookies.set('bolaxo_user_role', user.role, {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -100,29 +102,7 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    // Använd HTML redirect som fallback för bättre kompatibilitet
-    const redirectHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta http-equiv="refresh" content="0;url=${redirectUrl}">
-        <script>
-          window.location.href = "${redirectUrl}";
-        </script>
-      </head>
-      <body>
-        <p>Redirectar till <a href="${redirectUrl}">${redirectUrl}</a>...</p>
-      </body>
-      </html>
-    `
-    
-    return new NextResponse(redirectHtml, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html',
-        'Location': redirectUrl, // Fallback header
-      },
-    })
+    return response
 
   } catch (error) {
     console.error('Magic link verify error:', error)
