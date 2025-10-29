@@ -2,22 +2,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import PDFDocument from 'pdfkit'
 import { PROFESSIONAL_SPA_CONTENT } from '@/lib/professional-spa-content'
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest): Promise<Response> {
   try {
-    const doc = new PDFDocument({
-      size: 'A4',
-      margins: { top: 72, bottom: 72, left: 72, right: 72 },
-      info: {
-        Title: 'Aktieöverlåtelseavtal - TechVision AB',
-        Author: 'Bolagsportalen M&A Platform',
-        Subject: 'Share Purchase Agreement'
-      }
-    })
+    return new Promise<Response>((resolve) => {
+      const doc = new PDFDocument({
+        size: 'A4',
+        margins: { top: 72, bottom: 72, left: 72, right: 72 },
+        info: {
+          Title: 'Aktieöverlåtelseavtal - TechVision AB',
+          Author: 'Bolagsportalen M&A Platform',
+          Subject: 'Share Purchase Agreement'
+        }
+      })
 
-    const chunks: Buffer[] = []
-    doc.on('data', chunk => chunks.push(chunk))
-    
-    return new Promise((resolve) => {
+      const chunks: Buffer[] = []
+      doc.on('data', chunk => chunks.push(chunk))
+      
       doc.on('end', () => {
         const pdfBuffer = Buffer.concat(chunks)
         resolve(new NextResponse(pdfBuffer, {

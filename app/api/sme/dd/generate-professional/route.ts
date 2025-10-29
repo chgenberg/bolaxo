@@ -2,22 +2,22 @@ import { NextRequest, NextResponse } from 'next/server'
 import PDFDocument from 'pdfkit'
 import { PROFESSIONAL_DD_CONTENT } from '@/lib/professional-dd-content'
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest): Promise<Response> {
   try {
-    const doc = new PDFDocument({
-      size: 'A4',
-      margins: { top: 72, bottom: 72, left: 72, right: 72 },
-      info: {
-        Title: 'Due Diligence Report - TechVision AB',
-        Author: 'Bolagsportalen M&A Platform',
-        Subject: 'Comprehensive Due Diligence Analysis'
-      }
-    })
+    return new Promise<Response>((resolve) => {
+      const doc = new PDFDocument({
+        size: 'A4',
+        margins: { top: 72, bottom: 72, left: 72, right: 72 },
+        info: {
+          Title: 'Due Diligence Report - TechVision AB',
+          Author: 'Bolagsportalen M&A Platform',
+          Subject: 'Comprehensive Due Diligence Analysis'
+        }
+      })
 
-    const chunks: Buffer[] = []
-    doc.on('data', chunk => chunks.push(chunk))
-    
-    return new Promise((resolve) => {
+      const chunks: Buffer[] = []
+      doc.on('data', chunk => chunks.push(chunk))
+      
       doc.on('end', () => {
         const pdfBuffer = Buffer.concat(chunks)
         resolve(new NextResponse(pdfBuffer, {
