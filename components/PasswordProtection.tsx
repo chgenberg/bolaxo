@@ -95,8 +95,8 @@ export default function PasswordProtection({ children }: PasswordProtectionProps
             </div>
             
             {/* Title */}
-            <h1 className="text-2xl font-bold text-center text-gray-900 mb-2">
-              Välkommen till Bolagsplatsen
+            <h1 className="text-3xl font-bold text-center text-[#003366] mb-2">
+              Välkommen till BOLAXO
             </h1>
             <p className="text-center text-gray-600 mb-6">
               Denna sida är lösenordsskyddad
@@ -107,18 +107,20 @@ export default function PasswordProtection({ children }: PasswordProtectionProps
                 {/* Password form */}
                 <form onSubmit={handlePasswordSubmit} className="space-y-4">
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                      Lösenord
+                    <label htmlFor="password" className="block text-sm font-semibold text-[#003366] mb-2">
+                      Lösenord <span className="text-red-500">*</span>
                     </label>
-                    <input
-                      type="password"
-                      id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003366] focus:border-transparent"
-                      placeholder="Ange lösenord"
-                      autoFocus
-                    />
+                    <div className="relative">
+                      <input
+                        type="password"
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#FF69B4] focus:ring-2 focus:ring-[#FF69B4]/20 transition-all placeholder-gray-400 bg-gray-50 shadow-sm text-lg"
+                        placeholder="••••••••"
+                        autoFocus
+                      />
+                    </div>
                   </div>
                   
                   {error && (
@@ -166,13 +168,16 @@ export default function PasswordProtection({ children }: PasswordProtectionProps
                       Vi lanserar snart Sveriges smartaste plattform för företagsförmedling. 
                       Lämna din e-post så kontaktar vi dig.
                     </p>
+                    <label className="block text-sm font-semibold text-[#003366] mb-2">
+                      E-postadress <span className="text-red-500">*</span>
+                    </label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                       <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003366] focus:border-transparent"
+                        className="w-full pl-12 pr-5 py-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#FF69B4] focus:ring-2 focus:ring-[#FF69B4]/20 transition-all placeholder-gray-400 bg-gray-50 shadow-sm text-lg"
                         placeholder="din@epost.se"
                         required
                         autoFocus

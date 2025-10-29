@@ -214,16 +214,18 @@ function LoginForm() {
               {/* Email with enhanced styling */}
               <div>
                 <label className="block text-sm font-bold text-primary-navy mb-2 uppercase tracking-wide">
-                  E-postadress
+                  E-postadress <span className="text-accent-pink">*</span>
                 </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="din@email.se"
-                  required
-                  className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-accent-pink transition-colors text-lg"
-                />
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="ch.genberg@gmail.com"
+                    required
+                    className="w-full px-6 py-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-accent-pink focus:ring-2 focus:ring-accent-pink/20 transition-all text-lg placeholder-gray-400 bg-gray-50 shadow-sm"
+                  />
+                </div>
               </div>
 
               {/* Privacy Policy */}

@@ -196,25 +196,41 @@ export default function RegisterPage() {
               <div className="space-y-6 border-t border-gray-200 pt-8">
                 <h2 className="text-2xl font-bold text-primary-navy">Logga in eller skapa konto</h2>
                 
-                <FormField
-                  label="E-postadress"
-                  name="email"
-                  type="email"
-                  placeholder="din@epost.se"
-                  value={email}
-                  onValueChange={setEmail}
-                  required
-                />
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-semibold text-primary-navy mb-2">
+                      E-postadress <span className="text-accent-pink">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="ch.genberg@gmail.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-accent-pink focus:ring-2 focus:ring-accent-pink/20 transition-all placeholder-gray-400 bg-gray-50"
+                        required
+                      />
+                    </div>
+                  </div>
 
-                <FormField
-                  label="Lösenord"
-                  name="password"
-                  type="text"
-                  placeholder="Minst 8 tecken"
-                  value={password}
-                  onValueChange={setPassword}
-                  required
-                />
+                  <div>
+                    <label className="block text-sm font-semibold text-primary-navy mb-2">
+                      Lösenord <span className="text-accent-pink">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="password"
+                        name="password"
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-accent-pink focus:ring-2 focus:ring-accent-pink/20 transition-all placeholder-gray-400 bg-gray-50"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
 
                 <button
                   onClick={handleEmailPassword}
