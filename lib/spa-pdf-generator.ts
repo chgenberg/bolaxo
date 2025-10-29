@@ -36,6 +36,7 @@ export interface SPAPdfData {
   warranties: string[]
   conditions: string[]
   nonCompetePeriod: string
+  indemnification?: string
   
   // Financial data
   financialData?: {
