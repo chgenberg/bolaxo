@@ -1014,7 +1014,8 @@ model SPA {
   status          String   @default("draft") // draft, negotiation, signed, executed, cancelled
   version         Int      @default(1)
   revisions       SPARevision[]
-  
+  earnout         EarnOut?  @relation(name: "SPAEarnout")
+
   signedAt        DateTime?
   executedAt      DateTime?
   
@@ -1044,8 +1045,8 @@ model SPARevision {
 
 model EarnOut {
   id              String   @id @default(cuid())
-  spaId           String
-  spa             SPA?     @relation(fields: [spaId], references: [id], onDelete: SetNull)
+  spaId           String?  @unique
+  spa             SPA?     @relation(name: "SPAEarnout", fields: [spaId], references: [id], onDelete: SetNull)
   
   listingId       String
   listing         Listing  @relation("ListingEarnout", fields: [listingId], references: [id], onDelete: Cascade)
