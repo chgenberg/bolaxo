@@ -67,11 +67,109 @@ export default function QAPage() {
       if (filter.status !== 'all') params.append('status', filter.status)
       if (filter.category !== 'all') params.append('category', filter.category)
       
-      const response = await fetch(`/api/sme/qa/get-questions?${params}`)
-      if (response.ok) {
-        const data = await response.json()
-        setQuestions(data.data.questions || [])
+      // Demo mode - show realistic Q&A data
+      const demoQuestions: Question[] = [
+        {
+          id: 'q1',
+          title: 'Vilka är era största kundsegment?',
+          description: 'Vi behöver förstå fördelningen av intäkter mellan olika kundgrupper för att bedöma marknadsberoende.',
+          category: 'commercial',
+          priority: 'high',
+          status: 'answered',
+          createdAt: '2025-10-24T10:30:00Z',
+          slaDeadline: '2025-10-26T10:30:00Z',
+          answeredAt: '2025-10-25T09:15:00Z',
+          hoursRemaining: 0,
+          buyer: { name: 'Köpare AB', email: 'buyer@example.com' },
+          answers: [{
+            id: 'a1',
+            content: 'Vi har tre huvudsakliga kundsegment:\n\n1. Financial Services (45% av omsättning) - 8 långtidskontrakt\n2. Retail & E-commerce (35%) - 12 medelstora kunder\n3. Manufacturing (20%) - 5 stora OEM-partners\n\nTop 2 kunder står för 28M SEK av vår 60M SEK årlig omsättning. Vi arbetar aktivt på att diversifiera kundbasen.',
+            createdAt: '2025-10-25T09:15:00Z',
+            seller: { name: 'Säljare AB' }
+          }]
+        },
+        {
+          id: 'q2',
+          title: 'Vilken är churn-raten för era två största kunder?',
+          description: 'Vi behöver förstå kundhållanderisken för era största kontrakt.',
+          category: 'financial',
+          priority: 'high',
+          status: 'pending',
+          createdAt: '2025-10-28T14:20:00Z',
+          slaDeadline: '2025-10-30T14:20:00Z',
+          hoursRemaining: 23,
+          buyer: { name: 'Köpare AB', email: 'buyer@example.com' },
+          answers: []
+        },
+        {
+          id: 'q3',
+          title: 'Vilka är era huvudsakliga konkurrenter?',
+          description: 'Vill förstå konkurrenslandskapet och er unika position.',
+          category: 'market',
+          priority: 'medium',
+          status: 'answered',
+          createdAt: '2025-10-26T11:45:00Z',
+          slaDeadline: '2025-10-28T11:45:00Z',
+          answeredAt: '2025-10-26T19:30:00Z',
+          hoursRemaining: 0,
+          buyer: { name: 'Köpare AB', email: 'buyer@example.com' },
+          answers: [{
+            id: 'a3',
+            content: 'Våra huvudkonkurrenter är Acme Corp, TechSolutions, och Global Consulting.\n\nVi differentiera oss genom:\n- 15% lägre kostnad än Acme\n- 2v implementation mot deras 4-6 veckor\n- Dedikerad support team (vs generisk support)\n- Högre SLA-garanti (99.9% uptime)\n\nMarknaden växer ~12% årligen, och vi tar marknadsandelar från större, trögrare spelare.',
+            createdAt: '2025-10-26T19:30:00Z',
+            seller: { name: 'Säljare AB' }
+          }]
+        },
+        {
+          id: 'q4',
+          title: 'Vilka är era huvudsakliga kostnader?',
+          description: 'COGS breakdown och operativa kostnader',
+          category: 'financial',
+          priority: 'high',
+          status: 'answered',
+          createdAt: '2025-10-25T13:00:00Z',
+          slaDeadline: '2025-10-27T13:00:00Z',
+          answeredAt: '2025-10-25T16:45:00Z',
+          hoursRemaining: 0,
+          buyer: { name: 'Köpare AB', email: 'buyer@example.com' },
+          answers: [{
+            id: 'a4',
+            content: 'Kostnadsstruktur (60M SEK revenue):\n\nDirekt kostnader (40%):\n- Personallöner: 15M (utvecklare, konsulter)\n- Licenser & infrastructure: 6M\n- Resor & möten: 3M\n\nOperativa kostnader (20%):\n- Löner ledning & admin: 8M\n- Kontor & overhead: 4M\n\nSäljning & marknadsföring (15%): 9M\n\nEBITDA: 22M SEK (37%)',
+            createdAt: '2025-10-25T16:45:00Z',
+            seller: { name: 'Säljare AB' }
+          }]
+        },
+        {
+          id: 'q5',
+          title: 'Vilka är säkerhetscertifieringarna?',
+          description: 'ISO, SOC2, GDPR compliance status',
+          category: 'it',
+          priority: 'medium',
+          status: 'answered',
+          createdAt: '2025-10-27T09:00:00Z',
+          slaDeadline: '2025-10-29T09:00:00Z',
+          answeredAt: '2025-10-27T10:20:00Z',
+          hoursRemaining: 0,
+          buyer: { name: 'Köpare AB', email: 'buyer@example.com' },
+          answers: [{
+            id: 'a5',
+            content: 'Vi har följande certifieringar:\n\n✅ GDPR-compliant (audited 2025-03)\n✅ ISO 27001 (expirerar 2026-02)\n✅ SOC 2 Type II (annual audit)\n✅ WCAG 2.1 AA accessibility\n\nSäkerhet:\n- Penetration testing 2x årligen\n- Datakryptering end-to-end\n- 30-dagars backup retention\n- DLP-policys för känslig data',
+            createdAt: '2025-10-27T10:20:00Z',
+            seller: { name: 'Säljare AB' }
+          }]
+        }
+      ]
+      
+      // Apply filters
+      let filtered = demoQuestions
+      if (filter.status !== 'all') {
+        filtered = filtered.filter(q => q.status === filter.status)
       }
+      if (filter.category !== 'all') {
+        filtered = filtered.filter(q => q.category === filter.category)
+      }
+      
+      setQuestions(filtered)
     } catch (error) {
       console.error('Error fetching questions:', error)
     } finally {

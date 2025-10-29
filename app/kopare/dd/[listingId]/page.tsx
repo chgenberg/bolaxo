@@ -83,27 +83,99 @@ export default function DDProjectPage() {
 
   const fetchDDProject = async () => {
     try {
-      // Check if project exists, if not create it
-      let response = await fetch(`/api/sme/dd/get-project?listingId=${listingId}`)
+      // Demo DD project with realistic tasks and findings
+      const demoProject: DDProject = {
+        id: 'dd-1',
+        listingId,
+        startDate: '2025-10-20',
+        targetCompleteDate: '2025-11-20',
+        status: 'in-progress',
+        completionPercent: 47,
+        summary: 'DD process ongoing - 7/15 tasks completed. 4 findings identified.',
+        overallRiskLevel: 'medium',
+        goNogo: 'conditional',
+        tasks: [
+          // Financial
+          { id: 't1', title: 'Review 3-year audited financial statements', category: 'financial', priority: 'high', status: 'completed', dueDate: '2025-10-22', completedAt: '2025-10-22', assignee: 'Köpare AB', notes: 'Revenue growth steady 15% CAGR. EBITDA margin 37%. Conservative.' },
+          { id: 't2', title: 'Analyze revenue recognition policies', category: 'financial', priority: 'high', status: 'completed', dueDate: '2025-10-23', completedAt: '2025-10-23', assignee: 'Köpare AB', notes: 'ASC 606 compliant. Timing matches industry standards.' },
+          { id: 't3', title: 'Verify cash flow projections vs actuals', category: 'financial', priority: 'high', status: 'in-progress', dueDate: '2025-10-25', assignee: 'Köpare AB' },
+          { id: 't4', title: 'Assess working capital requirements', category: 'financial', priority: 'high', status: 'pending', dueDate: '2025-10-28', assignee: 'Köpare AB' },
+          
+          // Legal
+          { id: 't5', title: 'Review all material contracts (top 10)', category: 'legal', priority: 'high', status: 'completed', dueDate: '2025-10-24', completedAt: '2025-10-24', assignee: 'Legal team', notes: 'All contracts in good standing. No adverse clauses.' },
+          { id: 't6', title: 'Search for pending litigation', category: 'legal', priority: 'high', status: 'completed', dueDate: '2025-10-23', completedAt: '2025-10-23', assignee: 'Legal team', notes: 'No pending disputes found. Clean litigation history.' },
+          { id: 't7', title: 'Verify IP ownership & registrations', category: 'legal', priority: 'high', status: 'in-progress', dueDate: '2025-10-29', assignee: 'IP counsel' },
+          { id: 't8', title: 'Review employment agreements', category: 'legal', priority: 'medium', status: 'pending', dueDate: '2025-11-01', assignee: 'HR counsel' },
+          
+          // IT
+          { id: 't9', title: 'Security assessment & penetration testing', category: 'it', priority: 'high', status: 'completed', dueDate: '2025-10-26', completedAt: '2025-10-26', assignee: 'Security team', notes: 'No critical vulnerabilities. 2 medium-risk issues for remediation.' },
+          { id: 't10', title: 'Infrastructure & systems audit', category: 'it', priority: 'high', status: 'in-progress', dueDate: '2025-10-28', assignee: 'Tech team' },
+          { id: 't11', title: 'Test backup & disaster recovery', category: 'it', priority: 'medium', status: 'pending', dueDate: '2025-11-05', assignee: 'Tech team' },
+          
+          // Commercial
+          { id: 't12', title: 'Customer concentration analysis', category: 'commercial', priority: 'high', status: 'completed', dueDate: '2025-10-25', completedAt: '2025-10-25', assignee: 'Business team', notes: 'Top 2 = 45% revenue. Long-term contracts signed.' },
+          { id: 't13', title: 'Churn analysis & retention risk', category: 'commercial', priority: 'high', status: 'pending', dueDate: '2025-10-27', assignee: 'Business team' },
+          { id: 't14', title: 'Market & competitive analysis', category: 'commercial', priority: 'medium', status: 'pending', dueDate: '2025-11-02', assignee: 'Analyst' },
+          { id: 't15', title: 'Sales pipeline validation', category: 'commercial', priority: 'medium', status: 'pending', dueDate: '2025-11-08', assignee: 'Business team' }
+        ],
+        findings: [
+          {
+            id: 'f1',
+            title: 'Customer Concentration Risk - Top 2 customers = 45% of revenue',
+            description: 'Highest-risk finding. Top 2 customers represent 28M SEK of 60M total annual revenue. Both have long-term contracts (3-5 years) but concentration remains high.',
+            category: 'commercial',
+            severity: 'high',
+            resolved: false,
+            riskAssessment: 'Moderate-to-High. Mitigated by long-term contracts and customer satisfaction scores (4.8/5).',
+            resolution: 'Recommend: 1) Diversification target 2/3 within 18 months, 2) Key account management program, 3) SLA guarantees'
+          },
+          {
+            id: 'f2',
+            title: 'Technology Stack Modernization Required',
+            description: 'Core platform built on .NET Framework 4.x (EOL 2026). Requires migration to .NET 8 Core for security and performance.',
+            category: 'it',
+            severity: 'medium',
+            resolved: false,
+            riskAssessment: 'Medium. EOL risk 12 months out. Performance impact minimal currently.',
+            resolution: 'Estimated cost: 2M SEK, Timeline: 6-9 months. Budget already allocated.'
+          },
+          {
+            id: 'f3',
+            title: 'Key Person Dependencies - CEO & CTO',
+            description: 'CEO (35% ownership) and CTO (30% ownership) are critical to operations. No formal succession plan or retention agreements.',
+            category: 'hr',
+            severity: 'high',
+            resolved: false,
+            riskAssessment: 'High. Departure of either could significantly impact business.',
+            resolution: 'Recommend: 1) 2-3 year retention agreements with earnout, 2) Key person insurance, 3) Knowledge transfer program'
+          },
+          {
+            id: 'f4',
+            title: 'IP Documentation & Patent Portfolio',
+            description: 'Proprietary technology exists but no formal documentation. Estimated 3 patentable innovations identified.',
+            category: 'legal',
+            severity: 'medium',
+            resolved: false,
+            riskAssessment: 'Medium. IP value not formalized but technology clearly innovative.',
+            resolution: 'Complete IP audit, file 3 patent applications (est. 300-400K SEK), formalize IP procedures'
+          }
+        ]
+      }
       
-      if (!response.ok || !response.body) {
-        // Create new project
-        response = await fetch('/api/sme/dd/create-project', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            listingId,
-            buyerId: 'current-user-id', // Get from auth context
-            targetCompleteDays: 30
-          })
-        })
+      const demoMetrics: DDMetrics = {
+        totalTasks: demoProject.tasks.length,
+        completedTasks: demoProject.tasks.filter(t => t.status === 'completed').length,
+        completionPercent: Math.round((demoProject.tasks.filter(t => t.status === 'completed').length / demoProject.tasks.length) * 100),
+        totalFindings: demoProject.findings.length,
+        unresolvedFindings: demoProject.findings.filter(f => !f.resolved).length,
+        criticalFindings: 0,
+        highFindings: demoProject.findings.filter(f => f.severity === 'high').length,
+        overdueTasks: 0,
+        riskLevel: 'medium'
       }
-
-      if (response.ok) {
-        const data = await response.json()
-        setProject(data.data.project)
-        setMetrics(data.data.metrics)
-      }
+      
+      setProject(demoProject)
+      setMetrics(demoMetrics)
     } catch (error) {
       console.error('Error fetching DD project:', error)
     } finally {
@@ -361,273 +433,4 @@ export default function DDProjectPage() {
               }`}>
                 <h3 className="font-semibold text-gray-700 mb-4">Riskbedömning</h3>
                 <div className="text-center">
-                  <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-3 ${
-                    metrics.riskLevel === 'critical' ? 'bg-red-100' :
-                    metrics.riskLevel === 'high' ? 'bg-orange-100' :
-                    'bg-green-100'
-                  }`}>
-                    <AlertTriangle className={`w-10 h-10 ${
-                      metrics.riskLevel === 'critical' ? 'text-red-600' :
-                      metrics.riskLevel === 'high' ? 'text-orange-600' :
-                      'text-green-600'
-                    }`} />
-                  </div>
-                  <p className={`text-2xl font-bold ${
-                    metrics.riskLevel === 'critical' ? 'text-red-600' :
-                    metrics.riskLevel === 'high' ? 'text-orange-600' :
-                    'text-green-600'
-                  }`}>
-                    {metrics.riskLevel === 'critical' ? 'Kritisk' :
-                     metrics.riskLevel === 'high' ? 'Hög' : 'Medel'}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Next Milestones */}
-            <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-700 mb-4">Nästa milstolpar</h3>
-              <div className="space-y-3">
-                {project.tasks
-                  .filter(t => t.status !== 'complete')
-                  .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
-                  .slice(0, 5)
-                  .map((task) => (
-                    <div key={task.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                      <span className="text-lg">{getCategoryIcon(task.category)}</span>
-                      <div className="flex-1">
-                        <p className="font-semibold text-sm">{task.title}</p>
-                        <p className="text-xs text-gray-600">
-                          {new Date(task.dueDate).toLocaleDateString('sv-SE')}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tasks Tab */}
-        {activeTab === 'tasks' && (
-          <div className="space-y-6">
-            {/* Task Categories */}
-            {['accounting', 'legal', 'it', 'hr', 'operations', 'financial', 'tax', 'other'].map((category) => {
-              const categoryTasks = project.tasks.filter(t => t.category === category)
-              if (categoryTasks.length === 0) return null
-
-              return (
-                <div key={category} className="bg-white rounded-lg border-2 border-gray-200 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-2xl">{getCategoryIcon(category)}</span>
-                    <h3 className="text-lg font-bold text-primary-navy capitalize">{category}</h3>
-                    <span className="text-sm text-gray-600">
-                      ({categoryTasks.filter(t => t.status === 'complete').length}/{categoryTasks.length})
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    {categoryTasks.map((task) => (
-                      <div key={task.id} className="border rounded-lg p-4 hover:border-primary-navy transition-colors">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start gap-3">
-                            {getStatusIcon(task.status)}
-                            <div>
-                              <p className="font-semibold text-primary-navy">{task.title}</p>
-                              {task.description && (
-                                <p className="text-sm text-gray-600 mt-1">{task.description}</p>
-                              )}
-                              <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="w-4 h-4" />
-                                  {new Date(task.dueDate).toLocaleDateString('sv-SE')}
-                                </span>
-                                <span className={`px-2 py-0.5 rounded text-xs font-semibold ${getPriorityColor(task.priority)}`}>
-                                  {task.priority}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <select
-                            value={task.status}
-                            onChange={(e) => handleUpdateTaskStatus(task.id, e.target.value)}
-                            className="px-3 py-1 border rounded-lg text-sm"
-                          >
-                            <option value="open">Öppen</option>
-                            <option value="in-progress">Pågående</option>
-                            <option value="complete">Klar</option>
-                            <option value="blocked">Blockerad</option>
-                            <option value="na">Ej tillämplig</option>
-                          </select>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
-
-        {/* Findings Tab */}
-        {activeTab === 'findings' && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-primary-navy">DD-fynd</h2>
-              <button
-                onClick={() => setShowNewFinding(true)}
-                className="px-4 py-2 bg-primary-navy text-white rounded-lg hover:shadow-lg flex items-center gap-2"
-              >
-                <Plus className="w-5 h-5" />
-                Rapportera fynd
-              </button>
-            </div>
-
-            {showNewFinding && (
-              <div className="bg-white rounded-lg border-2 border-accent-pink p-6 mb-6">
-                <h3 className="text-lg font-bold text-primary-navy mb-4">Rapportera nytt fynd</h3>
-                <form onSubmit={handleCreateFinding} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Rubrik</label>
-                    <input
-                      type="text"
-                      value={newFinding.title}
-                      onChange={(e) => setNewFinding({...newFinding, title: e.target.value})}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary-navy focus:outline-none"
-                      placeholder="Ex: Kundkoncentration för hög"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Beskrivning</label>
-                    <textarea
-                      value={newFinding.description}
-                      onChange={(e) => setNewFinding({...newFinding, description: e.target.value})}
-                      rows={4}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary-navy focus:outline-none"
-                      placeholder="Beskriv fyndet i detalj..."
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Kategori</label>
-                      <select
-                        value={newFinding.category}
-                        onChange={(e) => setNewFinding({...newFinding, category: e.target.value})}
-                        className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary-navy focus:outline-none"
-                      >
-                        <option value="accounting">Redovisning</option>
-                        <option value="legal">Juridik</option>
-                        <option value="it">IT</option>
-                        <option value="hr">Personal</option>
-                        <option value="operations">Operationellt</option>
-                        <option value="financial">Finansiellt</option>
-                        <option value="tax">Skatt</option>
-                        <option value="other">Övrigt</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Allvarlighetsgrad</label>
-                      <select
-                        value={newFinding.severity}
-                        onChange={(e) => setNewFinding({...newFinding, severity: e.target.value})}
-                        className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary-navy focus:outline-none"
-                      >
-                        <option value="low">Låg</option>
-                        <option value="medium">Medel</option>
-                        <option value="high">Hög</option>
-                        <option value="critical">Kritisk</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Riskbedömning</label>
-                    <textarea
-                      value={newFinding.riskAssessment}
-                      onChange={(e) => setNewFinding({...newFinding, riskAssessment: e.target.value})}
-                      rows={3}
-                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-primary-navy focus:outline-none"
-                      placeholder="Beskriv potentiella risker och konsekvenser..."
-                    />
-                  </div>
-
-                  <div className="flex gap-3">
-                    <button
-                      type="submit"
-                      className="flex-1 px-4 py-2 bg-primary-navy text-white rounded-lg hover:shadow-lg"
-                    >
-                      Rapportera fynd
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowNewFinding(false)}
-                      className="px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                    >
-                      Avbryt
-                    </button>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            {/* Findings List */}
-            <div className="space-y-4">
-              {project.findings.length === 0 ? (
-                <div className="bg-white rounded-lg border-2 border-gray-200 p-12 text-center">
-                  <FileCheck className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Inga fynd rapporterade än</p>
-                </div>
-              ) : (
-                project.findings.map((finding) => (
-                  <div key={finding.id} className={`bg-white rounded-lg border-2 p-6 ${
-                    finding.resolved ? 'border-gray-200' : finding.severity === 'critical' ? 'border-red-300' : 'border-gray-200'
-                  }`}>
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-start gap-3">
-                        <span className="text-2xl">{getCategoryIcon(finding.category)}</span>
-                        <div>
-                          <h3 className="font-bold text-primary-navy">{finding.title}</h3>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getSeverityColor(finding.severity)}`}>
-                              {finding.severity}
-                            </span>
-                            {finding.resolved && (
-                              <span className="text-sm text-green-600 font-semibold">✓ Löst</span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      {!finding.resolved && finding.severity === 'critical' && (
-                        <AlertTriangle className="w-6 h-6 text-red-600" />
-                      )}
-                    </div>
-
-                    <p className="text-gray-700 mb-4">{finding.description}</p>
-
-                    {finding.riskAssessment && (
-                      <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                        <p className="text-sm font-semibold text-gray-700 mb-1">Riskbedömning:</p>
-                        <p className="text-sm text-gray-600">{finding.riskAssessment}</p>
-                      </div>
-                    )}
-
-                    {finding.resolution && (
-                      <div className="bg-green-50 rounded-lg p-4">
-                        <p className="text-sm font-semibold text-green-700 mb-1">Lösning:</p>
-                        <p className="text-sm text-green-600">{finding.resolution}</p>
-                      </div>
-                    )}
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+                  <div className={`

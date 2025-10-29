@@ -57,38 +57,48 @@ export default function LoIPage() {
 
   const fetchListingData = async () => {
     try {
-      // Get listing data to calculate proposed price
-      const listingRes = await fetch(`/api/listings/${listingId}`)
-      if (listingRes.ok) {
-        const listing = await listingRes.json()
-        const basePrice = listing.askingPrice || 10000000 // Default 10M SEK
-        setFormData(prev => ({
-          ...prev,
-          proposedPrice: basePrice
-        }))
+      // Demo LoI data with version history
+      const demoLoI: LoIData = {
+        id: 'loi-1',
+        listingId,
+        proposedPrice: 65000000,
+        priceBasis: 'enterprise-value',
+        multiple: 4.3,
+        multipleBase: 'EBITDA',
+        cashAtClosing: 58000000,
+        escrowHoldback: 2000000,
+        earnOutAmount: 5000000,
+        earnOutStructure: {
+          period: 3,
+          kpiType: 'revenue',
+          targets: {
+            year1: 65000000,
+            year2: 72000000,
+            year3: 80000000
+          }
+        },
+        sellerFinancing: 0,
+        proposedClosingDate: '2025-12-31',
+        exclusivityPeriod: 45,
+        nonCompete: 3,
+        workingCapitalTarget: 5000000,
+        status: 'negotiation',
+        version: 3
       }
-
-      // Check if LoI exists
-      const loiRes = await fetch(`/api/sme/loi/get?listingId=${listingId}`)
-      if (loiRes.ok) {
-        const data = await loiRes.json()
-        if (data.data) {
-          setLoi(data.data)
-          // Update form with existing data
-          setFormData({
-            proposedPrice: data.data.proposedPrice,
-            multiple: data.data.multiple || 5.0,
-            cashAtClosingPercent: Math.round((data.data.cashAtClosing / data.data.proposedPrice) * 100),
-            escrowPercent: Math.round((data.data.escrowHoldback / data.data.proposedPrice) * 100),
-            earnOutPercent: data.data.earnOutAmount ? Math.round((data.data.earnOutAmount / data.data.proposedPrice) * 100) : 0,
-            exclusivityDays: data.data.exclusivityPeriod || 60,
-            closingDateDaysOut: 90,
-            nonCompeteYears: data.data.nonCompete || 3
-          })
-        }
-      }
+      
+      setLoi(demoLoI)
+      setFormData({
+        proposedPrice: 65000000,
+        multiple: 4.3,
+        cashAtClosingPercent: 89,
+        escrowPercent: 3,
+        earnOutPercent: 8,
+        exclusivityDays: 45,
+        closingDateDaysOut: 60,
+        nonCompeteYears: 3
+      })
     } catch (error) {
-      console.error('Error fetching data:', error)
+      console.error('Error fetching listing data:', error)
     } finally {
       setLoading(false)
     }
