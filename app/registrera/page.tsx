@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePaymentStore, UserRole } from '@/store/paymentStore'
-import { Building, Handshake, Search, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react'
+import { Building, Handshake, Search, ArrowRight, CheckCircle, AlertCircle, Mail } from 'lucide-react'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -16,6 +16,7 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [linkSent, setLinkSent] = useState(false)
 
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role)
@@ -78,16 +79,42 @@ export default function RegisterPage() {
         throw new Error(data.error || 'Kunde inte skapa konto')
       }
 
-      // Show success message and redirect to login
-      setError('')
-      alert('Kontot har skapats! Kolla din email för verifieringslänken.')
-      router.push('/login')
+      // Show success screen
+      setLinkSent(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Något gick fel. Försök igen.')
       console.error(err)
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  // Show success screen after registration
+  if (linkSent) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-accent-pink/5 via-neutral-white to-primary-navy/5 py-12 sm:py-16 md:py-24 flex items-center justify-center px-4">
+        <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl max-w-md w-full text-center border border-gray-100">
+          <div className="w-20 h-20 bg-accent-pink/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <Mail className="w-10 h-10 text-accent-pink" />
+          </div>
+          
+          <h1 className="text-3xl sm:text-4xl font-bold text-primary-navy mb-2">Kolla din inkorg!</h1>
+          <p className="text-lg text-primary-navy mb-6">
+            Vi har skickat en verifieringslänk till <strong>{email}</strong>
+          </p>
+          <p className="text-sm text-gray-600 mb-8">
+            Klicka på länken i mailet för att aktivera ditt konto och logga in. Länken är giltig i 1 timme.
+          </p>
+
+          <button
+            onClick={() => router.push('/login')}
+            className="w-full bg-primary-navy text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-navy/90 transition-all shadow-md"
+          >
+            Gå till inloggning
+          </button>
+        </div>
+      </main>
+    )
   }
 
   return (
