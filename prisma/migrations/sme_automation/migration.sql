@@ -6,15 +6,15 @@ CREATE TABLE "FinancialData" (
     "listingId" TEXT NOT NULL UNIQUE,
     "fileName" TEXT,
     "fileUrl" TEXT,
-    "uploadedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "uploadedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "normalizedEBITDA" REAL,
     "addBacks" TEXT,
     "workingCapital" REAL,
-    "lastReviewedAt" DATETIME,
+    "lastReviewedAt" TIMESTAMP,
     "reviewedByAdvisor" TEXT,
     "dataQuality" TEXT NOT NULL DEFAULT 'pending',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "FinancialData_listingId_fkey" FOREIGN KEY ("listingId") REFERENCES "Listing" ("id") ON DELETE CASCADE
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE "FinancialYear" (
     "operatingCF" REAL,
     "investingCF" REAL,
     "financingCF" REAL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "FinancialYear_financialDataId_fkey" FOREIGN KEY ("financialDataId") REFERENCES "FinancialData" ("id") ON DELETE CASCADE
 );
 
@@ -48,14 +48,14 @@ CREATE TABLE "Agreement" (
     "fileSize" INTEGER,
     "description" TEXT,
     "counterparty" TEXT,
-    "startDate" DATETIME,
-    "endDate" DATETIME,
+    "startDate" TIMESTAMP,
+    "endDate" TIMESTAMP,
     "terminationNotice" TEXT,
     "riskLevel" TEXT NOT NULL DEFAULT 'low',
     "riskDescription" TEXT,
-    "uploadedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "uploadedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "Agreement_listingId_fkey" FOREIGN KEY ("listingId") REFERENCES "Listing" ("id") ON DELETE CASCADE
 );
 
@@ -64,8 +64,8 @@ CREATE TABLE "DataRoom" (
     "listingId" TEXT NOT NULL UNIQUE,
     "structure" TEXT NOT NULL,
     "accessRules" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "DataRoom_listingId_fkey" FOREIGN KEY ("listingId") REFERENCES "Listing" ("id") ON DELETE CASCADE
 );
 
@@ -78,7 +78,7 @@ CREATE TABLE "DataRoomAccess" (
     "fileName" TEXT,
     "ipAddress" TEXT,
     "userAgent" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "DataRoomAccess_dataRoomId_fkey" FOREIGN KEY ("dataRoomId") REFERENCES "DataRoom" ("id") ON DELETE CASCADE
 );
 
@@ -89,11 +89,11 @@ CREATE TABLE "TeaserIM" (
     "questionnaire" TEXT NOT NULL,
     "pdfUrl" TEXT,
     "pptxUrl" TEXT,
-    "generatedAt" DATETIME,
+    "generatedAt" TIMESTAMP,
     "version" INTEGER NOT NULL DEFAULT 1,
     "status" TEXT NOT NULL DEFAULT 'draft',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "TeaserIM_listingId_fkey" FOREIGN KEY ("listingId") REFERENCES "Listing" ("id") ON DELETE CASCADE
 );
 
@@ -105,14 +105,14 @@ CREATE TABLE "NDASignature" (
     "templateVersion" TEXT NOT NULL DEFAULT 'v1',
     "customTerms" TEXT,
     "status" TEXT NOT NULL DEFAULT 'sent',
-    "signedAt" DATETIME,
+    "signedAt" TIMESTAMP,
     "signedUrl" TEXT,
     "bankIdRef" TEXT,
-    "sentAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "viewedAt" DATETIME,
-    "expiresAt" DATETIME NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "sentAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "viewedAt" TIMESTAMP,
+    "expiresAt" TIMESTAMP NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "NDASignature_listingId_fkey" FOREIGN KEY ("listingId") REFERENCES "Listing" ("id") ON DELETE CASCADE
 );
 
@@ -121,13 +121,13 @@ CREATE TABLE "HandoffPack" (
     "listingId" TEXT NOT NULL UNIQUE,
     "overview" TEXT NOT NULL,
     "zipUrl" TEXT,
-    "zipGeneratedAt" DATETIME,
+    "zipGeneratedAt" TIMESTAMP,
     "advisorEmail" TEXT,
     "advisorName" TEXT,
-    "handoffAt" DATETIME,
+    "handoffAt" TIMESTAMP,
     "status" TEXT NOT NULL DEFAULT 'draft',
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "HandoffPack_listingId_fkey" FOREIGN KEY ("listingId") REFERENCES "Listing" ("id") ON DELETE CASCADE
 );
 
