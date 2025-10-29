@@ -1,6 +1,4 @@
 -- Add SME automation tables
-ALTER TABLE "Listing" ADD COLUMN "advisorId" TEXT;
-
 CREATE TABLE "FinancialData" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "listingId" TEXT NOT NULL UNIQUE,
