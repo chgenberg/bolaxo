@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
         closingDate: new Date(pdfData.closingDate),
         cashAtClosing: pdfData.cashAtClosing,
         escrowHoldback: pdfData.escrowAmount,
-        earnoutStructure: {
+        earnOutStructure: {
           totalEarnout: pdfData.earnoutAmount,
           period: pdfData.earnoutPeriod,
           kpi: pdfData.earnoutKPI
