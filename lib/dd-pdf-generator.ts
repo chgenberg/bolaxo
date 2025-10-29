@@ -204,4 +204,96 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
       if (data.topThreeRisks && data.topThreeRisks.length > 0) {
         doc.fontSize(11).fontBold().text('Tre viktigaste riskerna:')
         data.topThreeRisks.forEach((risk, idx) => {
-          doc.fontSize(10).font('Helvetica').text(`
+          doc.fontSize(10).font('Helvetica').text(`${idx + 1}. ${risk}`, { indent: 20 })
+        })
+        doc.moveDown(0.5)
+      }
+      
+      // Recommendation
+      if (data.dealRecommendation) {
+        doc.fontSize(11).fontBold().text('Rekommendation:')
+        doc.fontSize(10).font('Helvetica').text(data.dealRecommendation, { align: 'justify', indent: 20 })
+        doc.moveDown(1)
+      }
+      
+      doc.fontSize(9).fillColor('#808080')
+      doc.text('Denna rapport är baserad på tillgänglig dokumentation och intervjuer. En fullständig framtidsprognos kan inte garanteras.')
+
+      doc.addPage()
+
+      // ===== FINANSIELL DUE DILIGENCE =====
+      if (data.financialFindings && data.financialFindings.length > 0) {
+        createSectionHeader(doc, 'Finansiell Due Diligence', 1)
+        data.financialFindings.forEach(finding => addFinding(doc, finding, 0))
+        doc.addPage()
+      }
+
+      // ===== JURIDISK DUE DILIGENCE =====
+      if (data.legalFindings && data.legalFindings.length > 0) {
+        createSectionHeader(doc, 'Juridisk Due Diligence', 2)
+        data.legalFindings.forEach(finding => addFinding(doc, finding, 0))
+        doc.addPage()
+      }
+
+      // ===== KOMMERSIELL DUE DILIGENCE =====
+      if (data.commercialFindings && data.commercialFindings.length > 0) {
+        createSectionHeader(doc, 'Kommersiell Due Diligence', 3)
+        data.commercialFindings.forEach(finding => addFinding(doc, finding, 0))
+        doc.addPage()
+      }
+
+      // ===== HR DUE DILIGENCE =====
+      if (data.hrFindings && data.hrFindings.length > 0) {
+        createSectionHeader(doc, 'HR & Organisation', 4)
+        data.hrFindings.forEach(finding => addFinding(doc, finding, 0))
+        doc.addPage()
+      }
+
+      // ===== IT DUE DILIGENCE =====
+      if (data.itFindings && data.itFindings.length > 0) {
+        createSectionHeader(doc, 'IT & Teknisk', 5)
+        data.itFindings.forEach(finding => addFinding(doc, finding, 0))
+        doc.addPage()
+      }
+
+      // ===== SKATT =====
+      if (data.taxFindings && data.taxFindings.length > 0) {
+        createSectionHeader(doc, 'Skattemässig Due Diligence', 6)
+        data.taxFindings.forEach(finding => addFinding(doc, finding, 0))
+        doc.addPage()
+      }
+
+      // ===== MILJÖ =====
+      if (data.envFindings && data.envFindings.length > 0) {
+        createSectionHeader(doc, 'Miljömässig Due Diligence', 7)
+        data.envFindings.forEach(finding => addFinding(doc, finding, 0))
+        doc.addPage()
+      }
+
+      // ===== SIGNATURE PAGE =====
+      doc.fontSize(14).fontBold().fillColor('#0E2D5C')
+      doc.text('UNDERTECKNING', { underline: true })
+      doc.moveDown(1)
+      doc.fillColor('#000000')
+      
+      doc.fontSize(11).font('Helvetica').text(
+        'Denna rapport är baserad på tillgänglig information per rapporteringsdatum. ' +
+        'Rapporten är avsedd för användning i samband med köpbeslutet och är konfidentiell.',
+        { align: 'justify' }
+      )
+      
+      doc.moveDown(3)
+      doc.text('DD-ledare:')
+      doc.moveDown(2)
+      doc.text('_' . repeat(40))
+      doc.text(data.ddTeamLead)
+      doc.moveDown(0.3)
+      doc.text(`Datum: ${new Date().toLocaleDateString('sv-SE')}`)
+
+      doc.end()
+    } catch (error) {
+      doc.end()
+      reject(error)
+    }
+  })
+}
