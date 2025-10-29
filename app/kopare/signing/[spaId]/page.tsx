@@ -56,17 +56,6 @@ export default function SigningPage() {
         })
       })
 
-      // Call finalize endpoint to update SPA status and milestone
-      const response = await fetch('/api/sme/spa/finalize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          spaId,
-          signedBy: userRole,
-          timestamp: new Date().toISOString()
-        })
-      })
-
       if (response.ok) {
         const data = await response.json()
         setSpaInfo(data.data?.spa)
