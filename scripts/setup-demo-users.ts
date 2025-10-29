@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client'
-import * as bcrypt from 'bcrypt'
 
 const prisma = new PrismaClient()
 
@@ -27,19 +26,15 @@ async function main() {
 
   console.log('👤 Creating demo users...')
 
-  const password = 'Password1!'
-  const hashedPassword = await bcrypt.hash(password, 10)
-
   // Create Seller
   const seller = await prisma.user.create({
     data: {
       email: 'saljare@bolaxo.com',
-      hashedPassword: hashedPassword,
       role: 'seller',
-      firstName: 'Säljaren',
-      lastName: 'Demo',
-      company: 'Tech Company AB',
-      isVerified: true,
+      name: 'Säljaren Demo',
+      companyName: 'Tech Company AB',
+      verified: true,
+      bankIdVerified: true,
     },
   })
   console.log(`✅ Seller created: ${seller.email}`)
@@ -48,12 +43,11 @@ async function main() {
   const buyer = await prisma.user.create({
     data: {
       email: 'kopare@bolaxo.com',
-      hashedPassword: hashedPassword,
       role: 'buyer',
-      firstName: 'Köparen',
-      lastName: 'Demo',
-      company: 'Investment Partners',
-      isVerified: true,
+      name: 'Köparen Demo',
+      companyName: 'Investment Partners',
+      verified: true,
+      bankIdVerified: true,
     },
   })
   console.log(`✅ Buyer created: ${buyer.email}`)
@@ -62,12 +56,11 @@ async function main() {
   const advisor = await prisma.user.create({
     data: {
       email: 'maklare@bolaxo.com',
-      hashedPassword: hashedPassword,
-      role: 'advisor',
-      firstName: 'Mäklaren',
-      lastName: 'Demo',
-      company: 'M&A Advisors',
-      isVerified: true,
+      role: 'broker',
+      name: 'Mäklaren Demo',
+      companyName: 'M&A Advisors',
+      verified: true,
+      bankIdVerified: true,
     },
   })
   console.log(`✅ Advisor created: ${advisor.email}`)
@@ -77,29 +70,28 @@ async function main() {
 ✅ DEMO USERS SETUP COMPLETE
 ═══════════════════════════════════════════════════════════════
 
-📧 LOGIN CREDENTIALS:
+📧 LOGIN CREDENTIALS (Magic Link - no password needed):
 
 1️⃣  SÄLJARE (Seller):
     Email: saljare@bolaxo.com
-    Password: ${password}
     Role: seller
 
 2️⃣  KÖPARE (Buyer):
     Email: kopare@bolaxo.com
-    Password: ${password}
     Role: buyer
 
-3️⃣  MÄKLARE (Advisor):
+3️⃣  MÄKLARE (Advisor/Broker):
     Email: maklare@bolaxo.com
-    Password: ${password}
-    Role: advisor
+    Role: broker
 
 ═══════════════════════════════════════════════════════════════
 
 🚀 NEXT STEPS:
 1. Go to http://localhost:3000/login
-2. Login with any of the above credentials
-3. Test the M&A workflow:
+2. Enter any of the above email addresses
+3. Click "Get Magic Link"
+4. Follow the magic link in terminal output (dev mode)
+5. Test the M&A workflow:
    - Säljaren: Create listing, upload documents
    - Köparen: Find listing, ask questions, generate SPA
    - Mäklaren: Oversee the process
