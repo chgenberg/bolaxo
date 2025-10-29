@@ -12,6 +12,7 @@ export const LAUNCH_CONFIG = {
   VISIBLE_FEATURES: {
     VALUATION: true, // Gratis värdering för säljare
     SELLER_LISTINGS: true, // Annonser för säljare
+    BROKER_LISTINGS: true, // Annonser för mäklare (NEW)
     BUYER_SEARCH: true, // Sök för köpare
     LOGIN_REGISTER: true, // Login/Register
     NDA: true, // NDA-process
@@ -21,7 +22,6 @@ export const LAUNCH_CONFIG = {
 
   // Features to hide during launch (show "Coming Soon")
   COMING_SOON_FEATURES: {
-    BROKER_MODE: true,
     INVESTOR_MODE: true,
     ADMIN_PANEL: true,
     CHAT_MESSAGING: true,
@@ -34,12 +34,12 @@ export const LAUNCH_CONFIG = {
     WHITE_LABEL: true,
   },
 
-  // Hide these roles from registration
-  HIDDEN_ROLES: ['broker'],
+  // Hide these roles from registration (empty = show all)
+  HIDDEN_ROLES: [],
 
   // Navigation items visibility
   NAVIGATION: {
-    SHOW_FOR_MAKLARE: false,
+    SHOW_FOR_MAKLARE: true, // Show broker section now
     SHOW_FOR_INVESTERARE: false,
     SHOW_BLOG: false,
     SHOW_ADMIN: false,
@@ -48,16 +48,17 @@ export const LAUNCH_CONFIG = {
 
   // Only show these dashboard sections
   ALLOWED_DASHBOARD_SECTIONS: [
-    'listings', // Säljare: Mina annonser
+    'listings', // Säljare & Mäklare: Mina annonser
     'deals', // Köpare: Mina affärer
     'saved', // Köpare: Sparade objekt
-    'lois', // Säljare: Mottagna LOIs
+    'lois', // Säljare & Mäklare: Mottagna LOIs
     'messages', // Begränsad - bara för transaktioner
   ],
 
   // Free trial limits
   FREE_LIMITS: {
     SELLER_LISTINGS: 999, // Unlimited listings
+    BROKER_LISTINGS: 999, // Unlimited listings for brokers
     SELLER_VALUATIONS: 999, // Unlimited valuations
     BUYER_SEARCHES: 999, // Unlimited searches
     BUYER_NDA_REQUESTS: 999, // Unlimited NDA requests
@@ -67,6 +68,7 @@ export const LAUNCH_CONFIG = {
   PAYMENTS: {
     ENABLED: false, // All features free during launch
     SELLER_LISTING_COST: 0,
+    BROKER_LISTING_COST: 0,
     BUYER_SUBSCRIPTION: 0,
     TRANSACTION_FEE: 0,
   },

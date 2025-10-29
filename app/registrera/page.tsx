@@ -28,17 +28,17 @@ export default function RegisterPage() {
       icon: <Building className="w-8 h-8" />
     },
     {
+      id: 'broker',
+      label: 'Jag är mäklare/fastighetsmäklare',
+      description: 'Annonsera företag från dina klienter och få provision',
+      icon: <Handshake className="w-8 h-8" />
+    },
+    {
       id: 'buyer',
       label: 'Jag vill köpa ett företag',
       description: 'Sök och hitta företag att förvärva',
       icon: <Search className="w-8 h-8" />
     },
-    ...(LAUNCH_CONFIG.LAUNCH_MODE ? [] : [{
-      id: 'broker' as UserRole,
-      label: 'Jag är mäklare/rådgivare',
-      description: 'Assistera säljare och köpare',
-      icon: <Handshake className="w-8 h-8" />
-    }])
   ].filter(role => !LAUNCH_CONFIG.HIDDEN_ROLES.includes(role.id))
 
   const handleRoleSelect = (role: UserRole) => {

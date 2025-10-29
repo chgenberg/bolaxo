@@ -37,16 +37,25 @@ const getNavigation = (): NavItem[] => {
         { label: 'Skapa konto', href: '/kopare/start' },
       ]
     },
-    {
-      label: 'Om oss',
-      dropdown: [
-        { label: 'Kontakt', href: '/kontakt' },
-      ]
-    }
   ]
 
-  // In launch mode, hide mäklare and investor content
-  if (LAUNCH_CONFIG.LAUNCH_MODE) {
+  // Add broker section if enabled in launch config
+  if (LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_MAKLARE) {
+    baseNav.push({
+      label: 'För mäklare',
+      href: '/for-maklare'
+    })
+  }
+
+  baseNav.push({
+    label: 'Om oss',
+    dropdown: [
+      { label: 'Kontakt', href: '/kontakt' },
+    ]
+  })
+
+  // In launch mode with limited features, keep it simple
+  if (LAUNCH_CONFIG.LAUNCH_MODE && !LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_INVESTERARE) {
     return baseNav
   }
 
@@ -54,15 +63,11 @@ const getNavigation = (): NavItem[] => {
   return [
     ...baseNav,
     {
-      label: 'För mäklare',
-      href: '/for-maklare'
-    },
-    {
       label: 'Mer',
       dropdown: [
         { label: 'Vårt företag', href: '/om-oss' },
         { label: 'Success stories', href: '/success-stories' },
-        { label: 'För investerare', href: '/investor' },
+        ...(LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_INVESTERARE ? [{ label: 'För investerare', href: '/investor' }] : []),
       ]
     }
   ]
