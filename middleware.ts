@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
         "font-src 'self' data:",
         "connect-src 'self' https://api.openai.com https://api.resend.com https://api.railway.app",
         "frame-src https://player.vimeo.com https://vimeo.com",
-        "frame-ancestors 'none'",
+        "frame-ancestors 'self' https://bolaxo.com https://www.bolaxo.com",
       ].join('; ')
     )
   }
