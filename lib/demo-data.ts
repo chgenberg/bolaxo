@@ -389,3 +389,299 @@ export const DEMO_DD_FULL_DATA = {
     '100% cloud-baserad infrastruktur'
   ]
 }
+
+export const EXTENDED_SPA_DATA = {
+  ...DEMO_SPA_FULL_DATA,
+  
+  // REPRESENTATIONS & WARRANTIES - EXTENDED
+  representations: {
+    organization: [
+      'Bolaget är korrekt bildade och registrerade hos Bolagsverket',
+      'Bolagsordningen är giltig och har inte ändrats sedan registreringen',
+      'Alla styrelsebeslut är korrekt dokumenterade',
+      'Säljaren är ensamägare av alla aktier'
+    ],
+    capitalization: [
+      'Aktiekapitalet är 500,000 SEK, indelat i 500,000 aktier à 1 SEK',
+      'Inga optioner, warranter eller andra värdepapper utestår',
+      'Inga aktiveringsrätter eller kallelsepliktiga aktier'
+    ],
+    financial: [
+      'Årsredovisningarna är upprättade enligt god redovisningssed',
+      'Balansräkning är fullständig och korrekt',
+      'Inga väsentliga förändringar sedan senaste rapportering',
+      'Alla skatter är betalda i tid'
+    ],
+    assets: [
+      'Bolaget äger all egendom som används i verksamheten',
+      'Inget pantsat eller belastas med säkerhet',
+      'Immaterialrätt är registrerad och skyddad'
+    ],
+    liabilities: [
+      'Alla skulder är redovisade i balansräkningen',
+      'Inga dolda eller villkorade skulder existerar',
+      'Inga garantier eller borgenärsåtaganden'
+    ],
+    contracts: [
+      'Alla väsentliga kontrakt är giltiga och bindande',
+      'Inga ändringar av kontraktsvillkor utan Köparens godkännande',
+      'Inga uppsägningsrätt vid ägarförbindelser'
+    ]
+  },
+  
+  // FINANCIAL SCHEDULES
+  schedules: {
+    customers: [
+      { name: 'Televerket AB', revenue: '9.4 MSEK', share: '18%', status: 'Aktiv, 3-årigt avtal' },
+      { name: 'Vattenfall Digital', revenue: '6.2 MSEK', share: '12%', status: 'Aktiv, renews 2025' },
+      { name: 'Scania Digital', revenue: '2.6 MSEK', share: '5%', status: 'Aktiv, renewal Q4 2024' },
+      { name: 'Volvo Connected', revenue: '1.6 MSEK', share: '3%', status: 'Aktiv' },
+      { name: 'SJ Digital', revenue: '1.3 MSEK', share: '2.5%', status: 'Aktiv' },
+      { name: 'Övriga 42 kunder', revenue: '30.9 MSEK', share: '59.5%', status: 'Fördelat SMB-segment' }
+    ],
+    
+    suppliers: [
+      { name: 'AWS', category: 'Cloud Infrastructure', annual: '2.1 MSEK', terms: '30 dagar' },
+      { name: 'Twilio', category: 'Telecom API', annual: '0.8 MSEK', terms: 'Net 30' },
+      { name: 'Stripe', category: 'Payment', annual: '0.4 MSEK', terms: 'Net 30' }
+    ],
+    
+    employees: [
+      { name: 'Anna Pettersson', role: 'VD/CEO', salary: '800,000', bonus: 'Variable 20%', tenure: '10 år' },
+      { name: 'Erik Svensson', role: 'CTO', salary: '700,000', bonus: 'Variable 15%', tenure: '8 år' },
+      { name: 'Sofia Bergström', role: 'Head of Sales', salary: '650,000', bonus: 'Commission 5%', tenure: '5 år' },
+      { name: 'Lars Eklund', role: 'CFO', salary: '600,000', bonus: 'Variable 10%', tenure: '3 år' },
+      { name: '8 Technical Staff', role: 'Developers/Ops', salary: 'Avg 450,000', bonus: '5%', tenure: 'Avg 2.5 år' }
+    ]
+  },
+  
+  // LEGAL ISSUES & CONTINGENCIES
+  legal_issues: [
+    {
+      issue: 'Leverantörstvist - Telecom API leverantör',
+      amount: '0.3 MSEK',
+      status: 'Under förlikning',
+      probability: '40%',
+      recommendation: 'Escrowed, insurance täcker'
+    },
+    {
+      issue: 'IP-tvister - Patentanspråk från tidigare anställd',
+      amount: '0.5 MSEK',
+      status: 'Avvunnet anspråk',
+      probability: '10%',
+      recommendation: 'Försäkring täcker'
+    }
+  ],
+  
+  // MATERIAL CONTRACTS
+  material_contracts: [
+    {
+      contract: 'Televerket AB - Service Agreement',
+      value: '9.4 MSEK',
+      term: '3 år (till 2026)',
+      renewal: 'Auto, 12m notice to cancel',
+      coc_risk: 'Måste notifieras',
+      status: 'Kritisk'
+    },
+    {
+      contract: 'AWS Master Service Agreement',
+      value: '2.1 MSEK annually',
+      term: 'Evergreen, 30d termination',
+      renewal: 'N/A',
+      coc_risk: 'Låg',
+      status: 'Standard'
+    },
+    {
+      contract: 'Office Lease - Stureplan 42',
+      value: '0.6 MSEK annually',
+      term: '3 år (till 2027)',
+      renewal: 'Option to renew 3+3 år',
+      coc_risk: 'Måste notifieras',
+      status: 'Important'
+    }
+  ]
+}
+
+export const EXTENDED_DD_DATA = {
+  ...DEMO_DD_FULL_DATA,
+  
+  // DETAILED FINANCIAL ANALYSIS
+  financials_detailed: {
+    revenue_breakdown: {
+      saas: { amount: 35200000, percentage: 67.7 },
+      professional_services: { amount: 10400000, percentage: 20 },
+      support_maintenance: { amount: 6400000, percentage: 12.3 }
+    },
+    
+    cost_structure: {
+      cogs: { amount: 11400000, percentage: 21.9 },
+      personnel: { amount: 22100000, percentage: 42.5 },
+      infrastructure: { amount: 6800000, percentage: 13.1 },
+      marketing: { amount: 3200000, percentage: 6.2 },
+      rd: { amount: 8000000, percentage: 15.4 }
+    },
+    
+    working_capital: {
+      accounts_receivable: { days: 60, amount: 8666667 },
+      inventory: { days: 0, amount: 0 },
+      accounts_payable: { days: 45, amount: 6500000 },
+      cash_cycle: 75
+    }
+  },
+  
+  // DETAILED CUSTOMER ANALYSIS
+  customers_detailed: [
+    {
+      name: 'Televerket AB',
+      revenue: 9400000,
+      share: '18%',
+      relationship_length: '6 år',
+      contract_expiry: '2026-12-31',
+      churn_risk: 'Låg',
+      expansion_potential: 'Hög (3-5x current)'
+    },
+    {
+      name: 'Vattenfall Digital',
+      revenue: 6200000,
+      share: '12%',
+      relationship_length: '4 år',
+      contract_expiry: '2025-06-30',
+      churn_risk: 'Låg-Medium',
+      expansion_potential: 'Låg (mature engagement)'
+    },
+    {
+      name: 'Scania Digital',
+      revenue: 2600000,
+      share: '5%',
+      relationship_length: '3 år',
+      contract_expiry: '2024-12-15',
+      churn_risk: 'Medium (renewal pending)',
+      expansion_potential: 'Medium'
+    }
+  ],
+  
+  // ORGANIZATION DETAILED
+  organization_detailed: {
+    departments: [
+      {
+        name: 'Product & Engineering',
+        headcount: 6,
+        avg_salary: 520000,
+        description: 'Full-stack developers, DevOps, QA'
+      },
+      {
+        name: 'Sales & Business Development',
+        headcount: 2,
+        avg_salary: 650000,
+        description: 'Enterprise sales, partnerships'
+      },
+      {
+        name: 'Operations & Finance',
+        headcount: 2,
+        avg_salary: 600000,
+        description: 'Finance, HR, Operations'
+      },
+      {
+        name: 'Support & Success',
+        headcount: 2,
+        avg_salary: 380000,
+        description: 'Customer support, onboarding'
+      }
+    ]
+  },
+  
+  // TECHNOLOGY STACK DETAILED
+  tech_detailed: {
+    frontend: 'React 18.2.0, TypeScript 5.x, Next.js 14.x, Tailwind CSS',
+    backend: 'Node.js 20.x LTS, Express.js 4.18, Prisma ORM 5.x',
+    database: 'PostgreSQL 15.x, Redis 7.x for caching',
+    infrastructure: 'AWS: EC2, RDS, S3, CloudFront, VPC',
+    monitoring: 'Datadog, PagerDuty, CloudWatch',
+    security: 'SSL/TLS, WAF, VPC, encryption at rest/transit',
+    compliance: 'ISO 27001 certified, GDPR compliant, SOC2 Type II in progress',
+    code_quality: {
+      test_coverage: '72%',
+      code_reviews: 'All PRs require 2 reviews',
+      deployment_frequency: '2-3x weekly',
+      deployment_success_rate: '99.2%'
+    }
+  },
+  
+  // MARKET & COMPETITIVE ANALYSIS
+  market_detailed: {
+    tam: {
+      total: 2500000000,
+      serviceable: 800000000,
+      obtainable: 200000000,
+      logic: 'Nordic mid-market companies with 50+ employees'
+    },
+    
+    competitors: [
+      {
+        name: 'Competitor A (Large)',
+        market_share: '15%',
+        strengths: ['Brand', 'Distribution', '1000+ employees'],
+        weaknesses: ['Slow innovation', 'High price', 'Poor NPS'],
+        strategy: 'Enterprise focus'
+      },
+      {
+        name: 'Competitor B (Niche)',
+        market_share: '8%',
+        strengths: ['Cheap', 'Simple', 'Good support'],
+        weaknesses: ['Limited features', 'Outdated tech'],
+        strategy: 'Budget segment'
+      },
+      {
+        name: 'CloudTech (Target)',
+        market_share: '6.5%',
+        strengths: ['Modern tech', '95% NPS', 'Fast deployment', 'Best API'],
+        weaknesses: ['Smaller team', 'Limited marketing'],
+        strategy: 'Premium mid-market'
+      }
+    ]
+  },
+  
+  // RISK MATRIX - DETAILED
+  risks_detailed: [
+    {
+      category: 'Commercial',
+      risk: 'Customer concentration - Top 3 = 35% revenue',
+      severity: 'HIGH',
+      probability: 'MEDIUM',
+      mitigation: 'Pre-closing customer calls, retention bonuses',
+      residual_risk: 'MEDIUM'
+    },
+    {
+      category: 'Technical',
+      risk: 'Legacy infrastructure - Some on-premise systems',
+      severity: 'MEDIUM',
+      probability: 'LOW',
+      mitigation: 'Cloud migration plan, AWS full migration',
+      residual_risk: 'LOW'
+    },
+    {
+      category: 'Organization',
+      risk: 'Key person dependency - CTO is critical',
+      severity: 'HIGH',
+      probability: 'MEDIUM',
+      mitigation: '2-year retention bonus + 3-month transition plan',
+      residual_risk: 'MEDIUM-LOW'
+    },
+    {
+      category: 'Financial',
+      risk: 'Margin compression - 28% to 20% in 2 years',
+      severity: 'MEDIUM',
+      probability: 'MEDIUM',
+      mitigation: 'Cost optimization, automation, offshore resources',
+      residual_risk: 'LOW'
+    },
+    {
+      category: 'Legal',
+      risk: 'IP disputes - Patent claim from former employee',
+      severity: 'LOW',
+      probability: 'LOW',
+      mitigation: 'D&O insurance covers, legal opinion obtained',
+      residual_risk: 'VERY LOW'
+    }
+  ]
+}

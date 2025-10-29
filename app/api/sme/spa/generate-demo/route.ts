@@ -322,7 +322,7 @@ export async function GET() {
     
     await browser.close()
     
-    return new Response(pdfBuffer, {
+    return new Response(Buffer.from(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename="SPA_Demo_CloudTech.pdf"'
