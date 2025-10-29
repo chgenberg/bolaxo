@@ -97,7 +97,8 @@ export const DEMO_DD_FINDINGS = [
     severity: 'High',
     category: 'Commercial',
     status: 'open',
-    description: 'Top 2 kunder står för 28M av 60M SEK årlig omsättning. Mitigering: Long-term kontrakt på 3-5 år, diversifieringsstrategi.'
+    description: 'Top 2 kunder står för 28M av 60M SEK årlig omsättning. Mitigering: Long-term kontrakt på 3-5 år, diversifieringsstrategi.',
+    resolution: 'Diversifieringsplan för nächsta 18 månader. Key account management program. SLA-garantier.'
   },
   {
     id: 'f2',
@@ -105,7 +106,8 @@ export const DEMO_DD_FINDINGS = [
     severity: 'Medium',
     category: 'IT',
     status: 'open',
-    description: 'Huvudapplikation byggd på .NET Framework 4.x. Rekommendation: Migrera till .NET 8 Core (6-9 mån projekt, ~2M SEK).'
+    description: 'Huvudapplikation byggd på .NET Framework 4.x. Rekommendation: Migrera till .NET 8 Core (6-9 mån projekt, ~2M SEK).',
+    resolution: 'Migration till .NET 8 Core. Budget redan allokerat. Timeline 6-9 månader.'
   },
   {
     id: 'f3',
@@ -113,7 +115,8 @@ export const DEMO_DD_FINDINGS = [
     severity: 'High',
     category: 'HR',
     status: 'open',
-    description: 'CEO (35%) och CTO (30%) är kritiska för verksamheten. Retention agreements saknas. Kräver förhandling med båda.'
+    description: 'CEO (35%) och CTO (30%) är kritiska för verksamheten. Retention agreements saknas. Kräver förhandling med båda.',
+    resolution: '2-3 år retention agreements med earnout. Key person insurance. Knowledge transfer program.'
   },
   {
     id: 'f4',
@@ -121,7 +124,8 @@ export const DEMO_DD_FINDINGS = [
     severity: 'Medium',
     category: 'Legal',
     status: 'resolved',
-    description: 'Ingen patent-dokumentation för egen teknik. Rekommendation: Formalisera IP-portfölj (möjlighet för 3 patent registreringar).'
+    description: 'Ingen patent-dokumentation för egen teknik. Rekommendation: Formalisera IP-portfölj (möjlighet för 3 patent registreringar).',
+    resolution: 'IP audit genomfört. 3 patent applications inlämnade. IP procedures formaliserade.'
   }
 ]
 
