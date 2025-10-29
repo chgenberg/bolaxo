@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
 import InfoPopup from '@/components/InfoPopup'
@@ -11,12 +10,37 @@ import InfoPopup from '@/components/InfoPopup'
 export default function NDASigningPage() {
   const params = useParams()
   const router = useRouter()
-  const { user, loading } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const { ndaSignedObjects, signNDA } = useBuyerStore()
   
   const objectId = params.id as string
-  const object = getObjectById(objectId)
+  const [object, setObject] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const hasSignedNDA = ndaSignedObjects.includes(objectId)
+
+  // Fetch listing from API
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const url = `/api/listings/${objectId}${user?.id ? `?userId=${user.id}` : ''}`
+        const response = await fetch(url)
+        if (response.ok) {
+          const data = await response.json()
+          setObject(data)
+        } else {
+          console.error('Failed to fetch listing')
+        }
+      } catch (error) {
+        console.error('Error fetching listing:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    if (objectId && !authLoading) {
+      fetchListing()
+    }
+  }, [objectId, user?.id, authLoading])
 
   const [step, setStep] = useState(1)
   const [agreed, setAgreed] = useState(false)
@@ -24,7 +48,7 @@ export default function NDASigningPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div>
@@ -121,12 +145,19 @@ export default function NDASigningPage() {
     setError('')
 
     try {
-      // Get seller info from the object
-      const response = await fetch(`/api/listings?id=${objectId}`)
-      const listingData = await response.json()
-      const listing = listingData.listings?.[0] || listingData.listing
-      
+      // Use object already fetched, or fetch if not available
+      let listing = object
       if (!listing) {
+        const response = await fetch(`/api/listings/${objectId}`)
+        if (!response.ok) {
+          setError('Kunde inte hitta uppgifter om säljaren')
+          setIsSubmitting(false)
+          return
+        }
+        listing = await response.json()
+      }
+      
+      if (!listing || !listing.userId) {
         setError('Kunde inte hitta uppgifter om säljaren')
         setIsSubmitting(false)
         return

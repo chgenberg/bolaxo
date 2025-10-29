@@ -9,6 +9,8 @@ export async function GET(
 ) {
   try {
     const params = await context.params
+    const { searchParams } = new URL(request.url)
+    const currentUserId = searchParams.get('userId') // User som frågar
 
     const listing = await prisma.listing.findUnique({
       where: { id: params.id },
@@ -23,13 +25,45 @@ export async function GET(
       return NextResponse.json({ error: 'Listing not found' }, { status: 404 })
     }
 
+    // Check if current user has NDA approved
+    let hasNDA = false
+    if (currentUserId) {
+      const ndaRequest = await prisma.nDARequest.findFirst({
+        where: {
+          listingId: params.id,
+          buyerId: currentUserId,
+          status: 'approved'
+        }
+      })
+      hasNDA = !!ndaRequest
+    }
+
+    // Check if current user is owner
+    const isOwner = listing.userId === currentUserId
+
+    // Anonymize if not owner and no NDA
+    const anonymizedListing = {
+      ...listing,
+      ...(isOwner || hasNDA ? {} : {
+        companyName: undefined,
+        orgNumber: undefined,
+        address: undefined,
+        website: undefined,
+        // Keep anonymousTitle visible
+      })
+    }
+
     // Increment views asynchronously (non-blocking)
     prisma.listing.update({
       where: { id: params.id },
       data: { views: { increment: 1 } }
     }).catch(() => {})
 
-    return NextResponse.json(listing)
+    return NextResponse.json({
+      ...anonymizedListing,
+      hasNDA,
+      isOwner
+    })
   } catch (error) {
     console.error('Error fetching listing:', error)
     return NextResponse.json({ error: 'Failed to fetch listing' }, { status: 500 })

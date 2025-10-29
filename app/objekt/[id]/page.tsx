@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, MapPin, TrendingUp, Users, Eye, Bookmark, Shield, AlertCircle, Calendar, FileText, BarChart, CheckCircle } from 'lucide-react'
-import { mockObjects } from '@/data/mockObjects'
 import { useBuyerStore } from '@/stores/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
 import InfoPopup from '@/components/InfoPopup'
@@ -13,13 +12,38 @@ import InfoPopup from '@/components/InfoPopup'
 export default function ObjectDetailPage() {
   const params = useParams()
   const objectId = params.id as string
-  const object = mockObjects.find(obj => obj.id === objectId)
   const { user } = useAuth()
   
+  const [object, setObject] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('overview')
   const [isSyncingToDb, setIsSyncingToDb] = useState(false)
   const { savedObjects, toggleSaved, hasNDA } = useBuyerStore()
   const isSaved = savedObjects.includes(objectId)
+
+  // Fetch listing from API
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const url = `/api/listings/${objectId}${user?.id ? `?userId=${user.id}` : ''}`
+        const response = await fetch(url)
+        if (response.ok) {
+          const data = await response.json()
+          setObject(data)
+        } else {
+          console.error('Failed to fetch listing')
+        }
+      } catch (error) {
+        console.error('Error fetching listing:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    if (objectId) {
+      fetchListing()
+    }
+  }, [objectId, user?.id])
   
   // Sync save to database when it changes
   const handleToggleSaved = async (e?: React.MouseEvent) => {
@@ -60,6 +84,14 @@ export default function ObjectDetailPage() {
     }
   }
   
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div>
+      </div>
+    )
+  }
+
   if (!object) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -80,11 +112,17 @@ export default function ObjectDetailPage() {
   ]
 
   const calculateEBITDARange = () => {
+    if (!object.revenueRange) return 'N/A'
     const margin = 0.15 // Assume 15% EBITDA margin
-    const minRevenue = parseInt(object.revenueRange.split('-')[0])
-    const maxRevenue = parseInt(object.revenueRange.split('-')[1])
+    const parts = object.revenueRange.split('-')
+    if (parts.length < 2) return 'N/A'
+    const minRevenue = parseInt(parts[0])
+    const maxRevenue = parseInt(parts[1])
     return `${(minRevenue * margin).toFixed(0)}-${(maxRevenue * margin).toFixed(0)} MSEK`
   }
+  
+  // Use hasNDA from API response or fallback to local store
+  const userHasNDA = object?.hasNDA || hasNDA(objectId)
 
   return (
     <main className="min-h-screen bg-background">
@@ -327,7 +365,7 @@ export default function ObjectDetailPage() {
 
             {activeTab === 'economics' && (
               <div className="space-y-6">
-                {!hasNDA(objectId) ? (
+                {!userHasNDA ? (
                   <div className="bg-amber-50 border border-amber-200 rounded-lg sm:rounded-xl p-4 sm:p-6">
                     <div className="flex items-start space-x-2 sm:space-x-3">
                       <Shield className="w-5 sm:w-6 h-5 sm:h-6 text-amber-600 flex-shrink-0 mt-1" />
