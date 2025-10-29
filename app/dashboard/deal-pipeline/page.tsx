@@ -97,7 +97,7 @@ const DEMO_DEALS_BUYER: Deal[] = [
     id: 'deal-b2',
     listingId: 'listing-5',
     companyName: 'Restaurant Chain',
-    counterpartyName: 'Maria's Restaurants',
+    counterpartyName: "Maria's Restaurants",
     counterpartyRole: 'seller',
     stage: 'loi-proposed',
     stageLabel: 'Waiting for LoI response',
