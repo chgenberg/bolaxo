@@ -100,7 +100,29 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    return response
+    // Använd HTML redirect som fallback för bättre kompatibilitet
+    const redirectHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta http-equiv="refresh" content="0;url=${redirectUrl}">
+        <script>
+          window.location.href = "${redirectUrl}";
+        </script>
+      </head>
+      <body>
+        <p>Redirectar till <a href="${redirectUrl}">${redirectUrl}</a>...</p>
+      </body>
+      </html>
+    `
+    
+    return new NextResponse(redirectHtml, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html',
+        'Location': redirectUrl, // Fallback header
+      },
+    })
 
   } catch (error) {
     console.error('Magic link verify error:', error)
