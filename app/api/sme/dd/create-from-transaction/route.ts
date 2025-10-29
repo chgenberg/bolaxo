@@ -157,6 +157,38 @@ export async function POST(req: NextRequest) {
         }
       })
 
+      // Find and auto-complete "Due Diligence påbörjad" milestone
+      const ddMilestone = await prisma.milestone.findFirst({
+        where: {
+          transactionId: transactionId,
+          title: { contains: 'Due Diligence påbörjad' },
+          completed: false
+        }
+      })
+
+      if (ddMilestone) {
+        await prisma.milestone.update({
+          where: { id: ddMilestone.id },
+          data: {
+            completed: true,
+            completedAt: new Date(),
+            completedBy: userId
+          }
+        })
+
+        await prisma.activity.create({
+          data: {
+            transactionId: transactionId,
+            type: 'MILESTONE_COMPLETED',
+            title: `Milstolpe slutförd: ${ddMilestone.title}`,
+            description: 'Due Diligence projekt skapat',
+            actorId: userId,
+            actorName: isBuyer ? transaction.buyer.name || transaction.buyer.email : 'Säljare',
+            actorRole: isBuyer ? 'buyer' : 'seller'
+          }
+        })
+      }
+
       // Log activity
       await prisma.activity.create({
         data: {

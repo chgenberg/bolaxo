@@ -41,6 +41,15 @@ interface Transaction {
     signedAt: string | null
     createdAt: string
   }>
+  ddProjects?: Array<{
+    id: string
+    status: string
+    completionPercent: number
+    overallRiskLevel: string | null
+    goNogo: string | null
+    actualCompleteDate: string | null
+    createdAt: string
+  }>
   agreedPrice: number
   stage: string
   createdAt: string
@@ -241,6 +250,14 @@ export default function TransactionPage() {
               className="text-primary-blue hover:underline text-sm flex items-center gap-1"
             >
               → Se SPA ({transaction.spas[0].status})
+            </Link>
+          )}
+          {transaction.ddProjects && transaction.ddProjects.length > 0 && (
+            <Link 
+              href={`/kopare/dd/${transaction.listingId}`}
+              className="text-primary-blue hover:underline text-sm flex items-center gap-1"
+            >
+              → Se DD ({transaction.ddProjects[0].completionPercent}% klar)
             </Link>
           )}
           <Link 
