@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import crypto from 'crypto'
 import { checkRateLimit } from '@/lib/ratelimit'
+import { sendMagicLinkEmail } from '@/lib/email'
 
 const prisma = new PrismaClient()
 
@@ -55,20 +56,26 @@ export async function POST(request: Request) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
     const magicLink = `${baseUrl}/api/auth/magic-link/verify?token=${token}`
 
-    // I produktion: skicka email via Resend/SendGrid
-    // För nu: returnera länk för testning
-    console.log(`Magic link for ${email}: ${magicLink}`)
-
-    // TODO: Skicka email
-    if (process.env.RESEND_API_KEY) {
-      await sendMagicLinkEmail(email, magicLink, user.name || 'där')
+    // Skicka email via Sendinblue (Brevo)
+    const emailResult = await sendMagicLinkEmail(email, magicLink, user.name || 'där')
+    
+    if (!emailResult.success && process.env.NODE_ENV === 'production') {
+      console.error('Failed to send email:', emailResult.error)
+      return NextResponse.json(
+        { error: 'Kunde inte skicka magic link. Försök igen senare.' },
+        { status: 500 }
+      )
     }
+
+    // I development eller om email-service inte är konfigurerad, visa länken direkt
+    const shouldShowLink = process.env.NODE_ENV === 'development' || !process.env.BREVO_API_KEY
 
     return NextResponse.json({ 
       success: true,
-      message: 'Magic link skickad! Kolla din inkorg.',
-      // I dev ELLER om ingen email-service: visa länken direkt (för demo)
-      ...((process.env.NODE_ENV === 'development' || !process.env.RESEND_API_KEY) && { magicLink })
+      message: emailResult.success 
+        ? 'Magic link skickad! Kolla din inkorg.' 
+        : 'Magic link genererad (email service inte konfigurerad).',
+      ...(shouldShowLink && { magicLink })
     })
 
   } catch (error) {
@@ -80,46 +87,4 @@ export async function POST(request: Request) {
   }
 }
 
-async function sendMagicLinkEmail(email: string, magicLink: string, name: string) {
-  // Placeholder för email-integration
-  // I produktion: använd Resend, SendGrid eller liknande
-  
-  try {
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: 'BOLAXO <noreply@bolaxo.se>',
-        to: email,
-        subject: 'Din inloggningslänk till BOLAXO',
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #1e40af;">Välkommen till BOLAXO</h1>
-            <p>Hej ${name},</p>
-            <p>Klicka på länken nedan för att logga in på ditt konto:</p>
-            <a href="${magicLink}" style="display: inline-block; background: #1e40af; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; margin: 20px 0;">
-              Logga in
-            </a>
-            <p style="color: #6b7280; font-size: 14px;">
-              Länken är giltig i 1 timme. Om du inte begärt denna länk, ignorera detta mail.
-            </p>
-            <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
-            <p style="color: #9ca3af; font-size: 12px;">
-              BOLAXO © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
-            </p>
-          </div>
-        `
-      })
-    })
-
-    if (!response.ok) {
-      console.error('Email send failed:', await response.text())
-    }
-  } catch (error) {
-    console.error('Email send error:', error)
-  }
-}
 
