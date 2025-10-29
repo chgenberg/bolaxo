@@ -88,7 +88,7 @@ function getSeverityColor(severity: string): [number, number, number] {
 }
 
 function createSectionHeader(doc: PDFDocumentType, title: string, sectionNum: number) {
-  doc.fontSize(16).font('Helvetica-Bold').fillColor(14, 45, 92)
+  doc.fontSize(16).font('Helvetica-Bold').fillColor('#0E2D5C')
   doc.text(`${sectionNum}. ${title}`, { underline: true })
   doc.moveDown(0.5)
   doc.fillColor(0, 0, 0)
