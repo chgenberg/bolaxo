@@ -1,0 +1,122 @@
+/**
+ * 100 största städer i Sverige för SEO landing pages
+ */
+export const SWEDISH_CITIES = [
+  // Top 20
+  { name: 'Stockholm', slug: 'stockholm', region: 'Stockholms' },
+  { name: 'Göteborg', slug: 'goteborg', region: 'Västra Götalands' },
+  { name: 'Malmö', slug: 'malmo', region: 'Skåne' },
+  { name: 'Uppsala', slug: 'uppsala', region: 'Uppsala' },
+  { name: 'Västerås', slug: 'vasteras', region: 'Västmanlands' },
+  { name: 'Örebro', slug: 'orebro', region: 'Örebro' },
+  { name: 'Linköping', slug: 'linkoping', region: 'Östergötlands' },
+  { name: 'Helsingborg', slug: 'helsingborg', region: 'Skåne' },
+  { name: 'Jönköping', slug: 'jonkoping', region: 'Jönköpings' },
+  { name: 'Norrköping', slug: 'norrkoping', region: 'Östergötlands' },
+  { name: 'Lund', slug: 'lund', region: 'Skåne' },
+  { name: 'Borås', slug: 'boras', region: 'Västra Götalands' },
+  { name: 'Sundsvall', slug: 'sundsvall', region: 'Västernorrlands' },
+  { name: 'Umeå', slug: 'umea', region: 'Västerbottens' },
+  { name: 'Gävle', slug: 'gavle', region: 'Gävleborgs' },
+  { name: 'Växjö', slug: 'vaxjo', region: 'Kronobergs' },
+  { name: 'Värnamo', slug: 'varnamo', region: 'Smålands' },
+  { name: 'Eskilstuna', slug: 'eskilstuna', region: 'Västmanlands' },
+  { name: 'Karlstad', slug: 'karlstad', region: 'Värmlands' },
+  { name: 'Västervik', slug: 'vastervik', region: 'Östergötlands' },
+  
+  // 21-40
+  { name: 'Falun', slug: 'falun', region: 'Dalarnas' },
+  { name: 'Halmstad', slug: 'halmstad', region: 'Hallands' },
+  { name: 'Kalmar', slug: 'kalmar', region: 'Kalmar' },
+  { name: 'Kristianstad', slug: 'kristianstad', region: 'Skåne' },
+  { name: 'Trollhättan', slug: 'trollhattan', region: 'Västra Götalands' },
+  { name: 'Vänersborg', slug: 'vanersborg', region: 'Västra Götalands' },
+  { name: 'Varberg', slug: 'varberg', region: 'Hallands' },
+  { name: 'Växjö', slug: 'vaxjo', region: 'Kronobergs' },
+  { name: 'Ängelholm', slug: 'angelholm', region: 'Skåne' },
+  { name: 'Ludvika', slug: 'ludvika', region: 'Dalarnas' },
+  { name: 'Skövde', slug: 'skovde', region: 'Västra Götalands' },
+  { name: 'Östersund', slug: 'ostersund', region: 'Jämtlands' },
+  { name: 'Sundbyberg', slug: 'sundbyberg', region: 'Stockholms' },
+  { name: 'Solna', slug: 'solna', region: 'Stockholms' },
+  { name: 'Sigtuna', slug: 'sigtuna', region: 'Stockholms' },
+  { name: 'Täby', slug: 'taby', region: 'Stockholms' },
+  { name: 'Haninge', slug: 'haninge', region: 'Stockholms' },
+  { name: 'Värmdö', slug: 'varmdo', region: 'Stockholms' },
+  { name: 'Vaxholm', slug: 'vaxholm', region: 'Stockholms' },
+  { name: 'Nacka', slug: 'nacka', region: 'Stockholms' },
+  
+  // 41-60
+  { name: 'Lidingö', slug: 'lidingo', region: 'Stockholms' },
+  { name: 'Ekerö', slug: 'ekero', region: 'Stockholms' },
+  { name: 'Nykvarn', slug: 'nykvarn', region: 'Stockholms' },
+  { name: 'Västerhaninge', slug: 'vesterhaninge', region: 'Stockholms' },
+  { name: 'Fitja', slug: 'fitja', region: 'Stockholms' },
+  { name: 'Västra Frölunda', slug: 'vestra-frolunda', region: 'Västra Götalands' },
+  { name: 'Mölnlycke', slug: 'molnlycke', region: 'Västra Götalands' },
+  { name: 'Partille', slug: 'partille', region: 'Västra Götalands' },
+  { name: 'Lerum', slug: 'lerum', region: 'Västra Götalands' },
+  { name: 'Kungälv', slug: 'kungalv', region: 'Västra Götalands' },
+  { name: 'Öckerö', slug: 'ockero', region: 'Västra Götalands' },
+  { name: 'Stenungsund', slug: 'stenungsund', region: 'Västra Götalands' },
+  { name: 'Tjörn', slug: 'tjorn', region: 'Västra Götalands' },
+  { name: 'Kungsbacka', slug: 'kungsbacka', region: 'Västra Götalands' },
+  { name: 'Högsbo', slug: 'hogsbo', region: 'Västra Götalands' },
+  { name: 'Torslanda', slug: 'torslanda', region: 'Västra Götalands' },
+  { name: 'Falkenberg', slug: 'falkenberg', region: 'Hallands' },
+  { name: 'Laholm', slug: 'laholm', region: 'Hallands' },
+  { name: 'Båstad', slug: 'bastad', region: 'Skåne' },
+  { name: 'Skanör', slug: 'skanor', region: 'Skåne' },
+  
+  // 61-80
+  { name: 'Kävlinge', slug: 'kavlinge', region: 'Skåne' },
+  { name: 'Höör', slug: 'hoor', region: 'Skåne' },
+  { name: 'Eslöv', slug: 'eslov', region: 'Skåne' },
+  { name: 'Landskrona', slug: 'landskrona', region: 'Skåne' },
+  { name: 'Ystad', slug: 'ystad', region: 'Skåne' },
+  { name: 'Simrishamn', slug: 'simrishamn', region: 'Skåne' },
+  { name: 'Tomelilla', slug: 'tomelilla', region: 'Skåne' },
+  { name: 'Sjöbo', slug: 'sjobo', region: 'Skåne' },
+  { name: 'Trelleborg', slug: 'trelleborg', region: 'Skåne' },
+  { name: 'Svedala', slug: 'svedala', region: 'Skåne' },
+  { name: 'Staffanstorp', slug: 'staffanstorp', region: 'Skåne' },
+  { name: 'Burlöv', slug: 'burlov', region: 'Skåne' },
+  { name: 'Lomma', slug: 'lomma', region: 'Skåne' },
+  { name: 'Bålsta', slug: 'balsta', region: 'Uppsala' },
+  { name: 'Enköping', slug: 'enkoping', region: 'Uppsala' },
+  { name: 'Tierp', slug: 'tierp', region: 'Uppsala' },
+  { name: 'Västerås', slug: 'vasteras', region: 'Västmanlands' },
+  { name: 'Köping', slug: 'koping', region: 'Västmanlands' },
+  { name: 'Hallstahammar', slug: 'hallstahammar', region: 'Västmanlands' },
+  { name: 'Arboga', slug: 'arboga', region: 'Västmanlands' },
+  
+  // 81-100
+  { name: 'Västra Göta', slug: 'vestra-gota', region: 'Västra Götalands' },
+  { name: 'Trollhättan', slug: 'trollhattan', region: 'Västra Götalands' },
+  { name: 'Nyköping', slug: 'nykoping', region: 'Södermanlands' },
+  { name: 'Gnesta', slug: 'gnesta', region: 'Södermanlands' },
+  { name: 'Strängnäs', slug: 'strangnas', region: 'Södermanlands' },
+  { name: 'Katrineholm', slug: 'katrineholm', region: 'Södermanlands' },
+  { name: 'Flen', slug: 'flen', region: 'Södermanlands' },
+  { name: 'Mariefred', slug: 'mariefred', region: 'Södermanlands' },
+  { name: 'Trosa', slug: 'trosa', region: 'Södermanlands' },
+  { name: 'Torshälla', slug: 'torshalla', region: 'Södermanlands' },
+  { name: 'Västerås', slug: 'vasteras', region: 'Västmanlands' },
+  { name: 'Kinda', slug: 'kinda', region: 'Östergötlands' },
+  { name: 'Kimstad', slug: 'kimstad', region: 'Östergötlands' },
+  { name: 'Ljungsbro', slug: 'ljungsbro', region: 'Östergötlands' },
+  { name: 'Vadstena', slug: 'vadstena', region: 'Östergötlands' },
+  { name: 'Motala', slug: 'motala', region: 'Östergötlands' },
+  { name: 'Söderköping', slug: 'soderkoping', region: 'Östergötlands' },
+  { name: 'Visby', slug: 'visby', region: 'Gotlands' },
+  { name: 'Roma', slug: 'roma', region: 'Gotlands' },
+  { name: 'Hemse', slug: 'hemse', region: 'Gotlands' }
+]
+
+export function getCityBySlug(slug: string) {
+  return SWEDISH_CITIES.find(city => city.slug === slug)
+}
+
+export function getAllCitySlugs() {
+  return SWEDISH_CITIES.map(city => city.slug)
+}

@@ -56,6 +56,7 @@ export default function Footer() {
               <li><Link href="/vardering" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Gratis värdering</Link></li>
               <li><Link href="/salja" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Så funkar det</Link></li>
               <li><Link href="/salja/start" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Börja sälja</Link></li>
+              <li><Link href="/saljare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Sälja i din stad</Link></li>
               <li><Link href="/priser" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Priser & paket</Link></li>
               <li><Link href="/faq" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">FAQ</Link></li>
             </ul>
@@ -68,6 +69,7 @@ export default function Footer() {
               <li><Link href="/sok" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Sök företag</Link></li>
               <li><Link href="/kopare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Så funkar det</Link></li>
               <li><Link href="/kopare/start" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Skapa konto</Link></li>
+              <li><Link href="/kopare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Köp i din stad</Link></li>
               <li><Link href="/success-stories" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Framgångshistorier</Link></li>
               <li><Link href="/blogg" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Blogg</Link></li>
             </ul>
