@@ -1,19 +1,15 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { getCityBySlug, SWEDISH_CITIES } from '@/lib/cities'
-import { ArrowRight, TrendingUp, Shield, Users, Target, Clock, Lightbulb } from 'lucide-react'
+import { ArrowRight, Target } from 'lucide-react'
 
-export default function BuyerCityLandingPage({ params }: { params: { stad: string } }) {
-  const city = getCityBySlug(params.stad)
-  const [isClient, setIsClient] = useState(false)
+interface PageProps {
+  params: Promise<{ stad: string }>
+}
 
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
+export default async function BuyerCityLandingPage({ params }: PageProps) {
+  const { stad } = await params
+  const city = getCityBySlug(stad)
 
-  if (!isClient) return null
   if (!city) return <div className="text-center py-20">Staden hittades inte</div>
 
   const benefits = [
