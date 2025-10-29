@@ -94,7 +94,7 @@ export default function SPAEditorPage() {
     const newVersion: SPAVersion = {
       version: versions.length + 1,
       date: new Date().toISOString().split('T')[0],
-      status: 'negotiation',
+      status: 'negotiating',
       changedBy: 'Säljare',
       changes: 'Updated SPA terms',
       pdfUrl: '#'
