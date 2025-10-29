@@ -1,84 +1,66 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { generateTeaserPDF } from '@/lib/pdf-generator';
+import { generateTeaserPDF, generateIMPDF } from '@/lib/pdf-generator';
 
 export async function POST(req: NextRequest) {
   try {
-    const { listingId, buyerEmail } = await req.json();
+    const data = await req.json();
+    const isIM = data.type === 'im';
+    
+    // Direct data from SME Kit form
+    const teaserData = {
+      companyName: data.companyName,
+      industry: data.industry,
+      founded: data.foundedYear,
+      employees: data.employees,
+      revenue: data.revenue.toString(),
+      ebitdaMargin: data.ebitda ? `${Math.round((data.ebitda / data.revenue) * 100)}%` : '15-25%',
+      products: data.description || 'Verksamhetsbeskrivning saknas',
+      geography: 'Sverige',
+      whySelling: data.sellingReason || 'Tillväxtmöjlighet för nästa ägare',
+      futureNutential: data.keySellingPoints || 'Stark marknadsposition med tillväxtpotential',
+      normalizedEBITDA: data.ebitda,
+      createdAt: new Date(),
+    };
 
-    if (!listingId) {
-      return NextResponse.json({ error: 'Missing listingId' }, { status: 400 });
+    let pdfBuffer;
+    
+    if (isIM) {
+      // Generate Information Memorandum
+      const imData = {
+        ...teaserData,
+        executiveSummary: data.description || 'Executive summary',
+        businessModel: data.businessModel || data.description || 'Affärsmodell',
+        marketPosition: data.marketPosition || 'Marknadsposition',
+        competitiveAdvantages: data.keySellingPoints || 'Konkurrensfördelar',
+        growthStrategy: data.growthPotential || 'Tillväxtstrategi',
+        managementTeam: 'Erfaret ledningsteam',
+        targetBuyers: data.targetBuyers || 'Strategiska och finansiella köpare',
+        financialProjections: 'Finansiella prognoser tillgängliga på begäran',
+        askingPrice: data.askingPrice || 'Konfidentiell',
+        terms: 'Flexibla villkor',
+        timeline: '3-6 månader',
+        nextSteps: 'Kontakta för mer information'
+      };
+      
+      pdfBuffer = await generateIMPDF(imData);
+    } else {
+      // Generate Teaser
+      pdfBuffer = await generateTeaserPDF(teaserData);
     }
-
-    // Fetch teaser/IM data
-    const teaser = await prisma.teaserIM.findFirst({
-      where: { listingId, type: 'teaser' },
-    });
-
-    if (!teaser) {
-      return NextResponse.json(
-        { error: 'Teaser not found. Please fill out the questionnaire first.' },
-        { status: 404 }
-      );
-    }
-
-    // Fetch listing for company info
-    const listing = await prisma.listing.findUnique({
-      where: { id: listingId },
-      include: { user: true },
-    });
-
-    if (!listing) {
-      return NextResponse.json({ error: 'Listing not found' }, { status: 404 });
-    }
-
-    // Fetch financial data for numbers
-    const financialData = await prisma.financialData.findUnique({
-      where: { listingId },
-      include: { years: { orderBy: { year: 'asc' } } },
-    });
-
-    // Extract questionnaire data
-    const questions = (teaser.questionnaire as any) || {};
-
-    // Generate PDF with collected data
-    const pdfBuffer = await generateTeaserPDF(
-      {
-        companyName: listing.companyName || questions.companyName || 'Company',
-        industry: questions.industry || listing.industry || 'Unknown',
-        founded: parseInt(questions.founded) || new Date().getFullYear(),
-        employees: parseInt(questions.employees) || 1,
-        revenue: questions.revenue || listing.revenue || 'N/A',
-        ebitdaMargin: questions.ebitdaMargin || '15-25%',
-        products: questions.products || listing.description || 'Product/Service description',
-        geography: questions.geography || 'Sweden',
-        whySelling: questions.whySelling || 'Growth opportunity for next owner',
-        futureNutential: questions.futureNutential || 'Strong market position with growth potential',
-        normalizedEBITDA: financialData?.normalizedEBITDA || undefined,
-        yearlyFinancials: financialData?.years.map((y) => ({
-          year: y.year,
-          revenue: y.revenue,
-          ebitda: y.ebitda,
-          ebit: y.ebit,
-        })),
-        createdAt: new Date(),
-      },
-      buyerEmail
-    );
 
     // Return PDF
     return new NextResponse(new Uint8Array(pdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="teaser_${listing.companyName?.replace(/[^a-z0-9]/gi, '_')}_${new Date().getTime()}.pdf"`,
+        'Content-Disposition': `attachment; filename="${isIM ? 'im' : 'teaser'}_${data.companyName?.replace(/[^a-z0-9]/gi, '_')}_${new Date().getTime()}.pdf"`,
       },
     });
   } catch (error) {
-    console.error('Teaser PDF generation error:', error);
+    console.error('PDF generation error:', error);
     return NextResponse.json(
       {
-        error: 'Failed to generate Teaser PDF',
+        error: 'Failed to generate PDF',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
