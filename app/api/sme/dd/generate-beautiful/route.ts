@@ -658,7 +658,10 @@ export async function GET(req: NextRequest): Promise<Response> {
     
     await browser.close()
     
-    return new NextResponse(pdfBuffer, {
+    // Convert Uint8Array to Buffer for NextResponse
+    const pdfBufferConverted = Buffer.from(pdfBuffer)
+    
+    return new NextResponse(pdfBufferConverted, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
