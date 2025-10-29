@@ -62,12 +62,9 @@
 - [x] **Sendinblue (Brevo) implementerat** ✅
   - Kod implementerad i `lib/email.ts`
   - Magic link emails fungerar
-- [ ] **BREVO_API_KEY** läggs till i Railway Variables
-  - Skapa konto: https://www.brevo.com
-  - Gå till Settings → SMTP & API
-  - Skapa API Key
-  - Lägg till: `BREVO_API_KEY=your_api_key_here`
-- [ ] **Testa magic link emails** fungerar efter API key är lagd
+- [x] **BREVO_API_KEY** lagd i Railway Variables ✅
+- [ ] **Testa magic link emails** fungerar efter deployment
+- [ ] **Sender domain verifierad** (för `noreply@bolaxo.com` - optional för start)
 
 ### 7. Testing & Verification
 - [ ] **Lösenordsskydd testat** (`BOLAXO`)

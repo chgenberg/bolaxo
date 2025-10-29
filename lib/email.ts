@@ -1,5 +1,3 @@
-import { BREVO_API_KEY } from './config'
-
 export interface EmailOptions {
   to: string | string[]
   subject: string
@@ -32,7 +30,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
       body: JSON.stringify({
         sender: {
           name: options.fromName || 'BOLAXO',
-          email: options.from || 'noreply@bolaxo.com',
+          email: options.from || 'noreply@sendinblue.com', // Temporärt tills bolaxo.com är verifierad
         },
         to: recipients.map(email => ({ email })),
         subject: options.subject,
