@@ -6,6 +6,7 @@ export interface DDFinding {
   category: 'Financial' | 'Legal' | 'Commercial' | 'HR' | 'IT' | 'Tax' | 'Environmental'
   severity: 'Critical' | 'High' | 'Medium' | 'Low'
   description: string
+  recommendation?: string
 }
 
 // COMPREHENSIVE DD QUESTIONS - 100% COVERAGE
