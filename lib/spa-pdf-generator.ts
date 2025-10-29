@@ -475,7 +475,7 @@ Vid aktieöverlåtelse förekommer ingen stämpelskatt enligt gällande svensk l
     doc.fontSize(11).font('Helvetica').text('HÄRIGENOM bestyrka vi att vi läst och förstått detta Avtal och att vi går in på dess villkor.', { align: 'justify' })
     doc.moveDown(2)
 
-    doc.text('SÄLJARE:', { font: 'Helvetica-Bold' })
+    doc.fontSize(11).font('Helvetica-Bold').text('SÄLJARE:')
     doc.moveDown(2)
     doc.text('_' . repeat(40))
     doc.moveDown(0.5)
@@ -485,7 +485,7 @@ Vid aktieöverlåtelse förekommer ingen stämpelskatt enligt gällande svensk l
 
     doc.moveDown(3)
 
-    doc.text('KÖPARE:', { font: 'Helvetica-Bold' })
+    doc.fontSize(11).font('Helvetica-Bold').text('KÖPARE:')
     doc.moveDown(2)
     doc.text('_' . repeat(40))
     doc.moveDown(0.5)
