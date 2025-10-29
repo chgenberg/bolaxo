@@ -1,18 +1,28 @@
 'use client'
 
-import { useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
 import Link from 'next/link'
 import { ArrowLeft, CheckCircle2, Clock, AlertCircle, Signature, Download, Send } from 'lucide-react'
 
 export default function SigningPage() {
   const params = useParams()
+  const router = useRouter()
+  const { user } = useAuth()
   const spaId = params.spaId as string
   
   const [step, setStep] = useState<'review' | 'sign' | 'complete'>('review')
   const [signed, setSigned] = useState(false)
   const [signingLoading, setSigningLoading] = useState(false)
-  const [userRole] = useState<'buyer' | 'seller'>('buyer')
+  const [userRole, setUserRole] = useState<'buyer' | 'seller'>('buyer')
+  const [spaInfo, setSpaInfo] = useState<any>(null)
+
+  useEffect(() => {
+    // Determine user role from SPA or user context
+    // For now, assume buyer if on /kopare route
+    setUserRole('buyer')
+  }, [])
 
   const handleInitiateSignature = async () => {
     setSigningLoading(true)
@@ -34,10 +44,41 @@ export default function SigningPage() {
       // In production: Verify signature from Scrive/DocuSign
       // For now: Simulate
       await new Promise(resolve => setTimeout(resolve, 1500))
-      setSigned(true)
-      setStep('complete')
+      
+      // Call finalize endpoint to update SPA status and milestone
+      const response = await fetch('/api/sme/spa/finalize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          spaId,
+          signedBy: userRole,
+          timestamp: new Date().toISOString()
+        })
+      })
+
+      // Call finalize endpoint to update SPA status and milestone
+      const response = await fetch('/api/sme/spa/finalize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          spaId,
+          signedBy: userRole,
+          timestamp: new Date().toISOString()
+        })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setSpaInfo(data.data?.spa)
+        setSigned(true)
+        setStep('complete')
+      } else {
+        const errorData = await response.json()
+        alert(errorData.error || 'Kunde inte slutföra signering')
+      }
     } catch (error) {
       console.error('Error completing signature:', error)
+      alert('Ett fel uppstod vid signering')
     } finally {
       setSigningLoading(false)
     }
@@ -278,22 +319,22 @@ export default function SigningPage() {
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <Link
-                href={`/kopare/closing/${spaId}`}
-                className="flex-1 px-6 py-3 bg-primary-navy text-white font-semibold rounded-lg hover:shadow-lg text-center flex items-center justify-center gap-2"
-              >
-                <Send className="w-5 h-5" />
-                Gå till stängningschecklistan
-              </Link>
-              <button
-                onClick={() => alert('PDF skulle laddas ned här')}
-                className="px-6 py-3 border-2 border-primary-navy text-primary-navy font-semibold rounded-lg hover:bg-primary-navy/5 flex items-center justify-center gap-2"
-              >
-                <Download className="w-5 h-5" />
-                Ladda ned signerat avtal
-              </button>
-            </div>
+              <div className="flex gap-4">
+                <Link
+                  href={`/transaktion/${spaInfo?.transactionId || '#'}`}
+                  className="flex-1 px-6 py-3 bg-primary-navy text-white font-semibold rounded-lg hover:shadow-lg text-center flex items-center justify-center gap-2"
+                >
+                  <Send className="w-5 h-5" />
+                  Gå till transaktion
+                </Link>
+                <button
+                  onClick={() => alert('PDF skulle laddas ned här')}
+                  className="px-6 py-3 border-2 border-primary-navy text-primary-navy font-semibold rounded-lg hover:bg-primary-navy/5 flex items-center justify-center gap-2"
+                >
+                  <Download className="w-5 h-5" />
+                  Ladda ned signerat avtal
+                </button>
+              </div>
           </div>
         )}
       </div>
