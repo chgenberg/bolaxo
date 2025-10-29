@@ -10,7 +10,9 @@ export async function GET(request: Request) {
     // Detektera rätt base URL tidigt
     const protocol = request.headers.get('x-forwarded-proto') || 'https'
     const host = request.headers.get('host') || 'bolaxo.com'
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    // Ta bort trailing slash om den finns
+    baseUrl = baseUrl.replace(/\/$/, '')
     
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')

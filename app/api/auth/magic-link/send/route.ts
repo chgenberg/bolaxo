@@ -53,7 +53,9 @@ export async function POST(request: Request) {
     // Skapa magic link URL - detektera automatiskt från request
     const protocol = request.headers.get('x-forwarded-proto') || 'http'
     const host = request.headers.get('host') || 'localhost:3000'
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    // Ta bort trailing slash om den finns
+    baseUrl = baseUrl.replace(/\/$/, '')
     const magicLink = `${baseUrl}/api/auth/magic-link/verify?token=${token}`
 
     // Skicka email via Sendinblue (Brevo)
