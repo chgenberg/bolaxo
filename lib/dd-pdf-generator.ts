@@ -96,7 +96,7 @@ function createSectionHeader(doc: PDFDocumentType, title: string, sectionNum: nu
 
 function addFinding(
   doc: PDFDocumentType,
-  finding: { title: string; severity: string; description: string; recommendation: string },
+  finding: { title: string; severity: string; description: string; recommendation?: string },
   index: number
 ) {
   const [r, g, b] = getSeverityColor(finding.severity)
@@ -126,8 +126,10 @@ function addFinding(
   doc.moveDown(0.3)
   
   // Recommendation
-  doc.text('Recommendation:', { underline: true })
-  doc.text(finding.recommendation, { indent: 20, align: 'justify' })
+  if (finding.recommendation) {
+    doc.text('Recommendation:', { underline: true })
+    doc.text(finding.recommendation, { indent: 20, align: 'justify' })
+  }
   
   doc.moveDown(0.5)
 }
