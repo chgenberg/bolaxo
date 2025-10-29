@@ -307,6 +307,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const [enrichmentStatus, setEnrichmentStatus] = useState('')
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [autoAccountCreated, setAutoAccountCreated] = useState(false)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+  const [loadingText, setLoadingText] = useState('Analyserar din information...')
 
   const totalSteps = 6
   const progress = (step / totalSteps) * 100
@@ -423,6 +425,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
+    setLoadingProgress(0)
+    setLoadingText('Analyserar din information...')
     
     // AUTO-SKAPA KONTO om användaren inte är inloggad
     if (!user && data.email && acceptedPrivacy) {
@@ -441,8 +445,21 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     // Spara data i localStorage för att skicka till resultat-sidan
     localStorage.setItem('valuationData', JSON.stringify(data))
     
-    // Simulera API-anrop (senare ersätts med riktig GPT-4o-mini call)
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    // Anropa API för värdering
+    try {
+      const response = await fetch('/api/valuation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      
+      if (response.ok) {
+        const result = await response.json()
+        localStorage.setItem('valuationResult', JSON.stringify(result))
+      }
+    } catch (error) {
+      console.error('Valuation API error:', error)
+    }
     
     // Navigera till resultatsidan
     router.push('/vardering/resultat')
@@ -489,8 +506,85 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     }
   }, [step])
 
+  // Laddningstexterna som ska visas i sekvens
+  const loadingTexts = [
+    'Analyserar din information...',
+    'Beräknar branschvärden...',
+    'Skapar värderingsunderlag...',
+    'Snart har vi resultatet...'
+  ]
+
+  // Uppdatera progress och text under laddning
+  useEffect(() => {
+    if (isSubmitting) {
+      const totalDuration = 90000 // 1.5 minuter = 90 sekunder
+      const updateInterval = 100 // Uppdatera var 100ms
+      const progressIncrement = 100 / (totalDuration / updateInterval)
+      const textChangeInterval = totalDuration / loadingTexts.length
+
+      let currentProgress = 0
+      let textIndex = 0
+
+      const progressTimer = setInterval(() => {
+        currentProgress += progressIncrement
+        if (currentProgress >= 100) {
+          currentProgress = 100
+          clearInterval(progressTimer)
+        }
+        setLoadingProgress(currentProgress)
+      }, updateInterval)
+
+      const textTimer = setInterval(() => {
+        textIndex++
+        if (textIndex < loadingTexts.length) {
+          setLoadingText(loadingTexts[textIndex])
+        } else {
+          clearInterval(textTimer)
+        }
+      }, textChangeInterval)
+
+      return () => {
+        clearInterval(progressTimer)
+        clearInterval(textTimer)
+      }
+    }
+  }, [isSubmitting])
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      {/* Laddningsskärm */}
+      {isSubmitting && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+            <div className="mb-8">
+              <div className="w-20 h-20 bg-primary-navy/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+                <TrendingUp className="w-10 h-10 text-primary-navy" />
+              </div>
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">
+                Analyserar ditt företag
+              </h2>
+              <p className="text-gray-600">
+                {loadingText}
+              </p>
+            </div>
+
+            <div className="mb-6">
+              <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-primary-navy to-accent-pink h-full rounded-full transition-all duration-300 ease-out"
+                  style={{ width: `${loadingProgress}%` }}
+                />
+              </div>
+              <p className="text-sm text-gray-500 mt-2">{Math.round(loadingProgress)}%</p>
+            </div>
+
+            <p className="text-xs text-gray-400">
+              Detta tar normalt 60-90 sekunder
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-3xl h-[95vh] sm:h-[90vh] md:h-[85vh] flex flex-col">
         {/* Header - Fixed */}
         <div className="px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-3 sm:pb-4 border-b border-gray-100 flex-shrink-0">

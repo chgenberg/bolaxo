@@ -96,7 +96,7 @@ export default function ValuationResultPage() {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="heading-3 mb-2">Analyserar ditt företag...</h2>
-          <p className="text-text-gray">Vår AI gör en djupgående värdering</p>
+          <p className="text-primary-navy">Vår AI gör en djupgående värdering</p>
         </div>
       </div>
     )
@@ -108,7 +108,7 @@ export default function ValuationResultPage() {
         <div className="bg-white p-8 rounded-2xl shadow-card max-w-md text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
           <h2 className="heading-3 mb-2">Något gick fel</h2>
-          <p className="text-text-gray mb-6">{error}</p>
+          <p className="text-primary-navy mb-6">{error}</p>
           <Link href="/vardering" className="btn-primary">
             Försök igen
           </Link>
@@ -174,7 +174,7 @@ export default function ValuationResultPage() {
             Värdering klar!
           </div>
           <h1 className="heading-1 mb-4">Din Företagsvärdering</h1>
-          <p className="text-lg text-text-gray">
+          <p className="text-lg text-primary-navy">
             Baserad på AI-analys med professionella värderingsmetoder
           </p>
         </div>
@@ -220,8 +220,8 @@ export default function ValuationResultPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-8">
           {result.keyMetrics.map((metric, index) => (
             <div key={index} className="bg-white p-6 rounded-2xl shadow-card">
-              <div className="text-sm text-text-gray mb-1">{metric.label}</div>
-              <div className="text-xl sm:text-2xl font-bold text-primary-blue">{metric.value}</div>
+              <div className="text-sm text-gray-600 mb-1">{metric.label}</div>
+              <div className="text-xl sm:text-2xl font-bold text-primary-navy">{metric.value}</div>
             </div>
           ))}
         </div>
@@ -231,36 +231,36 @@ export default function ValuationResultPage() {
           <div className="flex items-start mb-6">
             <FileText className="w-6 h-6 text-primary-blue mr-3 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="heading-3 mb-2">Beräkningsunderlag</h2>
-              <p className="text-text-gray">Så har vi kommit fram till värderingen</p>
+              <h2 className="heading-3 mb-2 text-primary-navy">Beräkningsunderlag</h2>
+              <p className="text-gray-600">Så har vi kommit fram till värderingen</p>
             </div>
           </div>
 
           <div className="space-y-4">
             {result.methodology.multipel && (
               <div className="bg-light-blue p-4 rounded-xl">
-                <h3 className="font-semibold text-primary-blue mb-2">Multipelvärdering</h3>
-                <p className="text-sm text-text-dark">{result.methodology.multipel}</p>
+                <h3 className="font-semibold text-primary-navy mb-2">Multipelvärdering</h3>
+                <p className="text-sm text-primary-navy">{result.methodology.multipel}</p>
               </div>
             )}
             {result.methodology.avkastningskrav && (
               <div className="bg-light-blue p-4 rounded-xl">
-                <h3 className="font-semibold text-primary-blue mb-2">Avkastningsvärdering</h3>
-                <p className="text-sm text-text-dark">{result.methodology.avkastningskrav}</p>
+                <h3 className="font-semibold text-primary-navy mb-2">Avkastningsvärdering</h3>
+                <p className="text-sm text-primary-navy">{result.methodology.avkastningskrav}</p>
               </div>
             )}
             {result.methodology.substans && (
               <div className="bg-light-blue p-4 rounded-xl">
-                <h3 className="font-semibold text-primary-blue mb-2">Substansvärde</h3>
-                <p className="text-sm text-text-dark">{result.methodology.substans}</p>
+                <h3 className="font-semibold text-primary-navy mb-2">Substansvärde</h3>
+                <p className="text-sm text-primary-navy">{result.methodology.substans}</p>
               </div>
             )}
           </div>
 
           {result.marketComparison && (
             <div className="mt-6 p-4 bg-gray-50 rounded-xl">
-              <h3 className="font-semibold text-text-dark mb-2">Jämförelse med marknaden</h3>
-              <p className="text-sm text-text-gray">{result.marketComparison}</p>
+              <h3 className="font-semibold text-primary-navy mb-2">Jämförelse med marknaden</h3>
+              <p className="text-sm text-primary-navy">{result.marketComparison}</p>
             </div>
           )}
         </div>
@@ -270,8 +270,8 @@ export default function ValuationResultPage() {
           <div className="flex items-start mb-6">
             <BarChart3 className="w-6 h-6 text-primary-blue mr-3 flex-shrink-0 mt-1" />
             <div>
-              <h2 className="heading-3 mb-2">Analys av företaget</h2>
-              <p className="text-text-gray">Styrkor, svagheter, möjligheter och risker</p>
+              <h2 className="heading-3 mb-2 text-primary-navy">Analys av företaget</h2>
+              <p className="text-gray-600">Styrkor, svagheter, möjligheter och risker</p>
             </div>
           </div>
 
@@ -286,7 +286,7 @@ export default function ValuationResultPage() {
                 {result.analysis.strengths.map((strength, index) => (
                   <li key={index} className="flex items-start text-sm">
                     <span className="text-green-500 mr-2">•</span>
-                    <span className="text-text-gray">{strength}</span>
+                    <span className="text-primary-navy">{strength}</span>
                   </li>
                 ))}
               </ul>
@@ -302,7 +302,7 @@ export default function ValuationResultPage() {
                 {result.analysis.weaknesses.map((weakness, index) => (
                   <li key={index} className="flex items-start text-sm">
                     <span className="text-orange-500 mr-2">•</span>
-                    <span className="text-text-gray">{weakness}</span>
+                    <span className="text-primary-navy">{weakness}</span>
                   </li>
                 ))}
               </ul>
@@ -318,7 +318,7 @@ export default function ValuationResultPage() {
                 {result.analysis.opportunities.map((opportunity, index) => (
                   <li key={index} className="flex items-start text-sm">
                     <span className="text-blue-500 mr-2">•</span>
-                    <span className="text-text-gray">{opportunity}</span>
+                    <span className="text-primary-navy">{opportunity}</span>
                   </li>
                 ))}
               </ul>
@@ -334,7 +334,7 @@ export default function ValuationResultPage() {
                 {result.analysis.risks.map((risk, index) => (
                   <li key={index} className="flex items-start text-sm">
                     <span className="text-red-500 mr-2">•</span>
-                    <span className="text-text-gray">{risk}</span>
+                    <span className="text-primary-navy">{risk}</span>
                   </li>
                 ))}
               </ul>
@@ -348,7 +348,7 @@ export default function ValuationResultPage() {
             <Lightbulb className="w-6 h-6 text-primary-blue mr-3 flex-shrink-0 mt-1" />
             <div>
               <h2 className="heading-3 mb-2">Så ökar du företagsvärdet</h2>
-              <p className="text-text-gray">Konkreta rekommendationer baserat på analysen</p>
+              <p className="text-primary-navy">Konkreta rekommendationer baserat på analysen</p>
             </div>
           </div>
 
@@ -365,7 +365,7 @@ export default function ValuationResultPage() {
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-semibold text-text-dark">{rec.title}</h3>
+                  <h3 className="font-semibold text-primary-navy">{rec.title}</h3>
                   <span
                     className={`text-xs px-2 py-1 rounded-full ${
                       rec.impact === 'high'
@@ -378,7 +378,7 @@ export default function ValuationResultPage() {
                     {rec.impact === 'high' ? 'Hög påverkan' : rec.impact === 'medium' ? 'Medel påverkan' : 'Låg påverkan'}
                   </span>
                 </div>
-                <p className="text-sm text-text-gray">{rec.description}</p>
+                <p className="text-sm text-primary-navy">{rec.description}</p>
               </div>
             ))}
           </div>
@@ -427,7 +427,7 @@ export default function ValuationResultPage() {
         </div>
 
         {/* Disclaimer */}
-        <div className="mt-8 text-center text-sm text-text-gray">
+        <div className="mt-8 text-center text-sm text-primary-navy">
           <p>
             Denna värdering är en indikation baserad på AI-analys och bör inte ses som en formell värdering.
             För en fullständig Due Diligence och professionell värdering, kontakta en auktoriserad värderare.
