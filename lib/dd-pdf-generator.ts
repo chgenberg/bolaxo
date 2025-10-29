@@ -91,7 +91,7 @@ function createSectionHeader(doc: PDFDocumentType, title: string, sectionNum: nu
   doc.fontSize(16).font('Helvetica-Bold').fillColor('#0E2D5C')
   doc.text(`${sectionNum}. ${title}`, { underline: true })
   doc.moveDown(0.5)
-  doc.fillColor(0, 0, 0)
+  doc.fillColor('#000000')
 }
 
 function addFinding(
@@ -113,9 +113,9 @@ function addFinding(
   const badgeX = 450
   const badgeY = doc.y - 15
   doc.rect(badgeX, badgeY, 90, 18).fill(`rgb(${r},${g},${b})`)
-  doc.fontSize(9).font('Helvetica-Bold').fillColor(255, 255, 255)
+  doc.fontSize(9).font('Helvetica-Bold').fillColor('#FFFFFF')
   doc.text(finding.severity, badgeX + 5, badgeY + 3, { width: 80 })
-  doc.fillColor(0, 0, 0)
+  doc.fillColor('#000000')
   
   doc.moveDown(0.8)
   
@@ -149,10 +149,10 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
     doc.on('error', reject)
 
     // ===== TITLE PAGE =====
-    doc.fontSize(28).font('Helvetica-Bold').fillColor(14, 45, 92)
+    doc.fontSize(28).font('Helvetica-Bold').fillColor('#0E2D5C')
     doc.text('DUE DILIGENCE RAPPORT', { align: 'center' })
     doc.moveDown(0.5)
-    doc.fontSize(14).font('Helvetica').fillColor(0, 0, 0)
+    doc.fontSize(14).font('Helvetica').fillColor('#000000')
     doc.text('(Företagsbesiktning)', { align: 'center' })
     
     doc.moveDown(2)
@@ -167,18 +167,18 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
     doc.text(`Slutfört: ${new Date(data.ddCompletionDate).toLocaleDateString('sv-SE')}`)
     
     doc.moveDown(3)
-    doc.fontSize(10).fillColor(192, 0, 0).font('Helvetica-Bold')
+    doc.fontSize(10).fillColor('#C00000').font('Helvetica-Bold')
     doc.text('KONFIDENTIELLT', { align: 'center' })
     doc.text('För auktoriserade mottagare endast', { align: 'center' })
-    doc.fillColor(0, 0, 0)
+    doc.fillColor('#000000')
 
     doc.addPage()
 
     // ===== EXECUTIVE SUMMARY =====
-    doc.fontSize(16).font('Helvetica-Bold').fillColor(14, 45, 92)
+    doc.fontSize(16).font('Helvetica-Bold').fillColor('#0E2D5C')
     doc.text('VERKSTÄLLANDE SAMMANFATTNING', { underline: true })
     doc.moveDown(0.5)
-    doc.fillColor(0, 0, 0)
+    doc.fillColor('#000000')
     
     // Overall risk level
     const riskColors: Record<string, [number, number, number]> = {
@@ -191,9 +191,9 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
     
     doc.fontSize(12).font('Helvetica-Bold').text('Övergripande risknivå:')
     doc.rect(50, doc.y, 150, 30).fill(`rgb(${riskColor[0]},${riskColor[1]},${riskColor[2]})`)
-    doc.fontSize(14).font('Helvetica-Bold').fillColor(255, 255, 255)
+    doc.fontSize(14).font('Helvetica-Bold').fillColor('#FFFFFF')
     doc.text(data.overallRiskLevel || 'Medium', 55, doc.y + 5)
-    doc.fillColor(0, 0, 0)
+    doc.fillColor('#000000')
     doc.moveDown(2)
     
     // Top three risks
@@ -212,7 +212,7 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
       doc.moveDown(1)
     }
     
-    doc.fontSize(9).fillColor(128, 128, 128)
+    doc.fontSize(9).fillColor('#808080')
     doc.text('Denna rapport är baserad på tillgänglig dokumentation och intervjuer. En fullständig framtidsprognos kan inte garanteras.')
 
     doc.addPage()
@@ -267,10 +267,10 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
     }
 
     // ===== SIGNATURE PAGE =====
-    doc.fontSize(14).font('Helvetica-Bold').fillColor(14, 45, 92)
+    doc.fontSize(14).font('Helvetica-Bold').fillColor('#0E2D5C')
     doc.text('UNDERTECKNING', { underline: true })
     doc.moveDown(1)
-    doc.fillColor(0, 0, 0)
+    doc.fillColor('#000000')
     
     doc.fontSize(11).font('Helvetica').text(
       'Denna rapport är baserad på tillgänglig information per rapporteringsdatum. ' +
