@@ -73,45 +73,87 @@ export async function sendMagicLinkEmail(
     to: email,
     subject: 'Din inloggningslänk till BOLAXO',
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">Välkommen till BOLAXO</h1>
-        </div>
-        
-        <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb;">
-          <p style="color: #374151; font-size: 16px; line-height: 1.6;">Hej ${name},</p>
-          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
-            Klicka på knappen nedan för att logga in på ditt konto:
-          </p>
-          
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${magicLink}" style="display: inline-block; background: #1e40af; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-              Logga in på BOLAXO
-            </a>
-          </div>
-          
-          <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin-top: 30px;">
-            <strong>Länken är giltig i 1 timme.</strong> Om du inte begärt denna länk, ignorera detta mail.
-          </p>
-          
-          <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin-top: 20px;">
-            Om knappen inte fungerar, kopiera och klistra in denna länk i din webbläsare:
-          </p>
-          <p style="color: #1e40af; font-size: 12px; word-break: break-all; background: #f3f4f6; padding: 10px; border-radius: 4px;">
-            ${magicLink}
-          </p>
-        </div>
-        
-        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-          <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-            BOLAXO © 2025 | Sveriges smartaste företagsförmedling
-          </p>
-          <p style="color: #9ca3af; font-size: 12px; margin: 5px 0 0 0;">
-            Verifierade uppgifter • NDA innan detaljer • Kvalificerade köpare
-          </p>
-        </div>
-      </div>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
+                      Välkommen till BOLAXO
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${name},
+                    </p>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
+                      Klicka på knappen nedan för att logga in på ditt konto:
+                    </p>
+                    
+                    <!-- Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 0 0 30px 0;">
+                          <a href="${magicLink}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Logga in på BOLAXO
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <!-- Info -->
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 0 0 20px 0;">
+                      <strong>Länken är giltig i 1 timme.</strong> Om du inte begärt denna länk, ignorera detta mail.
+                    </p>
+                    
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 0 0 15px 0;">
+                      Om knappen inte fungerar, kopiera och klistra in denna länk i din webbläsare:
+                    </p>
+                    
+                    <p style="color: #1F3C58; font-size: 12px; word-break: break-all; background-color: #f3f4f6; padding: 12px; border-radius: 6px; margin: 0; font-family: monospace;">
+                      ${magicLink}
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                      Verifierade uppgifter • NDA innan detaljer • Kvalificerade köpare
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `,
+    fromName: 'BOLAXO',
+    from: 'noreply@bolaxo.com'
   })
 }
 
@@ -132,39 +174,79 @@ export async function sendLOINotificationEmail(
     to: sellerEmail,
     subject: `Ny indikativt bud (LOI) från ${buyerName}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">Ny LOI mottagen</h1>
-        </div>
-        
-        <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb;">
-          <p style="color: #374151; font-size: 16px; line-height: 1.6;">Hej ${sellerName},</p>
-          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
-            Du har fått ett nytt indikativt bud (LOI) från <strong>${buyerName}</strong> för ditt objekt:
-          </p>
-          
-          <div style="background: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1e40af;">
-            <p style="margin: 0; font-weight: 600; color: #1e40af;">${listingTitle}</p>
-          </div>
-          
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${loiUrl}" style="display: inline-block; background: #1e40af; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-              Se LOI och hantera
-            </a>
-          </div>
-          
-          <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin-top: 30px;">
-            Logga in på BOLAXO för att se detaljer och godkänna eller avslå budet.
-          </p>
-        </div>
-        
-        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-          <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-            BOLAXO © 2025 | Sveriges smartaste företagsförmedling
-          </p>
-        </div>
-      </div>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
+                      Ny LOI mottagen
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${sellerName},
+                    </p>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Du har fått ett nytt indikativt bud (LOI) från <strong>${buyerName}</strong> för ditt objekt:
+                    </p>
+                    
+                    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #1F3C58;">
+                      <p style="margin: 0; font-weight: 600; color: #1F3C58; font-size: 18px;">${listingTitle}</p>
+                    </div>
+                    
+                    <!-- Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 0 0 30px 0;">
+                          <a href="${loiUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Se LOI och hantera
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 0;">
+                      Logga in på BOLAXO för att se detaljer och godkänna eller avslå budet.
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `,
+    fromName: 'BOLAXO',
+    from: 'noreply@bolaxo.com'
   })
 }
 
@@ -184,39 +266,79 @@ export async function sendLOIApprovalEmail(
     to: buyerEmail,
     subject: `Din LOI har godkänts för ${listingTitle}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">LOI godkänd! 🎉</h1>
-        </div>
-        
-        <div style="background: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e5e7eb;">
-          <p style="color: #374151; font-size: 16px; line-height: 1.6;">Hej ${buyerName},</p>
-          <p style="color: #374151; font-size: 16px; line-height: 1.6;">
-            Vi har glada nyheter! Din LOI för <strong>${listingTitle}</strong> har godkänts av säljaren.
-          </p>
-          
-          <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #10b981;">
-            <p style="margin: 0; font-weight: 600; color: #065f46;">Transaktionen är nu skapad och redo att börja!</p>
-          </div>
-          
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${transactionUrl}" style="display: inline-block; background: #10b981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">
-              Gå till transaktion
-            </a>
-          </div>
-          
-          <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin-top: 30px;">
-            <strong>Nästa steg:</strong> Logga in på BOLAXO för att se transaktionsdashboarden och börja med Due Diligence.
-          </p>
-        </div>
-        
-        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-          <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-            BOLAXO © 2025 | Sveriges smartaste företagsförmedling
-          </p>
-        </div>
-      </div>
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
+                      LOI godkänd! 🎉
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${buyerName},
+                    </p>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Vi har glada nyheter! Din LOI för <strong>${listingTitle}</strong> har godkänts av säljaren.
+                    </p>
+                    
+                    <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #22c55e;">
+                      <p style="margin: 0; font-weight: 600; color: #065f46; font-size: 16px;">Transaktionen är nu skapad och redo att börja!</p>
+                    </div>
+                    
+                    <!-- Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 0 0 30px 0;">
+                          <a href="${transactionUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Gå till transaktion
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 0;">
+                      <strong>Nästa steg:</strong> Logga in på BOLAXO för att se transaktionsdashboarden och börja med Due Diligence.
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `,
+    fromName: 'BOLAXO',
+    from: 'noreply@bolaxo.com'
   })
 }
 
