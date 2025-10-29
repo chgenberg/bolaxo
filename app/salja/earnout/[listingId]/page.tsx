@@ -52,18 +52,64 @@ export default function EarnoutTrackerPage() {
 
   const fetchEarnoutData = async () => {
     try {
-      const response = await fetch(`/api/sme/earnout/get?listingId=${listingId}`)
-      if (response.ok) {
-        const data = await response.json()
-        setEarnout(data.data)
-        if (data.data?.payments?.length > 0) {
-          // Find the current period that needs KPI update
-          const currentPayment = data.data.payments.find((p: EarnoutPayment) => p.status === 'pending')
-          if (currentPayment) {
-            setSelectedPayment(currentPayment)
-            setKpiForm({ actualKPI: currentPayment.actualKPI || 0, notes: '' })
+      // Demo earnout data
+      const demoEarnout: EarnoutData = {
+        id: 'earnout-1',
+        listingId,
+        totalEarnoutAmount: 5000000,
+        period: 3,
+        startDate: '2025-12-31',
+        endDate: '2028-12-31',
+        kpiType: 'Revenue',
+        kpiTarget: {
+          year1: 65000000,
+          year2: 72000000,
+          year3: 80000000
+        },
+        status: 'active',
+        payments: [
+          {
+            id: 'ep1',
+            period: 1,
+            year: 2025,
+            targetKPI: 65000000,
+            actualKPI: 0,
+            achievementPercent: 0,
+            earnedAmount: 0,
+            status: 'pending',
+            notes: 'Waiting for Year 1 results (Dec 2025)'
+          },
+          {
+            id: 'ep2',
+            period: 2,
+            year: 2026,
+            targetKPI: 72000000,
+            actualKPI: 0,
+            achievementPercent: 0,
+            earnedAmount: 0,
+            status: 'pending',
+            notes: 'Will be calculated after Year 1 closes'
+          },
+          {
+            id: 'ep3',
+            period: 3,
+            year: 2027,
+            targetKPI: 80000000,
+            actualKPI: 0,
+            achievementPercent: 0,
+            earnedAmount: 0,
+            status: 'pending',
+            notes: 'Will be calculated after Year 2 closes'
           }
-        }
+        ]
+      }
+      
+      setEarnout(demoEarnout)
+      // Find the current period that needs KPI update
+      const currentPayment = demoEarnout.payments.find(p => p.status === 'pending')
+      if (currentPayment) {
+        setSelectedPayment(currentPayment)
+        setKpiForm({ actualKPI: currentPayment.actualKPI || 0, notes: '' })
       }
     } catch (error) {
       console.error('Error fetching earnout data:', error)
