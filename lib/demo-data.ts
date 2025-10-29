@@ -231,3 +231,161 @@ export const DEMO_EARNOUT_DATA = {
   year2: { target: 72000000, actual: null, earned: null, status: 'pending' },
   year3: { target: 80000000, actual: null, earned: null, status: 'pending' },
 }
+
+export const DEMO_SPA_FULL_DATA = {
+  // PARTIES
+  companyName: 'CloudTech Solutions AB',
+  orgNumber: '556234-5678',
+  legalForm: 'Aktiebolag',
+  companyAddress: 'Storgatan 42, 171 00 Stockholm',
+  industry: 'Teknologi',
+  description: 'CloudTech Solutions AB utvecklar molnbaserad bokföringssoftware för småföretag och medelstora företag i Norden. Företaget erbjuder SaaS-lösningar för finansiell rapportering, fakturering och ekonomiöversikt.',
+  
+  // SELLER INFO
+  sellerName: 'Magnus Lundström',
+  sellerIdNumber: '710312-1234',
+  sellerAddress: 'Värmlandsgatan 15, 100 54 Stockholm',
+  sellerBank: 'SEB',
+  sellerBankGiro: '5001-1234567',
+  
+  // BUYER INFO
+  buyerName: 'Industrikapital Partners AB',
+  buyerOrgNumber: '559876-5432',
+  buyerAddress: 'Blasieholmen 5, 111 48 Stockholm',
+  buyerBank: 'Handelsbanken',
+  buyerBankGiro: '6000-9876543',
+  
+  // PURCHASE PRICE
+  basePurchasePrice: '150,000,000',
+  earnoutAmount: '25,000,000',
+  earnoutPercentage: '14.3',
+  totalMaxPrice: '175,000,000',
+  
+  // PAYMENT TERMS
+  escrowAmount: '15,000,000',
+  escrowPercentage: '10',
+  escrowPeriod: '18',
+  escrowAgent: 'Enskilda Securities AB',
+  
+  // EARNOUT STRUCTURE
+  earnoutYear1Target: 'EBITDA > 12.5 MSEK',
+  earnoutYear1Amount: '8,000,000',
+  earnoutYear2Target: 'EBITDA > 13.5 MSEK + Revenue growth 15%',
+  earnoutYear2Amount: '9,000,000',
+  earnoutYear3Target: 'EBITDA > 14.5 MSEK + Churn < 5%',
+  earnoutYear3Amount: '8,000,000',
+  totalEarnout: '25,000,000',
+  
+  // NON-COMPETE
+  nonCompetePeriod: '3',
+  nonCompeteGeography: 'Norden (Sverige, Norge, Danmark)',
+  
+  // CLOSING
+  closingDate: '2025-01-31',
+  
+  // KEY EMPLOYEES
+  keyEmployee1: 'Anna Pettersson (VD, 10 år tenure)',
+  keyEmployee2: 'Erik Svensson (CTO, 8 år tenure)',
+  keyEmployee3: 'Sofia Bergström (Head of Sales, 5 år tenure)',
+  
+  // RETENTION BONUSES
+  ceoBonus: '2,500,000',
+  ctoBonus: '2,000,000',
+  otherBonus: '1,500,000'
+}
+
+export const DEMO_DD_FULL_DATA = {
+  // COMPANY INFO
+  companyName: 'CloudTech Solutions AB',
+  orgNumber: '556234-5678',
+  industry: 'Teknologi - Cloud-baserad mjukvara',
+  description: 'SaaS-plattform för finansiell rapportering',
+  employees: 12,
+  revenue2024: 52000000,
+  revenue2023: 46400000,
+  revenue2022: 32000000,
+  ebitda2024: 10400000,
+  ebitda2023: 10080000,
+  ebitda2022: 8960000,
+  
+  // FINANCIAL METRICS
+  grossMargin: 78,
+  operatingMargin: 20,
+  netMargin: 16,
+  daysInventory: 0,
+  daysSales: 60,
+  daysPayable: 45,
+  totalDebt: 5000000,
+  cashPosition: 8500000,
+  capex: 1200000,
+  rd: 8000000,
+  
+  // CUSTOMERS
+  totalCustomers: 47,
+  topCustomerRevenue: 18,
+  top3Revenue: 35,
+  top10Revenue: 65,
+  churnRate: 5,
+  nps: 72,
+  
+  // ORGANIZATION
+  ceoName: 'Anna Pettersson',
+  cfoName: 'Lars Eklund',
+  ctoName: 'Erik Svensson',
+  avgTenure: 6.8,
+  turnover: 8,
+  
+  // TECHNICAL
+  techStack: 'React 18, TypeScript, Next.js 14, Node.js 20, PostgreSQL 15, AWS',
+  cloudVsOnpremise: '100% Cloud',
+  datacenters: 'AWS eu-north-1 (Stockholm)',
+  testCoverage: 72,
+  uptime: 99.95,
+  backupStrategy: 'RTO 1 hour, RPO 15 minutes, daily incremental backups',
+  securityCertification: 'ISO 27001, GDPR compliant, SOC2 Type II in progress',
+  
+  // COMMERCIAL
+  marketShare: 6.5,
+  tam: 2500000000,
+  
+  // RISK ASSESSMENT
+  overallRisk: 'MEDIUM',
+  recommendation: 'GENOMFÖR MED VILLKOR',
+  criticalRisks: [
+    {
+      title: 'Kundberoende - Top 3 = 35% av omsättning',
+      severity: 'HIGH',
+      mitigation: 'Pre-closing calls för säkerställande av continuation'
+    },
+    {
+      title: 'Infrastruktur - On-premise servrar från 2016',
+      severity: 'HIGH',
+      mitigation: 'Omedelbar cloud migration, 3-4 mån timeline'
+    },
+    {
+      title: 'Nyckelpersoner - CTO och Head of Sales kritiska',
+      severity: 'HIGH',
+      mitigation: '2-år retention bonus for CTO, Head of Sales, CEO'
+    }
+  ],
+  mediumRisks: [
+    {
+      title: 'Marginalpressing - 28% till 20% på 2 år',
+      severity: 'MEDIUM',
+      mitigation: 'Kostnadsoptimering, målmarginal 26% inom 12 mån'
+    },
+    {
+      title: 'Arbetande kapital - 2 MSEK behövs för skalning',
+      severity: 'MEDIUM',
+      mitigation: 'Financing-arrangemang, factoring möjligt'
+    }
+  ],
+  strengths: [
+    'Stark marknadspojtion - Top 3 i segment',
+    'Solid produkt - 95% NPS, 72 NPS score',
+    'Erfaren ledning - 5-8 år tenure',
+    '45% CAGR 2021-2024',
+    'SaaS-potential - 2-3x värderingsmultipel upside',
+    '100% cloud-baserad infrastruktur'
+  ]
+}
