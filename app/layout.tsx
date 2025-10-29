@@ -7,6 +7,7 @@ import ChatWidget from '@/components/ChatWidget'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
 import PasswordProtection from '@/components/PasswordProtection'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 export const metadata: Metadata = {
   title: 'BOLAXO - Sveriges smartaste företagsförmedling',
@@ -26,17 +27,19 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="antialiased">
-        <PasswordProtection>
-          <AuthProvider>
-            <ToastProvider>
-              <Header />
-              {children}
-              <Footer />
-              <CookieConsent />
-              <ChatWidget />
-            </ToastProvider>
-          </AuthProvider>
-        </PasswordProtection>
+        <ErrorBoundary>
+          <PasswordProtection>
+            <AuthProvider>
+              <ToastProvider>
+                <Header />
+                {children}
+                <Footer />
+                <CookieConsent />
+                <ChatWidget />
+              </ToastProvider>
+            </AuthProvider>
+          </PasswordProtection>
+        </ErrorBoundary>
       </body>
     </html>
   )
