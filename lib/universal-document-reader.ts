@@ -1,7 +1,14 @@
-import pdfParse from 'pdf-parse'
+import type { Readable } from 'stream'
+import * as pdfParse from 'pdf-parse/lib/pdf-parse.js'
 import * as XLSX from 'xlsx'
 import * as mammoth from 'mammoth'
 import { extractText } from 'unzipper'
+
+// pdf-parse is CommonJS, need to import correctly
+const getPdfParse = () => {
+  const mod = require('pdf-parse') as any
+  return mod.default || mod
+}
 
 export interface DocumentExtractionResult {
   text: string
@@ -74,7 +81,8 @@ function detectFormat(mimeType: string, fileName: string): DocumentExtractionRes
  */
 async function extractFromPDF(buffer: Buffer): Promise<DocumentExtractionResult> {
   try {
-    const pdf = await pdfParse(buffer)
+    const pdfParseFunc = getPdfParse()
+    const pdf = await pdfParseFunc(buffer)
     const text = pdf.text || ''
     
     return {

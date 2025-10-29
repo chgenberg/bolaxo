@@ -67,16 +67,10 @@ const DEMO_SPA_DATA: SPAPdfData = {
   
   // Financial data for the SPA
   financialData: {
-    latestYear: 2024,
-    revenue: 52000000,
-    ebitda: 10400000,
-    ebitdaMargin: 20,
+    latestRevenue: 52000000,
+    latestEBITDA: 10400000,
     employees: 12,
-    yearlyBreakdown: [
-      { year: 2022, revenue: 32000000, ebitda: 5120000 },
-      { year: 2023, revenue: 46400000, ebitda: 8352000 },
-      { year: 2024, revenue: 52000000, ebitda: 10400000 }
-    ]
+    lastFiscalYear: '2024'
   },
   
   // Additional info
@@ -91,17 +85,14 @@ const DEMO_SPA_DATA: SPAPdfData = {
       { name: 'Sofia Bergström', title: 'CTO & Co-founder', tenure: '8 år' },
       { name: 'Magnus Eriksson', title: 'Head of Sales', tenure: '4 år' }
     ],
-    financialData: {
-      latestYear: 2024,
-      revenue: 52000000,
-      ebitda: 10400000,
-      ebitdaMargin: 20,
-      employees: 12,
-      yearlyBreakdown: [
-        { year: 2022, revenue: 32000000, ebitda: 5120000 },
-        { year: 2023, revenue: 46400000, ebitda: 8352000 },
-        { year: 2024, revenue: 52000000, ebitda: 10400000 }
-      ]
+    financialSummary: {
+      revenue_2022: 32000000,
+      revenue_2023: 46400000,
+      revenue_2024: 52000000,
+      ebitda_2022: 5120000,
+      ebitda_2023: 8352000,
+      ebitda_2024: 10400000,
+      growth_rate: '45% CAGR'
     }
   }
 }
