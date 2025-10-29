@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
 import { MessageCircle, Folder } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { getListingById, getMessages, sendMessage } from '@/lib/api-client'
+import { getMessages, sendMessage } from '@/lib/api-client'
 
 export default function DataroomPage() {
   const params = useParams()
@@ -16,7 +15,8 @@ export default function DataroomPage() {
   const { user } = useAuth()
   
   const objectId = params.id as string
-  const [object, setObject] = useState<any>(getObjectById(objectId))
+  const [object, setObject] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const hasNDA = ndaSignedObjects.includes(objectId)
 
   const [activeTab, setActiveTab] = useState<'dataroom' | 'qa'>('qa')
@@ -26,22 +26,57 @@ export default function DataroomPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const listing = await getListingById(objectId)
-        setObject(listing)
-        // Load existing Q&A messages between buyer and seller for this listing
-        if (user && listing?.user?.id) {
-          const res = await getMessages({ userId: user.id, listingId: objectId, peerId: listing.user.id })
-          setMessages(res.messages || [])
+        setLoading(true)
+        // Fetch listing from API
+        const url = `/api/listings/${objectId}${user?.id ? `?userId=${user.id}` : ''}`
+        const response = await fetch(url)
+        if (response.ok) {
+          const listing = await response.json()
+          setObject(listing)
+          
+          // Load existing Q&A messages between buyer and seller for this listing
+          if (user && listing?.user?.id) {
+            try {
+              const res = await getMessages({ userId: user.id, listingId: objectId, peerId: listing.user.id })
+              setMessages(res.messages || [])
+            } catch (msgError) {
+              console.error('Error loading messages:', msgError)
+            }
+          }
+        } else {
+          console.error('Failed to fetch listing')
         }
       } catch (e) {
-        setObject(getObjectById(objectId))
+        console.error('Error loading datarum:', e)
+      } finally {
+        setLoading(false)
       }
     }
-    load()
+    
+    if (objectId) {
+      load()
+    }
   }, [objectId, user])
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div>
+      </div>
+    )
+  }
+
   if (!object) {
-    return <div>Objekt ej hittat</div>
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-text-dark mb-2">Objekt hittades inte</h1>
+          <Link href="/sok" className="text-primary-blue hover:underline">
+            Tillbaka till sök
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   if (!hasNDA) {

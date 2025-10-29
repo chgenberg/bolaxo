@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getObjectById } from '@/data/mockObjects'
 import { useBuyerStore } from '@/store/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from '@/components/FormField'
@@ -16,8 +15,33 @@ export default function LOIPage() {
   const { user } = useAuth()
   
   const objectId = params.id as string
-  const object = getObjectById(objectId)
+  const [object, setObject] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const hasNDA = ndaSignedObjects.includes(objectId)
+
+  // Fetch listing from API
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const url = `/api/listings/${objectId}${user?.id ? `?userId=${user.id}` : ''}`
+        const response = await fetch(url)
+        if (response.ok) {
+          const data = await response.json()
+          setObject(data)
+        } else {
+          console.error('Failed to fetch listing')
+        }
+      } catch (error) {
+        console.error('Error fetching listing:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    if (objectId) {
+      fetchListing()
+    }
+  }, [objectId, user?.id])
   const [isCreatingTransaction, setIsCreatingTransaction] = useState(false)
 
   const [loiData, setLoiData] = useState({
@@ -31,8 +55,25 @@ export default function LOIPage() {
     timeline: ''
   })
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div>
+      </div>
+    )
+  }
+
   if (!object) {
-    return <div>Objekt ej hittat</div>
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-text-dark mb-2">Objekt hittades inte</h1>
+          <Link href="/sok" className="text-primary-blue hover:underline">
+            Tillbaka till sök
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   if (!hasNDA) {
@@ -78,7 +119,7 @@ export default function LOIPage() {
       // Beräkna agreed price (använd max om angivet, annars object max)
       const agreedPrice = loiData.priceMax 
         ? parseFloat(loiData.priceMax) * 1000000 
-        : object.priceMax
+        : (object.priceMax || 0)
 
       const response = await fetch('/api/transactions/create', {
         method: 'POST',
@@ -120,7 +161,7 @@ export default function LOIPage() {
               Indikativt bud (LOI)
             </h1>
             <p className="text-text-gray">
-              {object.companyName || object.anonymousTitle}
+              {object.companyName || object.anonymousTitle || 'Företag'}
             </p>
           </div>
 
@@ -141,7 +182,7 @@ export default function LOIPage() {
                   label="Minimum (MSEK)"
                   name="priceMin"
                   type="number"
-                  placeholder={`Föreslagen: ${(object.priceMin / 1000000).toFixed(1)}`}
+                  placeholder={`Föreslagen: ${object.priceMin ? (object.priceMin / 1000000).toFixed(1) : 'N/A'}`}
                   value={loiData.priceMin}
                   onValueChange={(value) => setLoiData({ ...loiData, priceMin: value })}
                 />
