@@ -274,13 +274,9 @@ Analysera nu och returnera JSON-svaret:
 `
 
     const result = await generateText({
-      model: openai('gpt-5') as any,
+      model: openai('gpt-5-mini') as any,
       prompt: analysisPrompt,
-      temperature: undefined, // GPT-5 uses verbosity instead
-      maxTokens: undefined, // GPT-5 handles context automatically
-      // GPT-5 specific parameters:
-      // verbosity: 'high' for detailed analysis
-      // reasoning_effort: 'high' for deep analysis
+      maxTokens: 8000, // Optimize for mini
     })
 
     console.log('✅ GPT analysis completed')
@@ -373,7 +369,7 @@ Extrahera följande och returnera som JSON:
 `
 
     const result = await generateText({
-      model: openai('gpt-5') as any,
+      model: openai('gpt-5-mini') as any,
       prompt,
       temperature: undefined, // GPT-5 uses verbosity
       maxTokens: undefined // GPT-5 handles automatically

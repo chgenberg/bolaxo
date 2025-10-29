@@ -67,8 +67,8 @@ export async function POST(req: NextRequest) {
     
     Var specifik och praktisk i dina rekommendationer. Fokusera på vad som verkligen behövs för en framgångsrik försäljningsprocess.`
 
-    // Cast to any to bypass TypeScript issues with GPT-5
-    const model = openai('gpt-5') as any
+    // Cast to any to bypass TypeScript issues with GPT-5-mini
+    const model = openai('gpt-5-mini') as any
 
     const { object: assessment } = await generateObject({
       model,
