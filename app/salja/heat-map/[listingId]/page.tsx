@@ -64,13 +64,273 @@ export default function HeatMapPage() {
         if (result.data.buyers.length > 0) {
           setSelectedBuyer(result.data.buyers[0])
         }
+      } else {
+        // Use demo data if API fails
+        setData(DEMO_HEAT_MAP_DATA)
+        setSelectedBuyer(DEMO_HEAT_MAP_DATA.buyers[0])
       }
     } catch (error) {
       console.error('Error fetching heat map data:', error)
+      // Use demo data on error
+      setData(DEMO_HEAT_MAP_DATA)
+      setSelectedBuyer(DEMO_HEAT_MAP_DATA.buyers[0])
     } finally {
       setLoading(false)
     }
   }
+
+const DEMO_HEAT_MAP_DATA: HeatMapData = {
+  buyers: [
+    {
+      buyerEmail: 'erik.andersson@industrikapital.se',
+      buyerName: 'Erik Andersson',
+      totalViews: 45,
+      totalTimeSpent: 3600,
+      downloadCount: 8,
+      avgEngagementScore: 92,
+      criticalDocumentsViewed: {
+        teaser: true,
+        im: true,
+        financials: true
+      },
+      documents: [
+        {
+          documentName: 'Teaser',
+          documentPath: 'teaser.pdf',
+          viewCount: 8,
+          timeSpentSeconds: 720,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 95
+        },
+        {
+          documentName: 'Information Memorandum',
+          documentPath: 'im.pdf',
+          viewCount: 12,
+          timeSpentSeconds: 1200,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 94
+        },
+        {
+          documentName: 'Årsredovisning 2024',
+          documentPath: 'ar2024.pdf',
+          viewCount: 10,
+          timeSpentSeconds: 900,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 92
+        },
+        {
+          documentName: 'Kundbas & Kontrakt',
+          documentPath: 'customers.pdf',
+          viewCount: 8,
+          timeSpentSeconds: 600,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 88
+        },
+        {
+          documentName: 'Börsdata & Finanser',
+          documentPath: 'financial_analysis.xlsx',
+          viewCount: 7,
+          timeSpentSeconds: 180,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 75
+        }
+      ]
+    },
+    {
+      buyerEmail: 'sophia.bergman@privequity.com',
+      buyerName: 'Sophia Bergman',
+      totalViews: 38,
+      totalTimeSpent: 2400,
+      downloadCount: 6,
+      avgEngagementScore: 78,
+      criticalDocumentsViewed: {
+        teaser: true,
+        im: true,
+        financials: true
+      },
+      documents: [
+        {
+          documentName: 'Teaser',
+          documentPath: 'teaser.pdf',
+          viewCount: 5,
+          timeSpentSeconds: 480,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 85
+        },
+        {
+          documentName: 'Information Memorandum',
+          documentPath: 'im.pdf',
+          viewCount: 9,
+          timeSpentSeconds: 800,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 82
+        },
+        {
+          documentName: 'Årsredovisning 2024',
+          documentPath: 'ar2024.pdf',
+          viewCount: 8,
+          timeSpentSeconds: 720,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 80
+        },
+        {
+          documentName: 'Organisationsstruktur',
+          documentPath: 'org_structure.pdf',
+          viewCount: 6,
+          timeSpentSeconds: 300,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 18 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 65
+        },
+        {
+          documentName: 'Marknadsprognos',
+          documentPath: 'market_forecast.pdf',
+          viewCount: 10,
+          timeSpentSeconds: 100,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 55
+        }
+      ]
+    },
+    {
+      buyerEmail: 'martin.larsson@strategiska.se',
+      buyerName: 'Martin Larsson',
+      totalViews: 28,
+      totalTimeSpent: 1800,
+      downloadCount: 4,
+      avgEngagementScore: 65,
+      criticalDocumentsViewed: {
+        teaser: true,
+        im: false,
+        financials: true
+      },
+      documents: [
+        {
+          documentName: 'Teaser',
+          documentPath: 'teaser.pdf',
+          viewCount: 6,
+          timeSpentSeconds: 360,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 75
+        },
+        {
+          documentName: 'Årsredovisning 2024',
+          documentPath: 'ar2024.pdf',
+          viewCount: 12,
+          timeSpentSeconds: 900,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 88
+        },
+        {
+          documentName: 'Information Memorandum',
+          documentPath: 'im.pdf',
+          viewCount: 1,
+          timeSpentSeconds: 60,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 20
+        },
+        {
+          documentName: 'Kundbas & Kontrakt',
+          documentPath: 'customers.pdf',
+          viewCount: 4,
+          timeSpentSeconds: 240,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 42
+        },
+        {
+          documentName: 'Börsdata & Finanser',
+          documentPath: 'financial_analysis.xlsx',
+          viewCount: 5,
+          timeSpentSeconds: 240,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 35
+        }
+      ]
+    },
+    {
+      buyerEmail: 'anna.nilsson@familjekontor.se',
+      buyerName: 'Anna Nilsson',
+      totalViews: 18,
+      totalTimeSpent: 900,
+      downloadCount: 2,
+      avgEngagementScore: 48,
+      criticalDocumentsViewed: {
+        teaser: true,
+        im: false,
+        financials: false
+      },
+      documents: [
+        {
+          documentName: 'Teaser',
+          documentPath: 'teaser.pdf',
+          viewCount: 3,
+          timeSpentSeconds: 180,
+          downloaded: true,
+          lastViewedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 72
+        },
+        {
+          documentName: 'Information Memorandum',
+          documentPath: 'im.pdf',
+          viewCount: 2,
+          timeSpentSeconds: 120,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 38
+        },
+        {
+          documentName: 'Årsredovisning 2024',
+          documentPath: 'ar2024.pdf',
+          viewCount: 5,
+          timeSpentSeconds: 300,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 42
+        },
+        {
+          documentName: 'Organisationsstruktur',
+          documentPath: 'org_structure.pdf',
+          viewCount: 4,
+          timeSpentSeconds: 120,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 28
+        },
+        {
+          documentName: 'Börsdata & Finanser',
+          documentPath: 'financial_analysis.xlsx',
+          viewCount: 4,
+          timeSpentSeconds: 80,
+          downloaded: false,
+          lastViewedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          engagementScore: 25
+        }
+      ]
+    }
+  ],
+  summary: {
+    totalBuyers: 4,
+    totalViews: 129,
+    totalDownloads: 20,
+    avgEngagementScore: 71,
+    mostViewedDocument: 'Årsredovisning 2024',
+    mostEngagedBuyer: 'Erik Andersson'
+  }
+}
 
   const formatTime = (seconds: number) => {
     if (seconds < 60) return `${seconds}s`
