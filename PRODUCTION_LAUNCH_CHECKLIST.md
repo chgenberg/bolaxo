@@ -91,13 +91,19 @@
 
 ### 📋 LEGAL & COMPLIANCE
 
-- [ ] **Terms of Service** - Published on site
-- [ ] **Privacy Policy** - GDPR compliant
-- [ ] **Seller Agreement** - What sellers agree to
-- [ ] **Buyer Agreement** - What buyers agree to
-- [ ] **Broker Agreement** - Commission structure
-- [ ] **NDA Template** - Legally sound
-- [ ] **Cookie Consent** - Implemented & compliant
+**KRÄVS för launch (Core flow):**
+- [x] **Terms of Service** - Published on site ✅
+- [x] **Privacy Policy** - GDPR compliant ✅
+- [ ] **Seller Agreement** - Villkor för att annonsera (1-2 pages)
+- [ ] **Buyer Agreement** - Villkor för att söka & skicka NDA (1-2 pages)
+- [ ] **Broker Agreement** - Villkor för mäklare (1-2 pages)
+- [ ] **NDA-mall** - Användarna signerar detta mellan säljare/köpare
+
+**KOMMER SENARE (Blurred "Coming Soon"):**
+- SPA-mall → "Kommer snart"
+- Due Diligence dokument → "Kommer snart"
+- Transaction agreements → "Kommer snart"
+- Payment processing T&Cs → "Kommer snart"
 
 ---
 
