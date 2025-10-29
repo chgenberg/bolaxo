@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, FileText, DollarSign, Lock, BookOpen, Users, Package, Check, Upload, Edit3, ChevronRight, Building2, FileSpreadsheet, Shield, Search, FileSignature, Send, Download, HelpCircle, X } from 'lucide-react'
+import { ArrowLeft, FileText, DollarSign, Lock, BookOpen, Users, Package, Check, Upload, Edit3, ChevronRight, Building2, FileSpreadsheet, Shield, Search, FileSignature, Send, Download, HelpCircle, X, TrendingUp, AlertCircle, BarChart3, RefreshCw } from 'lucide-react'
 
 interface Step {
   id: string
@@ -345,12 +345,33 @@ const STEP_TIPS: Record<string, { title: string; tips: TipItem[] }> = {
   }
 }
 
+interface Assessment {
+  completenessScore: number
+  overallAssessment: string
+  missingCritical: Array<{
+    category: string
+    description: string
+    importance: 'Kritisk' | 'Viktig' | 'Bra att ha'
+    suggestedDocument: string
+  }>
+  strengths: string[]
+  recommendations: Array<{
+    area: string
+    action: string
+    impact: string
+  }>
+  readinessLevel: 'Redo för försäljning' | 'Nästan redo' | 'Behöver mer förberedelse' | 'Tidigt stadium'
+  analyzedAt?: string
+}
+
 export default function SMEKitPage() {
   const [activeTab, setActiveTab] = useState('identity')
   const [completedSteps, setCompletedSteps] = useState<string[]>(['identity'])
   const [formData, setFormData] = useState<any>({})
   const [showTips, setShowTips] = useState(false)
   const [currentTip, setCurrentTip] = useState<TipItem | null>(null)
+  const [assessment, setAssessment] = useState<Assessment | null>(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   const steps: Step[] = [
     {
@@ -443,6 +464,13 @@ export default function SMEKitPage() {
         { id: 'includeSPA', label: 'Inkludera SPA-mall', type: 'select', options: ['Ja', 'Nej'], required: true },
         { id: 'additionalNotes', label: 'Meddelande till rådgivare', type: 'textarea' }
       ]
+    },
+    {
+      id: 'assessment',
+      title: 'Bedömning',
+      description: 'AI-driven analys av din försäljningsberedskap',
+      icon: BarChart3,
+      fields: []
     }
   ]
 
@@ -586,6 +614,46 @@ export default function SMEKitPage() {
       }
     } catch (error) {
       console.error('Error generating handoff package:', error)
+    }
+  }
+
+  const runAssessment = async () => {
+    setIsAnalyzing(true)
+    try {
+      // Gather all uploaded documents info
+      const uploadedDocuments: Record<string, string[]> = {}
+      Object.entries(formData).forEach(([stepId, stepData]) => {
+        const files: string[] = []
+        Object.entries(stepData || {}).forEach(([fieldId, value]) => {
+          if (value instanceof File) {
+            files.push(value.name)
+          }
+        })
+        if (files.length > 0) {
+          uploadedDocuments[stepId] = files
+        }
+      })
+
+      const response = await fetch('/api/sme/assessment/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          formData,
+          uploadedDocuments
+        })
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setAssessment(data)
+      }
+    } catch (error) {
+      console.error('Assessment error:', error)
+      alert('Kunde inte genomföra bedömning')
+    } finally {
+      setIsAnalyzing(false)
     }
   }
 
@@ -756,8 +824,176 @@ export default function SMEKitPage() {
                 <p className="text-gray-600">{step.description}</p>
               </div>
 
-              <div className="space-y-6">
-                {step.fields?.map(field => (
+              {step.id === 'assessment' ? (
+                <div className="space-y-8">
+                  {!assessment ? (
+                    <div className="text-center py-16">
+                      <BarChart3 className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-primary-navy mb-2">
+                        Kör AI-bedömning
+                      </h3>
+                      <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                        GPT-5 analyserar all information du lämnat och ger dig en omfattande bedömning av din försäljningsberedskap
+                      </p>
+                      <button
+                        onClick={runAssessment}
+                        disabled={isAnalyzing}
+                        className="px-8 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2 mx-auto disabled:opacity-50"
+                      >
+                        {isAnalyzing ? (
+                          <>
+                            <RefreshCw className="w-5 h-5 animate-spin" />
+                            Analyserar...
+                          </>
+                        ) : (
+                          <>
+                            <TrendingUp className="w-5 h-5" />
+                            Kör bedömning
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-8">
+                      {/* Score and Overall Assessment */}
+                      <div className="bg-white rounded-xl p-8 border border-gray-200">
+                        <div className="flex items-center justify-between mb-6">
+                          <h3 className="text-2xl font-bold text-primary-navy">
+                            Försäljningsberedskap
+                          </h3>
+                          <div className="text-right">
+                            <div className="text-4xl font-bold text-primary-navy">
+                              {assessment.completenessScore}%
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              Komplett
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Progress Bar */}
+                        <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+                          <div 
+                            className="bg-primary-navy h-3 rounded-full transition-all duration-500"
+                            style={{ width: `${assessment.completenessScore}%` }}
+                          />
+                        </div>
+                        
+                        {/* Readiness Level Badge */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4"
+                          style={{
+                            backgroundColor: assessment.readinessLevel === 'Redo för försäljning' ? '#10B981' :
+                                           assessment.readinessLevel === 'Nästan redo' ? '#F59E0B' :
+                                           assessment.readinessLevel === 'Behöver mer förberedelse' ? '#EF4444' : '#6B7280',
+                            color: 'white'
+                          }}
+                        >
+                          {assessment.readinessLevel}
+                        </div>
+                        
+                        <p className="text-gray-700 leading-relaxed">
+                          {assessment.overallAssessment}
+                        </p>
+                      </div>
+
+                      {/* Missing Critical Items */}
+                      {assessment.missingCritical.length > 0 && (
+                        <div className="bg-red-50 rounded-xl p-6 border border-red-200">
+                          <h4 className="text-lg font-semibold text-red-900 mb-4 flex items-center gap-2">
+                            <AlertCircle className="w-5 h-5" />
+                            Saknade kritiska dokument
+                          </h4>
+                          <div className="space-y-4">
+                            {assessment.missingCritical.map((item, idx) => (
+                              <div key={idx} className="bg-white rounded-lg p-4 border border-red-200">
+                                <div className="flex items-start justify-between mb-2">
+                                  <h5 className="font-medium text-gray-900">{item.category}</h5>
+                                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                                    item.importance === 'Kritisk' ? 'bg-red-100 text-red-700' :
+                                    item.importance === 'Viktig' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-gray-100 text-gray-700'
+                                  }`}>
+                                    {item.importance}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-600 mb-3">{item.description}</p>
+                                <div className="flex items-center gap-4">
+                                  <label className="flex items-center gap-2 px-4 py-2 bg-primary-navy text-white rounded-lg hover:bg-opacity-90 cursor-pointer transition-all text-sm">
+                                    <Upload className="w-4 h-4" />
+                                    Ladda upp {item.suggestedDocument}
+                                    <input type="file" className="hidden" onChange={(e) => {
+                                      const file = e.target.files?.[0]
+                                      if (file) {
+                                        // Handle file upload and re-run assessment
+                                        handleFileUpload(item.category.toLowerCase(), item.suggestedDocument, file)
+                                        setTimeout(runAssessment, 1000)
+                                      }
+                                    }} />
+                                  </label>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Strengths */}
+                      {assessment.strengths.length > 0 && (
+                        <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                          <h4 className="text-lg font-semibold text-green-900 mb-4">
+                            Styrkor i din presentation
+                          </h4>
+                          <ul className="space-y-2">
+                            {assessment.strengths.map((strength, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                                <span className="text-gray-700">{strength}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Recommendations */}
+                      {assessment.recommendations.length > 0 && (
+                        <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                          <h4 className="text-lg font-semibold text-blue-900 mb-4">
+                            Rekommendationer för förbättring
+                          </h4>
+                          <div className="space-y-4">
+                            {assessment.recommendations.map((rec, idx) => (
+                              <div key={idx} className="bg-white rounded-lg p-4 border border-blue-200">
+                                <h5 className="font-medium text-gray-900 mb-2">{rec.area}</h5>
+                                <p className="text-sm text-gray-700 mb-2">{rec.action}</p>
+                                <p className="text-xs text-blue-600">
+                                  Påverkan: {rec.impact}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Re-run Assessment Button */}
+                      <div className="text-center pt-4">
+                        <button
+                          onClick={runAssessment}
+                          disabled={isAnalyzing}
+                          className="px-6 py-3 bg-white text-primary-navy font-medium rounded-lg border border-primary-navy hover:bg-gray-50 transition-all flex items-center justify-center gap-2 mx-auto"
+                        >
+                          <RefreshCw className={`w-5 h-5 ${isAnalyzing ? 'animate-spin' : ''}`} />
+                          Kör om bedömning
+                        </button>
+                        <p className="text-sm text-gray-500 mt-2">
+                          Senast analyserad: {new Date(assessment.analyzedAt || '').toLocaleString('sv-SE')}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {step.fields?.map(field => (
                   <div key={field.id} className="relative">
                     {field.label && (
                       <label className="block text-sm font-medium text-primary-navy mb-2">
@@ -872,46 +1108,49 @@ export default function SMEKitPage() {
                       </div>
                     )}
                   </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
               {/* Action Buttons */}
-              <div className="flex gap-4 pt-8">
-                <button
-                  onClick={() => {
-                    const currentIndex = steps.findIndex(s => s.id === step.id)
-                    if (currentIndex > 0) {
-                      setActiveTab(steps[currentIndex - 1].id)
-                    }
-                  }}
-                  className="px-6 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-all"
-                >
-                  Tillbaka
-                </button>
-                
-                <button
-                  onClick={() => {
-                    if (step.id === 'handoff') {
-                      generateHandoffPackage()
-                    } else {
-                      handleStepComplete(step.id)
-                    }
-                  }}
-                  className="flex-1 px-6 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2"
-                >
-                  {step.id === 'handoff' ? (
-                    <>
-                      <Send className="w-5 h-5" />
-                      Skapa handoff-paket
-                    </>
-                  ) : (
-                    <>
-                      Spara och fortsätt
-                      <ChevronRight className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
-              </div>
+              {step.id !== 'assessment' && (
+                <div className="flex gap-4 pt-8">
+                  <button
+                    onClick={() => {
+                      const currentIndex = steps.findIndex(s => s.id === step.id)
+                      if (currentIndex > 0) {
+                        setActiveTab(steps[currentIndex - 1].id)
+                      }
+                    }}
+                    className="px-6 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-all"
+                  >
+                    Tillbaka
+                  </button>
+                  
+                  <button
+                    onClick={() => {
+                      if (step.id === 'handoff') {
+                        generateHandoffPackage()
+                      } else {
+                        handleStepComplete(step.id)
+                      }
+                    }}
+                    className="flex-1 px-6 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2"
+                  >
+                    {step.id === 'handoff' ? (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Skapa handoff-paket
+                      </>
+                    ) : (
+                      <>
+                        Spara och fortsätt
+                        <ChevronRight className="w-5 h-5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* Export Options for final step */}
               {step.id === 'handoff' && (
