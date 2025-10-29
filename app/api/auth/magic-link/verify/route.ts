@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   try {
     // Detektera rätt base URL tidigt
     const protocol = request.headers.get('x-forwarded-proto') || 'https'
-    const host = request.headers.get('host') || 'bolaxo-production.up.railway.app'
+    const host = request.headers.get('host') || 'bolaxo.com'
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
     
     const { searchParams } = new URL(request.url)
@@ -83,7 +83,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('Magic link verify error:', error)
     // Fallback till production URL vid error
-    const errorBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo-production.up.railway.app'
+    const errorBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
     return NextResponse.redirect(new URL('/login?error=server_error', errorBaseUrl))
   }
 }
