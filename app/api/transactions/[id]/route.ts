@@ -23,6 +23,36 @@ export async function GET(
     const transaction = await prisma.transaction.findUnique({
       where: { id: params.id },
       include: {
+        listing: {
+          select: {
+            id: true,
+            anonymousTitle: true,
+            companyName: true,
+            userId: true
+          }
+        },
+        buyer: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
+        seller: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
+        loi: {
+          select: {
+            id: true,
+            proposedPrice: true,
+            status: true,
+            createdAt: true
+          }
+        },
         milestones: {
           orderBy: { order: 'asc' }
         },

@@ -9,11 +9,30 @@ export async function POST(
 ) {
   const params = await context.params
   try {
-    const body = await request.json()
-    const { userId, userName } = body
+    const cookieStore = await cookies()
+    const userId = cookieStore.get('bolaxo_user_id')?.value
 
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    const body = await request.json()
+    const { userName } = body
+
+    // Get milestone with transaction info
     const milestone = await prisma.milestone.findUnique({
-      where: { id: params.milestoneId }
+      where: { id: params.milestoneId },
+      include: {
+        transaction: {
+          select: {
+            buyerId: true,
+            sellerId: true
+          }
+        }
+      }
     })
 
     if (!milestone) {
@@ -23,6 +42,17 @@ export async function POST(
     if (milestone.transactionId !== params.id) {
       return NextResponse.json({ error: 'Milestone does not belong to this transaction' }, { status: 400 })
     }
+
+    // Verify user has access (buyer or seller)
+    if (milestone.transaction.buyerId !== userId && milestone.transaction.sellerId !== userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 403 }
+      )
+    }
+
+    // Determine user role
+    const actorRole = milestone.transaction.buyerId === userId ? 'buyer' : 'seller'
 
     const updated = await prisma.milestone.update({
       where: { id: params.milestoneId },
@@ -39,10 +69,10 @@ export async function POST(
         transactionId: params.id,
         type: 'MILESTONE_COMPLETED',
         title: `Milstolpe slutförd: ${milestone.title}`,
-        description: `${userName} markerade "${milestone.title}" som slutförd`,
+        description: `${userName || 'Användare'} markerade "${milestone.title}" som slutförd`,
         actorId: userId,
-        actorName: userName || 'Unknown',
-        actorRole: 'seller'
+        actorName: userName || 'Användare',
+        actorRole
       }
     })
 

@@ -10,8 +10,29 @@ import { ArrowLeft, CheckCircle2, Clock, FileText, DollarSign, Users, Lock, Eye,
 interface Transaction {
   id: string
   listingId: string
+  listing?: {
+    id: string
+    anonymousTitle: string
+    companyName?: string
+  }
   buyerId: string
+  buyer?: {
+    id: string
+    name: string
+    email: string
+  }
   sellerId: string
+  seller?: {
+    id: string
+    name: string
+    email: string
+  }
+  loiId?: string
+  loi?: {
+    id: string
+    proposedPrice: number
+    status: string
+  }
   agreedPrice: number
   stage: string
   createdAt: string
@@ -145,8 +166,23 @@ export default function TransactionPage() {
           </Link>
           <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-3 sm:gap-0">
             <div className="min-w-0">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">Affär #{transaction.id.slice(0, 8)}</h1>
-              <p className="text-xs sm:text-sm text-gray-600 mt-1">Köpeskilling: <span className="font-bold text-primary-blue">{(transaction.agreedPrice / 1_000_000).toFixed(1)} MSEK</span></p>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+                {transaction.listing?.companyName || transaction.listing?.anonymousTitle || 'Företag'}
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                Köpeskilling: <span className="font-bold text-primary-blue">{(transaction.agreedPrice / 1_000_000).toFixed(1)} MSEK</span>
+                {transaction.loi && (
+                  <span className="ml-2">• Skapad från LOI</span>
+                )}
+              </p>
+              <div className="flex flex-wrap gap-3 mt-2 text-xs sm:text-sm text-gray-600">
+                {transaction.buyer && (
+                  <span>Köpare: <span className="font-medium">{transaction.buyer.name || transaction.buyer.email}</span></span>
+                )}
+                {transaction.seller && (
+                  <span>Säljare: <span className="font-medium">{transaction.seller.name || transaction.seller.email}</span></span>
+                )}
+              </div>
             </div>
             <div className="text-left sm:text-right">
               <p className="text-xs sm:text-sm text-gray-600">Nuvarande steg</p>
@@ -175,6 +211,30 @@ export default function TransactionPage() {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
+        {/* Quick Links */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6 flex flex-wrap gap-3">
+          <Link 
+            href={`/objekt/${transaction.listingId}`}
+            className="text-primary-blue hover:underline text-sm flex items-center gap-1"
+          >
+            → Se objekt
+          </Link>
+          {transaction.loiId && (
+            <Link 
+              href={`/loi/${transaction.loiId}`}
+              className="text-primary-blue hover:underline text-sm flex items-center gap-1"
+            >
+              → Se LOI
+            </Link>
+          )}
+          <Link 
+            href={`/objekt/${transaction.listingId}/datarum`}
+            className="text-primary-blue hover:underline text-sm flex items-center gap-1"
+          >
+            → Datarum
+          </Link>
+        </div>
+
         {/* Tabs */}
         <div className="flex gap-2 sm:gap-3 md:gap-4 mb-6 sm:mb-8 border-b border-gray-200 overflow-x-auto">
           {(['timeline', 'documents', 'payments', 'activity'] as const).map((tab) => (
@@ -239,8 +299,7 @@ export default function TransactionPage() {
                                   method: 'POST',
                                   headers: { 'Content-Type': 'application/json' },
                                   body: JSON.stringify({
-                                    userId: user?.id,
-                                    userName: user?.email || 'Unknown'
+                                    userName: user?.name || user?.email || 'Användare'
                                   })
                                 }
                               )
