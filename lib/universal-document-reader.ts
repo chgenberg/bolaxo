@@ -1,8 +1,6 @@
 import type { Readable } from 'stream'
-import * as pdfParse from 'pdf-parse/lib/pdf-parse.js'
 import * as XLSX from 'xlsx'
 import * as mammoth from 'mammoth'
-import { extractText } from 'unzipper'
 
 // pdf-parse is CommonJS, need to import correctly
 const getPdfParse = () => {
