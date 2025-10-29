@@ -61,6 +61,7 @@ export async function GET(
 
     return NextResponse.json({
       ...anonymizedListing,
+      userId: listing.userId, // Always include userId for LOI creation
       hasNDA,
       isOwner
     })
