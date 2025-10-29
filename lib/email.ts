@@ -30,7 +30,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
       body: JSON.stringify({
         sender: {
           name: options.fromName || 'BOLAXO',
-          email: options.from || 'noreply@sendinblue.com', // Temporärt tills bolaxo.com är verifierad
+          email: options.from || 'noreply@bolaxo.com', // Domänen är nu verifierad hos Brevo ✅
         },
         to: recipients.map(email => ({ email })),
         subject: options.subject,
