@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle, MessageSquare, FileText, ClipboardCheck, Scale } from 'lucide-react'
+import { DEMO_DEALS, DEMO_QA_QUESTIONS } from '@/lib/demo-data'
+
+const DEMO_MODE = true // Set to true to show demo data
 
 interface BuyerDashboardProps {
   userId: string
@@ -20,30 +23,34 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
 
   const fetchBuyerData = async () => {
     try {
-      // Fetch saved listings
-      const savedRes = await fetch(`/api/saved-listings?userId=${userId}`)
-      if (savedRes.ok) {
-        const data = await savedRes.json()
-        // Fetch full listing details for each saved
-        const listingPromises = data.saved.map((s: any) => 
-          fetch(`/api/listings/${s.listingId}`).then(r => r.ok ? r.json() : null)
-        )
-        const listingDetails = await Promise.all(listingPromises)
-        setSavedListings(listingDetails.filter(Boolean))
-      }
+      if (DEMO_MODE) {
+        // Use demo data
+        setSavedListings(DEMO_DEALS.map(d => d.listing))
+        setNdaRequests(DEMO_DEALS)
+        setMatchedListings(DEMO_DEALS.map(d => d.listing).slice(0, 3))
+      } else {
+        // Fetch from API
+        const savedRes = await fetch(`/api/saved-listings?userId=${userId}`)
+        if (savedRes.ok) {
+          const data = await savedRes.json()
+          const listingPromises = data.saved.map((s: any) => 
+            fetch(`/api/listings/${s.listingId}`).then(r => r.ok ? r.json() : null)
+          )
+          const listingDetails = await Promise.all(listingPromises)
+          setSavedListings(listingDetails.filter(Boolean))
+        }
 
-      // Fetch buyer's NDA requests
-      const ndaRes = await fetch(`/api/nda-requests?userId=${userId}&role=buyer`)
-      if (ndaRes.ok) {
-        const data = await ndaRes.json()
-        setNdaRequests(data.requests || [])
-      }
+        const ndaRes = await fetch(`/api/nda-requests?userId=${userId}&role=buyer`)
+        if (ndaRes.ok) {
+          const data = await ndaRes.json()
+          setNdaRequests(data.requests || [])
+        }
 
-      // Fetch matched listings (simplified - first 6 active)
-      const matchRes = await fetch('/api/listings?status=active')
-      if (matchRes.ok) {
-        const data = await matchRes.json()
-        setMatchedListings(data.slice(0, 6))
+        const matchRes = await fetch('/api/listings?status=active')
+        if (matchRes.ok) {
+          const data = await matchRes.json()
+          setMatchedListings(data.slice(0, 6))
+        }
       }
     } catch (error) {
       console.error('Error fetching buyer data:', error)

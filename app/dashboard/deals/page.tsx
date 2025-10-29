@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { MessageSquare, FileText, ClipboardCheck, Scale, Signature, CheckCircle, DollarSign, Target, ArrowRight } from 'lucide-react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import { DEMO_DEALS } from '@/lib/demo-data'
+
+const DEMO_MODE = true // Set to true to show demo data
 
 export default function MyDealsPage() {
   const [deals, setDeals] = useState<any[]>([])
@@ -15,11 +18,16 @@ export default function MyDealsPage() {
 
   const fetchDeals = async () => {
     try {
-      // Fetch user's active NDAs which represent deals
-      const response = await fetch('/api/nda-requests?role=buyer')
-      if (response.ok) {
-        const data = await response.json()
-        setDeals(data.requests?.filter((r: any) => r.status === 'approved') || [])
+      if (DEMO_MODE) {
+        // Use demo data
+        setDeals(DEMO_DEALS)
+      } else {
+        // Fetch from API
+        const response = await fetch('/api/nda-requests?role=buyer')
+        if (response.ok) {
+          const data = await response.json()
+          setDeals(data.requests?.filter((r: any) => r.status === 'approved') || [])
+        }
       }
     } catch (error) {
       console.error('Error fetching deals:', error)
