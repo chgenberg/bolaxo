@@ -181,9 +181,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Fetch LoI from database
+    // Fetch LoI with buyer relation
     const loi = await prisma.lOI.findUnique({
-      where: { id: loiId }
+      where: { id: loiId },
+      include: {
+        buyer: true,
+        listing: {
+          include: { user: true }
+        }
+      }
     })
 
     if (!loi) {
@@ -193,58 +199,66 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Fetch listing for company info
-    const listing = await prisma.listing.findUnique({
-      where: { id: listingId }
-    })
+    // Extract names from relations
+    const buyerName = loi.buyer?.companyName || loi.buyer?.name || 'Köpare AB'
+    const sellerName = loi.listing?.user?.companyName || loi.listing?.user?.name || 'Säljare'
+    const companyName = loi.listing?.companyName || 'Target Company'
 
-    if (!listing) {
-      return NextResponse.json(
-        { error: 'Listing not found' },
-        { status: 404 }
-      )
+    // Calculate payment amounts
+    const purchasePrice = loi.proposedPrice || 50000000
+    const cashPercentage = loi.cashAtClosing || 70 // Default 70%
+    const escrowPercentage = loi.escrowHoldback || 20 // Default 20%
+    
+    const cashAtClosing = Math.round(purchasePrice * (cashPercentage / 100))
+    const escrowAmount = Math.round(purchasePrice * (escrowPercentage / 100))
+    const earnoutAmount = loi.earnOutAmount || Math.round(purchasePrice * 0.1) // Default 10%
+
+    // Parse earnout structure
+    let earnoutStructure: any = {}
+    if (loi.earnOutStructure && typeof loi.earnOutStructure === 'object') {
+      earnoutStructure = loi.earnOutStructure
     }
 
     // Extract LoI terms
     const loiTerms: LoITerms = {
       listingId,
-      buyerName: loi.buyerName || 'Köpare AB',
-      sellerName: loi.sellerName || 'Säljare',
-      purchasePrice: loi.purchasePrice || 50000000,
-      cashAtClosing: loi.cashAtClosing || 35000000,
-      escrowAmount: loi.escrowAmount || 10000000,
-      escrowPeriod: loi.escrowPeriod || 18,
-      earnoutAmount: loi.earnoutAmount || 5000000,
-      earnoutTerms: loi.earnoutTerms as any,
-      nonCompetePeriod: loi.nonCompetePeriod || 3,
-      nonCompeteGeography: loi.nonCompeteGeography || 'Sweden',
+      buyerName,
+      sellerName,
+      purchasePrice,
+      cashAtClosing,
+      escrowAmount,
+      escrowPeriod: 18, // Standard 18 months
+      earnoutAmount,
+      earnoutTerms: earnoutStructure,
+      nonCompetePeriod: (loi.nonCompete || 36) / 12, // Convert months to years
+      nonCompeteGeography: 'Sweden',
       closingDate: loi.proposedClosingDate?.toISOString().split('T')[0] || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
     }
 
     // Populate SPA data from LoI
     const populatedSPA: PopulatedSPAData = {
       // Party Info
-      buyerName: loiTerms.buyerName,
-      sellerName: loiTerms.sellerName,
-      companyName: listing.companyName || 'Target Company',
+      buyerName,
+      sellerName,
+      companyName,
       
       // Pricing & Payment
-      basePurchasePrice: loiTerms.purchasePrice,
-      cashAtClosing: loiTerms.cashAtClosing,
-      escrowAmount: loiTerms.escrowAmount,
-      escrowPeriod: loiTerms.escrowPeriod,
-      earnoutAmount: loiTerms.earnoutAmount,
-      earnoutPercentage: (loiTerms.earnoutAmount / loiTerms.purchasePrice) * 100,
-      totalMaxPrice: loiTerms.purchasePrice + loiTerms.earnoutAmount,
-      totalEarnout: loiTerms.earnoutAmount,
+      basePurchasePrice: purchasePrice,
+      cashAtClosing,
+      escrowAmount,
+      escrowPeriod: 18,
+      earnoutAmount,
+      earnoutPercentage: (earnoutAmount / purchasePrice) * 100,
+      totalMaxPrice: purchasePrice + earnoutAmount,
+      totalEarnout: earnoutAmount,
       
-      // Earnout Details - Extract from LoI
-      earnoutYear1Target: (loiTerms.earnoutTerms?.year1?.target || 0),
-      earnoutYear1Amount: (loiTerms.earnoutTerms?.year1?.amount || 0),
-      earnoutYear2Target: (loiTerms.earnoutTerms?.year2?.target || 0),
-      earnoutYear2Amount: (loiTerms.earnoutTerms?.year2?.amount || 0),
-      earnoutYear3Target: (loiTerms.earnoutTerms?.year3?.target || 0),
-      earnoutYear3Amount: (loiTerms.earnoutTerms?.year3?.amount || 0),
+      // Earnout Details
+      earnoutYear1Target: earnoutStructure.year1?.target || 0,
+      earnoutYear1Amount: earnoutStructure.year1?.amount || 0,
+      earnoutYear2Target: earnoutStructure.year2?.target || 0,
+      earnoutYear2Amount: earnoutStructure.year2?.amount || 0,
+      earnoutYear3Target: earnoutStructure.year3?.target || 0,
+      earnoutYear3Amount: earnoutStructure.year3?.amount || 0,
       
       // Representations & Warranties
       representations: DEFAULT_REPRESENTATIONS,
@@ -253,8 +267,8 @@ export async function POST(request: NextRequest) {
       covenants: DEFAULT_COVENANTS,
       
       // Non-Compete
-      nonCompetePeriod: loiTerms.nonCompetePeriod,
-      nonCompeteGeography: loiTerms.nonCompeteGeography,
+      nonCompetePeriod: (loi.nonCompete || 36) / 12,
+      nonCompeteGeography: 'Sweden',
       
       // Key Person Retention
       ceoBonus: 1000000,
@@ -262,7 +276,7 @@ export async function POST(request: NextRequest) {
       otherBonus: 500000,
       
       // Closing Date
-      closingDate: loiTerms.closingDate,
+      closingDate: loi.proposedClosingDate?.toISOString().split('T')[0] || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       
       // Schedules
       schedules: DEMO_SCHEDULES,

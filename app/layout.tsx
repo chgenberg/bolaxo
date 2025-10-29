@@ -6,6 +6,7 @@ import CookieConsent from '@/components/CookieConsent'
 import ChatWidget from '@/components/ChatWidget'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
+import PasswordProtection from '@/components/PasswordProtection'
 
 export const metadata: Metadata = {
   title: 'Bolagsplatsen - Sälj ditt företag tryggt och enkelt',
@@ -25,15 +26,17 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       </head>
       <body className="antialiased">
-        <AuthProvider>
-          <ToastProvider>
-            <Header />
-            {children}
-            <Footer />
-            <CookieConsent />
-            <ChatWidget />
-          </ToastProvider>
-        </AuthProvider>
+        <PasswordProtection>
+          <AuthProvider>
+            <ToastProvider>
+              <Header />
+              {children}
+              <Footer />
+              <CookieConsent />
+              <ChatWidget />
+            </ToastProvider>
+          </AuthProvider>
+        </PasswordProtection>
       </body>
     </html>
   )
