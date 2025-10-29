@@ -456,7 +456,7 @@ export default function ObjectDetailPage() {
                       'Erfaren och driven personalstyrka',
                       'Moderna lokaler med bra läge',
                       'Starka kassaflöden och god lönsamhet'
-                    ]).map((strength, index) => (
+                    ]).map((strength: string, index: number) => (
                       <li key={index} className="flex items-start">
                         <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-success flex-shrink-0 mt-0.5 mr-2 sm:mr-3" />
                         <span className="text-sm sm:text-base text-text-gray">{strength}</span>
@@ -473,7 +473,7 @@ export default function ObjectDetailPage() {
                       'Digitalisering av försäljningskanaler',
                       'Utökning av produkt/tjänsteutbud',
                       'Strategiska partnerskap och samarbeten'
-                    ].map((opportunity, index) => (
+                    ].map((opportunity: string, index: number) => (
                       <li key={index} className="flex items-start">
                         <TrendingUp className="w-4 sm:w-5 h-4 sm:h-5 text-primary-blue flex-shrink-0 mt-0.5 mr-2 sm:mr-3" />
                         <span className="text-sm sm:text-base text-text-gray">{opportunity}</span>
@@ -489,7 +489,7 @@ export default function ObjectDetailPage() {
                       'Behov av fortsatt marknadsföringssatsningar',
                       'Beroende av nyckelpersoner i organisationen',
                       'Konkurrenssituation på lokal marknad'
-                    ]).map((risk, index) => (
+                    ]).map((risk: string, index: number) => (
                       <li key={index} className="flex items-start">
                         <AlertCircle className="w-4 sm:w-5 h-4 sm:h-5 text-amber-600 flex-shrink-0 mt-0.5 mr-2 sm:mr-3" />
                         <span className="text-sm sm:text-base text-text-gray">{risk}</span>
