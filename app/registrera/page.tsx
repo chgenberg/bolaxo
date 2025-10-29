@@ -34,19 +34,7 @@ export default function RegisterPage() {
     }
 
     try {
-      // Create user
-      const user = {
-        email,
-        role: selectedRole!,
-        verified: true,
-        bankIdVerified: false,
-        name,
-        phone,
-      }
-
-      setUser(user)
-
-      // In development: also save to database via dev-login endpoint
+      // In development: use dev-login for quick testing
       if (process.env.NODE_ENV === 'development') {
         const response = await fetch('/api/auth/dev-login', {
           method: 'POST',
@@ -58,21 +46,44 @@ export default function RegisterPage() {
           })
         })
         
-        if (!response.ok) {
-          throw new Error('Failed to create user')
+        if (response.ok) {
+          // Redirect based on role
+          if (selectedRole === 'seller') {
+            router.push('/dashboard')
+          } else if (selectedRole === 'broker') {
+            router.push('/dashboard')
+          } else {
+            router.push('/sok')
+          }
+          return
         }
       }
 
-      // Redirect based on role
-      if (selectedRole === 'seller') {
-        router.push('/dashboard')
-      } else if (selectedRole === 'broker') {
-        router.push('/dashboard')
-      } else {
-        router.push('/sok')
+      // Production: use registration API with magic link
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          role: selectedRole,
+          name,
+          phone,
+          acceptedPrivacy: true
+        })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Kunde inte skapa konto')
       }
+
+      // Show success message and redirect to login
+      setError('')
+      alert('Kontot har skapats! Kolla din email för verifieringslänken.')
+      router.push('/login')
     } catch (err) {
-      setError('Något gick fel. Försök igen.')
+      setError(err instanceof Error ? err.message : 'Något gick fel. Försök igen.')
       console.error(err)
     } finally {
       setIsSubmitting(false)

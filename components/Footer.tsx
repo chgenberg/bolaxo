@@ -81,7 +81,6 @@ export default function Footer() {
               <li><Link href="/for-maklare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">För mäklare</Link></li>
               <li><Link href="/investor" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">För investerare</Link></li>
               <li><Link href="/kontakt" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Kontakt</Link></li>
-              <li><Link href="/press" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Press</Link></li>
             </ul>
           </div>
         </div>
