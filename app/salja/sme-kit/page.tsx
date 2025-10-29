@@ -315,6 +315,23 @@ export default function SMEKitPage() {
     setLoading(false)
   }
 
+  const handleDownloadFullPDF = async (type: 'dd' | 'spa') => {
+    setLoading(true)
+    try {
+      const endpoint = type === 'dd' ? '/api/sme/dd/generate-full' : '/api/sme/spa/generate-full'
+      const response = await fetch(endpoint, { method: type === 'dd' ? 'POST' : 'GET' })
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${type.toUpperCase()}_Full_${formData.companyName || 'CloudTech'}.pdf`
+      a.click()
+    } catch (error) {
+      console.error('Full PDF download failed:', error)
+    }
+    setLoading(false)
+  }
+
   const handleStepComplete = (stepId: string) => {
     if (!completedSteps.includes(stepId)) {
       setCompletedSteps([...completedSteps, stepId])
@@ -434,20 +451,70 @@ export default function SMEKitPage() {
               {/* ACTION BUTTONS */}
               {step.id === 'export' && (
                 <div className="mt-8 space-y-4">
-                  <button
-                    onClick={() => handleGeneratePDF('dd')}
-                    disabled={loading}
-                    className="w-full bg-primary-navy text-white py-3 rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50"
-                  >
-                    {loading ? 'Genererar...' : 'Generera DD Report'}
-                  </button>
-                  <button
-                    onClick={() => handleGeneratePDF('spa')}
-                    disabled={loading}
-                    className="w-full bg-primary-navy text-white py-3 rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50"
-                  >
-                    {loading ? 'Genererar...' : 'Generera SPA'}
-                  </button>
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-6">
+                    <h3 className="font-semibold text-primary-navy mb-2">Professionella Rapporter</h3>
+                    <p className="text-sm text-gray-600 mb-4">Välj mellan snabbgenerade eller kompletta versioner</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      onClick={() => handleGeneratePDF('dd')}
+                      disabled={loading}
+                      className="bg-primary-navy text-white py-3 rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
+                    >
+                      <FileText className="w-4 h-4 inline mr-2" />
+                      {loading ? 'Genererar...' : 'DD Report'}
+                    </button>
+                    <button
+                      onClick={() => handleGeneratePDF('spa')}
+                      disabled={loading}
+                      className="bg-primary-navy text-white py-3 rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
+                    >
+                      <FileSignature className="w-4 h-4 inline mr-2" />
+                      {loading ? 'Genererar...' : 'SPA Avtal'}
+                    </button>
+                  </div>
+
+                  <div className="border-t pt-6 mt-6">
+                    <h3 className="font-semibold text-primary-navy mb-3 text-lg">Kompletta Versioner (40+ & 25+ sidor)</h3>
+                    <p className="text-sm text-gray-600 mb-4">Professionella M&A-rapporter med alla detaljer, schedules och appendices</p>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        onClick={() => handleDownloadFullPDF('dd')}
+                        disabled={loading}
+                        className="border-2 border-primary-navy text-primary-navy py-3 rounded-lg font-medium hover:bg-primary-navy hover:text-white disabled:opacity-50 transition-all"
+                      >
+                        <Download className="w-4 h-4 inline mr-2" />
+                        {loading ? 'Hämtar...' : 'Full DD (25+ sid)'}
+                      </button>
+                      <button
+                        onClick={() => handleDownloadFullPDF('spa')}
+                        disabled={loading}
+                        className="border-2 border-primary-navy text-primary-navy py-3 rounded-lg font-medium hover:bg-primary-navy hover:text-white disabled:opacity-50 transition-all"
+                      >
+                        <Download className="w-4 h-4 inline mr-2" />
+                        {loading ? 'Hämtar...' : 'Full SPA (40+ sid)'}
+                      </button>
+                    </div>
+
+                    <div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                      <div className="flex gap-3">
+                        <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                        <div className="text-sm text-gray-700">
+                          <p className="font-medium text-green-900 mb-1">Vad ingår i kompletta versioner?</p>
+                          <ul className="text-xs space-y-1 ml-3">
+                            <li>✓ Detaljerad finansiell analys med 3-årstrend</li>
+                            <li>✓ Kundbas & leverantörsanalys</li>
+                            <li>✓ Organisation & personalbeskrivning</li>
+                            <li>✓ Teknisk bedömning & risk matrix</li>
+                            <li>✓ Alla schedules & appendices</li>
+                            <li>✓ Professionell design & formatering</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
