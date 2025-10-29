@@ -1,279 +1,473 @@
 'use client'
 
 import { useState } from 'react'
-import { FileUp, CheckCircle, Loader } from 'lucide-react'
+import { Upload, CheckCircle2, AlertCircle, FileText, DollarSign, Scale, Users, Zap, Leaf, ChevronDown } from 'lucide-react'
+import Link from 'next/link'
 
-interface DDDocumentRequirement {
-  id: string
-  category: string
+interface UploadedFile {
   name: string
-  description: string
-  required: boolean
-  accepted: string[]
-  instructions: string[]
-  example?: string
+  category: string
+  size: number
 }
 
-const DD_DOCUMENT_REQUIREMENTS: DDDocumentRequirement[] = [
-  {
-    id: 'financial_dd',
-    category: 'FINANSIELL DUE DILIGENCE',
-    name: 'Finansiella rapporter & bokslut',
-    description: 'Årsrapporter och detaljerad finansiell information',
-    required: true,
-    accepted: ['PDF', 'Excel'],
-    instructions: [
-      'Årsrapporter för senaste 3 år',
-      'Månatliga rapporter för senaste 12 månader',
-      'Balansräkningar, resultaträkningar, kassaflöde',
-      'Budget vs. actual analyser',
-      'Kundreskontro och leverantörsreskontro',
-      'Arbetskapitalanalys'
-    ],
-    example: 'Finansiella rapporter 2022-2024.pdf'
-  },
-  {
-    id: 'operational_dd',
-    category: 'OPERATIONELL DUE DILIGENCE',
-    name: 'Operationell dokumentation',
-    description: 'Processer, personal och operationell struktur',
-    required: true,
-    accepted: ['PDF', 'DOCX', 'Excel'],
-    instructions: [
-      'Organisationsschema och rapportstruktur',
-      'Lönelista med roller och anställningstyp',
-      'Nyckelmedarbetares CV och ansvar',
-      'Processbeskrivningar för kritiska funktioner',
-      'Operativa KPIs och metrics',
-      'Personalhandboken och policies'
-    ],
-    example: 'Organisationsstruktur och processer.pdf'
-  },
-  {
-    id: 'legal_dd',
-    category: 'JURIDISK DUE DILIGENCE',
-    name: 'Juridiska dokument & avtal',
-    description: 'Kontrakt, avtal och juridisk dokumentation',
-    required: true,
-    accepted: ['PDF', 'DOCX'],
-    instructions: [
-      'Top 5-10 kundbas-kontrakt (värdemässigt)',
-      'Viktiga leverantörsavtal',
-      'Hyres- och fastighetsavtal',
-      'Anställningsavtal för ledning',
-      'IP-relaterade avtal och licenses',
-      'Lån- och finansieringsavtal',
-      'Försäkringsavtal'
-    ],
-    example: 'Huvudkontrakt och juridiska avtal.pdf'
-  },
-  {
-    id: 'commercial_dd',
-    category: 'KOMMERSIELL DUE DILIGENCE',
-    name: 'Marknad och kundanalys',
-    description: 'Kundbas, marknadsposition och försäljning',
-    required: true,
-    accepted: ['PDF', 'Excel', 'DOCX'],
-    instructions: [
-      'Kundbas-lista med storlek, sektor, avtalslängd',
-      'Churn- och retention historik',
-      'Försäljnings- och marknadsstrategi',
-      'Prisbeskrivning och marginaler',
-      'Konkurrensanalys',
-      'Marknadsöversikt och positionering'
-    ],
-    example: 'Kundbas och marknadsanalys.xlsx'
-  },
-  {
-    id: 'it_dd',
-    category: 'IT & SÄKERHET DUE DILIGENCE',
-    name: 'IT-infrastruktur och säkerhet',
-    description: 'Teknisk miljö, säkerhet och dataskydd',
-    required: false,
-    accepted: ['PDF', 'DOCX'],
-    instructions: [
-      'IT-arkitektur och infrastruktur-diagram',
-      'Säkerhetsbeskrivning och policies',
-      'Backup- och disaster recovery plan',
-      'Dataskyddscertifieringar (ISO, SOC2)',
-      'GDPR compliance dokumentation',
-      'Penetrationstestresultat',
-      'Källkodsöversikt för egenutvecklad mjukvara'
-    ],
-    example: 'IT-säkerhetsbeskrivning.pdf'
-  }
-]
-
 export default function DDUploadPage() {
-  const [uploading, setUploading] = useState(false)
-  const [uploadedDocs, setUploadedDocs] = useState<string[]>([])
-  const [activeTab, setActiveTab] = useState<'requirements' | 'upload'>('requirements')
+  const [step, setStep] = useState<'instructions' | 'upload'>('instructions')
+  const [uploads, setUploads] = useState<Record<string, UploadedFile[]>>({})
+  const [expandedCategory, setExpandedCategory] = useState<string>('financial')
+  const [loading, setLoading] = useState(false)
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, docId: string) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const ddCategories = [
+    {
+      id: 'financial',
+      name: '💰 Finansiell Due Diligence',
+      icon: DollarSign,
+      description: 'Bokslut, resultat, kassaflöde och finansiell status',
+      documents: [
+        {
+          id: 'bokslut',
+          title: 'Reviderad bokslut (senaste 3 år)',
+          required: true,
+          why: 'Analyse: Omsättningstrend, EBITDA-utveckling, arbetkspital, kassaflöde-kvalitet',
+          examples: 'Årsrapporter 2022-2024, resultaträkningar, balansräkningar'
+        },
+        {
+          id: 'skatter',
+          title: 'Skattedeklaration & betalningsbevis',
+          required: true,
+          why: 'Verifiera skatter betalda, identifiera aggressiv skatteplanering',
+          examples: 'K10, momsdeklaration, inbetalningsbevis senaste 2 år'
+        },
+        {
+          id: 'cash',
+          title: 'Bankuppgifter & kassaflöde',
+          required: true,
+          why: 'Kontrollera verklig likviditet och kassabrunnar',
+          examples: 'Senaste 12 månaderspåutdrag, kassaflödesanalys'
+        },
+        {
+          id: 'skulder',
+          title: 'Skuldförteckning & finansieringsavtal',
+          required: true,
+          why: 'Kartlägg all finansiering och identifiera covenant-risker',
+          examples: 'Alla banklån, leasingavtal, återstående löptider'
+        },
+        {
+          id: 'kundfordran',
+          title: 'Kundfordring & kundanalyse',
+          required: false,
+          why: 'Analys av kundberoende och intäktskvalitet',
+          examples: 'Kundlistor, top 10 kunder, omsättning per kund'
+        }
+      ]
+    },
+    {
+      id: 'legal',
+      name: '⚖️ Juridisk Due Diligence',
+      icon: Scale,
+      description: 'Kontrakt, ägarskap, IP och juridiska risker',
+      documents: [
+        {
+          id: 'bolag',
+          title: 'Bolagsförhål anden (registrering, stämmoprotokoller)',
+          required: true,
+          why: 'Verifiera ägarskapsstruktur och eventuella förköpsrätter',
+          examples: 'Aktiebrev från Bolagsverket, bolagsordning, stämmoprotokoller'
+        },
+        {
+          id: 'avtal',
+          title: 'Material kontrakt (kundavtal, leverantörer)',
+          required: true,
+          why: 'Identifiera change-of-control klausuler och kritiska beroenden',
+          examples: 'Top 10 kundkontrakt, key leverantörsavtal'
+        },
+        {
+          id: 'ip',
+          title: 'IP-rättigheter (patent, varumärken)',
+          required: false,
+          why: 'Verifiera ägarskap av immateriella rättigheter',
+          examples: 'PRV-register, licensavtal, källkodsöversikt'
+        },
+        {
+          id: 'tvister',
+          title: 'Tvister & myndighetsmärenden',
+          required: false,
+          why: 'Identifiera juridiska risker och ongoing konflikter',
+          examples: 'Pågående tvister, myndighetskorresp ondence'
+        },
+        {
+          id: 'försäkring',
+          title: 'Försäkringsöversikt',
+          required: false,
+          why: 'Bedöm försäkringsskydd mot identifierade risker',
+          examples: 'Företagsförsäkring, ansvarsförsäkring, skadhistorik'
+        }
+      ]
+    },
+    {
+      id: 'commercial',
+      name: '📊 Kommersiell Due Diligence',
+      icon: AlertCircle,
+      description: 'Marknad, kunder och konkurrens',
+      documents: [
+        {
+          id: 'kunder',
+          title: 'Kundanalys & kundkontrakt',
+          required: true,
+          why: 'Analyse kundberoende, retention-risk, revenue-kvalitet',
+          examples: 'Top 20 kunder, omsättning %, kontraktslöptider'
+        },
+        {
+          id: 'marked',
+          title: 'Marknadsanalys & konkurrenter',
+          required: true,
+          why: 'Bedöm marknadsposition, trender och konkurrensrisker',
+          examples: 'Marknadsstorlek, konkurrentanalys, marknadstrend'
+        },
+        {
+          id: 'produkt',
+          title: 'Produktöversikt & pricingmodell',
+          required: false,
+          why: 'Verifiera revenue-mix och pricing power',
+          examples: 'Produktlista, pricingmodell, margin-trend'
+        },
+        {
+          id: 'pipeline',
+          title: 'Sales pipeline & orderstock',
+          required: false,
+          why: 'Bedöm framtida revenue kvalitet och sustainability',
+          examples: 'Active opportunities, win-rates, orderstock'
+        }
+      ]
+    },
+    {
+      id: 'hr',
+      name: '👥 HR & Organisation',
+      icon: Users,
+      description: 'Personal, nyckelpersoner och arbetsrätt',
+      documents: [
+        {
+          id: 'personal',
+          title: 'Personallista & org-struktur',
+          required: true,
+          why: 'Kartlägg nyckelperson-beroende och organisationen',
+          examples: 'Personallista med roller, löner, org-chart'
+        },
+        {
+          id: 'ledning',
+          title: 'Ledningsgrupp & anställningsavtal',
+          required: true,
+          why: 'Identifiera retention-risker och avgångsvederlag',
+          examples: 'VD-avtal, key person-avtal, exit-paket'
+        },
+        {
+          id: 'pension',
+          title: 'Pension & personalförmåner',
+          required: false,
+          why: 'Kartlägg pensionsskulder och åtaganden post-closing',
+          examples: 'Pensionsöversikt, ITP-försäkring, sparad semeste r'
+        },
+        {
+          id: 'tvister',
+          title: 'Arbetsrätt tvister & fackliga relationer',
+          required: false,
+          why: 'Identifiera HR-relaterade risker',
+          examples: 'Arbetsrättsliga tvister, fackagreement'
+        }
+      ]
+    },
+    {
+      id: 'it',
+      name: '🔧 IT & Teknisk',
+      icon: Zap,
+      description: 'System, säkerhet och infrastruktur',
+      documents: [
+        {
+          id: 'it-system',
+          title: 'IT-systemöversikt & infrastruktur',
+          required: true,
+          why: 'Bedöm teknik-risker, vendor lock-in, moderniseringsmöjligheter',
+          examples: 'System-inventering, ålder, uppdaterings-status'
+        },
+        {
+          id: 'security',
+          title: 'Cybersäkerhet & dataskydd',
+          required: true,
+          why: 'Identifiera säkerhetssårbarheter och GDPR-compliance',
+          examples: 'Säkerhetsprinciper, backup-rutiner, GDPR-dokumentation'
+        },
+        {
+          id: 'teknik',
+          title: 'Teknisk utrustning (maskiner, servrar)',
+          required: false,
+          why: 'Bedöm reinvesterings-behov och upphängstatusuppdatering',
+          examples: 'Maskinpark-inventering, ålder, skick'
+        }
+      ]
+    },
+    {
+      id: 'tax',
+      name: '📋 Skattemässig DD',
+      icon: FileText,
+      description: 'Skatte-situationen och framtida risker',
+      documents: [
+        {
+          id: 'skatterevisioner',
+          title: 'Skatterevisions-historia',
+          required: false,
+          why: 'Identifiera aggressiv skatteplanering och revisionsrisker',
+          examples: 'Revisions-rapporter, Skatteverkets kommunikation'
+        },
+        {
+          id: 'underskott',
+          title: 'Underskotts-avdrag & koncernbidrag',
+          required: false,
+          why: 'Bedöm begränsningar post-ägarförändring',
+          examples: 'Underskott-lista, koncernbidrag-utnyttjade'
+        }
+      ]
+    },
+    {
+      id: 'env',
+      name: '🌿 Miljömässig DD',
+      icon: Leaf,
+      description: 'Miljöersättning och ESG-compliance',
+      documents: [
+        {
+          id: 'miljötillstånd',
+          title: 'Miljötillstånd & myndighetstillsyn',
+          required: false,
+          why: 'Verifiera compliance med miljölagstiftning',
+          examples: 'Miljötillståndsbevis, inspektionsmeddelanden'
+        },
+        {
+          id: 'föroreningar',
+          title: 'Miljörisker & föroreningar',
+          required: false,
+          why: 'Identifiera mark-föroreningar eller andra miljöansvar',
+          examples: 'Miljörapporter, undersökningsresultat'
+        }
+      ]
+    }
+  ]
 
-    setUploading(true)
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      setUploadedDocs([...uploadedDocs, docId])
-    } finally {
-      setUploading(false)
+  const handleFileSelect = (categoryId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files).map(file => ({
+        name: file.name,
+        category: categoryId,
+        size: file.size
+      }))
+      
+      setUploads(prev => ({
+        ...prev,
+        [categoryId]: [...(prev[categoryId] || []), ...newFiles]
+      }))
     }
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-primary-navy">Due Diligence - Dokumentuppladdning</h1>
-          <p className="text-gray-600 mt-2">Ladda upp dokument så skapar vi en komplett DD-rapport automatiskt</p>
-        </div>
-      </div>
+  const handleGenerateDD = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/sme/dd/generate-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uploads, documentCategories: ddCategories })
+      })
 
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex gap-8">
-            <button
-              onClick={() => setActiveTab('requirements')}
-              className={`py-4 font-semibold border-b-2 transition-colors ${
-                activeTab === 'requirements'
-                  ? 'text-primary-navy border-primary-navy'
-                  : 'text-gray-600 border-transparent hover:text-primary-navy'
-              }`}
-            >
-              Dokumentkrav
-            </button>
-            <button
-              onClick={() => setActiveTab('upload')}
-              className={`py-4 font-semibold border-b-2 transition-colors ${
-                activeTab === 'upload'
-                  ? 'text-primary-navy border-primary-navy'
-                  : 'text-gray-600 border-transparent hover:text-primary-navy'
-              }`}
-            >
-              Ladda upp
-            </button>
+      if (response.ok) {
+        const data = await response.json()
+        window.location.href = `/kopare/dd-report/${data.reportId}`
+      }
+    } catch (error) {
+      console.error('Error generating DD report:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (step === 'instructions') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8">
+            <Link href="/kopare" className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-4">
+              ← Tillbaka
+            </Link>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">📋 Due Diligence - Steg för Steg</h1>
+            <p className="text-lg text-gray-700">
+              Genomför en professionell företagsbesiktning före köpet. Vi analyserar alla dokument med GPT och genererar en DD-rapport.
+            </p>
           </div>
-        </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {activeTab === 'requirements' && (
-          <div className="space-y-6">
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
-              <h2 className="text-lg font-bold text-blue-900 mb-3">📊 Hur fungerar Due Diligence?</h2>
-              <ol className="text-sm text-blue-800 space-y-2 list-decimal list-inside">
-                <li>Ladda upp dokument från alla 5 kategorier</li>
-                <li>Vi analyserar dokumenten med AI</li>
-                <li>Systemet identifierar risker och fynd</li>
-                <li>Automatisk rapport genereras</li>
-                <li>Du granskar och förbereder svar på fynd</li>
-              </ol>
+          <div className="grid md:grid-cols-3 gap-4 mb-8">
+            <div className="bg-white rounded-lg p-6 border-2 border-blue-200">
+              <div className="text-3xl mb-2">📊</div>
+              <h3 className="font-bold text-lg mb-2">Systematisk</h3>
+              <p className="text-sm text-gray-600">7 DD-kategorier täcker alla risker</p>
             </div>
-
-            {DD_DOCUMENT_REQUIREMENTS.map((doc) => (
-              <div key={doc.id} className="bg-white rounded-lg border-2 border-gray-200 p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <p className="text-sm font-bold text-accent-pink uppercase tracking-wide">{doc.category}</p>
-                    <h3 className="text-lg font-bold text-primary-navy mt-1">{doc.name}</h3>
-                    <p className="text-gray-600 text-sm mt-1">{doc.description}</p>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${
-                    doc.required ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
-                  }`}>
-                    {doc.required ? 'Obligatorisk' : 'Valfri'}
-                  </span>
-                </div>
-
-                <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">📝 Instruktioner:</h4>
-                  <ul className="space-y-1 text-sm text-gray-700">
-                    {doc.instructions.map((instr, idx) => (
-                      <li key={idx} className="flex gap-2">
-                        <span className="text-primary-navy font-bold">•</span>
-                        <span>{instr}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="flex gap-4 items-center text-sm">
-                  <div>
-                    <p className="text-gray-600 mb-1">
-                      <strong>Format:</strong> {doc.accepted.join(', ')}
-                    </p>
-                    {doc.example && (
-                      <p className="text-gray-600">
-                        <strong>Exempel:</strong> {doc.example}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+            <div className="bg-white rounded-lg p-6 border-2 border-green-200">
+              <div className="text-3xl mb-2">🤖</div>
+              <h3 className="font-bold text-lg mb-2">AI-Driven</h3>
+              <p className="text-sm text-gray-600">GPT analyserar all risk automatiskt</p>
+            </div>
+            <div className="bg-white rounded-lg p-6 border-2 border-purple-200">
+              <div className="text-3xl mb-2">📄</div>
+              <h3 className="font-bold text-lg mb-2">Professionell</h3>
+              <p className="text-sm text-gray-600">Färdig DD-rapport i PDF</p>
+            </div>
           </div>
-        )}
 
-        {activeTab === 'upload' && (
-          <div className="space-y-6">
-            {DD_DOCUMENT_REQUIREMENTS.map((doc) => (
-              <div key={doc.id} className="bg-white rounded-lg border-2 border-gray-200 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <p className="text-xs font-bold text-accent-pink uppercase">{doc.category}</p>
-                    <h3 className="text-lg font-bold text-primary-navy mt-1">{doc.name}</h3>
+          <div className="space-y-4 mb-8">
+            {ddCategories.map((category) => (
+              <div key={category.id} className="bg-white rounded-lg border-2 border-gray-200 overflow-hidden">
+                <button
+                  onClick={() => setExpandedCategory(expandedCategory === category.id ? '' : category.id)}
+                  className="w-full p-6 flex items-center justify-between hover:bg-gray-50 transition-colors bg-gradient-to-r from-blue-50 to-transparent"
+                >
+                  <div className="flex items-center gap-4 text-left">
+                    <div className="text-3xl">{category.name.split(' ')[0]}</div>
+                    <div>
+                      <h3 className="font-bold text-lg">{category.name}</h3>
+                      <p className="text-sm text-gray-600">{category.description}</p>
+                    </div>
                   </div>
-                  {uploadedDocs.includes(doc.id) && (
-                    <span className="flex items-center gap-2 text-green-600 font-semibold">
-                      <CheckCircle className="w-5 h-5" />
-                      Uppladdad
-                    </span>
-                  )}
-                </div>
+                  <ChevronDown
+                    className={`w-6 h-6 transition-transform ${
+                      expandedCategory === category.id ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
 
-                {!uploadedDocs.includes(doc.id) && (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary-navy transition-colors cursor-pointer">
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileUpload(e, doc.id)}
-                      disabled={uploading}
-                      className="hidden"
-                      id={`upload-${doc.id}`}
-                    />
-                    <label htmlFor={`upload-${doc.id}`} className="cursor-pointer block">
-                      {uploading ? (
-                        <>
-                          <Loader className="w-8 h-8 text-primary-navy mx-auto mb-2 animate-spin" />
-                          <p className="text-gray-600">Analyserar dokument...</p>
-                        </>
-                      ) : (
-                        <>
-                          <FileUp className="w-8 h-8 text-primary-navy mx-auto mb-2" />
-                          <p className="text-primary-navy font-semibold">Klicka för att ladda upp</p>
-                          <p className="text-sm text-gray-600">eller dra och släpp här</p>
-                        </>
-                      )}
-                    </label>
+                {expandedCategory === category.id && (
+                  <div className="border-t border-gray-200 p-6 space-y-4">
+                    {category.documents.map(doc => (
+                      <div key={doc.id} className="bg-gray-50 p-4 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <div className={`mt-1 ${doc.required ? 'text-red-500' : 'text-gray-400'}`}>
+                            {doc.required ? <AlertCircle className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-bold text-gray-900">
+                              {doc.title}
+                              {doc.required && <span className="text-red-500 ml-2">*</span>}
+                            </h4>
+                            <p className="text-sm text-gray-700 mt-1"><strong>Varför:</strong> {doc.why}</p>
+                            <p className="text-sm text-gray-600 mt-1"><strong>Exempel:</strong> {doc.examples}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
             ))}
-
-            {uploadedDocs.length > 0 && (
-              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6">
-                <h3 className="font-bold text-green-900 mb-2">✅ Nästa steg</h3>
-                <p className="text-green-800 mb-3">
-                  Du har laddat upp {uploadedDocs.length} dokumentkategori(er). Vi analyserar dem nu...
-                </p>
-                <button className="px-6 py-2 bg-primary-navy text-white rounded-lg hover:shadow-lg font-semibold">
-                  Generera DD-rapport
-                </button>
-              </div>
-            )}
           </div>
-        )}
+
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8">
+            <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
+              <CheckCircle2 className="w-6 h-6 text-blue-600" />
+              Processen
+            </h3>
+            <ol className="space-y-2 text-gray-700 list-decimal list-inside">
+              <li>Du laddar upp dokument för varje DD-kategori</li>
+              <li>GPT analyserar alla dokument och identifierar risker</li>
+              <li>En professionell DD-rapport genereras automatiskt</li>
+              <li>Rapporten grupperar fynd efter kategori och severity</li>
+              <li>Du kan presentera rapporten för dina partners/jurister</li>
+            </ol>
+          </div>
+
+          <button
+            onClick={() => setStep('upload')}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors mb-4"
+          >
+            ▶ Börja ladda upp dokument →
+          </button>
+
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
+            <p className="text-sm text-gray-700">
+              <strong>💡 Tips:</strong> Du behöver inte ladda upp alla dokument - ju fler du laddar, desto bättre blir DD-rapporten. Även delvis dokumentation ger värde.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-4xl mx-auto">
+        <button
+          onClick={() => setStep('instructions')}
+          className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-6"
+        >
+          ← Tillbaka till instruktioner
+        </button>
+
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">📤 Ladda upp DD-dokument</h1>
+        <p className="text-gray-700 mb-8">Ladda upp dokumenten för Din Due Diligence-analys</p>
+
+        <div className="space-y-4">
+          {ddCategories.map(category => (
+            <div key={category.id} className="bg-white rounded-lg border-2 border-gray-200 p-6">
+              <h3 className="font-bold text-lg mb-4">{category.name}</h3>
+
+              <div className="space-y-3">
+                {category.documents.map(doc => (
+                  <div key={doc.id} className="bg-gray-50 p-4 rounded-lg">
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="file"
+                        multiple
+                        onChange={(e) => handleFileSelect(category.id, e)}
+                        className="hidden"
+                        accept=".pdf,.doc,.docx,.xlsx,.xls,.txt,.jpg,.png"
+                      />
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-900">{doc.title}</p>
+                        <p className="text-sm text-gray-600">{doc.why}</p>
+                        <div className="mt-2 flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                          <Upload className="w-4 h-4" />
+                          <span>Klicka för att ladda upp eller dra-och-släpp</span>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                ))}
+              </div>
+
+              {uploads[category.id] && uploads[category.id].length > 0 && (
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Uppladdade filer:</p>
+                  <div className="space-y-1">
+                    {uploads[category.id].map((file, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-sm text-green-600">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>{file.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-8 flex gap-4">
+          <button
+            onClick={() => setStep('instructions')}
+            className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors"
+          >
+            ← Tillbaka
+          </button>
+          <button
+            onClick={handleGenerateDD}
+            disabled={loading}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+          >
+            {loading ? '⏳ Genererar DD-rapport...' : '✓ Generera DD-rapport'}
+          </button>
+        </div>
       </div>
     </div>
   )
