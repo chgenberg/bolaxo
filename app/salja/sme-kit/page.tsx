@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, FileText, DollarSign, Lock, BookOpen, Users, Package, Check, Upload, Edit3, ChevronRight, Building2, FileSpreadsheet, Shield, Search, FileSignature, Send, Download } from 'lucide-react'
+import { ArrowLeft, FileText, DollarSign, Lock, BookOpen, Users, Package, Check, Upload, Edit3, ChevronRight, Building2, FileSpreadsheet, Shield, Search, FileSignature, Send, Download, HelpCircle, X } from 'lucide-react'
 
 interface Step {
   id: string
@@ -22,10 +22,335 @@ interface Field {
   aiAssisted?: boolean
 }
 
+interface TipItem {
+  title: string
+  content: string[]
+  examples?: string[]
+  required?: boolean
+}
+
+const STEP_TIPS: Record<string, { title: string; tips: TipItem[] }> = {
+  identity: {
+    title: 'Företagsidentitet - Vad behövs?',
+    tips: [
+      {
+        title: 'Företagsnamn',
+        content: [
+          'Det exakta registrerade namnet från Bolagsverket',
+          'Detta är juridiskt bindande och måste matcha alla andra dokument',
+          'Du kan ha ett handelnamn som skiljer sig - ange det om relevant'
+        ],
+        examples: ['AB Tech Solutions', 'ACME Sverige HB', 'Verksamhetsnamn HB'],
+        required: true
+      },
+      {
+        title: 'Organisationsnummer',
+        content: [
+          'Personnummer eller organisationsnummer som identifierar företaget',
+          'Använd formatet XXXXXX-XXXX (personnummer) eller XXXXXXXX-XXXX (org-nummer)',
+          'Du hittar det på Bolagsverkets utdrag eller på huvudkontorets registreringsbrev'
+        ],
+        examples: ['8501011234', '550123123456'],
+        required: true
+      },
+      {
+        title: 'Bransch & Verksamhetsbeskrivning',
+        content: [
+          'Välj lämplig bransch från listan (Teknologi, E-handel, etc.)',
+          'Beskriv kort och konkret vad företaget gör - fokusera på det viktigaste',
+          'Exempel: "Vi utvecklar molnbaserad bokföringssoftware för små företag"',
+          'Denna beskrivning kommer användas i Teaser och för köparmatchning'
+        ],
+        required: true
+      },
+      {
+        title: 'Grundat år & Antal anställda',
+        content: [
+          'Grundat år: Det år företaget registrerades hos Bolagsverket',
+          'Antal anställda: Räkna heltidsekvivalenter (t.ex. två deltidare = 1 FTE)',
+          'Inkludera även egenföretagare om tillämpligt',
+          'Denna data påverkar värderingen och köparmatchning'
+        ],
+        required: true
+      }
+    ]
+  },
+  financials: {
+    title: 'Ekonomisk Data - Vad behövs?',
+    tips: [
+      {
+        title: 'Årsredovisning (Reviderad bokslut)',
+        content: [
+          'Du behöver årsredovisningar från de senaste 3 räkenskapsåren',
+          'Dessa bör vara reviderade för högre trovärdighet',
+          'Ladda upp som PDF från Bolagsverkets register eller från din revisor',
+          'Innehåll som GPT extraherar: Omsättning, EBITDA, marginaler, tillväxt, skuldsättning, kassaflöde'
+        ],
+        examples: ['AR_2024.pdf', 'Arsredovisning_2024_2023_2022.pdf'],
+        required: true
+      },
+      {
+        title: 'EBITDA & Marginaler',
+        content: [
+          'EBITDA = Vinst innan räntekostnader, skatter, avskrivningar',
+          'Detta kan ofta extraheras automatiskt från bokslut',
+          'Om du har ett eget EBITDA-beräknat värde kan du ange det här',
+          'Detta är KRITISKT för värderingen - köpare kommer att fokusera på detta värde'
+        ],
+        required: false
+      },
+      {
+        title: 'Antal Anställda',
+        content: [
+          'Räkna samtliga aktiva anställda vid värderingstillfället',
+          'Inkludera både heltids- och deltidsanställda (som FTE)',
+          'Detta påverkar både värdering och köparintresse'
+        ],
+        required: true
+      },
+      {
+        title: 'Övriga Finansiella Dokument',
+        content: [
+          'Bankuppgifter och likvida medel (visar verklig kassaposition)',
+          'Skuld- och åtagande-lista (visar passiva skulder)',
+          'Kassaflödesanalys (visar verkligheten bakom siffrorna)',
+          'Dessa hjälper till att ge en mer komplett bild för köpare'
+        ],
+        required: false
+      }
+    ]
+  },
+  contracts: {
+    title: 'Viktiga Avtal - Vad behövs?',
+    tips: [
+      {
+        title: 'Kundkontrakt',
+        content: [
+          'Listning av dina viktigaste kundkontrakt (topp 10-20 efter omsättning)',
+          'Inkludera kontraktslängd, värde, villkor för uppsägning',
+          'GPT analyserar: Kundberoende, avtalsvillkor, uppsägningsklausuler',
+          'Köpare behöver verifiera att kunder inte kan sluta vilka de vill'
+        ],
+        examples: ['Huvudsakliga kundkontrakt 2024.xlsx', 'Customer_List.pdf'],
+        required: true
+      },
+      {
+        title: 'Leverantörsavtal',
+        content: [
+          'Kontrakt med stora leverantörer (möbler, komponenter, tjänster)',
+          'Inkludera betalningsvillkor, prisbindningar, uppsägningsvillkor',
+          'GPT analyserar: Leverantörsberoende, lagringskostnader, prisstabilitet',
+          'Viktigt för att köpare ska förstå operativ risk'
+        ],
+        required: false
+      },
+      {
+        title: 'IP & Immateriella Rättigheter',
+        content: [
+          'Patent, varumärken, domäner, programvara som du äger',
+          'Licensavtal för programvara du använder',
+          'Registrering från PRV (Patent- och registreringsverket)',
+          'GPT analyserar: IP-värde, licensrisker, konkurrensrestriktioner'
+        ],
+        required: false
+      },
+      {
+        title: 'Tvister & Juridisk Status',
+        content: [
+          'Lista över eventuella pågående tvister',
+          'Försäkringsbrev från dina försäkringsbolag',
+          'Dokumentation av tidigare juridiska processer',
+          'GPT analyserar: Juridisk risk, försäkringsskydd, potentiella skulder'
+        ],
+        required: false
+      }
+    ]
+  },
+  assets: {
+    title: 'Tillgångar & IP - Vad behövs?',
+    tips: [
+      {
+        title: 'Varumärken & Registreringar',
+        content: [
+          'Lista alla registrerade varumärken (nationella, EU, internationella)',
+          'Inkludera registreringsnummer och utgångsdatum',
+          'Visar på intellektuell äganderätt och varumärkestyrka',
+          'GPT analyserar: Varumärkesportfölj, värde, risker för förfallande'
+        ],
+        examples: ['Varumärken_PRV.pdf', 'TM_Portfolio.xlsx']
+      },
+      {
+        title: 'Patent & Innovationer',
+        content: [
+          'Lista över aktiva patent och patentansökningar',
+          'Inkludera ansökningstid, utgångsdatum och teknologiområde',
+          'Visar på innovativ styrka och teknologisk differentiation',
+          'GPT analyserar: Patent-värde, teknologirisk, konkurrensförsprång'
+        ],
+        examples: ['Patent_List_2024.docx', 'Innovation_Portfolio.pdf']
+      },
+      {
+        title: 'Domäner & Digital Assets',
+        content: [
+          'Lista alla domännamn som företaget äger eller använder',
+          'Inkludera vilka som är centrala för verksamheten',
+          'E-mail-domäner, webbplatser, sociala medier-konton',
+          'GPT analyserar: Digital portfölj, varumärkesrisk, migrationsrisker'
+        ],
+        examples: ['Domains.xlsx', 'Digital_Assets.txt']
+      },
+      {
+        title: 'Programvara & Licenser',
+        content: [
+          'Lista över egen utvecklad kod/programvara',
+          'Tredjepartslicenser och SaaS-prenumerationer',
+          'Open-source-komponenter i din kod',
+          'GPT analyserar: Licensrisker, kodberoenden, teknisk skuld'
+        ],
+        examples: ['Software_List.md', 'Licenses_2024.pdf']
+      }
+    ]
+  },
+  compliance: {
+    title: 'Regelefterlevnad - Vad behövs?',
+    tips: [
+      {
+        title: 'Registreringsbevis & Grundhandlingar',
+        content: [
+          'Bolagsverkets registreringsbevis (aktuellt och fullständigt)',
+          'Bolagsordningen (gällande version)',
+          'Styrelseprokoll från senaste 12 månader',
+          'Dessa visar att företaget är juridiskt gilltig och välstyrt'
+        ],
+        examples: ['Registreringsbevis_Bolagsverket.pdf', 'Bolagsordning.pdf'],
+        required: true
+      },
+      {
+        title: 'Tillstånd & Licenser',
+        content: [
+          'Yrkeskompetensbevis och relevanta licenser',
+          'Branschspecifika tillstånd (miljötillstånd, arbetsmiljötillstånd)',
+          'Försäljar- eller revisorslicenser om tillämpligt',
+          'Visar att ni är tillåten att bedriva er verksamhet'
+        ],
+        required: false
+      },
+      {
+        title: 'GDPR & Dataskydd',
+        content: [
+          'Databehandlaravtal med tjänsteleverantörer',
+          'Integritetspolicy och dataskyddsöversikt',
+          'Dokumentation av datahantering och personuppgiftsbehandling',
+          'Visar compliance med EU-reglerna - KRITISKT för alla företag'
+        ],
+        required: false
+      },
+      {
+        title: 'Skattedeklarationer & Myndighetskontakter',
+        content: [
+          'Skattedeklarationer från Skatteverket för senaste 3 år',
+          'Betalningsintyg som visar att all skatt är betald',
+          'Eventuella revisionspåpekanden från Revisorverket',
+          'Visar att ni är skattemässigt korrekt rapporterad och betald'
+        ],
+        examples: ['Deklaration_2024.pdf', 'Skatteverket_Intyg.pdf'],
+        required: true
+      }
+    ]
+  },
+  documents: {
+    title: 'Teaser & IM - Vad behövs?',
+    tips: [
+      {
+        title: 'Nyckelpunkter & Försäljningsargument',
+        content: [
+          'Vad gör ert företag unikt? (3-5 huvudpunkter)',
+          'Exempel: "Ledande marknadsposition", "Patenterad teknologi", "Långtidskontrakt"',
+          'Fokusera på det som gör ert företag värdefullt',
+          'Dessa används i Teasern för att fånga köpares intresse'
+        ],
+        examples: ['Stark grossistöversikt', 'Unikt produktflöde', 'Stabil kundbas']
+      },
+      {
+        title: 'Anledning till Försäljning',
+        content: [
+          'Var ärlig om varför ni säljer - köpare respekterar transparens',
+          'Exempel: "Ägare gör exit", "Vill samla investering", "Seek strategisk partner"',
+          'Undvik att verka desperat - formulera det positivt',
+          'Detta är VIKTIGT - köpare vill förstå motivationen'
+        ],
+        examples: ['Ägare nått pensionsålder', 'Expandera till ny marknad', 'Strategisk konsolidering']
+      },
+      {
+        title: 'Målgrupp & Idealiska Köpare',
+        content: [
+          'Vilka är de ideala köparna för ert företag?',
+          'Exempel: "Finansiella investerare", "Strategiska köpare inom samma bransch", "Family offices"',
+          'Det hjälper oss att matcha med rätta köpare',
+          'Kan påverka värdering och processens snabbhet'
+        ]
+      },
+      {
+        title: 'Försäljningsmall Val',
+        content: [
+          'Välj en design som passar er brand',
+          'Modern: Minimalistisk, modern design för tech-företag',
+          'Klassisk: Traditionell, formell design för finansiella företag',
+          'Minimalistisk: Rent, fokuserat på data för analytiska köpare',
+          'Mallen avgör första intrycket hos köpare'
+        ]
+      }
+    ]
+  },
+  handoff: {
+    title: 'Export & Handoff - Vad behövs?',
+    tips: [
+      {
+        title: 'Rådgivarens E-post',
+        content: [
+          'E-postadress till din finansiell rådgivare eller M&A-advisor',
+          'Handoff-paketet skickas direkt till denna person',
+          'Säkerställ att du har rätt kontakt',
+          'Rådgivaren får tillgång till ALLT du laddat upp plus genererade rapporter'
+        ]
+      },
+      {
+        title: 'Exportformat & Innehål',
+        content: [
+          'ZIP-format: Säker nedladdning av alla dokument i en fil',
+          'Säker länk: Enkrypterad länk som kan delas via e-post',
+          'Du kan välja att inkludera DD-rapport och SPA-mall',
+          'ZIP är lämpligt för rådgivare, länk för köpare'
+        ]
+      },
+      {
+        title: 'DD-rapport & SPA-mall',
+        content: [
+          'DD-rapport: Automatisk analys av alla dina inladdade dokument',
+          'Visar möjliga risker och styrkor ur due diligence-perspektiv',
+          'SPA-mall: Förifyllt aktieöverlåtelseavtal baserat på dina data',
+          'Både är värdefulla för att kickstarta förhandlingarna'
+        ]
+      },
+      {
+        title: 'Meddelande till Rådgivare',
+        content: [
+          'Lägg till ett kort personligt meddelande',
+          'Exempel: "Här är all dokumentation. Vi siktar på att starta marknadsföring nästa vecka."',
+          'Detta skapar context och visar handlingskraft',
+          'Rådgivaren får paket + meddelande tillsammans'
+        ]
+      }
+    ]
+  }
+}
+
 export default function SMEKitPage() {
   const [activeTab, setActiveTab] = useState('identity')
   const [completedSteps, setCompletedSteps] = useState<string[]>(['identity'])
   const [formData, setFormData] = useState<any>({})
+  const [showTips, setShowTips] = useState(false)
+  const [currentTip, setCurrentTip] = useState<TipItem | null>(null)
 
   const steps: Step[] = [
     {
@@ -282,20 +607,20 @@ export default function SMEKitPage() {
       {/* Header */}
       <div className="border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-6">
-          <Link href="/salja" className="inline-flex items-center gap-2 text-gray-600 hover:text-black mb-6 transition-colors">
+          <Link href="/salja" className="inline-flex items-center gap-2 text-gray-600 hover:text-primary-navy mb-6 transition-colors">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Tillbaka till översikt</span>
           </Link>
           
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-black">SME Automation Kit</h1>
+              <h1 className="text-3xl font-bold text-primary-navy">SME Automation Kit</h1>
               <p className="text-gray-600 mt-1">Förbered din företagsförsäljning på rekordtid</p>
             </div>
             
             <div className="text-right">
               <p className="text-sm text-gray-500 mb-1">Totalt framsteg</p>
-              <p className="text-2xl font-bold text-black">{completionPercentage}%</p>
+              <p className="text-2xl font-bold text-primary-navy">{completionPercentage}%</p>
             </div>
           </div>
         </div>
@@ -306,7 +631,7 @@ export default function SMEKitPage() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-black transition-all duration-500"
+              className="h-full bg-primary-navy transition-all duration-500"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
@@ -328,17 +653,17 @@ export default function SMEKitPage() {
                   onClick={() => setActiveTab(step.id)}
                   className={`flex items-center gap-3 py-4 px-1 border-b-2 whitespace-nowrap transition-all ${
                     isActive 
-                      ? 'border-black text-black' 
+                      ? 'border-primary-navy text-primary-navy' 
                       : isComplete
-                      ? 'border-transparent text-gray-600 hover:text-black'
+                      ? 'border-transparent text-gray-600 hover:text-primary-navy'
                       : 'border-transparent text-gray-400 hover:text-gray-600'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     isComplete 
-                      ? 'bg-black text-white' 
+                      ? 'bg-primary-navy text-white' 
                       : isActive
-                      ? 'bg-gray-900 text-white'
+                      ? 'bg-primary-navy text-white'
                       : 'bg-gray-200 text-gray-500'
                   }`}>
                     {isComplete ? <Check className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
@@ -351,6 +676,65 @@ export default function SMEKitPage() {
         </div>
       </div>
 
+      {/* Tips Modal */}
+      {showTips && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-primary-navy">{STEP_TIPS[activeTab]?.title}</h2>
+              <button
+                onClick={() => setShowTips(false)}
+                className="text-gray-400 hover:text-primary-navy transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              {STEP_TIPS[activeTab]?.tips.map((tip, idx) => (
+                <div key={idx} className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                      <div className="flex items-center justify-center h-6 w-6 rounded-full bg-gray-100">
+                        <span className="text-sm font-medium text-gray-600">{idx + 1}</span>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-primary-navy mb-2">
+                        {tip.title}
+                        {tip.required && <span className="text-red-500 ml-2 text-sm font-normal">Obligatorisk</span>}
+                      </h3>
+                      
+                      <ul className="space-y-2">
+                        {tip.content.map((line, i) => (
+                          <li key={i} className="text-sm text-gray-700 flex gap-2">
+                            <span className="text-gray-400 mt-0.5">•</span>
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      
+                      {tip.examples && tip.examples.length > 0 && (
+                        <div className="mt-3 p-3 bg-gray-50 rounded border border-gray-200">
+                          <p className="text-xs font-medium text-gray-600 mb-2">Exempel:</p>
+                          <ul className="space-y-1">
+                            {tip.examples.map((example, i) => (
+                              <li key={i} className="text-sm text-gray-600">
+                                <span className="text-gray-400">→</span> {example}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 py-12">
         {steps.map(step => {
@@ -358,8 +742,17 @@ export default function SMEKitPage() {
           
           return (
             <div key={step.id} className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-2xl font-bold text-black mb-2">{step.title}</h2>
+              <div className="text-center mb-12 flex flex-col items-center">
+                <div className="flex items-center gap-3 mb-4">
+                  <h2 className="text-2xl font-bold text-primary-navy">{step.title}</h2>
+                  <button
+                    onClick={() => setShowTips(true)}
+                    className="p-2 text-gray-400 hover:text-primary-navy hover:bg-gray-100 rounded-full transition-all"
+                    title="Visa hjälp för detta steg"
+                  >
+                    <HelpCircle className="w-5 h-5" />
+                  </button>
+                </div>
                 <p className="text-gray-600">{step.description}</p>
               </div>
 
@@ -367,7 +760,7 @@ export default function SMEKitPage() {
                 {step.fields?.map(field => (
                   <div key={field.id} className="relative">
                     {field.label && (
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
+                      <label className="block text-sm font-medium text-primary-navy mb-2">
                         {field.label}
                         {field.required && <span className="text-red-500 ml-1">*</span>}
                         {field.aiAssisted && (
@@ -384,7 +777,7 @@ export default function SMEKitPage() {
                         placeholder={field.placeholder}
                         value={formData[step.id]?.[field.id] || ''}
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-navy focus:border-transparent transition-all"
                       />
                     )}
                     
@@ -394,7 +787,7 @@ export default function SMEKitPage() {
                         placeholder={field.placeholder}
                         value={formData[step.id]?.[field.id] || ''}
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-navy focus:border-transparent transition-all"
                       />
                     )}
                     
@@ -404,7 +797,7 @@ export default function SMEKitPage() {
                         placeholder={field.placeholder}
                         value={formData[step.id]?.[field.id] || ''}
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
-                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all resize-none"
+                        className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-navy focus:border-transparent transition-all resize-none"
                       />
                     )}
                     
@@ -413,7 +806,7 @@ export default function SMEKitPage() {
                         <select
                           value={formData[step.id]?.[field.id] || ''}
                           onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all appearance-none cursor-pointer"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-navy focus:border-transparent transition-all appearance-none cursor-pointer"
                         >
                           <option value="">Välj...</option>
                           {field.options?.map(option => (
@@ -463,7 +856,7 @@ export default function SMEKitPage() {
                         <button 
                           type="button"
                           onClick={generateTeaser}
-                          className="flex-1 px-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                          className="flex-1 px-6 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2"
                         >
                           <Download className="w-5 h-5" />
                           Generera Teaser PDF
@@ -471,7 +864,7 @@ export default function SMEKitPage() {
                         <button 
                           type="button"
                           onClick={generateIM}
-                          className="flex-1 px-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                          className="flex-1 px-6 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2"
                         >
                           <Download className="w-5 h-5" />
                           Generera IM PDF
@@ -504,7 +897,7 @@ export default function SMEKitPage() {
                       handleStepComplete(step.id)
                     }
                   }}
-                  className="flex-1 px-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-opacity-90 transition-all flex items-center justify-center gap-2"
                 >
                   {step.id === 'handoff' ? (
                     <>
@@ -523,17 +916,17 @@ export default function SMEKitPage() {
               {/* Export Options for final step */}
               {step.id === 'handoff' && (
                 <div className="mt-12 p-6 bg-gray-50 rounded-lg">
-                  <h3 className="font-semibold text-lg mb-4">Exportalternativ</h3>
+                  <h3 className="font-semibold text-lg text-primary-navy mb-4">Exportalternativ</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <button 
                       type="button"
                       onClick={async () => {
                         window.location.href = '/api/sme/dd/generate-report'
                       }}
-                      className="p-4 bg-white border border-gray-300 rounded-lg hover:border-gray-400 transition-all text-left"
+                      className="p-4 bg-white border border-gray-300 rounded-lg hover:border-primary-navy hover:shadow-md transition-all text-left"
                     >
-                      <FileText className="w-8 h-8 text-gray-700 mb-2" />
-                      <p className="font-medium">DD-rapport</p>
+                      <FileText className="w-8 h-8 text-primary-navy mb-2" />
+                      <p className="font-medium text-primary-navy">DD-rapport</p>
                       <p className="text-sm text-gray-500">Komplett due diligence-rapport i PDF</p>
                     </button>
                     <button 
@@ -541,10 +934,10 @@ export default function SMEKitPage() {
                       onClick={async () => {
                         window.location.href = '/salja/spa-upload/new'
                       }}
-                      className="p-4 bg-white border border-gray-300 rounded-lg hover:border-gray-400 transition-all text-left"
+                      className="p-4 bg-white border border-gray-300 rounded-lg hover:border-primary-navy hover:shadow-md transition-all text-left"
                     >
-                      <FileSignature className="w-8 h-8 text-gray-700 mb-2" />
-                      <p className="font-medium">SPA-mall</p>
+                      <FileSignature className="w-8 h-8 text-primary-navy mb-2" />
+                      <p className="font-medium text-primary-navy">SPA-mall</p>
                       <p className="text-sm text-gray-500">Förifylld aktieöverlåtelseavtal</p>
                     </button>
                   </div>
