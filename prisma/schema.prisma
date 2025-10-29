@@ -210,6 +210,7 @@ model Transaction {
   advisorId       String?
   loiId           String?   // Link to LOI if created from LOI
   loi             LOI?       @relation("TransactionLOI", fields: [loiId], references: [id])
+  spas            SPA[]      @relation("TransactionSPA")
   
   // Deal data
   stage           String    @default("LOI_SIGNED") // LOI_SIGNED, DD_IN_PROGRESS, SPA_NEGOTIATION, CLOSING, COMPLETED, CANCELLED
@@ -996,6 +997,8 @@ model SPA {
   listing         Listing  @relation("ListingSPA", fields: [listingId], references: [id], onDelete: Cascade)
   
   loiId           String?  // Link to LoI
+  transactionId  String?  // Link to Transaction
+  transaction    Transaction? @relation("TransactionSPA", fields: [transactionId], references: [id], onDelete: SetNull)
   buyerId         String
   buyer           User     @relation("BuyerSPA", fields: [buyerId], references: [id], onDelete: Cascade)
   

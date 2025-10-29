@@ -53,6 +53,19 @@ export async function GET(
             createdAt: true
           }
         },
+        spas: {
+          select: {
+            id: true,
+            status: true,
+            version: true,
+            purchasePrice: true,
+            signedAt: true,
+            createdAt: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
         milestones: {
           orderBy: { order: 'asc' }
         },

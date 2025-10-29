@@ -33,6 +33,14 @@ interface Transaction {
     proposedPrice: number
     status: string
   }
+  spas?: Array<{
+    id: string
+    status: string
+    version: number
+    purchasePrice: number
+    signedAt: string | null
+    createdAt: string
+  }>
   agreedPrice: number
   stage: string
   createdAt: string
@@ -225,6 +233,14 @@ export default function TransactionPage() {
               className="text-primary-blue hover:underline text-sm flex items-center gap-1"
             >
               → Se LOI
+            </Link>
+          )}
+          {transaction.spas && transaction.spas.length > 0 && (
+            <Link 
+              href={`/kopare/spa/${transaction.listingId}`}
+              className="text-primary-blue hover:underline text-sm flex items-center gap-1"
+            >
+              → Se SPA ({transaction.spas[0].status})
             </Link>
           )}
           <Link 

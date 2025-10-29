@@ -13,7 +13,29 @@ export async function POST(req: NextRequest) {
     }
 
     const spa = await prisma.sPA.findUnique({
-      where: { id: spaId }
+      where: { id: spaId },
+      include: {
+        listing: {
+          select: {
+            userId: true
+          }
+        },
+        transaction: {
+          select: {
+            id: true,
+            milestones: {
+              where: {
+                title: {
+                  contains: 'SPA signerad'
+                }
+              },
+              orderBy: {
+                order: 'asc'
+              }
+            }
+          }
+        }
+      }
     });
 
     if (!spa) {
@@ -35,6 +57,35 @@ export async function POST(req: NextRequest) {
         signedAt: new Date(timestamp || Date.now())
       }
     });
+
+    // If SPA is connected to a transaction, update milestone
+    if (spa.transaction && spa.transaction.milestones.length > 0) {
+      const spaMilestone = spa.transaction.milestones[0] // Should be "SPA signerad" milestone
+
+      if (spaMilestone && !spaMilestone.completed) {
+        await prisma.milestone.update({
+          where: { id: spaMilestone.id },
+          data: {
+            completed: true,
+            completedAt: new Date(),
+            completedBy: signedBy === 'buyer' ? spa.buyerId : spa.listing.userId
+          }
+        })
+
+        // Log activity
+        await prisma.activity.create({
+          data: {
+            transactionId: spa.transaction.id,
+            type: 'MILESTONE_COMPLETED',
+            title: `Milstolpe slutförd: ${spaMilestone.title}`,
+            description: `SPA signerad av ${signedBy === 'buyer' ? 'köpare' : 'säljare'}`,
+            actorId: signedBy === 'buyer' ? spa.buyerId : spa.listing.userId,
+            actorName: signedBy === 'buyer' ? 'Köpare' : 'Säljare',
+            actorRole: signedBy
+          }
+        })
+      }
+    }
 
     return NextResponse.json({
       success: true,
