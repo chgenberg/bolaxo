@@ -66,6 +66,20 @@ export async function GET(
             createdAt: 'desc'
           }
         },
+        ddProjects: {
+          select: {
+            id: true,
+            status: true,
+            completionPercent: true,
+            overallRiskLevel: true,
+            goNogo: true,
+            actualCompleteDate: true,
+            createdAt: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
         milestones: {
           orderBy: { order: 'asc' }
         },

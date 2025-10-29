@@ -211,6 +211,7 @@ model Transaction {
   loiId           String?   // Link to LOI if created from LOI
   loi             LOI?       @relation("TransactionLOI", fields: [loiId], references: [id])
   spas            SPA[]      @relation("TransactionSPA")
+  ddProjects      DDProject[] @relation("TransactionDD")
   
   // Deal data
   stage           String    @default("LOI_SIGNED") // LOI_SIGNED, DD_IN_PROGRESS, SPA_NEGOTIATION, CLOSING, COMPLETED, CANCELLED
@@ -907,6 +908,8 @@ model DDProject {
   buyer           User     @relation("BuyerDD", fields: [buyerId], references: [id], onDelete: Cascade)
   
   loiId           String?  // Link to LoI if exists
+  transactionId   String?  // Link to Transaction
+  transaction     Transaction? @relation("TransactionDD", fields: [transactionId], references: [id], onDelete: SetNull)
   
   // Timeline
   startDate       DateTime @default(now())
@@ -931,6 +934,7 @@ model DDProject {
   
   @@index([listingId])
   @@index([buyerId])
+  @@index([transactionId])
   @@index([status])
 }
 
