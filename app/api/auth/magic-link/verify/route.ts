@@ -18,7 +18,9 @@ export async function GET(request: Request) {
     const token = searchParams.get('token')
 
     if (!token) {
-      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl))
+      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl), {
+        status: 302,
+      })
     }
 
     // Hitta användare med token
@@ -27,12 +29,16 @@ export async function GET(request: Request) {
     })
 
     if (!user) {
-      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl))
+      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl), {
+        status: 302,
+      })
     }
 
     // Kolla om token har gått ut
     if (!user.tokenExpiresAt || user.tokenExpiresAt < new Date()) {
-      return NextResponse.redirect(new URL('/login?error=expired_token', baseUrl))
+      return NextResponse.redirect(new URL('/login?error=expired_token', baseUrl), {
+        status: 302,
+      })
     }
 
     // Generera referral code om användaren inte redan har en
@@ -53,7 +59,22 @@ export async function GET(request: Request) {
       }
     })
 
-    // Sätt session cookie
+    // Bestäm rätt destination baserat på roll
+    let redirectUrl = '/dashboard'
+    if (user.role === 'seller') {
+      redirectUrl = '/dashboard/listings'
+    } else if (user.role === 'buyer') {
+      redirectUrl = '/sok'
+    } else if (user.role === 'broker') {
+      redirectUrl = '/dashboard'
+    }
+
+    // Skapa redirect response
+    const response = NextResponse.redirect(new URL(redirectUrl, baseUrl), {
+      status: 302,
+    })
+
+    // Sätt session cookies
     const cookieStore = await cookies()
     cookieStore.set('bolaxo_user_id', user.id, {
       httpOnly: true,
@@ -79,14 +100,15 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    // Redirect all to dashboard (role-specific content shown there)
-    return NextResponse.redirect(new URL('/dashboard', baseUrl))
+    return response
 
   } catch (error) {
     console.error('Magic link verify error:', error)
     // Fallback till production URL vid error
-    const errorBaseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
-    return NextResponse.redirect(new URL('/login?error=server_error', errorBaseUrl))
+    const errorBaseUrl = process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, '') || 'https://bolaxo.com'
+    return NextResponse.redirect(new URL('/login?error=server_error', errorBaseUrl), {
+      status: 302,
+    })
   }
 }
 
