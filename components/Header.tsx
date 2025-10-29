@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Menu, X, User, LogOut, MessageSquare, LayoutDashboard } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { usePathname } from 'next/navigation'
+import { LAUNCH_CONFIG } from '@/lib/launch-config'
 
 interface DropdownItem {
   label: string
@@ -18,38 +19,56 @@ interface NavItem {
   dropdown?: DropdownItem[]
 }
 
-const navigation: NavItem[] = [
-  {
-    label: 'För säljare',
-    dropdown: [
-      { label: 'Gratis företagsvärdering', href: '/vardering' },
-      { label: 'Så funkar det', href: '/salja' },
-      { label: 'Börja sälja', href: '/salja/start' },
-      { label: 'Priser', href: '/priser' },
-    ]
-  },
-  {
-    label: 'För köpare',
-    dropdown: [
-      { label: 'Sök företag', href: '/sok' },
-      { label: 'Så funkar det', href: '/kopare' },
-      { label: 'Skapa konto', href: '/kopare/start' },
-    ]
-  },
-  {
-    label: 'För mäklare',
-    href: '/for-maklare'
-  },
-  {
-    label: 'Om oss',
-    dropdown: [
-      { label: 'Vårt företag', href: '/om-oss' },
-      { label: 'Success stories', href: '/success-stories' },
-      { label: 'För investerare', href: '/investor' },
-      { label: 'Kontakt', href: '/kontakt' },
-    ]
+const getNavigation = (): NavItem[] => {
+  const baseNav: NavItem[] = [
+    {
+      label: 'För säljare',
+      dropdown: [
+        { label: 'Gratis företagsvärdering', href: '/vardering' },
+        { label: 'Så funkar det', href: '/salja' },
+        { label: 'Börja sälja', href: '/salja/start' },
+      ]
+    },
+    {
+      label: 'För köpare',
+      dropdown: [
+        { label: 'Sök företag', href: '/sok' },
+        { label: 'Så funkar det', href: '/kopare' },
+        { label: 'Skapa konto', href: '/kopare/start' },
+      ]
+    },
+    {
+      label: 'Om oss',
+      dropdown: [
+        { label: 'Kontakt', href: '/kontakt' },
+      ]
+    }
+  ]
+
+  // In launch mode, hide mäklare and investor content
+  if (LAUNCH_CONFIG.LAUNCH_MODE) {
+    return baseNav
   }
-]
+
+  // Full navigation when not in launch mode
+  return [
+    ...baseNav,
+    {
+      label: 'För mäklare',
+      href: '/for-maklare'
+    },
+    {
+      label: 'Mer',
+      dropdown: [
+        { label: 'Vårt företag', href: '/om-oss' },
+        { label: 'Success stories', href: '/success-stories' },
+        { label: 'För investerare', href: '/investor' },
+      ]
+    }
+  ]
+}
+
+const navigation = getNavigation()
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

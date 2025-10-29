@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePaymentStore, UserRole } from '@/store/paymentStore'
-import { Building, Handshake, Search, ArrowRight, CheckCircle, AlertCircle, Mail } from 'lucide-react'
+import { Building, Search, ArrowRight, Mail, Handshake } from 'lucide-react'
+import { LAUNCH_CONFIG } from '@/lib/launch-config'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -17,6 +18,28 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [linkSent, setLinkSent] = useState(false)
+
+  // Filter roles based on launch mode
+  const availableRoles: Array<{ id: UserRole; label: string; description: string; icon: React.ReactNode }> = [
+    {
+      id: 'seller',
+      label: 'Jag vill sälja mitt företag',
+      description: 'Gör en gratis värdering och annonsera ditt företag',
+      icon: <Building className="w-8 h-8" />
+    },
+    {
+      id: 'buyer',
+      label: 'Jag vill köpa ett företag',
+      description: 'Sök och hitta företag att förvärva',
+      icon: <Search className="w-8 h-8" />
+    },
+    ...(LAUNCH_CONFIG.LAUNCH_MODE ? [] : [{
+      id: 'broker' as UserRole,
+      label: 'Jag är mäklare/rådgivare',
+      description: 'Assistera säljare och köpare',
+      icon: <Handshake className="w-8 h-8" />
+    }])
+  ].filter(role => !LAUNCH_CONFIG.HIDDEN_ROLES.includes(role.id))
 
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role)
@@ -130,95 +153,35 @@ export default function RegisterPage() {
 
             {/* Role Selection */}
             <div className="space-y-4 mb-10">
-              {/* Seller */}
-              <div
-                onClick={() => handleRoleSelect('seller')}
-                className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                  selectedRole === 'seller'
-                    ? 'border-accent-pink bg-accent-pink/5'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div>
-                    <input
-                      type="radio"
-                      checked={selectedRole === 'seller'}
-                      onChange={() => handleRoleSelect('seller')}
-                      className="w-5 h-5 accent-accent-pink"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Building className="w-6 h-6 text-primary-navy" />
-                      <h3 className="text-lg font-bold text-primary-navy">Jag vill sälja</h3>
+              {availableRoles.map((role) => (
+                <div
+                  key={role.id}
+                  onClick={() => handleRoleSelect(role.id)}
+                  className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
+                    selectedRole === role.id
+                      ? 'border-accent-pink bg-accent-pink/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div>
+                      <input
+                        type="radio"
+                        checked={selectedRole === role.id}
+                        onChange={() => handleRoleSelect(role.id)}
+                        className="w-5 h-5 accent-accent-pink"
+                      />
                     </div>
-                    <p className="text-gray-700">
-                      Skapa en annons för ditt företag. Kan vara helt anonymt tills NDA.
-                    </p>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        {role.icon}
+                        <h3 className="text-lg font-bold text-primary-navy">{role.label}</h3>
+                      </div>
+                      <p className="text-gray-700">{role.description}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Broker */}
-              <div
-                onClick={() => handleRoleSelect('broker')}
-                className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                  selectedRole === 'broker'
-                    ? 'border-accent-pink bg-accent-pink/5'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div>
-                    <input
-                      type="radio"
-                      checked={selectedRole === 'broker'}
-                      onChange={() => handleRoleSelect('broker')}
-                      className="w-5 h-5 accent-accent-pink"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Handshake className="w-6 h-6 text-primary-navy" />
-                      <h3 className="text-lg font-bold text-primary-navy">Jag är mäklare</h3>
-                    </div>
-                    <p className="text-gray-700">
-                      Hantera flera annonser åt dina kunder. BankID-verifiering krävs.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Buyer */}
-              <div
-                onClick={() => handleRoleSelect('buyer')}
-                className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-                  selectedRole === 'buyer'
-                    ? 'border-accent-pink bg-accent-pink/5'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div>
-                    <input
-                      type="radio"
-                      checked={selectedRole === 'buyer'}
-                      onChange={() => handleRoleSelect('buyer')}
-                      className="w-5 h-5 accent-accent-pink"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Search className="w-6 h-6 text-primary-navy" />
-                      <h3 className="text-lg font-bold text-primary-navy">Jag är köpare</h3>
-                    </div>
-                    <p className="text-gray-700">
-                      Sök företag att köpa. Helt gratis att skapa konto och bevaka objekt.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
 
           {selectedRole && (
