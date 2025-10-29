@@ -38,6 +38,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         { label: 'Meddelanden', href: '/dashboard/messages', icon: MessageSquare, badge: 2 },
         { label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
         { label: 'Dokument', href: '/dashboard/documents', icon: FolderOpen },
+        { label: 'Mina försäljningar', href: '/dashboard/sales', icon: TrendingUp },
         { label: 'Kalender', href: '/dashboard/calendar', icon: Calendar },
         { label: 'Inställningar', href: '/dashboard/settings', icon: Settings },
       ]

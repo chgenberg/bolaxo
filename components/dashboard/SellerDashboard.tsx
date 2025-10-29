@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { TrendingUp, Eye, Users, CheckCircle, XCircle, Clock, Edit, Pause, Play, MessageSquare, BarChart3, HelpCircle, FileText, Target } from 'lucide-react'
+import { DEMO_DEALS, DEMO_QA_QUESTIONS } from '@/lib/demo-data'
+
+const DEMO_MODE = true // Set to true to show demo data
 
 interface SellerDashboardProps {
   userId: string
@@ -20,25 +23,59 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
 
   const fetchSellerData = async () => {
     try {
-      // Fetch seller's listings
-      const listingsRes = await fetch(`/api/listings?userId=${userId}`)
-      if (listingsRes.ok) {
-        const data = await listingsRes.json()
-        setListings(data)
-      }
+      if (DEMO_MODE) {
+        // Use demo data - map deals to listings
+        const mockListings = [
+          {
+            id: 'listing-1',
+            anonymousTitle: 'IT-konsultbolag - Växande SaaS-företag',
+            status: 'active',
+            views: 124,
+            revenueRange: '25-30 MSEK'
+          },
+          {
+            id: 'listing-2',
+            anonymousTitle: 'E-handelplattform - D2C Brand',
+            status: 'active',
+            views: 87,
+            revenueRange: '40-50 MSEK'
+          },
+          {
+            id: 'listing-3',
+            anonymousTitle: 'Tjänsteföretag - Managementkonsultation',
+            status: 'paused',
+            views: 42,
+            revenueRange: '15-20 MSEK'
+          }
+        ]
+        setListings(mockListings)
+        setNdaRequests(DEMO_DEALS)
+        setMessages(DEMO_QA_QUESTIONS.map(q => ({
+          id: q.id,
+          subject: q.question,
+          content: q.question,
+          createdAt: q.createdAt,
+          read: q.status === 'answered'
+        })))
+      } else {
+        // Fetch from API
+        const listingsRes = await fetch(`/api/listings?userId=${userId}`)
+        if (listingsRes.ok) {
+          const data = await listingsRes.json()
+          setListings(data)
+        }
 
-      // Fetch NDA requests for seller
-      const ndaRes = await fetch(`/api/nda-requests?userId=${userId}&role=seller`)
-      if (ndaRes.ok) {
-        const data = await ndaRes.json()
-        setNdaRequests(data.requests || [])
-      }
+        const ndaRes = await fetch(`/api/nda-requests?userId=${userId}&role=seller`)
+        if (ndaRes.ok) {
+          const data = await ndaRes.json()
+          setNdaRequests(data.requests || [])
+        }
 
-      // Fetch messages
-      const msgRes = await fetch(`/api/messages?userId=${userId}`)
-      if (msgRes.ok) {
-        const data = await msgRes.json()
-        setMessages(data.messages || [])
+        const msgRes = await fetch(`/api/messages?userId=${userId}`)
+        if (msgRes.ok) {
+          const data = await msgRes.json()
+          setMessages(data.messages || [])
+        }
       }
     } catch (error) {
       console.error('Error fetching seller data:', error)
@@ -203,10 +240,6 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
                     <div className="grid grid-cols-3 gap-4 text-sm text-text-gray">
                       <div className="flex items-center">
                         <Eye className="w-3 h-3 mr-1" />
-                        {listing.views || 0} visningar
-                      </div>
-                      <div className="flex items-center">
-                        <Users className="w-3 h-3 mr-1" />
                         {ndaRequests.filter(n => n.listingId === listing.id).length} NDA-förfrågningar
                       </div>
                       <div className="text-primary-blue font-medium">
