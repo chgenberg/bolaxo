@@ -270,8 +270,8 @@ export default function QAPage() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <Link href={`/objekt/${listingId}`} className="inline-flex items-center gap-2 text-primary-navy hover:text-accent-pink mb-4">
-            <ArrowLeft className="w-5 h-5" /> Tillbaka till objekt
+          <Link href={`/dashboard/deals`} className="inline-flex items-center gap-2 text-primary-navy hover:text-accent-pink mb-4">
+            <ArrowLeft className="w-5 h-5" /> Tillbaka till Mina affärer
           </Link>
           <div className="flex items-center justify-between">
             <div>

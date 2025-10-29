@@ -200,8 +200,8 @@ export default function SPAEditorPage() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-6">
-          <Link href={`/objekt/${listingId}`} className="inline-flex items-center gap-2 text-primary-navy hover:text-accent-pink mb-4">
-            <ArrowLeft className="w-5 h-5" /> Tillbaka till objekt
+          <Link href={`/dashboard/deals`} className="inline-flex items-center gap-2 text-primary-navy hover:text-accent-pink mb-4">
+            <ArrowLeft className="w-5 h-5" /> Tillbaka till Mina affärer
           </Link>
           <div className="flex items-center justify-between">
             <div>
@@ -374,7 +374,7 @@ export default function SPAEditorPage() {
                             <div className="flex-1">
                               <p className="font-semibold text-gray-800">{rep.label}</p>
                               <p className="text-sm text-gray-600 mt-1">
-                                {rep.id === 'organization' && 'Säljaren är korrekt organiserat och har full behörighet att genomföra transaktionen.'}
+                                {rep.id === 'organization' && 'Säljaren är korrekt organiserad och har full behörighet att genomföra transaktionen.'}
                                 {rep.id === 'financials' && 'Alla finansiella rapporter är korrekta och ger en rättvisande bild av verksamheten.'}
                                 {rep.id === 'assets' && 'Säljaren äger alla tillgångar fria från panträtter och belastningar.'}
                                 {rep.id === 'contracts' && 'Alla väsentliga avtal har avslöjats och är giltiga.'}
