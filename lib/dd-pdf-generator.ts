@@ -88,7 +88,7 @@ function getSeverityColor(severity: string): [number, number, number] {
 }
 
 function createSectionHeader(doc: PDFDocumentType, title: string, sectionNum: number) {
-  doc.fontSize(16).fontBold().fillColor('#0E2D5C')
+  doc.fontSize(16).font('Helvetica-Bold').fillColor('#0E2D5C')
   doc.text(`${sectionNum}. ${title}`, { underline: true })
   doc.moveDown(0.5)
   doc.fillColor('#000000')
@@ -106,14 +106,14 @@ function addFinding(
   doc.moveDown(0.3)
   
   // Title and severity badge
-  doc.fontSize(11).fontBold()
+  doc.fontSize(11).font('Helvetica-Bold')
   doc.text(finding.title, 50, doc.y, { width: 400 })
   
   // Severity badge
   const badgeX = 450
   const badgeY = doc.y - 15
   doc.rect(badgeX, badgeY, 90, 18).fill(`rgb(${r},${g},${b})`)
-  doc.fontSize(9).fontBold().fillColor('#FFFFFF')
+  doc.fontSize(9).font('Helvetica-Bold').fillColor('#FFFFFF')
   doc.text(finding.severity, badgeX + 5, badgeY + 3, { width: 80 })
   doc.fillColor('#000000')
   
@@ -153,14 +153,14 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
 
     try {
       // ===== TITLE PAGE =====
-      doc.fontSize(28).fontBold().fillColor('#0E2D5C')
+      doc.fontSize(28).font('Helvetica-Bold').fillColor('#0E2D5C')
       doc.text('DUE DILIGENCE RAPPORT', { align: 'center' })
       doc.moveDown(0.5)
       doc.fontSize(14).font('Helvetica').fillColor('#000000')
       doc.text('(Företagsbesiktning)', { align: 'center' })
       
       doc.moveDown(2)
-      doc.fontSize(14).fontBold().text(`För förvärv av ${data.companyName}`)
+      doc.fontSize(14).font('Helvetica-Bold').text(`För förvärv av ${data.companyName}`)
       doc.fontSize(11).font('Helvetica')
       doc.text(`Organisationsnummer: ${data.companyOrgNumber}`)
       
@@ -171,7 +171,7 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
       doc.text(`Slutfört: ${new Date(data.ddCompletionDate).toLocaleDateString('sv-SE')}`)
       
       doc.moveDown(3)
-      doc.fontSize(10).fillColor('#C00000').fontBold()
+      doc.fontSize(10).fillColor('#C00000').font('Helvetica-Bold')
       doc.text('KONFIDENTIELLT', { align: 'center' })
       doc.text('För auktoriserade mottagare endast', { align: 'center' })
       doc.fillColor('#000000')
@@ -179,7 +179,7 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
       doc.addPage()
 
       // ===== EXECUTIVE SUMMARY =====
-      doc.fontSize(16).fontBold().fillColor('#0E2D5C')
+      doc.fontSize(16).font('Helvetica-Bold').fillColor('#0E2D5C')
       doc.text('VERKSTÄLLANDE SAMMANFATTNING', { underline: true })
       doc.moveDown(0.5)
       doc.fillColor('#000000')
@@ -193,16 +193,16 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
       }
       const riskColor = riskColors[data.overallRiskLevel || 'Medium']
       
-      doc.fontSize(12).fontBold().text('Övergripande risknivå:')
+      doc.fontSize(12).font('Helvetica-Bold').text('Övergripande risknivå:')
       doc.rect(50, doc.y, 150, 30).fill(`rgb(${riskColor[0]},${riskColor[1]},${riskColor[2]})`)
-      doc.fontSize(14).fontBold().fillColor('#FFFFFF')
+      doc.fontSize(14).font('Helvetica-Bold').fillColor('#FFFFFF')
       doc.text(data.overallRiskLevel || 'Medium', 55, doc.y + 5)
       doc.fillColor('#000000')
       doc.moveDown(2)
       
       // Top three risks
       if (data.topThreeRisks && data.topThreeRisks.length > 0) {
-        doc.fontSize(11).fontBold().text('Tre viktigaste riskerna:')
+        doc.fontSize(11).font('Helvetica-Bold').text('Tre viktigaste riskerna:')
         data.topThreeRisks.forEach((risk, idx) => {
           doc.fontSize(10).font('Helvetica').text(`${idx + 1}. ${risk}`, { indent: 20 })
         })
@@ -211,7 +211,7 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
       
       // Recommendation
       if (data.dealRecommendation) {
-        doc.fontSize(11).fontBold().text('Rekommendation:')
+        doc.fontSize(11).font('Helvetica-Bold').text('Rekommendation:')
         doc.fontSize(10).font('Helvetica').text(data.dealRecommendation, { align: 'justify', indent: 20 })
         doc.moveDown(1)
       }
@@ -271,7 +271,7 @@ export async function generateDDReportPDF(data: DDPdfData): Promise<Buffer> {
       }
 
       // ===== SIGNATURE PAGE =====
-      doc.fontSize(14).fontBold().fillColor('#0E2D5C')
+      doc.fontSize(14).font('Helvetica-Bold').fillColor('#0E2D5C')
       doc.text('UNDERTECKNING', { underline: true })
       doc.moveDown(1)
       doc.fillColor('#000000')
