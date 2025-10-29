@@ -177,6 +177,7 @@ model Listing {
   ddProjects      DDProject[]      @relation("ListingDD")
   spas            SPA[]            @relation("ListingSPA")
   earnouts        EarnOut[]        @relation("ListingEarnout")
+  transactions    Transaction[]    @relation("ListingTransaction")
   
   @@index([userId])
   @@index([status])
@@ -201,11 +202,14 @@ model Transaction {
   
   // Relations
   listingId       String
+  listing         Listing   @relation("ListingTransaction", fields: [listingId], references: [id], onDelete: Cascade)
   buyerId         String
   buyer           User      @relation("BuyerTransactions", fields: [buyerId], references: [id])
   sellerId        String
   seller          User      @relation("SellerTransactions", fields: [sellerId], references: [id])
   advisorId       String?
+  loiId           String?   // Link to LOI if created from LOI
+  loi             LOI?       @relation("TransactionLOI", fields: [loiId], references: [id])
   
   // Deal data
   stage           String    @default("LOI_SIGNED") // LOI_SIGNED, DD_IN_PROGRESS, SPA_NEGOTIATION, CLOSING, COMPLETED, CANCELLED
@@ -225,6 +229,7 @@ model Transaction {
   @@index([buyerId])
   @@index([sellerId])
   @@index([stage])
+  @@index([loiId])
 }
 
 model Document {
@@ -862,6 +867,9 @@ model LOI {
   signedAt        DateTime?
   expiresAt       DateTime? // 30 days from creation default
   rejectedReason  String?
+  
+  // Transaction relation
+  transactions    Transaction[] @relation("TransactionLOI")
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
