@@ -27,11 +27,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create or get user
+    // Create or get user (don't update role if user already exists)
     const user = await prisma.user.upsert({
       where: { email },
       update: {
-        role,
+        // Only update name if provided, don't change role
         name: name || undefined,
         verified: true,
         bankIdVerified: true,
