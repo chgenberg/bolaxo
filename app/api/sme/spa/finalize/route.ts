@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
         transaction: {
           select: {
             id: true,
+            stage: true,
             milestones: {
               where: {
                 title: {
