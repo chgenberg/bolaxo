@@ -205,79 +205,45 @@ Questions about Bolagsplatsen? Visit support.bolagsplatsen.se
 }
 
 function generateIndexPdf(content: HandoffPackageContent): Buffer {
-  return new Promise((resolve, reject) => {
-    try {
-      const doc = new PDFDocument({
-        size: 'A4',
-        margin: 50,
-      });
-
-      const chunks: Buffer[] = [];
-      doc.on('data', (chunk) => chunks.push(chunk));
-      doc.on('end', () => resolve(Buffer.concat(chunks)));
-      doc.on('error', reject);
-
-      // Title
-      doc.fontSize(24).font('Helvetica-Bold').fillColor('#0f172a').text('ADVISOR HANDOFF PACKAGE', { align: 'center' });
-
-      doc.fontSize(18).fillColor('#1e293b').text(`${content.companyName}`, { align: 'center' });
-
-      doc.fontSize(10).fillColor('#64748b').text(`Created: ${content.createdAt.toLocaleDateString('sv-SE')}`, { align: 'center' });
-
-      // Document inventory
-      doc.moveDown();
-      doc.fontSize(14).font('Helvetica-Bold').fillColor('#0f172a').text('Document Inventory');
-
-      doc.fontSize(11).font('Helvetica').fillColor('#1e293b');
-
-      const inventory = [
-        {
-          title: 'Teaser',
-          pages: 2,
-          status: content.teaserPdfBuffer ? 'Included' : 'Not available',
-        },
-        {
-          title: 'Information Memorandum',
-          pages: 10,
-          status: content.imPdfBuffer ? 'Included' : 'Not available',
-        },
-        {
-          title: 'Financial Statements',
-          years: 3,
-          status: content.financialExcelBuffer || content.financialPdfBuffer ? 'Included' : 'Not available',
-        },
-        {
-          title: 'Key Agreements',
-          count: content.agreementsData?.length || 0,
-          status: content.agreementsData && content.agreementsData.length > 0 ? 'Included' : 'Not available',
-        },
-        {
-          title: 'NDA Status Report',
-          status: content.ndaReportData ? 'Included' : 'Not available',
-        },
-      ];
-
-      let y = doc.y + 10;
-      inventory.forEach((item) => {
-        doc.text(`• ${item.title}`, 70, y);
-        doc.fontSize(9).fillColor('#64748b').text(`   Status: ${item.status}`, 70, y + 15);
-        doc.fontSize(11).fillColor('#1e293b');
-        y += 40;
-      });
-
-      // Footer
-      doc.moveDown(2);
-      doc.fontSize(9).fillColor('#64748b').text('CONFIDENTIAL - For Authorized Recipients Only', { align: 'center' });
-
-      doc.end();
-    } catch (error) {
-      reject(error);
-    }
-  }).catch(() => {
-    // If PDF generation fails, return a text version
-    const fallback = Buffer.from('INDEX: See README.txt for inventory', 'utf-8');
-    return fallback;
-  });
+  let indexContent = `HANDOFF PACKAGE INDEX\n`;
+  indexContent += `================================\n\n`;
+  indexContent += `Company: ${content.companyName}\n`;
+  indexContent += `Created: ${content.createdAt.toLocaleDateString('sv-SE')}\n`;
+  indexContent += `Package ID: ${content.listingId}\n\n`;
+  
+  indexContent += `DOCUMENTS INCLUDED:\n`;
+  indexContent += `-----------------\n`;
+  indexContent += `1. README.txt - This package overview\n`;
+  
+  if (content.teaserPdfBuffer) {
+    indexContent += `2. TEASER - Anonymized company overview\n`;
+  }
+  
+  if (content.imPdfBuffer) {
+    indexContent += `3. INFORMATION MEMORANDUM - Full company details\n`;
+  }
+  
+  if (content.financialExcelBuffer) {
+    indexContent += `4. FINANCIAL_DATA.xlsx - Historical financial statements\n`;
+  } else if (content.financialPdfBuffer) {
+    indexContent += `4. FINANCIAL_DATA.pdf - Historical financial statements\n`;
+  }
+  
+  if (content.agreementsData && content.agreementsData.length > 0) {
+    indexContent += `5. AGREEMENTS - Key contracts (${content.agreementsData.length} files)\n`;
+  }
+  
+  if (content.dataroomIndex) {
+    indexContent += `6. DATAROOM - Full data room index\n`;
+  }
+  
+  if (content.ndaReportData) {
+    indexContent += `7. NDA_REPORT - NDA status summary\n`;
+  }
+  
+  indexContent += `\nCONFIDENTIAL - For Authorized Recipients Only\n`;
+  
+  return Buffer.from(indexContent, 'utf-8');
 }
 
 function generateAgreementsCsv(agreements: AgreementData[]): Buffer {

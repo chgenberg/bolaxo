@@ -25,16 +25,16 @@ export async function POST(req: NextRequest) {
     const updated = await prisma.transaction.update({
       where: { id: transactionId },
       data: {
-        status: 'completed',
-        closedAt: closingDate ? new Date(closingDate) : new Date(),
-        summary: summary
+        stage: 'COMPLETED',
+        closingDate: closingDate ? new Date(closingDate) : new Date(),
+        notes: summary
       }
     });
 
     // Update all related milestones to completed
     await prisma.milestone.updateMany({
       where: { transactionId },
-      data: { status: 'completed', completedAt: new Date() }
+      data: { completed: true, completedAt: new Date() }
     });
 
     return NextResponse.json({

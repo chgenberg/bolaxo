@@ -30,17 +30,11 @@ export async function POST(req: NextRequest) {
         },
       },
       update: {
-        viewCount:
-          action === 'view'
-            ? { increment: 1 }
-            : { __typename: 'Int' }, // Don't change
-        lastViewedAt: action === 'view' ? new Date() : undefined,
-        downloaded: action === 'download' ? true : undefined,
-        downloadedAt: action === 'download' ? new Date() : undefined,
-        timeSpentSeconds:
-          action === 'timeSpent' && timeSpentSeconds
-            ? { increment: timeSpentSeconds }
-            : { __typename: 'Int' }, // Don't change
+        ...(action === 'view' && { viewCount: { increment: 1 } }),
+        ...(action === 'view' && { lastViewedAt: new Date() }),
+        ...(action === 'download' && { downloaded: true }),
+        ...(action === 'download' && { downloadedAt: new Date() }),
+        ...(action === 'timeSpent' && timeSpentSeconds && { timeSpentSeconds: { increment: timeSpentSeconds } }),
       },
       create: {
         listingId,
