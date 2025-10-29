@@ -1,340 +1,222 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { MessageSquare, FileText, ClipboardCheck, Scale, Signature, CheckCircle, DollarSign, Target, ArrowRight } from 'lucide-react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
-import { Building, Calendar, DollarSign, User, TrendingUp, Clock, CheckCircle, AlertCircle, MoreVertical } from 'lucide-react'
 
-export default function DealsPage() {
-  const [filter, setFilter] = useState('all')
-  
-  const deals = [
-    {
-      id: 'deal-001',
-      title: 'E-handelsplattform - Tech Innovations',
-      buyer: 'Nordic Capital Partners',
-      seller: 'Tech Innovations AB',
-      value: 25000000,
-      stage: 'Due Diligence',
-      advisor: 'Johan Svensson',
-      startDate: '2024-05-15',
-      expectedClose: '2024-08-15',
-      probability: 75,
-      status: 'on_track',
-      commission: 500000,
-      lastActivity: 'Finansiell DD påbörjad',
-      nextSteps: 'Slutför finansiell och legal DD'
-    },
-    {
-      id: 'deal-002',
-      title: 'SaaS HR-system - Förvärv',
-      buyer: 'Strategic Buyer AB',
-      seller: 'HR Tech Solutions',
-      value: 35000000,
-      stage: 'LOI',
-      advisor: 'Anna Lindberg',
-      startDate: '2024-04-20',
-      expectedClose: '2024-07-30',
-      probability: 60,
-      status: 'at_risk',
-      commission: 700000,
-      lastActivity: 'LOI-förhandlingar pågår',
-      nextSteps: 'Lösa prisjustering och garantier'
-    },
-    {
-      id: 'deal-003',
-      title: 'Byggföretag Syd - MBO',
-      buyer: 'Ledningsgruppen',
-      seller: 'Byggmästaren i Syd AB',
-      value: 18000000,
-      stage: 'NDA',
-      advisor: 'Johan Svensson',
-      startDate: '2024-06-10',
-      expectedClose: '2024-09-30',
-      probability: 30,
-      status: 'on_track',
-      commission: 360000,
-      lastActivity: 'Första möte genomfört',
-      nextSteps: 'Teaser och IM distribution'
-    },
-    {
-      id: 'deal-004',
-      title: 'Miljöteknik - Strategiskt förvärv',
-      buyer: 'Green Invest AB',
-      seller: 'Miljöteknik Sverige',
-      value: 42000000,
-      stage: 'SPA',
-      advisor: 'Maria Eriksson',
-      startDate: '2024-03-01',
-      expectedClose: '2024-07-01',
-      probability: 85,
-      status: 'on_track',
-      commission: 840000,
-      lastActivity: 'SPA-förhandlingar nästan klara',
-      nextSteps: 'Slutföra juridisk granskning'
-    },
-    {
-      id: 'deal-005',
-      title: 'Modekedjan - Turnaround',
-      buyer: 'Retail Group International',
-      seller: 'Fashion Stores AB',
-      value: 28000000,
-      stage: 'Closing',
-      advisor: 'Anna Lindberg',
-      startDate: '2024-02-15',
-      expectedClose: '2024-06-30',
-      probability: 95,
-      status: 'closing_soon',
-      commission: 560000,
-      lastActivity: 'Signing planerad nästa vecka',
-      nextSteps: 'Förbereda closing och överlämnande'
-    }
-  ]
+export default function MyDealsPage() {
+  const [deals, setDeals] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const filteredDeals = deals.filter(deal => {
-    if (filter === 'all') return true
-    if (filter === 'active') return deal.status !== 'closed'
-    if (filter === 'at_risk') return deal.status === 'at_risk'
-    if (filter === 'closing_soon') return deal.status === 'closing_soon'
-    return true
-  })
+  useEffect(() => {
+    fetchDeals()
+  }, [])
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'on_track':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
-            <CheckCircle className="w-3 h-3 mr-1" />
-            På rätt spår
-          </span>
-        )
-      case 'at_risk':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
-            <AlertCircle className="w-3 h-3 mr-1" />
-            Risk
-          </span>
-        )
-      case 'closing_soon':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent-pink/10 text-accent-pink">
-            <Clock className="w-3 h-3 mr-1" />
-            Closing snart
-          </span>
-        )
-      default:
-        return null
+  const fetchDeals = async () => {
+    try {
+      // Fetch user's active NDAs which represent deals
+      const response = await fetch('/api/nda-requests?role=buyer')
+      if (response.ok) {
+        const data = await response.json()
+        setDeals(data.requests?.filter((r: any) => r.status === 'approved') || [])
+      }
+    } catch (error) {
+      console.error('Error fetching deals:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const getStageBadge = (stage: string) => {
-    const colors: Record<string, string> = {
-      NDA: 'bg-gray-100 text-gray-700',
-      'Due Diligence': 'bg-amber-100 text-amber-700',
-      LOI: 'bg-accent-pink/10 text-accent-pink',
-      SPA: 'bg-purple-100 text-purple-700',
-      Closing: 'bg-green-100 text-green-700',
-    }
-    const colorClass = colors[stage] ?? 'bg-gray-100 text-gray-700'
+  if (loading) {
     return (
-      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${colorClass}`}>
-        {stage}
-      </span>
+      <DashboardLayout>
+        <div className="text-center py-12">
+          <div className="w-12 h-12 border-4 border-primary-blue border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
+      </DashboardLayout>
     )
   }
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-8 p-6 max-w-7xl">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Aktiva affärer</h1>
-            <p className="text-sm text-gray-600 mt-1">Detaljerad översikt över pågående transaktioner</p>
-          </div>
-          <button className="btn-primary">
-            Exportera rapport
-          </button>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-primary-navy mb-2">Mina affärer</h1>
+          <p className="text-gray-600">Hantera alla steg i köpprocessen för dina aktiva affärer</p>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <Building className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{deals.length}</p>
-            <p className="text-xs text-gray-600">Aktiva affärer</p>
+        {deals.length === 0 ? (
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-12 text-center">
+            <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Inga aktiva affärer</h2>
+            <p className="text-gray-600 mb-4">Du behöver godkända NDAs för att komma igång</p>
+            <Link href="/dashboard/nda-status" className="text-primary-blue hover:underline">
+              Visa mina NDA-förfrågningar →
+            </Link>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
-              {(deals.reduce((sum, d) => sum + d.value, 0) / 1000000).toFixed(0)} MSEK
-            </p>
-            <p className="text-xs text-gray-600">Total volym</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
-              {(deals.reduce((sum, d) => sum + d.commission, 0) / 1000000).toFixed(1)} MSEK
-            </p>
-            <p className="text-xs text-gray-600">Förväntad provision</p>
-          </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
-              {deals.filter(d => d.status === 'closing_soon').length}
-            </p>
-            <p className="text-xs text-gray-600">Closing inom 30 dagar</p>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className="flex items-center gap-2">
-          {[
-            { value: 'all', label: 'Alla affärer' },
-            { value: 'active', label: 'Aktiva' },
-            { value: 'at_risk', label: 'Risk' },
-            { value: 'closing_soon', label: 'Closing snart' }
-          ].map((option) => (
-            <button
-              key={option.value}
-              onClick={() => setFilter(option.value)}
-              className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
-                filter === option.value
-                  ? 'bg-accent-pink text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Deals table */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-neutral-white border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Affär
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Parter
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Värde
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Fas
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Förväntat closing
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Rådgivare
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                  Åtgärder
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredDeals.map((deal) => (
-                <tr key={deal.id} className="hover:bg-neutral-white transition-colors">
-                  <td className="px-6 py-4">
-                    <div>
-                      <p className="text-sm font-medium text-primary-navy">{deal.title}</p>
-                      <p className="text-xs text-gray-600 mt-1">{deal.lastActivity}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div>
-                      <p className="text-sm text-primary-navy">K: {deal.buyer}</p>
-                      <p className="text-sm text-gray-600">S: {deal.seller}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div>
-                      <p className="text-sm font-medium text-primary-navy">
-                        {(deal.value / 1000000).toFixed(0)} MSEK
-                      </p>
-                      <p className="text-xs text-gray-600">
-                        Prov: {(deal.commission / 1000).toFixed(0)}k
-                      </p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    {getStageBadge(deal.stage)}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div>
-                      {getStatusBadge(deal.status)}
-                      <p className="text-xs text-gray-600 mt-1">
-                        {deal.probability}% sannolikhet
-                      </p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div>
-                      {deal.expectedClose && new Date(deal.expectedClose).getTime() ? (
-                        <>
-                          <p className="text-sm text-primary-navy">
-                            {new Date(deal.expectedClose).toLocaleDateString('sv-SE')}
-                          </p>
-                          <p className="text-xs text-gray-600">
-                            {Math.ceil((new Date(deal.expectedClose).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} dagar
-                          </p>
-                        </>
-                      ) : (
-                        <p className="text-sm text-gray-600">-</p>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {deal.advisor}
-                  </td>
-                  <td className="px-6 py-4">
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                      <MoreVertical className="w-4 h-4 text-gray-600" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Next steps overview */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200">
-          <h2 className="text-lg font-semibold text-primary-navy mb-4">Kommande åtgärder</h2>
-          <div className="space-y-3">
-            {filteredDeals.map((deal) => (
-              <div key={deal.id} className="flex items-start gap-4 p-3 bg-neutral-white rounded-lg">
-                <div className="flex-shrink-0">
-                  <div className={`w-2 h-2 rounded-full mt-2 ${
-                    deal.status === 'at_risk' ? 'bg-amber-500' : 
-                    deal.status === 'closing_soon' ? 'bg-accent-pink/100' : 'bg-green-500'
-                  }`} />
+        ) : (
+          <div className="space-y-6">
+            {deals.map((deal) => (
+              <div key={deal.id} className="bg-white rounded-lg border-2 border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                {/* Deal Header */}
+                <div className="bg-gradient-to-r from-primary-navy/5 to-accent-pink/5 p-6 border-b border-gray-200">
+                  <h2 className="text-xl font-bold text-primary-navy">
+                    {deal.listing?.anonymousTitle || 'Företag'}
+                  </h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Godkänd NDA: {new Date(deal.approvedAt).toLocaleDateString('sv-SE')}
+                  </p>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-primary-navy">{deal.title}</p>
-                  <p className="text-sm text-gray-600 mt-1">{deal.nextSteps}</p>
-                </div>
-                <div className="text-xs text-gray-600">
-                  {deal.advisor}
+
+                {/* Deal Actions */}
+                <div className="p-6">
+                  <p className="text-sm font-semibold text-gray-700 mb-4">Tillgängliga åtgärder:</p>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {/* Q&A Center */}
+                    <Link 
+                      href={`/kopare/qa/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <MessageSquare className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">Q&A Center</h3>
+                        <p className="text-sm text-gray-600">Ställ frågor till säljaren (48h SLA)</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    </Link>
+
+                    {/* LoI Editor */}
+                    <Link 
+                      href={`/kopare/loi/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-green-400 hover:bg-green-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <FileText className="w-6 h-6 text-green-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">LoI Editor</h3>
+                        <p className="text-sm text-gray-600">Skapa & förhandla Letter of Intent</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
+                    </Link>
+
+                    {/* DD Manager */}
+                    <Link 
+                      href={`/kopare/dd/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-400 hover:bg-purple-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <ClipboardCheck className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">DD Manager</h3>
+                        <p className="text-sm text-gray-600">Due Diligence checklist (17 tasks)</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                    </Link>
+
+                    {/* SPA Editor */}
+                    <Link 
+                      href={`/kopare/spa/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-amber-400 hover:bg-amber-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <Scale className="w-6 h-6 text-amber-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">SPA Editor</h3>
+                        <p className="text-sm text-gray-600">Share Purchase Agreement</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-amber-600 transition-colors" />
+                    </Link>
+
+                    {/* Digital Signing */}
+                    <Link 
+                      href={`/kopare/signing/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-red-400 hover:bg-red-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <Signature className="w-6 h-6 text-red-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">Digital Signing</h3>
+                        <p className="text-sm text-gray-600">Signera SPA med BankID</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-colors" />
+                    </Link>
+
+                    {/* Closing Checklist */}
+                    <Link 
+                      href={`/kopare/closing/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-blue-600 hover:bg-blue-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <CheckCircle className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">Closing Checklist</h3>
+                        <p className="text-sm text-gray-600">Final verification innan betalning</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    </Link>
+
+                    {/* Payment & Closing */}
+                    <Link 
+                      href={`/kopare/payment/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-green-600 hover:bg-green-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <DollarSign className="w-6 h-6 text-green-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">Payment & Closing</h3>
+                        <p className="text-sm text-gray-600">Processera betalning & överföring</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
+                    </Link>
+
+                    {/* Earnout Tracker */}
+                    <Link 
+                      href={`/salja/earnout/${deal.listingId}`}
+                      className="group flex items-start gap-4 p-4 border-2 border-gray-200 rounded-lg hover:border-purple-600 hover:bg-purple-50 transition-all"
+                    >
+                      <div className="flex-shrink-0">
+                        <Target className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">Earnout Tracker</h3>
+                        <p className="text-sm text-gray-600">Spåra KPI-performance (3 år)</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
+        )}
+
+        {/* Complete Flow Info */}
+        <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mt-8">
+          <h3 className="font-bold text-blue-900 mb-3">🚀 Komplett M&A Flöde</h3>
+          <p className="text-sm text-blue-800 mb-3">
+            Här kan du se alla steg från frågor till faktisk köp:
+          </p>
+          <ol className="text-sm text-blue-800 space-y-1 ml-4 list-decimal">
+            <li><strong>Q&A Center</strong> - Ställ frågor till säljaren</li>
+            <li><strong>LoI Editor</strong> - Skapa initialt bud</li>
+            <li><strong>DD Manager</strong> - Genomför due diligence</li>
+            <li><strong>SPA Editor</strong> - Förhandla Share Purchase Agreement</li>
+            <li><strong>Digital Signing</strong> - Signera avtalet juridiskt bindande</li>
+            <li><strong>Closing Checklist</strong> - Verifiera allt innan betalning</li>
+            <li><strong>Payment & Closing</strong> - Processera betalning & aktieöverlåtelse</li>
+            <li><strong>Earnout Tracker</strong> - Spåra KPI efter köp (3 år)</li>
+          </ol>
         </div>
       </div>
     </DashboardLayout>

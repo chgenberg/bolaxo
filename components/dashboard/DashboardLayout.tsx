@@ -50,6 +50,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         { label: 'Meddelanden', href: '/dashboard/messages', icon: MessageSquare, badge: 1 },
         { label: 'Jämförelser', href: '/dashboard/compare', icon: BarChart3 },
         { label: 'Kalender', href: '/dashboard/calendar', icon: Calendar },
+        // M&A Transaction Features
+        { label: 'Mina affärer', href: '/dashboard/deals', icon: FileText, badge: 0 },
         { label: 'Inställningar', href: '/dashboard/settings', icon: Settings },
       ]
     } else {
