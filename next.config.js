@@ -16,10 +16,17 @@ const nextConfig = {
     // Optimize images för production
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
+    // Ensure images are served from the correct domain
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   // Production optimizations
   compress: true,
   poweredByHeader: false,
+  // Ensure correct base URL for image optimization
+  ...(process.env.NEXT_PUBLIC_BASE_URL && {
+    assetPrefix: undefined, // Let Next.js handle it automatically
+  }),
   // Security headers (complementing middleware.ts)
   async headers() {
     return [

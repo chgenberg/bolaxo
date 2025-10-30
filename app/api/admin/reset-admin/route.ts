@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       message: 'Admin account reset completed',
       email: adminUser.email,
       password: password,
-      loginUrl: 'https://bolaxo-production.up.railway.app/admin/login'
+      loginUrl: process.env.NEXT_PUBLIC_BASE_URL ? `${process.env.NEXT_PUBLIC_BASE_URL}/admin/login` : 'https://bolaxo.com/admin/login'
     })
 
   } catch (error) {
