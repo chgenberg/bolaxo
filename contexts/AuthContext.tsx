@@ -1,7 +1,6 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { useSearchParams } from 'next/navigation'
 
 interface User {
   id: string
