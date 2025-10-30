@@ -125,6 +125,13 @@ export async function GET(request: Request) {
     console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set, redirecting to:', redirectUrl)
     console.log('✅ [MAGIC LINK VERIFY] Production mode:', isProduction)
     console.log('✅ [MAGIC LINK VERIFY] User role:', user.role)
+    console.log('✅ [MAGIC LINK VERIFY] Cookies set:', {
+      bolaxo_user_id: user.id.substring(0, 10) + '...',
+      bolaxo_user_email: user.email,
+      bolaxo_user_role: user.role,
+      secure: isProduction,
+      sameSite: 'lax'
+    })
 
     return response
 
