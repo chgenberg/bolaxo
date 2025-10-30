@@ -122,10 +122,10 @@ export default function Header() {
       scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'
     }`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20 sm:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold tracking-tight text-primary-navy">
+            <span className="text-3xl sm:text-2xl font-bold tracking-tight text-primary-navy">
               BOLAXO
             </span>
           </Link>
@@ -252,9 +252,9 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="lg:hidden p-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
             </button>
           </div>
         </div>
@@ -279,27 +279,38 @@ export default function Header() {
           }`}
         >
           <div className="p-6 space-y-6">
+            {/* Close button */}
+            <div className="flex justify-between items-center pb-4 border-b">
+              <span className="text-2xl font-bold text-primary-navy">BOLAXO</span>
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-8 h-8" />
+              </button>
+            </div>
+            
             {/* Mobile navigation */}
             {navigation.map((item) => (
               <div key={item.label}>
                 {item.href ? (
                   <Link
                     href={item.href}
-                    className="block text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
+                    className="block text-xl font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}
                   </Link>
                 ) : (
                   <div>
-                    <div className="text-base font-medium text-gray-900 mb-3">{item.label}</div>
+                    <div className="text-xl font-medium text-gray-900 mb-3">{item.label}</div>
                     {item.dropdown && (
-                      <div className="space-y-2 pl-4">
+                      <div className="space-y-3 pl-4">
                         {item.dropdown.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.href}
                             href={dropdownItem.href}
-                            className="block text-sm text-gray-600 hover:text-primary-navy transition-colors py-1"
+                            className="block text-lg text-gray-600 hover:text-primary-navy transition-colors py-2"
                             onClick={() => setIsMenuOpen(false)}
                           >
                             {dropdownItem.label}
@@ -320,28 +331,28 @@ export default function Header() {
                     <>
                       <Link
                         href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
-                        className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
+                        className="flex items-center space-x-3 text-lg font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <MessageSquare className="w-5 h-5" />
+                        <MessageSquare className="w-6 h-6" />
                         <span>Meddelanden</span>
                       </Link>
                       <Link
                         href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
-                        className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
+                        className="flex items-center space-x-3 text-lg font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <User className="w-5 h-5" />
+                        <User className="w-6 h-6" />
                         <span>Profil & Inställningar</span>
                       </Link>
                     </>
                   )}
                   <Link
                     href="/dashboard"
-                    className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
+                    className="flex items-center space-x-3 text-lg font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <LayoutDashboard className="w-5 h-5" />
+                    <LayoutDashboard className="w-6 h-6" />
                     <span>Dashboard</span>
                   </Link>
                   <button
@@ -349,9 +360,9 @@ export default function Header() {
                       logout()
                       setIsMenuOpen(false)
                     }}
-                    className="flex items-center space-x-3 text-base font-medium text-red-600 hover:text-red-700 transition-colors w-full"
+                    className="flex items-center space-x-3 text-lg font-medium text-red-600 hover:text-red-700 transition-colors w-full py-2"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className="w-6 h-6" />
                     <span>Logga ut</span>
                   </button>
                 </div>
@@ -359,14 +370,14 @@ export default function Header() {
                 <div className="space-y-4">
                   <Link
                     href="/login"
-                    className="block text-base font-medium text-gray-900 hover:text-primary-navy transition-colors"
+                    className="block text-xl font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Logga in
                   </Link>
                   <Link
                     href="/registrera"
-                    className="block w-full text-center px-4 py-3 bg-primary-navy text-white rounded-lg font-medium hover:bg-primary-navy/90 transition-all"
+                    className="block w-full text-center px-6 py-4 bg-primary-navy text-white rounded-lg font-medium text-lg hover:bg-primary-navy/90 transition-all"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Kom igång
