@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 interface User {
   id: string
@@ -66,7 +67,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       
       // Fall back to regular auth API (checks session cookie)
-      const response = await fetch('/api/auth/me')
+      const response = await fetch('/api/auth/me', {
+        credentials: 'include', // Important: include cookies
+        cache: 'no-store', // Don't cache auth check
+      })
       if (response.ok) {
         const data = await response.json()
         setUser(data.user)
@@ -83,6 +87,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     fetchUser()
+    
+    // Refresh user when window gains focus (helps catch cookies after redirect)
+    const handleFocus = () => {
+      // Small delay to ensure cookies are available
+      setTimeout(() => {
+        fetchUser()
+      }, 100)
+    }
+    
+    window.addEventListener('focus', handleFocus)
+    return () => window.removeEventListener('focus', handleFocus)
+  }, [])
+  
+  // Also refresh after a short delay to catch cookies set during redirect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!user && !loading) {
+        fetchUser()
+      }
+    }, 500)
+    return () => clearTimeout(timer)
   }, [])
 
   const login = async (email: string, role: string, acceptedPrivacy: boolean, referralCode?: string) => {

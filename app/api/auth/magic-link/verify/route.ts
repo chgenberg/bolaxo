@@ -76,28 +76,34 @@ export async function GET(request: Request) {
     })
 
     // Sätt cookies PÅ response-objektet så de skickas med redirecten
+    // I production SKA secure vara true för HTTPS
+    const isProduction = process.env.NODE_ENV === 'production' || baseUrl.includes('bolaxo.com')
+    
     response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction, // true för HTTPS i production
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 dagar
-      path: '/'
+      path: '/',
+      domain: isProduction ? '.bolaxo.com' : undefined, // Sätt domain för production
     })
 
     response.cookies.set('bolaxo_user_email', user.email, {
       httpOnly: false, // Behöver läsas client-side
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
-      path: '/'
+      path: '/',
+      domain: isProduction ? '.bolaxo.com' : undefined,
     })
 
     response.cookies.set('bolaxo_user_role', user.role, {
       httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
-      path: '/'
+      path: '/',
+      domain: isProduction ? '.bolaxo.com' : undefined,
     })
 
     return response
