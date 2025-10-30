@@ -7,6 +7,8 @@ const prisma = new PrismaClient()
 
 export async function GET(request: Request) {
   try {
+    console.log('🔐 [MAGIC LINK VERIFY] Starting verification...')
+    
     // Detektera rätt base URL tidigt
     const protocol = request.headers.get('x-forwarded-proto') || 'https'
     const host = request.headers.get('host') || 'bolaxo.com'
@@ -17,7 +19,10 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')
 
+    console.log('🔐 [MAGIC LINK VERIFY] Token received:', token ? `${token.substring(0, 20)}...` : 'none')
+
     if (!token) {
+      console.log('❌ [MAGIC LINK VERIFY] No token provided')
       return NextResponse.json(
         { success: false, error: 'Invalid token' },
         { status: 400 }
@@ -29,7 +34,10 @@ export async function GET(request: Request) {
       where: { magicLinkToken: token }
     })
 
+    console.log('🔐 [MAGIC LINK VERIFY] User lookup:', user ? `Found user ${user.id} (${user.email})` : 'No user found')
+
     if (!user) {
+      console.log('❌ [MAGIC LINK VERIFY] User not found for token')
       return NextResponse.json(
         { success: false, error: 'Invalid token' },
         { status: 400 }
@@ -38,6 +46,7 @@ export async function GET(request: Request) {
 
     // Kolla om token har gått ut
     if (!user.tokenExpiresAt || user.tokenExpiresAt < new Date()) {
+      console.log('❌ [MAGIC LINK VERIFY] Token expired:', user.tokenExpiresAt)
       return NextResponse.json(
         { success: false, error: 'Token expired' },
         { status: 400 }
@@ -112,6 +121,10 @@ export async function GET(request: Request) {
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
     })
+
+    console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set, redirecting to:', redirectUrl)
+    console.log('✅ [MAGIC LINK VERIFY] Production mode:', isProduction)
+    console.log('✅ [MAGIC LINK VERIFY] User role:', user.role)
 
     return response
 
