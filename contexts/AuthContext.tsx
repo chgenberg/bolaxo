@@ -103,10 +103,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!user && !loading) {
+        console.log('🔄 [AUTH] No user found after delay, refreshing...')
         fetchUser()
       }
-    }, 500)
+    }, 1000) // Increased delay to catch cookies after redirect
     return () => clearTimeout(timer)
+  }, [])
+  
+  // Check if we're on a page that just did magic link verification
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Check URL params for magic link success
+      const urlParams = new URLSearchParams(window.location.search)
+      const fromMagicLink = sessionStorage.getItem('from_magic_link')
+      
+      if (fromMagicLink === 'true' || urlParams.get('logged_in') === 'true') {
+        console.log('🔄 [AUTH] Detected magic link redirect, refreshing auth...')
+        setTimeout(() => {
+          fetchUser()
+          sessionStorage.removeItem('from_magic_link')
+        }, 500)
+      }
+    }
   }, [])
 
   const login = async (email: string, role: string, acceptedPrivacy: boolean, referralCode?: string) => {

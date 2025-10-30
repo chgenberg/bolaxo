@@ -54,6 +54,12 @@ function VerifyContent() {
           // Wait a bit longer to ensure cookies are persisted
           setTimeout(() => {
             console.log('Redirecting to:', data.redirectUrl || '/dashboard')
+            
+            // Set flag in sessionStorage to trigger auth refresh after redirect
+            if (typeof window !== 'undefined') {
+              sessionStorage.setItem('from_magic_link', 'true')
+            }
+            
             // Force full page reload - this will trigger AuthContext to check cookies
             window.location.href = data.redirectUrl || '/dashboard'
           }, 1000) // Longer delay to ensure cookies are set
