@@ -70,18 +70,25 @@ export async function GET(request: Request) {
     // Skapa full URL för redirect
     const fullRedirectUrl = new URL(redirectUrl, baseUrl)
 
-    // Skapa redirect response FÖRST
-    const response = NextResponse.redirect(fullRedirectUrl, {
-      status: 302,
-    })
-
-    // Sätt cookies PÅ response-objektet så de skickas med redirecten
     // I production SKA secure vara true för HTTPS
     const isProduction = process.env.NODE_ENV === 'production' || baseUrl.includes('bolaxo.com')
-    
+
+    // Returnera JSON response med cookies istället för redirect
+    // Client-side kommer att hantera redirecten efter cookies är satta
+    const response = NextResponse.json({
+      success: true,
+      redirectUrl: redirectUrl,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      }
+    })
+
+    // Sätt cookies PÅ response-objektet
     response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
-      secure: isProduction, // true för HTTPS i production
+      secure: isProduction,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 dagar
       path: '/',

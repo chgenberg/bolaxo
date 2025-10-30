@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
       // Ta bort trailing slash om den finns
       baseUrl = baseUrl.replace(/\/$/, '')
-      const magicLink = `${baseUrl}/api/auth/magic-link/verify?token=${token}`
+      const magicLink = `${baseUrl}/auth/verify?token=${token}`
 
       await sendMagicLinkEmail(email, magicLink, name)
 
@@ -87,8 +87,10 @@ export async function POST(request: Request) {
     // Generate magic link
     const protocol = request.headers.get('x-forwarded-proto') || 'https'
     const host = request.headers.get('host') || 'bolaxo.com'
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
-    const magicLink = `${baseUrl}/api/auth/magic-link/verify?token=${token}`
+    let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
+    // Ta bort trailing slash om den finns
+    baseUrl = baseUrl.replace(/\/$/, '')
+    const magicLink = `${baseUrl}/auth/verify?token=${token}`
 
     // Send magic link email
     const emailResult = await sendMagicLinkEmail(email, magicLink, name)

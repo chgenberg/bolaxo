@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     let baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${protocol}://${host}`
     // Ta bort trailing slash om den finns
     baseUrl = baseUrl.replace(/\/$/, '')
-    const magicLink = `${baseUrl}/api/auth/magic-link/verify?token=${token}`
+    const magicLink = `${baseUrl}/auth/verify?token=${token}`
 
     // Skicka email via Sendinblue (Brevo)
     const emailResult = await sendMagicLinkEmail(email, magicLink, user.name || 'där')
