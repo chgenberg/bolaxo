@@ -70,9 +70,13 @@ export async function GET(request: Request) {
     // Skapa full URL för redirect
     const fullRedirectUrl = new URL(redirectUrl, baseUrl)
 
-    // Sätt session cookies först med cookies() helper
-    const cookieStore = await cookies()
-    cookieStore.set('bolaxo_user_id', user.id, {
+    // Skapa redirect response FÖRST
+    const response = NextResponse.redirect(fullRedirectUrl, {
+      status: 302,
+    })
+
+    // Sätt cookies PÅ response-objektet så de skickas med redirecten
+    response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -80,7 +84,7 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    cookieStore.set('bolaxo_user_email', user.email, {
+    response.cookies.set('bolaxo_user_email', user.email, {
       httpOnly: false, // Behöver läsas client-side
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -88,7 +92,7 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    cookieStore.set('bolaxo_user_role', user.role, {
+    response.cookies.set('bolaxo_user_role', user.role, {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -96,10 +100,7 @@ export async function GET(request: Request) {
       path: '/'
     })
 
-    // Nu redirect efter cookies är satta
-    return NextResponse.redirect(fullRedirectUrl, {
-      status: 302,
-    })
+    return response
 
   } catch (error) {
     console.error('Magic link verify error:', error)
