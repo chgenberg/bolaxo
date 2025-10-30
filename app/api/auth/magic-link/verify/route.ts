@@ -106,10 +106,11 @@ export async function GET(request: Request) {
     })
 
     // Sätt cookies PÅ response-objektet (redirect response)
+    // Use 'none' for sameSite to allow cookies across redirects, but only with secure
     response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
       secure: useSecure,
-      sameSite: 'lax',
+      sameSite: useSecure ? 'none' : 'lax', // Use 'none' for HTTPS to allow cross-site cookies
       maxAge: 60 * 60 * 24 * 30, // 30 dagar
       path: '/',
     })
@@ -117,7 +118,7 @@ export async function GET(request: Request) {
     response.cookies.set('bolaxo_user_email', user.email, {
       httpOnly: false, // Behöver läsas client-side
       secure: useSecure,
-      sameSite: 'lax',
+      sameSite: useSecure ? 'none' : 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
     })
@@ -125,7 +126,7 @@ export async function GET(request: Request) {
     response.cookies.set('bolaxo_user_role', user.role, {
       httpOnly: false,
       secure: useSecure,
-      sameSite: 'lax',
+      sameSite: useSecure ? 'none' : 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
     })
