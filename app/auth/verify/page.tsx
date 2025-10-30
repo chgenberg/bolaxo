@@ -1,106 +1,29 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 function VerifyContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams?.get('token')
-  const [error, setError] = useState<string | null>(null)
-  const [status, setStatus] = useState<string>('Verifierar din inloggning...')
 
   useEffect(() => {
     if (!token) {
-      setError('Ingen token hittades')
-      setTimeout(() => {
-        router.push('/login?error=invalid_token')
-      }, 2000)
+      router.push('/login?error=invalid_token')
       return
     }
 
-    // Verify token and set cookies via API
-    const verifyAndLogin = async () => {
-      try {
-        setStatus('Kontrollerar token...')
-        
-        const response = await fetch(`/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`, {
-          method: 'GET',
-          credentials: 'include', // Important: include cookies
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-
-        console.log('Verify response status:', response.status)
-        console.log('Verify response ok:', response.ok)
-
-        if (response.ok) {
-          const data = await response.json()
-          console.log('Verify success, data:', data)
-          
-          setStatus('Loggar in...')
-          
-          // Check if cookies are set (note: httpOnly cookies won't show in document.cookie)
-          // But we can check for non-httpOnly cookies
-          const cookies = document.cookie
-          console.log('Cookies after API call:', cookies)
-          
-          const userRoleCookie = cookies.split('; ').find(row => row.startsWith('bolaxo_user_role='))
-          
-          console.log('User Role cookie:', userRoleCookie)
-          
-          // Even if httpOnly cookie isn't visible, if API returned success, cookies should be set
-          // Wait a bit longer to ensure cookies are persisted
-          setTimeout(() => {
-            console.log('Redirecting to:', data.redirectUrl || '/dashboard')
-            
-            // Set flag in sessionStorage to trigger auth refresh after redirect
-            if (typeof window !== 'undefined') {
-              sessionStorage.setItem('from_magic_link', 'true')
-            }
-            
-            // Force full page reload - this will trigger AuthContext to check cookies
-            window.location.href = data.redirectUrl || '/dashboard'
-          }, 1000) // Longer delay to ensure cookies are set
-        } else {
-          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
-          console.error('Verify failed:', errorData)
-          setError(errorData.error || 'Invalid token')
-          setTimeout(() => {
-            router.push('/login?error=invalid_token')
-          }, 3000)
-        }
-      } catch (error) {
-        console.error('Verify error:', error)
-        setError(`Något gick fel: ${error instanceof Error ? error.message : 'Okänt fel'}`)
-        setTimeout(() => {
-          router.push('/login?error=server_error')
-        }, 3000)
-      }
-    }
-
-    verifyAndLogin()
+    // API endpoint now does server-side redirect with cookies
+    // Just redirect to API endpoint which will handle everything
+    window.location.href = `/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`
   }, [token, router])
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center max-w-md px-4">
-          <div className="w-12 h-12 border-4 border-red-500 rounded-full mx-auto mb-4"></div>
-          <p className="text-red-600 mb-4 font-semibold">{error}</p>
-          <p className="text-gray-600 text-sm">Redirectar till inloggning...</p>
-          <p className="text-gray-400 text-xs mt-2">Token: {token?.substring(0, 20)}...</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center">
         <div className="w-12 h-12 border-4 border-primary-navy border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-gray-600">{status}</p>
+        <p className="text-gray-600">Verifierar din inloggning...</p>
         {token && (
           <p className="text-gray-400 text-xs mt-2">Token: {token.substring(0, 20)}...</p>
         )}

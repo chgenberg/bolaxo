@@ -83,24 +83,29 @@ export async function GET(request: Request) {
     const fullRedirectUrl = new URL(redirectUrl, baseUrl)
 
     // I production SKA secure vara true för HTTPS
+    // Always use secure for HTTPS, check host header
     const isProduction = process.env.NODE_ENV === 'production' || baseUrl.includes('bolaxo.com')
+    const isSecure = protocol === 'https' || baseUrl.includes('https://')
+    const useSecure = isProduction || isSecure
 
-    // Returnera JSON response med cookies istället för redirect
-    // Client-side kommer att hantera redirecten efter cookies är satta
-    const response = NextResponse.json({
-      success: true,
-      redirectUrl: redirectUrl,
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      }
+    console.log('🔐 [MAGIC LINK VERIFY] Cookie settings:', {
+      isProduction,
+      isSecure,
+      useSecure,
+      protocol,
+      host,
+      baseUrl
     })
 
-    // Sätt cookies PÅ response-objektet
+    // Create response with redirect - cookies will be set on redirect response
+    const response = NextResponse.redirect(fullRedirectUrl, {
+      status: 302,
+    })
+
+    // Sätt cookies PÅ response-objektet (redirect response)
     response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
-      secure: isProduction,
+      secure: useSecure, // Always secure for HTTPS
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 dagar
       path: '/',
@@ -108,7 +113,7 @@ export async function GET(request: Request) {
 
     response.cookies.set('bolaxo_user_email', user.email, {
       httpOnly: false, // Behöver läsas client-side
-      secure: isProduction,
+      secure: useSecure,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
@@ -116,7 +121,7 @@ export async function GET(request: Request) {
 
     response.cookies.set('bolaxo_user_role', user.role, {
       httpOnly: false,
-      secure: isProduction,
+      secure: useSecure,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
@@ -124,12 +129,13 @@ export async function GET(request: Request) {
 
     console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set, redirecting to:', redirectUrl)
     console.log('✅ [MAGIC LINK VERIFY] Production mode:', isProduction)
+    console.log('✅ [MAGIC LINK VERIFY] Use secure cookies:', useSecure)
     console.log('✅ [MAGIC LINK VERIFY] User role:', user.role)
     console.log('✅ [MAGIC LINK VERIFY] Cookies set:', {
       bolaxo_user_id: user.id.substring(0, 10) + '...',
       bolaxo_user_email: user.email,
       bolaxo_user_role: user.role,
-      secure: isProduction,
+      secure: useSecure,
       sameSite: 'lax'
     })
 
