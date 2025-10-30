@@ -15,8 +15,8 @@ export default function Footer() {
   return (
     <footer className="bg-primary-navy text-white">
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-8 mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
           {/* Company Info */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-6">
@@ -25,15 +25,15 @@ export default function Footer() {
                 alt="BOLAXO" 
                 width={130} 
                 height={40}
-                className="h-8 w-auto brightness-0 invert"
+                className="h-10 md:h-8 w-auto brightness-0 invert"
               />
             </Link>
-            <p className="text-gray-300 text-sm leading-relaxed mb-6">
+            <p className="text-gray-300 text-base md:text-sm leading-relaxed mb-6">
               Sveriges moderna marknadsplats för företagsöverlåtelser. Vi förenar säljare och köpare med smarta matchningar och säker process.
             </p>
             
             {/* Contact Info */}
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 text-base md:text-sm">
               <a href="tel:+46812345678" className="flex items-center gap-3 text-gray-300 hover:text-accent-pink transition-colors">
                 <Phone className="w-4 h-4 flex-shrink-0" />
                 <span>+46 (0)8 123 456 78</span>
@@ -51,38 +51,38 @@ export default function Footer() {
 
           {/* För säljare */}
           <div>
-            <h3 className="text-white font-bold text-base mb-6">För säljare</h3>
+            <h3 className="text-white font-bold text-lg md:text-base mb-6">För säljare</h3>
             <ul className="space-y-3">
-              <li><Link href="/vardering" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Gratis värdering</Link></li>
-              <li><Link href="/salja" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Så funkar det</Link></li>
-              <li><Link href="/salja/start" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Börja sälja</Link></li>
-              <li><Link href="/saljare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Sälja i din stad</Link></li>
-              <li><Link href="/priser" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Priser & paket</Link></li>
-              <li><Link href="/faq" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">FAQ</Link></li>
+              <li><Link href="/vardering" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Gratis värdering</Link></li>
+              <li><Link href="/salja" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Så funkar det</Link></li>
+              <li><Link href="/salja/start" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Börja sälja</Link></li>
+              <li><Link href="/saljare" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Sälja i din stad</Link></li>
+              <li><Link href="/priser" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Priser & paket</Link></li>
+              <li><Link href="/faq" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">FAQ</Link></li>
             </ul>
           </div>
 
           {/* För köpare */}
           <div>
-            <h3 className="text-white font-bold text-base mb-6">För köpare</h3>
+            <h3 className="text-white font-bold text-lg md:text-base mb-6">För köpare</h3>
             <ul className="space-y-3">
-              <li><Link href="/sok" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Sök företag</Link></li>
-              <li><Link href="/kopare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Så funkar det</Link></li>
-              <li><Link href="/kopare/start" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Skapa konto</Link></li>
-              <li><Link href="/kopare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Köp i din stad</Link></li>
-              <li><Link href="/success-stories" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Framgångshistorier</Link></li>
-              <li><Link href="/blogg" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Blogg</Link></li>
+              <li><Link href="/sok" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Sök företag</Link></li>
+              <li><Link href="/kopare" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Så funkar det</Link></li>
+              <li><Link href="/kopare/start" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Skapa konto</Link></li>
+              <li><Link href="/kopare" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Köp i din stad</Link></li>
+              <li><Link href="/success-stories" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Framgångshistorier</Link></li>
+              <li><Link href="/blogg" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Blogg</Link></li>
             </ul>
           </div>
 
           {/* Om oss */}
           <div>
-            <h3 className="text-white font-bold text-base mb-6">Om oss</h3>
+            <h3 className="text-white font-bold text-lg md:text-base mb-6">Om oss</h3>
             <ul className="space-y-3">
-              <li><Link href="/om-oss" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Vårt företag</Link></li>
-              <li><Link href="/for-maklare" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">För mäklare</Link></li>
-              <li><Link href="/investor" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">För investerare</Link></li>
-              <li><Link href="/kontakt" className="text-gray-300 text-sm hover:text-accent-pink transition-colors">Kontakt</Link></li>
+              <li><Link href="/om-oss" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Vårt företag</Link></li>
+              <li><Link href="/for-maklare" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">För mäklare</Link></li>
+              <li><Link href="/investor" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">För investerare</Link></li>
+              <li><Link href="/kontakt" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Kontakt</Link></li>
             </ul>
           </div>
         </div>
