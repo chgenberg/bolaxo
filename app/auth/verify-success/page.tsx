@@ -9,11 +9,36 @@ function VerifySuccessContent() {
   const redirectUrl = searchParams?.get('redirect') || '/dashboard'
 
   useEffect(() => {
+    // Check if cookies are set
+    const checkCookies = () => {
+      const cookies = document.cookie
+      const hasUserId = cookies.includes('bolaxo_user_id=')
+      const hasUserRole = cookies.includes('bolaxo_user_role=')
+      
+      console.log('🍪 [VERIFY SUCCESS] Checking cookies:', {
+        cookies: cookies.substring(0, 200),
+        hasUserId,
+        hasUserRole
+      })
+      
+      return hasUserId && hasUserRole
+    }
+
     // Wait a moment to ensure cookies are set, then redirect
     const timer = setTimeout(() => {
-      console.log('🔄 [VERIFY SUCCESS] Redirecting to:', redirectUrl)
-      // Force full page reload to ensure cookies are read
-      window.location.href = redirectUrl
+      const cookiesSet = checkCookies()
+      
+      if (cookiesSet) {
+        console.log('✅ [VERIFY SUCCESS] Cookies found, redirecting to:', redirectUrl)
+        // Force full page reload to ensure cookies are read
+        window.location.href = redirectUrl
+      } else {
+        console.warn('⚠️ [VERIFY SUCCESS] Cookies not found, retrying...')
+        // Retry after another delay
+        setTimeout(() => {
+          window.location.href = redirectUrl
+        }, 1000)
+      }
     }, 500)
 
     return () => clearTimeout(timer)
