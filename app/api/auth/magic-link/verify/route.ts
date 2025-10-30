@@ -96,6 +96,7 @@ export async function GET(request: Request) {
 
     // Create HTML page that sets cookies via JavaScript and then redirects
     // This ensures cookies are set before redirect
+    // Note: httpOnly cookies can't be set via JS, so we use Set-Cookie headers for those
     const html = `
       <!DOCTYPE html>
       <html>
@@ -105,8 +106,8 @@ export async function GET(request: Request) {
         </head>
         <body>
           <script>
-            // Set cookies via JavaScript
-            document.cookie = 'bolaxo_user_id=${user.id}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
+            // Set non-httpOnly cookies via JavaScript
+            // httpOnly cookies are set via Set-Cookie headers below
             document.cookie = 'bolaxo_user_email=${encodeURIComponent(user.email)}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
             document.cookie = 'bolaxo_user_role=${user.role}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
             
@@ -141,7 +142,8 @@ export async function GET(request: Request) {
       },
     })
 
-    // Also try to set cookies via Set-Cookie headers (backup)
+    // Set ALL cookies via Set-Cookie headers (primary method)
+    // httpOnly cookies MUST be set via headers
     response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
       secure: useSecure,
