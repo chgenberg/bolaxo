@@ -116,7 +116,7 @@ export async function GET(request: Request) {
     return response
 
   } catch (error) {
-    console.error('Magic link verify error:', error)
+    console.error('❌ [MAGIC LINK VERIFY] Error:', error)
     return NextResponse.json(
       { success: false, error: 'Server error' },
       { status: 500 }
