@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePaymentStore, UserRole } from '@/store/paymentStore'
-import { Building, Search, ArrowRight, Mail, Handshake } from 'lucide-react'
+import { Building, Search, ArrowRight, Mail, Handshake, AlertCircle } from 'lucide-react'
 import { LAUNCH_CONFIG } from '@/lib/launch-config'
 
 export default function RegisterPage() {
