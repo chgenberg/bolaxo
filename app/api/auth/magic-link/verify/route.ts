@@ -83,18 +83,18 @@ export async function GET(request: Request) {
     const fullRedirectUrl = new URL(redirectUrl, baseUrl)
 
     // I production SKA secure vara true för HTTPS
-    // Always use secure for HTTPS, check host header
-    const isProduction = process.env.NODE_ENV === 'production' || baseUrl.includes('bolaxo.com')
-    const isSecure = protocol === 'https' || baseUrl.includes('https://')
-    const useSecure = isProduction || isSecure
+    // Always use secure for HTTPS - check protocol header
+    const isHttps = protocol === 'https' || baseUrl.startsWith('https://')
+    // Always use secure cookies for HTTPS, and in production
+    const useSecure = isHttps || process.env.NODE_ENV === 'production' || baseUrl.includes('bolaxo.com')
 
     console.log('🔐 [MAGIC LINK VERIFY] Cookie settings:', {
-      isProduction,
-      isSecure,
-      useSecure,
       protocol,
+      isHttps,
+      useSecure,
       host,
-      baseUrl
+      baseUrl,
+      nodeEnv: process.env.NODE_ENV
     })
 
     // Create response with redirect - cookies will be set on redirect response
@@ -128,15 +128,16 @@ export async function GET(request: Request) {
     })
 
     console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set, redirecting to:', redirectUrl)
-    console.log('✅ [MAGIC LINK VERIFY] Production mode:', isProduction)
     console.log('✅ [MAGIC LINK VERIFY] Use secure cookies:', useSecure)
+    console.log('✅ [MAGIC LINK VERIFY] Protocol:', protocol)
     console.log('✅ [MAGIC LINK VERIFY] User role:', user.role)
     console.log('✅ [MAGIC LINK VERIFY] Cookies set:', {
       bolaxo_user_id: user.id.substring(0, 10) + '...',
       bolaxo_user_email: user.email,
       bolaxo_user_role: user.role,
       secure: useSecure,
-      sameSite: 'lax'
+      sameSite: 'lax',
+      maxAge: '30 days'
     })
 
     return response
