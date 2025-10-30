@@ -41,17 +41,22 @@ function VerifyContent() {
           
           setStatus('Loggar in...')
           
-          // Check if cookies are set
+          // Check if cookies are set (note: httpOnly cookies won't show in document.cookie)
+          // But we can check for non-httpOnly cookies
           const cookies = document.cookie
           console.log('Cookies after API call:', cookies)
           
-          // Cookies should now be set via Set-Cookie headers
-          // Give browser a moment to set cookies, then redirect
+          const userRoleCookie = cookies.split('; ').find(row => row.startsWith('bolaxo_user_role='))
+          
+          console.log('User Role cookie:', userRoleCookie)
+          
+          // Even if httpOnly cookie isn't visible, if API returned success, cookies should be set
+          // Wait a bit longer to ensure cookies are persisted
           setTimeout(() => {
-            // Use window.location.href for full page reload to ensure cookies are read
             console.log('Redirecting to:', data.redirectUrl || '/dashboard')
+            // Force full page reload - this will trigger AuthContext to check cookies
             window.location.href = data.redirectUrl || '/dashboard'
-          }, 500) // Increased delay to ensure cookies are set
+          }, 1000) // Longer delay to ensure cookies are set
         } else {
           const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
           console.error('Verify failed:', errorData)
