@@ -79,9 +79,6 @@ export async function GET(request: Request) {
       redirectUrl = '/dashboard/deals' // Mina affärer (overview)
     }
 
-    // Skapa full URL för redirect
-    const fullRedirectUrl = new URL(redirectUrl, baseUrl)
-
     // I production SKA secure vara true för HTTPS
     // Always use secure for HTTPS - check protocol header
     const isHttps = protocol === 'https' || baseUrl.startsWith('https://')
@@ -97,15 +94,21 @@ export async function GET(request: Request) {
       nodeEnv: process.env.NODE_ENV
     })
 
-    // Create response with redirect - cookies will be set on redirect response
-    const response = NextResponse.redirect(fullRedirectUrl, {
+    // Redirect to success page first, then redirect to dashboard
+    // This ensures cookies are set before final redirect
+    const successUrl = new URL('/auth/verify-success', baseUrl)
+    successUrl.searchParams.set('redirect', redirectUrl)
+    successUrl.searchParams.set('user', user.id)
+
+    // Create response with redirect to success page
+    const response = NextResponse.redirect(successUrl, {
       status: 302,
     })
 
     // Sätt cookies PÅ response-objektet (redirect response)
     response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
-      secure: useSecure, // Always secure for HTTPS
+      secure: useSecure,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 dagar
       path: '/',
@@ -127,7 +130,7 @@ export async function GET(request: Request) {
       path: '/',
     })
 
-    console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set, redirecting to:', redirectUrl)
+    console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set, redirecting to success page')
     console.log('✅ [MAGIC LINK VERIFY] Use secure cookies:', useSecure)
     console.log('✅ [MAGIC LINK VERIFY] Protocol:', protocol)
     console.log('✅ [MAGIC LINK VERIFY] User role:', user.role)
