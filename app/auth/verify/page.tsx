@@ -15,7 +15,8 @@ function VerifyContent() {
     }
 
     // API endpoint now does server-side redirect with cookies
-    // Just redirect to API endpoint which will handle everything
+    // Direct redirect to API endpoint - cookies will be set on redirect response
+    console.log('🔄 [VERIFY PAGE] Redirecting to API endpoint with token:', token.substring(0, 20) + '...')
     window.location.href = `/api/auth/magic-link/verify?token=${encodeURIComponent(token)}`
   }, [token, router])
 
