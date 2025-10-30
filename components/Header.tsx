@@ -261,14 +261,22 @@ export default function Header() {
       </nav>
 
       {/* Mobile Menu */}
-      <div className={`lg:hidden fixed inset-x-0 top-16 bottom-0 bg-black/50 backdrop-blur-sm transition-all duration-300 ${
-        isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-      }`} onClick={() => setIsMenuOpen(false)}>
+      <div className={`lg:hidden fixed inset-0 z-50 ${
+        isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
+      }`}>
+        {/* Overlay */}
         <div 
-          className={`bg-white w-full max-w-sm h-full overflow-y-auto transform transition-transform duration-300 ${
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+            isMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`} 
+          onClick={() => setIsMenuOpen(false)}
+        />
+        
+        {/* Menu Panel */}
+        <div 
+          className={`absolute top-0 left-0 w-full max-w-sm h-full bg-white shadow-2xl transform transition-transform duration-300 ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
-          onClick={(e) => e.stopPropagation()}
         >
           <div className="p-6 space-y-6">
             {/* Mobile navigation */}

@@ -11,7 +11,9 @@ export default function ReferralCard({ referralCode }: ReferralCardProps) {
   const [copied, setCopied] = useState(false);
   const [referralCount, setReferralCount] = useState(0);
   
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://bolaxo-production.up.railway.app';
+  const baseUrl = typeof window !== 'undefined'
+    ? window.location.origin
+    : (process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com');
   const referralLink = `${baseUrl}/login?ref=${referralCode}`;
 
   useEffect(() => {
