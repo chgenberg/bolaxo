@@ -85,7 +85,6 @@ export async function GET(request: Request) {
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 dagar
       path: '/',
-      domain: isProduction ? '.bolaxo.com' : undefined, // Sätt domain för production
     })
 
     response.cookies.set('bolaxo_user_email', user.email, {
@@ -94,7 +93,6 @@ export async function GET(request: Request) {
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
-      domain: isProduction ? '.bolaxo.com' : undefined,
     })
 
     response.cookies.set('bolaxo_user_role', user.role, {
@@ -103,7 +101,6 @@ export async function GET(request: Request) {
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
-      domain: isProduction ? '.bolaxo.com' : undefined,
     })
 
     return response
