@@ -265,7 +265,7 @@ export default function Header() {
         isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
       }`} onClick={() => setIsMenuOpen(false)}>
         <div 
-          className={`bg-white h-full overflow-y-auto transform transition-transform duration-300 ${
+          className={`bg-white w-full max-w-sm h-full overflow-y-auto transform transition-transform duration-300 ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
           onClick={(e) => e.stopPropagation()}
