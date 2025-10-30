@@ -94,31 +94,66 @@ export async function GET(request: Request) {
       nodeEnv: process.env.NODE_ENV
     })
 
-    // Redirect to success page first, then redirect to dashboard
-    // This ensures cookies are set before final redirect
-    const successUrl = new URL('/auth/verify-success', baseUrl)
-    successUrl.searchParams.set('redirect', redirectUrl)
-    successUrl.searchParams.set('user', user.id)
+    // Create HTML page that sets cookies via JavaScript and then redirects
+    // This ensures cookies are set before redirect
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>Loggar in...</title>
+        </head>
+        <body>
+          <script>
+            // Set cookies via JavaScript
+            document.cookie = 'bolaxo_user_id=${user.id}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
+            document.cookie = 'bolaxo_user_email=${encodeURIComponent(user.email)}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
+            document.cookie = 'bolaxo_user_role=${user.role}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
+            
+            console.log('🍪 [VERIFY] Cookies set via JavaScript');
+            console.log('🍪 [VERIFY] Cookies:', document.cookie);
+            
+            // Wait a moment then redirect
+            setTimeout(() => {
+              console.log('🔄 [VERIFY] Redirecting to:', '${redirectUrl}');
+              window.location.href = '${redirectUrl}';
+            }, 500);
+          </script>
+          <div style="display: flex; align-items: center; justify-content: center; height: 100vh; font-family: system-ui;">
+            <div style="text-align: center;">
+              <div style="width: 48px; height: 48px; border: 4px solid #1F3C58; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+              <p style="color: #666;">Loggar in...</p>
+            </div>
+          </div>
+          <style>
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
+        </body>
+      </html>
+    `
 
-    // Create response with redirect to success page
-    const response = NextResponse.redirect(successUrl, {
-      status: 302,
+    const response = new NextResponse(html, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html',
+      },
     })
 
-    // Sätt cookies PÅ response-objektet (redirect response)
-    // Use 'none' for sameSite to allow cookies across redirects, but only with secure
+    // Also try to set cookies via Set-Cookie headers (backup)
     response.cookies.set('bolaxo_user_id', user.id, {
       httpOnly: true,
       secure: useSecure,
-      sameSite: useSecure ? 'none' : 'lax', // Use 'none' for HTTPS to allow cross-site cookies
-      maxAge: 60 * 60 * 24 * 30, // 30 dagar
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30,
       path: '/',
     })
 
     response.cookies.set('bolaxo_user_email', user.email, {
-      httpOnly: false, // Behöver läsas client-side
+      httpOnly: false,
       secure: useSecure,
-      sameSite: useSecure ? 'none' : 'lax',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
     })
@@ -126,23 +161,15 @@ export async function GET(request: Request) {
     response.cookies.set('bolaxo_user_role', user.role, {
       httpOnly: false,
       secure: useSecure,
-      sameSite: useSecure ? 'none' : 'lax',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
     })
 
-    console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set, redirecting to success page')
+    console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set via HTML + headers')
     console.log('✅ [MAGIC LINK VERIFY] Use secure cookies:', useSecure)
     console.log('✅ [MAGIC LINK VERIFY] Protocol:', protocol)
     console.log('✅ [MAGIC LINK VERIFY] User role:', user.role)
-    console.log('✅ [MAGIC LINK VERIFY] Cookies set:', {
-      bolaxo_user_id: user.id.substring(0, 10) + '...',
-      bolaxo_user_email: user.email,
-      bolaxo_user_role: user.role,
-      secure: useSecure,
-      sameSite: 'lax',
-      maxAge: '30 days'
-    })
 
     return response
 
@@ -154,4 +181,3 @@ export async function GET(request: Request) {
     )
   }
 }
-
