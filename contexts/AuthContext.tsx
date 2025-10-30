@@ -70,10 +70,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         credentials: 'include', // Important: include cookies
         cache: 'no-store', // Don't cache auth check
       })
+      
+      console.log('🔍 [AUTH] /api/auth/me response status:', response.status)
+      
       if (response.ok) {
         const data = await response.json()
+        console.log('🔍 [AUTH] User data:', data.user ? { email: data.user.email, role: data.user.role } : 'null')
         setUser(data.user)
       } else {
+        console.log('❌ [AUTH] /api/auth/me failed:', response.status)
         setUser(null)
       }
     } catch (error) {
