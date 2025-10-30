@@ -18,9 +18,10 @@ export async function GET(request: Request) {
     const token = searchParams.get('token')
 
     if (!token) {
-      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl), {
-        status: 302,
-      })
+      return NextResponse.json(
+        { success: false, error: 'Invalid token' },
+        { status: 400 }
+      )
     }
 
     // Hitta användare med token
@@ -29,16 +30,18 @@ export async function GET(request: Request) {
     })
 
     if (!user) {
-      return NextResponse.redirect(new URL('/login?error=invalid_token', baseUrl), {
-        status: 302,
-      })
+      return NextResponse.json(
+        { success: false, error: 'Invalid token' },
+        { status: 400 }
+      )
     }
 
     // Kolla om token har gått ut
     if (!user.tokenExpiresAt || user.tokenExpiresAt < new Date()) {
-      return NextResponse.redirect(new URL('/login?error=expired_token', baseUrl), {
-        status: 302,
-      })
+      return NextResponse.json(
+        { success: false, error: 'Token expired' },
+        { status: 400 }
+      )
     }
 
     // Generera referral code om användaren inte redan har en
@@ -114,11 +117,10 @@ export async function GET(request: Request) {
 
   } catch (error) {
     console.error('Magic link verify error:', error)
-    // Fallback till production URL vid error
-    const errorBaseUrl = process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, '') || 'https://bolaxo.com'
-    return NextResponse.redirect(new URL('/login?error=server_error', errorBaseUrl), {
-      status: 302,
-    })
+    return NextResponse.json(
+      { success: false, error: 'Server error' },
+      { status: 500 }
+    )
   }
 }
 
