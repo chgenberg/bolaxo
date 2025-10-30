@@ -6,7 +6,6 @@ import CookieConsent from '@/components/CookieConsent'
 import ChatWidget from '@/components/ChatWidget'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { ToastProvider } from '@/contexts/ToastContext'
-import PasswordProtection from '@/components/PasswordProtection'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 export const metadata: Metadata = {
@@ -28,19 +27,17 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <ErrorBoundary>
-          <PasswordProtection>
-            <AuthProvider>
-              <ToastProvider>
-                <Header />
-                <div className="pt-16">
-                  {children}
-                </div>
-                <Footer />
-                <CookieConsent />
-                <ChatWidget />
-              </ToastProvider>
-            </AuthProvider>
-          </PasswordProtection>
+          <AuthProvider>
+            <ToastProvider>
+              <Header />
+              <div className="pt-16">
+                {children}
+              </div>
+              <Footer />
+              <CookieConsent />
+              <ChatWidget />
+            </ToastProvider>
+          </AuthProvider>
         </ErrorBoundary>
       </body>
     </html>
