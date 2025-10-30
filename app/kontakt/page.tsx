@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import FormField from '@/components/FormField'
-import { Mail, Phone, MapPin, Send, MessageCircle, Clock, ArrowRight } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, MessageCircle, Clock, ArrowRight, ChevronDown } from 'lucide-react'
 
 interface ContactFormData {
   name: string
@@ -12,6 +12,13 @@ interface ContactFormData {
   message: string
   interest: 'buying' | 'selling' | 'partnership' | 'other'
 }
+
+const interestOptions = [
+  { value: 'buying', label: 'Jag vill köpa', icon: '🛒' },
+  { value: 'selling', label: 'Jag vill sälja', icon: '💰' },
+  { value: 'partnership', label: 'Samarbete/Partnership', icon: '🤝' },
+  { value: 'other', label: 'Övrigt', icon: '💬' },
+]
 
 export default function ContactPage() {
   const [formData, setFormData] = useState<ContactFormData>({
@@ -24,6 +31,20 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,6 +53,8 @@ export default function ContactPage() {
     setIsSubmitting(false)
     setSubmitted(true)
   }
+
+  const selectedInterest = interestOptions.find(opt => opt.value === formData.interest)
 
   if (submitted) {
     return (
@@ -84,8 +107,8 @@ export default function ContactPage() {
                 <Mail className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold text-primary-navy mb-1">E-post</h3>
-                  <a href="mailto:hej@bolagsplatsen.se" className="text-gray-700 hover:text-accent-pink transition-colors">
-                    hej@bolagsplatsen.se
+                  <a href="mailto:hej@bolaxo.com" className="text-gray-700 hover:text-accent-pink transition-colors">
+                    hej@bolaxo.com
                   </a>
                 </div>
               </div>
@@ -129,55 +152,89 @@ export default function ContactPage() {
           <form onSubmit={handleSubmit} className="lg:col-span-2 bg-neutral-off-white p-10 rounded-lg border border-gray-200">
             <div className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <FormField
-                  label="Namn *"
-                  type="text"
-                  value={formData.name}
-                  onValueChange={(val) => setFormData({...formData, name: val})}
-                  placeholder="Ditt namn"
-                  required
-                />
-                <FormField
-                  label="E-post *"
-                  type="email"
-                  value={formData.email}
-                  onValueChange={(val) => setFormData({...formData, email: val})}
-                  placeholder="din@epost.se"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <FormField
-                  label="Telefon"
-                  type="tel"
-                  value={formData.phone || ''}
-                  onValueChange={(val) => setFormData({...formData, phone: val})}
-                  placeholder="070-123 45 67"
-                />
                 <div>
-                  <label className="block text-sm font-semibold text-primary-navy mb-2">Intresse *</label>
-                  <select
-                    value={formData.interest}
-                    onChange={(e) => setFormData({...formData, interest: e.target.value as any})}
-                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-primary-navy focus:outline-none focus:ring-2 focus:ring-accent-pink"
-                  >
-                    <option value="buying">Jag vill köpa</option>
-                    <option value="selling">Jag vill sälja</option>
-                    <option value="partnership">Samarbete/Partnership</option>
-                    <option value="other">Övrigt</option>
-                  </select>
+                  <label className="block text-sm font-semibold text-primary-navy mb-2">Namn *</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    placeholder="Ditt namn"
+                    required
+                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-primary-navy mb-2">E-post *</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    placeholder="din@epost.se"
+                    required
+                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
+                  />
                 </div>
               </div>
 
-              <FormField
-                label="Ämne *"
-                type="text"
-                value={formData.subject}
-                onValueChange={(val) => setFormData({...formData, subject: val})}
-                placeholder="Vad handlar detta om?"
-                required
-              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-primary-navy mb-2">Telefon</label>
+                  <input
+                    type="tel"
+                    value={formData.phone || ''}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    placeholder="070-123 45 67"
+                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
+                  />
+                </div>
+                <div className="relative" ref={dropdownRef}>
+                  <label className="block text-sm font-semibold text-primary-navy mb-2">Intresse *</label>
+                  <button
+                    type="button"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm flex items-center justify-between hover:border-[#1F3C58]/50"
+                  >
+                    <span className="flex items-center gap-2">
+                      {selectedInterest?.icon && <span>{selectedInterest.icon}</span>}
+                      {selectedInterest?.label}
+                    </span>
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {dropdownOpen && (
+                    <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-lg shadow-lg overflow-hidden">
+                      {interestOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => {
+                            setFormData({...formData, interest: option.value as any})
+                            setDropdownOpen(false)
+                          }}
+                          className={`w-full px-5 py-3 text-left flex items-center gap-3 hover:bg-[#1F3C58]/5 transition-colors ${
+                            formData.interest === option.value ? 'bg-[#1F3C58]/10 font-semibold' : ''
+                          }`}
+                        >
+                          <span className="text-xl">{option.icon}</span>
+                          <span>{option.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-primary-navy mb-2">Ämne *</label>
+                <input
+                  type="text"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                  placeholder="Vad handlar detta om?"
+                  required
+                  className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
+                />
+              </div>
 
               <div>
                 <label className="block text-sm font-semibold text-primary-navy mb-2">Meddelande *</label>
@@ -186,7 +243,7 @@ export default function ContactPage() {
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
                   placeholder="Berätta mer om din fråga..."
                   rows={6}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-primary-navy focus:outline-none focus:ring-2 focus:ring-accent-pink"
+                  className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm resize-none"
                   required
                 />
               </div>
@@ -194,7 +251,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2"
+                className="w-full py-4 px-6 bg-[#1F3C58] text-white font-bold rounded-lg hover:bg-[#1F3C58]/90 transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
               >
                 {isSubmitting ? 'Skickar...' : 'Skicka meddelande'}
                 {!isSubmitting && <ArrowRight className="w-5 h-5" />}
