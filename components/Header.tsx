@@ -122,10 +122,10 @@ export default function Header() {
       scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'
     }`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20 sm:h-16">
+        <div className="flex justify-between items-center h-24 md:h-20 lg:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-3xl sm:text-2xl font-bold tracking-tight text-primary-navy">
+            <span className="text-4xl md:text-3xl lg:text-2xl font-bold tracking-tight text-primary-navy">
               BOLAXO
             </span>
           </Link>
@@ -252,9 +252,10 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="lg:hidden p-3 md:p-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+              {isMenuOpen ? <X className="w-10 h-10 md:w-8 md:h-8" /> : <Menu className="w-10 h-10 md:w-8 md:h-8" />}
             </button>
           </div>
         </div>

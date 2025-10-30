@@ -30,7 +30,7 @@ export default function RootLayout({
           <AuthProvider>
             <ToastProvider>
               <Header />
-              <div className="pt-20 sm:pt-16">
+              <div className="pt-24 md:pt-20 lg:pt-16">
                 {children}
               </div>
               <Footer />
