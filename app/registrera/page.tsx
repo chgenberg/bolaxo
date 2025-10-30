@@ -22,19 +22,19 @@ export default function RegisterPage() {
   // Filter roles based on launch mode
   const availableRoles: Array<{ id: UserRole; label: string; description: string; icon: React.ReactNode }> = [
     {
-      id: 'seller',
+      id: 'seller' as UserRole,
       label: 'Jag vill sälja mitt företag',
       description: 'Gör en gratis värdering och annonsera ditt företag',
       icon: <Building className="w-8 h-8" />
     },
     {
-      id: 'broker',
+      id: 'broker' as UserRole,
       label: 'Jag är mäklare/fastighetsmäklare',
       description: 'Annonsera företag från dina klienter och få provision',
       icon: <Handshake className="w-8 h-8" />
     },
     {
-      id: 'buyer',
+      id: 'buyer' as UserRole,
       label: 'Jag vill köpa ett företag',
       description: 'Sök och hitta företag att förvärva',
       icon: <Search className="w-8 h-8" />
