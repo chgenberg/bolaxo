@@ -4,6 +4,8 @@
  * Set LAUNCH_MODE to true to hide non-core features
  */
 
+import type { UserRole } from '@/store/paymentStore'
+
 export const LAUNCH_CONFIG = {
   // Set to true to enable launch mode (hide non-core features)
   LAUNCH_MODE: true,
@@ -35,7 +37,7 @@ export const LAUNCH_CONFIG = {
   },
 
   // Hide these roles from registration (empty = show all)
-  HIDDEN_ROLES: [],
+  HIDDEN_ROLES: [] as UserRole[],
 
   // Navigation items visibility
   NAVIGATION: {
