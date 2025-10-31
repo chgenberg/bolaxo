@@ -186,7 +186,7 @@ export default function LOIPage() {
                   label="Minimum (MSEK)"
                   name="priceMin"
                   type="number"
-                  placeholder={`Föreslagen: ${object.priceMin ? (object.priceMin / 1000000).toFixed(1) : 'N/A'}`}
+                  placeholder={`Föreslagen: ${object.priceMin && !object.abstainPriceMin ? (object.priceMin / 1000000).toFixed(1) : 'N/A'}`}
                   value={loiData.priceMin}
                   onValueChange={(value) => setLoiData({ ...loiData, priceMin: value })}
                 />
@@ -194,13 +194,22 @@ export default function LOIPage() {
                   label="Maximum (MSEK)"
                   name="priceMax"
                   type="number"
-                  placeholder={`Föreslagen: ${(object.priceMax / 1000000).toFixed(1)}`}
+                  placeholder={`Föreslagen: ${object.priceMax && !object.abstainPriceMax ? (object.priceMax / 1000000).toFixed(1) : 'N/A'}`}
                   value={loiData.priceMax}
                   onValueChange={(value) => setLoiData({ ...loiData, priceMax: value })}
                 />
               </div>
               <p className="text-xs text-text-gray mt-2">
-                Säljares prisidé: {(object.priceMin / 1000000).toFixed(1)}-{(object.priceMax / 1000000).toFixed(1)} MSEK
+                Säljares prisidé: {
+                  object.abstainPriceMin && object.abstainPriceMax ? 
+                    'Pris ej angivet' :
+                  object.abstainPriceMin ? 
+                    `Från ${(object.priceMax / 1000000).toFixed(1)} MSEK` :
+                  object.abstainPriceMax ?
+                    `Upp till ${(object.priceMin / 1000000).toFixed(1)} MSEK` :
+                  object.priceMin && object.priceMax ?
+                    `${(object.priceMin / 1000000).toFixed(1)}-${(object.priceMax / 1000000).toFixed(1)} MSEK`
+                    : 'Ej angivet'}
               </p>
             </div>
 

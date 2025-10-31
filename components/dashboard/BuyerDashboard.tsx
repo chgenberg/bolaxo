@@ -143,7 +143,17 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="text-text-gray">Omsättning: <span className="font-medium text-text-dark">{listing.revenueRange}</span></div>
-                  <div className="text-text-gray">Pris: <span className="font-medium text-primary-blue">{(listing.priceMin / 1000000).toFixed(1)}-{(listing.priceMax / 1000000).toFixed(1)} MSEK</span></div>
+                  <div className="text-text-gray">Pris: <span className="font-medium text-primary-blue">
+                    {listing.abstainPriceMin && listing.abstainPriceMax ? 
+                      'Ej angivet' :
+                    listing.abstainPriceMin ? 
+                      `Från ${(listing.priceMax / 1000000).toFixed(1)} MSEK` :
+                    listing.abstainPriceMax ?
+                      `Upp till ${(listing.priceMin / 1000000).toFixed(1)} MSEK` :
+                    listing.priceMin && listing.priceMax ?
+                      `${(listing.priceMin / 1000000).toFixed(1)}-${(listing.priceMax / 1000000).toFixed(1)} MSEK`
+                      : 'Ej angivet'}
+                  </span></div>
                 </div>
               </Link>
             ))}
@@ -179,7 +189,15 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                       {listing.region}
                     </div>
                     <div className="text-sm text-primary-blue font-medium">
-                      {(listing.priceMin / 1000000).toFixed(1)}-{(listing.priceMax / 1000000).toFixed(1)} MSEK
+                      {listing.abstainPriceMin && listing.abstainPriceMax ? 
+                        'Pris ej angivet' :
+                      listing.abstainPriceMin ? 
+                        `Från ${(listing.priceMax / 1000000).toFixed(1)} MSEK` :
+                      listing.abstainPriceMax ?
+                        `Upp till ${(listing.priceMin / 1000000).toFixed(1)} MSEK` :
+                      listing.priceMin && listing.priceMax ?
+                        `${(listing.priceMin / 1000000).toFixed(1)}-${(listing.priceMax / 1000000).toFixed(1)} MSEK`
+                        : 'Ej angivet'}
                     </div>
                   </div>
                   <Bookmark className="w-5 h-5 text-primary-blue fill-current" />

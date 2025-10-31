@@ -9,6 +9,8 @@ export interface BusinessObject {
   ownerRole: string
   priceMin: number
   priceMax: number
+  abstainPriceMin?: boolean // User opted out of providing min price
+  abstainPriceMax?: boolean // User opted out of providing max price
   description: string
   strengths: string[]
   risks: string[]

@@ -97,6 +97,8 @@ export default function SearchPage() {
             revenueRange: listing.revenueRange,
             priceMin: listing.priceMin,
             priceMax: listing.priceMax,
+            abstainPriceMin: listing.abstainPriceMin || false,
+            abstainPriceMax: listing.abstainPriceMax || false,
             employees: listing.employees?.toString() || '0',
             image: listing.image,
             verified: listing.verified,

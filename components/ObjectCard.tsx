@@ -121,7 +121,19 @@ export default function ObjectCard({ object }: ObjectCardProps) {
 
             {/* Price Chip */}
             <div className="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-primary-blue/10 text-primary-blue rounded-full text-[10px] sm:text-xs font-semibold border border-primary-blue/20 hover:bg-primary-blue/20 transition-colors">
-              💰 {formatCurrency(object.price || object.priceMin)}
+              💰 {(() => {
+                if (object.abstainPriceMin && object.abstainPriceMax) {
+                  return 'Pris ej angivet'
+                } else if (object.abstainPriceMin) {
+                  return `Från ${formatCurrency(object.priceMax || 0)}`
+                } else if (object.abstainPriceMax) {
+                  return `Upp till ${formatCurrency(object.priceMin || 0)}`
+                } else if (object.priceMin && object.priceMax) {
+                  return `${formatCurrency(object.priceMin)}-${formatCurrency(object.priceMax)}`
+                } else {
+                  return formatCurrency(object.price || object.priceMin || 0)
+                }
+              })()}
             </div>
 
             {/* Location Chip */}

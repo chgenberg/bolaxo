@@ -258,7 +258,15 @@ export default function ObjectDetailPage() {
                 <div className="bg-primary-blue/10 rounded-lg sm:rounded-xl p-3 sm:p-4">
                   <div className="text-text-gray text-xs sm:text-sm mb-1 sm:mb-2">Prisidé</div>
                   <div className="text-base sm:text-lg md:text-xl font-bold text-primary-blue">
-                    {(object.priceMin / 1000000).toFixed(1)}-{(object.priceMax / 1000000).toFixed(1)} MSEK
+                    {object.abstainPriceMin && object.abstainPriceMax ? 
+                      'Pris ej angivet' :
+                    object.abstainPriceMin ? 
+                      `Från ${(object.priceMax / 1000000).toFixed(1)} MSEK` :
+                    object.abstainPriceMax ?
+                      `Upp till ${(object.priceMin / 1000000).toFixed(1)} MSEK` :
+                    object.priceMin && object.priceMax ?
+                      `${(object.priceMin / 1000000).toFixed(1)}-${(object.priceMax / 1000000).toFixed(1)} MSEK`
+                      : 'Ej angivet'}
                   </div>
                 </div>
                 <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
