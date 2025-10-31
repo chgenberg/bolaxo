@@ -9,6 +9,13 @@ const secret = new TextEncoder().encode(JWT_SECRET)
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
+  // 0. Ensure root domain has proper path
+  const url = request.nextUrl
+  // This is handled by Next.js automatically, but we ensure consistency
+  if (url.pathname === '' || url.pathname === '/') {
+    // Allow root path to proceed normally
+  }
+
   // 1. CSRF Protection via SameSite cookies (redan satt i auth)
   // Cookies med httpOnly + sameSite='lax' är redan skyddade
   
