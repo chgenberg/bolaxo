@@ -57,6 +57,9 @@ interface ListingData {
   // Step 5: Bilder
   images: string[]
   
+  // Step 6: Paketval
+  packageType: 'basic' | 'pro' | 'enterprise'
+  
   // Step 3: Branschspecifika frågor (dynamic)
   [key: string]: any
 }
@@ -324,7 +327,8 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
     abstainPriceMax: false,
     location: '',
     region: '',
-    images: []
+    images: [],
+    packageType: 'pro' as const
   })
 
   const totalSteps = 7 // Added preview step
@@ -396,7 +400,6 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
           userId: user?.id,
           ...data,
           status: 'active',
-          packageType: 'pro', // Default till Pro-paket
           autoPublish: true
         })
       })
@@ -891,9 +894,9 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 </div>
 
                 {/* Annonsförhandsvisning - detaljerad som objektsidan */}
-                <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
                   {/* Hero Image Section */}
-                  <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-navy to-accent-pink">
+                  <div className="relative h-64 sm:h-80 md:h-96 bg-primary-navy">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center">
                         <Building className="w-20 h-20 text-white/30 mb-4" />
@@ -911,7 +914,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="p-4 sm:p-6 md:p-8">
                     {/* Key Metrics */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
-                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <TrendingUp className="w-4 h-4" />
                           <span className="text-xs sm:text-sm">Omsättning</span>
@@ -920,14 +923,14 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           {data.revenue ? `${parseInt(data.revenue).toLocaleString('sv-SE')} kr` : 'Ej angiven'}
                         </p>
                       </div>
-                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <Users className="w-4 h-4" />
                           <span className="text-xs sm:text-sm">Anställda</span>
-                      </div>
+                        </div>
                         <p className="text-base sm:text-lg font-bold text-navy">{data.employees || 'Ej angiven'}</p>
                       </div>
-                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <Target className="w-4 h-4" />
                           <span className="text-xs sm:text-sm">Marginal</span>
@@ -936,7 +939,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           {data.profitMargin ? `${data.profitMargin}%` : 'Ej angiven'}
                         </p>
                       </div>
-                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
+                      <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <Package className="w-4 h-4" />
                           <span className="text-xs sm:text-sm">Prisintervall</span>
@@ -965,7 +968,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
 
                     {/* Strengths & Risks */}
                     <div className="grid md:grid-cols-2 gap-6 mb-6">
-                      <div>
+                      <div className="bg-green-50 rounded-xl p-4 border border-green-100">
                         <h3 className="text-lg font-bold text-navy mb-3 flex items-center gap-2">
                           <CheckCircle className="w-5 h-5 text-green-500" />
                           Styrkor
@@ -979,7 +982,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           ))}
                         </ul>
                       </div>
-                      <div>
+                      <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
                         <h3 className="text-lg font-bold text-navy mb-3 flex items-center gap-2">
                           <AlertCircle className="w-5 h-5 text-amber-500" />
                           Risker & utmaningar
@@ -999,11 +1002,124 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                       <h3 className="text-lg font-bold text-navy mb-2">Anledning till försäljning</h3>
                       <p className="text-gray-700">{data.whySelling || 'Ej angiven'}</p>
-                      </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Paketval CTA */}
+                <div className="mt-8 space-y-6">
+                  <h3 className="text-xl font-bold text-navy text-center">Välj paket för din annons</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Basic Paket */}
+                    <div className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-blue transition-all duration-200 cursor-pointer group">
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">Basic</h4>
+                      <p className="text-3xl font-bold text-primary-blue mb-1">2 990 kr</p>
+                      <p className="text-sm text-gray-600 mb-4">Engångskostnad • 90 dagar</p>
+                      <ul className="space-y-2 mb-6">
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Publicering i marknadsplats</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Automatisk matchning</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Grundläggande statistik</span>
+                        </li>
+                      </ul>
+                      <button 
+                        onClick={() => {
+                          updateField('packageType', 'basic')
+                          setStep(7)
+                        }}
+                        className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg font-medium group-hover:bg-primary-blue group-hover:text-white transition-all duration-200">
+                        Välj Basic
+                      </button>
+                    </div>
+
+                    {/* Pro Paket */}
+                    <div className="bg-white rounded-xl border-2 border-primary-blue p-6 hover:shadow-lg transition-all duration-200 cursor-pointer group relative">
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-full">POPULÄRAST</span>
                       </div>
-                    )}
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">Pro</h4>
+                      <p className="text-3xl font-bold text-primary-blue mb-1">4 990 kr</p>
+                      <p className="text-sm text-gray-600 mb-4">Engångskostnad • 180 dagar</p>
+                      <ul className="space-y-2 mb-6">
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Allt i Basic</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Topplacering i sökresultat</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Framhävd i nyhetsbrev</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Detaljerad analytics</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Prioriterad support</span>
+                        </li>
+                      </ul>
+                      <button 
+                        onClick={() => {
+                          updateField('packageType', 'pro')
+                          setStep(7)
+                        }}
+                        className="w-full py-2 px-4 bg-primary-blue text-white rounded-lg font-medium hover:bg-primary-dark transition-all duration-200">
+                        Välj Pro
+                      </button>
+                    </div>
+
+                    {/* Enterprise Paket */}
+                    <div className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-blue transition-all duration-200 cursor-pointer group">
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">Enterprise</h4>
+                      <p className="text-3xl font-bold text-primary-blue mb-1">9 990 kr</p>
+                      <p className="text-sm text-gray-600 mb-4">Engångskostnad • Obegränsat</p>
+                      <ul className="space-y-2 mb-6">
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Allt i Pro</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Featured på startsida</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Dedikerad rådgivare</span>
+                        </li>
+                        <li className="flex items-start gap-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span>Obegränsade boosts</span>
+                        </li>
+                      </ul>
+                      <button 
+                        onClick={() => {
+                          updateField('packageType', 'enterprise')
+                          setStep(7)
+                        }}
+                        className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg font-medium group-hover:bg-primary-blue group-hover:text-white transition-all duration-200">
+                        Välj Enterprise
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <p className="text-center text-sm text-gray-600">
+                    Alla paket inkluderar moms. Inga dolda avgifter eller bindningstid.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Step 7: Bekräftelse och publicering */}
             {step === 7 && (
@@ -1018,7 +1134,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
 
                 {/* Paketval */}
                 <div className="bg-gradient-to-br from-accent-pink/10 to-navy/10 rounded-2xl p-6">
-                  <h4 className="text-lg font-bold text-navy mb-4">Valt paket: Pro-annons</h4>
+                  <h4 className="text-lg font-bold text-navy mb-4">Valt paket: {data.packageType === 'basic' ? 'Basic' : data.packageType === 'enterprise' ? 'Enterprise' : 'Pro'}</h4>
                   <div className="grid md:grid-cols-2 gap-4 mb-4">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-5 h-5 text-green-500" />
@@ -1039,12 +1155,17 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-2xl font-bold text-navy">4 990 kr</p>
+                      <p className="text-2xl font-bold text-navy">
+                        {data.packageType === 'basic' ? '2 990 kr' : data.packageType === 'enterprise' ? '9 990 kr' : '4 990 kr'}
+                      </p>
                       <p className="text-sm text-gray-600">Engångskostnad, ingen bindningstid</p>
                     </div>
-                    <Link href="/priser" className="text-accent-pink hover:underline text-sm">
+                    <button 
+                      onClick={() => setStep(6)}
+                      className="text-accent-pink hover:underline text-sm"
+                    >
                       Byt paket
-                    </Link>
+                    </button>
                   </div>
                   </div>
                   
