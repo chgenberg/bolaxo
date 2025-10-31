@@ -15,6 +15,8 @@ interface MultiSelectProps {
   placeholder?: string
   className?: string
   maxDisplay?: number
+  icon?: React.ReactNode
+  label?: string
 }
 
 export default function MultiSelect({ 
@@ -23,7 +25,9 @@ export default function MultiSelect({
   onChange, 
   placeholder = 'Välj alternativ',
   className = '',
-  maxDisplay = 2
+  maxDisplay = 2,
+  icon,
+  label
 }: MultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false)
   const selectRef = useRef<HTMLDivElement>(null)
@@ -73,33 +77,50 @@ export default function MultiSelect({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          w-full px-4 py-3 text-left
+          w-full px-4 py-3
           bg-white border-2 rounded-lg shadow-sm
-          transition-all duration-200 ease-in-out
+          transition-all duration-300 ease-out
           ${isOpen 
-            ? 'border-primary-navy shadow-lg shadow-primary-navy/10' 
-            : 'border-primary-navy/30 hover:border-primary-navy/50'
+            ? 'border-primary-navy shadow-xl shadow-primary-navy/20 scale-[1.02]' 
+            : 'border-primary-navy/30 hover:border-primary-navy/50 hover:shadow-lg'
           }
-          focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/20 focus:shadow-lg
-          flex items-center justify-between gap-2
-          ${selectedOptions.length > 0 ? 'text-text-dark' : 'text-text-gray'}
+          focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/20 focus:shadow-xl
+          group
         `}
       >
-        <span className="truncate flex-1 text-sm sm:text-base">
-          {getDisplayText()}
-        </span>
-        <div className="flex items-center gap-1">
-          {selectedOptions.length > 0 && (
-            <X 
-              onClick={clearAll}
-              className="w-4 h-4 text-text-gray hover:text-error transition-colors"
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            {icon && (
+              <div className={`transition-colors flex-shrink-0 ${isOpen ? 'text-primary-navy' : 'text-text-gray group-hover:text-primary-navy'}`}>
+                {icon}
+              </div>
+            )}
+            <div className="text-left flex-1 min-w-0">
+              {label && (
+                <div className="text-xs text-text-gray mb-0.5">{label}</div>
+              )}
+              <div className={`font-medium transition-colors truncate ${
+                selectedOptions.length > 0 
+                  ? 'text-primary-navy' 
+                  : 'text-text-dark'
+              }`}>
+                {getDisplayText()}
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {selectedOptions.length > 0 && (
+              <X 
+                onClick={clearAll}
+                className="w-4 h-4 text-text-gray hover:text-error transition-colors"
+              />
+            )}
+            <ChevronDown 
+              className={`w-5 h-5 text-text-gray transition-transform duration-200 ${
+                isOpen ? 'transform rotate-180' : ''
+              }`}
             />
-          )}
-          <ChevronDown 
-            className={`w-5 h-5 text-text-gray transition-transform duration-200 ${
-              isOpen ? 'transform rotate-180' : ''
-            }`}
-          />
+          </div>
         </div>
       </button>
 

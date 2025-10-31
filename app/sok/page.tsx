@@ -9,7 +9,7 @@ import ObjectCard from '@/components/ObjectCard'
 import MultiSelect from '@/components/MultiSelect'
 import PriceRangeSlider from '@/components/PriceRangeSlider'
 import AdvancedFilterDropdown from '@/components/AdvancedFilterDropdown'
-import { Search, SlidersHorizontal, ChevronDown, X, TrendingUp, AlertCircle, MapPin, Briefcase, DollarSign, Users, Calendar, Shield, BarChart3, Filter, Zap } from 'lucide-react'
+import { Search, SlidersHorizontal, ChevronDown, X, TrendingUp, AlertCircle, MapPin, Briefcase, DollarSign, Users, Calendar, Shield, BarChart3, Filter, Zap, HelpCircle } from 'lucide-react'
 
 export default function SearchPage() {
   const router = useRouter()
@@ -423,6 +423,8 @@ export default function SearchPage() {
                     {/* Industries Multi-Select */}
                     <div>
                       <MultiSelect
+                        label="Välj branscher"
+                        icon={<Briefcase className="w-4 h-4" />}
                         options={[
                           { value: 'it-konsult-utveckling', label: 'IT-konsult & utveckling' },
                           { value: 'ehandel-d2c', label: 'E-handel/D2C' },
@@ -454,6 +456,8 @@ export default function SearchPage() {
                     {/* Locations Multi-Select */}
                     <div>
                       <MultiSelect
+                        label="Välj platser"
+                        icon={<MapPin className="w-4 h-4" />}
                         options={[
                           { value: 'stockholm-malardalen', label: 'Stockholm & Mälardalen' },
                           { value: 'vastsverige', label: 'Västsverige' },
@@ -524,6 +528,8 @@ export default function SearchPage() {
                     {/* Employees - Multi-Select */}
                     <div>
                       <MultiSelect
+                        label="Antal anställda"
+                        icon={<Users className="w-4 h-4" />}
                         options={[
                           { value: '1-5', label: '1-5 anställda' },
                           { value: '6-10', label: '6-10 anställda' },
@@ -565,6 +571,8 @@ export default function SearchPage() {
                     {/* Why Selling - Multi-Select */}
                     <div>
                       <MultiSelect
+                        label="Anledning till försäljning"
+                        icon={<HelpCircle className="w-4 h-4" />}
                         options={[
                           { value: 'pension', label: 'Ägarens pension/generationsskifte' },
                           { value: 'fokus', label: 'Fokus på annat bolag/projekt' },
