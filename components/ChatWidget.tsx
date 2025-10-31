@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Phone, Mail, User, Sparkles, Calendar, CheckCircle2, ChevronDown } from 'lucide-react'
+import { MessageCircle, X, Send, Phone, Mail, User, Sparkles, Calendar, CheckCircle2, ChevronDown, ShoppingCart, DollarSign, Handshake, HelpCircle } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 interface Message {
@@ -52,10 +52,10 @@ export default function ChatWidget() {
   const pathname = usePathname()
 
   const interestOptions = [
-    { value: 'buying', label: 'Jag vill köpa', icon: '🛒' },
-    { value: 'selling', label: 'Jag vill sälja', icon: '💰' },
-    { value: 'partnership', label: 'Samarbete/Partnership', icon: '🤝' },
-    { value: 'other', label: 'Övrigt', icon: '💬' },
+    { value: 'buying', label: 'Jag vill köpa', icon: ShoppingCart },
+    { value: 'selling', label: 'Jag vill sälja', icon: DollarSign },
+    { value: 'partnership', label: 'Samarbete/Partnership', icon: Handshake },
+    { value: 'other', label: 'Övrigt', icon: HelpCircle },
   ]
 
   // Close interest dropdown when clicking outside
@@ -503,7 +503,10 @@ export default function ChatWidget() {
                     >
                       <span className="flex items-center gap-2">
                         {interestOptions.find(opt => opt.value === contactForm.interest)?.icon && (
-                          <span>{interestOptions.find(opt => opt.value === contactForm.interest)?.icon}</span>
+                          (() => {
+                            const IconComponent = interestOptions.find(opt => opt.value === contactForm.interest)?.icon
+                            return IconComponent ? <IconComponent className="w-5 h-5 text-gray-600" /> : null
+                          })()
                         )}
                         {interestOptions.find(opt => opt.value === contactForm.interest)?.label}
                       </span>
@@ -512,22 +515,25 @@ export default function ChatWidget() {
                     
                     {interestDropdownOpen && (
                       <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-lg overflow-hidden">
-                        {interestOptions.map((option) => (
-                          <button
-                            key={option.value}
-                            type="button"
-                            onClick={() => {
-                              setContactForm({ ...contactForm, interest: option.value as any })
-                              setInterestDropdownOpen(false)
-                            }}
-                            className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#1F3C58]/5 transition-colors ${
-                              contactForm.interest === option.value ? 'bg-[#1F3C58]/10 font-semibold' : ''
-                            }`}
-                          >
-                            <span className="text-xl">{option.icon}</span>
-                            <span>{option.label}</span>
-                          </button>
-                        ))}
+                        {interestOptions.map((option) => {
+                          const IconComponent = option.icon
+                          return (
+                            <button
+                              key={option.value}
+                              type="button"
+                              onClick={() => {
+                                setContactForm({ ...contactForm, interest: option.value as any })
+                                setInterestDropdownOpen(false)
+                              }}
+                              className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#1F3C58]/5 transition-colors ${
+                                contactForm.interest === option.value ? 'bg-[#1F3C58]/10 font-semibold' : ''
+                              }`}
+                            >
+                              <IconComponent className="w-5 h-5 text-gray-600" />
+                              <span>{option.label}</span>
+                            </button>
+                          )
+                        })}
                       </div>
                     )}
                   </div>
