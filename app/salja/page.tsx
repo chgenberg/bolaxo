@@ -13,7 +13,7 @@ export default function SaljaInfoPage() {
       step: 1,
       title: 'Skapa annonsen',
       shortTitle: 'Skapa annonsen',
-      description: 'Fyll i nyckeltal och relevant data, lägg till bilder och en kort pitch. Vår 7-stegs guide ger råd längs vägen och polerar texten. Behöver du ett komplett pitchdeck? Vi fixar det åt dig.',
+      description: 'Fyll i nyckeltal och relevant data, lägg till bilder och en kort pitch. Behöver du ett komplett pitchdeck? Vi fixar det åt dig.',
       time: '8-12 min',
       icon: <FileText className="w-6 h-6" />,
     },
@@ -59,10 +59,10 @@ export default function SaljaInfoPage() {
           src="/2.png" 
           alt="Säljprocess" 
           fill
-          className="object-cover opacity-10"
+          className="object-cover opacity-20"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/70 to-white/90"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/60 to-white/85"></div>
       </div>
 
       {/* Content */}

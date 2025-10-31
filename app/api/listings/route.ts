@@ -111,8 +111,13 @@ export async function POST(request: NextRequest) {
       address,
       revenue,
       revenueRange,
+      revenueYear1,
+      revenueYear2,
+      revenueYear3,
       priceMin,
       priceMax,
+      abstainPriceMin,
+      abstainPriceMax,
       ebitda,
       employees,
       foundedYear,
@@ -143,8 +148,8 @@ export async function POST(request: NextRequest) {
         expiresAt = new Date(now.setDate(now.getDate() + 90))
       } else if (packageType === 'pro') {
         expiresAt = new Date(now.setDate(now.getDate() + 180))
-      } else if (packageType === 'pro_plus') {
-        // No expiration for pro+
+      } else if (packageType === 'pro_plus' || packageType === 'enterprise') {
+        // No expiration for pro_plus and enterprise
         expiresAt = null
       }
     }
@@ -164,8 +169,13 @@ export async function POST(request: NextRequest) {
         address,
         revenue: parseInt(revenue) || 0,
         revenueRange,
-        priceMin: parseInt(priceMin) || 0,
-        priceMax: parseInt(priceMax) || 0,
+        revenueYear1: revenueYear1 ? parseInt(revenueYear1) : null,
+        revenueYear2: revenueYear2 ? parseInt(revenueYear2) : null,
+        revenueYear3: revenueYear3 ? parseInt(revenueYear3) : null,
+        priceMin: abstainPriceMin ? 0 : (parseInt(priceMin) || 0),
+        priceMax: abstainPriceMax ? 0 : (parseInt(priceMax) || 0),
+        abstainPriceMin: abstainPriceMin || false,
+        abstainPriceMax: abstainPriceMax || false,
         ebitda: ebitda ? parseInt(ebitda) : null,
         employees: parseInt(employees) || 0,
         foundedYear: foundedYear ? parseInt(foundedYear) : null,

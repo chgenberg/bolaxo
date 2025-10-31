@@ -122,8 +122,13 @@ model Listing {
   // Financials
   revenue         Int      @default(0) // Revenue in SEK
   revenueRange    String   @default("Okänd") // e.g. "5-10 MSEK"
+  revenueYear1    Int?     // Revenue 3 years ago (senaste året = revenueYear3)
+  revenueYear2    Int?     // Revenue 2 years ago
+  revenueYear3    Int?     // Revenue last year (current year)
   priceMin        Int      @default(0) // Min price in SEK
   priceMax        Int      @default(0) // Max price in SEK
+  abstainPriceMin Boolean  @default(false) // User opted out of providing min price
+  abstainPriceMax Boolean  @default(false) // User opted out of providing max price
   ebitda          Int?     // EBITDA in SEK
   employees       Int      @default(0) // Number of employees
   foundedYear     Int?
@@ -147,7 +152,7 @@ model Listing {
   
   // Status & Package
   status          String   @default("draft") // draft, active, sold, paused
-  packageType     String   @default("basic") // free, basic, pro, pro_plus
+  packageType     String   @default("basic") // free, basic, pro, pro_plus, enterprise
   
   // Timestamps
   createdAt       DateTime @default(now())
