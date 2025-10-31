@@ -62,16 +62,26 @@ interface WizardProps {
 }
 
 const industries = [
-  { value: 'tech', label: 'Tech & IT' },
-  { value: 'retail', label: 'Detaljhandel' },
-  { value: 'manufacturing', label: 'Tillverkning' },
-  { value: 'services', label: 'Tjänsteföretag' },
-  { value: 'restaurant', label: 'Restaurang & Café' },
-  { value: 'construction', label: 'Bygg & Anläggning' },
-  { value: 'healthcare', label: 'Vård & Hälsa' },
-  { value: 'ecommerce', label: 'E-handel' },
-  { value: 'consulting', label: 'Konsultverksamhet' },
-  { value: 'other', label: 'Övrigt' },
+  { value: 'it-konsult-utveckling', label: 'IT-konsult & utveckling' },
+  { value: 'ehandel-d2c', label: 'E-handel/D2C' },
+  { value: 'saas-licensmjukvara', label: 'SaaS & licensmjukvara' },
+  { value: 'bygg-anlaggning', label: 'Bygg & anläggning' },
+  { value: 'el-vvs-installation', label: 'El, VVS & installation' },
+  { value: 'stad-facility-services', label: 'Städ & facility services' },
+  { value: 'lager-logistik-3pl', label: 'Lager, logistik & 3PL' },
+  { value: 'restaurang-cafe', label: 'Restaurang & café' },
+  { value: 'detaljhandel-fysisk', label: 'Detaljhandel (fysisk)' },
+  { value: 'grossist-partihandel', label: 'Grossist/partihandel' },
+  { value: 'latt-tillverkning-verkstad', label: 'Lätt tillverkning/verkstad' },
+  { value: 'fastighetsservice-forvaltning', label: 'Fastighetsservice & förvaltning' },
+  { value: 'marknadsforing-kommunikation-pr', label: 'Marknadsföring, kommunikation & PR' },
+  { value: 'ekonomitjanster-redovisning', label: 'Ekonomitjänster & redovisning' },
+  { value: 'halsa-skönhet', label: 'Hälsa/skönhet (salonger, kliniker, spa)' },
+  { value: 'gym-fitness-wellness', label: 'Gym, fitness & wellness' },
+  { value: 'event-konferens-upplevelser', label: 'Event, konferens & upplevelser' },
+  { value: 'utbildning-kurser-edtech', label: 'Utbildning, kurser & edtech småskaligt' },
+  { value: 'bilverkstad-fordonsservice', label: 'Bilverkstad & fordonsservice' },
+  { value: 'jord-skog-tradgard-gronyteskotsel', label: 'Jord/skog, trädgård & grönyteskötsel' },
 ]
 
 const regions = [
@@ -403,7 +413,32 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
   }
 
   // Hämta branschspecifika frågor för aktuell bransch
-  const currentIndustryQuestions = data.industry ? industryQuestions[data.industry] || [] : []
+  // Mappning av nya branscher till befintliga frågor
+  const industryMapping: Record<string, string> = {
+    'it-konsult-utveckling': 'consulting',
+    'ehandel-d2c': 'ecommerce',
+    'saas-licensmjukvara': 'tech',
+    'bygg-anlaggning': 'construction',
+    'restaurang-cafe': 'restaurant',
+    'detaljhandel-fysisk': 'retail',
+    'grossist-partihandel': 'retail',
+    'latt-tillverkning-verkstad': 'manufacturing',
+    'ekonomitjanster-redovisning': 'services',
+    'marknadsforing-kommunikation-pr': 'services',
+    'halsa-skönhet': 'healthcare',
+    'gym-fitness-wellness': 'healthcare',
+    'stad-facility-services': 'services',
+    'lager-logistik-3pl': 'services',
+    'el-vvs-installation': 'services',
+    'fastighetsservice-forvaltning': 'services',
+    'event-konferens-upplevelser': 'services',
+    'utbildning-kurser-edtech': 'services',
+    'bilverkstad-fordonsservice': 'services',
+    'jord-skog-tradgard-gronyteskotsel': 'services',
+  }
+
+  const mappedIndustry = data.industry ? industryMapping[data.industry] || data.industry : ''
+  const currentIndustryQuestions = mappedIndustry ? industryQuestions[mappedIndustry] || [] : []
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
