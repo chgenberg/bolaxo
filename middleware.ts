@@ -28,13 +28,13 @@ export async function middleware(request: NextRequest) {
       'Content-Security-Policy',
       [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // Next.js kräver unsafe-eval i dev
-        "style-src 'self' 'unsafe-inline'",
+        "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com", // Next.js kräver unsafe-eval i dev, unpkg för Swagger
+        "style-src 'self' 'unsafe-inline' https://unpkg.com",
         "img-src 'self' data: https:",
-        "font-src 'self' data:",
-        "connect-src 'self' https://api.openai.com https://api.resend.com https://api.railway.app",
-        "frame-src https://player.vimeo.com https://vimeo.com",
-        "frame-ancestors 'self' https://bolaxo.com https://www.bolaxo.com",
+        "font-src 'self' data: https:",
+        "connect-src 'self' https://api.openai.com https://api.brevo.com https://api.sendinblue.com",
+        "frame-src 'self' https://player.vimeo.com https://vimeo.com",
+        "frame-ancestors 'none'", // Block all frame embedding except own domain
       ].join('; ')
     )
   }
