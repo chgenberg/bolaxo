@@ -389,11 +389,11 @@ export default function SearchPage() {
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`
-                  relative px-4 sm:px-6 py-3 sm:py-3.5 rounded-button font-medium text-sm sm:text-base
+                  relative px-4 sm:px-6 py-3 sm:py-3.5 rounded-lg font-medium text-sm sm:text-base
                   transition-all duration-300 transform
                   flex items-center justify-center gap-2 whitespace-nowrap
                   ${showFilters 
-                    ? 'bg-gradient-to-r from-primary-blue to-primary-dark text-white shadow-xl scale-105' 
+                    ? 'bg-primary-navy text-white shadow-xl scale-105' 
                     : 'bg-white text-primary-navy border-2 border-primary-navy/30 hover:border-primary-navy hover:shadow-lg hover:bg-primary-navy/5'
                   }
                 `}
@@ -404,7 +404,7 @@ export default function SearchPage() {
                 {activeFilterCount > 0 && (
                   <span className={`
                     px-1.5 sm:px-2 py-0.5 rounded-full text-xs sm:text-sm font-bold
-                    ${showFilters ? 'bg-white text-primary-blue' : 'bg-primary-blue text-white'}
+                    ${showFilters ? 'bg-white text-primary-navy' : 'bg-primary-navy text-white'}
                     animate-pulse
                   `}>
                     {activeFilterCount}
@@ -506,20 +506,21 @@ export default function SearchPage() {
 
                   {/* Price Range Slider - Compact */}
                   <div className="mb-4 sm:mb-6">
-                    <div className="text-sm font-medium text-gray-700 mb-2">Prisintervall</div>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                    <div className="text-xs font-medium text-gray-700 mb-2">Prisintervall</div>
+                    <div className="bg-gray-50 rounded-lg p-2 sm:p-3">
                       <PriceRangeSlider
                         min={0}
                         max={150000000}
                         value={filters.priceRange}
                         onChange={(value) => setFilters({...filters, priceRange: value})}
                         step={500000}
+                        className=""
                       />
                     </div>
                   </div>
 
                   {/* Secondary Filters Row - All equal width */}
-                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     {/* Employees - Multi-Select */}
                     <div>
                       <MultiSelect

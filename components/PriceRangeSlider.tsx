@@ -85,21 +85,21 @@ export default function PriceRangeSlider({
   const maxPercent = getPercentage(localValue[1])
 
   return (
-    <div className={`px-4 py-3 ${className}`}>
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-sm text-text-gray">Prisintervall</span>
-        <div className="flex items-center gap-2 text-sm font-medium text-text-dark">
+    <div className={`${className}`}>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-text-gray hidden sm:inline">Prisintervall</span>
+        <div className="flex items-center gap-2 text-xs font-medium text-text-dark">
           {formatPrice(localValue[0])} - {formatPrice(localValue[1])}
         </div>
       </div>
 
-      <div className="relative h-2" ref={sliderRef}>
+      <div className="relative h-1.5 mb-2" ref={sliderRef}>
         {/* Track background */}
         <div className="absolute inset-0 bg-gray-200 rounded-full"></div>
         
         {/* Active track */}
         <div 
-          className="absolute h-full bg-gradient-to-r from-primary-blue to-primary-dark rounded-full transition-all"
+          className="absolute h-full bg-primary-navy rounded-full transition-all"
           style={{
             left: `${minPercent}%`,
             width: `${maxPercent - minPercent}%`
@@ -108,13 +108,13 @@ export default function PriceRangeSlider({
 
         {/* Min thumb */}
         <div
-          className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-primary-blue rounded-full cursor-pointer transform transition-transform ${
+          className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-primary-navy rounded-full cursor-pointer transform transition-transform ${
             isDragging === 'min' ? 'scale-125 shadow-lg' : 'hover:scale-110'
           }`}
           style={{ left: `${minPercent}%`, transform: 'translateX(-50%) translateY(-50%)' }}
           onMouseDown={() => handleMouseDown('min')}
         >
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-text-dark text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity pointer-events-none"
+          <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-text-dark text-white px-2 py-0.5 rounded text-[10px] whitespace-nowrap opacity-0 transition-opacity pointer-events-none"
             style={{ opacity: isDragging === 'min' ? 1 : 0 }}
           >
             {formatPrice(localValue[0])}
@@ -123,13 +123,13 @@ export default function PriceRangeSlider({
 
         {/* Max thumb */}
         <div
-          className={`absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-primary-blue rounded-full cursor-pointer transform transition-transform ${
+          className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white border-2 border-primary-navy rounded-full cursor-pointer transform transition-transform ${
             isDragging === 'max' ? 'scale-125 shadow-lg' : 'hover:scale-110'
           }`}
           style={{ left: `${maxPercent}%`, transform: 'translateX(-50%) translateY(-50%)' }}
           onMouseDown={() => handleMouseDown('max')}
         >
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-text-dark text-white px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 transition-opacity pointer-events-none"
+          <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-text-dark text-white px-2 py-0.5 rounded text-[10px] whitespace-nowrap opacity-0 transition-opacity pointer-events-none"
             style={{ opacity: isDragging === 'max' ? 1 : 0 }}
           >
             {formatPrice(localValue[1])}
@@ -138,7 +138,7 @@ export default function PriceRangeSlider({
       </div>
 
       {/* Quick select buttons */}
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-1.5 mt-2">
         {[
           { label: 'Under 5M', value: [0, 5000000] as [number, number] },
           { label: '5-10M', value: [5000000, 10000000] as [number, number] },
@@ -149,9 +149,9 @@ export default function PriceRangeSlider({
             key={preset.label}
             onClick={() => onChange(preset.value)}
             className={`
-              px-3 py-1 text-xs rounded-full transition-all
+              px-2 py-0.5 text-[10px] sm:text-xs rounded-full transition-all
               ${localValue[0] === preset.value[0] && localValue[1] === preset.value[1]
-                ? 'bg-primary-blue text-white'
+                ? 'bg-primary-navy text-white'
                 : 'bg-gray-100 text-text-gray hover:bg-gray-200'
               }
             `}
