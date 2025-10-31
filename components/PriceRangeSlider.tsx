@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { DollarSign } from 'lucide-react'
 
 interface PriceRangeSliderProps {
   min: number
@@ -30,9 +29,9 @@ export default function PriceRangeSlider({
 
   const formatPrice = (price: number) => {
     if (price >= 1000000) {
-      return `${(price / 1000000).toFixed(1)}M`
+      return `${(price / 1000000).toFixed(1)} MSEK`
     }
-    return `${(price / 1000).toFixed(0)}k`
+    return `${(price / 1000).toFixed(0)} kSEK`
   }
 
   const getPercentage = (val: number) => {
@@ -90,7 +89,6 @@ export default function PriceRangeSlider({
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm text-text-gray">Prisintervall</span>
         <div className="flex items-center gap-2 text-sm font-medium text-text-dark">
-          <DollarSign className="w-4 h-4" />
           {formatPrice(localValue[0])} - {formatPrice(localValue[1])}
         </div>
       </div>
