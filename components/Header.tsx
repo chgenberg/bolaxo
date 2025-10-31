@@ -33,7 +33,7 @@ const getNavigation = (): NavItem[] => {
       label: 'För köpare',
       dropdown: [
         { label: 'Sök företag', href: '/sok' },
-        { label: 'Så funkar det', href: '/kopare' },
+        { label: 'Så funkar det', href: '/kopare/sa-fungerar-det' },
         { label: 'Skapa konto', href: '/kopare/start' },
       ]
     },
