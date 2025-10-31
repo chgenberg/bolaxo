@@ -1,44 +1,85 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import FormField from '@/components/FormField'
-import { Mail, Phone, MapPin, Send, MessageCircle, Clock, ArrowRight, ChevronDown } from 'lucide-react'
+import { Mail, Phone, MapPin, Clock, CheckCircle2, Calendar, User, ShoppingCart, DollarSign, Handshake, HelpCircle, ChevronDown, X } from 'lucide-react'
 
 interface ContactFormData {
   name: string
+  phone: string
   email: string
-  phone?: string
   subject: string
-  message: string
+  contactMethod: 'email' | 'phone' | 'demo' | ''
   interest: 'buying' | 'selling' | 'partnership' | 'other'
+  preferredDate?: string
+  preferredTime?: string
 }
 
 const interestOptions = [
-  { value: 'buying', label: 'Jag vill köpa', icon: '🛒' },
-  { value: 'selling', label: 'Jag vill sälja', icon: '💰' },
-  { value: 'partnership', label: 'Samarbete/Partnership', icon: '🤝' },
-  { value: 'other', label: 'Övrigt', icon: '💬' },
+  { value: 'buying', label: 'Jag vill köpa', icon: ShoppingCart },
+  { value: 'selling', label: 'Jag vill sälja', icon: DollarSign },
+  { value: 'partnership', label: 'Samarbete/Partnership', icon: Handshake },
+  { value: 'other', label: 'Övrigt', icon: HelpCircle },
 ]
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState<ContactFormData>({
+  const [contactForm, setContactForm] = useState<ContactFormData>({
     name: '',
-    email: '',
     phone: '',
+    email: '',
     subject: '',
-    message: '',
+    contactMethod: '',
     interest: 'buying'
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [contactFormSubmitted, setContactFormSubmitted] = useState(false)
+  const [interestDropdownOpen, setInterestDropdownOpen] = useState(false)
+  const interestDropdownRef = useRef<HTMLDivElement>(null)
 
-  // Close dropdown when clicking outside
+  // Generate available time slots for the next 7 days
+  const getAvailableTimeSlots = () => {
+    const slots = []
+    const today = new Date()
+    
+    for (let i = 1; i <= 7; i++) {
+      const date = new Date(today)
+      date.setDate(today.getDate() + i)
+      
+      // Skip weekends
+      if (date.getDay() === 0 || date.getDay() === 6) continue
+      
+      const dateStr = date.toLocaleDateString('sv-SE', { 
+        weekday: 'long', 
+        month: 'long', 
+        day: 'numeric' 
+      })
+      
+      slots.push({
+        date: date.toISOString().split('T')[0],
+        label: dateStr.charAt(0).toUpperCase() + dateStr.slice(1)
+      })
+    }
+    
+    return slots
+  }
+
+  const timeSlots = [
+    { value: '09:00', label: '09:00 - 09:30' },
+    { value: '09:30', label: '09:30 - 10:00' },
+    { value: '10:00', label: '10:00 - 10:30' },
+    { value: '10:30', label: '10:30 - 11:00' },
+    { value: '11:00', label: '11:00 - 11:30' },
+    { value: '13:00', label: '13:00 - 13:30' },
+    { value: '13:30', label: '13:30 - 14:00' },
+    { value: '14:00', label: '14:00 - 14:30' },
+    { value: '14:30', label: '14:30 - 15:00' },
+    { value: '15:00', label: '15:00 - 15:30' },
+    { value: '15:30', label: '15:30 - 16:00' },
+  ]
+
+  // Close interest dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false)
+      if (interestDropdownRef.current && !interestDropdownRef.current.contains(event.target as Node)) {
+        setInterestDropdownOpen(false)
       }
     }
 
@@ -46,37 +87,70 @@ export default function ContactPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    setSubmitted(true)
+    
+    // Validate based on contact method
+    if (!contactForm.name || !contactForm.contactMethod) return
+    
+    if (contactForm.contactMethod === 'email' && !contactForm.email) return
+    if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime || !contactForm.subject)) return
+    if (contactForm.contactMethod === 'demo' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime || !contactForm.subject)) return
+    
+    // Here you would normally send the contact form to your backend
+    console.log('Contact form submitted:', contactForm)
+    
+    setContactFormSubmitted(true)
+    
+    // Reset after 3 seconds
+    setTimeout(() => {
+      setContactFormSubmitted(false)
+      setContactForm({ 
+        name: '', 
+        phone: '', 
+        email: '', 
+        subject: '',
+        contactMethod: '',
+        interest: 'buying',
+        preferredDate: '',
+        preferredTime: ''
+      })
+    }, 5000)
   }
 
-  const selectedInterest = interestOptions.find(opt => opt.value === formData.interest)
-
-  if (submitted) {
+  if (contactFormSubmitted) {
     return (
       <main className="min-h-screen bg-neutral-white py-20 sm:py-32 flex items-center justify-center">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <div className="bg-white p-12 rounded-lg shadow-card border border-gray-200">
-            <div className="w-20 h-20 bg-accent-pink/10 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <Send className="w-10 h-10 text-accent-pink" />
+          <div className="bg-white p-12 rounded-3xl shadow-2xl border border-gray-200">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 className="w-10 h-10 text-green-600" />
             </div>
-            <h1 className="text-4xl font-bold text-primary-navy mb-4">Tack för ditt meddelande!</h1>
+            <h1 className="text-4xl font-bold text-primary-navy mb-4">Tack!</h1>
             <p className="text-lg text-primary-navy leading-relaxed mb-10">
-              Vi har tagit emot ditt meddelande och återkommer inom 24 timmar.
+              {contactForm.contactMethod === 'email' 
+                ? 'Vi kontaktar dig via e-post inom 24 timmar' 
+                : contactForm.contactMethod === 'demo'
+                ? 'Vi kontaktar dig för att boka demo'
+                : 'Vi kontaktar dig på vald tid'}
             </p>
             <button 
               onClick={() => {
-                setSubmitted(false)
-                setFormData({ name: '', email: '', phone: '', subject: '', message: '', interest: 'buying' })
+                setContactFormSubmitted(false)
+                setContactForm({ 
+                  name: '', 
+                  phone: '', 
+                  email: '', 
+                  subject: '',
+                  contactMethod: '',
+                  interest: 'buying',
+                  preferredDate: '',
+                  preferredTime: ''
+                })
               }}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-[#1F3C58] text-white font-bold rounded-xl hover:shadow-lg transition-all"
             >
               Skicka nytt meddelande
-              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -90,8 +164,11 @@ export default function ContactPage() {
       <section className="bg-gradient-to-br from-primary-navy/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6">KONTAKTA OSS</h1>
-          <p className="text-2xl text-primary-navy leading-relaxed">
-            Vi finns här för att hjälpa dig. Skicka ett meddelande så återkommer vi inom 24 timmar.
+          <p className="text-xl text-primary-navy leading-relaxed mb-4">
+            Fyll i formulär så ringer vi upp dig
+          </p>
+          <p className="text-sm text-gray-600 max-w-2xl mx-auto">
+            Annars kommer vi bli nerringda av telefonförsäljare etc – speciellt när vi är nystartat företag - o vill inte bli uppringd när man är ute o springer 3 mil
           </p>
         </div>
       </section>
@@ -104,27 +181,27 @@ export default function ContactPage() {
             
             <div className="space-y-6">
               <div className="flex gap-4">
-                <Mail className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <Mail className="w-6 h-6 text-[#1F3C58] flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold text-primary-navy mb-1">E-post</h3>
-                  <a href="mailto:hej@bolaxo.com" className="text-gray-700 hover:text-accent-pink transition-colors">
+                  <a href="mailto:hej@bolaxo.com" className="text-gray-700 hover:text-[#1F3C58] transition-colors">
                     hej@bolaxo.com
                   </a>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <Phone className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <Phone className="w-6 h-6 text-[#1F3C58] flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold text-primary-navy mb-1">Telefon</h3>
-                  <a href="tel:+46812345678" className="text-gray-700 hover:text-accent-pink transition-colors">
+                  <a href="tel:+46812345678" className="text-gray-700 hover:text-[#1F3C58] transition-colors">
                     +46 (0) 8 123 456 78
                   </a>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <MapPin className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <MapPin className="w-6 h-6 text-[#1F3C58] flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold text-primary-navy mb-1">Adress</h3>
                   <p className="text-gray-700">
@@ -136,7 +213,7 @@ export default function ContactPage() {
               </div>
 
               <div className="flex gap-4 pt-4 border-t border-gray-200">
-                <Clock className="w-6 h-6 text-accent-pink flex-shrink-0 mt-1" />
+                <Clock className="w-6 h-6 text-[#1F3C58] flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-bold text-primary-navy mb-1">Öppettider</h3>
                   <p className="text-gray-700">
@@ -148,116 +225,285 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Contact Form */}
-          <form onSubmit={handleSubmit} className="lg:col-span-2 bg-neutral-off-white p-10 rounded-lg border border-gray-200">
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-primary-navy mb-2">Namn *</label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="Ditt namn"
-                    required
-                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-primary-navy mb-2">E-post *</label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    placeholder="din@epost.se"
-                    required
-                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
-                  />
-                </div>
+          {/* Contact Form - Matching ChatWidget Design */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
+              {/* Header */}
+              <div className="bg-[#1F3C58] text-white p-6 md:p-8">
+                <h3 className="text-2xl md:text-3xl font-bold mb-2">Vi kontaktar dig!</h3>
+                <p className="text-base md:text-lg text-white/90">Välj hur du vill bli kontaktad</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {/* Form */}
+              <form onSubmit={handleContactSubmit} className="p-6 md:p-8 space-y-6">
+                {/* Contact Method Selection */}
                 <div>
-                  <label className="block text-sm font-semibold text-primary-navy mb-2">Telefon</label>
-                  <input
-                    type="tel"
-                    value={formData.phone || ''}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    placeholder="070-123 45 67"
-                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
-                  />
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Hur vill du bli kontaktad? *
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                           style={{ borderColor: contactForm.contactMethod === 'email' ? '#1F3C58' : '#E5E7EB' }}>
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value="email"
+                        checked={contactForm.contactMethod === 'email'}
+                        onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'email' })}
+                        className="mr-3"
+                      />
+                      <div className="flex items-center gap-3">
+                        <Mail className="w-5 h-5 text-gray-600" />
+                        <div>
+                          <p className="text-base font-medium">E-post</p>
+                          <p className="text-sm text-gray-500">Få svar inom 24 timmar</p>
+                        </div>
+                      </div>
+                    </label>
+                    
+                    <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                           style={{ borderColor: contactForm.contactMethod === 'phone' ? '#1F3C58' : '#E5E7EB' }}>
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value="phone"
+                        checked={contactForm.contactMethod === 'phone'}
+                        onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'phone' })}
+                        className="mr-3"
+                      />
+                      <div className="flex items-center gap-3">
+                        <Phone className="w-5 h-5 text-gray-600" />
+                        <div>
+                          <p className="text-base font-medium">Telefon</p>
+                          <p className="text-sm text-gray-500">Boka tid för uppringning</p>
+                        </div>
+                      </div>
+                    </label>
+
+                    <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                           style={{ borderColor: contactForm.contactMethod === 'demo' ? '#1F3C58' : '#E5E7EB' }}>
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value="demo"
+                        checked={contactForm.contactMethod === 'demo'}
+                        onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'demo' })}
+                        className="mr-3"
+                      />
+                      <div className="flex items-center gap-3">
+                        <Calendar className="w-5 h-5 text-gray-600" />
+                        <div>
+                          <p className="text-base font-medium">Jag vill boka en demo</p>
+                          <p className="text-sm text-gray-500">ca 20 min</p>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
                 </div>
-                <div className="relative" ref={dropdownRef}>
-                  <label className="block text-sm font-semibold text-primary-navy mb-2">Intresse *</label>
+
+                {/* Subject - Show for phone and demo */}
+                {(contactForm.contactMethod === 'phone' || contactForm.contactMethod === 'demo') && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Beskriv din fråga (1 mening) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={contactForm.subject}
+                      onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
+                      placeholder="T.ex. Jag vill sälja mitt IT-företag"
+                      maxLength={100}
+                    />
+                  </div>
+                )}
+
+                {/* Interest Dropdown */}
+                <div className="relative" ref={interestDropdownRef}>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Intresse *
+                  </label>
                   <button
                     type="button"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm flex items-center justify-between hover:border-[#1F3C58]/50"
+                    onClick={() => setInterestDropdownOpen(!interestDropdownOpen)}
+                    className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-left focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all flex items-center justify-between hover:border-[#1F3C58]/50"
                   >
                     <span className="flex items-center gap-2">
-                      {selectedInterest?.icon && <span>{selectedInterest.icon}</span>}
-                      {selectedInterest?.label}
+                      {interestOptions.find(opt => opt.value === contactForm.interest)?.icon && (
+                        (() => {
+                          const IconComponent = interestOptions.find(opt => opt.value === contactForm.interest)?.icon
+                          return IconComponent ? <IconComponent className="w-5 h-5 text-gray-600" /> : null
+                        })()
+                      )}
+                      {interestOptions.find(opt => opt.value === contactForm.interest)?.label}
                     </span>
-                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${interestDropdownOpen ? 'rotate-180' : ''}`} />
                   </button>
                   
-                  {dropdownOpen && (
-                    <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-lg shadow-lg overflow-hidden">
-                      {interestOptions.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => {
-                            setFormData({...formData, interest: option.value as any})
-                            setDropdownOpen(false)
-                          }}
-                          className={`w-full px-5 py-3 text-left flex items-center gap-3 hover:bg-[#1F3C58]/5 transition-colors ${
-                            formData.interest === option.value ? 'bg-[#1F3C58]/10 font-semibold' : ''
-                          }`}
-                        >
-                          <span className="text-xl">{option.icon}</span>
-                          <span>{option.label}</span>
-                        </button>
-                      ))}
+                  {interestDropdownOpen && (
+                    <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                      {interestOptions.map((option) => {
+                        const IconComponent = option.icon
+                        return (
+                          <button
+                            key={option.value}
+                            type="button"
+                            onClick={() => {
+                              setContactForm({ ...contactForm, interest: option.value as any })
+                              setInterestDropdownOpen(false)
+                            }}
+                            className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#1F3C58]/5 transition-colors ${
+                              contactForm.interest === option.value ? 'bg-[#1F3C58]/10 font-semibold' : ''
+                            }`}
+                          >
+                            <IconComponent className="w-5 h-5 text-gray-600" />
+                            <span>{option.label}</span>
+                          </button>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-primary-navy mb-2">Ämne *</label>
-                <input
-                  type="text"
-                  value={formData.subject}
-                  onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                  placeholder="Vad handlar detta om?"
-                  required
-                  className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm"
-                />
-              </div>
+                {/* Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Namn *
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      required
+                      value={contactForm.name}
+                      onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
+                      placeholder="Ditt namn"
+                    />
+                  </div>
+                </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-primary-navy mb-2">Meddelande *</label>
-                <textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  placeholder="Berätta mer om din fråga..."
-                  rows={6}
-                  className="w-full px-5 py-4 bg-white border-2 border-gray-300 rounded-lg text-primary-navy placeholder-gray-400 focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all shadow-sm resize-none"
-                  required
-                />
-              </div>
+                {/* Email (shown if email contact method selected) */}
+                {contactForm.contactMethod === 'email' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      E-post *
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        type="email"
+                        required
+                        value={contactForm.email}
+                        onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                        className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
+                        placeholder="din@email.se"
+                      />
+                    </div>
+                  </div>
+                )}
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-4 px-6 bg-[#1F3C58] text-white font-bold rounded-lg hover:bg-[#1F3C58]/90 transition-all disabled:opacity-50 inline-flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-              >
-                {isSubmitting ? 'Skickar...' : 'Skicka meddelande'}
-                {!isSubmitting && <ArrowRight className="w-5 h-5" />}
-              </button>
+                {/* Phone and Calendar (shown if phone or demo contact method selected) */}
+                {(contactForm.contactMethod === 'phone' || contactForm.contactMethod === 'demo') && (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Telefonnummer *
+                      </label>
+                      <div className="relative">
+                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="tel"
+                          required
+                          value={contactForm.phone}
+                          onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                          className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
+                          placeholder="+46 70 123 45 67"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Date Selection */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <Calendar className="inline w-4 h-4 mr-1" />
+                        När passar det att vi ringer? *
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {getAvailableTimeSlots().map((slot) => (
+                          <button
+                            key={slot.date}
+                            type="button"
+                            onClick={() => setContactForm({ ...contactForm, preferredDate: slot.date })}
+                            className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
+                              contactForm.preferredDate === slot.date
+                                ? 'border-[#1F3C58] bg-[#1F3C58] text-white'
+                                : 'border-gray-200 hover:border-gray-300'
+                            }`}
+                          >
+                            {slot.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Time Selection (shown after date is selected) */}
+                    {contactForm.preferredDate && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Välj tid *
+                        </label>
+                        <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
+                          {timeSlots.map((slot) => (
+                            <button
+                              key={slot.value}
+                              type="button"
+                              onClick={() => setContactForm({ ...contactForm, preferredTime: slot.value })}
+                              className={`p-2 border-2 rounded-lg text-sm transition-all ${
+                                contactForm.preferredTime === slot.value
+                                  ? 'border-[#1F3C58] bg-[#1F3C58] text-white'
+                                  : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                            >
+                              {slot.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setContactForm({ 
+                        name: '', 
+                        phone: '', 
+                        email: '', 
+                        subject: '',
+                        contactMethod: '',
+                        interest: 'buying',
+                        preferredDate: '',
+                        preferredTime: ''
+                      })
+                    }}
+                    className="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    Rensa
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-6 py-3 bg-[#1F3C58] text-white rounded-xl hover:shadow-lg transition-all font-medium"
+                  >
+                    Skicka
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </main>
