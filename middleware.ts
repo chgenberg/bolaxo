@@ -7,6 +7,15 @@ const JWT_SECRET = process.env.JWT_SECRET || 'bolagsplatsen-admin-secret-key-202
 const secret = new TextEncoder().encode(JWT_SECRET)
 
 export async function middleware(request: NextRequest) {
+  // 0. Redirect Railway domain to bolaxo.com if accessed directly
+  const host = request.headers.get('host') || ''
+  if (host.includes('railway.app') || host.includes('bolaxo-production')) {
+    const url = request.nextUrl.clone()
+    url.host = 'www.bolaxo.com'
+    url.protocol = 'https'
+    return NextResponse.redirect(url, 301)
+  }
+
   const response = NextResponse.next()
 
   // 0. Ensure root domain has proper path
@@ -31,6 +40,10 @@ export async function middleware(request: NextRequest) {
 
   // 3. Content Security Policy (strikt för production)
   if (process.env.NODE_ENV === 'production') {
+    // Get current domain from request
+    const currentHost = request.headers.get('host') || ''
+    const isBolaxoDomain = currentHost.includes('bolaxo.com')
+    
     response.headers.set(
       'Content-Security-Policy',
       [
@@ -40,8 +53,10 @@ export async function middleware(request: NextRequest) {
         "img-src 'self' data: https:",
         "font-src 'self' data: https:",
         "connect-src 'self' https://api.openai.com https://api.brevo.com https://api.sendinblue.com",
-        "frame-src 'self' https://player.vimeo.com https://vimeo.com",
-        "frame-ancestors 'none'", // Block all frame embedding except own domain
+        "frame-src 'self' https://player.vimeo.com https://vimeo.com", // Only allow frames from same origin and Vimeo
+        `frame-ancestors 'self'${isBolaxoDomain ? ' https://bolaxo.com https://www.bolaxo.com' : ''}`, // Block Railway domain from framing
+        "base-uri 'self'", // Prevent base tag injection
+        "form-action 'self'", // Prevent form submission to external domains
       ].join('; ')
     )
   }
