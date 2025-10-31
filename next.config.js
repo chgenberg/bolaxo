@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  trailingSlash: false, // Ensure URLs don't have trailing slashes
   eslint: {
     // Tillåt prod-build utan att eslint är installerat i CI-miljöer
     ignoreDuringBuilds: true,
