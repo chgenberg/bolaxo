@@ -7,9 +7,14 @@ const JWT_SECRET = process.env.JWT_SECRET || 'bolagsplatsen-admin-secret-key-202
 const secret = new TextEncoder().encode(JWT_SECRET)
 
 export async function middleware(request: NextRequest) {
-  // 0. Redirect Railway domain to bolaxo.com if accessed directly
+  // 0. Redirect Railway domain to bolaxo.com ONLY if custom domain is configured
+  // Allow Railway domain to work until custom domain is fully set up
   const host = request.headers.get('host') || ''
-  if (host.includes('railway.app') || host.includes('bolaxo-production')) {
+  const customDomainConfigured = process.env.NEXT_PUBLIC_BASE_URL?.includes('bolaxo.com')
+  
+  // Only redirect if custom domain is configured AND we're in production
+  if (process.env.NODE_ENV === 'production' && customDomainConfigured && 
+      (host.includes('railway.app') || host.includes('bolaxo-production'))) {
     const url = request.nextUrl.clone()
     url.host = 'www.bolaxo.com'
     url.protocol = 'https'

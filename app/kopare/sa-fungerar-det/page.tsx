@@ -69,10 +69,9 @@ export default function BuyerInfoPage() {
           src="/1.png" 
           alt="Köparprocess" 
           fill
-          className="object-cover opacity-20"
+          className="object-cover opacity-100"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/60 to-white/85"></div>
       </div>
 
       {/* Content */}
