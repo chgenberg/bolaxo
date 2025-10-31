@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, Phone, Mail, User, Sparkles, Calendar, CheckCircle2 } from 'lucide-react'
+import { MessageCircle, X, Send, Phone, Mail, User, Sparkles, Calendar, CheckCircle2, ChevronDown } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 interface Message {
@@ -16,7 +16,8 @@ interface ContactFormData {
   phone: string
   email: string
   subject: string
-  contactMethod: 'email' | 'phone' | ''
+  contactMethod: 'email' | 'phone' | 'demo' | ''
+  interest: 'buying' | 'selling' | 'partnership' | 'other'
   preferredDate?: string
   preferredTime?: string
 }
@@ -39,13 +40,35 @@ export default function ChatWidget() {
     phone: '',
     email: '',
     subject: '',
-    contactMethod: ''
+    contactMethod: '',
+    interest: 'buying'
   })
   const [contactFormSubmitted, setContactFormSubmitted] = useState(false)
+  const [interestDropdownOpen, setInterestDropdownOpen] = useState(false)
+  const interestDropdownRef = useRef<HTMLDivElement>(null)
   
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const pathname = usePathname()
+
+  const interestOptions = [
+    { value: 'buying', label: 'Jag vill köpa', icon: '🛒' },
+    { value: 'selling', label: 'Jag vill sälja', icon: '💰' },
+    { value: 'partnership', label: 'Samarbete/Partnership', icon: '🤝' },
+    { value: 'other', label: 'Övrigt', icon: '💬' },
+  ]
+
+  // Close interest dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (interestDropdownRef.current && !interestDropdownRef.current.contains(event.target as Node)) {
+        setInterestDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   // Generate available time slots for the next 7 days
   const getAvailableTimeSlots = () => {
@@ -203,8 +226,8 @@ export default function ChatWidget() {
     if (!contactForm.name || !contactForm.contactMethod) return
     
     if (contactForm.contactMethod === 'email' && !contactForm.email) return
-    if (contactForm.contactMethod === 'email' && !contactForm.email) return
     if (contactForm.contactMethod === 'phone' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime || !contactForm.subject)) return
+    if (contactForm.contactMethod === 'demo' && (!contactForm.phone || !contactForm.preferredDate || !contactForm.preferredTime || !contactForm.subject)) return
     // Here you would normally send the contact form to your backend
     console.log('Contact form submitted:', contactForm)
     
@@ -220,6 +243,7 @@ export default function ChatWidget() {
         email: '', 
         subject: '',
         contactMethod: '',
+        interest: 'buying',
         preferredDate: '',
         preferredTime: ''
       })
@@ -427,14 +451,33 @@ export default function ChatWidget() {
                           </div>
                         </div>
                       </label>
+
+                      <label className="flex items-center p-3 md:p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+                             style={{ borderColor: contactForm.contactMethod === 'demo' ? '#1F3C58' : '#E5E7EB' }}>
+                        <input
+                          type="radio"
+                          name="contactMethod"
+                          value="demo"
+                          checked={contactForm.contactMethod === 'demo'}
+                          onChange={(e) => setContactForm({ ...contactForm, contactMethod: 'demo' })}
+                          className="mr-2 md:mr-3"
+                        />
+                        <div className="flex items-center gap-2 md:gap-3">
+                          <Calendar className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
+                          <div>
+                            <p className="text-sm md:text-base font-medium">Jag vill boka en demo</p>
+                            <p className="text-xs md:text-sm text-gray-500">ca 20 min</p>
+                          </div>
+                        </div>
+                      </label>
                     </div>
                   </div>
 
-                  {/* Subject - Only show for phone */}
-                  {contactForm.contactMethod === 'phone' && (
+                  {/* Subject - Show for phone and demo */}
+                  {(contactForm.contactMethod === 'phone' || contactForm.contactMethod === 'demo') && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Vad vill du prata om? (1 mening) *
+                        Beskriv din fråga (1 mening) *
                       </label>
                       <input
                         type="text"
@@ -447,6 +490,47 @@ export default function ChatWidget() {
                       />
                     </div>
                   )}
+
+                  {/* Interest Dropdown */}
+                  <div className="relative" ref={interestDropdownRef}>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Intresse *
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setInterestDropdownOpen(!interestDropdownOpen)}
+                      className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl text-left focus:outline-none focus:border-[#1F3C58] focus:ring-2 focus:ring-[#1F3C58]/20 transition-all flex items-center justify-between hover:border-[#1F3C58]/50"
+                    >
+                      <span className="flex items-center gap-2">
+                        {interestOptions.find(opt => opt.value === contactForm.interest)?.icon && (
+                          <span>{interestOptions.find(opt => opt.value === contactForm.interest)?.icon}</span>
+                        )}
+                        {interestOptions.find(opt => opt.value === contactForm.interest)?.label}
+                      </span>
+                      <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${interestDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    
+                    {interestDropdownOpen && (
+                      <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                        {interestOptions.map((option) => (
+                          <button
+                            key={option.value}
+                            type="button"
+                            onClick={() => {
+                              setContactForm({ ...contactForm, interest: option.value as any })
+                              setInterestDropdownOpen(false)
+                            }}
+                            className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#1F3C58]/5 transition-colors ${
+                              contactForm.interest === option.value ? 'bg-[#1F3C58]/10 font-semibold' : ''
+                            }`}
+                          >
+                            <span className="text-xl">{option.icon}</span>
+                            <span>{option.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
 
                   {/* Name */}
@@ -487,8 +571,8 @@ export default function ChatWidget() {
                     </div>
                   )}
 
-                  {/* Phone and Calendar (shown if phone contact method selected) */}
-                  {contactForm.contactMethod === 'phone' && (
+                  {/* Phone and Calendar (shown if phone or demo contact method selected) */}
+                  {(contactForm.contactMethod === 'phone' || contactForm.contactMethod === 'demo') && (
                     <>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -582,7 +666,11 @@ export default function ChatWidget() {
                   </div>
                   <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Tack!</h3>
                   <p className="text-sm md:text-base text-gray-600">
-                    Vi kontaktar dig {contactForm.contactMethod === 'email' ? 'via e-post inom 24 timmar' : 'på vald tid'}
+                    {contactForm.contactMethod === 'email' 
+                      ? 'Vi kontaktar dig via e-post inom 24 timmar' 
+                      : contactForm.contactMethod === 'demo'
+                      ? 'Vi kontaktar dig för att boka demo'
+                      : 'Vi kontaktar dig på vald tid'}
                   </p>
                 </div>
             )}
