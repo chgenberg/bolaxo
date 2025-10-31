@@ -529,13 +529,6 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     placeholder="www.exempel.se"
                   />
 
-                  <FormField
-                    label="Organisationsnummer"
-                    value={data.orgNumber}
-                    onChange={(e) => updateField('orgNumber', e.target.value)}
-                    placeholder="556677-8899"
-                  />
-
                   <CustomSelect
                     label="Bransch"
                     value={data.industry}
@@ -543,6 +536,13 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     options={industries}
                     placeholder="Välj bransch"
                     required
+                  />
+
+                  <FormField
+                    label="Organisationsnummer"
+                    value={data.orgNumber}
+                    onChange={(e) => updateField('orgNumber', e.target.value)}
+                    placeholder="556677-8899"
                   />
                 </div>
               </div>

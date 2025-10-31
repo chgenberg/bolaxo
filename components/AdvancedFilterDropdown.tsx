@@ -55,20 +55,20 @@ export default function AdvancedFilterDropdown({
         onMouseEnter={() => setHoveredOption(null)}
         className={`
           w-full px-4 py-3
-          bg-white border-2 rounded-button
+          bg-white border-2 rounded-lg shadow-sm
           transition-all duration-300 ease-out
           ${isOpen 
-            ? 'border-primary-blue shadow-xl shadow-primary-blue/20 scale-[1.02]' 
-            : 'border-gray-200 hover:border-primary-blue/50 hover:shadow-lg'
+            ? 'border-primary-navy shadow-xl shadow-primary-navy/20 scale-[1.02]' 
+            : 'border-primary-navy/30 hover:border-primary-navy/50 hover:shadow-lg'
           }
-          focus:outline-none focus:border-primary-blue focus:shadow-xl focus:shadow-primary-blue/20
+          focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/20 focus:shadow-xl
           group
         `}
       >
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 flex-1">
             {icon && (
-              <div className={`transition-colors ${isOpen ? 'text-primary-blue' : 'text-text-gray group-hover:text-primary-blue'}`}>
+              <div className={`transition-colors ${isOpen ? 'text-primary-navy' : 'text-text-gray group-hover:text-primary-navy'}`}>
                 {icon}
               </div>
             )}
@@ -76,7 +76,7 @@ export default function AdvancedFilterDropdown({
               <div className="text-xs text-text-gray mb-0.5">{label}</div>
               <div className={`font-medium transition-colors ${
                 selectedOption && selectedOption.value !== '' 
-                  ? 'text-primary-blue' 
+                  ? 'text-primary-navy' 
                   : 'text-text-dark'
               }`}>
                 {selectedOption ? selectedOption.label : 'Välj alternativ'}
@@ -85,7 +85,7 @@ export default function AdvancedFilterDropdown({
           </div>
           <ChevronDown 
             className={`w-5 h-5 text-text-gray transition-all duration-300 ${
-              isOpen ? 'transform rotate-180 text-primary-blue' : 'group-hover:text-primary-blue'
+              isOpen ? 'transform rotate-180 text-primary-navy' : 'group-hover:text-primary-navy'
             }`}
           />
         </div>
@@ -109,7 +109,7 @@ export default function AdvancedFilterDropdown({
                   transition-all duration-200
                   relative overflow-hidden
                   ${option.value === value 
-                    ? 'bg-gradient-to-r from-primary-blue/10 to-primary-blue/5' 
+                    ? 'bg-gradient-to-r from-primary-navy/10 to-primary-navy/5' 
                     : hoveredOption === option.value
                     ? 'bg-gradient-to-r from-gray-50 to-white'
                     : 'bg-white'
@@ -124,9 +124,9 @@ export default function AdvancedFilterDropdown({
                         <div className={`
                           transition-all duration-200
                           ${option.value === value 
-                            ? 'text-primary-blue scale-110' 
+                            ? 'text-primary-navy scale-110' 
                             : hoveredOption === option.value
-                            ? 'text-primary-blue scale-105'
+                            ? 'text-primary-navy scale-105'
                             : 'text-text-gray'
                           }
                         `}>
@@ -135,7 +135,7 @@ export default function AdvancedFilterDropdown({
                       )}
                       <div className="flex-1">
                         <div className={`font-medium transition-colors ${
-                          option.value === value ? 'text-primary-blue' : 'text-text-dark'
+                          option.value === value ? 'text-primary-navy' : 'text-text-dark'
                         }`}>
                           {option.label}
                         </div>
@@ -151,7 +151,7 @@ export default function AdvancedFilterDropdown({
                         <span className={`
                           text-xs px-2 py-1 rounded-full transition-all
                           ${option.value === value 
-                            ? 'bg-primary-blue text-white' 
+                            ? 'bg-primary-navy text-white' 
                             : 'bg-gray-100 text-text-gray'
                           }
                         `}>
@@ -159,7 +159,7 @@ export default function AdvancedFilterDropdown({
                         </span>
                       )}
                       {option.value === value && (
-                        <div className="text-primary-blue animate-scale-in">
+                        <div className="text-primary-navy animate-scale-in">
                           <Check className="w-5 h-5" />
                         </div>
                       )}
@@ -169,7 +169,7 @@ export default function AdvancedFilterDropdown({
                 
                 {/* Hover effect bar */}
                 <div className={`
-                  absolute bottom-0 left-0 h-0.5 bg-primary-blue transition-all duration-300
+                  absolute bottom-0 left-0 h-0.5 bg-primary-navy transition-all duration-300
                   ${hoveredOption === option.value ? 'w-full' : 'w-0'}
                 `}></div>
               </button>

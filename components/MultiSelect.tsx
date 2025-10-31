@@ -74,13 +74,13 @@ export default function MultiSelect({
         onClick={() => setIsOpen(!isOpen)}
         className={`
           w-full px-4 py-3 text-left
-          bg-white border-2 rounded-button
+          bg-white border-2 rounded-lg shadow-sm
           transition-all duration-200 ease-in-out
           ${isOpen 
-            ? 'border-primary-blue shadow-lg shadow-primary-blue/10' 
-            : 'border-gray-200 hover:border-primary-blue/50'
+            ? 'border-primary-navy shadow-lg shadow-primary-navy/10' 
+            : 'border-primary-navy/30 hover:border-primary-navy/50'
           }
-          focus:outline-none focus:border-primary-blue focus:shadow-lg focus:shadow-primary-blue/10
+          focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/20 focus:shadow-lg
           flex items-center justify-between gap-2
           ${selectedOptions.length > 0 ? 'text-text-dark' : 'text-text-gray'}
         `}

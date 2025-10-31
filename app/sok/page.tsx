@@ -392,7 +392,7 @@ export default function SearchPage() {
                   flex items-center justify-center gap-2 whitespace-nowrap
                   ${showFilters 
                     ? 'bg-gradient-to-r from-primary-blue to-primary-dark text-white shadow-xl scale-105' 
-                    : 'bg-white text-text-dark border-2 border-gray-200 hover:border-primary-blue hover:shadow-lg'
+                    : 'bg-white text-primary-navy border-2 border-primary-navy/30 hover:border-primary-navy hover:shadow-lg hover:bg-primary-navy/5'
                   }
                 `}
               >
@@ -416,10 +416,10 @@ export default function SearchPage() {
             {showFilters && (
               <div className="animate-slide-down">
                 <div className="bg-white rounded-button border border-gray-200 p-4 sm:p-6 shadow-inner">
-                  {/* Primary Filters Row */}
+                  {/* Primary Filters Row - All equal width */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
                     {/* Industries Multi-Select */}
-                    <div className="col-span-1 md:col-span-2 lg:col-span-1">
+                    <div>
                       <MultiSelect
                         options={[
                           { value: 'it-konsult-utveckling', label: 'IT-konsult & utveckling' },
@@ -502,19 +502,22 @@ export default function SearchPage() {
                     </div>
                   </div>
 
-                  {/* Price Range Slider */}
-                  <div className="mb-4 sm:mb-6 bg-gray-50 rounded-button p-3 sm:p-4">
-                    <PriceRangeSlider
-                      min={0}
-                      max={150000000}
-                      value={filters.priceRange}
-                      onChange={(value) => setFilters({...filters, priceRange: value})}
-                      step={500000}
-                    />
+                  {/* Price Range Slider - Compact */}
+                  <div className="mb-4 sm:mb-6">
+                    <div className="text-sm font-medium text-gray-700 mb-2">Prisintervall</div>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                      <PriceRangeSlider
+                        min={0}
+                        max={150000000}
+                        value={filters.priceRange}
+                        onChange={(value) => setFilters({...filters, priceRange: value})}
+                        step={500000}
+                      />
+                    </div>
                   </div>
 
-                  {/* Secondary Filters Row */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                  {/* Secondary Filters Row - All equal width */}
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     {/* Employees - Multi-Select */}
                     <div>
                       <MultiSelect
