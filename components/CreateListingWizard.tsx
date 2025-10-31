@@ -24,7 +24,9 @@ interface ListingData {
   // Step 2: Företagsdata (Allmänt)
   companyAge: string
   revenue: string
-  revenue3Years: string
+  revenueYear1: string  // För 3 år sedan
+  revenueYear2: string  // För 2 år sedan
+  revenueYear3: string  // Förra året
   profitMargin: string
   employees: string
   grossMargin?: string
@@ -310,7 +312,9 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
     industry: '',
     companyAge: '',
     revenue: '',
-    revenue3Years: '',
+    revenueYear1: '',
+    revenueYear2: '',
+    revenueYear3: '',
     profitMargin: '',
     employees: '',
     anonymousTitle: '',
@@ -354,7 +358,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
       case 1:
         return data.email && data.companyName && data.industry
       case 2:
-        return data.companyAge && data.revenue && data.employees
+        return data.companyAge && data.revenue && data.employees && data.revenueYear1 && data.revenueYear2 && data.revenueYear3
       case 3:
         return true // Branschspecifika frågor är valfria
       case 4:
@@ -591,19 +595,35 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   required
                 />
 
-                <CustomSelect
-                  label="Omsättningsutveckling senaste 3 åren"
-                  value={data.revenue3Years}
-                  onChange={(value) => updateField('revenue3Years', value)}
-                  options={[
-                    { value: 'strong-growth', label: 'Stark tillväxt (>20% per år)' },
-                    { value: 'moderate-growth', label: 'Måttlig tillväxt (5-20% per år)' },
-                    { value: 'stable', label: 'Stabil (±5% per år)' },
-                    { value: 'declining', label: 'Vikande (-5 till -20% per år)' },
-                    { value: 'strong-decline', label: 'Kraftigt vikande (>-20% per år)' }
-                  ]}
-                  required
-                />
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-gray-900">Omsättningsutveckling senaste 3 åren</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <FormFieldCurrency
+                      label={`Omsättning ${new Date().getFullYear() - 3} (3 år sedan)`}
+                      value={data.revenueYear1}
+                      onChange={(value) => updateField('revenueYear1', value)}
+                      placeholder="5000000"
+                      tooltip="Årsomsättning för 3 år sedan"
+                      required
+                    />
+                    <FormFieldCurrency
+                      label={`Omsättning ${new Date().getFullYear() - 2} (2 år sedan)`}
+                      value={data.revenueYear2}
+                      onChange={(value) => updateField('revenueYear2', value)}
+                      placeholder="6000000"
+                      tooltip="Årsomsättning för 2 år sedan"
+                      required
+                    />
+                    <FormFieldCurrency
+                      label={`Omsättning ${new Date().getFullYear() - 1} (förra året)`}
+                      value={data.revenueYear3}
+                      onChange={(value) => updateField('revenueYear3', value)}
+                      placeholder="7000000"
+                      tooltip="Årsomsättning förra året"
+                      required
+                    />
+                  </div>
+                </div>
 
                 <FormFieldPercent
                   label="Vinstmarginal (EBITDA %)"
