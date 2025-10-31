@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, Target } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function ValuationPage() {
   const [showWizard, setShowWizard] = useState(false)
@@ -129,10 +130,13 @@ export default function ValuationPage() {
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500" />
                     <span>Helt gratis</span>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
+                  <Link 
+                    href="/registrera"
+                    className="flex items-center gap-2 sm:gap-3 text-[#1F3C58] hover:text-[#1F3C58]/80 font-semibold text-sm sm:text-base transition-colors group"
+                  >
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500" />
-                    <span>Ingen registrering</span>
-                  </div>
+                    <span className="group-hover:underline">Skapa din profil nu</span>
+                  </Link>
                 </div>
               </div>
             </div>
