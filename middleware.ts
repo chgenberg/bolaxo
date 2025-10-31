@@ -9,6 +9,8 @@ const secret = new TextEncoder().encode(JWT_SECRET)
 export async function middleware(request: NextRequest) {
   // 0. Redirect Railway domain to bolaxo.com ONLY if custom domain is configured
   // Allow Railway domain to work until custom domain is fully set up
+  // TEMPORARILY DISABLED: Uncomment when www.bolaxo.com is confirmed working
+  /*
   const host = request.headers.get('host') || ''
   const customDomainConfigured = process.env.NEXT_PUBLIC_BASE_URL?.includes('bolaxo.com')
   
@@ -21,6 +23,7 @@ export async function middleware(request: NextRequest) {
     const redirectUrl = new URL(request.nextUrl.pathname + request.nextUrl.search, 'https://www.bolaxo.com')
     return NextResponse.redirect(redirectUrl, 301)
   }
+  */
 
   const response = NextResponse.next()
 
