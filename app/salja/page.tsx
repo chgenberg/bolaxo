@@ -30,7 +30,7 @@ export default function SaljaInfoPage() {
                 {
                   step: 1,
                   title: 'Skapa annons',
-                  description: 'Ladda upp siffror, bilder och kort beskrivning. Vi hjälper dig att polera copy. 7-stegs wizard guidar dig genom prosessen. Se live-analys av ditt företagsvärde.',
+                  description: 'Ladda upp siffror, bilder och kort beskrivning. Se live-analys av ditt företagsvärde.',
                   time: '8-12 min',
                 },
                 {
