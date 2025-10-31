@@ -87,17 +87,11 @@ const industries = [
 ]
 
 const regions = [
-  { value: 'stockholm', label: 'Stockholm' },
-  { value: 'goteborg', label: 'Göteborg' },
-  { value: 'malmo', label: 'Malmö' },
-  { value: 'uppsala', label: 'Uppsala' },
-  { value: 'vasteras', label: 'Västerås' },
-  { value: 'orebro', label: 'Örebro' },
-  { value: 'linkoping', label: 'Linköping' },
-  { value: 'helsingborg', label: 'Helsingborg' },
-  { value: 'jonkoping', label: 'Jönköping' },
-  { value: 'norrkoping', label: 'Norrköping' },
-  { value: 'other', label: 'Övriga Sverige' },
+  { value: 'stockholm-malardalen', label: 'Stockholm & Mälardalen' },
+  { value: 'vastsverige', label: 'Västsverige' },
+  { value: 'syd', label: 'Syd' },
+  { value: 'ostra-smaland', label: 'Östra & Småland' },
+  { value: 'norr-mitt', label: 'Norr & Mitt' },
 ]
 
 // Branschspecifika frågor (samma som i ValuationWizard)
