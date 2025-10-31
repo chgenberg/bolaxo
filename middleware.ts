@@ -13,12 +13,13 @@ export async function middleware(request: NextRequest) {
   const customDomainConfigured = process.env.NEXT_PUBLIC_BASE_URL?.includes('bolaxo.com')
   
   // Only redirect if custom domain is configured AND we're in production
+  // BUT: Make sure NEXT_PUBLIC_BASE_URL doesn't include port 8080 (which means domain isn't ready)
   if (process.env.NODE_ENV === 'production' && customDomainConfigured && 
+      !process.env.NEXT_PUBLIC_BASE_URL?.includes(':8080') &&
       (host.includes('railway.app') || host.includes('bolaxo-production'))) {
-    const url = request.nextUrl.clone()
-    url.host = 'www.bolaxo.com'
-    url.protocol = 'https'
-    return NextResponse.redirect(url, 301)
+    // Create redirect URL without port (use standard HTTPS port 443)
+    const redirectUrl = new URL(request.nextUrl.pathname + request.nextUrl.search, 'https://www.bolaxo.com')
+    return NextResponse.redirect(redirectUrl, 301)
   }
 
   const response = NextResponse.next()
