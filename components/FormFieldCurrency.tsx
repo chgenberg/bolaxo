@@ -8,6 +8,7 @@ interface FormFieldCurrencyProps {
   onChange: (value: string) => void
   placeholder?: string
   required?: boolean
+  disabled?: boolean
   className?: string
   tooltip?: string
 }
@@ -18,6 +19,7 @@ export default function FormFieldCurrency({
   onChange,
   placeholder = 'Ex: 500.000 kr',
   required = false,
+  disabled = false,
   className = '',
   tooltip
 }: FormFieldCurrencyProps) {
@@ -56,7 +58,8 @@ export default function FormFieldCurrency({
         value={displayValue}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+        disabled={disabled}
+        className={`w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20 ${disabled ? 'bg-gray-100 cursor-not-allowed opacity-60' : ''}`}
         required={required}
       />
       {tooltip && (

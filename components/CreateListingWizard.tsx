@@ -49,6 +49,8 @@ interface ListingData {
   whySelling: string
   priceMin: string
   priceMax: string
+  abstainPriceMin: boolean
+  abstainPriceMax: boolean
   location: string
   region: string
   
@@ -318,6 +320,8 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
     whySelling: '',
     priceMin: '',
     priceMax: '',
+    abstainPriceMin: false,
+    abstainPriceMax: false,
     location: '',
     region: '',
     images: []
@@ -356,7 +360,10 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
       case 3:
         return true // Branschspecifika frågor är valfria
       case 4:
-        return data.description && data.priceMin && data.priceMax && data.location && data.region
+        // Price fields are optional if "abstain" is checked
+        const priceMinValid = data.abstainPriceMin || data.priceMin
+        const priceMaxValid = data.abstainPriceMax || data.priceMax
+        return data.description && priceMinValid && priceMaxValid && data.location && data.region
       case 5:
         return true // Bilder är valfria
       case 6:
@@ -771,21 +778,67 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormFieldCurrency
-                    label="Lägsta acceptabla pris"
-                    value={data.priceMin}
-                    onChange={(value) => updateField('priceMin', value)}
-                    placeholder="5000000"
-                    required
-                  />
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <FormFieldCurrency
+                        label="Lägsta acceptabla pris"
+                        value={data.priceMin}
+                        onChange={(value) => updateField('priceMin', value)}
+                        placeholder="5000000"
+                        required={!data.abstainPriceMin}
+                        disabled={data.abstainPriceMin}
+                        className="flex-1"
+                      />
+                      <div className="flex items-center gap-2 pt-8">
+                        <input
+                          type="checkbox"
+                          id="abstainPriceMin"
+                          checked={data.abstainPriceMin}
+                          onChange={(e) => {
+                            updateField('abstainPriceMin', e.target.checked)
+                            if (e.target.checked) {
+                              updateField('priceMin', '')
+                            }
+                          }}
+                          className="w-5 h-5 border-2 border-gray-300 rounded text-primary-blue focus:ring-primary-blue focus:ring-2"
+                        />
+                        <label htmlFor="abstainPriceMin" className="text-sm text-gray-700 cursor-pointer">
+                          Avstår
+                        </label>
+                      </div>
+                    </div>
+                  </div>
 
-                  <FormFieldCurrency
-                    label="Önskat pris"
-                    value={data.priceMax}
-                    onChange={(value) => updateField('priceMax', value)}
-                    placeholder="8000000"
-                    required
-                  />
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <FormFieldCurrency
+                        label="Önskat pris"
+                        value={data.priceMax}
+                        onChange={(value) => updateField('priceMax', value)}
+                        placeholder="8000000"
+                        required={!data.abstainPriceMax}
+                        disabled={data.abstainPriceMax}
+                        className="flex-1"
+                      />
+                      <div className="flex items-center gap-2 pt-8">
+                        <input
+                          type="checkbox"
+                          id="abstainPriceMax"
+                          checked={data.abstainPriceMax}
+                          onChange={(e) => {
+                            updateField('abstainPriceMax', e.target.checked)
+                            if (e.target.checked) {
+                              updateField('priceMax', '')
+                            }
+                          }}
+                          className="w-5 h-5 border-2 border-gray-300 rounded text-primary-blue focus:ring-primary-blue focus:ring-2"
+                        />
+                        <label htmlFor="abstainPriceMax" className="text-sm text-gray-700 cursor-pointer">
+                          Avstår
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -889,7 +942,13 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           <span className="text-xs sm:text-sm">Prisintervall</span>
                         </div>
                         <p className="text-base sm:text-lg font-bold text-accent-pink">
-                          {data.priceMin && data.priceMax ? 
+                          {data.abstainPriceMin && data.abstainPriceMax ? 
+                            'Pris ej angivet' :
+                          data.abstainPriceMin ? 
+                            `Från ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr` :
+                          data.abstainPriceMax ?
+                            `Upp till ${parseInt(data.priceMin).toLocaleString('sv-SE')} kr` :
+                          data.priceMin && data.priceMax ? 
                             `${parseInt(data.priceMin).toLocaleString('sv-SE')} - ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr` 
                             : 'Ej angiven'}
                         </p>
@@ -1008,9 +1067,17 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Prisintervall:</span>
                       <span className="font-medium">
-                        {parseInt(data.priceMin).toLocaleString('sv-SE')} - {parseInt(data.priceMax).toLocaleString('sv-SE')} kr
-                        </span>
-                      </div>
+                        {data.abstainPriceMin && data.abstainPriceMax ? 
+                          'Pris ej angivet' :
+                        data.abstainPriceMin ? 
+                          `Från ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr` :
+                        data.abstainPriceMax ?
+                          `Upp till ${parseInt(data.priceMin).toLocaleString('sv-SE')} kr` :
+                        data.priceMin && data.priceMax ?
+                          `${parseInt(data.priceMin).toLocaleString('sv-SE')} - ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr`
+                          : 'Ej angiven'}
+                      </span>
+                    </div>
                     </div>
                   </div>
 
