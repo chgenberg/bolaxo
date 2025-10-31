@@ -28,7 +28,8 @@ export default function SearchPage() {
     priceRange: [0, 150000000] as [number, number],
     revenueRange: '',
     locations: [] as string[],
-    employees: '',
+    employees: [] as string[], // Changed to array for multi-select
+    whySelling: [] as string[], // New filter for reason for sale
     sortBy: 'newest',
     verified: 'all',
     broker: 'all'
@@ -66,7 +67,8 @@ export default function SearchPage() {
     (filters.priceRange[0] > 0 || filters.priceRange[1] < 150000000 ? 1 : 0) +
     (filters.revenueRange ? 1 : 0) +
     (filters.locations.length > 0 ? 1 : 0) +
-    (filters.employees ? 1 : 0) +
+    (filters.employees.length > 0 ? 1 : 0) +
+    (filters.whySelling.length > 0 ? 1 : 0) +
     (filters.verified !== 'all' ? 1 : 0) +
     (filters.broker !== 'all' ? 1 : 0) +
     (searchQuery ? 1 : 0)
@@ -128,8 +130,38 @@ export default function SearchPage() {
       }
     }
 
+    // Load saved filter preferences if user is logged in
+    const loadSavedFilters = async () => {
+      if (!user?.id) return
+
+      try {
+        const response = await fetch(`/api/buyer-profile?userId=${user.id}`)
+        if (response.ok) {
+          const data = await response.json()
+          const profile = data.profile
+
+          if (profile) {
+            setFilters(prev => ({
+              ...prev,
+              categories: profile.preferredIndustries || [],
+              locations: profile.preferredRegions || [],
+              employees: profile.preferredEmployeeRanges || [],
+              whySelling: profile.preferredWhySelling || [],
+              priceRange: [
+                profile.priceMin || 0,
+                profile.priceMax || 150000000
+              ] as [number, number]
+            }))
+          }
+        }
+      } catch (error) {
+        console.error('Error loading saved filters:', error)
+      }
+    }
+
     fetchListings()
-  }, [profileChecked])
+    loadSavedFilters()
+  }, [profileChecked, user?.id])
 
   const applyFilters = () => {
     setLoading(true)
@@ -171,12 +203,54 @@ export default function SearchPage() {
 
       // Locations filter (multi-select)
       if (filters.locations.length > 0) {
-        filtered = filtered.filter(obj => filters.locations.includes(obj.region))
+        filtered = filtered.filter(obj => {
+          // Map region values to match listings
+          const regionMapping: Record<string, string[]> = {
+            'stockholm-malardalen': ['Stockholm', 'Stockholm & Mälardalen'],
+            'vastsverige': ['Göteborg', 'Västsverige'],
+            'syd': ['Malmö', 'Syd'],
+            'ostra-smaland': ['Östra & Småland'],
+            'norr-mitt': ['Norr & Mitt']
+          }
+          const mappedRegions = filters.locations.flatMap(loc => regionMapping[loc] || [loc])
+          return mappedRegions.some(region => obj.region === region || obj.location === region)
+        })
       }
 
-      // Employees filter
-      if (filters.employees) {
-        filtered = filtered.filter(obj => obj.employees === filters.employees)
+      // Employees filter (multi-select)
+      if (filters.employees.length > 0) {
+        filtered = filtered.filter(obj => {
+          const employeeRange = obj.employees
+          return filters.employees.some(filter => {
+            if (filter === '1-5') return employeeRange === '1-5' || employeeRange === '1' || employeeRange === '2-5'
+            if (filter === '6-10') return employeeRange === '6-10'
+            if (filter === '11-25') return employeeRange === '11-25'
+            if (filter === '26-50') return employeeRange === '26-50'
+            return false
+          })
+        })
+      }
+
+      // Why selling filter (multi-select)
+      if (filters.whySelling.length > 0) {
+        filtered = filtered.filter(obj => {
+          const whySelling = obj.whySelling || ''
+          return filters.whySelling.some(filter => {
+            // Map filter values to whySelling text patterns
+            const filterPatterns: Record<string, string[]> = {
+              'pension': ['pension', 'generationsskifte', 'kliva av'],
+              'fokus': ['fokus', 'tid', 'annat bolag'],
+              'tillväxt': ['tillväxt', 'kapital', 'skala'],
+              'strategisk': ['strategisk', 'avyttring', 'renodla'],
+              'flytt': ['flytt', 'livssituation', 'stad'],
+              'kompetens': ['kompetens', 'nästa fas'],
+              'sjukdom': ['sjukdom', 'utbrändhet', 'tid saknas'],
+              'marknad': ['marknad', 'regel', 'nätverk']
+            }
+            const patterns = filterPatterns[filter] || []
+            return patterns.some(pattern => whySelling.toLowerCase().includes(pattern))
+          })
+        })
       }
 
       // Verified filter
@@ -220,6 +294,38 @@ export default function SearchPage() {
     applyFilters()
   }, [searchQuery, filters])
 
+  // Save filter preferences to database when user is logged in
+  useEffect(() => {
+    if (!user?.id || !profileChecked) return
+
+    const saveFilters = async () => {
+      try {
+        // Debounce: Only save after 1 second of no changes
+        const timeoutId = setTimeout(async () => {
+          await fetch('/api/buyer-profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: user.id,
+              preferredRegions: filters.locations,
+              preferredIndustries: filters.categories,
+              preferredEmployeeRanges: filters.employees,
+              preferredWhySelling: filters.whySelling,
+              priceMin: filters.priceRange[0] > 0 ? filters.priceRange[0] : null,
+              priceMax: filters.priceRange[1] < 150000000 ? filters.priceRange[1] : null
+            })
+          })
+        }, 1000)
+
+        return () => clearTimeout(timeoutId)
+      } catch (error) {
+        console.error('Error saving filter preferences:', error)
+      }
+    }
+
+    saveFilters()
+  }, [filters, user?.id, profileChecked])
+
   const clearAllFilters = () => {
     setSearchQuery('')
     setFilters({
@@ -227,7 +333,8 @@ export default function SearchPage() {
       priceRange: [0, 150000000],
       revenueRange: '',
       locations: [],
-      employees: '',
+      employees: [],
+      whySelling: [],
       sortBy: 'newest',
       verified: 'all',
       broker: 'all'
@@ -315,26 +422,26 @@ export default function SearchPage() {
                     <div className="col-span-1 md:col-span-2 lg:col-span-1">
                       <MultiSelect
                         options={[
-                          { value: 'IT-konsult & utveckling', label: 'IT-konsult & utveckling' },
-                          { value: 'SaaS-företag', label: 'SaaS-företag' },
-                          { value: 'E-handel', label: 'E-handel' },
-                          { value: 'Konsultbolag', label: 'Konsultbolag' },
-                          { value: 'Webbyrå', label: 'Webbyrå' },
-                          { value: 'Digital marknadsföring', label: 'Digital marknadsföring' },
-                          { value: 'Restaurang & mat', label: 'Restaurang & mat' },
-                          { value: 'Café & Bageri', label: 'Café & Bageri' },
-                          { value: 'Hälso & träning', label: 'Hälso & träning' },
-                          { value: 'Redovisning & ekonomi', label: 'Redovisning & ekonomi' },
-                          { value: 'Marknadsföringsbyrå', label: 'Marknadsföringsbyrå' },
-                          { value: 'Bygg & fastighet', label: 'Bygg & fastighet' },
-                          { value: 'Städ & service', label: 'Städ & service' },
-                          { value: 'Transport & logistik', label: 'Transport & logistik' },
-                          { value: 'Retail & handel', label: 'Retail & handel' },
-                          { value: 'Hudvård & skönhet', label: 'Hudvård & skönhet' },
-                          { value: 'Vård & omsorg', label: 'Vård & omsorg' },
-                          { value: 'Utbildning & lärande', label: 'Utbildning & lärande' },
-                          { value: 'Media & kommunikation', label: 'Media & kommunikation' },
-                          { value: 'Jord/skog, trädgård & grönyteskötsel', label: 'Jord/skog, trädgård & grönyteskötsel' }
+                          { value: 'it-konsult-utveckling', label: 'IT-konsult & utveckling' },
+                          { value: 'ehandel-d2c', label: 'E-handel/D2C' },
+                          { value: 'saas-licensmjukvara', label: 'SaaS & licensmjukvara' },
+                          { value: 'bygg-anlaggning', label: 'Bygg & anläggning' },
+                          { value: 'el-vvs-installation', label: 'El, VVS & installation' },
+                          { value: 'stad-facility-services', label: 'Städ & facility services' },
+                          { value: 'lager-logistik-3pl', label: 'Lager, logistik & 3PL' },
+                          { value: 'restaurang-cafe', label: 'Restaurang & café' },
+                          { value: 'detaljhandel-fysisk', label: 'Detaljhandel (fysisk)' },
+                          { value: 'grossist-partihandel', label: 'Grossist/partihandel' },
+                          { value: 'latt-tillverkning-verkstad', label: 'Lätt tillverkning/verkstad' },
+                          { value: 'fastighetsservice-forvaltning', label: 'Fastighetsservice & förvaltning' },
+                          { value: 'marknadsforing-kommunikation-pr', label: 'Marknadsföring, kommunikation & PR' },
+                          { value: 'ekonomitjanster-redovisning', label: 'Ekonomitjänster & redovisning' },
+                          { value: 'halsa-skönhet', label: 'Hälsa/skönhet (salonger, kliniker, spa)' },
+                          { value: 'gym-fitness-wellness', label: 'Gym, fitness & wellness' },
+                          { value: 'event-konferens-upplevelser', label: 'Event, konferens & upplevelser' },
+                          { value: 'utbildning-kurser-edtech', label: 'Utbildning, kurser & edtech småskaligt' },
+                          { value: 'bilverkstad-fordonsservice', label: 'Bilverkstad & fordonsservice' },
+                          { value: 'jord-skog-tradgard-gronyteskotsel', label: 'Jord/skog, trädgård & grönyteskötsel' }
                         ]}
                         value={filters.categories}
                         onChange={(value) => setFilters({...filters, categories: value})}
@@ -346,54 +453,11 @@ export default function SearchPage() {
                     <div>
                       <MultiSelect
                         options={[
-                          { value: 'Stockholm & Mälardalen', label: 'Stockholm & Mälardalen' },
-                          { value: 'Västsverige', label: 'Västsverige' },
-                          { value: 'Syd', label: 'Syd' },
-                          { value: 'Östra & Småland', label: 'Östra & Småland' },
-                          { value: 'Norr & Mitt', label: 'Norr & Mitt' },
-                          { value: 'Stockholm', label: 'Stockholm' },
-                          { value: 'Göteborg', label: 'Göteborg' },
-                          { value: 'Malmö', label: 'Malmö' },
-                          { value: 'Uppsala', label: 'Uppsala' },
-                          { value: 'Västerås', label: 'Västerås' },
-                          { value: 'Örebro', label: 'Örebro' },
-                          { value: 'Linköping', label: 'Linköping' },
-                          { value: 'Helsingborg', label: 'Helsingborg' },
-                          { value: 'Jönköping', label: 'Jönköping' },
-                          { value: 'Norrköping', label: 'Norrköping' },
-                          { value: 'Lund', label: 'Lund' },
-                          { value: 'Borås', label: 'Borås' },
-                          { value: 'Sundsvall', label: 'Sundsvall' },
-                          { value: 'Umeå', label: 'Umeå' },
-                          { value: 'Gävle', label: 'Gävle' },
-                          { value: 'Växjö', label: 'Växjö' },
-                          { value: 'Karlstad', label: 'Karlstad' },
-                          { value: 'Halmstad', label: 'Halmstad' },
-                          { value: 'Kalmar', label: 'Kalmar' },
-                          { value: 'Kristianstad', label: 'Kristianstad' },
-                          { value: 'Östersund', label: 'Östersund' },
-                          { value: 'Skövde', label: 'Skövde' },
-                          { value: 'Varberg', label: 'Varberg' },
-                          { value: 'Solna', label: 'Solna' },
-                          { value: 'Täby', label: 'Täby' },
-                          { value: 'Nacka', label: 'Nacka' },
-                          { value: 'Lidingö', label: 'Lidingö' },
-                          { value: 'Södertälje', label: 'Södertälje' },
-                          { value: 'Eskilstuna', label: 'Eskilstuna' },
-                          { value: 'Nyköping', label: 'Nyköping' },
-                          { value: 'Katrineholm', label: 'Katrineholm' },
-                          { value: 'Strängnäs', label: 'Strängnäs' },
-                          { value: 'Falun', label: 'Falun' },
-                          { value: 'Borlänge', label: 'Borlänge' },
-                          { value: 'Trollhättan', label: 'Trollhättan' },
-                          { value: 'Kungsbacka', label: 'Kungsbacka' },
-                          { value: 'Falkenberg', label: 'Falkenberg' },
-                          { value: 'Ystad', label: 'Ystad' },
-                          { value: 'Landskrona', label: 'Landskrona' },
-                          { value: 'Trelleborg', label: 'Trelleborg' },
-                          { value: 'Visby', label: 'Visby' },
-                          { value: 'Motala', label: 'Motala' },
-                          { value: 'Ängelholm', label: 'Ängelholm' }
+                          { value: 'stockholm-malardalen', label: 'Stockholm & Mälardalen' },
+                          { value: 'vastsverige', label: 'Västsverige' },
+                          { value: 'syd', label: 'Syd' },
+                          { value: 'ostra-smaland', label: 'Östra & Småland' },
+                          { value: 'norr-mitt', label: 'Norr & Mitt' }
                         ]}
                         value={filters.locations}
                         onChange={(value) => setFilters({...filters, locations: value})}
@@ -451,20 +515,20 @@ export default function SearchPage() {
 
                   {/* Secondary Filters Row */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                    {/* Employees */}
-                    <AdvancedFilterDropdown
-                      label="Antal anställda"
-                      icon={<Users className="w-4 h-4" />}
-                      options={[
-                        { value: '', label: 'Alla storlekar' },
-                        { value: '1-5', label: '1-5 anställda' },
-                        { value: '6-10', label: '6-10 anställda' },
-                        { value: '11-25', label: '11-25 anställda' },
-                        { value: '26-50', label: '26-50 anställda' }
-                      ]}
-                      value={filters.employees}
-                      onChange={(value) => setFilters({...filters, employees: value})}
-                    />
+                    {/* Employees - Multi-Select */}
+                    <div>
+                      <MultiSelect
+                        options={[
+                          { value: '1-5', label: '1-5 anställda' },
+                          { value: '6-10', label: '6-10 anställda' },
+                          { value: '11-25', label: '11-25 anställda' },
+                          { value: '26-50', label: '26-50 anställda' }
+                        ]}
+                        value={filters.employees}
+                        onChange={(value) => setFilters({...filters, employees: value})}
+                        placeholder="Antal anställda"
+                      />
+                    </div>
 
                     {/* Verified Status */}
                     <AdvancedFilterDropdown
@@ -492,18 +556,23 @@ export default function SearchPage() {
                       onChange={(value) => setFilters({...filters, broker: value})}
                     />
 
-                    {/* Quick Actions */}
-                    <div className="flex items-end">
-                      {activeFilterCount > 0 && (
-                        <button
-                          onClick={clearAllFilters}
-                          className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-error/10 text-error rounded-button hover:bg-error hover:text-white transition-all duration-300 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
-                        >
-                          <X className="w-3 sm:w-4 h-3 sm:h-4" />
-                          <span className="hidden sm:inline">Rensa alla filter</span>
-                          <span className="sm:hidden">Rensa</span>
-                        </button>
-                      )}
+                    {/* Why Selling - Multi-Select */}
+                    <div>
+                      <MultiSelect
+                        options={[
+                          { value: 'pension', label: 'Ägarens pension/generationsskifte' },
+                          { value: 'fokus', label: 'Fokus på annat bolag/projekt' },
+                          { value: 'tillväxt', label: 'Tillväxtpartner söks/kapitalbehov' },
+                          { value: 'strategisk', label: 'Strategisk avyttring' },
+                          { value: 'flytt', label: 'Flytt/ändrad livssituation' },
+                          { value: 'kompetens', label: 'Kompetensväxling behövs' },
+                          { value: 'sjukdom', label: 'Sjukdom/utbrändhet i ägarled' },
+                          { value: 'marknad', label: 'Marknads-/regelförändringar' }
+                        ]}
+                        value={filters.whySelling}
+                        onChange={(value) => setFilters({...filters, whySelling: value})}
+                        placeholder="Anledning till försäljning"
+                      />
                     </div>
                   </div>
 

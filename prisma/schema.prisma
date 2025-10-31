@@ -378,6 +378,8 @@ model BuyerProfile {
   // Additional preferences
   employeeCountMin      Int?      // Min antal anställda
   employeeCountMax      Int?      // Max antal anställda
+  preferredEmployeeRanges String[] // Array of preferred employee ranges: ['1-5', '6-10', etc]
+  preferredWhySelling   String[]  // Array of preferred reasons for sale: ['pension', 'fokus', etc]
   companyAgeMin         Int?      // Min företagsålder i år
   ownerInvolvement      String?   // active, passive, either
   
