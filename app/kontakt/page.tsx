@@ -164,12 +164,6 @@ export default function ContactPage() {
       <section className="bg-gradient-to-br from-primary-navy/10 to-accent-pink/10 py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6">KONTAKTA OSS</h1>
-          <p className="text-xl text-primary-navy leading-relaxed mb-4">
-            Fyll i formulär så ringer vi upp dig
-          </p>
-          <p className="text-sm text-gray-600 max-w-2xl mx-auto">
-            Annars kommer vi bli nerringda av telefonförsäljare etc – speciellt när vi är nystartat företag - o vill inte bli uppringd när man är ute o springer 3 mil
-          </p>
         </div>
       </section>
 
@@ -186,16 +180,6 @@ export default function ContactPage() {
                   <h3 className="font-bold text-primary-navy mb-1">E-post</h3>
                   <a href="mailto:hej@bolaxo.com" className="text-gray-700 hover:text-[#1F3C58] transition-colors">
                     hej@bolaxo.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <Phone className="w-6 h-6 text-[#1F3C58] flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-bold text-primary-navy mb-1">Telefon</h3>
-                  <a href="tel:+46812345678" className="text-gray-700 hover:text-[#1F3C58] transition-colors">
-                    +46 (0) 8 123 456 78
                   </a>
                 </div>
               </div>
@@ -230,8 +214,8 @@ export default function ContactPage() {
             <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
               {/* Header */}
               <div className="bg-[#1F3C58] text-white p-6 md:p-8">
-                <h3 className="text-2xl md:text-3xl font-bold mb-2">Vi kontaktar dig!</h3>
-                <p className="text-base md:text-lg text-white/90">Välj hur du vill bli kontaktad</p>
+                <h3 className="text-2xl md:text-3xl font-bold mb-2 text-white">Vi kontaktar dig!</h3>
+                <p className="text-base md:text-lg text-white">Välj hur du vill bli kontaktad</p>
               </div>
 
               {/* Form */}

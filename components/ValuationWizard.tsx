@@ -646,7 +646,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 value={data.email || ''}
                     onChange={(e) => setData({ ...data, email: e.target.value })}
                 placeholder="din@email.se"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                    className="input-field"
                 required
               />
                 </div>
@@ -660,7 +660,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 value={data.companyName || ''}
                     onChange={(e) => setData({ ...data, companyName: e.target.value })}
                 placeholder="Ditt Företag AB"
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                    className="input-field"
                 required
               />
                 </div>
@@ -687,7 +687,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       value={data.website || ''}
                       onChange={(e) => setData({ ...data, website: e.target.value })}
                       placeholder="www.dittforetag.se"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                      className="input-field"
                     />
                   </div>
 
@@ -700,7 +700,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       value={data.orgNumber || ''}
                       onChange={(e) => setData({ ...data, orgNumber: e.target.value })}
                   placeholder="556123-4567"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                      className="input-field"
                     />
                   </div>
               </div>
@@ -954,7 +954,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       onChange={(e) => setData({ ...data, [question.key]: e.target.value })}
                       placeholder={getExamplePlaceholder(question)}
                       rows={3}
-                          className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                          className="textarea-field"
                       required
                     />
                         {question.tooltip && (

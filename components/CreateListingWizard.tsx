@@ -594,7 +594,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   label="Årlig omsättning (senaste året)"
                   value={data.revenue}
                   onChange={(value) => updateField('revenue', value)}
-                  placeholder="10000000"
+                  placeholder="10.000.000 kr"
                   tooltip="Ange årsomsättning i SEK"
                   required
                 />
@@ -606,7 +606,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       label={`Omsättning ${new Date().getFullYear() - 3} (3 år sedan)`}
                       value={data.revenueYear1}
                       onChange={(value) => updateField('revenueYear1', value)}
-                      placeholder="5000000"
+                      placeholder="100.000 kr"
                       tooltip="Årsomsättning för 3 år sedan"
                       required
                     />
@@ -614,7 +614,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       label={`Omsättning ${new Date().getFullYear() - 2} (2 år sedan)`}
                       value={data.revenueYear2}
                       onChange={(value) => updateField('revenueYear2', value)}
-                      placeholder="6000000"
+                      placeholder="100.000 kr"
                       tooltip="Årsomsättning för 2 år sedan"
                       required
                     />
@@ -622,7 +622,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       label={`Omsättning ${new Date().getFullYear() - 1} (förra året)`}
                       value={data.revenueYear3}
                       onChange={(value) => updateField('revenueYear3', value)}
-                      placeholder="7000000"
+                      placeholder="100.000 kr"
                       tooltip="Årsomsättning förra året"
                       required
                     />
@@ -787,7 +787,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                         label="Lägsta acceptabla pris"
                         value={data.priceMin}
                         onChange={(value) => updateField('priceMin', value)}
-                        placeholder="5000000"
+                        placeholder="5.000.000 kr"
                         required={!data.abstainPriceMin}
                         disabled={data.abstainPriceMin}
                         className="flex-1"
@@ -818,7 +818,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                         label="Önskat pris"
                         value={data.priceMax}
                         onChange={(value) => updateField('priceMax', value)}
-                        placeholder="8000000"
+                        placeholder="8.000.000 kr"
                         required={!data.abstainPriceMax}
                         disabled={data.abstainPriceMax}
                         className="flex-1"

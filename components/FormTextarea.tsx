@@ -37,9 +37,7 @@ const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
         
         <textarea
           ref={ref}
-          className={`w-full px-4 py-3 border border-gray-200 rounded-xl 
-            focus:ring-2 focus:ring-primary-blue focus:border-transparent 
-            transition-all resize-none
+          className={`textarea-field 
             ${error ? 'border-error focus:border-error focus:ring-error/10' : ''}
             ${className}`}
           maxLength={maxLength}

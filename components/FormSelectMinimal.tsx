@@ -87,11 +87,11 @@ const FormSelectMinimal = forwardRef<HTMLSelectElement, FormSelectMinimalProps>(
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             className={`
-              w-full px-4 py-3 text-left bg-white border-2 rounded-xl
+              w-full px-4 py-3 text-left bg-white border-2 rounded-xl shadow-sm
               transition-all duration-200 flex items-center justify-between
-              ${error ? 'border-error' : isOpen ? 'border-primary-blue' : 'border-gray-200'}
-              ${isOpen ? 'shadow-lg' : 'hover:border-gray-300'}
-              focus:outline-none focus:ring-2 focus:ring-primary-blue/20
+              ${error ? 'border-error' : isOpen ? 'border-primary-navy' : 'border-primary-navy/30'}
+              ${isOpen ? 'shadow-lg' : 'hover:border-primary-navy/50'}
+              focus:outline-none focus:ring-2 focus:ring-primary-navy/20
             `}
           >
             <span className={selectedOption ? 'text-text-dark' : 'text-text-gray'}>

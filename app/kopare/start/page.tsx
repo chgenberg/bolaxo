@@ -4,33 +4,39 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
-import { Building, MapPin, TrendingUp, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react'
+import { Building, MapPin, TrendingUp, CheckCircle, ArrowRight, ArrowLeft, Check } from 'lucide-react'
 import Link from 'next/link'
 
 const INDUSTRIES = [
-  'Tech & IT',
-  'Detaljhandel',
-  'E-handel',
-  'Tjänsteföretag',
-  'Restaurang & Café',
-  'Tillverkning',
-  'Konsultverksamhet',
-  'Vård & Hälsa',
-  'Övrigt'
+  'IT-konsult & utveckling',
+  'E-handel/D2C',
+  'SaaS & licensmjukvara',
+  'Bygg & anläggning',
+  'El, VVS & installation',
+  'Städ & facility services',
+  'Lager, logistik & 3PL',
+  'Restaurang & café',
+  'Detaljhandel (fysisk)',
+  'Grossist/partihandel',
+  'Lätt tillverkning/verkstad',
+  'Fastighetsservice & förvaltning',
+  'Marknadsföring, kommunikation & PR',
+  'Ekonomitjänster & redovisning',
+  'Hälsa/skönhet (salonger, kliniker, spa)',
+  'Gym, fitness & wellness',
+  'Event, konferens & upplevelser',
+  'Utbildning, kurser & edtech småskaligt',
+  'Bilverkstad & fordonsservice',
+  'Jord/skog, trädgård & grönyteskötsel'
 ]
 
 const REGIONS = [
-  'Stockholm',
-  'Göteborg',
-  'Malmö',
-  'Uppsala',
-  'Västerås',
-  'Örebro',
-  'Linköping',
-  'Helsingborg',
-  'Jönköping',
-  'Norrköping',
-  'Hela Sverige'
+  'Hela Sverige',
+  'Stockholm & Mälardalen',
+  'Västsverige',
+  'Syd',
+  'Östra & Småland',
+  'Norr & Mitt'
 ]
 
 export default function BuyerStartPage() {
@@ -45,6 +51,7 @@ export default function BuyerStartPage() {
   const [formData, setFormData] = useState({
     preferredRegions: [] as string[],
     preferredIndustries: [] as string[],
+    preferredWhySelling: [] as string[],
     investmentType: '',
     priceMin: '',
     priceMax: '',
@@ -70,6 +77,15 @@ export default function BuyerStartPage() {
       preferredIndustries: prev.preferredIndustries.includes(industry)
         ? prev.preferredIndustries.filter(i => i !== industry)
         : [...prev.preferredIndustries, industry]
+    }))
+  }
+
+  const toggleWhySelling = (reason: string) => {
+    setFormData(prev => ({
+      ...prev,
+      preferredWhySelling: prev.preferredWhySelling.includes(reason)
+        ? prev.preferredWhySelling.filter(r => r !== reason)
+        : [...prev.preferredWhySelling, reason]
     }))
   }
 
@@ -116,29 +132,31 @@ export default function BuyerStartPage() {
     }
   }
 
-  const totalSteps = 4
+  const WHY_SELLING_OPTIONS = [
+    { value: 'pension', label: 'Ägarens pension/generationsskifte', description: 'Stabilt bolag, ägaren vill kliva av.' },
+    { value: 'fokus', label: 'Fokus på annat bolag/projekt', description: 'Verksamheten mår bra men tiden räcker inte.' },
+    { value: 'tillväxt', label: 'Tillväxtpartner söks / kapitalbehov', description: 'Stor potential, ny ägare kan skala snabbare.' },
+    { value: 'strategisk', label: 'Strategisk avyttring (icke-kärnverksamhet)', description: 'Säljs av koncern/ägare för att renodla.' },
+    { value: 'flytt', label: 'Flytt/ändrad livssituation', description: 'Ägaren byter stad/land eller livsstil.' },
+    { value: 'kompetens', label: 'Kompetensväxling behövs', description: 'Bolaget behöver ny kompetens/ägare för nästa fas.' },
+    { value: 'sjukdom', label: 'Sjukdom/utbrändhet i ägarled', description: 'Tid/kraft saknas för att driva vidare.' },
+    { value: 'marknad', label: 'Marknads-/regelförändringar', description: 'Kräver ny ägare med andra resurser eller nätverk.' }
+  ]
+
+  const totalSteps = 5
   const progress = (step / totalSteps) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      {/* Progress Bar */}
-      <div className="sticky top-0 z-40 bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-neutral-white">
+      {/* Header */}
+      <div className="border-b border-gray-200">
         <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Kom igång</h1>
-            <span className="text-sm font-medium text-gray-600">{step} av {totalSteps}</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-blue-900 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Kom igång</h1>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-12 pb-32">
         {/* Step 1: Email (if not logged in) + Regioner */}
         {step === 1 && (
           <div className="space-y-6">
@@ -151,7 +169,7 @@ export default function BuyerStartPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="din@email.se"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-navy focus:border-transparent"
                   required
                 />
                 <label className="flex items-start gap-3 mt-4">
@@ -163,7 +181,7 @@ export default function BuyerStartPage() {
                     required
                   />
                   <span className="text-sm text-gray-700">
-                    Jag godkänner <a href="/användarvillkor" className="text-blue-900 hover:underline">användarvillkoren</a> och <a href="/integritet" className="text-blue-900 hover:underline">integritetspolicyn</a>
+                    Jag godkänner <a href="/användarvillkor" className="text-primary-navy hover:underline">användarvillkoren</a> och <a href="/integritet" className="text-primary-navy hover:underline">integritetspolicyn</a>
                   </span>
                 </label>
               </div>
@@ -171,21 +189,21 @@ export default function BuyerStartPage() {
 
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
+                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-primary-navy" />
                 Vilka regioner intresserar dig?
               </h2>
               <p className="text-gray-600">Välj en eller flera regioner där du vill investera</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {REGIONS.map((region) => (
                 <button
                   key={region}
                   onClick={() => toggleRegion(region)}
                   className={`p-4 rounded-lg border-2 transition-all text-left font-medium ${
                     formData.preferredRegions.includes(region)
-                      ? 'border-blue-900 bg-blue-50 text-blue-900'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-blue-200'
+                      ? 'border-primary-navy bg-primary-navy/5 text-primary-navy'
+                      : 'border-gray-200 bg-white text-gray-700 hover:border-primary-navy/30'
                   }`}
                 >
                   {region}
@@ -200,21 +218,21 @@ export default function BuyerStartPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <Building className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
+                <Building className="w-6 h-6 sm:w-8 sm:h-8 text-primary-navy" />
                 Vilka branscher intresserar dig?
               </h2>
               <p className="text-gray-600">Välj en eller flera branscher</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {INDUSTRIES.map((industry) => (
                 <button
                   key={industry}
                   onClick={() => toggleIndustry(industry)}
                   className={`p-4 rounded-lg border-2 transition-all text-left font-medium ${
                     formData.preferredIndustries.includes(industry)
-                      ? 'border-blue-900 bg-blue-50 text-blue-900'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-blue-200'
+                      ? 'border-primary-navy bg-primary-navy/5 text-primary-navy'
+                      : 'border-gray-200 bg-white text-gray-700 hover:border-primary-navy/30'
                   }`}
                 >
                   {industry}
@@ -229,7 +247,7 @@ export default function BuyerStartPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-blue-900" />
+                <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 text-primary-navy" />
                 Budget & erfarenhet
               </h2>
               <p className="text-gray-600">Berätta om dina investeringskriterier</p>
@@ -245,7 +263,7 @@ export default function BuyerStartPage() {
                     <select
                       value={formData.priceMin}
                       onChange={(e) => setFormData({ ...formData, priceMin: e.target.value })}
-                      className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                      className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-primary-navy/30 focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/20 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
                     >
                       <option value="">Från...</option>
                       <option value="50000">50.000 kr</option>
@@ -264,7 +282,7 @@ export default function BuyerStartPage() {
                     <select
                       value={formData.priceMax}
                       onChange={(e) => setFormData({ ...formData, priceMax: e.target.value })}
-                      className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-blue-300 focus:border-blue-900 focus:ring-2 focus:ring-blue-100 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
+                      className="w-full px-3 sm:px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-primary-navy/30 focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/20 bg-white text-gray-900 font-medium cursor-pointer appearance-none transition-colors"
                     >
                       <option value="">Till...</option>
                       <option value="100000">100.000 kr</option>
@@ -316,23 +334,75 @@ export default function BuyerStartPage() {
               </div>
 
               {/* Financing Checkbox */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="bg-primary-navy/5 border border-primary-navy/20 rounded-lg p-4">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={formData.financingReady}
                     onChange={(e) => setFormData({ ...formData, financingReady: e.target.checked })}
-                    className="w-4 h-4 sm:w-5 sm:h-5 rounded border-2 border-blue-300 text-blue-900 cursor-pointer"
+                    className="w-4 h-4 sm:w-5 sm:h-5 rounded border-2 border-primary-navy/30 text-primary-navy cursor-pointer"
                   />
-                  <span className="text-sm font-medium text-blue-900">Jag har redan finansiering på plats</span>
+                  <span className="text-sm font-medium text-primary-navy">Jag har redan finansiering på plats</span>
                 </label>
               </div>
             </div>
           </div>
         )}
 
-        {/* Step 4: Sammanfattning */}
+        {/* Step 4: Anledning till försäljning */}
         {step === 4 && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
+                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-primary-navy" />
+                Status på bolag du söker
+              </h2>
+              <p className="text-gray-600 mb-2">Anledning till försäljning</p>
+              <p className="text-sm text-gray-500">Välj en eller flera alternativ</p>
+            </div>
+
+            <div className="space-y-3">
+              {WHY_SELLING_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => toggleWhySelling(option.value)}
+                  className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                    formData.preferredWhySelling.includes(option.value)
+                      ? 'border-primary-navy bg-primary-navy/5'
+                      : 'border-gray-200 bg-white hover:border-primary-navy/30'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 mt-0.5">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                        formData.preferredWhySelling.includes(option.value)
+                          ? 'border-primary-navy bg-primary-navy'
+                          : 'border-gray-300 bg-white'
+                      }`}>
+                        {formData.preferredWhySelling.includes(option.value) && (
+                          <Check className="w-4 h-4 text-white" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <p className={`font-medium ${
+                        formData.preferredWhySelling.includes(option.value)
+                          ? 'text-primary-navy'
+                          : 'text-gray-900'
+                      }`}>
+                        {WHY_SELLING_OPTIONS.indexOf(option) + 1}. {option.label}
+                      </p>
+                      <p className="text-sm text-gray-600 mt-1">{option.description}</p>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 5: Sammanfattning */}
+        {step === 5 && (
           <div className="space-y-6">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
@@ -369,50 +439,89 @@ export default function BuyerStartPage() {
                     : 'Ingen budget angiven'}
                 </p>
               </div>
+
+              <div>
+                <p className="text-sm text-gray-600 font-medium">Anledning till försäljning</p>
+                <p className="text-gray-900 mt-1">
+                  {formData.preferredWhySelling.length > 0
+                    ? formData.preferredWhySelling.map(value => {
+                        const option = WHY_SELLING_OPTIONS.find(opt => opt.value === value)
+                        return option?.label
+                      }).filter(Boolean).join(', ')
+                    : 'Ingen anledning vald'}
+                </p>
+              </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-900">
+            <div className="bg-primary-navy/5 border border-primary-navy/20 rounded-lg p-4">
+              <p className="text-sm text-primary-navy">
                 ✓ Du är nu redo att börja söka företag! Du kommer att få rekommendationer baserat på dina preferenser.
               </p>
             </div>
           </div>
         )}
 
-        {/* Navigation */}
-        <div className="flex gap-3 mt-12">
-          {step > 1 && (
-            <button
-              onClick={() => setStep(step - 1)}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-900 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Tillbaka
-            </button>
-          )}
+      </div>
 
-          {step < totalSteps ? (
-            <button
-              onClick={() => setStep(step + 1)}
-              disabled={
-                (step === 1 && formData.preferredRegions.length === 0) ||
-                (step === 2 && formData.preferredIndustries.length === 0)
-              }
-              className="flex-1 px-6 py-3 bg-blue-900 text-white font-medium rounded-lg hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-            >
-              Nästa
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              onClick={handleSave}
-              disabled={loading}
-              className="flex-1 px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-            >
-              {loading ? 'Sparar...' : 'Börja söka'}
-              <CheckCircle className="w-4 h-4" />
-            </button>
-          )}
+      {/* Progress Bar & Navigation - Fixed at bottom */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+        <div className="max-w-2xl mx-auto px-3 sm:px-6 lg:px-8 py-6">
+          {/* Progress Bar */}
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-sm font-medium text-gray-600">{step} av {totalSteps}</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+            <div
+              className="bg-primary-navy h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          {/* Navigation Buttons */}
+          <div className="flex gap-3">
+            {!user && (
+              <Link
+                href="/login"
+                className="flex-1 px-6 py-3 bg-white border-2 border-gray-300 text-gray-900 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
+              >
+                Logga in
+              </Link>
+            )}
+            
+            {step > 1 && (
+              <button
+                onClick={() => setStep(step - 1)}
+                className="flex-1 px-6 py-3 bg-white border-2 border-gray-300 text-gray-900 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Tillbaka
+              </button>
+            )}
+
+            {step < totalSteps ? (
+              <button
+                onClick={() => setStep(step + 1)}
+                disabled={
+                  (step === 1 && formData.preferredRegions.length === 0) ||
+                  (step === 2 && formData.preferredIndustries.length === 0) ||
+                  (step === 4 && formData.preferredWhySelling.length === 0)
+                }
+                className="flex-1 px-6 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-primary-navy/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              >
+                Kom igång
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                onClick={handleSave}
+                disabled={loading}
+                className="flex-1 px-6 py-3 bg-primary-navy text-white font-medium rounded-lg hover:bg-primary-navy/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              >
+                {loading ? 'Sparar...' : 'Kom igång'}
+                <CheckCircle className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

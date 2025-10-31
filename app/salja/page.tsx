@@ -1,12 +1,65 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { CheckCircle, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import { CheckCircle, ArrowRight, Shield, TrendingUp, Users, FileText } from 'lucide-react'
 
 export default function SaljaInfoPage() {
+  const [activeStep, setActiveStep] = useState(1)
+
+  const steps = [
+    {
+      step: 1,
+      title: 'Skapa annonsen',
+      description: 'Fyll i nyckeltal och relevant data, lägg till bilder och en kort pitch. Vår 7-stegs guide ger råd längs vägen och polerar texten. Behöver du ett komplett pitchdeck? Vi fixar det åt dig.',
+      time: '8-12 min',
+      icon: <FileText className="w-6 h-6" />,
+    },
+    {
+      step: 2,
+      title: 'Publicera och nå köpare',
+      description: 'Annonsen pushas till bevakningar och topplistor. Köpare verifieras och kontaktar dig via plattformen. Du ser livedata på visningar och förfrågningar från potentiella köpare.',
+      time: 'Löpande',
+      icon: <Users className="w-6 h-6" />,
+    },
+    {
+      step: 3,
+      title: 'NDA & frågor',
+      description: 'Köpare signerar NDA med BankID och kan ställa frågor. Du får mail / pushnotiser vid nya NDA-förfrågningar och väljer själv att godkänna eller avvisa. Du kan vara helt anonym tills du har godkänt NDA.',
+      time: 'Efter behov',
+      icon: <Shield className="w-6 h-6" />,
+    },
+    {
+      step: 4,
+      title: 'Datarum & DD',
+      description: 'Dela rätt dokument med rätt personer och följ intresset i realtid. Säker dokumentlagring med versionshistorik, vattenmärkning och logg över visningar. Ta emot indikativa bud (LOI) via ett strukturerat formulär.',
+      time: 'Efter behov',
+      icon: <FileText className="w-6 h-6" />,
+    },
+    {
+      step: 5,
+      title: 'LOI till avslut',
+      description: 'Starta den formella försäljningen med våra mallar och en milstolpsplan. Vi effektiviserar processen och minimerar onödigt arbete så att jurist/revisor kliver in först när det verkligen behövs—det sparar både tid och pengar. Vill du ha hjälp med slutförhandling och avtal? Vi matchar dig med rätt rådgivare.',
+      time: '60-90 dagar',
+      icon: <TrendingUp className="w-6 h-6" />,
+    },
+  ]
+
   return (
     <main className="bg-neutral-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-accent-pink/10 to-primary-navy/10 py-12 sm:py-20 md:py-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* Hero Section with Image */}
+      <section className="relative bg-gradient-to-br from-primary-navy/5 via-white to-accent-pink/5 py-12 sm:py-20 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <Image 
+            src="/2.png" 
+            alt="Säljprocess" 
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-4 sm:mb-6 uppercase">
             Från annons till avslut – steg för steg
           </h1>
@@ -16,92 +69,64 @@ export default function SaljaInfoPage() {
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
-
-        {/* Steps */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-24">
+        {/* Interactive Steps Tabs */}
         <div className="mb-16 sm:mb-24 md:mb-32">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 sm:mb-6 md:mb-8 text-center uppercase">Processen i 5 steg</h2>
           <p className="text-center text-primary-navy mb-8 sm:mb-12 md:mb-16 text-lg sm:text-xl font-semibold uppercase">SÄLJARE</p>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16">
-            {/* Left Column - Summary */}
-            <div className="space-y-6 sm:space-y-8">
-              {[
-                {
-                  step: 1,
-                  title: 'Skapa annons',
-                  description: 'Ladda upp siffror, bilder och kort beskrivning. Se live-analys av ditt företagsvärde.',
-                  time: '8-12 min',
-                },
-                {
-                  step: 2,
-                  title: 'Publicera och nå köpare',
-                  description: 'Vi matchar mot bevakningar och visar i listor. Kvalificerade köpare kontaktar dig. Se visningar, NDA-förfrågningar och konvertering i realtid via analytics.',
-                  time: 'Löpande',
-                },
-                {
-                  step: 3,
-                  title: 'NDA & frågor',
-                  description: 'Köpare signerar NDA och kan ställa frågor anonymt. Digital signering med BankID. Mail-notiser när någon vill signera NDA.',
-                  time: 'Efter behov',
-                },
-                {
-                  step: 4,
-                  title: 'Datarum & DD',
-                  description: 'Dela rätt dokument till rätt person, spåra intresse. Säker dokumentlagring med versionskontroll. Ta emot indikativa bud (LOI) med strukturerat formulär.',
-                  time: 'Efter behov',
-                },
-                {
-                  step: 5,
-                  title: 'LOI till avslut',
-                  description: 'Använd våra mallar och boka rådgivning vid behov. Starta formell transaktion med automatiska milestolpar (60-90 dagar). Spåra betalningar och bjud in rådgivare.',
-                  time: '60-90 dagar',
-                },
-              ].map((item) => (
-                <div key={item.step} className="flex gap-4 sm:gap-6 relative">
-                  <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-primary-navy text-white rounded-lg flex items-center justify-center text-xl sm:text-2xl font-bold">
+          {/* Step Tabs */}
+          <div className="mb-8 sm:mb-12">
+            <div className="flex flex-wrap justify-center gap-4">
+              {steps.map((item) => (
+                <button
+                  key={item.step}
+                  onClick={() => setActiveStep(item.step)}
+                  className={`group relative flex items-center gap-3 px-6 py-4 rounded-xl transition-all duration-300 ${
+                    activeStep === item.step 
+                      ? 'bg-primary-navy text-white shadow-lg scale-105' 
+                      : 'bg-white hover:bg-gray-50 text-primary-navy shadow-md hover:shadow-lg'
+                  }`}
+                >
+                  {/* Pulsing shadow effect for active step */}
+                  {activeStep === item.step && (
+                    <div className="absolute inset-0 rounded-xl bg-primary-navy animate-pulse opacity-25 -z-10 blur-md"></div>
+                  )}
+                  
+                  <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-300 ${
+                    activeStep === item.step 
+                      ? 'bg-white text-primary-navy' 
+                      : 'bg-primary-navy/10 text-primary-navy group-hover:bg-primary-navy/20'
+                  }`}>
                     {item.step}
                   </div>
-                  <div className="flex-1 pt-1 sm:pt-2">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 sm:mb-3 gap-2">
-                      <h3 className="text-base sm:text-lg md:text-xl font-bold text-primary-navy">{item.title}</h3>
-                      <span className="text-xs sm:text-sm text-gray-600 bg-gray-100 px-2 sm:px-3 py-1 rounded-lg font-medium inline-block self-start sm:self-auto">{item.time}</span>
-                    </div>
-                    <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{item.description}</p>
+                  
+                  <div className="text-left">
+                    <div className="font-bold text-base">{item.title}</div>
+                    <div className={`text-xs ${activeStep === item.step ? 'text-white/80' : 'text-gray-600'}`}>{item.time}</div>
                   </div>
-                </div>
+                  
+                  <div className={`transition-all duration-300 ${activeStep === item.step ? 'opacity-100' : 'opacity-0'}`}>
+                    {item.icon}
+                  </div>
+                </button>
               ))}
             </div>
+          </div>
 
-            {/* Right Column - Detailed Descriptions */}
-            <div className="space-y-6 sm:space-y-8">
-              {[
-                {
-                  title: 'Skapa annonsen',
-                  description: 'Fyll i nyckeltal och relevant data, lägg till bilder och en kort pitch. Vår 7-stegs guide ger råd längs vägen och polerar texten. Behöver du ett komplett pitchdeck? Vi fixar det åt dig.',
-                },
-                {
-                  title: 'Publicera och nå köpare',
-                  description: 'Annonsen pushas till bevakningar och topplistor. Köpare verifieras och kontaktar dig via plattformen. Du ser livedata på visningar och förfrågningar från potentiella köpare.',
-                },
-                {
-                  title: 'NDA & frågor',
-                  description: 'Köpare signerar NDA med BankID och kan ställa frågor. Du får mail / pushnotiser vid nya NDA-förfrågningar och väljer själv att godkänna eller avvisa. Du kan vara helt anonym tills du har godkänt NDA.',
-                },
-                {
-                  title: 'Datarum & DD',
-                  description: 'Dela rätt dokument med rätt personer och följ intresset i realtid. Säker dokumentlagring med versionshistorik, vattenmärkning och logg över visningar. Ta emot indikativa bud (LOI) via ett strukturerat formulär.',
-                },
-                {
-                  title: 'LOI till avslut',
-                  description: 'Starta den formella försäljningen med våra mallar och en milstolpsplan. Vi effektiviserar processen och minimerar onödigt arbete så att jurist/revisor kliver in först när det verkligen behövs-det sparar både tid och pengar. Vill du ha hjälp med slutförhandling och avtal? Vi matchar dig med rätt rådgivare.',
-                },
-              ].map((item, index) => (
-                <div key={index} className="pt-1 sm:pt-2">
-                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-primary-navy mb-2 sm:mb-3">{item.title}</h3>
-                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{item.description}</p>
+          {/* Active Step Content */}
+          <div className="max-w-3xl mx-auto animate-fadeIn">
+            <div className="bg-gradient-to-br from-primary-navy/5 to-accent-pink/5 rounded-xl p-8 sm:p-10 border-2 border-primary-navy/10 hover:border-primary-navy/20 transition-all duration-300 shadow-lg">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="flex-shrink-0 w-16 h-16 bg-primary-navy text-white rounded-xl flex items-center justify-center text-2xl font-bold shadow-md">
+                  {activeStep}
                 </div>
-              ))}
+                <div className="flex-1">
+                  <h3 className="text-xl sm:text-2xl font-bold text-primary-navy mb-2">{steps[activeStep - 1].title}</h3>
+                  <span className="text-sm text-gray-600 bg-white px-3 py-1 rounded-lg font-medium inline-block">{steps[activeStep - 1].time}</span>
+                </div>
+              </div>
+              <p className="text-gray-700 leading-relaxed text-base sm:text-lg">{steps[activeStep - 1].description}</p>
             </div>
           </div>
         </div>
@@ -260,7 +285,7 @@ export default function SaljaInfoPage() {
               },
               {
                 q: 'Vad är Deal Management?',
-                a: 'När köpare lämnat LOI kan ni starta en formell transaktion med automatiska milestolpar, dokumenthantering, betalningsspårning och aktivitetslogg. Bjud in rådgivare med olika rättigheter.',
+                a: 'När köpare lämnat LOI kan ni starta en formell transaktion med automatiska milstolpar, dokumenthantering, betalningsspårning och aktivitetslogg. Bjud in rådgivare med olika rättigheter.',
               },
               {
                 q: 'Vilka analytics får jag se?',
@@ -310,6 +335,17 @@ export default function SaljaInfoPage() {
           </p>
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-out;
+        }
+      `}</style>
     </main>
   )
 }

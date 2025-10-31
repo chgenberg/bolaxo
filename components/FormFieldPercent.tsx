@@ -59,7 +59,7 @@ export default function FormFieldPercent({
         value={displayValue}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+        className="input-field"
         required={required}
       />
       {tooltip && (

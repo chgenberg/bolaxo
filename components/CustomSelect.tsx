@@ -57,13 +57,13 @@ export default function CustomSelect({
           onClick={() => setIsOpen(!isOpen)}
           className={`
             w-full px-4 py-3 text-left
-            bg-white border-2 rounded-lg
+            bg-white border-2 rounded-lg shadow-sm
             transition-all duration-200 ease-in-out
             ${isOpen 
-              ? 'border-pink-500 shadow-lg shadow-pink-500/10' 
-              : 'border-gray-200 hover:border-pink-300'
+              ? 'border-primary-navy shadow-lg shadow-primary-navy/10' 
+              : 'border-primary-navy/30 hover:border-primary-navy/50'
             }
-            focus:outline-none focus:border-pink-500 focus:shadow-lg focus:shadow-pink-500/10
+            focus:outline-none focus:border-primary-navy focus:ring-2 focus:ring-primary-navy/20 focus:shadow-lg
             flex items-center justify-between
             ${selectedOption ? 'text-gray-900' : 'text-gray-500'}
           `}

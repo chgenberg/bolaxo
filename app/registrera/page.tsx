@@ -22,6 +22,12 @@ export default function RegisterPage() {
   // Filter roles based on launch mode
   const availableRoles: Array<{ id: UserRole; label: string; description: string; icon: React.ReactNode }> = [
     {
+      id: 'buyer' as UserRole,
+      label: 'Jag vill köpa ett företag',
+      description: 'Sök och hitta företag att förvärva',
+      icon: <Search className="w-8 h-8" />
+    },
+    {
       id: 'seller' as UserRole,
       label: 'Jag vill sälja mitt företag',
       description: 'Gör en gratis värdering och annonsera ditt företag',
@@ -33,16 +39,19 @@ export default function RegisterPage() {
       description: 'Annonsera företag från dina klienter och få provision',
       icon: <Handshake className="w-8 h-8" />
     },
-    {
-      id: 'buyer' as UserRole,
-      label: 'Jag vill köpa ett företag',
-      description: 'Sök och hitta företag att förvärva',
-      icon: <Search className="w-8 h-8" />
-    },
   ].filter(role => !LAUNCH_CONFIG.HIDDEN_ROLES.includes(role.id))
 
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role)
+    // Redirect to role-specific start page immediately
+    if (role === 'buyer') {
+      router.push('/kopare/start')
+    } else if (role === 'seller') {
+      router.push('/salja/start')
+    } else if (role === 'broker') {
+      // For broker, show form
+      setSelectedRole(role)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {

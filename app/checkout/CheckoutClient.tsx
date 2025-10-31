@@ -179,17 +179,17 @@ export default function CheckoutClient() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="companyName" className="block text-sm font-medium text-text-dark mb-1">Företagsnamn *</label>
-                      <input type="text" id="companyName" name="companyName" value={formData.companyName} onChange={handleInputChange} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent ${errors.companyName ? 'border-red-500' : 'border-gray-300'}`} placeholder="AB Exempel" />
+                      <input type="text" id="companyName" name="companyName" value={formData.companyName} onChange={handleInputChange} className={`input-field ${errors.companyName ? 'border-red-500' : ''}`} placeholder="AB Exempel" />
                       {errors.companyName && <p className="text-red-500 text-xs mt-1">{errors.companyName}</p>}
                     </div>
                     <div>
                       <label htmlFor="orgNumber" className="block text-sm font-medium text-text-dark mb-1">Organisationsnummer *</label>
-                      <input type="text" id="orgNumber" name="orgNumber" value={formData.orgNumber} onChange={handleInputChange} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent ${errors.orgNumber ? 'border-red-500' : 'border-gray-300'}`} placeholder="XXXXXX-XXXX" />
+                      <input type="text" id="orgNumber" name="orgNumber" value={formData.orgNumber} onChange={handleInputChange} className={`input-field ${errors.orgNumber ? 'border-red-500' : ''}`} placeholder="XXXXXX-XXXX" />
                       {errors.orgNumber && <p className="text-red-500 text-xs mt-1">{errors.orgNumber}</p>}
                     </div>
                     <div className="md:col-span-2">
                       <label htmlFor="phone" className="block text-sm font-medium text-text-dark mb-1">Telefonnummer *</label>
-                      <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleInputChange} className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent ${errors.phone ? 'border-red-500' : 'border-gray-300'}`} placeholder="07X-XXX XX XX" />
+                      <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleInputChange} className={`input-field ${errors.phone ? 'border-red-500' : ''}`} placeholder="07X-XXX XX XX" />
                       {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                     </div>
                   </div>
