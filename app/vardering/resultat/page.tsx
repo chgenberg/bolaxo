@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import WhatIfScenarios from '@/components/WhatIfScenarios'
+import React from 'react'
 
 interface ValuationResult {
   valuationRange: {
@@ -42,6 +43,7 @@ export default function ValuationResultPage() {
   const [result, setResult] = useState<ValuationResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [valuationData, setValuationData] = useState<any>(null)
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
 
   useEffect(() => {
     const fetchValuation = async () => {
@@ -120,7 +122,11 @@ export default function ValuationResultPage() {
   }
 
   const handleDownloadPDF = async () => {
+    if (isGeneratingPDF) return
+    
     try {
+      setIsGeneratingPDF(true)
+      
       if (!result) {
         alert('Ingen värdering att ladda ner ännu. Vänta på att värderingen är klar.')
         return
@@ -137,31 +143,32 @@ export default function ValuationResultPage() {
       const { pdf } = await import('@react-pdf/renderer')
       const ValuationPDF = (await import('@/components/ValuationPDF')).default
       
-      const blob = await pdf(
-        <ValuationPDF 
-          companyName={valuationData?.companyName || 'Ditt företag'}
-          result={result}
-          generatedAt={new Date().toLocaleDateString('sv-SE', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-          })}
-          companyInfo={enrichedData ? {
-            orgNumber: valuationData?.orgNumber,
-            website: enrichedData.website,
-            email: enrichedData.email,
-            phone: enrichedData.phone,
-            address: enrichedData.address,
-            industry: enrichedData.industry,
-            employees: enrichedData.employees
-          } : valuationData ? {
-            orgNumber: valuationData?.orgNumber,
-            industry: valuationData?.industry,
-            employees: valuationData?.employees
-          } : undefined}
-          hasExactFinancials={hasExactFinancials}
-        />
-      ).toBlob()
+      // Skapa PDF-komponenten med JSX
+      const pdfDocument = React.createElement(ValuationPDF, {
+        companyName: valuationData?.companyName || 'Ditt företag',
+        result: result,
+        generatedAt: new Date().toLocaleDateString('sv-SE', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        }),
+        companyInfo: enrichedData ? {
+          orgNumber: valuationData?.orgNumber,
+          website: enrichedData.website,
+          email: enrichedData.email,
+          phone: enrichedData.phone,
+          address: enrichedData.address,
+          industry: enrichedData.industry,
+          employees: enrichedData.employees
+        } : valuationData ? {
+          orgNumber: valuationData?.orgNumber,
+          industry: valuationData?.industry,
+          employees: valuationData?.employees
+        } : undefined,
+        hasExactFinancials: hasExactFinancials
+      })
+      
+      const blob = await pdf(pdfDocument).toBlob()
       
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -174,6 +181,8 @@ export default function ValuationResultPage() {
     } catch (error) {
       console.error('PDF generation error:', error)
       alert('Kunde inte generera PDF. Försök igen eller kontakta support om problemet kvarstår.')
+    } finally {
+      setIsGeneratingPDF(false)
     }
   }
 
@@ -212,10 +221,20 @@ export default function ValuationResultPage() {
             <div className="mt-8">
               <button
                 onClick={handleDownloadPDF}
-                className="bg-primary-blue text-white px-8 py-4 rounded-button font-semibold hover:bg-opacity-90 transition-all shadow-md inline-flex items-center"
+                disabled={isGeneratingPDF}
+                className="bg-primary-blue text-white px-8 py-4 rounded-button font-semibold hover:bg-opacity-90 transition-all shadow-md inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Ladda ner som PDF
+                {isGeneratingPDF ? (
+                  <>
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Genererar PDF...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    Ladda ner som PDF
+                  </>
+                )}
               </button>
             </div>
             
