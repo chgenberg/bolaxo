@@ -125,19 +125,19 @@ export default function ValuationDemoPage() {
         </div>
 
         {/* Main Valuation */}
-        <div className="bg-gradient-to-br from-primary-blue to-blue-800 text-white p-8 md:p-12 rounded-2xl shadow-card mb-8">
+        <div className="bg-white p-8 md:p-12 rounded-2xl shadow-card mb-8 border-2" style={{ borderColor: '#1F3C58' }}>
           <div className="text-center">
-            <TrendingUp className="w-16 h-16 mx-auto mb-6" />
+            <TrendingUp className="w-16 h-16 mx-auto mb-6" style={{ color: '#1F3C58' }} />
             <h2 className="text-xl sm:text-2xl font-semibold mb-2" style={{ color: '#1F3C58' }}>Uppskattat företagsvärde</h2>
-            <div className="text-5xl md:text-6xl font-bold mb-4">
+            <div className="text-5xl md:text-6xl font-bold mb-4" style={{ color: '#1F3C58' }}>
               {formatCurrency(demoResult.valuationRange.mostLikely)}
             </div>
-            <div className="text-lg opacity-90">
+            <div className="text-lg mb-4" style={{ color: '#1F3C58' }}>
               Intervall: {formatCurrency(demoResult.valuationRange.min)} - {formatCurrency(demoResult.valuationRange.max)}
             </div>
-            <div className="mt-6 bg-white/20 p-4 rounded-xl inline-block">
-              <p className="text-sm mb-1">Metod använd</p>
-              <p className="font-semibold">{demoResult.method}</p>
+            <div className="mt-6 p-4 rounded-xl inline-block" style={{ backgroundColor: '#F5F0E8' }}>
+              <p className="text-sm mb-1" style={{ color: '#666666' }}>Metod använd</p>
+              <p className="font-semibold" style={{ color: '#1F3C58' }}>{demoResult.method}</p>
             </div>
           </div>
         </div>
