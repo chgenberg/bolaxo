@@ -797,10 +797,11 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 </div>
 
                 <FormFieldCurrency
-                  label="Total skuldsättning"
+                  label="Räntebärande skulder totalt"
                   value={data.totalDebt || ''}
                   onChange={(value) => setData({ ...data, totalDebt: value })}
-                  placeholder="Ex: 500.000 kr"
+                  placeholder="Ex: 1 850 000 kr"
+                  helpText="Ange summa för alla räntebärande skulder: banklån inkl. kortfristig del, utnyttjad checkkredit, leasing (bilar/maskiner/lokaler), aktieägarlån. Exkludera leverantörsskulder och skatteskulder."
                 />
 
                 <div>
