@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation'
 import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import WhatIfScenarios from '@/components/WhatIfScenarios'
-import React from 'react'
+import dynamic from 'next/dynamic'
+
+// Dynamisk import av PDF-komponenten för att undvika SSR-problem
+const ValuationPDF = dynamic(() => import('@/components/ValuationPDF'), { ssr: false })
 
 interface ValuationResult {
   valuationRange: {
@@ -141,32 +144,33 @@ export default function ValuationResultPage() {
       
       // Importera dynamiskt för att undvika SSR-problem
       const { pdf } = await import('@react-pdf/renderer')
-      const ValuationPDF = (await import('@/components/ValuationPDF')).default
       
-      // Skapa PDF-komponenten med JSX
-      const pdfDocument = React.createElement(ValuationPDF, {
-        companyName: valuationData?.companyName || 'Ditt företag',
-        result: result,
-        generatedAt: new Date().toLocaleDateString('sv-SE', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        }),
-        companyInfo: enrichedData ? {
-          orgNumber: valuationData?.orgNumber,
-          website: enrichedData.website,
-          email: enrichedData.email,
-          phone: enrichedData.phone,
-          address: enrichedData.address,
-          industry: enrichedData.industry,
-          employees: enrichedData.employees
-        } : valuationData ? {
-          orgNumber: valuationData?.orgNumber,
-          industry: valuationData?.industry,
-          employees: valuationData?.employees
-        } : undefined,
-        hasExactFinancials: hasExactFinancials
-      })
+      // Använd JSX direkt för korrekt typning
+      const pdfDocument = (
+        <ValuationPDF 
+          companyName={valuationData?.companyName || 'Ditt företag'}
+          result={result}
+          generatedAt={new Date().toLocaleDateString('sv-SE', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })}
+          companyInfo={enrichedData ? {
+            orgNumber: valuationData?.orgNumber,
+            website: enrichedData.website,
+            email: enrichedData.email,
+            phone: enrichedData.phone,
+            address: enrichedData.address,
+            industry: enrichedData.industry,
+            employees: enrichedData.employees
+          } : valuationData ? {
+            orgNumber: valuationData?.orgNumber,
+            industry: valuationData?.industry,
+            employees: valuationData?.employees
+          } : undefined}
+          hasExactFinancials={hasExactFinancials}
+        />
+      )
       
       const blob = await pdf(pdfDocument).toBlob()
       
