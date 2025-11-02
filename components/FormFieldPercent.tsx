@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { HelpCircle } from 'lucide-react'
 
 interface FormFieldPercentProps {
   label: string
@@ -10,6 +11,7 @@ interface FormFieldPercentProps {
   required?: boolean
   className?: string
   tooltip?: string
+  helpText?: string
 }
 
 export default function FormFieldPercent({
@@ -19,9 +21,11 @@ export default function FormFieldPercent({
   placeholder = 'Ex: 15%',
   required = false,
   className = '',
-  tooltip
+  tooltip,
+  helpText
 }: FormFieldPercentProps) {
   const [displayValue, setDisplayValue] = useState('')
+  const [showTooltip, setShowTooltip] = useState(false)
 
   // Formatera värdet för visning
   useEffect(() => {
@@ -51,8 +55,29 @@ export default function FormFieldPercent({
 
   return (
     <div className={className}>
-      <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-        {label} {required && '*'}
+      <label className="block text-sm font-medium mb-2 flex items-center gap-2" style={{ color: '#1F3C58' }}>
+        <span>{label} {required && '*'}</span>
+        {helpText && (
+          <div className="relative">
+            <button
+              type="button"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              onFocus={() => setShowTooltip(true)}
+              onBlur={() => setShowTooltip(false)}
+              className="focus:outline-none"
+              aria-label="Hjälpinformation"
+            >
+              <HelpCircle className="w-4 h-4 text-gray-400 hover:text-primary-navy transition-colors" />
+            </button>
+            {showTooltip && (
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-80 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg z-50">
+                {helpText}
+                <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+              </div>
+            )}
+          </div>
+        )}
       </label>
       <input
         type="text"

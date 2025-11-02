@@ -61,7 +61,7 @@ const industries = [
 ]
 
 // Branschspecifika frågor
-const industryQuestions: Record<string, Array<{ key: string; label: string; type: 'text' | 'select' | 'textarea'; options?: {value: string; label: string}[]; tooltip?: string; fieldType?: 'currency' | 'percent' }>> = {
+const industryQuestions: Record<string, Array<{ key: string; label: string; type: 'text' | 'select' | 'textarea'; options?: {value: string; label: string}[]; tooltip?: string; helpText?: string; fieldType?: 'currency' | 'percent' }>> = {
   tech: [
     { key: 'businessModel', label: 'Affärsmodell', type: 'select', options: [
       { value: 'saas', label: 'SaaS (Software as a Service)' },
@@ -73,7 +73,7 @@ const industryQuestions: Record<string, Array<{ key: string; label: string; type
     { key: 'recurringRevenue', label: 'Andel återkommande intäkter / MRR', type: 'text', tooltip: 'T.ex. prenumerationer, support-avtal. För SaaS: ange MRR/ARR-andel.', fieldType: 'percent' },
     { key: 'monthlyRecurringRevenue', label: 'MRR - Monthly Recurring Revenue', type: 'text', tooltip: 'Endast för SaaS: månatliga återkommande intäkter', fieldType: 'currency' },
     { key: 'customerChurn', label: 'Årlig kundavgång (churn rate)', type: 'text', tooltip: 'Andel kunder som slutar per år. <5% är excellent för SaaS', fieldType: 'percent' },
-    { key: 'netRevenueRetention', label: 'NRR - Net Revenue Retention', type: 'text', tooltip: 'För SaaS: intäkter från befintliga kunder vs förra året. >100% = expansion!', fieldType: 'percent' },
+    { key: 'netRevenueRetention', label: 'NRR - Net Revenue Retention', type: 'text', helpText: 'Net Revenue Retention (NRR) mäter hur mycket intäkter ni behåller från befintliga kunder från ett år till nästa. Formel: (Intäkter från befintliga kunder detta år / Intäkter från samma kunder förra året) × 100. >100% betyder att ni expanderar med befintliga kunder (upsell/cross-sell). <100% betyder att ni förlorar intäkter från befintliga kunder. Exempel: Om ni hade 1 MSEK från befintliga kunder förra året och 1.2 MSEK från samma kunder detta år = 120% NRR.', fieldType: 'percent' },
     { key: 'customerAcquisitionCost', label: 'CAC - Customer Acquisition Cost (kr)', type: 'text', tooltip: 'Kostnad för att värva en ny kund' },
     { key: 'lifetimeValue', label: 'LTV - Lifetime Value per kund (kr)', type: 'text', tooltip: 'Total intäkt från en genomsnittlig kund' },
     { key: 'cacPaybackMonths', label: 'CAC Payback Period', type: 'select', tooltip: 'Hur många månader för att tjäna tillbaka kundanskaffningskostnad? <12 mån excellent', options: [
@@ -520,6 +520,25 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     }
   }, [step])
 
+  // Auto-calculate COGS from revenue and gross margin
+  useEffect(() => {
+    if (data.exactRevenue && data.grossMargin && step === 3) {
+      const revenue = Number(data.exactRevenue)
+      const grossMarginPercent = Number(data.grossMargin.replace('%', '').replace(',', '.'))
+      
+      if (revenue > 0 && grossMarginPercent > 0 && grossMarginPercent <= 100) {
+        // COGS = Revenue * (1 - Gross Margin / 100)
+        const calculatedCOGS = Math.round(revenue * (1 - grossMarginPercent / 100))
+        const currentCOGS = Number(data.cogs) || 0
+        // Only update if the calculated value differs significantly from current value
+        // This prevents infinite loops while allowing auto-calculation
+        if (Math.abs(currentCOGS - calculatedCOGS) > 1000) {
+          setData(prev => ({ ...prev, cogs: calculatedCOGS.toString() }))
+        }
+      }
+    }
+  }, [data.exactRevenue, data.grossMargin, step, data.cogs])
+
   // Laddningstexterna som ska visas i sekvens
   const loadingTexts = [
     'Analyserar din information...',
@@ -954,8 +973,14 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       value={data.cogs || ''}
                       onChange={(value) => setData({ ...data, cogs: value })}
                       placeholder="Ex: 4.000.000 kr"
+                      disabled={!!(data.exactRevenue && data.grossMargin)}
                     />
-                    </div>
+                    {data.exactRevenue && data.grossMargin && (
+                      <p className="text-xs mt-1 text-gray-500">
+                        Beräknas automatiskt från nettoomsättning och bruttomarginal
+                      </p>
+                    )}
+                  </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
@@ -965,8 +990,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       type="text"
                       value={data.salaries || ''}
                       onChange={(e) => setData({ ...data, salaries: e.target.value })}
-                      placeholder="Ex: 3500000"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                      placeholder="Ex: 123 000 kr"
+                      className="input-field"
                     />
                   </div>
                   </div>
@@ -1046,6 +1071,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                         onChange={(value) => setData({ ...data, [question.key]: value })}
                       placeholder={getExamplePlaceholder(question)}
                       tooltip={question.tooltip}
+                      helpText={question.helpText}
                       required
                     />
                   )
