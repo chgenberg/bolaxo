@@ -1,130 +1,112 @@
 'use client'
 
-import { Document, Page, Text, View, StyleSheet, Font, Svg, Path } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
 
-// Registrera Inter font om möjligt (annars fallback till Helvetica)
-Font.register({
-  family: 'Inter',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2' },
-    { src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2', fontWeight: 600 },
-    { src: 'https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiA.woff2', fontWeight: 700 },
-  ]
-})
-
-// Skapa stilar för PDF med mörkblå tema
+// Skapa stilar för PDF med mörkblå tema (#1F3C58)
 const styles = StyleSheet.create({
   page: {
-    padding: 50,
-    backgroundColor: '#F8FAFD',
-    fontFamily: 'Inter',
+    padding: 40,
+    backgroundColor: '#FFFFFF',
+    fontFamily: 'Helvetica',
     fontSize: 11,
-    lineHeight: 1.6,
+    lineHeight: 1.5,
   },
-  // Header med mörkblå gradient-liknande effekt
+  // Header med mörkblå accent
   header: {
-    marginBottom: 35,
-    paddingBottom: 20,
-    borderBottom: '3 solid #1e3a8a',
+    marginBottom: 30,
+    paddingBottom: 15,
+    borderBottom: '2 solid #1F3C58',
   },
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   logo: {
-    fontSize: 28,
-    fontWeight: 700,
-    color: '#1e3a8a',
-    letterSpacing: -1,
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    letterSpacing: 2,
   },
   tagline: {
     fontSize: 10,
-    color: '#64748b',
-    marginLeft: 15,
+    color: '#666666',
+    marginLeft: 12,
     fontStyle: 'italic',
   },
   title: {
-    fontSize: 22,
-    fontWeight: 600,
-    marginBottom: 10,
-    color: '#0f172a',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#1F3C58',
   },
   subtitle: {
-    fontSize: 12,
-    color: '#475569',
+    fontSize: 14,
+    color: '#666666',
     marginBottom: 5,
   },
   date: {
     fontSize: 10,
-    color: '#94a3b8',
+    color: '#999999',
   },
   // Huvudvärderingsbox med mörkblå accent
   valuationBox: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     padding: 30,
-    borderRadius: 12,
-    marginBottom: 30,
-    borderLeft: '5 solid #1e3a8a',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
+    borderRadius: 8,
+    marginBottom: 25,
+    border: '3 solid #1F3C58',
   },
   valuationLabel: {
-    fontSize: 13,
-    marginBottom: 8,
-    color: '#1e3a8a',
-    fontWeight: 600,
+    fontSize: 12,
+    marginBottom: 10,
+    color: '#1F3C58',
+    fontWeight: 'bold',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   valuationAmount: {
-    fontSize: 36,
-    fontWeight: 700,
-    color: '#1e3a8a',
-    marginBottom: 10,
+    fontSize: 42,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    marginBottom: 8,
   },
   valuationRange: {
     fontSize: 14,
-    color: '#64748b',
+    color: '#666666',
   },
   // Mjuka vita boxar för sektioner
   section: {
-    backgroundColor: '#ffffff',
-    padding: 20,
-    borderRadius: 8,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 5,
+    backgroundColor: '#FFFFFF',
+    padding: 18,
+    borderRadius: 6,
+    marginBottom: 18,
+    border: '1 solid #E5E5E5',
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 600,
-    color: '#1e3a8a',
-    marginBottom: 15,
-    letterSpacing: -0.5,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    marginBottom: 12,
   },
   // Metodologi box
   methodBox: {
-    backgroundColor: '#f1f5f9',
-    padding: 18,
+    backgroundColor: '#F5F0E8',
+    padding: 15,
     borderRadius: 6,
-    marginBottom: 15,
-    borderLeft: '3 solid #3b82f6',
+    marginBottom: 12,
+    borderLeft: '4 solid #1F3C58',
   },
   methodTitle: {
     fontSize: 13,
-    fontWeight: 600,
+    fontWeight: 'bold',
     marginBottom: 6,
-    color: '#1e293b',
+    color: '#1F3C58',
   },
   methodText: {
     fontSize: 11,
-    color: '#475569',
-    lineHeight: 1.5,
+    color: '#333333',
+    lineHeight: 1.6,
   },
   // Metrics grid
   metricsGrid: {
@@ -134,23 +116,24 @@ const styles = StyleSheet.create({
   },
   metricBox: {
     width: '48%',
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#F9F9F9',
     padding: 12,
-    borderRadius: 6,
+    borderRadius: 5,
     marginBottom: 10,
     marginRight: '2%',
+    border: '1 solid #E5E5E5',
   },
   metricLabel: {
-    fontSize: 10,
-    color: '#64748b',
-    marginBottom: 3,
+    fontSize: 9,
+    color: '#666666',
+    marginBottom: 4,
     textTransform: 'uppercase',
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
   },
   metricValue: {
-    fontSize: 14,
-    fontWeight: 600,
-    color: '#1e293b',
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#1F3C58',
   },
   // Listor
   listItem: {
@@ -161,101 +144,100 @@ const styles = StyleSheet.create({
   bullet: {
     width: 20,
     fontSize: 12,
-    color: '#3b82f6',
+    color: '#1F3C58',
   },
   listText: {
     flex: 1,
     fontSize: 11,
-    color: '#334155',
+    color: '#333333',
     lineHeight: 1.5,
   },
   // Rekommendationer
   recommendation: {
-    marginBottom: 18,
-    padding: 16,
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    borderLeft: '3 solid #10b981',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 3,
+    marginBottom: 15,
+    padding: 14,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 6,
+    borderLeft: '4 solid #1F3C58',
+    border: '1 solid #E5E5E5',
   },
   recHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   recTitle: {
     fontSize: 13,
-    fontWeight: 600,
-    color: '#0f172a',
+    fontWeight: 'bold',
+    color: '#1F3C58',
     flex: 1,
   },
   recDescription: {
     fontSize: 11,
-    color: '#475569',
-    lineHeight: 1.5,
+    color: '#333333',
+    lineHeight: 1.6,
   },
   impactBadge: {
     fontSize: 9,
-    fontWeight: 600,
+    fontWeight: 'bold',
     paddingVertical: 3,
-    paddingHorizontal: 10,
-    borderRadius: 4,
+    paddingHorizontal: 8,
+    borderRadius: 3,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   impactHigh: {
-    backgroundColor: '#fee2e2',
-    color: '#dc2626',
+    backgroundColor: '#FFE5E5',
+    color: '#CC0000',
   },
   impactMedium: {
-    backgroundColor: '#fef3c7',
-    color: '#d97706',
+    backgroundColor: '#FFF4E5',
+    color: '#CC6600',
   },
   impactLow: {
-    backgroundColor: '#dbeafe',
-    color: '#2563eb',
+    backgroundColor: '#E5F0FF',
+    color: '#1F3C58',
   },
   // Sidnumrering
   pageNumber: {
     position: 'absolute',
-    bottom: 30,
-    right: 50,
-    fontSize: 10,
-    color: '#94a3b8',
+    bottom: 25,
+    right: 40,
+    fontSize: 9,
+    color: '#999999',
   },
   // Footer/Disclaimer
   footer: {
     position: 'absolute',
-    bottom: 50,
-    left: 50,
-    right: 50,
-    paddingTop: 15,
-    borderTop: '1 solid #e2e8f0',
+    bottom: 40,
+    left: 40,
+    right: 40,
+    paddingTop: 12,
+    borderTop: '1 solid #E5E5E5',
   },
   disclaimer: {
     fontSize: 9,
-    color: '#94a3b8',
+    color: '#666666',
     lineHeight: 1.4,
+    textAlign: 'center',
   },
   // Marknadsanalys box
   analysisBox: {
-    backgroundColor: '#f8fafc',
-    padding: 18,
-    borderRadius: 8,
-    marginBottom: 15,
+    backgroundColor: '#F9F9F9',
+    padding: 15,
+    borderRadius: 6,
+    marginBottom: 12,
+    border: '1 solid #E5E5E5',
   },
   analysisText: {
     fontSize: 11,
-    color: '#334155',
+    color: '#333333',
     lineHeight: 1.6,
   },
   // SWOT specifika stilar
   swotContainer: {
-    marginBottom: 20,
+    marginBottom: 18,
   },
   swotGrid: {
     flexDirection: 'row',
@@ -265,14 +247,33 @@ const styles = StyleSheet.create({
     width: '48%',
     marginBottom: 15,
     marginRight: '2%',
+    padding: 12,
+    backgroundColor: '#F9F9F9',
+    borderRadius: 6,
+    border: '1 solid #E5E5E5',
   },
   swotTitle: {
-    fontSize: 12,
-    fontWeight: 600,
+    fontSize: 13,
+    fontWeight: 'bold',
     marginBottom: 8,
-    color: '#1e293b',
-    paddingBottom: 4,
-    borderBottom: '2 solid #e2e8f0',
+    color: '#1F3C58',
+    paddingBottom: 6,
+    borderBottom: '2 solid #E5E5E5',
+  },
+  qualityIndicator: {
+    padding: 12,
+    borderRadius: 6,
+    marginBottom: 18,
+    borderLeft: '4 solid',
+  },
+  qualityText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  qualityDesc: {
+    fontSize: 9,
+    lineHeight: 1.4,
   },
 })
 
@@ -332,24 +333,19 @@ export default function ValuationPDF({ companyName, result, generatedAt, company
 
         {/* Data quality indicator */}
         <View style={{
-          backgroundColor: hasExactFinancials ? '#f0fdf4' : '#fef3c7',
-          padding: 12,
-          borderRadius: 6,
-          marginBottom: 20,
-          borderLeft: hasExactFinancials ? '3 solid #10b981' : '3 solid #f59e0b'
+          ...styles.qualityIndicator,
+          backgroundColor: hasExactFinancials ? '#E8F5E9' : '#FFF8E1',
+          borderLeftColor: hasExactFinancials ? '#4CAF50' : '#FFC107',
         }}>
           <Text style={{
-            fontSize: 10,
-            color: hasExactFinancials ? '#166534' : '#92400e',
-            fontWeight: 600,
-            marginBottom: 3
+            ...styles.qualityText,
+            color: hasExactFinancials ? '#2E7D32' : '#F57C00',
           }}>
             {hasExactFinancials ? '✓ Baserat på exakta finansiella siffror' : '⚠ Baserat på uppskattningar'}
           </Text>
           <Text style={{
-            fontSize: 9,
-            color: hasExactFinancials ? '#15803d' : '#b45309',
-            lineHeight: 1.4
+            ...styles.qualityDesc,
+            color: hasExactFinancials ? '#388E3C' : '#E65100',
           }}>
             {hasExactFinancials 
               ? 'Värderingen baseras på faktisk omsättning och rörelsekostnader, vilket ger högre precision.'
@@ -477,10 +473,10 @@ export default function ValuationPDF({ companyName, result, generatedAt, company
           <View style={styles.swotGrid}>
             {/* Styrkor */}
             <View style={styles.swotBox}>
-              <Text style={{ ...styles.swotTitle, color: '#10b981' }}>Styrkor</Text>
+              <Text style={{ ...styles.swotTitle, color: '#1F3C58' }}>Styrkor</Text>
               {result.analysis.strengths.slice(0, 4).map((item: string, i: number) => (
                 <View key={i} style={styles.listItem}>
-                  <Text style={{ ...styles.bullet, color: '#10b981' }}>•</Text>
+                  <Text style={{ ...styles.bullet, color: '#1F3C58' }}>•</Text>
                   <Text style={styles.listText}>{item}</Text>
                 </View>
               ))}
@@ -488,10 +484,10 @@ export default function ValuationPDF({ companyName, result, generatedAt, company
 
             {/* Svagheter */}
             <View style={styles.swotBox}>
-              <Text style={{ ...styles.swotTitle, color: '#ef4444' }}>Svagheter</Text>
+              <Text style={{ ...styles.swotTitle, color: '#1F3C58' }}>Svagheter</Text>
               {result.analysis.weaknesses.slice(0, 4).map((item: string, i: number) => (
                 <View key={i} style={styles.listItem}>
-                  <Text style={{ ...styles.bullet, color: '#ef4444' }}>•</Text>
+                  <Text style={{ ...styles.bullet, color: '#1F3C58' }}>•</Text>
                   <Text style={styles.listText}>{item}</Text>
                 </View>
               ))}
@@ -499,10 +495,10 @@ export default function ValuationPDF({ companyName, result, generatedAt, company
 
             {/* Möjligheter */}
             <View style={styles.swotBox}>
-              <Text style={{ ...styles.swotTitle, color: '#3b82f6' }}>Möjligheter</Text>
+              <Text style={{ ...styles.swotTitle, color: '#1F3C58' }}>Möjligheter</Text>
               {result.analysis.opportunities.slice(0, 4).map((item: string, i: number) => (
                 <View key={i} style={styles.listItem}>
-                  <Text style={{ ...styles.bullet, color: '#3b82f6' }}>•</Text>
+                  <Text style={{ ...styles.bullet, color: '#1F3C58' }}>•</Text>
                   <Text style={styles.listText}>{item}</Text>
                 </View>
               ))}
@@ -510,10 +506,10 @@ export default function ValuationPDF({ companyName, result, generatedAt, company
 
             {/* Risker */}
             <View style={styles.swotBox}>
-              <Text style={{ ...styles.swotTitle, color: '#f59e0b' }}>Risker</Text>
+              <Text style={{ ...styles.swotTitle, color: '#1F3C58' }}>Risker</Text>
               {result.analysis.risks.slice(0, 4).map((item: string, i: number) => (
                 <View key={i} style={styles.listItem}>
-                  <Text style={{ ...styles.bullet, color: '#f59e0b' }}>•</Text>
+                  <Text style={{ ...styles.bullet, color: '#1F3C58' }}>•</Text>
                   <Text style={styles.listText}>{item}</Text>
                 </View>
               ))}

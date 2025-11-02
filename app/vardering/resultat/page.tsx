@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation'
 import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import WhatIfScenarios from '@/components/WhatIfScenarios'
-import { pdf } from '@react-pdf/renderer'
-import ValuationPDF from '@/components/ValuationPDF'
 
 interface ValuationResult {
   valuationRange: {
@@ -123,17 +121,26 @@ export default function ValuationResultPage() {
 
   const handleDownloadPDF = async () => {
     try {
+      if (!result) {
+        alert('Ingen värdering att ladda ner ännu. Vänta på att värderingen är klar.')
+        return
+      }
+
       // Hämta berikad data om den finns
       const enrichedDataStr = localStorage.getItem('enrichedCompanyData')
       const enrichedData = enrichedDataStr ? JSON.parse(enrichedDataStr) : null
       
       // Kolla om vi har exakta finansiella siffror
-      const hasExactFinancials = !!(valuationData?.exactRevenue && valuationData?.operatingCosts)
+      const hasExactFinancials = !!(valuationData?.exactRevenue && (valuationData?.salaries || valuationData?.operatingCosts))
+      
+      // Importera dynamiskt för att undvika SSR-problem
+      const { pdf } = await import('@react-pdf/renderer')
+      const ValuationPDF = (await import('@/components/ValuationPDF')).default
       
       const blob = await pdf(
         <ValuationPDF 
           companyName={valuationData?.companyName || 'Ditt företag'}
-          result={result!}
+          result={result}
           generatedAt={new Date().toLocaleDateString('sv-SE', { 
             year: 'numeric', 
             month: 'long', 
@@ -147,6 +154,10 @@ export default function ValuationResultPage() {
             address: enrichedData.address,
             industry: enrichedData.industry,
             employees: enrichedData.employees
+          } : valuationData ? {
+            orgNumber: valuationData?.orgNumber,
+            industry: valuationData?.industry,
+            employees: valuationData?.employees
           } : undefined}
           hasExactFinancials={hasExactFinancials}
         />
@@ -155,12 +166,14 @@ export default function ValuationResultPage() {
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = `Foretagsvardering_${valuationData?.companyName?.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`
+      link.download = `Foretagsvardering_${(valuationData?.companyName || 'foretag').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`
+      document.body.appendChild(link)
       link.click()
+      document.body.removeChild(link)
       URL.revokeObjectURL(url)
     } catch (error) {
       console.error('PDF generation error:', error)
-      alert('Kunde inte generera PDF. Försök igen.')
+      alert('Kunde inte generera PDF. Försök igen eller kontakta support om problemet kvarstår.')
     }
   }
 
