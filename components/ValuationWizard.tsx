@@ -311,6 +311,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [loadingText, setLoadingText] = useState('Analyserar din information...')
   const [showOrgNumberTooltip, setShowOrgNumberTooltip] = useState(false)
+  const cogsManuallySetRef = useRef(false)
 
   const totalSteps = 6
   const progress = (step / totalSteps) * 100
@@ -518,26 +519,25 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = 0
     }
+    // Reset manual COGS flag when leaving step 3
+    if (step !== 3) {
+      cogsManuallySetRef.current = false
+    }
   }, [step])
 
   // Auto-calculate COGS from revenue and gross margin
   useEffect(() => {
-    if (data.exactRevenue && data.grossMargin && step === 3) {
+    if (data.exactRevenue && data.grossMargin && step === 3 && !cogsManuallySetRef.current) {
       const revenue = Number(data.exactRevenue)
       const grossMarginPercent = Number(data.grossMargin.replace('%', '').replace(',', '.'))
       
       if (revenue > 0 && grossMarginPercent > 0 && grossMarginPercent <= 100) {
         // COGS = Revenue * (1 - Gross Margin / 100)
         const calculatedCOGS = Math.round(revenue * (1 - grossMarginPercent / 100))
-        const currentCOGS = Number(data.cogs) || 0
-        // Only update if the calculated value differs significantly from current value
-        // This prevents infinite loops while allowing auto-calculation
-        if (Math.abs(currentCOGS - calculatedCOGS) > 1000) {
-          setData(prev => ({ ...prev, cogs: calculatedCOGS.toString() }))
-        }
+        setData(prev => ({ ...prev, cogs: calculatedCOGS.toString() }))
       }
     }
-  }, [data.exactRevenue, data.grossMargin, step, data.cogs])
+  }, [data.exactRevenue, data.grossMargin, step])
 
   // Laddningstexterna som ska visas i sekvens
   const loadingTexts = [
@@ -971,11 +971,14 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     <FormFieldCurrency
                       label="Kostnad sålda varor/tjänster"
                       value={data.cogs || ''}
-                      onChange={(value) => setData({ ...data, cogs: value })}
+                      onChange={(value) => {
+                        cogsManuallySetRef.current = true
+                        setData({ ...data, cogs: value })
+                      }}
                       placeholder="Ex: 4.000.000 kr"
-                      disabled={!!(data.exactRevenue && data.grossMargin)}
+                      disabled={!!(data.exactRevenue && data.grossMargin && !cogsManuallySetRef.current)}
                     />
-                    {data.exactRevenue && data.grossMargin && (
+                    {data.exactRevenue && data.grossMargin && !cogsManuallySetRef.current && (
                       <p className="text-xs mt-1 text-gray-500">
                         Beräknas automatiskt från nettoomsättning och bruttomarginal
                       </p>
