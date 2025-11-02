@@ -275,9 +275,10 @@ export default function Header() {
         
         {/* Menu Panel */}
         <div 
-          className={`absolute top-0 left-0 w-full max-w-sm h-full bg-white shadow-2xl transform transition-transform duration-300 ${
+          className={`absolute top-0 left-0 w-full max-w-sm h-full bg-white shadow-2xl transform transition-transform duration-300 z-50 ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
+          style={{ backgroundColor: '#ffffff' }}
         >
           <div className="p-6 space-y-6">
             {/* Close button */}
