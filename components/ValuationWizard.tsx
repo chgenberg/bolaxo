@@ -254,7 +254,7 @@ const qualitativeQuestions = [
   { key: 'competitiveAdvantage', label: 'Unika konkurrensfördelar', type: 'textarea' as const, tooltip: 'Vad gör ert företag unikt?' },
   { key: 'futureGrowth', label: 'Tillväxtplaner kommande 3 år', type: 'textarea' as const },
   { key: 'challenges', label: 'Största utmaningar/risker', type: 'textarea' as const },
-  { key: 'whySelling', label: 'Varför överväger ni försäljning?', type: 'textarea' as const },
+  { key: 'whySelling', label: 'Går du i säljtankar? Varför?', type: 'textarea' as const },
 ]
 
 // Formateringsfunktioner
