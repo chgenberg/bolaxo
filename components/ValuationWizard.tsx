@@ -37,6 +37,7 @@ interface ValuationData {
   salaries?: string
   marketingCosts?: string
   rentCosts?: string
+  otherOperatingCosts?: string
   
   // Step 3: Branschspecifika frågor (dynamiska baserat på bransch)
   [key: string]: string | number | undefined
@@ -443,15 +444,28 @@ export default function ValuationWizard({ onClose }: WizardProps) {
       }
     }
     
+    // Beräkna totala rörelsekostnader från de nya kategorierna
+    const salaries = Number(data.salaries) || 0
+    const rent = Number(data.rentCosts) || 0
+    const marketing = Number(data.marketingCosts) || 0
+    const other = Number(data.otherOperatingCosts) || 0
+    const totalOperatingCosts = salaries + rent + marketing + other
+    
+    // Skapa en kopia av data med beräknade operatingCosts
+    const submitData = {
+      ...data,
+      operatingCosts: totalOperatingCosts > 0 ? totalOperatingCosts.toString() : data.operatingCosts || ''
+    }
+    
     // Spara data i localStorage för att skicka till resultat-sidan
-    localStorage.setItem('valuationData', JSON.stringify(data))
+    localStorage.setItem('valuationData', JSON.stringify(submitData))
     
     // Anropa API för värdering
     try {
       const response = await fetch('/api/valuation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify(submitData)
       })
       
       if (response.ok) {
@@ -484,7 +498,6 @@ export default function ValuationWizard({ onClose }: WizardProps) {
       case 3:
         // Steg 3: Finansiella frågor
         return data.exactRevenue && 
-               data.operatingCosts && 
                data.companyAge && 
                data.revenue3Years && 
                data.employees
@@ -839,21 +852,48 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
               <div className="space-y-4">
                 <FormFieldCurrency
-                  label="Årsomsättning"
+                  label="Nettoomsättning"
                   value={data.exactRevenue || ''}
                   onChange={(value) => setData({ ...data, exactRevenue: value })}
                   placeholder="Ex: 12.000.000 kr"
                   required
                 />
 
-                <FormFieldCurrency
-                  label="Totala rörelsekostnader"
-                  value={data.operatingCosts || ''}
-                  onChange={(value) => setData({ ...data, operatingCosts: value })}
-                  placeholder="Ex: 9.000.000 kr"
-                  tooltip="Inkluderar alla kostnader utom skatt"
-                    required
-                  />
+                <div>
+                  <h4 className="text-base font-semibold mb-3" style={{ color: '#1F3C58' }}>
+                    Rörelsekostnader
+                  </h4>
+                  <div className="space-y-4 pl-4 border-l-2 border-gray-200">
+                    <FormFieldCurrency
+                      label="Löner & sociala avgifter"
+                      value={data.salaries || ''}
+                      onChange={(value) => setData({ ...data, salaries: value })}
+                      placeholder="Ex: 4.500.000 kr"
+                    />
+                    
+                    <FormFieldCurrency
+                      label="Hyra & lokaler"
+                      value={data.rentCosts || ''}
+                      onChange={(value) => setData({ ...data, rentCosts: value })}
+                      placeholder="Ex: 800.000 kr"
+                    />
+                    
+                    <FormFieldCurrency
+                      label="Marknadsföring & försäljning"
+                      value={data.marketingCosts || ''}
+                      onChange={(value) => setData({ ...data, marketingCosts: value })}
+                      placeholder="Ex: 600.000 kr"
+                    />
+                    
+                    <FormFieldCurrency
+                      label="Övriga rörelsekostnader"
+                      value={data.otherOperatingCosts || ''}
+                      onChange={(value) => setData({ ...data, otherOperatingCosts: value })}
+                      placeholder="Ex: 1.200.000 kr"
+                      helpText="T.ex. administration, IT, konsulter, försäkringar, el/värme/vatten, reparationer & underhåll, etc."
+                    />
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -1093,7 +1133,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   </div>
                 </div>
                 <div>
-                    <div className="text-sm" style={{ color: '#666666' }}>Årsomsättning</div>
+                    <div className="text-sm" style={{ color: '#666666' }}>Nettoomsättning</div>
                     <div className="font-semibold" style={{ color: '#1F3C58' }}>
                     {data.exactRevenue ? `${(Number(data.exactRevenue) / 1000000).toFixed(2)} MSEK` : 'Ej angiven'}
                   </div>
@@ -1101,9 +1141,17 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 <div>
                     <div className="text-sm" style={{ color: '#666666' }}>EBITDA</div>
                     <div className="font-semibold" style={{ color: '#1F3C58' }}>
-                    {data.exactRevenue && data.operatingCosts 
-                        ? `${((Number(data.exactRevenue) - Number(data.operatingCosts)) / 1000000).toFixed(2)} MSEK`
-                      : 'Ej angiven'}
+                    {(() => {
+                      const revenue = Number(data.exactRevenue) || 0
+                      const salaries = Number(data.salaries) || 0
+                      const rent = Number(data.rentCosts) || 0
+                      const marketing = Number(data.marketingCosts) || 0
+                      const other = Number(data.otherOperatingCosts) || 0
+                      const totalCosts = salaries + rent + marketing + other
+                      return revenue > 0 && totalCosts > 0
+                        ? `${((revenue - totalCosts) / 1000000).toFixed(2)} MSEK`
+                        : 'Ej angiven'
+                    })()}
                   </div>
                 </div>
                 <div>
