@@ -104,6 +104,27 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [mounted])
 
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
+      document.body.style.overflow = 'hidden'
+      
+      return () => {
+        // Restore scroll position when menu closes
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        document.body.style.overflow = ''
+        window.scrollTo(0, scrollY)
+      }
+    }
+  }, [isMenuOpen])
+
   const handleMouseEnter = (label: string) => {
     if (dropdownTimeoutRef.current) {
       clearTimeout(dropdownTimeoutRef.current)
@@ -262,15 +283,26 @@ export default function Header() {
       </nav>
 
       {/* Mobile Menu */}
-      <div className={`lg:hidden fixed inset-0 z-50 ${
-        isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
-      }`}>
+      <div 
+        className={`lg:hidden fixed inset-0 z-[100] ${
+          isMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'
+        }`}
+        style={{ 
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 9999
+        }}
+      >
         {/* Overlay */}
         <div 
           className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
             isMenuOpen ? 'opacity-100' : 'opacity-0'
           }`} 
           onClick={() => setIsMenuOpen(false)}
+          style={{ position: 'fixed', inset: 0 }}
         />
         
         {/* Menu Panel */}
@@ -278,10 +310,23 @@ export default function Header() {
           className={`absolute top-0 left-0 w-full max-w-sm h-full bg-white shadow-2xl transform transition-transform duration-300 ease-out ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
-          style={{ backgroundColor: '#ffffff' }}
+          style={{ 
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            height: '100vh',
+            backgroundColor: '#ffffff',
+            zIndex: 10000,
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column'
+          }}
         >
-          {/* Header Section */}
-          <div className="bg-white border-b border-gray-200 px-6 py-5">
+          {/* Header Section - Fixed */}
+          <div 
+            className="bg-white border-b border-gray-200 px-6 py-5 flex-shrink-0"
+            style={{ position: 'relative', zIndex: 1 }}
+          >
             <div className="flex justify-between items-center">
               <span className="text-2xl font-bold text-primary-navy tracking-tight">BOLAXO</span>
               <button
@@ -295,29 +340,36 @@ export default function Header() {
           </div>
           
           {/* Scrollable Content */}
-          <div className="h-full overflow-y-auto pb-6">
-            <div className="px-6 pt-6 space-y-6">
+          <div 
+            className="flex-1 overflow-y-auto overscroll-contain"
+            style={{ 
+              WebkitOverflowScrolling: 'touch',
+              overflowY: 'auto',
+              overflowX: 'hidden'
+            }}
+          >
+            <div className="px-6 pt-6 pb-8 space-y-1">
               {/* Mobile navigation */}
               {navigation.map((item, index) => (
                 <div key={item.label}>
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.label}
                     </Link>
                   ) : (
-                    <div className="space-y-2">
-                      <div className="text-lg font-semibold text-gray-900 px-2 py-2">{item.label}</div>
+                    <div className="space-y-1">
+                      <div className="text-lg font-semibold text-gray-900 px-4 py-3">{item.label}</div>
                       {item.dropdown && (
                         <div className="space-y-1 pl-2">
                           {item.dropdown.map((dropdownItem) => (
                             <Link
                               key={dropdownItem.href}
                               href={dropdownItem.href}
-                              className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                              className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-6 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                               onClick={() => setIsMenuOpen(false)}
                             >
                               {dropdownItem.label}
@@ -327,19 +379,21 @@ export default function Header() {
                       )}
                     </div>
                   )}
-                  {index < navigation.length - 1 && <div className="border-b border-gray-100 my-4"></div>}
+                  {index < navigation.length - 1 && (
+                    <div className="border-b border-gray-100 my-2 mx-4"></div>
+                  )}
                 </div>
               ))}
               
               {/* Mobile user menu */}
-              <div className="pt-6 border-t border-gray-200">
+              <div className="pt-6 mt-6 border-t border-gray-200">
                 {user ? (
-                  <div className="space-y-3">
+                  <div className="space-y-1">
                     {(user.role === 'buyer' || user.role === 'seller') && (
                       <>
                         <Link
                           href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
-                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <MessageSquare className="w-5 h-5" />
@@ -347,7 +401,7 @@ export default function Header() {
                         </Link>
                         <Link
                           href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
-                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <User className="w-5 h-5" />
@@ -357,7 +411,7 @@ export default function Header() {
                     )}
                     <Link
                       href="/dashboard"
-                      className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                      className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <LayoutDashboard className="w-5 h-5" />
@@ -368,7 +422,7 @@ export default function Header() {
                         logout()
                         setIsMenuOpen(false)
                       }}
-                      className="flex items-center space-x-3 text-base font-medium text-red-600 hover:text-red-700 transition-colors w-full py-3 px-2 rounded-lg hover:bg-red-50 active:bg-red-100"
+                      className="flex items-center space-x-3 text-base font-medium text-red-600 hover:text-red-700 transition-colors w-full py-3 px-4 rounded-lg hover:bg-red-50 active:bg-red-100 text-left"
                     >
                       <LogOut className="w-5 h-5" />
                       <span>Logga ut</span>
@@ -378,7 +432,7 @@ export default function Header() {
                   <div className="space-y-3">
                     <Link
                       href="/login"
-                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Logga in
