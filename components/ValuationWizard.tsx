@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles, AlertCircle, CheckCircle } from 'lucide-react'
+import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, FileText, Lightbulb, Sparkles, AlertCircle, CheckCircle, HelpCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from './FormField'
@@ -309,6 +309,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const [autoAccountCreated, setAutoAccountCreated] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [loadingText, setLoadingText] = useState('Analyserar din information...')
+  const [showOrgNumberTooltip, setShowOrgNumberTooltip] = useState(false)
 
   const totalSteps = 6
   const progress = (step / totalSteps) * 100
@@ -692,8 +693,27 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                      Organisationsnummer (valfritt)
+                    <label className="block text-sm font-medium mb-2 flex items-center gap-2" style={{ color: '#1F3C58' }}>
+                      <span>Organisationsnummer (valfritt)</span>
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onMouseEnter={() => setShowOrgNumberTooltip(true)}
+                          onMouseLeave={() => setShowOrgNumberTooltip(false)}
+                          onFocus={() => setShowOrgNumberTooltip(true)}
+                          onBlur={() => setShowOrgNumberTooltip(false)}
+                          className="focus:outline-none"
+                          aria-label="Information om organisationsnummer"
+                        >
+                          <HelpCircle className="w-4 h-4 text-gray-400 hover:text-primary-navy transition-colors" />
+                        </button>
+                        {showOrgNumberTooltip && (
+                          <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg z-50">
+                            Fyller du i så hämtas offentliga uppgifter direkt.
+                            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                          </div>
+                        )}
+                      </div>
                     </label>
                     <input
                       type="text"
