@@ -119,7 +119,7 @@ export default function Header() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white'
+      scrolled ? 'bg-white shadow-md border-b border-gray-100' : 'bg-white'
     }`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24 md:h-20 lg:h-16">
@@ -252,10 +252,10 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-3 md:p-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-              aria-label="Toggle menu"
+              className="lg:hidden p-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors active:bg-gray-200"
+              aria-label="Öppna meny"
             >
-              {isMenuOpen ? <X className="w-10 h-10 md:w-8 md:h-8" /> : <Menu className="w-10 h-10 md:w-8 md:h-8" />}
+              {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
             </button>
           </div>
         </div>
@@ -267,7 +267,7 @@ export default function Header() {
       }`}>
         {/* Overlay */}
         <div 
-          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
             isMenuOpen ? 'opacity-100' : 'opacity-0'
           }`} 
           onClick={() => setIsMenuOpen(false)}
@@ -275,117 +275,124 @@ export default function Header() {
         
         {/* Menu Panel */}
         <div 
-          className={`absolute top-0 left-0 w-full max-w-sm h-full bg-white shadow-2xl transform transition-transform duration-300 z-50 ${
+          className={`absolute top-0 left-0 w-full max-w-sm h-full bg-white shadow-2xl transform transition-transform duration-300 ease-out ${
             isMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
           style={{ backgroundColor: '#ffffff' }}
         >
-          <div className="p-6 space-y-6">
-            {/* Close button */}
-            <div className="flex justify-between items-center pb-4 border-b">
-              <span className="text-2xl font-bold text-primary-navy">BOLAXO</span>
+          {/* Header Section */}
+          <div className="bg-white border-b border-gray-200 px-6 py-5">
+            <div className="flex justify-between items-center">
+              <span className="text-2xl font-bold text-primary-navy tracking-tight">BOLAXO</span>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                aria-label="Stäng meny"
               >
-                <X className="w-8 h-8" />
+                <X className="w-7 h-7 text-gray-700" />
               </button>
             </div>
-            
-            {/* Mobile navigation */}
-            {navigation.map((item) => (
-              <div key={item.label}>
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className="block text-xl font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <div>
-                    <div className="text-xl font-medium text-gray-900 mb-3">{item.label}</div>
-                    {item.dropdown && (
-                      <div className="space-y-3 pl-4">
-                        {item.dropdown.map((dropdownItem) => (
-                          <Link
-                            key={dropdownItem.href}
-                            href={dropdownItem.href}
-                            className="block text-lg text-gray-600 hover:text-primary-navy transition-colors py-2"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {dropdownItem.label}
-                          </Link>
-                        ))}
-                      </div>
+          </div>
+          
+          {/* Scrollable Content */}
+          <div className="h-full overflow-y-auto pb-6">
+            <div className="px-6 pt-6 space-y-6">
+              {/* Mobile navigation */}
+              {navigation.map((item, index) => (
+                <div key={item.label}>
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="text-lg font-semibold text-gray-900 px-2 py-2">{item.label}</div>
+                      {item.dropdown && (
+                        <div className="space-y-1 pl-2">
+                          {item.dropdown.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.href}
+                              href={dropdownItem.href}
+                              className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {dropdownItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {index < navigation.length - 1 && <div className="border-b border-gray-100 my-4"></div>}
+                </div>
+              ))}
+              
+              {/* Mobile user menu */}
+              <div className="pt-6 border-t border-gray-200">
+                {user ? (
+                  <div className="space-y-3">
+                    {(user.role === 'buyer' || user.role === 'seller') && (
+                      <>
+                        <Link
+                          href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
+                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <MessageSquare className="w-5 h-5" />
+                          <span>Meddelanden</span>
+                        </Link>
+                        <Link
+                          href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
+                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <User className="w-5 h-5" />
+                          <span>Profil & Inställningar</span>
+                        </Link>
+                      </>
                     )}
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <LayoutDashboard className="w-5 h-5" />
+                      <span>Dashboard</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout()
+                        setIsMenuOpen(false)
+                      }}
+                      className="flex items-center space-x-3 text-base font-medium text-red-600 hover:text-red-700 transition-colors w-full py-3 px-2 rounded-lg hover:bg-red-50 active:bg-red-100"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      <span>Logga ut</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <Link
+                      href="/login"
+                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-2 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Logga in
+                    </Link>
+                    <Link
+                      href="/registrera"
+                      className="block w-full text-center px-6 py-4 bg-primary-navy text-white rounded-lg font-semibold text-base hover:bg-primary-navy/90 active:bg-primary-navy/80 transition-all shadow-md active:shadow-sm"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Kom igång
+                    </Link>
                   </div>
                 )}
               </div>
-            ))}
-            
-            {/* Mobile user menu */}
-            <div className="pt-6 border-t border-gray-200">
-              {user ? (
-                <div className="space-y-4">
-                  {(user.role === 'buyer' || user.role === 'seller') && (
-                    <>
-                      <Link
-                        href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
-                        className="flex items-center space-x-3 text-lg font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <MessageSquare className="w-6 h-6" />
-                        <span>Meddelanden</span>
-                      </Link>
-                      <Link
-                        href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
-                        className="flex items-center space-x-3 text-lg font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <User className="w-6 h-6" />
-                        <span>Profil & Inställningar</span>
-                      </Link>
-                    </>
-                  )}
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center space-x-3 text-lg font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <LayoutDashboard className="w-6 h-6" />
-                    <span>Dashboard</span>
-                  </Link>
-                  <button
-                    onClick={() => {
-                      logout()
-                      setIsMenuOpen(false)
-                    }}
-                    className="flex items-center space-x-3 text-lg font-medium text-red-600 hover:text-red-700 transition-colors w-full py-2"
-                  >
-                    <LogOut className="w-6 h-6" />
-                    <span>Logga ut</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <Link
-                    href="/login"
-                    className="block text-xl font-medium text-gray-900 hover:text-primary-navy transition-colors py-2"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Logga in
-                  </Link>
-                  <Link
-                    href="/registrera"
-                    className="block w-full text-center px-6 py-4 bg-primary-navy text-white rounded-lg font-medium text-lg hover:bg-primary-navy/90 transition-all"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Kom igång
-                  </Link>
-                </div>
-              )}
             </div>
           </div>
         </div>
