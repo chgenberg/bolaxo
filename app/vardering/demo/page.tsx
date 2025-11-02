@@ -128,7 +128,7 @@ export default function ValuationDemoPage() {
         <div className="bg-gradient-to-br from-primary-blue to-blue-800 text-white p-8 md:p-12 rounded-2xl shadow-card mb-8">
           <div className="text-center">
             <TrendingUp className="w-16 h-16 mx-auto mb-6" />
-            <h2 className="text-xl sm:text-2xl font-semibold mb-2">Uppskattat företagsvärde</h2>
+            <h2 className="text-xl sm:text-2xl font-semibold mb-2" style={{ color: '#1F3C58' }}>Uppskattat företagsvärde</h2>
             <div className="text-5xl md:text-6xl font-bold mb-4">
               {formatCurrency(demoResult.valuationRange.mostLikely)}
             </div>
