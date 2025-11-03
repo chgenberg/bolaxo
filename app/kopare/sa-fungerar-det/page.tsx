@@ -62,23 +62,23 @@ export default function BuyerInfoPage() {
   ]
 
   return (
-    <main className="bg-neutral-white relative">
-      {/* Full-width background image */}
-      <div className="fixed inset-0 z-0">
-        <Image 
-          src="/1.png" 
-          alt="Köparprocess" 
-          fill
-          className="object-cover opacity-100"
-          priority
-        />
-      </div>
+    <main className="bg-neutral-white">
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-screen flex items-center bg-cover bg-center">
+        {/* Background Image - Only in hero */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/1.png" 
+            alt="Köparprocess" 
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
 
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Hero Section */}
-        <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Hero Content */}
+        <div className="relative z-10 w-full">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 sm:py-24 md:py-32">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-4 sm:mb-6">
               Bolaxo – Hitta, granska och förvärva tryggt och effektivt
             </h1>
@@ -94,10 +94,11 @@ export default function BuyerInfoPage() {
               </Link>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Interactive Steps Section with Image Integration */}
-        <section className="relative py-12 sm:py-16 md:py-24">
+        {/* Interactive Steps Section */}
+        <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 text-center uppercase">
               Köparresan i 5 steg
@@ -106,7 +107,7 @@ export default function BuyerInfoPage() {
 
             {/* Modern Tab Navigation */}
             <div className="mb-12 sm:mb-16">
-              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 border-2 border-primary-navy/10">
+              <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border-2 border-primary-navy/10">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                   {steps.map((item) => (
                     <button
@@ -156,7 +157,7 @@ export default function BuyerInfoPage() {
 
             {/* Active Step Detail */}
             <div className="max-w-4xl mx-auto animate-fadeIn">
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 sm:p-12 shadow-2xl border-2 border-primary-navy/20">
+              <div className="bg-white rounded-2xl p-8 sm:p-12 shadow-2xl border-2 border-primary-navy/20">
                 <div className="flex flex-col sm:flex-row items-start gap-6">
                   <div className="flex-shrink-0">
                     <div className="w-20 h-20 bg-primary-navy text-white rounded-2xl flex items-center justify-center shadow-lg">
@@ -179,8 +180,9 @@ export default function BuyerInfoPage() {
         </section>
 
         {/* Why Fill Profile */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl border-2 border-primary-navy/10">
+        <section className="bg-white py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl border-2 border-primary-navy/10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-6 sm:mb-8 text-center">
             Varför fylla i profilen ordentligt?
           </h2>
@@ -228,9 +230,11 @@ export default function BuyerInfoPage() {
           </div>
           </div>
         </div>
+        </section>
 
         {/* What's Included */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
+        <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-8 sm:mb-12 text-center">
             Vad ingår för köpare?
           </h2>
@@ -268,7 +272,7 @@ export default function BuyerInfoPage() {
                 description: 'För closing support (valfritt)'
               }
             ].map((feature, idx) => (
-              <div key={idx} className="bg-white/95 backdrop-blur-sm rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-primary-navy/10">
+              <div key={idx} className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border border-primary-navy/10">
                 <div className="w-14 h-14 bg-primary-navy/10 text-primary-navy rounded-lg flex items-center justify-center mb-4">
                   {feature.icon}
                 </div>
@@ -278,10 +282,12 @@ export default function BuyerInfoPage() {
             ))}
           </div>
         </div>
+        </section>
 
         {/* Pricing */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl border-2 border-primary-navy/10">
+        <section className="bg-white py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl border-2 border-primary-navy/10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-6 sm:mb-8 text-center">
             Pris & krav
           </h2>
@@ -311,22 +317,24 @@ export default function BuyerInfoPage() {
           </div>
           </div>
         </div>
+        </section>
 
         {/* Security */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
+        <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-8 sm:mb-12 text-center">
             Trygghet & sekretess
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-8 shadow-md border border-primary-navy/10">
+            <div className="bg-white rounded-xl p-8 shadow-md border border-primary-navy/10">
               <div className="flex items-center gap-3 mb-4">
                 <User className="w-6 h-6 text-primary-navy" />
                 <h3 className="text-xl font-bold text-primary-navy">Köparidentitet</h3>
               </div>
               <p className="text-gray-700">Synlig (minimikrav) – du styr hur mycket du skriver i profilen</p>
             </div>
-            <div className="bg-white/95 backdrop-blur-sm rounded-xl p-8 shadow-md border border-primary-navy/10">
+            <div className="bg-white rounded-xl p-8 shadow-md border border-primary-navy/10">
               <div className="flex items-center gap-3 mb-4">
                 <Lock className="w-6 h-6 text-primary-navy" />
                 <h3 className="text-xl font-bold text-primary-navy">Säljaridentitet</h3>
@@ -343,10 +351,12 @@ export default function BuyerInfoPage() {
             </p>
           </div>
         </div>
+        </section>
 
         {/* CTA Row */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 sm:pb-32 md:pb-48">
-          <div className="bg-gradient-to-r from-primary-navy to-primary-navy/90 backdrop-blur-sm rounded-2xl p-8 sm:p-12 text-center text-white shadow-2xl">
+        <section className="bg-white py-24 sm:py-32 md:py-48">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-r from-primary-navy to-primary-navy/90 rounded-2xl p-8 sm:p-12 text-center text-white shadow-2xl">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6">Redo att hitta ditt nästa företag?</h2>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/registrera" className="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-navy font-bold rounded-lg hover:bg-gray-100 transition-all shadow-lg">
@@ -361,7 +371,7 @@ export default function BuyerInfoPage() {
             </div>
           </div>
         </div>
-      </div>
+        </section>
       
       <style jsx>{`
         @keyframes fadeIn {

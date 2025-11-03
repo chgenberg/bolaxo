@@ -41,7 +41,7 @@ export const LAUNCH_CONFIG = {
 
   // Navigation items visibility
   NAVIGATION: {
-    SHOW_FOR_MAKLARE: true, // Show broker section now
+    SHOW_FOR_MAKLARE: false, // Hide broker section for now
     SHOW_FOR_INVESTERARE: false,
     SHOW_BLOG: false,
     SHOW_ADMIN: false,

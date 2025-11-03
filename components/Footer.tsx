@@ -80,7 +80,6 @@ export default function Footer() {
             <h3 className="text-white font-bold text-lg md:text-base mb-6">Om oss</h3>
             <ul className="space-y-3">
               <li><Link href="/om-oss" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Vårt företag</Link></li>
-              <li><Link href="/for-maklare" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">För mäklare</Link></li>
               <li><Link href="/investor" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">För investerare</Link></li>
               <li><Link href="/kontakt" className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Kontakt</Link></li>
             </ul>

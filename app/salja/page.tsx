@@ -52,23 +52,23 @@ export default function SaljaInfoPage() {
   ]
 
   return (
-    <main className="bg-neutral-white relative">
-      {/* Full-width background image */}
-      <div className="fixed inset-0 z-0">
-        <Image 
-          src="/2.png" 
-          alt="Säljprocess" 
-          fill
-          className="object-cover opacity-100"
-          priority
-        />
-      </div>
+    <main className="bg-neutral-white">
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-screen flex items-center bg-cover bg-center">
+        {/* Background Image - Only in hero */}
+        <div className="absolute inset-0 z-0">
+          <Image 
+            src="/2.png" 
+            alt="Säljprocess" 
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
 
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Hero Section */}
-        <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Hero Content */}
+        <div className="relative z-10 w-full">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 sm:py-24 md:py-32">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-4 sm:mb-6 uppercase">
               Från annons till avslut – steg för steg
             </h1>
@@ -76,17 +76,18 @@ export default function SaljaInfoPage() {
               Vi automatiserar det komplicerade och ger dig full kontroll över processen.
             </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Interactive Steps Section with Image Integration */}
-        <section className="relative py-12 sm:py-16 md:py-24">
+        {/* Interactive Steps Section */}
+        <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 text-center uppercase">Processen i 5 steg</h2>
             <p className="text-center text-primary-navy mb-12 sm:mb-16 text-lg sm:text-xl font-semibold uppercase">SÄLJARE</p>
             
             {/* Modern Tab Navigation */}
             <div className="mb-12 sm:mb-16">
-              <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 sm:p-8 border-2 border-primary-navy/10">
+              <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border-2 border-primary-navy/10">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                   {steps.map((item) => (
                     <button
@@ -136,7 +137,7 @@ export default function SaljaInfoPage() {
 
             {/* Active Step Detail */}
             <div className="max-w-4xl mx-auto animate-fadeIn">
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 sm:p-12 shadow-2xl border-2 border-primary-navy/20">
+              <div className="bg-white rounded-2xl p-8 sm:p-12 shadow-2xl border-2 border-primary-navy/20">
                 <div className="flex flex-col sm:flex-row items-start gap-6">
                   <div className="flex-shrink-0">
                     <div className="w-20 h-20 bg-primary-navy text-white rounded-2xl flex items-center justify-center shadow-lg">
@@ -159,8 +160,9 @@ export default function SaljaInfoPage() {
         </section>
 
         {/* Before/After NDA Comparison */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl border-2 border-primary-navy/10">
+        <section className="bg-white py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl border-2 border-primary-navy/10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-6 sm:mb-8 md:mb-12 text-center uppercase">
             FÖRE VS Efter NDA
           </h2>
@@ -214,9 +216,11 @@ export default function SaljaInfoPage() {
           </div>
         </div>
         </div>
+        </section>
 
         {/* Pricing Overview */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
+        <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 sm:mb-6 text-center uppercase">PRISÖVERSIKT</h2>
           <p className="text-center text-base sm:text-lg text-gray-700 mb-8 sm:mb-12 md:mb-16 max-w-2xl mx-auto px-4 sm:px-0">
             Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.
@@ -224,7 +228,7 @@ export default function SaljaInfoPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {/* Free */}
-            <div className="bg-white/95 backdrop-blur-sm border-2 border-primary-navy/20 rounded-2xl p-6 sm:p-8 hover:shadow-xl transition-all">
+            <div className="bg-white border-2 border-primary-navy/20 rounded-2xl p-6 sm:p-8 hover:shadow-xl transition-all">
               <div className="text-center mb-6 sm:mb-8">
                 <div className="text-xs sm:text-sm font-semibold text-gray-600 mb-2">Utkast</div>
                 <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-navy mb-2">0 kr</div>
@@ -244,7 +248,7 @@ export default function SaljaInfoPage() {
             </div>
 
             {/* Basic */}
-            <div className="bg-white/95 backdrop-blur-sm border-2 border-primary-navy/20 rounded-2xl p-8 hover:shadow-xl transition-all">
+            <div className="bg-white border-2 border-primary-navy/20 rounded-2xl p-8 hover:shadow-xl transition-all">
               <div className="text-center mb-8">
                 <div className="text-sm font-semibold text-primary-navy mb-2">Basic</div>
                 <div className="text-5xl font-bold text-primary-navy mb-2">495 kr</div>
@@ -264,7 +268,7 @@ export default function SaljaInfoPage() {
             </div>
 
             {/* Pro */}
-            <div className="relative bg-white/95 backdrop-blur-sm border-2 border-accent-pink rounded-2xl p-8 shadow-2xl ring-2 ring-accent-pink">
+            <div className="relative bg-white border-2 border-accent-pink rounded-2xl p-8 shadow-2xl ring-2 ring-accent-pink">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="bg-accent-pink text-primary-navy px-4 py-1 rounded-lg text-xs font-bold">
                   POPULÄR
@@ -297,12 +301,14 @@ export default function SaljaInfoPage() {
             </Link>
           </div>
         </div>
+        </section>
 
         {/* FAQ */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
+        <section className="bg-white py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-8 sm:mb-12 md:mb-16 text-center uppercase">VANLIGA FRÅGOR</h2>
           
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl border-2 border-primary-navy/10">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl border-2 border-primary-navy/10">
             <div className="space-y-6 sm:space-y-8">
             {[
               {
@@ -338,10 +344,12 @@ export default function SaljaInfoPage() {
             </div>
           </div>
         </div>
+        </section>
 
         {/* SME Kit CTA */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 sm:p-10 md:p-12 text-center shadow-xl border-2 border-primary-navy/10">
+        <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl p-8 sm:p-10 md:p-12 text-center shadow-xl border-2 border-primary-navy/10">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4 sm:mb-6">SME Kit</h2>
           <p className="text-base sm:text-lg text-primary-navy mb-6 sm:mb-8 max-w-2xl mx-auto px-4 sm:px-0">
             Automatisera dina försäljningsprocesser med vår nya SME Kit.
@@ -352,10 +360,12 @@ export default function SaljaInfoPage() {
           </Link>
           </div>
         </div>
+        </section>
 
         {/* CTA */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 sm:pb-32 md:pb-48">
-          <div className="bg-accent-pink/90 backdrop-blur-sm rounded-2xl p-8 sm:p-10 md:p-12 text-center shadow-2xl border-2 border-accent-pink">
+        <section className="bg-white py-24 sm:py-32 md:py-48">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-accent-pink rounded-2xl p-8 sm:p-10 md:p-12 text-center shadow-2xl border-2 border-accent-pink">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4 sm:mb-6">Redo att sälja?</h2>
           <p className="text-base sm:text-lg text-primary-navy mb-6 sm:mb-8 max-w-2xl mx-auto px-4 sm:px-0">
             Börja med en gratis värdering. Det tar 5 minuter och du får en detaljerad rapport direkt.
@@ -369,7 +379,7 @@ export default function SaljaInfoPage() {
           </p>
           </div>
         </div>
-      </div>
+        </section>
       
       <style jsx>{`
         @keyframes fadeIn {
