@@ -182,9 +182,6 @@ export default function ListingsPage() {
             <h1 className="text-2xl sm:text-3xl font-bold text-primary-navy uppercase">Mina annonser</h1>
             <p className="text-sm text-gray-600 mt-1">Hantera och följ upp dina annonser</p>
           </div>
-          <Link href="/salja/start" className="px-4 py-2.5 bg-primary-navy text-white rounded-lg font-semibold hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base inline-flex items-center justify-center gap-2 whitespace-nowrap">
-            + Ny annons
-          </Link>
         </div>
 
         {/* NDA Requests Panel */}

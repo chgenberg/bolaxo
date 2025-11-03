@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Send, Clock, AlertCircle, CheckCircle, MessageSquare, Plus, Filter, ChevronDown } from 'lucide-react'
+import { ArrowLeft, Send, Clock, AlertCircle, CheckCircle, MessageSquare, Plus, Filter, ChevronDown, DollarSign, Scale, BarChart3, Laptop, Users, FileText } from 'lucide-react'
 
 interface Question {
   id: string
@@ -236,15 +236,15 @@ export default function QAPage() {
   }
 
   const getCategoryIcon = (category: string) => {
-    const icons: Record<string, string> = {
-      financial: '💰',
-      legal: '⚖️',
-      commercial: '📊',
-      it: '💻',
-      hr: '👥',
-      other: '📄'
+    const icons: Record<string, React.ReactNode> = {
+      financial: <DollarSign className="w-6 h-6 text-primary-navy" />,
+      legal: <Scale className="w-6 h-6 text-primary-navy" />,
+      commercial: <BarChart3 className="w-6 h-6 text-primary-navy" />,
+      it: <Laptop className="w-6 h-6 text-primary-navy" />,
+      hr: <Users className="w-6 h-6 text-primary-navy" />,
+      other: <FileText className="w-6 h-6 text-primary-navy" />
     }
-    return icons[category] || '📄'
+    return icons[category] || <FileText className="w-6 h-6 text-primary-navy" />
   }
 
   const getPriorityColor = (priority: string) => {
@@ -342,7 +342,7 @@ export default function QAPage() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{getCategoryIcon(question.category)}</span>
+                      <div className="flex-shrink-0">{getCategoryIcon(question.category)}</div>
                       <div>
                         <h3 className="font-bold text-primary-navy">{question.title}</h3>
                         <p className="text-sm text-gray-600">
@@ -467,7 +467,7 @@ export default function QAPage() {
               <div className="bg-white rounded-lg border-2 border-primary-navy p-6">
                 <div className="mb-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">{getCategoryIcon(selectedQuestion.category)}</span>
+                    <div className="flex-shrink-0">{getCategoryIcon(selectedQuestion.category)}</div>
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPriorityColor(selectedQuestion.priority)}`}>
                       {selectedQuestion.priority}
                     </span>
