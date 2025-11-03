@@ -49,6 +49,7 @@ const getNavigation = (): NavItem[] => {
 
   baseNav.push({
     label: 'Om oss',
+    href: '/om-oss',
     dropdown: [
       { label: 'Kontakt', href: '/kontakt' },
     ]
@@ -161,12 +162,35 @@ export default function Header() {
                 onMouseLeave={handleMouseLeave}
               >
                 {item.href ? (
-                  <Link
-                    href={item.href}
-                    className="text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
-                  >
-                    {item.label}
-                  </Link>
+                  <div className="relative group">
+                    <Link
+                      href={item.href}
+                      className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
+                    >
+                      <span>{item.label}</span>
+                      {item.dropdown && (
+                        <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${
+                          openDropdown === item.label ? 'rotate-180' : ''
+                        }`} />
+                      )}
+                    </Link>
+                    {/* Dropdown Menu */}
+                    {item.dropdown && openDropdown === item.label && (
+                      <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100">
+                        <div className="py-2">
+                          {item.dropdown.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.href}
+                              href={dropdownItem.href}
+                              className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
+                            >
+                              {dropdownItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <button className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200">
                     <span>{item.label}</span>
@@ -353,13 +377,29 @@ export default function Header() {
               {navigation.map((item, index) => (
                 <div key={item.label}>
                   {item.href ? (
-                    <Link
-                      href={item.href}
-                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
+                    <div className="space-y-1">
+                      <Link
+                        href={item.href}
+                        className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                      {item.dropdown && (
+                        <div className="space-y-1 pl-2">
+                          {item.dropdown.map((dropdownItem) => (
+                            <Link
+                              key={dropdownItem.href}
+                              href={dropdownItem.href}
+                              className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-6 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {dropdownItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <div className="space-y-1">
                       <div className="text-lg font-semibold text-gray-900 px-4 py-3">{item.label}</div>
