@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
+import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import { TrendingUp, Users, Target, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 
@@ -57,8 +58,8 @@ export default function MatchesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-white">
-      <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <DashboardLayout>
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-primary-navy flex items-center gap-2 sm:gap-3 uppercase">
@@ -221,6 +222,6 @@ export default function MatchesPage() {
           </div>
         )}
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
