@@ -153,11 +153,11 @@ export default function MessagesPage() {
                   <span className="text-xs text-gray-600 flex-shrink-0">{conv.lastMessageTime}</span>
                 </div>
                 <p className="text-xs text-gray-600 mb-1 truncate">{conv.contactCompany}</p>
-                <p className="text-xs text-accent-pink mb-2 line-clamp-1 font-medium">{conv.listing}</p>
+                <p className="text-xs text-primary-navy mb-2 line-clamp-1 font-medium">{conv.listing}</p>
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-xs sm:text-sm text-gray-600 truncate flex-1 line-clamp-1">{conv.lastMessage}</p>
                   {conv.unread > 0 && (
-                    <span className="ml-1 bg-accent-pink text-white text-xs font-semibold rounded-full px-2 py-0.5 flex-shrink-0">
+                    <span className="ml-1 bg-primary-navy text-white text-xs font-semibold rounded-full px-2 py-0.5 flex-shrink-0">
                       {conv.unread}
                     </span>
                   )}
@@ -194,7 +194,7 @@ export default function MessagesPage() {
                     <div className={`max-w-[85%] sm:max-w-[70%] ${(message.senderId === user?.id || message.sent) ? 'text-right' : 'text-left'}`}>
                       <div className={`rounded-lg px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto ${
                         (message.senderId === user?.id || message.sent) 
-                          ? 'bg-accent-pink text-white' 
+                          ? 'bg-primary-navy text-white' 
                           : 'bg-gray-100 text-primary-navy'
                       }`}>
                         <p className="text-xs sm:text-sm">{message.content}</p>
@@ -232,7 +232,7 @@ export default function MessagesPage() {
                     />
                   </div>
                   <button 
-                    className="p-2 bg-accent-pink text-white rounded-lg hover:bg-blue-700 transition-colors min-h-10 flex items-center justify-center"
+                    className="p-2 bg-primary-navy text-white rounded-lg hover:bg-primary-navy/90 transition-colors min-h-10 flex items-center justify-center"
                     onClick={async () => {
                       if (!user || !messageText.trim()) return
                       const [listingId, peerId] = (selectedConversation || '').split('::')

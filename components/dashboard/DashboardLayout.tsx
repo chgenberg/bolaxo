@@ -116,7 +116,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* User info */}
         <div className="p-3 sm:p-4 border-b border-gray-200">
           <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-            <div className="w-8 sm:w-10 h-8 sm:h-10 bg-accent-pink rounded-full flex items-center justify-center text-white font-semibold text-sm sm:text-base">
+            <div className="w-8 sm:w-10 h-8 sm:h-10 bg-primary-navy rounded-full flex items-center justify-center text-white font-semibold text-sm sm:text-base">
               {user?.name?.[0] || user?.email?.[0] || 'U'}
             </div>
             {!collapsed && (
@@ -144,7 +144,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center justify-between px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg transition-all ${
                       isActive 
-                        ? 'bg-accent-pink/10 text-accent-pink font-medium' 
+                        ? 'bg-primary-navy/10 text-primary-navy font-medium' 
                         : 'text-gray-600 hover:bg-gray-100 hover:text-primary-navy'
                     }`}
                   >
@@ -154,7 +154,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     </div>
                     {!collapsed && item.badge && (
                       <span className={`text-xs px-1.5 sm:px-2 py-0.5 rounded-full font-semibold ${
-                        isActive ? 'bg-accent-pink text-white' : 'bg-gray-200 text-primary-navy'
+                        isActive ? 'bg-primary-navy text-white' : 'bg-gray-200 text-primary-navy'
                       }`}>
                         {item.badge}
                       </span>
@@ -200,13 +200,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Quick actions based on role */}
               {user?.role === 'seller' && (
-                <Link href="/salja/start" className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-accent-pink text-primary-navy font-semibold rounded-lg hover:shadow-md transition-shadow text-sm sm:text-base">
+                <Link href="/salja/start" className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
                   <Plus className="w-4 h-4" />
                   <span className="hidden sm:inline">Ny annons</span>
                 </Link>
               )}
               {user?.role === 'buyer' && (
-                <Link href="/sok" className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-accent-pink text-primary-navy font-semibold rounded-lg hover:shadow-md transition-shadow text-sm sm:text-base">
+                <Link href="/sok" className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
                   <Search className="w-4 h-4" />
                   <span className="hidden sm:inline">Sök företag</span>
                 </Link>

@@ -53,7 +53,7 @@ export default function MatchesPage() {
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return { bg: 'bg-green-50', text: 'text-green-900', bar: 'bg-green-500' }
-    if (score >= 60) return { bg: 'bg-accent-pink/10', text: 'text-primary-navy', bar: 'bg-accent-pink/100' }
+    if (score >= 60) return { bg: 'bg-primary-navy/10', text: 'text-primary-navy', bar: 'bg-primary-navy' }
     return { bg: 'bg-yellow-50', text: 'text-yellow-900', bar: 'bg-yellow-500' }
   }
 
@@ -109,7 +109,7 @@ export default function MatchesPage() {
             onClick={() => setSortBy('score')}
             className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all ${
               sortBy === 'score'
-                ? 'bg-accent-pink text-primary-navy'
+                ? 'bg-primary-navy text-white'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
           >
@@ -119,7 +119,7 @@ export default function MatchesPage() {
             onClick={() => setSortBy('recent')}
             className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all ${
               sortBy === 'recent'
-                ? 'bg-accent-pink text-primary-navy'
+                ? 'bg-primary-navy text-white'
                 : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
             }`}
           >
@@ -130,7 +130,7 @@ export default function MatchesPage() {
         {/* Matches List */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block w-6 h-6 sm:w-8 border-4 border-accent-pink/20 border-t-accent-pink rounded-full animate-spin" />
+            <div className="inline-block w-6 h-6 sm:w-8 border-4 border-primary-navy/20 border-t-primary-navy rounded-full animate-spin" />
           </div>
         ) : matches.length === 0 ? (
           <div className="bg-white rounded-lg p-6 sm:p-12 text-center border border-gray-200">
@@ -205,7 +205,7 @@ export default function MatchesPage() {
 
                     {/* Actions - Mobile optimized */}
                     <div className="flex flex-row sm:flex-col gap-2 sm:gap-2 flex-shrink-0 w-full sm:w-auto">
-                      <button className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-accent-pink text-white rounded-lg font-medium hover:bg-blue-800 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
+                      <button className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-primary-navy text-white rounded-lg font-medium hover:bg-primary-navy/90 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
                         Kontakta
                       </button>
                       <Link

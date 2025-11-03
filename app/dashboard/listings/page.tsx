@@ -182,7 +182,7 @@ export default function ListingsPage() {
             <h1 className="text-2xl sm:text-3xl font-bold text-primary-navy uppercase">Mina annonser</h1>
             <p className="text-sm text-gray-600 mt-1">Hantera och följ upp dina annonser</p>
           </div>
-          <Link href="/salja/start" className="px-4 py-2.5 bg-accent-pink text-primary-navy rounded-lg font-semibold hover:shadow-md transition-shadow text-sm sm:text-base inline-flex items-center justify-center gap-2 whitespace-nowrap">
+          <Link href="/salja/start" className="px-4 py-2.5 bg-primary-navy text-white rounded-lg font-semibold hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base inline-flex items-center justify-center gap-2 whitespace-nowrap">
             + Ny annons
           </Link>
         </div>
@@ -278,7 +278,7 @@ export default function ListingsPage() {
               onClick={() => setFilter(option.value)}
               className={`px-4 py-2 text-sm rounded-lg font-medium transition-all ${
                 filter === option.value
-                  ? 'bg-accent-pink text-primary-navy'
+                  ? 'bg-primary-navy text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -304,7 +304,7 @@ export default function ListingsPage() {
                 }
               </p>
               {filter === 'all' && (
-                <Link href="/salja/start" className="inline-flex px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-accent-pink text-white rounded-lg font-medium hover:bg-blue-800">
+                <Link href="/salja/start" className="inline-flex px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-primary-navy text-white rounded-lg font-medium hover:bg-primary-navy/90">
                   Skapa första annonsen
                 </Link>
               )}

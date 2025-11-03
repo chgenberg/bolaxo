@@ -231,7 +231,7 @@ export default function SavedListingsPage() {
               onClick={() => setFilter(option.value)}
               className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
                 filter === option.value
-                  ? 'bg-accent-pink text-white'
+                  ? 'bg-primary-navy text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >

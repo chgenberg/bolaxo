@@ -226,7 +226,7 @@ export default function NDAsPage() {
               onClick={() => setFilter(option.value)}
               className={`px-4 py-2 text-sm rounded-lg font-semibold transition-all ${
                 filter === option.value
-                  ? 'bg-accent-pink text-primary-navy'
+                  ? 'bg-primary-navy text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
