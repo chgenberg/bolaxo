@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown, Menu, X, User, LogOut, MessageSquare, LayoutDashboard } from 'lucide-react'
+import { ChevronDown, Menu, X, User, LogOut, MessageSquare, LayoutDashboard, Settings } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { usePathname } from 'next/navigation'
 import { LAUNCH_CONFIG } from '@/lib/launch-config'
@@ -22,56 +22,47 @@ interface NavItem {
 const getNavigation = (): NavItem[] => {
   const baseNav: NavItem[] = [
     {
-      label: 'För säljare',
+      label: 'Sälja företag',
       dropdown: [
-        { label: 'Gratis företagsvärdering', href: '/vardering' },
-        { label: 'Så funkar det', href: '/salja' },
-        { label: 'Börja sälja', href: '/salja/start' },
+        { label: 'Så fungerar det', href: '/salja' },
+        { label: 'Starta säljprocess', href: '/salja/start' },
+        { label: 'Gratis värdering', href: '/vardering' },
+        { label: 'Priser', href: '/priser' },
       ]
     },
     {
-      label: 'För köpare',
+      label: 'Köpa företag',
       dropdown: [
         { label: 'Sök företag', href: '/sok' },
-        { label: 'Så funkar det', href: '/kopare/sa-fungerar-det' },
-        { label: 'Skapa konto', href: '/kopare/start' },
+        { label: 'Så fungerar det', href: '/kopare/sa-fungerar-det' },
+        { label: 'Registrera som köpare', href: '/kopare/start' },
       ]
     },
   ]
 
-  // Add broker section if enabled in launch config
-  if (LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_MAKLARE) {
-    baseNav.push({
-      label: 'För mäklare',
-      href: '/for-maklare'
-    })
-  }
-
+  // Add services dropdown
   baseNav.push({
-    label: 'Om oss',
-    href: '/om-oss',
+    label: 'Tjänster',
     dropdown: [
-      { label: 'Kontakt', href: '/kontakt' },
+      { label: 'Företagsvärdering', href: '/vardering' },
+      { label: 'Due Diligence-stöd', href: '/juridiskt/due-diligence' },
+      { label: 'Juridiska mallar', href: '/juridiskt/mallar' },
+      ...(LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_MAKLARE ? [{ label: 'För mäklare', href: '/for-maklare' }] : []),
     ]
   })
 
-  // In launch mode with limited features, keep it simple
-  if (LAUNCH_CONFIG.LAUNCH_MODE && !LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_INVESTERARE) {
-    return baseNav
-  }
+  baseNav.push({
+    label: 'Om BOLAXO',
+    dropdown: [
+      { label: 'Om oss', href: '/om-oss' },
+      { label: 'Success stories', href: '/success-stories' },
+      { label: 'Kontakt', href: '/kontakt' },
+      { label: 'FAQ', href: '/faq' },
+      ...(LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_INVESTERARE ? [{ label: 'För investerare', href: '/investor' }] : []),
+    ]
+  })
 
-  // Full navigation when not in launch mode
-  return [
-    ...baseNav,
-    {
-      label: 'Mer',
-      dropdown: [
-        { label: 'Vårt företag', href: '/om-oss' },
-        { label: 'Success stories', href: '/success-stories' },
-        ...(LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_INVESTERARE ? [{ label: 'För investerare', href: '/investor' }] : []),
-      ]
-    }
-  ]
+  return baseNav
 }
 
 const navigation = getNavigation()
@@ -141,19 +132,19 @@ export default function Header() {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white shadow-md border-b border-gray-100' : 'bg-white'
+      scrolled ? 'bg-white shadow-sm border-b border-gray-200' : 'bg-white border-b border-gray-200'
     }`}>
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-24 md:h-20 lg:h-16">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-4xl md:text-3xl lg:text-2xl font-bold tracking-tight text-primary-navy">
+            <span className="text-2xl font-bold text-[#003366]">
               BOLAXO
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-1">
             {navigation.map((item) => (
               <div
                 key={item.label}
@@ -161,54 +152,24 @@ export default function Header() {
                 onMouseEnter={() => item.dropdown && handleMouseEnter(item.label)}
                 onMouseLeave={handleMouseLeave}
               >
-                {item.href ? (
-                  <div className="relative group">
-                    <Link
-                      href={item.href}
-                      className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
-                    >
-                      <span>{item.label}</span>
-                      {item.dropdown && (
-                        <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${
-                          openDropdown === item.label ? 'rotate-180' : ''
-                        }`} />
-                      )}
-                    </Link>
-                    {/* Dropdown Menu */}
-                    {item.dropdown && openDropdown === item.label && (
-                      <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100">
-                        <div className="py-2">
-                          {item.dropdown.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.href}
-                              href={dropdownItem.href}
-                              className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
-                            >
-                              {dropdownItem.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <button className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200">
-                    <span>{item.label}</span>
+                <button className="flex items-center space-x-1 text-sm font-medium text-[#003366] hover:bg-[#F0F7FA] px-4 py-2 rounded-md transition-colors duration-200">
+                  <span>{item.label}</span>
+                  {item.dropdown && (
                     <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${
                       openDropdown === item.label ? 'rotate-180' : ''
                     }`} />
-                  </button>
-                )}
+                  )}
+                </button>
 
                 {/* Dropdown Menu */}
                 {item.dropdown && openDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg overflow-hidden transform origin-top transition-all duration-200 ease-out scale-100 opacity-100">
-                    <div className="py-2">
+                  <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden">
+                    <div className="py-1">
                       {item.dropdown.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.href}
                           href={dropdownItem.href}
-                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
+                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-[#F0F7FA] hover:text-[#003366] transition-colors"
                         >
                           {dropdownItem.label}
                         </Link>
@@ -225,12 +186,12 @@ export default function Header() {
             {user ? (
               <>
                 {/* Desktop user menu */}
-                <div className="hidden lg:flex items-center space-x-1">
+                <div className="hidden lg:flex items-center space-x-2">
                   {/* Chat link */}
                   {(user.role === 'buyer' || user.role === 'seller') && (
                     <Link
                       href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
-                      className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
+                      className="p-2 rounded-md text-gray-600 hover:text-[#003366] hover:bg-[#F0F7FA] transition-all duration-200"
                       title="Meddelanden"
                     >
                       <MessageSquare className="w-5 h-5" />
@@ -240,8 +201,8 @@ export default function Header() {
                   {/* Dashboard link */}
                   <Link
                     href="/dashboard"
-                    className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
-                    title="Dashboard"
+                    className="p-2 rounded-md text-gray-600 hover:text-[#003366] hover:bg-[#F0F7FA] transition-all duration-200"
+                    title="Min sida"
                   >
                     <LayoutDashboard className="w-5 h-5" />
                   </Link>
@@ -252,23 +213,24 @@ export default function Header() {
                     onMouseEnter={() => handleMouseEnter('profile')}
                     onMouseLeave={handleMouseLeave}
                   >
-                    <button className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200">
+                    <button className="p-2 rounded-md text-gray-600 hover:text-[#003366] hover:bg-[#F0F7FA] transition-all duration-200">
                       <User className="w-5 h-5" />
                     </button>
                     
                     {openDropdown === 'profile' && (
-                      <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden">
-                        <div className="py-2">
+                      <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 overflow-hidden">
+                        <div className="py-1">
                           <Link
                             href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
-                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
+                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-[#F0F7FA] hover:text-[#003366] transition-colors"
                           >
                             Profil & Inställningar
                           </Link>
                           <button
                             onClick={logout}
-                            className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
+                            className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-[#F0F7FA] hover:text-[#003366] transition-colors flex items-center gap-2"
                           >
+                            <LogOut className="w-4 h-4" />
                             Logga ut
                           </button>
                         </div>
@@ -281,13 +243,13 @@ export default function Header() {
               <>
                 <Link
                   href="/login"
-                  className="hidden lg:block text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
+                  className="hidden lg:block text-sm font-medium text-[#003366] hover:bg-[#F0F7FA] px-4 py-2 rounded-md transition-colors duration-200"
                 >
                   Logga in
                 </Link>
                 <Link
                   href="/registrera"
-                  className="hidden lg:block px-4 py-2 bg-primary-navy text-white rounded-lg font-medium text-sm hover:bg-primary-navy/90 transition-all duration-200 hover:shadow-md"
+                  className="hidden lg:block px-6 py-2 bg-[#1F3C58] text-white rounded-md font-medium text-sm hover:bg-[#2D4A66] transition-all duration-200"
                 >
                   Kom igång
                 </Link>
@@ -297,10 +259,10 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors active:bg-gray-200"
+              className="lg:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
               aria-label="Öppna meny"
             >
-              {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
@@ -348,17 +310,17 @@ export default function Header() {
         >
           {/* Header Section - Fixed */}
           <div 
-            className="bg-white border-b border-gray-200 px-6 py-5 flex-shrink-0"
+            className="bg-white border-b border-gray-200 px-6 py-4 flex-shrink-0"
             style={{ position: 'relative', zIndex: 1 }}
           >
             <div className="flex justify-between items-center">
-              <span className="text-2xl font-bold text-primary-navy tracking-tight">BOLAXO</span>
+              <span className="text-2xl font-bold text-[#003366]">BOLAXO</span>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                className="p-2 rounded-md hover:bg-gray-100 transition-colors"
                 aria-label="Stäng meny"
               >
-                <X className="w-7 h-7 text-gray-700" />
+                <X className="w-6 h-6 text-gray-700" />
               </button>
             </div>
           </div>
@@ -372,68 +334,47 @@ export default function Header() {
               overflowX: 'hidden'
             }}
           >
-            <div className="px-6 pt-6 pb-8 space-y-1">
+            <div className="px-4 py-4 space-y-1">
               {/* Mobile navigation */}
-              {navigation.map((item, index) => (
+              {navigation.map((item) => (
                 <div key={item.label}>
-                  {item.href ? (
-                    <div className="space-y-1">
-                      <Link
-                        href={item.href}
-                        className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        {item.label}
-                      </Link>
-                      {item.dropdown && (
-                        <div className="space-y-1 pl-2">
-                          {item.dropdown.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.href}
-                              href={dropdownItem.href}
-                              className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-6 rounded-lg hover:bg-gray-50 active:bg-gray-100"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              {dropdownItem.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      <div className="text-lg font-semibold text-gray-900 px-4 py-3">{item.label}</div>
-                      {item.dropdown && (
-                        <div className="space-y-1 pl-2">
-                          {item.dropdown.map((dropdownItem) => (
-                            <Link
-                              key={dropdownItem.href}
-                              href={dropdownItem.href}
-                              className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-6 rounded-lg hover:bg-gray-50 active:bg-gray-100"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              {dropdownItem.label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  {index < navigation.length - 1 && (
-                    <div className="border-b border-gray-100 my-2 mx-4"></div>
-                  )}
+                  <div className="space-y-1">
+                    <div className="text-sm font-semibold text-[#003366] px-3 py-2">{item.label}</div>
+                    {item.dropdown && (
+                      <div className="space-y-0.5 pl-3">
+                        {item.dropdown.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.href}
+                            href={dropdownItem.href}
+                            className="block text-sm text-gray-600 hover:text-[#003366] transition-colors py-2 px-3 rounded-md hover:bg-[#F0F7FA]"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {dropdownItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
               
               {/* Mobile user menu */}
-              <div className="pt-6 mt-6 border-t border-gray-200">
+              <div className="pt-4 mt-4 border-t border-gray-200">
                 {user ? (
                   <div className="space-y-1">
+                    <Link
+                      href="/dashboard"
+                      className="flex items-center space-x-3 text-sm font-medium text-[#003366] transition-colors py-2 px-3 rounded-md hover:bg-[#F0F7FA]"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <LayoutDashboard className="w-5 h-5" />
+                      <span>Min sida</span>
+                    </Link>
                     {(user.role === 'buyer' || user.role === 'seller') && (
                       <>
                         <Link
                           href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
-                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                          className="flex items-center space-x-3 text-sm font-medium text-[#003366] transition-colors py-2 px-3 rounded-md hover:bg-[#F0F7FA]"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <MessageSquare className="w-5 h-5" />
@@ -441,45 +382,37 @@ export default function Header() {
                         </Link>
                         <Link
                           href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
-                          className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                          className="flex items-center space-x-3 text-sm font-medium text-[#003366] transition-colors py-2 px-3 rounded-md hover:bg-[#F0F7FA]"
                           onClick={() => setIsMenuOpen(false)}
                         >
-                          <User className="w-5 h-5" />
-                          <span>Profil & Inställningar</span>
+                          <Settings className="w-5 h-5" />
+                          <span>Inställningar</span>
                         </Link>
                       </>
                     )}
-                    <Link
-                      href="/dashboard"
-                      className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <LayoutDashboard className="w-5 h-5" />
-                      <span>Dashboard</span>
-                    </Link>
                     <button
                       onClick={() => {
                         logout()
                         setIsMenuOpen(false)
                       }}
-                      className="flex items-center space-x-3 text-base font-medium text-red-600 hover:text-red-700 transition-colors w-full py-3 px-4 rounded-lg hover:bg-red-50 active:bg-red-100 text-left"
+                      className="flex items-center space-x-3 text-sm font-medium text-red-600 hover:text-red-700 transition-colors w-full py-2 px-3 rounded-md hover:bg-red-50 text-left"
                     >
                       <LogOut className="w-5 h-5" />
                       <span>Logga ut</span>
                     </button>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <Link
                       href="/login"
-                      className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                      className="block text-sm font-medium text-[#003366] transition-colors py-2 px-3 rounded-md hover:bg-[#F0F7FA]"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Logga in
                     </Link>
                     <Link
                       href="/registrera"
-                      className="block w-full text-center px-6 py-4 bg-primary-navy text-white rounded-lg font-semibold text-base hover:bg-primary-navy/90 active:bg-primary-navy/80 transition-all shadow-md active:shadow-sm"
+                      className="block w-full text-center px-6 py-2.5 bg-[#1F3C58] text-white rounded-md font-medium text-sm hover:bg-[#2D4A66] transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Kom igång
