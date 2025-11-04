@@ -95,10 +95,13 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { listingId, buyerId, sellerId, message } = body
+    const { listingId, buyerId, sellerId, message, buyerProfile } = body
 
     if (!listingId || !buyerId || !sellerId) {
-      return NextResponse.json({ success: true })
+      return NextResponse.json(
+        { error: 'Missing required fields: listingId, buyerId, sellerId' },
+        { status: 400 }
+      )
     }
 
     try {
@@ -172,11 +175,18 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ request: created }, { status: 201 })
     } catch (dbError) {
-      return NextResponse.json({ success: true })
+      console.error('Database error creating NDA request:', dbError)
+      return NextResponse.json(
+        { error: 'Failed to create NDA request' },
+        { status: 500 }
+      )
     }
   } catch (error) {
     console.error('Create NDA request error:', error)
-    return NextResponse.json({ success: true })
+    return NextResponse.json(
+      { error: 'Failed to create NDA request' },
+      { status: 500 }
+    )
   }
 }
 
