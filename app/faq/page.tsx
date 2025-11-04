@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ChevronDown, HelpCircle, Users, Shield, CreditCard, FileText } from 'lucide-react'
+import { generateFAQStructuredData } from '@/lib/structured-data'
 
 interface FAQItem {
   question: string
@@ -75,6 +76,36 @@ export default function FAQPage() {
   const [expandedItem, setExpandedItem] = useState<number | null>(0)
 
   const filteredFAQ = faqData.filter(item => item.category === selectedCategory)
+
+  // Add FAQ structured data for SEO and LLM optimization
+  useEffect(() => {
+    const faqStructuredData = generateFAQStructuredData(
+      faqData.map(item => ({
+        question: item.question,
+        answer: item.answer,
+      }))
+    )
+
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.text = JSON.stringify(faqStructuredData)
+    script.id = 'structured-data-faq'
+
+    // Remove existing script if present
+    const existing = document.getElementById('structured-data-faq')
+    if (existing) {
+      existing.remove()
+    }
+
+    document.head.appendChild(script)
+
+    return () => {
+      const scriptToRemove = document.getElementById('structured-data-faq')
+      if (scriptToRemove) {
+        scriptToRemove.remove()
+      }
+    }
+  }, [])
 
   return (
     <main className="min-h-screen bg-neutral-white">

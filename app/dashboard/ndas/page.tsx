@@ -112,10 +112,9 @@ export default function NDAsPage() {
           })
         })
 
-        // Update local state
-        setRequests(requests.map(r => 
-          r.id === ndaId ? { ...r, status: 'approved', approvedAt: new Date().toISOString() } : r
-        ))
+        // Refresh requests from API
+        const res = await listNDARequests({ sellerId: user?.id })
+        setRequests(res.requests)
       }
     } catch (error) {
       console.error('Error approving NDA:', error)
@@ -134,9 +133,9 @@ export default function NDAsPage() {
       })
 
       if (response.ok) {
-        setRequests(requests.map(r => 
-          r.id === ndaId ? { ...r, status: 'rejected', rejectedAt: new Date().toISOString() } : r
-        ))
+        // Refresh requests from API
+        const res = await listNDARequests({ sellerId: user?.id })
+        setRequests(res.requests)
       }
     } catch (error) {
       console.error('Error rejecting NDA:', error)
@@ -187,28 +186,36 @@ export default function NDAsPage() {
               <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
               <span className="text-xs text-accent-pink font-semibold hidden sm:block uppercase">Nytt</span>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.filter(n => n.status === 'pending').length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
+              {(requests.length ? requests : mockNDAs).filter((n: any) => n.status === 'pending').length}
+            </p>
             <p className="text-xs text-gray-600 font-medium">Väntande</p>
           </div>
           <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
               <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.filter(n => n.status === 'approved').length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
+              {(requests.length ? requests : mockNDAs).filter((n: any) => n.status === 'approved').length}
+            </p>
             <p className="text-xs text-gray-600 font-medium">Godkända</p>
           </div>
           <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
               <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.filter(n => n.status === 'rejected').length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
+              {(requests.length ? requests : mockNDAs).filter((n: any) => n.status === 'rejected').length}
+            </p>
             <p className="text-xs text-gray-600 font-medium">Avslagna</p>
           </div>
           <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-200 hover:border-accent-pink/30 transition-colors">
             <div className="flex items-center justify-between mb-2">
               <User className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{mockNDAs.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
+              {(requests.length ? requests : mockNDAs).length}
+            </p>
             <p className="text-xs text-gray-600 font-medium">Totalt</p>
           </div>
         </div>
@@ -245,10 +252,14 @@ export default function NDAsPage() {
                   <div className="flex items-start justify-between mb-3 sm:mb-4 gap-2">
                     <div className="min-w-0">
                       <h3 className="text-base sm:text-lg font-semibold text-primary-navy mb-1 truncate">
-                        {nda.status === 'approved' ? nda.buyerName : 'Anonym köpare'}
+                        {nda.status === 'approved' || nda.status === 'signed' 
+                          ? (nda.buyerName || nda.buyerEmail || 'Okänd köpare')
+                          : 'Anonym köpare'}
                       </h3>
                       <p className="text-xs sm:text-sm text-gray-600 truncate">
-                        {nda.status === 'approved' ? nda.buyerCompany : nda.buyerType || 'Köparprofil'}
+                        {nda.status === 'approved' || nda.status === 'signed'
+                          ? (nda.buyerCompany || nda.buyerRegion || 'Köpare')
+                          : (nda.buyerType || 'Köparprofil')}
                       </p>
                     </div>
                     {getStatusBadge(nda.status)}
@@ -267,40 +278,56 @@ export default function NDAsPage() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs text-gray-600 mb-1">Typ</p>
-                      <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.buyerType}</p>
+                      <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">
+                        {nda.buyerType || (nda.buyerCompany ? 'Företag' : 'Privatperson')}
+                      </p>
                     </div>
-                    <div className="hidden sm:block min-w-0">
-                      <p className="text-xs text-gray-600 mb-1">Poäng</p>
-                      <div className="flex items-center gap-2">
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 max-w-[60px]">
-                          <div 
-                            className="bg-accent-pink h-1.5 rounded-full"
-                            style={{ width: `${nda.matchScore}%` }}
-                          />
-                        </div>
-                        <span className="text-xs font-medium text-primary-navy">{nda.matchScore}%</span>
+                    {(nda.status === 'approved' || nda.status === 'signed') && nda.buyerEmail && (
+                      <div className="min-w-0">
+                        <p className="text-xs text-gray-600 mb-1">Email</p>
+                        <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.buyerEmail}</p>
                       </div>
-                    </div>
-                    <div className="hidden lg:block min-w-0">
+                    )}
+                    {(nda.status === 'approved' || nda.status === 'signed') && nda.buyerPhone && (
+                      <div className="min-w-0">
+                        <p className="text-xs text-gray-600 mb-1">Telefon</p>
+                        <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.buyerPhone}</p>
+                      </div>
+                    )}
+                    <div className="hidden sm:block min-w-0">
                       <p className="text-xs text-gray-600 mb-1">Verifiering</p>
                       <p className="text-xs sm:text-sm font-medium text-primary-navy">
-                        {nda.verificationStatus === 'bankid_verified' ? (
-                          <span className="text-accent-pink">BankID</span>
+                        {nda.buyerBankIdVerified || nda.buyerVerified ? (
+                          <span className="text-accent-pink flex items-center gap-1">
+                            <CheckCircle className="w-3 h-3" /> BankID
+                          </span>
                         ) : (
                           <span className="text-gray-600">E-post</span>
                         )}
                       </p>
                     </div>
-                    {nda.status === 'approved' && (
-                      <div className="hidden md:block min-w-0">
-                        <p className="text-xs text-gray-600 mb-1">Email</p>
-                        <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.buyerEmail}</p>
+                    {nda.buyerRegion && (
+                      <div className="hidden lg:block min-w-0">
+                        <p className="text-xs text-gray-600 mb-1">Region</p>
+                        <p className="text-xs sm:text-sm font-medium text-primary-navy truncate">{nda.buyerRegion}</p>
                       </div>
                     )}
                   </div>
 
                   {/* Footer */}
-                  <div className="text-xs text-gray-600">{new Date(nda.requestedAt).toLocaleDateString('sv-SE')}</div>
+                  <div className="text-xs text-gray-600">
+                    Begärd: {new Date(nda.createdAt || nda.requestedAt).toLocaleDateString('sv-SE')}
+                    {nda.approvedAt && (
+                      <span className="ml-3 text-green-600">
+                        Godkänd: {new Date(nda.approvedAt).toLocaleDateString('sv-SE')}
+                      </span>
+                    )}
+                    {nda.rejectedAt && (
+                      <span className="ml-3 text-red-600">
+                        Avslagen: {new Date(nda.rejectedAt).toLocaleDateString('sv-SE')}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Actions */}

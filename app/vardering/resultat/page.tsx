@@ -81,11 +81,17 @@ export default function ValuationResultPage() {
         }
 
         const data = await response.json()
-        setResult(data.result)
+        
+        // Vänta tills result faktiskt finns innan vi döljer loading
+        if (data.result) {
+          setResult(data.result)
+          setLoading(false)
+        } else {
+          throw new Error('Inget resultat mottaget från API')
+        }
       } catch (err) {
         setError('Ett fel uppstod vid genereringen av värderingen')
         console.error(err)
-      } finally {
         setLoading(false)
       }
     }
@@ -143,7 +149,11 @@ export default function ValuationResultPage() {
       const hasExactFinancials = !!(valuationData?.exactRevenue && (valuationData?.salaries || valuationData?.operatingCosts))
       
       // Importera dynamiskt för att undvika SSR-problem
-      const { pdf } = await import('@react-pdf/renderer')
+      const ReactPDF = await import('@react-pdf/renderer')
+      
+      if (!ReactPDF) {
+        throw new Error('PDF library not loaded correctly')
+      }
       
       // Använd JSX direkt för korrekt typning
       const pdfDocument = (
@@ -172,7 +182,9 @@ export default function ValuationResultPage() {
         />
       )
       
-      const blob = await pdf(pdfDocument).toBlob()
+      // Använd renderToBuffer för att få en buffer, sedan konvertera till blob
+      const pdfBuffer = await ReactPDF.renderToBuffer(pdfDocument)
+      const blob = new Blob([pdfBuffer], { type: 'application/pdf' })
       
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -226,7 +238,8 @@ export default function ValuationResultPage() {
               <button
                 onClick={handleDownloadPDF}
                 disabled={isGeneratingPDF}
-                className="bg-primary-blue text-white px-8 py-4 rounded-button font-semibold hover:bg-opacity-90 transition-all shadow-md inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-[#1F3C58] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#1a3147] transition-all shadow-md inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#1F3C58', color: '#FFFFFF' }}
               >
                 {isGeneratingPDF ? (
                   <>
@@ -236,7 +249,7 @@ export default function ValuationResultPage() {
                 ) : (
                   <>
                     <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    Ladda ner som PDF
+                    Ladda hem PDF
                   </>
                 )}
               </button>
@@ -433,14 +446,29 @@ export default function ValuationResultPage() {
         {/* Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-8 mt-8">
           <button
-            onClick={() => window.print()}
-            className="btn-secondary flex items-center justify-center"
+            onClick={handleDownloadPDF}
+            disabled={isGeneratingPDF}
+            className="bg-[#1F3C58] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#1a3147] transition-all shadow-md flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: '#1F3C58', color: '#FFFFFF' }}
           >
-            <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-            Ladda ner som PDF
+            {isGeneratingPDF ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Genererar...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4 mr-2" />
+                Ladda hem PDF
+              </>
+            )}
           </button>
-          <button className="btn-secondary flex items-center justify-center">
-            <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+          <button 
+            onClick={() => window.print()}
+            className="bg-white border-2 border-[#1F3C58] text-[#1F3C58] px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-md flex items-center justify-center"
+            style={{ borderColor: '#1F3C58', color: '#1F3C58' }}
+          >
+            <Mail className="w-4 h-4 mr-2" />
             Skicka till min e-post
           </button>
         </div>

@@ -832,7 +832,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   label="Räntebärande skulder totalt"
                   value={data.totalDebt || ''}
                   onChange={(value) => setData({ ...data, totalDebt: value })}
-                  placeholder="Ex: 1 850 000 kr"
+                  placeholder="Ex: 1.850.000 kr"
                   helpText="Ange summa för alla räntebärande skulder: banklån inkl. kortfristig del, utnyttjad checkkredit, leasing (bilar/maskiner/lokaler), aktieägarlån. Exkludera leverantörsskulder och skatteskulder."
                 />
 
@@ -986,15 +986,11 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                      Lönekostnader (kr)
-                    </label>
-                    <input
-                      type="text"
+                    <FormFieldCurrency
+                      label="Lönekostnader (kr)"
                       value={data.salaries || ''}
-                      onChange={(e) => setData({ ...data, salaries: e.target.value })}
-                      placeholder="Ex: 123 000 kr"
-                      className="input-field"
+                      onChange={(value) => setData({ ...data, salaries: value })}
+                      placeholder="Ex: 500.000 kr"
                     />
                   </div>
                   </div>

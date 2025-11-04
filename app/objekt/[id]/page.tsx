@@ -8,6 +8,7 @@ import { ArrowLeft, MapPin, TrendingUp, Users, Eye, Bookmark, Shield, AlertCircl
 import { useBuyerStore } from '@/stores/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
 import InfoPopup from '@/components/InfoPopup'
+import { ListingStructuredData } from '@/components/ListingStructuredData'
 
 export default function ObjectDetailPage() {
   const params = useParams()
@@ -126,6 +127,25 @@ export default function ObjectDetailPage() {
 
   return (
     <main className="min-h-screen bg-background">
+      {/* Structured Data for SEO */}
+      {object && (
+        <ListingStructuredData 
+          listing={{
+            id: object.id,
+            anonymousTitle: object.anonymousTitle || object.title || 'Företag',
+            description: object.description || '',
+            priceMin: object.priceMin,
+            priceMax: object.priceMax,
+            location: object.location,
+            region: object.region,
+            industry: object.industry,
+            type: object.type,
+            image: object.image,
+            images: object.images,
+          }}
+        />
+      )}
+      
       {/* Navigation */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">

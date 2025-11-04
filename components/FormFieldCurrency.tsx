@@ -32,20 +32,21 @@ export default function FormFieldCurrency({
   const cursorPositionRef = useRef<number | null>(null)
   const previousDisplayValueRef = useRef<string>('')
 
-  // Formatera värdet för visning
+  // Formatera värdet för visning med punkt som tusentalsavgränsare
   useEffect(() => {
     if (value) {
       const numbers = value.replace(/\D/g, '')
       if (numbers) {
-        const formatted = parseInt(numbers).toLocaleString('sv-SE')
+        // Formatera med punkt som tusentalsavgränsare (t.ex. 100.000 kr)
+        const formatted = parseInt(numbers).toLocaleString('sv-SE').replace(/\s/g, '.')
         const newDisplayValue = formatted + ' kr'
         
         // Beräkna ny markörposition baserat på antal siffror före markören
         if (inputRef.current && cursorPositionRef.current !== null && previousDisplayValueRef.current) {
-          const oldValue = previousDisplayValueRef.current.replace(/\s*kr\s*$/, '')
+          const oldValue = previousDisplayValueRef.current.replace(/\s*kr\s*$/, '').replace(/\./g, '')
           const cursorPos = cursorPositionRef.current
           
-          // Räkna antal siffror före markören i den gamla texten
+          // Räkna antal siffror före markören i den gamla texten (ignorera punkt och mellanslag)
           const digitsBeforeCursor = oldValue.slice(0, cursorPos).replace(/\D/g, '').length
           
           // Hitta motsvarande position i den nya formaterade texten
@@ -120,7 +121,7 @@ export default function FormFieldCurrency({
       const newValue = value.slice(0, -1)
       onChange(newValue)
       setTimeout(() => {
-        const newFormatted = newValue ? parseInt(newValue).toLocaleString('sv-SE') : ''
+        const newFormatted = newValue ? parseInt(newValue).toLocaleString('sv-SE').replace(/\s/g, '.') : ''
         input.setSelectionRange(newFormatted.length, newFormatted.length)
       }, 0)
     }

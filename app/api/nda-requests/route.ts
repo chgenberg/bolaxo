@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma'
 
 // GET /api/nda-requests?listingId=&buyerId=&sellerId=&status=
 export async function GET(request: NextRequest) {
@@ -11,6 +9,8 @@ export async function GET(request: NextRequest) {
     const buyerId = searchParams.get('buyerId') || undefined
     const sellerId = searchParams.get('sellerId') || undefined
     const status = searchParams.get('status') || undefined
+    const userId = searchParams.get('userId') || undefined
+    const role = searchParams.get('role') || undefined
 
     const where: any = {}
     if (listingId) where.listingId = listingId
@@ -21,10 +21,68 @@ export async function GET(request: NextRequest) {
     try {
       const requests = await prisma.nDARequest.findMany({
         where,
-        orderBy: { createdAt: 'desc' }
+        include: {
+          listing: {
+            select: {
+              id: true,
+              anonymousTitle: true,
+              companyName: true,
+            },
+          },
+          buyer: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              companyName: true,
+              phone: true,
+              region: true,
+              bankIdVerified: true,
+              verified: true,
+            },
+          },
+          seller: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
       })
-      return NextResponse.json({ requests })
+
+      // Enrich requests with listing title and buyer info
+      const enrichedRequests = requests.map((req) => ({
+        id: req.id,
+        listingId: req.listingId,
+        listingTitle: req.listing.anonymousTitle || req.listing.companyName || 'Okänt objekt',
+        buyerId: req.buyerId,
+        buyerName: req.buyer.name || req.buyer.email || 'Okänd köpare',
+        buyerEmail: req.buyer.email,
+        buyerCompany: req.buyer.companyName,
+        buyerPhone: req.buyer.phone,
+        buyerRegion: req.buyer.region,
+        buyerVerified: req.buyer.verified,
+        buyerBankIdVerified: req.buyer.bankIdVerified,
+        sellerId: req.sellerId,
+        sellerName: req.seller.name || req.seller.email || 'Okänd säljare',
+        status: req.status,
+        message: req.message,
+        buyerProfile: req.buyerProfile,
+        documentUrl: req.documentUrl,
+        approvedAt: req.approvedAt,
+        rejectedAt: req.rejectedAt,
+        viewedAt: req.viewedAt,
+        signedAt: req.signedAt,
+        expiresAt: req.expiresAt,
+        createdAt: req.createdAt,
+        updatedAt: req.updatedAt,
+      }))
+
+      return NextResponse.json({ requests: enrichedRequests })
     } catch (dbError) {
+      console.error('Database error fetching NDA requests:', dbError)
       return NextResponse.json({ requests: [] })
     }
   } catch (error) {
@@ -63,15 +121,55 @@ export async function POST(request: NextRequest) {
         )
       }
 
+      // Get buyer profile if not provided
+      let profileData = buyerProfile
+      if (!profileData) {
+        const buyer = await prisma.user.findUnique({
+          where: { id: buyerId },
+          include: {
+            buyerProfile: true,
+          },
+        })
+        if (buyer) {
+          profileData = {
+            name: buyer.name,
+            email: buyer.email,
+            companyName: buyer.companyName,
+            region: buyer.region,
+            bankIdVerified: buyer.bankIdVerified,
+            verified: buyer.verified,
+            buyerProfile: buyer.buyerProfile,
+          }
+        }
+      }
+
       const created = await prisma.nDARequest.create({
         data: {
           listingId,
           buyerId,
           sellerId,
           message: message || null,
-          status: 'pending'
-        }
+          buyerProfile: profileData ? JSON.parse(JSON.stringify(profileData)) : null,
+          status: 'pending',
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        },
+        include: {
+          listing: {
+            select: {
+              id: true,
+              anonymousTitle: true,
+            },
+          },
+          buyer: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
       })
+
       return NextResponse.json({ request: created }, { status: 201 })
     } catch (dbError) {
       return NextResponse.json({ success: true })
@@ -82,32 +180,49 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PATCH /api/nda-requests -> update status
+// PATCH /api/nda-requests -> update status (legacy - use /api/nda-requests/[id] instead)
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json()
     const { id, status } = body
 
     if (!id || !status) {
-      return NextResponse.json({ success: true })
+      return NextResponse.json(
+        { error: 'Missing required fields: id, status' },
+        { status: 400 }
+      )
     }
 
     try {
       const data: any = { status }
-      if (status === 'approved') data.approvedAt = new Date()
-      if (status === 'rejected') data.rejectedAt = new Date()
+      if (status === 'approved') {
+        data.approvedAt = new Date()
+        data.viewedAt = new Date()
+      } else if (status === 'rejected') {
+        data.rejectedAt = new Date()
+        data.viewedAt = new Date()
+      } else if (status === 'signed') {
+        data.signedAt = new Date()
+      }
 
       const updated = await prisma.nDARequest.update({
         where: { id },
-        data
+        data,
       })
       return NextResponse.json({ request: updated })
     } catch (dbError) {
-      return NextResponse.json({ success: true })
+      console.error('Database error updating NDA request:', dbError)
+      return NextResponse.json(
+        { error: 'Failed to update NDA request' },
+        { status: 500 }
+      )
     }
   } catch (error) {
     console.error('Update NDA request error:', error)
-    return NextResponse.json({ success: true })
+    return NextResponse.json(
+      { error: 'Failed to update NDA request' },
+      { status: 500 }
+    )
   }
 }
 
