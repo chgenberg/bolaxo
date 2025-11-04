@@ -100,7 +100,7 @@ export async function POST(request: Request) {
         // Använd ny tokens-parameter
         max_completion_tokens: 16000
       }),
-      // Öka timeout för GPT-5 enligt riktlinjer (5 min för premiumkvalitet)
+      // Öka timeout för GPT-4o-mini (5 min för premiumkvalitet)
       signal: (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal)
         ? AbortSignal.timeout(300000)
         : undefined
