@@ -184,7 +184,9 @@ export default function ValuationResultPage() {
       
       // Använd renderToBuffer för att få en buffer, sedan konvertera till blob
       const pdfBuffer = await ReactPDF.renderToBuffer(pdfDocument)
-      const blob = new Blob([pdfBuffer], { type: 'application/pdf' })
+      // Konvertera Buffer till Uint8Array för Blob-konstruktorn
+      const uint8Array = new Uint8Array(pdfBuffer)
+      const blob = new Blob([uint8Array], { type: 'application/pdf' })
       
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
