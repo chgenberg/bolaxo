@@ -286,3 +286,7 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+// Prevent static prerendering to avoid build errors
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
