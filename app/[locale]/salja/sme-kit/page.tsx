@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, FileText, DollarSign, Lock, BookOpen, Users, Package, Check, Upload, Edit3, ChevronRight, Building2, FileSpreadsheet, Shield, Search, FileSignature, Send, Download, HelpCircle, X, TrendingUp, AlertCircle, BarChart3, RefreshCw, Users2, Code2, Rocket, PieChart } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface Step {
   id: string
@@ -52,6 +53,9 @@ interface Assessment {
 }
 
 export default function SMEKitPage() {
+  const t = useTranslations('smeKit')
+  const locale = useLocale()
+  
   const [activeTab, setActiveTab] = useState('company-basics')
   const [completedSteps, setCompletedSteps] = useState<string[]>(['company-basics'])
   const [formData, setFormData] = useState<any>({})
@@ -350,8 +354,8 @@ export default function SMEKitPage() {
       <div className="max-w-7xl mx-auto px-4 py-12">
         {/* HEADER */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-primary-navy mb-2">SME Sales Automation Kit</h1>
-          <p className="text-gray-600">Sammanställ all information för professionell DD och SPA</p>
+          <h1 className="text-4xl font-bold text-primary-navy mb-2">{t('title')}</h1>
+          <p className="text-gray-600">{t('subtitle')}</p>
         </div>
 
         {/* TAB NAVIGATION */}
@@ -400,7 +404,7 @@ export default function SMEKitPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {field.label}
                       {field.required && <span className="text-red-500 ml-1">*</span>}
-                      {field.aiAssisted && <span className="text-blue-500 text-xs ml-2">(GPT-analyserad)</span>}
+                      {field.aiAssisted && <span className="text-blue-500 text-xs ml-2">{t('gptAnalyzed')}</span>}
                     </label>
                     {field.type === 'textarea' && (
                       <textarea
@@ -417,7 +421,7 @@ export default function SMEKitPage() {
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-navy focus:border-transparent"
                       >
-                        <option value="">Välj...</option>
+                        <option value="">{t('selectOption')}</option>
                         {field.options?.map((opt) => <option key={opt}>{opt}</option>)}
                       </select>
                     )}
@@ -433,7 +437,7 @@ export default function SMEKitPage() {
                     {field.type === 'file' && (
                       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-primary-navy">
                         <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-                        <p className="text-sm text-gray-600">Dra hit eller klicka för att ladda upp</p>
+                        <p className="text-sm text-gray-600">{t('uploadText')}</p>
                       </div>
                     )}
                     {field.type === 'checkbox' && (
@@ -463,7 +467,7 @@ export default function SMEKitPage() {
                       className="bg-primary-navy text-white py-3 rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
                     >
                       <FileText className="w-4 h-4 inline mr-2" />
-                      {loading ? 'Genererar...' : 'DD Report'}
+                      {loading ? t('generating') : t('steps.export.ddReport')}
                     </button>
                     <button
                       onClick={() => handleGeneratePDF('spa')}
@@ -471,13 +475,13 @@ export default function SMEKitPage() {
                       className="bg-primary-navy text-white py-3 rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50 transition-all"
                     >
                       <FileSignature className="w-4 h-4 inline mr-2" />
-                      {loading ? 'Genererar...' : 'SPA Avtal'}
+                      {loading ? t('generating') : t('steps.export.spaAgreement')}
                     </button>
                   </div>
 
                   <div className="border-t pt-6 mt-6">
-                    <h3 className="font-semibold text-primary-navy mb-3 text-lg">Kompletta Versioner (40+ & 25+ sidor)</h3>
-                    <p className="text-sm text-gray-600 mb-4">Professionella M&A-rapporter med alla detaljer, schedules och appendices</p>
+                    <h3 className="font-semibold text-primary-navy mb-3 text-lg">{t('steps.export.fullVersions')}</h3>
+                    <p className="text-sm text-gray-600 mb-4">{t('steps.export.fullVersionsDesc')}</p>
                     
                     <div className="grid grid-cols-2 gap-4">
                       <button
@@ -486,7 +490,7 @@ export default function SMEKitPage() {
                         className="border-2 border-primary-navy text-primary-navy py-3 rounded-lg font-medium hover:bg-primary-navy hover:text-white disabled:opacity-50 transition-all"
                       >
                         <Download className="w-4 h-4 inline mr-2" />
-                        {loading ? 'Hämtar...' : 'Full DD (25+ sid)'}
+                        {loading ? t('fetching') : t('steps.export.fullDD')}
                       </button>
                       <button
                         onClick={() => handleDownloadFullPDF('spa')}
@@ -494,7 +498,7 @@ export default function SMEKitPage() {
                         className="border-2 border-primary-navy text-primary-navy py-3 rounded-lg font-medium hover:bg-primary-navy hover:text-white disabled:opacity-50 transition-all"
                       >
                         <Download className="w-4 h-4 inline mr-2" />
-                        {loading ? 'Hämtar...' : 'Full SPA (40+ sid)'}
+                        {loading ? t('fetching') : t('steps.export.fullSPA')}
                       </button>
                     </div>
 
@@ -502,14 +506,14 @@ export default function SMEKitPage() {
                       <div className="flex gap-3">
                         <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-gray-700">
-                          <p className="font-medium text-green-900 mb-1">Vad ingår i kompletta versioner?</p>
+                          <p className="font-medium text-green-900 mb-1">{t('steps.export.whatsIncluded')}</p>
                           <ul className="text-xs space-y-1 ml-3">
-                            <li>✓ Detaljerad finansiell analys med 3-årstrend</li>
-                            <li>✓ Kundbas & leverantörsanalys</li>
-                            <li>✓ Organisation & personalbeskrivning</li>
-                            <li>✓ Teknisk bedömning & risk matrix</li>
-                            <li>✓ Alla schedules & appendices</li>
-                            <li>✓ Professionell design & formatering</li>
+                            <li>✓ {t('steps.export.whatsIncludedItems.financial')}</li>
+                            <li>✓ {t('steps.export.whatsIncludedItems.customer')}</li>
+                            <li>✓ {t('steps.export.whatsIncludedItems.organization')}</li>
+                            <li>✓ {t('steps.export.whatsIncludedItems.technical')}</li>
+                            <li>✓ {t('steps.export.whatsIncludedItems.schedules')}</li>
+                            <li>✓ {t('steps.export.whatsIncludedItems.design')}</li>
                           </ul>
                         </div>
                       </div>
@@ -524,11 +528,11 @@ export default function SMEKitPage() {
         {/* ASSESSMENT SECTION */}
         {assessment && (
           <div className="mt-8 bg-white rounded-lg shadow-sm p-8">
-            <h3 className="text-xl font-bold mb-4">Bedömning av kompletthet</h3>
+            <h3 className="text-xl font-bold mb-4">{t('assessment.title')}</h3>
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between mb-2">
-                  <span className="font-medium">Completion Score</span>
+                  <span className="font-medium">{t('assessment.completionScore')}</span>
                   <span className="text-2xl font-bold text-primary-navy">{assessment.completeness}%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3">
@@ -541,7 +545,7 @@ export default function SMEKitPage() {
               <p className="text-lg font-medium text-primary-navy">{assessment.status}</p>
               {assessment.missing.length > 0 && (
                 <div>
-                  <h4 className="font-medium text-red-600 mb-2">Saknas:</h4>
+                  <h4 className="font-medium text-red-600 mb-2">{t('assessment.missing')}</h4>
                   <ul className="list-disc list-inside text-gray-700">
                     {assessment.missing.map((item, i) => <li key={i}>{item}</li>)}
                   </ul>

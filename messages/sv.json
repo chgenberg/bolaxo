@@ -1174,5 +1174,226 @@
       ],
       "seeAll": "Se alla vanliga frågor →"
     }
+  },
+  "smeKit": {
+    "title": "SME Sales Automation Kit",
+    "subtitle": "Sammanställ all information för professionell DD och SPA",
+    "selectOption": "Välj...",
+    "uploadText": "Dra hit eller klicka för att ladda upp",
+    "gptAnalyzed": "(GPT-analyserad)",
+    "generating": "Genererar...",
+    "fetching": "Hämtar...",
+    "steps": {
+      "companyBasics": {
+        "title": "1. Företagsidentitet",
+        "description": "Grundläggande info om ditt företag",
+        "fields": {
+          "companyName": "Företagsnamn",
+          "orgNumber": "Organisationsnummer",
+          "registrationDate": "Registreringsdatum",
+          "industry": "Bransch",
+          "description": "Verksamhetsbeskrivning",
+          "descriptionPlaceholder": "Beskriv verksamheten detaljerat...",
+          "employees": "Antal anställda",
+          "businessModel": "Affärsmodell",
+          "businessModelPlaceholder": "B2B, B2C, SaaS, etc."
+        },
+        "industryOptions": {
+          "tech": "Teknologi",
+          "ecommerce": "E-handel",
+          "services": "Tjänster",
+          "manufacturing": "Tillverkning",
+          "finance": "Finans",
+          "health": "Hälsa",
+          "education": "Utbildning",
+          "other": "Övrigt"
+        }
+      },
+      "financialsCore": {
+        "title": "2. Finansiell Bas",
+        "description": "Historiska siffror och nyckeltal",
+        "fields": {
+          "financialStatement": "Årsredovisning (PDF)",
+          "revenue2024": "Omsättning 2024 (SEK)",
+          "revenue2023": "Omsättning 2023 (SEK)",
+          "revenue2022": "Omsättning 2022 (SEK)",
+          "ebitda2024": "EBITDA 2024 (SEK)",
+          "ebitda2023": "EBITDA 2023 (SEK)",
+          "ebitda2022": "EBITDA 2022 (SEK)"
+        }
+      },
+      "financialsAdvanced": {
+        "title": "3. Avancerad Finansiell Data",
+        "description": "Detaljerad finansiell analys",
+        "fields": {
+          "grossMargin": "Bruttomarginal (%)",
+          "operatingMargin": "Operativ marginal (%)",
+          "netMargin": "Nettomarginal (%)",
+          "daysInventory": "Days Inventory Outstanding",
+          "daysSales": "Days Sales Outstanding (DSO)",
+          "daysPayable": "Days Payable Outstanding (DPO)",
+          "totalDebt": "Total skuld (SEK)",
+          "cashPosition": "Kassaposition (SEK)",
+          "capex": "Årlig CAPEX (SEK)",
+          "rd": "Årlig R&D (SEK)"
+        }
+      },
+      "customers": {
+        "title": "4. Kundbas & Kommersiell",
+        "description": "Kundberoende och marknadsposition",
+        "fields": {
+          "totalCustomers": "Antal kunder totalt",
+          "topCustomerRevenue": "Största kundens % av omsättning",
+          "top3Revenue": "Top 3 kunders % av omsättning",
+          "top10Revenue": "Top 10 kunders % av omsättning",
+          "churnRate": "Årlig churn-rate (%)",
+          "nps": "NPS Score",
+          "customerContracts": "Stora kundbas-kontrakt (PDF)",
+          "customerList": "Kundbas-lista (Excel)",
+          "marketPosition": "Marknadsposition",
+          "marketPositionPlaceholder": "Marknadsstorlek, konkurrenter, position..."
+        }
+      },
+      "organization": {
+        "title": "5. Organisation & Personal",
+        "description": "Struktur, löner, och nyckelrisker",
+        "fields": {
+          "orgChart": "Organisationsschema (PDF/Image)",
+          "employeeList": "Personallista med löner (Excel)",
+          "ceoName": "VD namn och tenure",
+          "cfoName": "CFO/Ekonomichef namn",
+          "ctoName": "CTO/Teknikchef namn",
+          "avgTenure": "Genomsnittlig anställdlängd (år)",
+          "turnover": "Årlig personalomsättning (%)",
+          "keyPersonDependency": "Beroende av nyckelpersoner",
+          "keyPersonDependencyPlaceholder": "Vem är kritisk för verksamheten?",
+          "employeeContracts": "Nyckelrollskontrakt (PDF)"
+        }
+      },
+      "legal": {
+        "title": "6. Juridik & Compliance",
+        "description": "Kontrakt, rättigheter, tvister",
+        "fields": {
+          "companyRegistration": "Bolagsverkets registreringsbevis (PDF)",
+          "mainContracts": "Huvudsakliga affärskontrakt (PDF)",
+          "leaseAgreement": "Hyresavtal för lokaler (PDF)",
+          "taxCertificate": "Intyg om ingen skattskuld (PDF)",
+          "licensePermits": "Licenser och tillstånd (PDF)",
+          "gdprDocumentation": "GDPR-dokumentation (PDF)",
+          "pendingLitigation": "Pågående rättstvister",
+          "pendingLitigationPlaceholder": "Beskriv eventuella tvister",
+          "changeOfControl": "Change of Control i kontrakt?",
+          "ipOwnership": "IP-äganderätt (patent, varumärken)",
+          "ipOwnershipPlaceholder": "Lista alla viktiga IP"
+        }
+      },
+      "technical": {
+        "title": "7. Teknik & IT",
+        "description": "System, infrastruktur, säkerhet",
+        "fields": {
+          "techStack": "Teknikstack",
+          "techStackPlaceholder": "Frontend, backend, databaser...",
+          "cloudVsOnpremise": "Cloud eller On-premise?",
+          "datacenters": "Datacenter-lokation",
+          "datacentersPlaceholder": "Var ligger servrar?",
+          "testCoverage": "Test coverage (%)",
+          "uptime": "System uptime SLA (%)",
+          "backupStrategy": "Backup & disaster recovery",
+          "backupStrategyPlaceholder": "RTO/RPO, backup frequency...",
+          "securityCertification": "Säkerhetscertifieringar (SOC2, ISO27001, etc)",
+          "dataProtection": "Dataskydd och kryptering",
+          "dataProtectionPlaceholder": "Beskriv säkerhetsåtgärder",
+          "penetrationTest": "Penetrationstestrapport (PDF)",
+          "technicalDocs": "Teknisk dokumentation (PDF)"
+        },
+        "cloudOptions": {
+          "cloud": "100% Cloud",
+          "hybrid": "Hybrid",
+          "onpremise": "100% On-premise"
+        }
+      },
+      "strategic": {
+        "title": "8. Strategisk Överblick",
+        "description": "Tillväxtplan, IP, synergier",
+        "fields": {
+          "growthStrategy": "Tillväxtstrategi 3-5 år",
+          "growthStrategyPlaceholder": "Hur planerar ni att växa?",
+          "priorCompetitors": "Huvudkonkurrenter",
+          "priorCompetitorsPlaceholder": "Namn och deras styrkor/svagheter",
+          "marketShare": "Beräknad marknadsandel (%)",
+          "tam": "Total Addressable Market (TAM) (SEK)",
+          "productRoadmap": "Produktutvecklingsplan",
+          "productRoadmapPlaceholder": "Kommande features/produkter",
+          "ipDescription": "Immateriell egendom",
+          "ipDescriptionPlaceholder": "Patent, varumärken, algoritmer",
+          "synergies": "Potentiella synergieffekter",
+          "synergiesPlaceholder": "Revenue, cost, operational synergies"
+        }
+      },
+      "valuation": {
+        "title": "9. Värdering & Exit",
+        "description": "Köpares förväntningar",
+        "fields": {
+          "expectedValuation": "Förväntad värdering (SEK)",
+          "valuationMultiple": "Önskad multipel (EV/EBITDA)",
+          "earnoutExpectation": "Vill du ha earnout?",
+          "earnoutTerms": "Earnout-villkor",
+          "earnoutTermsPlaceholder": "KPI, period, etc.",
+          "sellingReason": "Anledning till försäljning",
+          "sellingReasonPlaceholder": "Varför säljer du nu?",
+          "newOwnerVision": "Vision för ny ägare",
+          "newOwnerVisionPlaceholder": "Vad hoppas du att nya ägare gör?"
+        },
+        "earnoutOptions": {
+          "no": "Nej",
+          "yes1020": "Ja, 10-20%",
+          "yes2030": "Ja, 20-30%",
+          "yes30plus": "Ja, >30%"
+        }
+      },
+      "export": {
+        "title": "10. Exportera & Handoff",
+        "description": "Generera professionella dokument",
+        "fields": {
+          "selectedDocuments": "Välja dokument att exportera"
+        },
+        "documentOptions": {
+          "dd": "DD Report",
+          "spa": "SPA",
+          "both": "Båda"
+        },
+        "professionalReports": "Professionella Rapporter",
+        "professionalReportsDesc": "Välj mellan snabbgenererade eller kompletta versioner",
+        "ddReport": "DD Report",
+        "spaAgreement": "SPA Avtal",
+        "fullVersions": "Kompletta Versioner (40+ & 25+ sidor)",
+        "fullVersionsDesc": "Professionella M&A-rapporter med alla detaljer, schedules och appendices",
+        "fullDD": "Full DD (25+ sid)",
+        "fullSPA": "Full SPA (40+ sid)",
+        "whatsIncluded": "Vad ingår i kompletta versioner?",
+        "whatsIncludedItems": {
+          "financial": "Detaljerad finansiell analys med 3-årstrend",
+          "customer": "Kundbas & leverantörsanalys",
+          "organization": "Organisation & personalbeskrivning",
+          "technical": "Teknisk bedömning & risk matrix",
+          "schedules": "Alla schedules & appendices",
+          "design": "Professionell design & formatering"
+        }
+      }
+    },
+    "assessment": {
+      "title": "Bedömning av kompletthet",
+      "completionScore": "Completion Score",
+      "status": {
+        "veryComplete": "Mycket komplett",
+        "veryGood": "Väldigt bra",
+        "good": "Bra",
+        "needsMore": "Behöver mer",
+        "needsMuchMore": "Behöver mycket mer",
+        "needsMorePreparation": "Behöver mer förberedelse",
+        "earlyStage": "Tidigt stadium"
+      },
+      "missing": "Saknas:"
+    }
   }
 }

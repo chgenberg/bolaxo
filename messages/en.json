@@ -1174,5 +1174,226 @@
       ],
       "seeAll": "See all frequently asked questions →"
     }
+  },
+  "smeKit": {
+    "title": "SME Sales Automation Kit",
+    "subtitle": "Compile all information for professional DD and SPA",
+    "selectOption": "Select...",
+    "uploadText": "Drag here or click to upload",
+    "gptAnalyzed": "(GPT analyzed)",
+    "generating": "Generating...",
+    "fetching": "Fetching...",
+    "steps": {
+      "companyBasics": {
+        "title": "1. Company Identity",
+        "description": "Basic information about your company",
+        "fields": {
+          "companyName": "Company Name",
+          "orgNumber": "Organization Number",
+          "registrationDate": "Registration Date",
+          "industry": "Industry",
+          "description": "Business Description",
+          "descriptionPlaceholder": "Describe the business in detail...",
+          "employees": "Number of Employees",
+          "businessModel": "Business Model",
+          "businessModelPlaceholder": "B2B, B2C, SaaS, etc."
+        },
+        "industryOptions": {
+          "tech": "Technology",
+          "ecommerce": "E-commerce",
+          "services": "Services",
+          "manufacturing": "Manufacturing",
+          "finance": "Finance",
+          "health": "Health",
+          "education": "Education",
+          "other": "Other"
+        }
+      },
+      "financialsCore": {
+        "title": "2. Financial Base",
+        "description": "Historical figures and key metrics",
+        "fields": {
+          "financialStatement": "Annual Report (PDF)",
+          "revenue2024": "Revenue 2024 (SEK)",
+          "revenue2023": "Revenue 2023 (SEK)",
+          "revenue2022": "Revenue 2022 (SEK)",
+          "ebitda2024": "EBITDA 2024 (SEK)",
+          "ebitda2023": "EBITDA 2023 (SEK)",
+          "ebitda2022": "EBITDA 2022 (SEK)"
+        }
+      },
+      "financialsAdvanced": {
+        "title": "3. Advanced Financial Data",
+        "description": "Detailed financial analysis",
+        "fields": {
+          "grossMargin": "Gross Margin (%)",
+          "operatingMargin": "Operating Margin (%)",
+          "netMargin": "Net Margin (%)",
+          "daysInventory": "Days Inventory Outstanding",
+          "daysSales": "Days Sales Outstanding (DSO)",
+          "daysPayable": "Days Payable Outstanding (DPO)",
+          "totalDebt": "Total Debt (SEK)",
+          "cashPosition": "Cash Position (SEK)",
+          "capex": "Annual CAPEX (SEK)",
+          "rd": "Annual R&D (SEK)"
+        }
+      },
+      "customers": {
+        "title": "4. Customer Base & Commercial",
+        "description": "Customer dependency and market position",
+        "fields": {
+          "totalCustomers": "Total Number of Customers",
+          "topCustomerRevenue": "Largest Customer % of Revenue",
+          "top3Revenue": "Top 3 Customers % of Revenue",
+          "top10Revenue": "Top 10 Customers % of Revenue",
+          "churnRate": "Annual Churn Rate (%)",
+          "nps": "NPS Score",
+          "customerContracts": "Major Customer Contracts (PDF)",
+          "customerList": "Customer List (Excel)",
+          "marketPosition": "Market Position",
+          "marketPositionPlaceholder": "Market size, competitors, position..."
+        }
+      },
+      "organization": {
+        "title": "5. Organization & HR",
+        "description": "Structure, salaries, and key risks",
+        "fields": {
+          "orgChart": "Organization Chart (PDF/Image)",
+          "employeeList": "Employee List with Salaries (Excel)",
+          "ceoName": "CEO Name and Tenure",
+          "cfoName": "CFO/Finance Manager Name",
+          "ctoName": "CTO/Technical Manager Name",
+          "avgTenure": "Average Employee Tenure (years)",
+          "turnover": "Annual Employee Turnover (%)",
+          "keyPersonDependency": "Key Person Dependency",
+          "keyPersonDependencyPlaceholder": "Who is critical to the business?",
+          "employeeContracts": "Key Role Contracts (PDF)"
+        }
+      },
+      "legal": {
+        "title": "6. Legal & Compliance",
+        "description": "Contracts, rights, disputes",
+        "fields": {
+          "companyRegistration": "Company Registration Certificate (PDF)",
+          "mainContracts": "Main Business Contracts (PDF)",
+          "leaseAgreement": "Lease Agreement for Premises (PDF)",
+          "taxCertificate": "Certificate of No Tax Debt (PDF)",
+          "licensePermits": "Licenses and Permits (PDF)",
+          "gdprDocumentation": "GDPR Documentation (PDF)",
+          "pendingLitigation": "Pending Legal Disputes",
+          "pendingLitigationPlaceholder": "Describe any disputes",
+          "changeOfControl": "Change of Control in Contracts?",
+          "ipOwnership": "IP Ownership (patents, trademarks)",
+          "ipOwnershipPlaceholder": "List all important IP"
+        }
+      },
+      "technical": {
+        "title": "7. Technology & IT",
+        "description": "Systems, infrastructure, security",
+        "fields": {
+          "techStack": "Tech Stack",
+          "techStackPlaceholder": "Frontend, backend, databases...",
+          "cloudVsOnpremise": "Cloud or On-premise?",
+          "datacenters": "Data Center Location",
+          "datacentersPlaceholder": "Where are servers located?",
+          "testCoverage": "Test Coverage (%)",
+          "uptime": "System Uptime SLA (%)",
+          "backupStrategy": "Backup & Disaster Recovery",
+          "backupStrategyPlaceholder": "RTO/RPO, backup frequency...",
+          "securityCertification": "Security Certifications (SOC2, ISO27001, etc)",
+          "dataProtection": "Data Protection and Encryption",
+          "dataProtectionPlaceholder": "Describe security measures",
+          "penetrationTest": "Penetration Test Report (PDF)",
+          "technicalDocs": "Technical Documentation (PDF)"
+        },
+        "cloudOptions": {
+          "cloud": "100% Cloud",
+          "hybrid": "Hybrid",
+          "onpremise": "100% On-premise"
+        }
+      },
+      "strategic": {
+        "title": "8. Strategic Overview",
+        "description": "Growth plan, IP, synergies",
+        "fields": {
+          "growthStrategy": "Growth Strategy 3-5 years",
+          "growthStrategyPlaceholder": "How do you plan to grow?",
+          "priorCompetitors": "Main Competitors",
+          "priorCompetitorsPlaceholder": "Names and their strengths/weaknesses",
+          "marketShare": "Estimated Market Share (%)",
+          "tam": "Total Addressable Market (TAM) (SEK)",
+          "productRoadmap": "Product Development Plan",
+          "productRoadmapPlaceholder": "Upcoming features/products",
+          "ipDescription": "Intellectual Property",
+          "ipDescriptionPlaceholder": "Patents, trademarks, algorithms",
+          "synergies": "Potential Synergy Effects",
+          "synergiesPlaceholder": "Revenue, cost, operational synergies"
+        }
+      },
+      "valuation": {
+        "title": "9. Valuation & Exit",
+        "description": "Buyer expectations",
+        "fields": {
+          "expectedValuation": "Expected Valuation (SEK)",
+          "valuationMultiple": "Desired Multiple (EV/EBITDA)",
+          "earnoutExpectation": "Do you want earnout?",
+          "earnoutTerms": "Earnout Terms",
+          "earnoutTermsPlaceholder": "KPI, period, etc.",
+          "sellingReason": "Reason for Selling",
+          "sellingReasonPlaceholder": "Why are you selling now?",
+          "newOwnerVision": "Vision for New Owner",
+          "newOwnerVisionPlaceholder": "What do you hope the new owner will do?"
+        },
+        "earnoutOptions": {
+          "no": "No",
+          "yes1020": "Yes, 10-20%",
+          "yes2030": "Yes, 20-30%",
+          "yes30plus": "Yes, >30%"
+        }
+      },
+      "export": {
+        "title": "10. Export & Handoff",
+        "description": "Generate professional documents",
+        "fields": {
+          "selectedDocuments": "Select Documents to Export"
+        },
+        "documentOptions": {
+          "dd": "DD Report",
+          "spa": "SPA",
+          "both": "Both"
+        },
+        "professionalReports": "Professional Reports",
+        "professionalReportsDesc": "Choose between quick-generated or complete versions",
+        "ddReport": "DD Report",
+        "spaAgreement": "SPA Agreement",
+        "fullVersions": "Complete Versions (40+ & 25+ pages)",
+        "fullVersionsDesc": "Professional M&A reports with all details, schedules and appendices",
+        "fullDD": "Full DD (25+ pgs)",
+        "fullSPA": "Full SPA (40+ pgs)",
+        "whatsIncluded": "What's included in complete versions?",
+        "whatsIncludedItems": {
+          "financial": "Detailed financial analysis with 3-year trend",
+          "customer": "Customer base & supplier analysis",
+          "organization": "Organization & personnel description",
+          "technical": "Technical assessment & risk matrix",
+          "schedules": "All schedules & appendices",
+          "design": "Professional design & formatting"
+        }
+      }
+    },
+    "assessment": {
+      "title": "Completeness Assessment",
+      "completionScore": "Completion Score",
+      "status": {
+        "veryComplete": "Very Complete",
+        "veryGood": "Very Good",
+        "good": "Good",
+        "needsMore": "Needs More",
+        "needsMuchMore": "Needs Much More",
+        "needsMorePreparation": "Needs More Preparation",
+        "earlyStage": "Early Stage"
+      },
+      "missing": "Missing:"
+    }
   }
 }
