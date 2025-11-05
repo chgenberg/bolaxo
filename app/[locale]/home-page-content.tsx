@@ -246,7 +246,7 @@ export default function HomePageContent() {
                 shape: "col-span-1 row-span-1"
               },
               {
-                link: "/partners",
+                link: `/${locale}/partners`,
                 image: "/Badringar/badring5.png",
                 shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2"
               },
@@ -256,32 +256,32 @@ export default function HomePageContent() {
                 shape: "col-span-1 row-span-1"
               },
               {
-                link: "/investor",
+                link: `/${locale}/investor`,
                 image: "/Badringar/badring7.png",
                 shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
               },
               {
-                link: "/success-stories",
+                link: `/${locale}/success-stories`,
                 image: "/Badringar/badring8.png",
                 shape: "col-span-1 row-span-1"
               },
               {
-                link: "/blogg",
+                link: `/${locale}/blogg`,
                 image: "/Badringar/badring9.png",
                 shape: "col-span-1 row-span-1"
               },
               {
-                link: "/faq",
+                link: `/${locale}/faq`,
                 image: "/Badringar/badring10.png",
                 shape: "col-span-1 row-span-1"
               },
               {
-                link: "/kontakt",
+                link: `/${locale}/kontakt`,
                 image: "/Badringar/badring11.png",
                 shape: "col-span-1 row-span-1"
               },
               {
-                link: "/for-maklare",
+                link: `/${locale}/for-maklare`,
                 image: "/Badringar/badring12.png",
                 shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
               }
