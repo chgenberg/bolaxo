@@ -65,14 +65,46 @@ export default function PricingPage() {
       {/* Hero Section */}
       <section className="bg-neutral-white py-16 sm:py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
-              {t('heroTitle')}
-            </h1>
-            <p className="text-xl text-primary-navy leading-relaxed max-w-3xl mx-auto">
-              {t('heroSubtitle')}
-            </p>
-          </div>
+'use client'
+
+import { Check, X, Star, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { useMemo } from 'react'
+
+export default function PricingPage() {
+  const t = useTranslations('priser')
+  
+  // Get plans from translations
+  const plans = useMemo(() => [
+    {
+      name: t('plans.basic.name'),
+      price: t('plans.basic.price'),
+      subtitle: t('plans.basic.subtitle'),
+      features: t.raw('plans.basic.features') as Array<{ text: string; included: boolean; highlight?: boolean }>,
+      cta: t('plans.basic.cta'),
+      ctaLink: '/checkout?package=basic',
+      popular: false,
+    },
+    {
+      name: t('plans.pro.name'),
+      price: t('plans.pro.price'),
+      subtitle: t('plans.pro.subtitle'),
+      features: t.raw('plans.pro.features') as Array<{ text: string; included: boolean; highlight?: boolean }>,
+      cta: t('plans.pro.cta'),
+      ctaLink: '/checkout?package=pro',
+      popular: true,
+    },
+    {
+      name: t('plans.enterprise.name'),
+      price: t('plans.enterprise.price'),
+      subtitle: t('plans.enterprise.subtitle'),
+      features: t.raw('plans.enterprise.features') as Array<{ text: string; included: boolean; highlight?: boolean }>,
+      cta: t('plans.enterprise.cta'),
+      ctaLink: '/kontakt?plan=enterprise',
+      popular: false,
+    },
+  ], [t])
 
           {/* Pricing Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
