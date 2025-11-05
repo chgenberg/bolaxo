@@ -220,7 +220,7 @@ export default function RegisterPage() {
                   <input
                     type="email"
                     name="email"
-                    placeholder={locale === 'sv' ? 'ch.genberg@gmail.com' : 'your@email.com'}
+                    placeholder={t('emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-accent-pink focus:ring-2 focus:ring-accent-pink/20 transition-all placeholder-gray-400 bg-gray-50"
@@ -235,7 +235,7 @@ export default function RegisterPage() {
                   <input
                     type="password"
                     name="password"
-                    placeholder="••••••••"
+                    placeholder={t('passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-accent-pink focus:ring-2 focus:ring-accent-pink/20 transition-all placeholder-gray-400 bg-gray-50"
