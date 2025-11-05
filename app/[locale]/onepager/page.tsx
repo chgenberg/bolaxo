@@ -387,10 +387,10 @@ export default function OnePagerPage() {
                 'Smart Matchning': Target,
                 'Rådgivning': Award,
                 'Transparent Pris': DollarSign,
+                // English translations
                 'AI Valuation': Zap,
                 'Anonymity': Lock,
                 '50K+ Buyers': Eye,
-                'BankID & NDA': Shield,
                 'Data Room & Q&A': MessageCircle,
                 'Smart Matching': Target,
                 'Advisory': Award,
