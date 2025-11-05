@@ -1,7 +1,5 @@
-import { redirect } from 'next/navigation'
-
-// Root page - redirect to default locale
-// Middleware should handle this, but this is a fallback
+// Root page - middleware handles redirect from / to /sv
+// This file should not be called if middleware works correctly
 export default function RootPage() {
-  redirect('/sv')
+  return null
 }
