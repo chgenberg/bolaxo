@@ -513,5 +513,139 @@
     "ctaTitle": "Redo att hitta ditt nästa företag?",
     "ctaSubtitle": "Registrera dig gratis och få tillgång till alla lediga företag i Sverige.",
     "ctaButton": "Registrera dig gratis"
+  },
+  "kopareSaFungerarDet": {
+    "heroTitle": "Bolaxo – Hitta, granska och förvärva tryggt och effektivt",
+    "heroSubtitle": "Skapa en trovärdig köparprofil med BankID. Filtrera annonser, signera NDA och få tillgång till datarum – allt i samma flöde.",
+    "createProfileButton": "Skapa köparprofil",
+    "watchButton": "Sätt bevakning (gratis)",
+    "processTitle": "Köparresan i 5 steg",
+    "buyerLabel": "KÖPARE",
+    "steps": {
+      "step1": {
+        "title": "Profil & bevakningar",
+        "shortTitle": "Profil & bevakningar",
+        "description": "Logga in med BankID och fyll i din profil. Sätt bevakningar och få mail/push när nya matchningar dyker upp.",
+        "time": "5-10 min",
+        "detailedTitle": "Skapa en trovärdig köparprofil",
+        "detailedDescription": "Logga in med BankID och fyll i din profil med branscher, storlek och finansiering. Lägg gärna till LinkedIn, kort investeringspitch och vad du söker. Mer profilinfo ger högre trovärdighet och fler säljare släpper in dig."
+      },
+      "step2": {
+        "title": "Sök & intresseanmäl",
+        "shortTitle": "Sök & intresseanmäl",
+        "description": "Filtrera på bransch, region, omsättning, pris. Skicka intresseanmälan på relevanta objekt.",
+        "time": "Löpande",
+        "detailedTitle": "Hitta rätt objekt",
+        "detailedDescription": "Filtrera på bransch, region, omsättning, pris, antal anställda, verifiering och anledning till försäljning. Skicka intresseanmälan på relevanta objekt och få svar direkt i plattformen."
+      },
+      "step3": {
+        "title": "NDA",
+        "shortTitle": "NDA",
+        "description": "Begär access och signera NDA med BankID. Säljaren är anonym tills NDA är godkänd.",
+        "time": "2-5 dagar",
+        "detailedTitle": "Signera NDA och få full access",
+        "detailedDescription": "Begär access och signera NDA med BankID. Säljaren är anonym tills NDA är godkänd. Efter godkännande ser du utökad info och kan ställa frågor direkt till säljaren."
+      },
+      "step4": {
+        "title": "Q&A, shortlist & datarum",
+        "shortTitle": "Datarum & DD",
+        "description": "Ställ frågor i säker chat. Jämför nyckeltal sida-vid-sida. Få access till datarum.",
+        "time": "Efter behov",
+        "detailedTitle": "Granska och analysera",
+        "detailedDescription": "Ställ frågor i säker chat. Lägg objekt i shortlist och jämför nyckeltal sida-vid-sida. Få behörighetsstyrd access till datarum med versionshistorik, vattenmärkning och aktivitetslogg."
+      },
+      "step5": {
+        "title": "LOI & tillträde",
+        "shortTitle": "LOI & tillträde",
+        "description": "Skicka indikativt bud (LOI) via vår mall. Följ milstolpsplan: DD → avtal → tillträde.",
+        "time": "60-90 dagar",
+        "detailedTitle": "Från bud till tillträde",
+        "detailedDescription": "Skicka indikativt bud (LOI) via vår mall med pris, villkor och tidslinje. Följ milstolpsplan: DD → avtal → tillträde. Behöver du stöd? Vi matchar dig med jurist/revisor i slutskedet."
+      }
+    },
+    "whyProfileTitle": "Varför fylla i profilen ordentligt?",
+    "whyProfile": {
+      "trust": {
+        "title": "Förtroende",
+        "desc": "BankID + LinkedIn + tydliga kriterier ökar chansen till snabb NDA-access"
+      },
+      "speed": {
+        "title": "Fart",
+        "desc": "Säljare prioriterar köpare med visad finansieringsförmåga och tydligt mandat"
+      },
+      "matches": {
+        "title": "Bättre matchningar",
+        "desc": "Bevakningar träffar rätt när din profil är komplett"
+      }
+    },
+    "profileCheckTitle": "Profilcheck (snabb):",
+    "profileCheckItems": [
+      "BankID verifierat",
+      "LinkedIn-länk",
+      "Investeringspitch (2–3 meningar)",
+      "Sökmandat/budget",
+      "Bransch & region"
+    ],
+    "whatsIncludedTitle": "Vad ingår för köpare?",
+    "features": [
+      {
+        "title": "Verifierade annonser",
+        "description": "BankID/NDA-flöde säkerställer seriösa säljare"
+      },
+      {
+        "title": "Shortlist & jämförelse",
+        "description": "Export till PDF/Excel för enkel analys"
+      },
+      {
+        "title": "Bevakningar & varningar",
+        "description": "Nya objekt, prisändring, nya dokument, Q&A-svar"
+      },
+      {
+        "title": "Datarum",
+        "description": "Versionshistorik, vattenmärkta dokument, aktivitetslogg"
+      },
+      {
+        "title": "Mallbibliotek",
+        "description": "NDA, LOI, Q&A-guide för professionell kommunikation"
+      },
+      {
+        "title": "Rådgivarnätverk",
+        "description": "För closing support (valfritt)"
+      }
+    ],
+    "pricingTitle": "Pris & krav",
+    "pricing": [
+      {
+        "title": "Konto & bevakningar",
+        "desc": "Gratis"
+      },
+      {
+        "title": "NDA & datarum",
+        "desc": "Kräver BankID"
+      },
+      {
+        "title": "Tillval",
+        "desc": "LOI-granskning/closing-stöd enligt prislista"
+      }
+    ],
+    "securityTitle": "Trygghet & sekretess",
+    "security": {
+      "buyerIdentity": {
+        "title": "Köparidentitet",
+        "desc": "Synlig (minimikrav) – du styr hur mycket du skriver i profilen"
+      },
+      "sellerIdentity": {
+        "title": "Säljaridentitet",
+        "desc": "Anonym tills NDA är signerad och säljaren ger access"
+      },
+      "securityTitle": "Säkerhet",
+      "securityDesc": "BankID, krypterad filhantering, loggar och vattenmärkning säkerställer maximal trygghet i alla transaktioner"
+    },
+    "cta": {
+      "title": "Redo att hitta ditt nästa företag?",
+      "createProfile": "Skapa köparprofil",
+      "watch": "Sätt bevakning",
+      "importLoi": "Importera LOI-mall"
+    }
   }
 }

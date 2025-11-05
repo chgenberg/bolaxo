@@ -513,5 +513,139 @@
     "ctaTitle": "Ready to find your next company?",
     "ctaSubtitle": "Register for free and get access to all available companies in Sweden.",
     "ctaButton": "Register for free"
+  },
+  "kopareSaFungerarDet": {
+    "heroTitle": "Bolaxo – Find, review and acquire safely and efficiently",
+    "heroSubtitle": "Create a credible buyer profile with BankID. Filter listings, sign NDA and get access to data room – all in the same flow.",
+    "createProfileButton": "Create buyer profile",
+    "watchButton": "Set watch (free)",
+    "processTitle": "The buyer journey in 5 steps",
+    "buyerLabel": "BUYER",
+    "steps": {
+      "step1": {
+        "title": "Profile & watchlists",
+        "shortTitle": "Profile & watchlists",
+        "description": "Log in with BankID and fill in your profile. Set watchlists and get email/push when new matches appear.",
+        "time": "5-10 min",
+        "detailedTitle": "Create a credible buyer profile",
+        "detailedDescription": "Log in with BankID and fill in your profile with industries, size and financing. Feel free to add LinkedIn, short investment pitch and what you're looking for. More profile info gives higher credibility and more sellers let you in."
+      },
+      "step2": {
+        "title": "Search & express interest",
+        "shortTitle": "Search & express",
+        "description": "Filter by industry, region, revenue, price. Send interest inquiry on relevant listings.",
+        "time": "Ongoing",
+        "detailedTitle": "Find the right listing",
+        "detailedDescription": "Filter by industry, region, revenue, price, number of employees, verification and reason for sale. Send interest inquiry on relevant listings and get answers directly in the platform."
+      },
+      "step3": {
+        "title": "NDA",
+        "shortTitle": "NDA",
+        "description": "Request access and sign NDA with BankID. Seller is anonymous until NDA is approved.",
+        "time": "2-5 days",
+        "detailedTitle": "Sign NDA and get full access",
+        "detailedDescription": "Request access and sign NDA with BankID. Seller is anonymous until NDA is approved. After approval you see extended info and can ask questions directly to the seller."
+      },
+      "step4": {
+        "title": "Q&A, shortlist & data room",
+        "shortTitle": "Data room & DD",
+        "description": "Ask questions in secure chat. Compare key figures side-by-side. Get access to data room.",
+        "time": "As needed",
+        "detailedTitle": "Review and analyze",
+        "detailedDescription": "Ask questions in secure chat. Add listings to shortlist and compare key figures side-by-side. Get permission-controlled access to data room with version history, watermarking and activity log."
+      },
+      "step5": {
+        "title": "LOI & closing",
+        "shortTitle": "LOI & closing",
+        "description": "Send indicative bid (LOI) via our template. Follow milestone plan: DD → agreement → closing.",
+        "time": "60-90 days",
+        "detailedTitle": "From bid to closing",
+        "detailedDescription": "Send indicative bid (LOI) via our template with price, terms and timeline. Follow milestone plan: DD → agreement → closing. Need support? We match you with lawyer/accountant in the final phase."
+      }
+    },
+    "whyProfileTitle": "Why fill in the profile properly?",
+    "whyProfile": {
+      "trust": {
+        "title": "Trust",
+        "desc": "BankID + LinkedIn + clear criteria increases chance of quick NDA access"
+      },
+      "speed": {
+        "title": "Speed",
+        "desc": "Sellers prioritize buyers with shown financing ability and clear mandate"
+      },
+      "matches": {
+        "title": "Better matches",
+        "desc": "Watchlists hit right when your profile is complete"
+      }
+    },
+    "profileCheckTitle": "Profile check (quick):",
+    "profileCheckItems": [
+      "BankID verified",
+      "LinkedIn link",
+      "Investment pitch (2–3 sentences)",
+      "Search mandate/budget",
+      "Industry & region"
+    ],
+    "whatsIncludedTitle": "What's included for buyers?",
+    "features": [
+      {
+        "title": "Verified listings",
+        "description": "BankID/NDA flow ensures serious sellers"
+      },
+      {
+        "title": "Shortlist & comparison",
+        "description": "Export to PDF/Excel for easy analysis"
+      },
+      {
+        "title": "Watchlists & alerts",
+        "description": "New listings, price changes, new documents, Q&A answers"
+      },
+      {
+        "title": "Data room",
+        "description": "Version history, watermarked documents, activity log"
+      },
+      {
+        "title": "Template library",
+        "description": "NDA, LOI, Q&A guide for professional communication"
+      },
+      {
+        "title": "Advisor network",
+        "description": "For closing support (optional)"
+      }
+    ],
+    "pricingTitle": "Pricing & requirements",
+    "pricing": [
+      {
+        "title": "Account & watchlists",
+        "desc": "Free"
+      },
+      {
+        "title": "NDA & data room",
+        "desc": "Requires BankID"
+      },
+      {
+        "title": "Optional",
+        "desc": "LOI review/closing support according to price list"
+      }
+    ],
+    "securityTitle": "Security & confidentiality",
+    "security": {
+      "buyerIdentity": {
+        "title": "Buyer identity",
+        "desc": "Visible (minimum requirement) – you control how much you write in the profile"
+      },
+      "sellerIdentity": {
+        "title": "Seller identity",
+        "desc": "Anonymous until NDA is signed and seller gives access"
+      },
+      "securityTitle": "Security",
+      "securityDesc": "BankID, encrypted file management, logs and watermarking ensure maximum security in all transactions"
+    },
+    "cta": {
+      "title": "Ready to find your next company?",
+      "createProfile": "Create buyer profile",
+      "watch": "Set watch",
+      "importLoi": "Import LOI template"
+    }
   }
 }
