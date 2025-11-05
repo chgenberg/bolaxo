@@ -1,4 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl'
+import '../globals.css'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { locales } from '@/i18n'
