@@ -5,72 +5,76 @@ import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, 
 import ValuationWizard from '@/components/ValuationWizard'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function ValuationPage() {
   const [showWizard, setShowWizard] = useState(false)
+  const t = useTranslations('valuation')
+  const locale = useLocale()
+  const getLocalizedPath = (path: string) => `/${locale}${path}`
 
   const features = [
     {
       icon: Zap,
-      title: 'Snabbt',
-      description: 'Få din värdering på 5 minuter'
+      title: t('features.fast'),
+      description: t('features.fastDesc')
     },
     {
       icon: Shield,
-      title: 'Gratis',
-      description: 'Ingen kostnad eller dolda avgifter'
+      title: t('features.free'),
+      description: t('features.freeDesc')
     },
     {
       icon: BarChart3,
-      title: 'Professionell',
-      description: 'Samma metoder som experter använder'
+      title: t('features.professional'),
+      description: t('features.professionalDesc')
     },
     {
       icon: FileText,
-      title: 'Rapport',
-      description: 'Detaljerad rapport med tips'
+      title: t('features.report'),
+      description: t('features.reportDesc')
     }
   ]
 
   const steps = [
     {
       number: '1',
-      title: 'Om bolaget',
-      description: 'Bransch, omsättning, EBIT/EBITDA, ägarstruktur'
+      title: t('steps.company'),
+      description: t('steps.companyDesc')
     },
     {
       number: '2',
-      title: 'Kunder & kanaler',
-      description: 'Churn, koncentration, säsong'
+      title: t('steps.customers'),
+      description: t('steps.customersDesc')
     },
     {
       number: '3',
-      title: 'Tillgångar & risk',
-      description: 'Lager, IP, avtal, beroenden'
+      title: t('steps.assets'),
+      description: t('steps.assetsDesc')
     },
     {
       number: '4',
-      title: 'Tillväxt & plan',
-      description: 'Pipeline, CAPEX, expansionsplaner'
+      title: t('steps.growth'),
+      description: t('steps.growthDesc')
     }
   ]
 
   const methods = [
     {
-      name: 'Multipelvärdering',
-      description: 'Jämför med liknande bolag'
+      name: t('methods.multiple'),
+      description: t('methods.multipleDesc')
     },
     {
-      name: 'Avkastningsvärdering',
-      description: 'Baserat på kassaflöde'
+      name: t('methods.return'),
+      description: t('methods.returnDesc')
     },
     {
-      name: 'Substansvärdering',
-      description: 'Värde av tillgångar minus skulder'
+      name: t('methods.substance'),
+      description: t('methods.substanceDesc')
     },
     {
-      name: 'DCF-metoden',
-      description: 'Diskonterat kassaflöde'
+      name: t('methods.dcf'),
+      description: t('methods.dcfDesc')
     }
   ]
 
@@ -104,11 +108,11 @@ export default function ValuationPage() {
               
               <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 md:p-12 shadow-2xl">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-3 sm:mb-4">
-                  Vad är ditt bolag värt just nu?
+                  {t('whatWorth')}
                 </h1>
                 
                 <p className="text-center text-gray-700 mb-6 sm:mb-8 text-base sm:text-lg">
-                  Få en indikativ värdering på några minuter – samma metodik som i riktiga affärer, anpassad för snabb överblick.
+                  {t('indicative')}
                 </p>
                 
                 <button
@@ -116,7 +120,7 @@ export default function ValuationPage() {
                   className="w-full bg-navy text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 text-base sm:text-lg group shadow-lg"
                 >
                   <span className="flex items-center justify-center gap-2 sm:gap-3">
-                    Starta värdering
+                    {t('start')}
                     <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5 transition-transform group-hover:translate-x-1" />
                   </span>
                 </button>
@@ -124,18 +128,18 @@ export default function ValuationPage() {
                 <div className="mt-6 sm:mt-8 space-y-2 sm:space-y-3">
                   <div className="flex items-center gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500" />
-                    <span>5 minuter</span>
+                    <span>{t('5minutes')}</span>
                   </div>
                   <div className="flex items-center gap-2 sm:gap-3 text-gray-600 text-sm sm:text-base">
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500" />
-                    <span>Helt gratis</span>
+                    <span>{t('completelyFree')}</span>
                   </div>
                   <Link 
-                    href="/registrera"
+                    href={getLocalizedPath('/registrera')}
                     className="flex items-center gap-2 sm:gap-3 text-[#1F3C58] hover:text-[#1F3C58]/80 font-semibold text-sm sm:text-base transition-colors group"
                   >
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500" />
-                    <span className="group-hover:underline">Skapa din profil nu</span>
+                    <span className="group-hover:underline">{t('createProfile')}</span>
                   </Link>
                 </div>
               </div>
@@ -167,9 +171,9 @@ export default function ValuationPage() {
         <section className="py-12 sm:py-16 md:py-24 bg-neutral-off-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-3 sm:mb-4 md:mb-6 uppercase">SÅ FUNGERAR VÄRDERINGEN</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-3 sm:mb-4 md:mb-6 uppercase">{t('howItWorks')}</h2>
               <p className="text-base sm:text-lg md:text-xl text-primary-navy max-w-2xl mx-auto">
-                Följ dessa 4 steg för att få din indikativa värdering
+                {t('howItWorksDesc')}
               </p>
             </div>
 
@@ -190,7 +194,7 @@ export default function ValuationPage() {
                 onClick={() => setShowWizard(true)}
                 className="inline-flex items-center gap-2 px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-accent-pink text-primary-navy font-bold rounded-lg hover:shadow-lg transition-all text-base sm:text-lg"
               >
-                Kom igång nu
+                {t('getStarted')}
                 <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
               </button>
             </div>
@@ -201,9 +205,9 @@ export default function ValuationPage() {
         <section className="py-12 sm:py-16 md:py-24 bg-neutral-white">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-3 sm:mb-4 md:mb-6 uppercase">PROFESSIONELLA METODER</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-3 sm:mb-4 md:mb-6 uppercase">{t('professionalMethods')}</h2>
               <p className="text-base sm:text-lg text-primary-navy max-w-2xl mx-auto">
-                Vi kombinerar flera etablerade värderingsmetoder för en rättvisande bedömning
+                {t('methodsDesc')}
               </p>
             </div>
 
@@ -224,15 +228,15 @@ export default function ValuationPage() {
             </div>
 
             <div className="bg-primary-navy/5 border border-primary-navy/20 rounded-lg p-6 sm:p-8">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy mb-4 sm:mb-6">Resultat</h3>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy mb-4 sm:mb-6">{locale === 'sv' ? 'Resultat' : 'Result'}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 <div className="flex items-start gap-2 sm:gap-3">
                   <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-primary-navy text-sm sm:text-base">Indikativ multipel</span>
+                  <span className="text-primary-navy text-sm sm:text-base">{locale === 'sv' ? 'Indikativ multipel' : 'Indicative multiple'}</span>
                 </div>
                 <div className="flex items-start gap-2 sm:gap-3">
                   <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-primary-navy text-sm sm:text-base">Värderingsintervall med jämförelse</span>
+                  <span className="text-primary-navy text-sm sm:text-base">{t('interval')}</span>
                 </div>
               </div>
             </div>
@@ -246,12 +250,12 @@ export default function ValuationPage() {
               <div className="flex gap-3 sm:gap-4">
                 <div className="text-amber-600 text-xl sm:text-2xl flex-shrink-0">⚠️</div>
                 <div>
-                  <h3 className="text-primary-navy font-bold mb-1 sm:mb-2 text-base sm:text-lg">Viktigt: Ansvarsfriskrivning</h3>
+                  <h3 className="text-primary-navy font-bold mb-1 sm:mb-2 text-base sm:text-lg">{t('important')}</h3>
                   <p className="text-gray-700 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-3">
-                    <strong>Värdet är indikativt och utgör inte finansiell rådgivning.</strong> För en fördjupad värdering rekommenderar vi en genomgång med värderingsspecialist (30 min kostnadsfritt för Pro/Enterprise).
+                    <strong>{t('disclaimerBold')}</strong> {t('disclaimerDetail')}
                   </p>
                   <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">
-                    Denna värdering baseras på uppgifter du själv matar in och allmän marknadsdata. För en bindande värdering rekommenderar vi att du konsulterar en auktoriserad värderare eller finansiell rådgivare.
+                    {t('disclaimer')}
                   </p>
                 </div>
               </div>
@@ -264,16 +268,16 @@ export default function ValuationPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <TrendingUp className="w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 text-primary-navy mx-auto mb-4 sm:mb-6" />
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 sm:mb-6">
-              Redo att värdera ditt företag?
+              {t('ready')}
             </h2>
             <p className="text-base sm:text-lg text-primary-navy leading-relaxed mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto">
-              Få en professionell värdering helt gratis. Inga dolda avgifter eller förpliktelser. Det tar bara 5 minuter.
+              {t('ctaDesc')}
             </p>
             <button
               onClick={() => setShowWizard(true)}
               className="inline-flex items-center gap-2 px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-base sm:text-lg"
             >
-              Starta Värdering Nu
+              {t('start')}
               <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
             </button>
           </div>

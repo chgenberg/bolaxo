@@ -10,11 +10,16 @@ import MultiSelect from '@/components/MultiSelect'
 import PriceRangeSlider from '@/components/PriceRangeSlider'
 import AdvancedFilterDropdown from '@/components/AdvancedFilterDropdown'
 import { Search, SlidersHorizontal, ChevronDown, X, TrendingUp, AlertCircle, MapPin, Briefcase, DollarSign, Users, Calendar, Shield, BarChart3, Filter, Zap, HelpCircle } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function SearchPage() {
   const router = useRouter()
   const { user } = useAuth()
   const { error: showError, info } = useToast()
+  const t = useTranslations('search')
+  const locale = useLocale()
+  const getLocalizedPath = (path: string) => `/${locale}${path}`
+  
   const [profileChecked, setProfileChecked] = useState(false)
   const [allObjects, setAllObjects] = useState<BusinessObject[]>(mockObjects)
   const [filteredObjects, setFilteredObjects] = useState<BusinessObject[]>(mockObjects)
@@ -47,8 +52,8 @@ export default function SearchPage() {
       try {
         const response = await fetch(`/api/buyer-profile?userId=${user.id}`)
         if (!response.ok) {
-          info('Du behöver slutföra din profil innan du kan söka')
-          router.push('/kopare/start')
+          info(t('completeProfile'))
+          router.push(getLocalizedPath('/kopare/start'))
           return
         }
         setProfileChecked(true)
@@ -349,7 +354,7 @@ export default function SearchPage() {
       <div className="bg-background-off-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">
           <h1 className="text-2xl sm:text-2xl sm:text-3xl md:text-4xl font-bold text-text-dark text-center uppercase">
-            Sök bland {allObjects.length} företag till salu
+            {t('title', { count: allObjects.length })}
           </h1>
         </div>
       </div>
@@ -367,7 +372,7 @@ export default function SearchPage() {
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-gray group-focus-within:text-primary-blue transition-colors z-10" />
                   <input
                     type="text"
-                    placeholder="Sök företag..."
+                    placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="relative w-full pl-10 sm:pl-12 pr-10 sm:pr-12 py-3 sm:py-3.5 bg-white border-2 border-gray-200 rounded-button text-sm sm:text-base text-text-dark placeholder-text-gray
@@ -399,8 +404,8 @@ export default function SearchPage() {
                 `}
               >
                 <Filter className={`w-4 sm:w-5 h-4 sm:h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-                <span className="hidden sm:inline">Avancerade filter</span>
-                <span className="sm:hidden">Filter</span>
+                <span className="hidden sm:inline">{t('advancedFilters')}</span>
+                <span className="sm:hidden">{t('filters')}</span>
                 {activeFilterCount > 0 && (
                   <span className={`
                     px-1.5 sm:px-2 py-0.5 rounded-full text-xs sm:text-sm font-bold
@@ -423,7 +428,7 @@ export default function SearchPage() {
                     {/* Industries Multi-Select */}
                     <div>
                       <MultiSelect
-                        label="Välj branscher"
+                        label={t('selectIndustries')}
                         icon={<Briefcase className="w-4 h-4" />}
                         options={[
                           { value: 'it-konsult-utveckling', label: 'IT-konsult & utveckling' },
@@ -449,7 +454,7 @@ export default function SearchPage() {
                         ]}
                         value={filters.categories}
                         onChange={(value) => setFilters({...filters, categories: value})}
-                        placeholder="Välj branscher"
+                        placeholder={t('selectIndustries')}
                       />
                     </div>
 
@@ -474,7 +479,7 @@ export default function SearchPage() {
                     {/* Revenue Range */}
                     <div>
                       <AdvancedFilterDropdown
-                        label="Omsättning"
+                        label={t('revenueRange')}
                         icon={<BarChart3 className="w-4 h-4" />}
                         options={[
                           { value: '', label: 'Alla omsättningar', description: 'Visa alla' },
@@ -493,7 +498,7 @@ export default function SearchPage() {
                     {/* Sort Options */}
                     <div>
                       <AdvancedFilterDropdown
-                        label="Sortera efter"
+                        label={t('sortBy')}
                         icon={<TrendingUp className="w-4 h-4" />}
                         options={[
                           { value: 'newest', label: 'Nyast först', icon: <Calendar className="w-4 h-4" /> },
@@ -595,8 +600,8 @@ export default function SearchPage() {
                     <div className="mt-4 pt-4 border-t border-gray-200">
                       <div className="flex items-center gap-2 text-sm text-text-gray">
                         <Zap className="w-4 h-4 text-primary-blue" />
-                        <span>Aktiva filter: {activeFilterCount}</span>
-                        <span className="text-primary-blue font-medium">• {filteredObjects.length} resultat</span>
+                        <span>{t('activeFilters', { count: activeFilterCount })}</span>
+                        <span className="text-primary-blue font-medium">• {filteredObjects.length} {t('results')}</span>
                       </div>
                     </div>
                   )}
@@ -612,11 +617,14 @@ export default function SearchPage() {
         {/* Results Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-4 sm:mb-6 md:mb-8">
           <h2 className="text-base sm:text-lg md:text-xl font-semibold text-text-dark">
-            {filteredObjects.length} företag {activeFilterCount > 0 && 'matchade'}
+            {t('companiesFound', { 
+              count: filteredObjects.length, 
+              matched: activeFilterCount > 0 ? t('matched') : '' 
+            })}
           </h2>
           {!loading && filteredObjects.length > 0 && (
             <p className="text-xs sm:text-sm text-text-gray hidden lg:block">
-              Alla annonser är verifierade
+              {t('allVerified')}
             </p>
           )}
         </div>
@@ -652,16 +660,16 @@ export default function SearchPage() {
           <div className="card text-center py-6 sm:py-8 md:py-12 max-w-md mx-auto">
             <AlertCircle className="w-12 sm:w-16 h-12 sm:h-16 text-text-gray/50 mx-auto mb-3 sm:mb-4" />
             <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-2">
-              Inga företag hittades
+              {t('noResults')}
             </h3>
             <p className="text-sm sm:text-base text-text-gray mb-4 sm:mb-6 px-4">
-              Prova att justera dina filter eller sökord för att se fler resultat
+              {t('adjustFilters')}
             </p>
             <button 
               onClick={clearAllFilters}
               className="btn-secondary mx-auto text-sm sm:text-base"
             >
-              Rensa alla filter
+              {t('clearFilters')}
             </button>
           </div>
         )}
