@@ -6,9 +6,8 @@ import Image from 'next/image'
 import { Star, ArrowRight, TrendingUp, ChevronDown, X, CheckCircle, Lightbulb, Zap, Lock, MessageCircle } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
 
-// Prevent static generation - this page uses ValuationWizard which uses useAuth
-export const dynamic = 'force-dynamic'
-export const dynamicParams = true
+// Note: Route segment config (dynamic, dynamicParams) should be in layout.tsx for client components
+// The layout.tsx already has export const dynamic = 'force-dynamic'
 
 export default function Home() {
   const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)

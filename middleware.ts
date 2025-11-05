@@ -75,7 +75,15 @@ export async function middleware(request: NextRequest) {
   console.log('🌐 [MIDDLEWARE] Processing pathname:', pathname)
 
   // Handle internationalization
+  // next-intl middleware handles locale routing automatically
   const response = intlMiddleware(request)
+  
+  // Log the response to debug routing issues
+  if (pathname.startsWith('/sv') || pathname.startsWith('/en')) {
+    console.log('🔍 [MIDDLEWARE] Locale route detected:', pathname)
+    console.log('🔍 [MIDDLEWARE] Response status:', response.status)
+    console.log('🔍 [MIDDLEWARE] Response URL:', response.url)
+  }
 
   // 2. Security Headers
   response.headers.set('X-Content-Type-Options', 'nosniff')
