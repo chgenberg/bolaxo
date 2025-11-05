@@ -1641,5 +1641,51 @@
       "newListing": "New Listing",
       "searchCompanies": "Search Companies"
     }
+  },
+  "spaEditor": {
+    "title": "📄 SPA Editor",
+    "back": "← Back",
+    "version": "Version",
+    "status": "Status",
+    "loading": "Loading...",
+    "viewPdf": "View PDF",
+    "edit": "Edit",
+    "history": "History",
+    "downloadPdf": "Download PDF",
+    "summary": "Purchase Summary",
+    "purchasePrice": "Purchase Price",
+    "cashAtClosing": "Cash at Closing",
+    "escrowHoldback": "Escrow (Holdback)",
+    "earnoutPotential": "Potential Earn-out",
+    "earnoutStructure": "Earn-out Structure",
+    "nonCompete": "Non-compete",
+    "editTerms": "Edit Terms",
+    "sendToBuyer": "Send to Buyer",
+    "sentToBuyer": "SPA sent to buyer! Waiting for response...",
+    "editTitle": "Edit SPA Terms",
+    "purchasePriceLabel": "Purchase Price (SEK)",
+    "cashAtClosingLabel": "Cash at Closing (SEK)",
+    "escrowHoldbackLabel": "Escrow Holdback (SEK)",
+    "escrowPeriod": "Escrow Period",
+    "earnoutAmount": "Earn-out Amount (SEK)",
+    "earnoutPeriod": "Earn-out Period",
+    "earnoutKPI": "Earn-out KPI",
+    "nonCompetePeriod": "Non-compete Period (years)",
+    "closingDate": "Closing Date",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "historyTitle": "Version History",
+    "downloadVersion": "Download version",
+    "changedBy": {
+      "seller": "Seller",
+      "buyer": "Buyer"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "proposed": "Proposed",
+      "negotiating": "Negotiating",
+      "signed": "Signed"
+    },
+    "updatedSPATerms": "Updated SPA terms"
   }
 }

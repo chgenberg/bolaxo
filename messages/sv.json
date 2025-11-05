@@ -1641,5 +1641,51 @@
       "newListing": "Ny annons",
       "searchCompanies": "Sök företag"
     }
+  },
+  "spaEditor": {
+    "title": "📄 SPA Editor",
+    "back": "← Tillbaka",
+    "version": "Version",
+    "status": "Status",
+    "loading": "Laddar...",
+    "viewPdf": "Visa PDF",
+    "edit": "Redigera",
+    "history": "Historik",
+    "downloadPdf": "Ladda ner PDF",
+    "summary": "Köpsammanfattning",
+    "purchasePrice": "Köpeskilling",
+    "cashAtClosing": "Kontant vid closing",
+    "escrowHoldback": "Escrow (holdback)",
+    "earnoutPotential": "Earn-out potentiell",
+    "earnoutStructure": "Earn-out struktur",
+    "nonCompete": "Konkurrensförbud",
+    "editTerms": "Redigera termer",
+    "sendToBuyer": "Skicka till köpare",
+    "sentToBuyer": "SPA skickad till köpare! Väntar på svar...",
+    "editTitle": "Redigera SPA-termer",
+    "purchasePriceLabel": "Köpeskilling (SEK)",
+    "cashAtClosingLabel": "Kontant vid closing (SEK)",
+    "escrowHoldbackLabel": "Escrow holdback (SEK)",
+    "escrowPeriod": "Escrow period",
+    "earnoutAmount": "Earn-out belopp (SEK)",
+    "earnoutPeriod": "Earn-out period",
+    "earnoutKPI": "Earn-out KPI",
+    "nonCompetePeriod": "Konkurrensförbud (år)",
+    "closingDate": "Closing datum",
+    "saveChanges": "Spara ändringar",
+    "cancel": "Avbryt",
+    "historyTitle": "Versionshistorik",
+    "downloadVersion": "Ladda ner version",
+    "changedBy": {
+      "seller": "Säljare",
+      "buyer": "Köpare"
+    },
+    "statuses": {
+      "draft": "Utkast",
+      "proposed": "Föreslagen",
+      "negotiating": "Förhandling",
+      "signed": "Signerad"
+    },
+    "updatedSPATerms": "Updated SPA terms"
   }
 }

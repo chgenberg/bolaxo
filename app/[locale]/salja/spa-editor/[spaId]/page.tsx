@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Download, Send, RotateCcw, Eye, Edit2, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface SPAVersion {
   version: number
@@ -17,6 +18,8 @@ interface SPAVersion {
 export default function SPAEditorPage() {
   const params = useParams()
   const spaId = params.spaId as string
+  const t = useTranslations('spaEditor')
+  const locale = useLocale()
   
   const [spa, setSpa] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -41,7 +44,7 @@ export default function SPAEditorPage() {
       version: 1,
       date: '2025-10-20',
       status: 'draft',
-      changedBy: 'Säljare',
+      changedBy: t('changedBy.seller'),
       changes: 'Initial SPA generated from documents',
       pdfUrl: '#'
     },
@@ -49,7 +52,7 @@ export default function SPAEditorPage() {
       version: 2,
       date: '2025-10-22',
       status: 'proposed',
-      changedBy: 'Köpare',
+      changedBy: t('changedBy.buyer'),
       changes: 'Counteroffer: Reduced price to 48M, increased escrow',
       pdfUrl: '#'
     },
@@ -57,7 +60,7 @@ export default function SPAEditorPage() {
       version: 3,
       date: '2025-10-25',
       status: 'negotiating',
-      changedBy: 'Säljare',
+      changedBy: t('changedBy.seller'),
       changes: 'Counter-counteroffer: 50M price, earn-out adjusted',
       pdfUrl: '#'
     }
@@ -95,8 +98,8 @@ export default function SPAEditorPage() {
       version: versions.length + 1,
       date: new Date().toISOString().split('T')[0],
       status: 'negotiating',
-      changedBy: 'Säljare',
-      changes: 'Updated SPA terms',
+      changedBy: t('changedBy.seller'),
+      changes: t('updatedSPATerms'),
       pdfUrl: '#'
     }
     setVersions([...versions, newVersion])
@@ -105,14 +108,14 @@ export default function SPAEditorPage() {
   const handleSendToKöpare = async () => {
     // TODO: Send to buyer
     console.log('Sending SPA to buyer')
-    alert('SPA skickad till köpare! Väntar på svar...')
+    alert(t('sentToBuyer'))
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 p-6">
         <div className="max-w-6xl mx-auto">
-          <div className="animate-spin">Laddar...</div>
+          <div className="animate-spin">{t('loading')}</div>
         </div>
       </div>
     )
@@ -123,11 +126,11 @@ export default function SPAEditorPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <Link href="/salja" className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-4">
-            ← Tillbaka
+          <Link href={`/${locale}/salja`} className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-4">
+            {t('back')}
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">📄 SPA Editor - {spa?.listing}</h1>
-          <p className="text-gray-600">Version {spa?.version} • Status: {spa?.status}</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')} - {spa?.listing}</h1>
+          <p className="text-gray-600">{t('version')} {spa?.version} • {t('status')}: {spa?.status}</p>
         </div>
 
         {/* Action Buttons */}
@@ -141,7 +144,7 @@ export default function SPAEditorPage() {
             }`}
           >
             <Eye className="w-4 h-4" />
-            Visa PDF
+            {t('viewPdf')}
           </button>
           <button
             onClick={() => setViewMode('edit')}
@@ -152,7 +155,7 @@ export default function SPAEditorPage() {
             }`}
           >
             <Edit2 className="w-4 h-4" />
-            Redigera
+            {t('edit')}
           </button>
           <button
             onClick={() => setViewMode('history')}
@@ -163,7 +166,7 @@ export default function SPAEditorPage() {
             }`}
           >
             <RotateCcw className="w-4 h-4" />
-            Historik
+            {t('history')}
           </button>
         </div>
 
@@ -174,27 +177,27 @@ export default function SPAEditorPage() {
               <h2 className="text-xl font-bold text-gray-900">SPA Version {spa?.version}</h2>
               <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                 <Download className="w-4 h-4" />
-                Ladda ner PDF
+                {t('downloadPdf')}
               </button>
             </div>
 
             <div className="bg-gray-50 rounded-lg p-6 mb-6">
-              <h3 className="font-bold text-lg mb-4">Köpsammanfattning</h3>
+              <h3 className="font-bold text-lg mb-4">{t('summary')}</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-600">Köpeskilling</p>
+                  <p className="text-sm text-gray-600">{t('purchasePrice')}</p>
                   <p className="text-2xl font-bold text-gray-900">{(formData.purchasePrice / 1000000).toFixed(0)} MSEK</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Kontant vid closing</p>
+                  <p className="text-sm text-gray-600">{t('cashAtClosing')}</p>
                   <p className="text-2xl font-bold text-gray-900">{(formData.cashAtClosing / 1000000).toFixed(0)} MSEK</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Escrow (holdback)</p>
+                  <p className="text-sm text-gray-600">{t('escrowHoldback')}</p>
                   <p className="text-2xl font-bold text-gray-900">{(formData.escrowHoldback / 1000000).toFixed(0)} MSEK</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Earn-out potentiell</p>
+                  <p className="text-sm text-gray-600">{t('earnoutPotential')}</p>
                   <p className="text-2xl font-bold text-gray-900">{(formData.earnoutAmount / 1000000).toFixed(0)} MSEK</p>
                 </div>
               </div>
@@ -202,13 +205,13 @@ export default function SPAEditorPage() {
 
             <div className="space-y-4">
               <div className="p-4 bg-blue-50 border-l-4 border-blue-600">
-                <p className="font-semibold text-gray-900">Earn-out struktur</p>
+                <p className="font-semibold text-gray-900">{t('earnoutStructure')}</p>
                 <p className="text-sm text-gray-700 mt-1">
                   {formData.earnoutAmount/1000000} MSEK över {formData.earnoutPeriod} baserat på: {formData.earnoutKPI}
                 </p>
               </div>
               <div className="p-4 bg-amber-50 border-l-4 border-amber-600">
-                <p className="font-semibold text-gray-900">Konkurrensförbud</p>
+                <p className="font-semibold text-gray-900">{t('nonCompete')}</p>
                 <p className="text-sm text-gray-700 mt-1">
                   {formData.nonCompetePeriod} från closing
                 </p>
@@ -221,14 +224,14 @@ export default function SPAEditorPage() {
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold"
               >
                 <Edit2 className="w-4 h-4" />
-                Redigera termer
+                {t('editTerms')}
               </button>
               <button
                 onClick={handleSendToKöpare}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold"
               >
                 <Send className="w-4 h-4" />
-                Skicka till köpare
+                {t('sendToBuyer')}
               </button>
             </div>
           </div>
@@ -237,13 +240,13 @@ export default function SPAEditorPage() {
         {/* Edit View */}
         {viewMode === 'edit' && (
           <div className="bg-white rounded-lg border-2 border-gray-200 p-8 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Redigera SPA-termer</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">{t('editTitle')}</h2>
 
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Köpeskilling (SEK)
+                    {t('purchasePriceLabel')}
                   </label>
                   <input
                     type="number"
@@ -255,7 +258,7 @@ export default function SPAEditorPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Kontant vid closing (SEK)
+                    {t('cashAtClosingLabel')}
                   </label>
                   <input
                     type="number"
@@ -267,7 +270,7 @@ export default function SPAEditorPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Escrow holdback (SEK)
+                    {t('escrowHoldbackLabel')}
                   </label>
                   <input
                     type="number"
@@ -279,7 +282,7 @@ export default function SPAEditorPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Escrow period
+                    {t('escrowPeriod')}
                   </label>
                   <input
                     type="text"
@@ -291,7 +294,7 @@ export default function SPAEditorPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Earn-out belopp (SEK)
+                    {t('earnoutAmount')}
                   </label>
                   <input
                     type="number"
@@ -303,7 +306,7 @@ export default function SPAEditorPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Earn-out period
+                    {t('earnoutPeriod')}
                   </label>
                   <input
                     type="text"
@@ -315,7 +318,7 @@ export default function SPAEditorPage() {
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Earn-out KPI
+                    {t('earnoutKPI')}
                   </label>
                   <input
                     type="text"
@@ -327,7 +330,7 @@ export default function SPAEditorPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Konkurrensförbud (år)
+                    {t('nonCompetePeriod')}
                   </label>
                   <input
                     type="text"
@@ -339,7 +342,7 @@ export default function SPAEditorPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Closing datum
+                    {t('closingDate')}
                   </label>
                   <input
                     type="date"
@@ -356,13 +359,13 @@ export default function SPAEditorPage() {
                   className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold"
                 >
                   <CheckCircle className="w-4 h-4" />
-                  Spara ändringar
+                  {t('saveChanges')}
                 </button>
                 <button
                   onClick={() => setViewMode('pdf')}
                   className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gray-300 text-gray-900 rounded-lg hover:bg-gray-400 font-semibold"
                 >
-                  Avbryt
+                  {t('cancel')}
                 </button>
               </div>
             </div>
@@ -372,7 +375,7 @@ export default function SPAEditorPage() {
         {/* History View */}
         {viewMode === 'history' && (
           <div className="bg-white rounded-lg border-2 border-gray-200 p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Versionshistorik</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">{t('historyTitle')}</h2>
 
             <div className="space-y-4">
               {versions.map((version, idx) => (
@@ -393,11 +396,11 @@ export default function SPAEditorPage() {
                       version.status === 'proposed' ? 'bg-blue-100 text-blue-700' :
                       'bg-gray-100 text-gray-700'
                     }`}>
-                      {version.status}
+                      {t(`statuses.${version.status}`)}
                     </span>
                   </div>
                   <button className="text-sm text-blue-600 hover:text-blue-800 font-semibold">
-                    Ladda ner version {version.version}
+                    {t('downloadVersion')} {version.version}
                   </button>
                 </div>
               ))}
