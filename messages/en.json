@@ -881,5 +881,291 @@
       "successDemo": "We will contact you to book a demo",
       "successPhone": "We will contact you at the selected time"
     }
+  },
+  "onepager": {
+    "hero": {
+      "socialProof": "entrepreneurs use BOLAXO",
+      "title": "Sell your company.",
+      "titleHighlight": "Simple. Secure.",
+      "titleSubtext": "On your terms.",
+      "subtitle": "Avoid unserious buyers, long processes and expensive intermediaries.",
+      "subtitleHighlight": "We connect you directly with the right buyers",
+      "subtitleSubtext": "- completely anonymous until you decide.",
+      "benefits": {
+        "freeValuation": "Free valuation",
+        "freeValuationTime": "in 5 minutes",
+        "anonymous": "100% anonymous",
+        "anonymousUntil": "until NDA signing",
+        "avgPrice": "Average sale price:",
+        "avgPriceValue": "18.7M SEK"
+      },
+      "cta": {
+        "freeValuation": "Get Free Valuation (5 min)",
+        "startSelling": "Start selling"
+      },
+      "trust": {
+        "bankIdSecure": "BankID secured",
+        "avgDays": "Ø 94 days to deal"
+      },
+      "testimonials": [
+        {
+          "quote": "We got 23 bids in 6 weeks. Sold for 4.2 million over our valuation.",
+          "name": "Anna Lindström",
+          "company": "TechStart AB",
+          "result": "+4.2M SEK over valuation"
+        },
+        {
+          "quote": "The process was so smooth. From listing to closing in 87 days.",
+          "name": "Erik Johansson",
+          "company": "Retail Solutions",
+          "result": "Sold in 87 days"
+        },
+        {
+          "quote": "The anonymity was perfect. Could continue running the business normally.",
+          "name": "Maria Berg",
+          "company": "Konsultbyrån Nordic",
+          "result": "100% anonymity"
+        }
+      ],
+      "stats": {
+        "companiesSold": "Companies sold",
+        "satisfiedSellers": "Satisfied sellers"
+      }
+    },
+    "statsBar": {
+      "avgPrice": "Average sale price",
+      "avgTime": "Average time to deal",
+      "verifiedBuyers": "Verified buyers",
+      "recommend": "Recommend us"
+    },
+    "problemSolution": {
+      "title": "Why is it so",
+      "titleHighlight": "difficult",
+      "titleEnd": "to sell your company?",
+      "subtitle": "We understand the frustration. That's why we built a better solution.",
+      "traditional": "Traditional way",
+      "withBolaxo": "With BOLAXO",
+      "problems": {
+        "longTime": {
+          "title": "Takes up to 2 years",
+          "desc": "Long processes with uncertain outcomes"
+        },
+        "expensive": {
+          "title": "Expensive intermediaries",
+          "desc": "10-15% commission + fixed fees"
+        },
+        "noAnonymity": {
+          "title": "No anonymity",
+          "desc": "Rumors spread, employees worried"
+        },
+        "unserious": {
+          "title": "Unserious interested parties",
+          "desc": "Waste time on \"tourist buyers\""
+        }
+      },
+      "solutions": {
+        "fast": {
+          "title": "Ø 94 days to deal",
+          "desc": "AI matching finds the right buyers quickly"
+        },
+        "fixedPrice": {
+          "title": "Fixed price from 5,900 SEK",
+          "desc": "No commission. Transparent pricing."
+        },
+        "anonymous": {
+          "title": "100% anonymous process",
+          "desc": "You decide when your identity is revealed"
+        },
+        "verified": {
+          "title": "Only BankID verified",
+          "desc": "All buyers are serious and verified"
+        }
+      },
+      "cta": {
+        "button": "Value My Company Free",
+        "subtext": "Takes only 5 minutes • No registration • Completely free"
+      }
+    },
+    "howItWorks": {
+      "title": "It's that simple",
+      "subtitle": "From valuation to closing in 3 steps",
+      "steps": {
+        "step1": {
+          "title": "Value Free",
+          "desc": "Get your AI-driven valuation in 5 minutes. Completely free, no registration.",
+          "time": "5 minutes"
+        },
+        "step2": {
+          "title": "Create Listing",
+          "desc": "Publish anonymously. Choose exactly what buyers see before/after NDA.",
+          "note": "100% anonymous"
+        },
+        "step3": {
+          "title": "Receive Bids",
+          "desc": "50,000+ verified buyers see your listing. You choose the right buyer.",
+          "time": "Ø 94 days"
+        }
+      }
+    },
+    "recentSales": {
+      "title": "Recent deals",
+      "subtitle": "Live updated from our platform",
+      "soldFor": "Sold for",
+      "closed": "✓ CLOSED",
+      "bidsReceived": "bids received",
+      "sales": [
+        {
+          "company": "Tech company Stockholm",
+          "price": "23.5M SEK",
+          "days": "67 days",
+          "bids": 18
+        },
+        {
+          "company": "E-commerce Gothenburg",
+          "price": "12.8M SEK",
+          "days": "89 days",
+          "bids": 14
+        },
+        {
+          "company": "Consulting firm Malmö",
+          "price": "8.2M SEK",
+          "days": "52 days",
+          "bids": 11
+        }
+      ]
+    },
+    "features": {
+      "title": "Everything you need for a successful sale",
+      "subtitle": "From valuation to closing - we guide you all the way",
+      "items": [
+        {
+          "title": "AI Valuation",
+          "desc": "Free valuation in 5 min",
+          "value": "Worth 5,000 SEK"
+        },
+        {
+          "title": "Anonymity",
+          "desc": "Full control over what is shown",
+          "value": "Priceless"
+        },
+        {
+          "title": "50K+ Buyers",
+          "desc": "Maximum exposure",
+          "value": "10x more than competitors"
+        },
+        {
+          "title": "BankID & NDA",
+          "desc": "Only serious buyers",
+          "value": "99% quality"
+        },
+        {
+          "title": "Data Room & Q&A",
+          "desc": "Structured communication",
+          "value": "Saves 40h"
+        },
+        {
+          "title": "Smart Matching",
+          "desc": "AI finds the right buyers",
+          "value": "3x faster"
+        },
+        {
+          "title": "Advisory",
+          "desc": "Personal support 24/7",
+          "value": "Included"
+        },
+        {
+          "title": "Transparent Price",
+          "desc": "From 5,900 SEK fixed price",
+          "value": "0% commission"
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "Real entrepreneurs. Real results.",
+      "subtitle": "Over 2,800 entrepreneurs have achieved their dreams through BOLAXO",
+      "stories": [
+        {
+          "name": "Stefan Andersson",
+          "age": 62,
+          "company": "Construction company, 15 employees",
+          "quote": "After 30 years it was time to retire. BOLAXO helped me find a buyer who really cares about my employees. Got 6.2M over my valuation.",
+          "result": "6.2M over valuation",
+          "metric": "Sold in 78 days"
+        },
+        {
+          "name": "Lisa Chen",
+          "age": 34,
+          "company": "SaaS startup",
+          "quote": "We needed to grow quickly. BOLAXO matched us with a strategic buyer who had the right network. Exit at 18.5M gave us the opportunity to start the next venture.",
+          "result": "18.5M exit",
+          "metric": "12 bids first week"
+        },
+        {
+          "name": "Johan Eriksson",
+          "age": 48,
+          "company": "Three restaurants",
+          "quote": "Wanted to sell discretely without worrying staff. The process was completely anonymous and professional. Got 3 serious bids from industry players.",
+          "result": "100% discrete",
+          "metric": "Sold to dream buyer"
+        }
+      ]
+    },
+    "fomo": {
+      "badge": "Limited offer",
+      "title": "First 100 valuations in March get",
+      "titleHighlight": "50% discount",
+      "titleEnd": "on listing price",
+      "subtitle": "87/100 spots left • Offer expires in 13 days",
+      "cta": "Activate My Offer Now"
+    },
+    "guarantee": {
+      "title": "Our BOLAXO Guarantee",
+      "subtitle": "If you don't get at least 3 qualified bids within 90 days you get",
+      "subtitleHighlight": "money back + 90 days free extension",
+      "items": [
+        {
+          "title": "Money-back",
+          "desc": "If no qualified bids"
+        },
+        {
+          "title": "No commitment period",
+          "desc": "Cancel anytime"
+        },
+        {
+          "title": "Satisfaction guarantee",
+          "desc": "97% recommend us"
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "You've built something valuable.",
+      "subtitle": "Now it's time to get what it's worth.",
+      "description": "Thousands of entrepreneurs have already taken the step. They got on average 23% over their own valuation.",
+      "descriptionHighlight": "Your turn now.",
+      "cta": "Start My Free Valuation",
+      "subtext": "Takes 5 minutes • 2,847 entrepreneurs valued their companies this month • No credit card required"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "q": "How much does it cost?",
+          "a": "From 5,900 SEK fixed price. No commission. The valuation is completely free."
+        },
+        {
+          "q": "Do I have to reveal my company?",
+          "a": "No! You are 100% anonymous until you choose to sign NDA with a specific buyer."
+        },
+        {
+          "q": "How long does it take?",
+          "a": "On average 94 days from publication to closing. 23% faster than traditional brokers."
+        },
+        {
+          "q": "What happens if I don't get bids?",
+          "a": "Money-back guarantee if you don't get at least 3 qualified bids within 90 days."
+        }
+      ],
+      "seeAll": "See all frequently asked questions →"
+    }
   }
 }
