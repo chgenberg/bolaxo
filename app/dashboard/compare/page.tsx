@@ -1,8 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import ClientDashboardLayout from '@/components/dashboard/ClientDashboardLayout'
 import { Building, MapPin, TrendingUp, Users, Calendar, DollarSign, X, Plus } from 'lucide-react'
+
+// Prevent static generation - this page requires AuthProvider
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
 
 export default function ComparePage() {
   const [compareList, setCompareList] = useState(['obj-001', 'obj-002', 'obj-003'])
@@ -116,7 +121,7 @@ export default function ComparePage() {
   }
 
   return (
-    <DashboardLayout>
+    <ClientDashboardLayout>
       <div className="space-y-6">
         {/* Header */}
         <div>
@@ -321,6 +326,6 @@ export default function ComparePage() {
           </div>
         )}
       </div>
-    </DashboardLayout>
+    </ClientDashboardLayout>
   )
 }

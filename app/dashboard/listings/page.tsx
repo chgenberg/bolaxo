@@ -1,12 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import DashboardLayout from '@/components/dashboard/DashboardLayout'
+import ClientDashboardLayout from '@/components/dashboard/ClientDashboardLayout'
 import Link from 'next/link'
 import { Building, Eye, Shield, MessageSquare, Edit, Pause, Play, MoreVertical, TrendingUp, Calendar, Download, Bookmark, Trash2, CheckCircle, XCircle } from 'lucide-react'
 import { mockObjects } from '@/data/mockObjects'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
+
+// Prevent static generation - this page requires AuthProvider
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
 
 type ListingStatus = 'active' | 'paused' | 'draft'
 type ListingPackage = 'pro' | 'pro_plus' | 'basic'
@@ -174,7 +179,7 @@ export default function ListingsPage() {
   })
 
   return (
-    <DashboardLayout>
+    <ClientDashboardLayout>
       <div className="space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
@@ -477,6 +482,6 @@ export default function ListingsPage() {
         {/* Empty state */}
         {/* The empty state block is now handled by the loading/filteredListings.length === 0 case */}
       </div>
-    </DashboardLayout>
+    </ClientDashboardLayout>
   )
 }
