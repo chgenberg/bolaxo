@@ -6,6 +6,11 @@ import { useBuyerStore } from '@/store/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 
+// Prevent static generation - this page requires AuthProvider
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
+
 export default function ComparePage() {
   const { compareList, toggleCompare, clearCompare, loadFromLocalStorage } = useBuyerStore()
   const { user } = useAuth()

@@ -2,7 +2,6 @@
 
 import { useLocale } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
-import { Globe } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 
 export default function LanguageSwitcher() {
@@ -46,7 +45,9 @@ export default function LanguageSwitcher() {
         className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
         aria-label="Change language"
       >
-        <Globe className="w-4 h-4" />
+        <span className="text-xl sm:text-2xl" role="img" aria-label={currentLanguage.label}>
+          {currentLanguage.flag}
+        </span>
         <span className="hidden sm:inline text-sm font-medium">{currentLanguage.code.toUpperCase()}</span>
       </button>
 
@@ -63,7 +64,9 @@ export default function LanguageSwitcher() {
                     : 'text-gray-700 hover:bg-gray-50 hover:text-primary-navy'
                 }`}
               >
-                <span>{lang.flag}</span>
+                <span className="text-lg" role="img" aria-label={lang.label}>
+                  {lang.flag}
+                </span>
                 <span>{lang.label}</span>
                 {locale === lang.code && (
                   <span className="ml-auto text-xs">✓</span>
