@@ -187,7 +187,59 @@
     },
     "notFound": "Can't find the answer?",
     "contactUs": "Contact us directly and we'll be happy to help",
-    "contactButton": "Contact us"
+    "contactButton": "Contact us",
+    "items": {
+      "general": {
+        "whatIs": {
+          "q": "What is BOLAXO?",
+          "a": "BOLAXO is an automated marketplace for buying and selling companies. We connect sellers and buyers of SME companies in a secure and efficient way, with automatic valuation, smart matching and complete anonymity until NDA signing."
+        },
+        "howItWorks": {
+          "q": "How does the process work?",
+          "a": "Sellers start with free valuation (5 min), then create an ad and publish. The system automatically matches with relevant buyers. Buyers search, sign NDA digitally for full information, and can then send LOI. The entire process from NDA to closing is handled in our deal management platform."
+        },
+        "cost": {
+          "q": "What does it cost to use BOLAXO?",
+          "a": "Valuation is always free! For sellers: Free (0 SEK - draft), Basic (495 SEK/month), Pro (895 SEK/month), Pro+ Featured (1,495 SEK/month). For buyers it is completely free to search and browse."
+        }
+      },
+      "sellers": {
+        "freeValuation": {
+          "q": "How do I get a free valuation?",
+          "a": "Click on \"Free valuation\" and fill in our form. The system analyzes your company with 10 data sources and gives you a professional valuation in 5 minutes. You get a PDF report completely free!"
+        },
+        "timeToSell": {
+          "q": "How long does it take to sell?",
+          "a": "It varies depending on company and industry, but on average 3-9 months from publication to closing. With our smart matching, the process can go faster."
+        },
+        "anonymous": {
+          "q": "Can I be completely anonymous?",
+          "a": "Yes! You choose your own anonymity level. Buyers only see this information after NDA signing. All communication goes through our NDA-protected platform."
+        }
+      },
+      "buyers": {
+        "freeSearch": {
+          "q": "Is it free to search for companies?",
+          "a": "Yes, completely free! Creating an account, searching, watching and getting matches is completely free for buyers. You only pay when you want to close a deal and purchase the Deal Management service."
+        },
+        "findRight": {
+          "q": "How do I find the right company?",
+          "a": "Our AI-driven matching algorithm analyzes your criteria and recommends relevant companies. You can also search manually with filters on industry, region, revenue and EBITDA. We help you find the right match!"
+        }
+      },
+      "pricing": {
+        "discount": {
+          "q": "Are there discounts for long-term contracts?",
+          "a": "Yes, contact our sales team for a customized quote. Discounts for annual contracts are possible, especially for Pro and Pro+ Featured packages."
+        }
+      },
+      "security": {
+        "dataProtection": {
+          "q": "How is my data protected?",
+          "a": "We use BankID for all verification, HTTPS + AES-256 encryption for all data, and digital NDA agreements signed by both parties. Your security is our highest priority."
+        }
+      }
+    }
   },
   "broker": {
     "title": "For business brokers",

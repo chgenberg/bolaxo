@@ -187,7 +187,59 @@
     },
     "notFound": "Hittar du inte svaret?",
     "contactUs": "Kontakta oss direkt och vi hjälper dig gärna",
-    "contactButton": "Kontakta oss"
+    "contactButton": "Kontakta oss",
+    "items": {
+      "general": {
+        "whatIs": {
+          "q": "Vad är BOLAXO?",
+          "a": "BOLAXO är en automatiserad marknadsplats för företagsköp och försäljning. Vi kopplar samman säljare och köpare av SME-företag på ett säkert och effektivt sätt, med automatisk värdering, smart matchning och fullständig anonymitet fram till NDA-signering."
+        },
+        "howItWorks": {
+          "q": "Hur fungerar processen?",
+          "a": "Säljare börjar med gratis värdering (5 min), skapar sedan annons och publicerar. Systemet matchar automatiskt med relevanta köpare. Köpare söker, signerar NDA digitalt för fullständig information, och kan sedan skicka LOI. Hela processen från NDA till closing hanteras i vår deal management-plattform."
+        },
+        "cost": {
+          "q": "Vad kostar det att använda BOLAXO?",
+          "a": "Värdering är alltid gratis! För säljare: Free (0 kr - utkast), Basic (495 kr/mån), Pro (895 kr/mån), Pro+ Featured (1,495 kr/mån). För köpare är det helt gratis att söka och titta."
+        }
+      },
+      "sellers": {
+        "freeValuation": {
+          "q": "Hur får jag en gratis värdering?",
+          "a": "Klicka på \"Gratis värdering\" och fyll i vårt formulär. Systemet analyserar ditt företag med 10 datakällor och ger dig en professionell värdering på 5 minuter. Du får en PDF-rapport helt gratis!"
+        },
+        "timeToSell": {
+          "q": "Hur lång tid tar det att sälja?",
+          "a": "Det varierar beroende på företag och bransch, men i genomsnitt 3-9 månader från publicering till avslut. Med vår smarta matchning kan processen gå snabbare."
+        },
+        "anonymous": {
+          "q": "Kan jag vara helt anonym?",
+          "a": "Ja! Du väljer själv anonymitetsnivå. Köpare ser bara denna information efter NDA-signering. All kommunikation går via vår NDA-skyddade plattform."
+        }
+      },
+      "buyers": {
+        "freeSearch": {
+          "q": "Är det gratis att söka efter företag?",
+          "a": "Ja, helt gratis! Att skapa konto, söka, bevaka och få matchningar är helt kostnadsfritt för köpare. Du betalar bara när du vill avsluta en deal och köper Deal Management-tjänsten."
+        },
+        "findRight": {
+          "q": "Hur hittar jag rätt företag?",
+          "a": "Vår AI-drivna matchningsalgoritm analyserar dina kriterier och rekommenderar relevanta företag. Du kan också söka manuellt med filter på bransch, region, omsättning och EBITDA. Vi hjälper dig hitta rätt match!"
+        }
+      },
+      "pricing": {
+        "discount": {
+          "q": "Finns det rabatt för långtidskontrakt?",
+          "a": "Ja, kontakta vår säljteam för skräddarsydd offert. Rabatt för årskontrakt är möjligt, speciellt för Pro och Pro+ Featured-paket."
+        }
+      },
+      "security": {
+        "dataProtection": {
+          "q": "Hur skydds min data?",
+          "a": "Vi använder BankID för all verifiering, HTTPS + AES-256 kryptering för all data, och digitala NDA-avtal signerade av båda parter. Din säkerhet är vår högsta prioritet."
+        }
+      }
+    }
   },
   "broker": {
     "title": "För företagsmäklare",

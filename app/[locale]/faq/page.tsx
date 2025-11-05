@@ -24,73 +24,53 @@ export default function FAQPage() {
   const faqData: FAQItem[] = [
     {
       category: 'general',
-      question: locale === 'sv' ? 'Vad är BOLAXO?' : 'What is BOLAXO?',
-      answer: locale === 'sv' 
-        ? 'BOLAXO är en automatiserad marknadsplats för företagsköp och försäljning. Vi kopplar samman säljare och köpare av SME-företag på ett säkert och effektivt sätt, med automatisk värdering, smart matchning och fullständig anonymitet fram till NDA-signering.'
-        : 'BOLAXO is an automated marketplace for buying and selling companies. We connect sellers and buyers of SME companies in a secure and efficient way, with automatic valuation, smart matching and complete anonymity until NDA signing.'
+      question: t('items.general.whatIs.q'),
+      answer: t('items.general.whatIs.a')
     },
     {
       category: 'general',
-      question: locale === 'sv' ? 'Hur fungerar processen?' : 'How does the process work?',
-      answer: locale === 'sv'
-        ? 'Säljare börjar med gratis värdering (5 min), skapar sedan annons och publicerar. Systemet matchar automatiskt med relevanta köpare. Köpare söker, signerar NDA digitalt för fullständig information, och kan sedan skicka LOI. Hela processen från NDA till closing hanteras i vår deal management-plattform.'
-        : 'Sellers start with free valuation (5 min), then create an ad and publish. The system automatically matches with relevant buyers. Buyers search, sign NDA digitally for full information, and can then send LOI. The entire process from NDA to closing is handled in our deal management platform.'
+      question: t('items.general.howItWorks.q'),
+      answer: t('items.general.howItWorks.a')
     },
     {
       category: 'general',
-      question: locale === 'sv' ? 'Vad kostar det att använda BOLAXO?' : 'What does it cost to use BOLAXO?',
-      answer: locale === 'sv'
-        ? 'Värdering är alltid gratis! För säljare: Free (0 kr - utkast), Basic (495 kr/mån), Pro (895 kr/mån), Pro+ Featured (1,495 kr/mån). För köpare är det helt gratis att söka och titta.'
-        : 'Valuation is always free! For sellers: Free (0 SEK - draft), Basic (495 SEK/month), Pro (895 SEK/month), Pro+ Featured (1,495 SEK/month). For buyers it is completely free to search and browse.'
+      question: t('items.general.cost.q'),
+      answer: t('items.general.cost.a')
     },
     {
       category: 'sellers',
-      question: locale === 'sv' ? 'Hur får jag en gratis värdering?' : 'How do I get a free valuation?',
-      answer: locale === 'sv'
-        ? 'Klicka på "Gratis värdering" och fyll i vårt formulär. Systemet analyserar ditt företag med 10 datakällor och ger dig en professionell värdering på 5 minuter. Du får en PDF-rapport helt gratis!'
-        : 'Click on "Free valuation" and fill in our form. The system analyzes your company with 10 data sources and gives you a professional valuation in 5 minutes. You get a PDF report completely free!'
+      question: t('items.sellers.freeValuation.q'),
+      answer: t('items.sellers.freeValuation.a')
     },
     {
       category: 'sellers',
-      question: locale === 'sv' ? 'Hur lång tid tar det att sälja?' : 'How long does it take to sell?',
-      answer: locale === 'sv'
-        ? 'Det varierar beroende på företag och bransch, men i genomsnitt 3-9 månader från publicering till avslut. Med vår smarta matchning kan processen gå snabbare.'
-        : 'It varies depending on company and industry, but on average 3-9 months from publication to closing. With our smart matching, the process can go faster.'
+      question: t('items.sellers.timeToSell.q'),
+      answer: t('items.sellers.timeToSell.a')
     },
     {
       category: 'sellers',
-      question: locale === 'sv' ? 'Kan jag vara helt anonym?' : 'Can I be completely anonymous?',
-      answer: locale === 'sv'
-        ? 'Ja! Du väljer själv anonymitetsnivå. Köpare ser bara denna information efter NDA-signering. All kommunikation går via vår NDA-skyddade plattform.'
-        : 'Yes! You choose your own anonymity level. Buyers only see this information after NDA signing. All communication goes through our NDA-protected platform.'
+      question: t('items.sellers.anonymous.q'),
+      answer: t('items.sellers.anonymous.a')
     },
     {
       category: 'buyers',
-      question: locale === 'sv' ? 'Är det gratis att söka efter företag?' : 'Is it free to search for companies?',
-      answer: locale === 'sv'
-        ? 'Ja, helt gratis! Att skapa konto, söka, bevaka och få matchningar är helt kostnadsfritt för köpare. Du betalar bara när du vill avsluta en deal och köper Deal Management-tjänsten.'
-        : 'Yes, completely free! Creating an account, searching, watching and getting matches is completely free for buyers. You only pay when you want to close a deal and purchase the Deal Management service.'
+      question: t('items.buyers.freeSearch.q'),
+      answer: t('items.buyers.freeSearch.a')
     },
     {
       category: 'buyers',
-      question: locale === 'sv' ? 'Hur hittar jag rätt företag?' : 'How do I find the right company?',
-      answer: locale === 'sv'
-        ? 'Vår AI-drivna matchningsalgoritm analyserar dina kriterier och rekommenderar relevanta företag. Du kan också söka manuellt med filter på bransch, region, omsättning och EBITDA. Vi hjälper dig hitta rätt match!'
-        : 'Our AI-driven matching algorithm analyzes your criteria and recommends relevant companies. You can also search manually with filters on industry, region, revenue and EBITDA. We help you find the right match!'
+      question: t('items.buyers.findRight.q'),
+      answer: t('items.buyers.findRight.a')
     },
     {
       category: 'pricing',
-      question: locale === 'sv' ? 'Finns det rabatt för långtidskontrakt?' : 'Are there discounts for long-term contracts?',
-      answer: locale === 'sv'
-        ? 'Ja, kontakta vår säljteam för skräddarsydd offert. Rabatt för årskontrakt är möjligt, speciellt för Pro och Pro+ Featured-paket.'
-        : 'Yes, contact our sales team for a customized quote. Discounts for annual contracts are possible, especially for Pro and Pro+ Featured packages.'
+      question: t('items.pricing.discount.q'),
+      answer: t('items.pricing.discount.a')
     },
     {
       category: 'security',
-      question: locale === 'sv' ? 'Hur skydds min data?' : 'How is my data protected?',
-      answer: locale === 'sv'
-        ? 'Vi använder BankID för all verifiering, HTTPS + AES-256 kryptering för all data, och digitala NDA-avtal signerade av båda parter. Din säkerhet är vår högsta prioritet.'
-        : 'We use BankID for all verification, HTTPS + AES-256 encryption for all data, and digital NDA agreements signed by both parties. Your security is our highest priority.'
+      question: t('items.security.dataProtection.q'),
+      answer: t('items.security.dataProtection.a')
     }
   ]
 
