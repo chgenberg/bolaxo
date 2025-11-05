@@ -7,6 +7,10 @@ import { useFormStore } from '@/store/formStore'
 import { useAuth } from '@/contexts/AuthContext'
 import { Share2, UserPlus, FolderOpen, Lightbulb, ArrowRight, X } from 'lucide-react'
 
+// Prevent static generation - this page requires AuthProvider
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 export default function KlartPage() {
   const router = useRouter()
   const { user } = useAuth()
