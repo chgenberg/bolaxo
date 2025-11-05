@@ -1,70 +1,3 @@
-import { Check, X, Star, ArrowRight } from 'lucide-react'
-import Link from 'next/link'
-
-export default function PricingPage() {
-  // Updated pricing plans with features
-  const plans = [
-    {
-      name: 'Basic',
-      price: '495',
-      subtitle: '/ mån',
-      features: [
-        { text: 'Annons i 90 dagar', included: true, highlight: true },
-        { text: 'Upp till 5 bilder', included: true },
-        { text: 'Standardplacering i listor', included: true },
-        { text: 'Standard-NDA', included: true },
-        { text: 'Enkel statistik', included: true },
-        { text: 'E-postsupport', included: true },
-        { text: 'Framhävning', included: false },
-        { text: 'Telefonstöd', included: false },
-      ],
-      cta: 'Välj Basic',
-      ctaLink: '/checkout?package=basic',
-      popular: false,
-    },
-    {
-      name: 'Pro',
-      price: '995',
-      subtitle: '/ mån',
-      features: [
-        { text: 'Annons i 180 dagar', included: true, highlight: true },
-        { text: 'Upp till 20 bilder', included: true },
-        { text: 'Framhävning + Boost 7 dagar/mån', included: true },
-        { text: 'Prioriterad NDA-hantering', included: true },
-        { text: 'Pitchdeck-mallar (1–5 sidor)', included: true },
-        { text: 'Telefonstöd vardagar 9–16', included: true },
-        { text: '1 st due diligence-checklista', included: true },
-        { text: 'Dedikerad rådgivare', included: false },
-      ],
-      cta: 'Välj Pro',
-      ctaLink: '/checkout?package=pro',
-      popular: true,
-    },
-    {
-      name: 'Enterprise',
-      price: '1 995',
-      subtitle: '/ mån',
-      features: [
-        { text: 'Annons tills såld', included: true, highlight: true },
-        { text: 'Obegränsat bildmaterial', included: true },
-        { text: 'Topplacering och först i bevakningar', included: true },
-        { text: 'Dedikerad rådgivare', included: true },
-        { text: 'Juridiska dokumentmallar (NDA, LOI, Term Sheet, Överlåtelseavtal)', included: true },
-        { text: 'CRM/API-integration', included: true },
-        { text: 'Månatlig marknadsrapporteringsvy', included: true },
-        { text: 'Prioriterad matchning', included: true },
-      ],
-      cta: 'Kontakta oss',
-      ctaLink: '/kontakt?plan=enterprise',
-      popular: false,
-    },
-  ]
-
-  return (
-    <div className="min-h-screen bg-neutral-white">
-      {/* Hero Section */}
-      <section className="bg-neutral-white py-16 sm:py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 'use client'
 
 import { Check, X, Star, ArrowRight } from 'lucide-react'
@@ -106,6 +39,20 @@ export default function PricingPage() {
     },
   ], [t])
 
+  return (
+    <div className="min-h-screen bg-neutral-white">
+      {/* Hero Section */}
+      <section className="bg-neutral-white py-16 sm:py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
+              {t('heroTitle')}
+            </h1>
+            <p className="text-xl text-primary-navy leading-relaxed max-w-3xl mx-auto">
+              {t('heroSubtitle')}
+            </p>
+          </div>
+
           {/* Pricing Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {plans.map((plan, index) => (
@@ -146,18 +93,18 @@ export default function PricingPage() {
 
                 {/* Features List */}
                 <div className="p-8 space-y-4">
-              {plan.features.map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  {feature.included !== false ? (
-                    <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  ) : (
-                    <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
-                  )}
-                  <span className={feature.included === false ? 'text-text-gray line-through' : 'text-text-dark'}>
-                    {feature.text}
-                  </span>
-                </div>
-              ))}
+                  {plan.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      {feature.included !== false ? (
+                        <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      ) : (
+                        <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
+                      )}
+                      <span className={feature.included === false ? 'text-text-gray line-through' : 'text-text-dark'}>
+                        {feature.text}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
