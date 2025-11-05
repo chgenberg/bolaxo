@@ -1395,5 +1395,214 @@
       },
       "missing": "Saknas:"
     }
+  },
+  "ddUpload": {
+    "title": "📋 Due Diligence - Steg för Steg",
+    "subtitle": "Genomför en professionell företagsbesiktning före köpet. Vi analyserar alla dokument med GPT och genererar en DD-rapport.",
+    "back": "← Tillbaka",
+    "backToInstructions": "← Tillbaka till instruktioner",
+    "benefits": {
+      "systematic": {
+        "title": "Systematisk",
+        "description": "7 DD-kategorier täcker alla risker"
+      },
+      "aiDriven": {
+        "title": "AI-Driven",
+        "description": "GPT analyserar all risk automatiskt"
+      },
+      "professional": {
+        "title": "Professionell",
+        "description": "Färdig DD-rapport i PDF"
+      }
+    },
+    "process": {
+      "title": "Processen",
+      "steps": [
+        "Du laddar upp dokument för varje DD-kategori",
+        "GPT analyserar alla dokument och identifierar risker",
+        "En professionell DD-rapport genereras automatiskt",
+        "Rapporten grupperar fynd efter kategori och severity",
+        "Du kan presentera rapporten för dina partners/jurister"
+      ]
+    },
+    "startUpload": "▶ Börja ladda upp dokument →",
+    "tip": "💡 Tips: Du behöver inte ladda upp alla dokument - ju fler du laddar, desto bättre blir DD-rapporten. Även delvis dokumentation ger värde.",
+    "uploadTitle": "📤 Ladda upp DD-dokument",
+    "uploadSubtitle": "Ladda upp dokumenten för Din Due Diligence-analys",
+    "clickToUpload": "Klicka för att ladda upp eller dra-och-släpp",
+    "uploadedFiles": "Uppladdade filer:",
+    "generateReport": "✓ Generera DD-rapport",
+    "generatingReport": "⏳ Genererar DD-rapport...",
+    "why": "Varför:",
+    "examples": "Exempel:",
+    "categories": {
+      "financial": {
+        "name": "💰 Finansiell Due Diligence",
+        "description": "Bokslut, resultat, kassaflöde och finansiell status",
+        "documents": {
+          "bokslut": {
+            "title": "Reviderad bokslut (senaste 3 år)",
+            "why": "Analyse: Omsättningstrend, EBITDA-utveckling, arbetkspital, kassaflöde-kvalitet",
+            "examples": "Årsrapporter 2022-2024, resultaträkningar, balansräkningar"
+          },
+          "skatter": {
+            "title": "Skattedeklaration & betalningsbevis",
+            "why": "Verifiera skatter betalda, identifiera aggressiv skatteplanering",
+            "examples": "K10, momsdeklaration, inbetalningsbevis senaste 2 år"
+          },
+          "cash": {
+            "title": "Bankuppgifter & kassaflöde",
+            "why": "Kontrollera verklig likviditet och kassabrunnar",
+            "examples": "Senaste 12 månaderspåutdrag, kassaflödesanalys"
+          },
+          "skulder": {
+            "title": "Skuldförteckning & finansieringsavtal",
+            "why": "Kartlägg all finansiering och identifiera covenant-risker",
+            "examples": "Alla banklån, leasingavtal, återstående löptider"
+          },
+          "kundfordran": {
+            "title": "Kundfordring & kundanalyse",
+            "why": "Analys av kundberoende och intäktskvalitet",
+            "examples": "Kundlistor, top 10 kunder, omsättning per kund"
+          }
+        }
+      },
+      "legal": {
+        "name": "⚖️ Juridisk Due Diligence",
+        "description": "Kontrakt, ägarskap, IP och juridiska risker",
+        "documents": {
+          "bolag": {
+            "title": "Bolagsförhål anden (registrering, stämmoprotokoller)",
+            "why": "Verifiera ägarskapsstruktur och eventuella förköpsrätter",
+            "examples": "Aktiebrev från Bolagsverket, bolagsordning, stämmoprotokoller"
+          },
+          "avtal": {
+            "title": "Material kontrakt (kundavtal, leverantörer)",
+            "why": "Identifiera change-of-control klausuler och kritiska beroenden",
+            "examples": "Top 10 kundkontrakt, key leverantörsavtal"
+          },
+          "ip": {
+            "title": "IP-rättigheter (patent, varumärken)",
+            "why": "Verifiera ägarskap av immateriella rättigheter",
+            "examples": "PRV-register, licensavtal, källkodsöversikt"
+          },
+          "tvister": {
+            "title": "Tvister & myndighetsmärenden",
+            "why": "Identifiera juridiska risker och ongoing konflikter",
+            "examples": "Pågående tvister, myndighetskorresp ondence"
+          },
+          "försäkring": {
+            "title": "Försäkringsöversikt",
+            "why": "Bedöm försäkringsskydd mot identifierade risker",
+            "examples": "Företagsförsäkring, ansvarsförsäkring, skadhistorik"
+          }
+        }
+      },
+      "commercial": {
+        "name": "📊 Kommersiell Due Diligence",
+        "description": "Marknad, kunder och konkurrens",
+        "documents": {
+          "kunder": {
+            "title": "Kundanalys & kundkontrakt",
+            "why": "Analyse kundberoende, retention-risk, revenue-kvalitet",
+            "examples": "Top 20 kunder, omsättning %, kontraktslöptider"
+          },
+          "marked": {
+            "title": "Marknadsanalys & konkurrenter",
+            "why": "Bedöm marknadsposition, trender och konkurrensrisker",
+            "examples": "Marknadsstorlek, konkurrentanalys, marknadstrend"
+          },
+          "produkt": {
+            "title": "Produktöversikt & pricingmodell",
+            "why": "Verifiera revenue-mix och pricing power",
+            "examples": "Produktlista, pricingmodell, margin-trend"
+          },
+          "pipeline": {
+            "title": "Sales pipeline & orderstock",
+            "why": "Bedöm framtida revenue kvalitet och sustainability",
+            "examples": "Active opportunities, win-rates, orderstock"
+          }
+        }
+      },
+      "hr": {
+        "name": "👥 HR & Organisation",
+        "description": "Personal, nyckelpersoner och arbetsrätt",
+        "documents": {
+          "personal": {
+            "title": "Personallista & org-struktur",
+            "why": "Kartlägg nyckelperson-beroende och organisationen",
+            "examples": "Personallista med roller, löner, org-chart"
+          },
+          "ledning": {
+            "title": "Ledningsgrupp & anställningsavtal",
+            "why": "Identifiera retention-risker och avgångsvederlag",
+            "examples": "VD-avtal, key person-avtal, exit-paket"
+          },
+          "pension": {
+            "title": "Pension & personalförmåner",
+            "why": "Kartlägg pensionsskulder och åtaganden post-closing",
+            "examples": "Pensionsöversikt, ITP-försäkring, sparad semeste r"
+          },
+          "tvister": {
+            "title": "Arbetsrätt tvister & fackliga relationer",
+            "why": "Identifiera HR-relaterade risker",
+            "examples": "Arbetsrättsliga tvister, fackagreement"
+          }
+        }
+      },
+      "it": {
+        "name": "🔧 IT & Teknisk",
+        "description": "System, säkerhet och infrastruktur",
+        "documents": {
+          "it-system": {
+            "title": "IT-systemöversikt & infrastruktur",
+            "why": "Bedöm teknik-risker, vendor lock-in, moderniseringsmöjligheter",
+            "examples": "System-inventering, ålder, uppdaterings-status"
+          },
+          "security": {
+            "title": "Cybersäkerhet & dataskydd",
+            "why": "Identifiera säkerhetssårbarheter och GDPR-compliance",
+            "examples": "Säkerhetsprinciper, backup-rutiner, GDPR-dokumentation"
+          },
+          "teknik": {
+            "title": "Teknisk utrustning (maskiner, servrar)",
+            "why": "Bedöm reinvesterings-behov och upphängstatusuppdatering",
+            "examples": "Maskinpark-inventering, ålder, skick"
+          }
+        }
+      },
+      "tax": {
+        "name": "📋 Skattemässig DD",
+        "description": "Skatte-situationen och framtida risker",
+        "documents": {
+          "skatterevisioner": {
+            "title": "Skatterevisions-historia",
+            "why": "Identifiera aggressiv skatteplanering och revisionsrisker",
+            "examples": "Revisions-rapporter, Skatteverkets kommunikation"
+          },
+          "underskott": {
+            "title": "Underskotts-avdrag & koncernbidrag",
+            "why": "Bedöm begränsningar post-ägarförändring",
+            "examples": "Underskott-lista, koncernbidrag-utnyttjade"
+          }
+        }
+      },
+      "env": {
+        "name": "🌿 Miljömässig DD",
+        "description": "Miljöersättning och ESG-compliance",
+        "documents": {
+          "miljötillstånd": {
+            "title": "Miljötillstånd & myndighetstillsyn",
+            "why": "Verifiera compliance med miljölagstiftning",
+            "examples": "Miljötillståndsbevis, inspektionsmeddelanden"
+          },
+          "föroreningar": {
+            "title": "Miljörisker & föroreningar",
+            "why": "Identifiera mark-föroreningar eller andra miljöansvar",
+            "examples": "Miljörapporter, undersökningsresultat"
+          }
+        }
+      }
+    }
   }
 }

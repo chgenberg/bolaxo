@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Upload, CheckCircle2, AlertCircle, FileText, DollarSign, Scale, Users, Zap, Leaf, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface UploadedFile {
   name: string
@@ -11,244 +12,248 @@ interface UploadedFile {
 }
 
 export default function DDUploadPage() {
+  const t = useTranslations('ddUpload')
+  const locale = useLocale()
+  
   const [step, setStep] = useState<'instructions' | 'upload'>('instructions')
   const [uploads, setUploads] = useState<Record<string, UploadedFile[]>>({})
   const [expandedCategory, setExpandedCategory] = useState<string>('financial')
   const [loading, setLoading] = useState(false)
 
-  const ddCategories = [
+  // Build ddCategories dynamically from translations
+  const ddCategories = useMemo(() => [
     {
       id: 'financial',
-      name: '💰 Finansiell Due Diligence',
+      name: t('categories.financial.name'),
       icon: DollarSign,
-      description: 'Bokslut, resultat, kassaflöde och finansiell status',
+      description: t('categories.financial.description'),
       documents: [
         {
           id: 'bokslut',
-          title: 'Reviderad bokslut (senaste 3 år)',
+          title: t('categories.financial.documents.bokslut.title'),
           required: true,
-          why: 'Analyse: Omsättningstrend, EBITDA-utveckling, arbetkspital, kassaflöde-kvalitet',
-          examples: 'Årsrapporter 2022-2024, resultaträkningar, balansräkningar'
+          why: t('categories.financial.documents.bokslut.why'),
+          examples: t('categories.financial.documents.bokslut.examples')
         },
         {
           id: 'skatter',
-          title: 'Skattedeklaration & betalningsbevis',
+          title: t('categories.financial.documents.skatter.title'),
           required: true,
-          why: 'Verifiera skatter betalda, identifiera aggressiv skatteplanering',
-          examples: 'K10, momsdeklaration, inbetalningsbevis senaste 2 år'
+          why: t('categories.financial.documents.skatter.why'),
+          examples: t('categories.financial.documents.skatter.examples')
         },
         {
           id: 'cash',
-          title: 'Bankuppgifter & kassaflöde',
+          title: t('categories.financial.documents.cash.title'),
           required: true,
-          why: 'Kontrollera verklig likviditet och kassabrunnar',
-          examples: 'Senaste 12 månaderspåutdrag, kassaflödesanalys'
+          why: t('categories.financial.documents.cash.why'),
+          examples: t('categories.financial.documents.cash.examples')
         },
         {
           id: 'skulder',
-          title: 'Skuldförteckning & finansieringsavtal',
+          title: t('categories.financial.documents.skulder.title'),
           required: true,
-          why: 'Kartlägg all finansiering och identifiera covenant-risker',
-          examples: 'Alla banklån, leasingavtal, återstående löptider'
+          why: t('categories.financial.documents.skulder.why'),
+          examples: t('categories.financial.documents.skulder.examples')
         },
         {
           id: 'kundfordran',
-          title: 'Kundfordring & kundanalyse',
+          title: t('categories.financial.documents.kundfordran.title'),
           required: false,
-          why: 'Analys av kundberoende och intäktskvalitet',
-          examples: 'Kundlistor, top 10 kunder, omsättning per kund'
+          why: t('categories.financial.documents.kundfordran.why'),
+          examples: t('categories.financial.documents.kundfordran.examples')
         }
       ]
     },
     {
       id: 'legal',
-      name: '⚖️ Juridisk Due Diligence',
+      name: t('categories.legal.name'),
       icon: Scale,
-      description: 'Kontrakt, ägarskap, IP och juridiska risker',
+      description: t('categories.legal.description'),
       documents: [
         {
           id: 'bolag',
-          title: 'Bolagsförhål anden (registrering, stämmoprotokoller)',
+          title: t('categories.legal.documents.bolag.title'),
           required: true,
-          why: 'Verifiera ägarskapsstruktur och eventuella förköpsrätter',
-          examples: 'Aktiebrev från Bolagsverket, bolagsordning, stämmoprotokoller'
+          why: t('categories.legal.documents.bolag.why'),
+          examples: t('categories.legal.documents.bolag.examples')
         },
         {
           id: 'avtal',
-          title: 'Material kontrakt (kundavtal, leverantörer)',
+          title: t('categories.legal.documents.avtal.title'),
           required: true,
-          why: 'Identifiera change-of-control klausuler och kritiska beroenden',
-          examples: 'Top 10 kundkontrakt, key leverantörsavtal'
+          why: t('categories.legal.documents.avtal.why'),
+          examples: t('categories.legal.documents.avtal.examples')
         },
         {
           id: 'ip',
-          title: 'IP-rättigheter (patent, varumärken)',
+          title: t('categories.legal.documents.ip.title'),
           required: false,
-          why: 'Verifiera ägarskap av immateriella rättigheter',
-          examples: 'PRV-register, licensavtal, källkodsöversikt'
+          why: t('categories.legal.documents.ip.why'),
+          examples: t('categories.legal.documents.ip.examples')
         },
         {
           id: 'tvister',
-          title: 'Tvister & myndighetsmärenden',
+          title: t('categories.legal.documents.tvister.title'),
           required: false,
-          why: 'Identifiera juridiska risker och ongoing konflikter',
-          examples: 'Pågående tvister, myndighetskorresp ondence'
+          why: t('categories.legal.documents.tvister.why'),
+          examples: t('categories.legal.documents.tvister.examples')
         },
         {
           id: 'försäkring',
-          title: 'Försäkringsöversikt',
+          title: t('categories.legal.documents.försäkring.title'),
           required: false,
-          why: 'Bedöm försäkringsskydd mot identifierade risker',
-          examples: 'Företagsförsäkring, ansvarsförsäkring, skadhistorik'
+          why: t('categories.legal.documents.försäkring.why'),
+          examples: t('categories.legal.documents.försäkring.examples')
         }
       ]
     },
     {
       id: 'commercial',
-      name: '📊 Kommersiell Due Diligence',
+      name: t('categories.commercial.name'),
       icon: AlertCircle,
-      description: 'Marknad, kunder och konkurrens',
+      description: t('categories.commercial.description'),
       documents: [
         {
           id: 'kunder',
-          title: 'Kundanalys & kundkontrakt',
+          title: t('categories.commercial.documents.kunder.title'),
           required: true,
-          why: 'Analyse kundberoende, retention-risk, revenue-kvalitet',
-          examples: 'Top 20 kunder, omsättning %, kontraktslöptider'
+          why: t('categories.commercial.documents.kunder.why'),
+          examples: t('categories.commercial.documents.kunder.examples')
         },
         {
           id: 'marked',
-          title: 'Marknadsanalys & konkurrenter',
+          title: t('categories.commercial.documents.marked.title'),
           required: true,
-          why: 'Bedöm marknadsposition, trender och konkurrensrisker',
-          examples: 'Marknadsstorlek, konkurrentanalys, marknadstrend'
+          why: t('categories.commercial.documents.marked.why'),
+          examples: t('categories.commercial.documents.marked.examples')
         },
         {
           id: 'produkt',
-          title: 'Produktöversikt & pricingmodell',
+          title: t('categories.commercial.documents.produkt.title'),
           required: false,
-          why: 'Verifiera revenue-mix och pricing power',
-          examples: 'Produktlista, pricingmodell, margin-trend'
+          why: t('categories.commercial.documents.produkt.why'),
+          examples: t('categories.commercial.documents.produkt.examples')
         },
         {
           id: 'pipeline',
-          title: 'Sales pipeline & orderstock',
+          title: t('categories.commercial.documents.pipeline.title'),
           required: false,
-          why: 'Bedöm framtida revenue kvalitet och sustainability',
-          examples: 'Active opportunities, win-rates, orderstock'
+          why: t('categories.commercial.documents.pipeline.why'),
+          examples: t('categories.commercial.documents.pipeline.examples')
         }
       ]
     },
     {
       id: 'hr',
-      name: '👥 HR & Organisation',
+      name: t('categories.hr.name'),
       icon: Users,
-      description: 'Personal, nyckelpersoner och arbetsrätt',
+      description: t('categories.hr.description'),
       documents: [
         {
           id: 'personal',
-          title: 'Personallista & org-struktur',
+          title: t('categories.hr.documents.personal.title'),
           required: true,
-          why: 'Kartlägg nyckelperson-beroende och organisationen',
-          examples: 'Personallista med roller, löner, org-chart'
+          why: t('categories.hr.documents.personal.why'),
+          examples: t('categories.hr.documents.personal.examples')
         },
         {
           id: 'ledning',
-          title: 'Ledningsgrupp & anställningsavtal',
+          title: t('categories.hr.documents.ledning.title'),
           required: true,
-          why: 'Identifiera retention-risker och avgångsvederlag',
-          examples: 'VD-avtal, key person-avtal, exit-paket'
+          why: t('categories.hr.documents.ledning.why'),
+          examples: t('categories.hr.documents.ledning.examples')
         },
         {
           id: 'pension',
-          title: 'Pension & personalförmåner',
+          title: t('categories.hr.documents.pension.title'),
           required: false,
-          why: 'Kartlägg pensionsskulder och åtaganden post-closing',
-          examples: 'Pensionsöversikt, ITP-försäkring, sparad semeste r'
+          why: t('categories.hr.documents.pension.why'),
+          examples: t('categories.hr.documents.pension.examples')
         },
         {
           id: 'tvister',
-          title: 'Arbetsrätt tvister & fackliga relationer',
+          title: t('categories.hr.documents.tvister.title'),
           required: false,
-          why: 'Identifiera HR-relaterade risker',
-          examples: 'Arbetsrättsliga tvister, fackagreement'
+          why: t('categories.hr.documents.tvister.why'),
+          examples: t('categories.hr.documents.tvister.examples')
         }
       ]
     },
     {
       id: 'it',
-      name: '🔧 IT & Teknisk',
+      name: t('categories.it.name'),
       icon: Zap,
-      description: 'System, säkerhet och infrastruktur',
+      description: t('categories.it.description'),
       documents: [
         {
           id: 'it-system',
-          title: 'IT-systemöversikt & infrastruktur',
+          title: t('categories.it.documents.it-system.title'),
           required: true,
-          why: 'Bedöm teknik-risker, vendor lock-in, moderniseringsmöjligheter',
-          examples: 'System-inventering, ålder, uppdaterings-status'
+          why: t('categories.it.documents.it-system.why'),
+          examples: t('categories.it.documents.it-system.examples')
         },
         {
           id: 'security',
-          title: 'Cybersäkerhet & dataskydd',
+          title: t('categories.it.documents.security.title'),
           required: true,
-          why: 'Identifiera säkerhetssårbarheter och GDPR-compliance',
-          examples: 'Säkerhetsprinciper, backup-rutiner, GDPR-dokumentation'
+          why: t('categories.it.documents.security.why'),
+          examples: t('categories.it.documents.security.examples')
         },
         {
           id: 'teknik',
-          title: 'Teknisk utrustning (maskiner, servrar)',
+          title: t('categories.it.documents.teknik.title'),
           required: false,
-          why: 'Bedöm reinvesterings-behov och upphängstatusuppdatering',
-          examples: 'Maskinpark-inventering, ålder, skick'
+          why: t('categories.it.documents.teknik.why'),
+          examples: t('categories.it.documents.teknik.examples')
         }
       ]
     },
     {
       id: 'tax',
-      name: '📋 Skattemässig DD',
+      name: t('categories.tax.name'),
       icon: FileText,
-      description: 'Skatte-situationen och framtida risker',
+      description: t('categories.tax.description'),
       documents: [
         {
           id: 'skatterevisioner',
-          title: 'Skatterevisions-historia',
+          title: t('categories.tax.documents.skatterevisioner.title'),
           required: false,
-          why: 'Identifiera aggressiv skatteplanering och revisionsrisker',
-          examples: 'Revisions-rapporter, Skatteverkets kommunikation'
+          why: t('categories.tax.documents.skatterevisioner.why'),
+          examples: t('categories.tax.documents.skatterevisioner.examples')
         },
         {
           id: 'underskott',
-          title: 'Underskotts-avdrag & koncernbidrag',
+          title: t('categories.tax.documents.underskott.title'),
           required: false,
-          why: 'Bedöm begränsningar post-ägarförändring',
-          examples: 'Underskott-lista, koncernbidrag-utnyttjade'
+          why: t('categories.tax.documents.underskott.why'),
+          examples: t('categories.tax.documents.underskott.examples')
         }
       ]
     },
     {
       id: 'env',
-      name: '🌿 Miljömässig DD',
+      name: t('categories.env.name'),
       icon: Leaf,
-      description: 'Miljöersättning och ESG-compliance',
+      description: t('categories.env.description'),
       documents: [
         {
           id: 'miljötillstånd',
-          title: 'Miljötillstånd & myndighetstillsyn',
+          title: t('categories.env.documents.miljötillstånd.title'),
           required: false,
-          why: 'Verifiera compliance med miljölagstiftning',
-          examples: 'Miljötillståndsbevis, inspektionsmeddelanden'
+          why: t('categories.env.documents.miljötillstånd.why'),
+          examples: t('categories.env.documents.miljötillstånd.examples')
         },
         {
           id: 'föroreningar',
-          title: 'Miljörisker & föroreningar',
+          title: t('categories.env.documents.föroreningar.title'),
           required: false,
-          why: 'Identifiera mark-föroreningar eller andra miljöansvar',
-          examples: 'Miljörapporter, undersökningsresultat'
+          why: t('categories.env.documents.föroreningar.why'),
+          examples: t('categories.env.documents.föroreningar.examples')
         }
       ]
     }
-  ]
+  ], [t])
 
   const handleFileSelect = (categoryId: string, e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -290,30 +295,30 @@ export default function DDUploadPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <Link href="/kopare" className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-4">
-              ← Tillbaka
+            <Link href={`/${locale}/kopare`} className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-4">
+              {t('back')}
             </Link>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">📋 Due Diligence - Steg för Steg</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">{t('title')}</h1>
             <p className="text-lg text-gray-700">
-              Genomför en professionell företagsbesiktning före köpet. Vi analyserar alla dokument med GPT och genererar en DD-rapport.
+              {t('subtitle')}
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4 mb-8">
             <div className="bg-white rounded-lg p-6 border-2 border-blue-200">
               <div className="text-3xl mb-2">📊</div>
-              <h3 className="font-bold text-lg mb-2">Systematisk</h3>
-              <p className="text-sm text-gray-600">7 DD-kategorier täcker alla risker</p>
+              <h3 className="font-bold text-lg mb-2">{t('benefits.systematic.title')}</h3>
+              <p className="text-sm text-gray-600">{t('benefits.systematic.description')}</p>
             </div>
             <div className="bg-white rounded-lg p-6 border-2 border-green-200">
               <div className="text-3xl mb-2">🤖</div>
-              <h3 className="font-bold text-lg mb-2">AI-Driven</h3>
-              <p className="text-sm text-gray-600">GPT analyserar all risk automatiskt</p>
+              <h3 className="font-bold text-lg mb-2">{t('benefits.aiDriven.title')}</h3>
+              <p className="text-sm text-gray-600">{t('benefits.aiDriven.description')}</p>
             </div>
             <div className="bg-white rounded-lg p-6 border-2 border-purple-200">
               <div className="text-3xl mb-2">📄</div>
-              <h3 className="font-bold text-lg mb-2">Professionell</h3>
-              <p className="text-sm text-gray-600">Färdig DD-rapport i PDF</p>
+              <h3 className="font-bold text-lg mb-2">{t('benefits.professional.title')}</h3>
+              <p className="text-sm text-gray-600">{t('benefits.professional.description')}</p>
             </div>
           </div>
 
@@ -351,8 +356,8 @@ export default function DDUploadPage() {
                               {doc.title}
                               {doc.required && <span className="text-red-500 ml-2">*</span>}
                             </h4>
-                            <p className="text-sm text-gray-700 mt-1"><strong>Varför:</strong> {doc.why}</p>
-                            <p className="text-sm text-gray-600 mt-1"><strong>Exempel:</strong> {doc.examples}</p>
+                            <p className="text-sm text-gray-700 mt-1"><strong>{t('why')}</strong> {doc.why}</p>
+                            <p className="text-sm text-gray-600 mt-1"><strong>{t('examples')}</strong> {doc.examples}</p>
                           </div>
                         </div>
                       </div>
@@ -366,14 +371,12 @@ export default function DDUploadPage() {
           <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8">
             <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
               <CheckCircle2 className="w-6 h-6 text-blue-600" />
-              Processen
+              {t('process.title')}
             </h3>
             <ol className="space-y-2 text-gray-700 list-decimal list-inside">
-              <li>Du laddar upp dokument för varje DD-kategori</li>
-              <li>GPT analyserar alla dokument och identifierar risker</li>
-              <li>En professionell DD-rapport genereras automatiskt</li>
-              <li>Rapporten grupperar fynd efter kategori och severity</li>
-              <li>Du kan presentera rapporten för dina partners/jurister</li>
+              {t.raw('process.steps').map((step: string, index: number) => (
+                <li key={index}>{step}</li>
+              ))}
             </ol>
           </div>
 
@@ -381,12 +384,12 @@ export default function DDUploadPage() {
             onClick={() => setStep('upload')}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors mb-4"
           >
-            ▶ Börja ladda upp dokument →
+            {t('startUpload')}
           </button>
 
           <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
             <p className="text-sm text-gray-700">
-              <strong>💡 Tips:</strong> Du behöver inte ladda upp alla dokument - ju fler du laddar, desto bättre blir DD-rapporten. Även delvis dokumentation ger värde.
+              {t('tip')}
             </p>
           </div>
         </div>
@@ -401,11 +404,11 @@ export default function DDUploadPage() {
           onClick={() => setStep('instructions')}
           className="text-blue-600 hover:text-blue-800 flex items-center gap-2 mb-6"
         >
-          ← Tillbaka till instruktioner
+          {t('backToInstructions')}
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">📤 Ladda upp DD-dokument</h1>
-        <p className="text-gray-700 mb-8">Ladda upp dokumenten för Din Due Diligence-analys</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('uploadTitle')}</h1>
+        <p className="text-gray-700 mb-8">{t('uploadSubtitle')}</p>
 
         <div className="space-y-4">
           {ddCategories.map(category => (
@@ -428,7 +431,7 @@ export default function DDUploadPage() {
                         <p className="text-sm text-gray-600">{doc.why}</p>
                         <div className="mt-2 flex items-center gap-2 text-blue-600 hover:text-blue-800">
                           <Upload className="w-4 h-4" />
-                          <span>Klicka för att ladda upp eller dra-och-släpp</span>
+                          <span>{t('clickToUpload')}</span>
                         </div>
                       </div>
                     </label>
@@ -438,7 +441,7 @@ export default function DDUploadPage() {
 
               {uploads[category.id] && uploads[category.id].length > 0 && (
                 <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">Uppladdade filer:</p>
+                  <p className="text-sm font-semibold text-gray-700 mb-2">{t('uploadedFiles')}</p>
                   <div className="space-y-1">
                     {uploads[category.id].map((file, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-sm text-green-600">
@@ -458,14 +461,14 @@ export default function DDUploadPage() {
             onClick={() => setStep('instructions')}
             className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors"
           >
-            ← Tillbaka
+            {t('back')}
           </button>
           <button
             onClick={handleGenerateDD}
             disabled={loading}
             className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >
-            {loading ? '⏳ Genererar DD-rapport...' : '✓ Generera DD-rapport'}
+            {loading ? t('generatingReport') : t('generateReport')}
           </button>
         </div>
       </div>

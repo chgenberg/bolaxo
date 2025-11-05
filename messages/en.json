@@ -1395,5 +1395,214 @@
       },
       "missing": "Missing:"
     }
+  },
+  "ddUpload": {
+    "title": "📋 Due Diligence - Step by Step",
+    "subtitle": "Conduct a professional business inspection before purchase. We analyze all documents with GPT and generate a DD report.",
+    "back": "← Back",
+    "backToInstructions": "← Back to instructions",
+    "benefits": {
+      "systematic": {
+        "title": "Systematic",
+        "description": "7 DD categories cover all risks"
+      },
+      "aiDriven": {
+        "title": "AI-Driven",
+        "description": "GPT analyzes all risks automatically"
+      },
+      "professional": {
+        "title": "Professional",
+        "description": "Ready DD report in PDF"
+      }
+    },
+    "process": {
+      "title": "The Process",
+      "steps": [
+        "You upload documents for each DD category",
+        "GPT analyzes all documents and identifies risks",
+        "A professional DD report is generated automatically",
+        "The report groups findings by category and severity",
+        "You can present the report to your partners/lawyers"
+      ]
+    },
+    "startUpload": "▶ Start uploading documents →",
+    "tip": "💡 Tip: You don't need to upload all documents - the more you upload, the better the DD report. Even partial documentation adds value.",
+    "uploadTitle": "📤 Upload DD Documents",
+    "uploadSubtitle": "Upload documents for Your Due Diligence analysis",
+    "clickToUpload": "Click to upload or drag-and-drop",
+    "uploadedFiles": "Uploaded files:",
+    "generateReport": "✓ Generate DD Report",
+    "generatingReport": "⏳ Generating DD report...",
+    "why": "Why:",
+    "examples": "Examples:",
+    "categories": {
+      "financial": {
+        "name": "💰 Financial Due Diligence",
+        "description": "Financial statements, results, cash flow and financial status",
+        "documents": {
+          "bokslut": {
+            "title": "Audited Financial Statements (latest 3 years)",
+            "why": "Analysis: Revenue trend, EBITDA development, working capital, cash flow quality",
+            "examples": "Annual reports 2022-2024, income statements, balance sheets"
+          },
+          "skatter": {
+            "title": "Tax Declaration & Payment Proof",
+            "why": "Verify taxes paid, identify aggressive tax planning",
+            "examples": "K10, VAT declaration, payment receipts last 2 years"
+          },
+          "cash": {
+            "title": "Bank Details & Cash Flow",
+            "why": "Check real liquidity and cash drains",
+            "examples": "Last 12 months bank statements, cash flow analysis"
+          },
+          "skulder": {
+            "title": "Debt List & Financing Agreements",
+            "why": "Map all financing and identify covenant risks",
+            "examples": "All bank loans, lease agreements, remaining terms"
+          },
+          "kundfordran": {
+            "title": "Accounts Receivable & Customer Analysis",
+            "why": "Analysis of customer dependency and revenue quality",
+            "examples": "Customer lists, top 10 customers, revenue per customer"
+          }
+        }
+      },
+      "legal": {
+        "name": "⚖️ Legal Due Diligence",
+        "description": "Contracts, ownership, IP and legal risks",
+        "documents": {
+          "bolag": {
+            "title": "Company Matters (registration, meeting minutes)",
+            "why": "Verify ownership structure and any pre-emption rights",
+            "examples": "Share certificates from Companies House, articles of association, meeting minutes"
+          },
+          "avtal": {
+            "title": "Material Contracts (customer contracts, suppliers)",
+            "why": "Identify change-of-control clauses and critical dependencies",
+            "examples": "Top 10 customer contracts, key supplier agreements"
+          },
+          "ip": {
+            "title": "IP Rights (patents, trademarks)",
+            "why": "Verify ownership of intangible rights",
+            "examples": "PRV register, license agreements, source code overview"
+          },
+          "tvister": {
+            "title": "Disputes & Regulatory Matters",
+            "why": "Identify legal risks and ongoing conflicts",
+            "examples": "Ongoing disputes, regulatory correspondence"
+          },
+          "försäkring": {
+            "title": "Insurance Overview",
+            "why": "Assess insurance coverage against identified risks",
+            "examples": "Business insurance, liability insurance, claims history"
+          }
+        }
+      },
+      "commercial": {
+        "name": "📊 Commercial Due Diligence",
+        "description": "Market, customers and competition",
+        "documents": {
+          "kunder": {
+            "title": "Customer Analysis & Customer Contracts",
+            "why": "Analyze customer dependency, retention risk, revenue quality",
+            "examples": "Top 20 customers, revenue %, contract terms"
+          },
+          "marked": {
+            "title": "Market Analysis & Competitors",
+            "why": "Assess market position, trends and competitive risks",
+            "examples": "Market size, competitor analysis, market trends"
+          },
+          "produkt": {
+            "title": "Product Overview & Pricing Model",
+            "why": "Verify revenue mix and pricing power",
+            "examples": "Product list, pricing model, margin trends"
+          },
+          "pipeline": {
+            "title": "Sales Pipeline & Order Backlog",
+            "why": "Assess future revenue quality and sustainability",
+            "examples": "Active opportunities, win rates, order backlog"
+          }
+        }
+      },
+      "hr": {
+        "name": "👥 HR & Organization",
+        "description": "Personnel, key persons and labor law",
+        "documents": {
+          "personal": {
+            "title": "Employee List & Org Structure",
+            "why": "Map key person dependency and organization",
+            "examples": "Employee list with roles, salaries, org chart"
+          },
+          "ledning": {
+            "title": "Management Team & Employment Contracts",
+            "why": "Identify retention risks and severance packages",
+            "examples": "CEO contract, key person contracts, exit packages"
+          },
+          "pension": {
+            "title": "Pension & Employee Benefits",
+            "why": "Map pension liabilities and post-closing obligations",
+            "examples": "Pension overview, ITP insurance, saved vacation"
+          },
+          "tvister": {
+            "title": "Labor Law Disputes & Union Relations",
+            "why": "Identify HR-related risks",
+            "examples": "Labor law disputes, union agreements"
+          }
+        }
+      },
+      "it": {
+        "name": "🔧 IT & Technical",
+        "description": "Systems, security and infrastructure",
+        "documents": {
+          "it-system": {
+            "title": "IT System Overview & Infrastructure",
+            "why": "Assess technology risks, vendor lock-in, modernization opportunities",
+            "examples": "System inventory, age, update status"
+          },
+          "security": {
+            "title": "Cybersecurity & Data Protection",
+            "why": "Identify security vulnerabilities and GDPR compliance",
+            "examples": "Security policies, backup routines, GDPR documentation"
+          },
+          "teknik": {
+            "title": "Technical Equipment (machines, servers)",
+            "why": "Assess reinvestment needs and update status",
+            "examples": "Machine inventory, age, condition"
+          }
+        }
+      },
+      "tax": {
+        "name": "📋 Tax Due Diligence",
+        "description": "Tax situation and future risks",
+        "documents": {
+          "skatterevisioner": {
+            "title": "Tax Audit History",
+            "why": "Identify aggressive tax planning and audit risks",
+            "examples": "Audit reports, Tax Agency communication"
+          },
+          "underskott": {
+            "title": "Deficit Deductions & Group Contributions",
+            "why": "Assess limitations post-ownership change",
+            "examples": "Deficit list, group contribution utilization"
+          }
+        }
+      },
+      "env": {
+        "name": "🌿 Environmental Due Diligence",
+        "description": "Environmental compensation and ESG compliance",
+        "documents": {
+          "miljötillstånd": {
+            "title": "Environmental Permits & Regulatory Oversight",
+            "why": "Verify compliance with environmental legislation",
+            "examples": "Environmental permits, inspection notices"
+          },
+          "föroreningar": {
+            "title": "Environmental Risks & Contamination",
+            "why": "Identify land contamination or other environmental liabilities",
+            "examples": "Environmental reports, investigation results"
+          }
+        }
+      }
+    }
   }
 }
