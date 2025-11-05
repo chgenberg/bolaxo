@@ -274,7 +274,7 @@ Analysera nu och returnera JSON-svaret:
 `
 
     const result = await generateText({
-      model: openai('gpt-4o-mini') as any,
+      model: openai('gpt-5-mini') as any,
       prompt: analysisPrompt,
       maxTokens: 8000, // Optimize for mini
     })
@@ -369,7 +369,7 @@ Extrahera följande och returnera som JSON:
 `
 
     const result = await generateText({
-      model: openai('gpt-4o-mini') as any,
+      model: openai('gpt-5-mini') as any,
       prompt,
       temperature: undefined, // GPT-5 uses verbosity
       maxTokens: undefined // GPT-5 handles automatically

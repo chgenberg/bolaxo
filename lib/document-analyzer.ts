@@ -343,7 +343,7 @@ export async function analyzeDocument(documentContent: string, documentType: key
       model: 'gpt-5-mini',
       messages: messages,
       response_format: { type: 'json_object' },
-      // GPT-4o-mini uses its own sampling strategy
+      // GPT-5-mini uses its own sampling strategy
     })
 
     const extractedData = JSON.parse(response.choices[0].message?.content || '{}')
