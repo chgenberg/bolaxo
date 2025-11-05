@@ -173,26 +173,26 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
                   {t('dataFetched')}
                 </h2>
                 <p className="text-lg mb-2" style={{ color: '#666666' }}>
-                  Vi har hämtat grundläggande information om {companyName}
+                  {t('foundBasicInfo', { companyName })}
                 </p>
                 <p className="text-sm mb-8" style={{ color: '#666666' }}>
-                  Nu behöver vi bara några uppgifter till för att kunna ge dig en exakt värdering.
+                  {t('needMoreInfo')}
                 </p>
 
                 <div className="rounded-xl p-6 mb-8" style={{ backgroundColor: '#F5F0E8' }}>
-                  <h3 className="font-semibold mb-3" style={{ color: '#1F3C58' }}>Vi har hittat:</h3>
+                  <h3 className="font-semibold mb-3" style={{ color: '#1F3C58' }}>{t('weFound')}</h3>
                   <ul className="space-y-2 text-sm text-left" style={{ color: '#666666' }}>
                     <li className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#96D2B4' }} />
-                      Organisationsnummer och bolagsform
+                      {t('foundItems.orgNumber')}
                     </li>
                     <li className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#96D2B4' }} />
-                      Registreringsår och branschkod
+                      {t('foundItems.registrationYear')}
                     </li>
                     <li className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#96D2B4' }} />
-                      Senaste årsredovisning
+                      {t('foundItems.financialStatement')}
                     </li>
                   </ul>
                 </div>
@@ -201,7 +201,7 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
                   onClick={handleStartValuation}
                   className="btn-primary w-full"
                 >
-                  Fortsätt till värdering
+                  {t('continueToValuation')}
                 </button>
               </div>
             </>

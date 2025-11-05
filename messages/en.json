@@ -1706,6 +1706,15 @@
     "autoDataDesc": "We fetch public data about your company from the Companies House, Tax Agency and other sources to give you as accurate a valuation as possible.",
     "fetchingData": "Fetching data...",
     "continue": "Continue",
-    "dataFetched": "Data fetched!"
+    "dataFetched": "Data fetched!",
+    "foundBasicInfo": "We have fetched basic information about {companyName}",
+    "needMoreInfo": "Now we just need a few more details to give you an accurate valuation.",
+    "weFound": "We found:",
+    "foundItems": {
+      "orgNumber": "Organization number and company type",
+      "registrationYear": "Registration year and industry code",
+      "financialStatement": "Latest annual report"
+    },
+    "continueToValuation": "Continue to valuation"
   }
 }

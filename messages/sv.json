@@ -1706,6 +1706,15 @@
     "autoDataDesc": "Vi hämtar offentlig data om ditt företag från Bolagsverket, Skatteverket och andra källor för att ge dig en så exakt värdering som möjligt.",
     "fetchingData": "Hämtar data...",
     "continue": "Fortsätt",
-    "dataFetched": "Data hämtad!"
+    "dataFetched": "Data hämtad!",
+    "foundBasicInfo": "Vi har hämtat grundläggande information om {companyName}",
+    "needMoreInfo": "Nu behöver vi bara några uppgifter till för att kunna ge dig en exakt värdering.",
+    "weFound": "Vi har hittat:",
+    "foundItems": {
+      "orgNumber": "Organisationsnummer och bolagsform",
+      "registrationYear": "Registreringsår och branschkod",
+      "financialStatement": "Senaste årsredovisning"
+    },
+    "continueToValuation": "Fortsätt till värdering"
   }
 }
