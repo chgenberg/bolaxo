@@ -1,7 +1,7 @@
 'use client'
 
 import { useLocale } from 'next-intl'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next-intl/client'
 import { useState, useRef, useEffect } from 'react'
 
 export default function LanguageSwitcher() {
@@ -30,11 +30,8 @@ export default function LanguageSwitcher() {
   }, [])
 
   const switchLanguage = (newLocale: string) => {
-    // Remove current locale from pathname
-    const pathWithoutLocale = pathname.replace(/^\/(sv|en)/, '') || '/'
-    // Navigate to new locale
-    const newPath = `/${newLocale}${pathWithoutLocale}`
-    router.push(newPath)
+    // Use next-intl router to preserve path & query and just switch locale
+    router.replace(pathname, { locale: newLocale })
     setIsOpen(false)
   }
 
