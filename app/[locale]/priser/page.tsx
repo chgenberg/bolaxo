@@ -114,7 +114,7 @@ export default function PricingPage() {
 
                 {/* Features List */}
                 <div className="p-8 space-y-4">
-              {plan.features.map((feature: { text: string; included: boolean }, idx: number) => (
+              {plan.features.map((feature: { text: string; included: boolean; highlight?: boolean }, idx: number) => (
                 <div key={idx} className="flex items-start gap-3">
                   {feature.included !== false ? (
                     <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
