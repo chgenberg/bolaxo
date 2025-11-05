@@ -349,7 +349,7 @@ export default function SearchPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-24 md:pt-20 lg:pt-16">
       {/* Header Section */}
       <div className="bg-background-off-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8">

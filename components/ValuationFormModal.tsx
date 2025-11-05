@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { X, Mail, Building, Info } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 
 interface ValuationFormModalProps {
   isOpen: boolean
@@ -9,6 +11,9 @@ interface ValuationFormModalProps {
 }
 
 export default function ValuationFormModal({ isOpen, onClose }: ValuationFormModalProps) {
+  const t = useTranslations('valuationFormModal')
+  const locale = useLocale()
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [step, setStep] = useState(1)
@@ -43,7 +48,7 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
     localStorage.setItem('valuationData', JSON.stringify(valuationData))
     
     // Redirect to results page with data
-    window.location.href = `/vardering/resultat?email=${encodeURIComponent(email)}&company=${encodeURIComponent(companyName)}`
+    window.location.href = `/${locale}/vardering/resultat?email=${encodeURIComponent(email)}&company=${encodeURIComponent(companyName)}`
   }
 
   return (
@@ -73,15 +78,15 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
                   <Mail className="w-8 h-8" style={{ color: '#A9D2DA' }} />
                 </div>
                 <h2 className="text-3xl font-bold mb-2" style={{ color: '#1F3C58' }}>
-                  Gratis Företagsvärdering
+                  {t('title')}
                 </h2>
                 <p className="text-lg" style={{ color: '#666666' }}>
-                  Få en AI-driven värdering på 2 minuter
+                  {t('subtitle')}
                 </p>
                 <div className="mt-4 flex items-center justify-center">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#1F3C58' }} />
-                    <span className="text-xs font-medium" style={{ color: '#1F3C58' }}>STEG 1 AV 6</span>
+                    <span className="text-xs font-medium" style={{ color: '#1F3C58' }}>{t('stepIndicator')}</span>
                     <div className="w-24 h-1 bg-gray-200 rounded-full ml-2">
                       <div className="w-4 h-1 rounded-full" style={{ backgroundColor: '#1F3C58' }} />
                     </div>
@@ -94,23 +99,23 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#666666' }}>
-                    Låt oss börja
+                    {t('letsStart')}
                   </label>
                   <p className="text-xs mb-4" style={{ color: '#666666' }}>
-                    Vi hämtar automatiskt så mycket data vi kan
+                    {t('autoData')}
                   </p>
                   
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium mb-1" style={{ color: '#666666' }}>
-                        E-postadress *
+                        {t('emailAddress')} *
                       </label>
                       <input
                         type="email"
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="din@email.se"
+                        placeholder={t('emailPlaceholder')}
                         className="input"
                         required
                       />
@@ -118,14 +123,14 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
                     
                     <div>
                       <label htmlFor="company" className="block text-sm font-medium mb-1" style={{ color: '#666666' }}>
-                        Företagsnamn *
+                        {t('companyName')} *
                       </label>
                       <input
                         type="text"
                         id="company"
                         value={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
-                        placeholder="Ditt Företag AB"
+                        placeholder={t('companyPlaceholder')}
                         className="input"
                         required
                       />
@@ -136,8 +141,8 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
                 <div className="rounded-xl p-4 flex items-start gap-3" style={{ backgroundColor: 'rgba(169, 210, 218, 0.15)' }}>
                   <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#A9D2DA' }} />
                   <div className="text-sm" style={{ color: '#666666' }}>
-                    <p className="font-medium mb-1">Automatisk datainsamling</p>
-                    <p>Vi hämtar offentlig data om ditt företag från Bolagsverket, Skatteverket och andra källor för att ge dig en så exakt värdering som möjligt.</p>
+                    <p className="font-medium mb-1">{t('autoDataTitle')}</p>
+                    <p>{t('autoDataDesc')}</p>
                   </div>
                 </div>
 
@@ -149,10 +154,10 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
                   {isLoading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Hämtar data...</span>
+                      <span>{t('fetchingData')}</span>
                     </>
                   ) : (
-                    <span>Fortsätt</span>
+                    <span>{t('continue')}</span>
                   )}
                 </button>
               </form>
@@ -165,7 +170,7 @@ export default function ValuationFormModal({ isOpen, onClose }: ValuationFormMod
                   <Building className="w-10 h-10" style={{ color: '#96D2B4' }} />
                 </div>
                 <h2 className="text-3xl font-bold mb-4" style={{ color: '#1F3C58' }}>
-                  Data hämtad!
+                  {t('dataFetched')}
                 </h2>
                 <p className="text-lg mb-2" style={{ color: '#666666' }}>
                   Vi har hämtat grundläggande information om {companyName}

@@ -1687,5 +1687,25 @@
       "signed": "Signed"
     },
     "updatedSPATerms": "Updated SPA terms"
+  },
+  "valuationWizard": {
+    "title": "Free Company Valuation",
+    "subtitle": "Get an AI-driven valuation in 5 minutes"
+  },
+  "valuationFormModal": {
+    "title": "Free Company Valuation",
+    "subtitle": "Get an AI-driven valuation in 2 minutes",
+    "stepIndicator": "STEP 1 OF 6",
+    "letsStart": "Let's get started",
+    "autoData": "We automatically fetch as much data as we can",
+    "emailAddress": "Email address",
+    "emailPlaceholder": "your@email.com",
+    "companyName": "Company name",
+    "companyPlaceholder": "Your Company AB",
+    "autoDataTitle": "Automatic data collection",
+    "autoDataDesc": "We fetch public data about your company from the Companies House, Tax Agency and other sources to give you as accurate a valuation as possible.",
+    "fetchingData": "Fetching data...",
+    "continue": "Continue",
+    "dataFetched": "Data fetched!"
   }
 }

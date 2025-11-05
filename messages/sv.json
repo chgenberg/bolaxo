@@ -1687,5 +1687,25 @@
       "signed": "Signerad"
     },
     "updatedSPATerms": "Updated SPA terms"
+  },
+  "valuationWizard": {
+    "title": "Gratis Företagsvärdering",
+    "subtitle": "Få en AI-driven värdering på 5 minuter"
+  },
+  "valuationFormModal": {
+    "title": "Gratis Företagsvärdering",
+    "subtitle": "Få en AI-driven värdering på 2 minuter",
+    "stepIndicator": "STEG 1 AV 6",
+    "letsStart": "Låt oss börja",
+    "autoData": "Vi hämtar automatiskt så mycket data vi kan",
+    "emailAddress": "E-postadress",
+    "emailPlaceholder": "din@email.se",
+    "companyName": "Företagsnamn",
+    "companyPlaceholder": "Ditt Företag AB",
+    "autoDataTitle": "Automatisk datainsamling",
+    "autoDataDesc": "Vi hämtar offentlig data om ditt företag från Bolagsverket, Skatteverket och andra källor för att ge dig en så exakt värdering som möjligt.",
+    "fetchingData": "Hämtar data...",
+    "continue": "Fortsätt",
+    "dataFetched": "Data hämtad!"
   }
 }

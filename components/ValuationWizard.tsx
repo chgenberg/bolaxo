@@ -10,6 +10,7 @@ import CustomSelect from './CustomSelect'
 import FormFieldCurrency from './FormFieldCurrency'
 import FormFieldPercent from './FormFieldPercent'
 import { calculateQuickValuation, getValuationColor } from '@/utils/quickValuation'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface ValuationData {
   // Step 1: Grunduppgifter
@@ -289,6 +290,8 @@ const parsePercent = (value: string): string => {
 export default function ValuationWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user, login } = useAuth()
+  const t = useTranslations('valuationWizard')
+  const locale = useLocale()
   const [step, setStep] = useState(1)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [data, setData] = useState<ValuationData>({
@@ -624,10 +627,10 @@ export default function ValuationWizard({ onClose }: WizardProps) {
           <div className="flex items-start justify-between">
           <div className="flex-1 mr-2">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ color: '#1F3C58' }}>
-                Gratis Företagsvärdering
+                {t('title')}
               </h2>
               <p className="text-xs sm:text-sm md:text-base mt-1" style={{ color: '#666666' }}>
-                Få en AI-driven värdering på 5 minuter
+                {t('subtitle')}
               </p>
           </div>
           <button

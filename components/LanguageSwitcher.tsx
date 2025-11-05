@@ -40,6 +40,10 @@ export default function LanguageSwitcher() {
       router.push(newPath)
     }
     setIsOpen(false)
+    // Force a page reload to ensure locale is updated
+    setTimeout(() => {
+      window.location.reload()
+    }, 100)
   }
 
   return (
