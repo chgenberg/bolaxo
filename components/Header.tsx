@@ -26,17 +26,17 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     {
       label: t('header.forSellers'),
       dropdown: [
-        { label: 'Gratis företagsvärdering', href: '/vardering' },
-        { label: 'Så funkar det', href: '/salja' },
-        { label: 'Börja sälja', href: '/salja/start' },
+        { label: t('footer.freeValuation'), href: '/vardering' },
+        { label: t('footer.howItWorks'), href: '/salja' },
+        { label: t('footer.startSelling'), href: '/salja/start' },
       ]
     },
     {
       label: t('header.forBuyers'),
       dropdown: [
-        { label: 'Sök företag', href: '/sok' },
-        { label: 'Så funkar det', href: '/kopare/sa-fungerar-det' },
-        { label: 'Skapa konto', href: '/kopare/start' },
+        { label: t('footer.searchCompany'), href: '/sok' },
+        { label: t('footer.howItWorks'), href: '/kopare/sa-fungerar-det' },
+        { label: t('footer.buyerSignup'), href: '/kopare/start' },
       ]
     },
   ]
@@ -53,7 +53,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     label: t('header.about'),
     href: '/om-oss',
     dropdown: [
-      { label: 'Kontakt', href: '/kontakt' },
+      { label: t('footer.contact'), href: '/kontakt' },
     ]
   })
 
@@ -68,9 +68,9 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     {
       label: t('header.more'),
       dropdown: [
-        { label: 'Vårt företag', href: '/om-oss' },
-        { label: 'Success stories', href: '/success-stories' },
-        ...(LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_INVESTERARE ? [{ label: 'För investerare', href: '/investor' }] : []),
+        { label: t('footer.company'), href: '/om-oss' },
+        { label: t('footer.successStories'), href: '/success-stories' },
+        ...(LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_INVESTERARE ? [{ label: t('footer.investors'), href: '/investor' }] : []),
       ]
     }
   ]
