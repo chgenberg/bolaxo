@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, ArrowRight, TrendingUp, ChevronDown, X, CheckCircle, Lightbulb, Zap, Lock, MessageCircle } from 'lucide-react'
@@ -34,6 +35,7 @@ export default function HomePageContent() {
   const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)
   const [activeReview, setActiveReview] = useState(0)
   const [selectedStep, setSelectedStep] = useState<number | null>(null)
+  const t = useTranslations('home')
 
   // Auto-rotate reviews
   useEffect(() => {
@@ -75,18 +77,18 @@ export default function HomePageContent() {
             <div className="relative bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 md:p-12 shadow-2xl">
               <div className="flex justify-center mb-3 sm:mb-4">
                 <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 bg-green-100 text-green-700 text-xs sm:text-sm font-semibold rounded-full">
-                  ✓ 100% gratis
+                  ✓ {t('free')}
                 </span>
               </div>
               
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-3 sm:mb-4">
-                Sälj ditt företag
+                {t('title')}
               </h1>
               
               <p className="text-center text-gray-700 mb-6 sm:mb-8 text-base sm:text-lg">
-                Professionell värdering på 5 minuter.
+                {t('subtitle')}
                 <br />
-                Smart matchning med rätt köpare.
+                {t('subtitle2')}
               </p>
               
               {/* CTA Button */}
@@ -95,7 +97,7 @@ export default function HomePageContent() {
                 className="w-full bg-navy text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 text-base sm:text-lg group shadow-lg"
               >
                 <span className="flex items-center justify-center gap-2 sm:gap-3">
-                  Starta här
+                  {t('cta')}
                   <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5 transition-transform group-hover:translate-x-1" />
                 </span>
               </button>
@@ -107,7 +109,7 @@ export default function HomePageContent() {
                 <Star className="w-3 sm:w-4 h-3 sm:w-4 text-yellow-500 fill-yellow-500" />
                 <Star className="w-3 sm:w-4 h-3 sm:w-4 text-yellow-500 fill-yellow-500" />
                 <Star className="w-3 sm:w-4 h-3 sm:w-4 text-yellow-500 fill-yellow-500" />
-                <span className="ml-1">500+ nöjda säljare</span>
+                <span className="ml-1">{t('satisfiedSellers')}</span>
               </div>
               
               {/* Small discreet buyer link */}
@@ -116,7 +118,7 @@ export default function HomePageContent() {
                   href="/kopare" 
                   className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-navy transition-colors font-medium"
                 >
-                  Vill du köpa företag? <span className="text-gray-400">→</span>
+                  {t('buyerLink')} <span className="text-gray-400">→</span>
                 </Link>
               </div>
             </div>
@@ -133,40 +135,40 @@ export default function HomePageContent() {
       <section className="section section-white overflow-hidden py-12 sm:py-16 md:py-20">
         <div className="container-custom px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Så enkelt säljer du ditt företag</h2>
-            <p className="text-base sm:text-lg text-graphite">Från registrering till avslut på rekordtid</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">{t('howEasyTitle')}</h2>
+            <p className="text-base sm:text-lg text-graphite">{t('howEasySubtitle')}</p>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {[
               { 
                 num: 1, 
-                title: "REGISTRERA", 
-                desc: "Skapa ditt konto på 2 minuter",
+                title: t('step1'), 
+                desc: t('step1Desc'),
                 link: "/registrera",
                 image: "/1.png",
                 cashback: "Gratis"
               },
               { 
                 num: 2, 
-                title: "VÄRDERA", 
-                desc: "Få professionell värdering direkt",
+                title: t('step2'), 
+                desc: t('step2Desc'),
                 link: "/vardering",
                 image: "/2.png",
                 cashback: "5 min"
               },
               { 
                 num: 3, 
-                title: "MATCHA", 
-                desc: "Vi hittar rätt köpare åt dig",
+                title: t('step3'), 
+                desc: t('step3Desc'),
                 link: "/salja",
                 image: "/3.png",
                 cashback: "87% match"
               },
               { 
                 num: 4, 
-                title: "FÖRHANDLA", 
-                desc: "Säker process hela vägen",
+                title: t('step4'), 
+                desc: t('step4Desc'),
                 link: "/salja/start",
                 image: "/4.png",
                 cashback: "100% säkert"
@@ -227,7 +229,7 @@ export default function HomePageContent() {
               href="/salja/start"
               className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-accent-pink text-primary-navy font-bold rounded-xl hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base"
             >
-              Kom igång nu
+              {t('getStarted')}
               <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
             </Link>
           </div>
@@ -238,8 +240,8 @@ export default function HomePageContent() {
       <section className="section section-sand overflow-hidden py-12 sm:py-16 md:py-20">
         <div className="container-custom px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Upptäck alla möjligheter</h2>
-            <p className="text-base sm:text-lg text-graphite">Utforska våra tjänster och verktyg för att maximera din affär</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">{t('discoverTitle')}</h2>
+            <p className="text-base sm:text-lg text-graphite">{t('discoverSubtitle')}</p>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-auto">
@@ -344,10 +346,10 @@ export default function HomePageContent() {
         <div className="container-custom px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-              Våra kunder älskar BOLAXO
+              {t('reviewsTitle')}
             </h2>
             <p className="text-base sm:text-lg text-graphite">
-              98% av våra säljare rekommenderar oss
+              {t('reviewsSubtitle')}
             </p>
           </div>
 
@@ -411,16 +413,16 @@ export default function HomePageContent() {
       <section className="section gradient-sky-mint text-navy py-12 sm:py-16 md:py-20">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
-            Redo att sälja ditt företag?
+            {t('ctaTitle')}
           </h2>
           <p className="text-base sm:text-lg mb-6 sm:mb-8 text-graphite">
-            Börja med en gratis värdering och se vad ditt företag är värt idag
+            {t('ctaSubtitle')}
           </p>
           <button
             onClick={() => setIsValuationModalOpen(true)}
             className="btn-primary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4"
           >
-            Starta gratis värdering
+            {t('ctaButton')}
           </button>
         </div>
       </section>
