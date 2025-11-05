@@ -37,8 +37,127 @@
     "ctaSubtitle": "Start with a free valuation and see what your company is worth today",
     "ctaButton": "Start free valuation",
     "howEasyTitle": "How easy it is to sell your company",
-    "howEasySubtitle": "From registration to completion in record time",
-    "satisfiedSellers": "500+ satisfied sellers"
+    "howEasySubtitle": "From registration to closing in record time",
+    "satisfiedSellers": "500+ satisfied sellers",
+    "steps": {
+      "cashback": {
+        "free": "Free",
+        "fiveMin": "5 min",
+        "match": "87% match",
+        "secure": "100% secure"
+      }
+    },
+    "reviews": [
+      {
+        "text": "Fantastic platform for business sales. The process was smooth and professional from start to finish.",
+        "author": "Maria Andersson",
+        "company": "CEO, TechStart AB",
+        "rating": 5,
+        "date": "October 2024"
+      },
+      {
+        "text": "The valuation was spot on and helped us set the right price. Got in touch with serious buyers within a week.",
+        "author": "Johan Eriksson",
+        "company": "Founder, Eriksson Construction",
+        "rating": 5,
+        "date": "September 2024"
+      },
+      {
+        "text": "Professional handling of the entire process. The NDA function and secure data room made due diligence easy.",
+        "author": "Anna Lindberg",
+        "company": "Owner, Lindberg Consulting",
+        "rating": 5,
+        "date": "November 2024"
+      }
+    ],
+    "stepModal": {
+      "step1": {
+        "title": "STEP 1: REGISTER",
+        "header": "Start your journey on BOLAXO",
+        "description": "Registration on BOLAXO is simple and takes only 2-3 minutes. You just need to fill in some basic information about yourself and your company to get started.",
+        "step1Title": "Create your account",
+        "step1Desc": "Use email or BankID to register. BankID gives you extra security and verification from the start.",
+        "step2Title": "Fill in company information",
+        "step2Desc": "Tell us about your company: name, industry, size and what you're looking for. You can always update this later.",
+        "step3Title": "Verify your identity",
+        "step3Desc": "Complete a quick BankID verification to unlock all features and get the \"Verified Seller\" badge.",
+        "step4Title": "You're ready!",
+        "step4Desc": "Now you can value your company, create listings, get matches and start negotiating with buyers.",
+        "free": "Completely free",
+        "freeDesc": "- You pay nothing for registration or to use the platform to find buyers."
+      },
+      "step2": {
+        "title": "STEP 2: VALUE",
+        "header": "AI-driven valuation in 5 minutes",
+        "description": "Our advanced valuation algorithm analyzes your company from multiple angles and gives you a professional value range - completely free. Suitable for everything from small startups to established mid-sized companies.",
+        "howWorks": "How does the valuation work?",
+        "financial": {
+          "title": "Financial analysis",
+          "desc": "We analyze your revenue, results, cash flow and growth rate over the last 3 years to create a solid foundation."
+        },
+        "comparison": {
+          "title": "Industry comparison",
+          "desc": "We compare your company with similar companies that have been sold recently to set the right multiple based on the market."
+        },
+        "methods": {
+          "title": "Valuation methods",
+          "desc": "We use EBITDA multiple, return valuation and revenue multiple to triangulate a fair value."
+        },
+        "report": {
+          "title": "Detailed report",
+          "desc": "You get a PDF report with value range, assumptions, charts and concrete tips to increase value."
+        },
+        "tip": "Tip:",
+        "tipDesc": "Use the valuation to set a reasonable price on your listing and as a starting point in negotiations."
+      },
+      "step3": {
+        "title": "STEP 3: MATCH",
+        "header": "Intelligent matching with the right buyers",
+        "description": "Our AI algorithm analyzes profiles and needs to find the best matches. We only present serious, verified buyers who actually fit your company.",
+        "howWorks": "How matching works",
+        "aiAnalysis": {
+          "title": "AI analysis of buyers",
+          "desc": "The system analyzes what each buyer is looking for: industry, region, size, EBITDA level and other criteria."
+        },
+        "automatic": {
+          "title": "Automatic matching",
+          "desc": "Your listing is automatically matched with buyers whose criteria match your profile."
+        },
+        "verified": {
+          "title": "Verified buyers",
+          "desc": "All buyers are verified with BankID, which guarantees they are serious and relevant."
+        },
+        "control": {
+          "title": "Your control is maintained",
+          "desc": "You decide what matches can see before they sign the NDA - you can be completely anonymous if you want."
+        },
+        "saveTime": "⚡ Save time:",
+        "saveTimeDesc": "Instead of waiting for random inquiries, you get relevant buyers presented automatically."
+      },
+      "step4": {
+        "title": "STEP 4: NEGOTIATE",
+        "header": "Secure negotiation from start to finish",
+        "description": "BOLAXO ensures a safe and professional negotiation process with automatic NDA, secure data room and legal tools that save both time and money.",
+        "nda": {
+          "title": "Automatic NDA",
+          "desc": "Before the buyer sees sensitive information, they must sign a digital confidentiality agreement with BankID. You are always protected."
+        },
+        "encrypted": {
+          "title": "Encrypted communication",
+          "desc": "Discuss details through the platform's built-in messaging system with end-to-end encryption. No uncertainty."
+        },
+        "templates": {
+          "title": "Legal templates",
+          "desc": "Get templates for LOI, SPA and other critical documents - saves massive legal costs and accelerates the process."
+        },
+        "dealManagement": {
+          "title": "Deal Management",
+          "desc": "Track progress, milestones, documents and payments in one place. Everything organized and transparent."
+        },
+        "result": "Result:",
+        "resultDesc": "Typically 60-90 days from LOI to closing - much faster than the traditional route with external brokers."
+      }
+    }
   },
   "header": {
     "forSellers": "For sellers",
