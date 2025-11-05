@@ -1,12 +1,12 @@
 'use client'
 
-import dynamic from 'next/dynamic'
+import dynamicImport from 'next/dynamic'
 
 /**
  * Client-only wrapper for KlartPage
  * Prevents SSR rendering issues with AuthProvider
  */
-const KlartPageContent = dynamic(() => import('./klart-page-content'), {
+const KlartPageContent = dynamicImport(() => import('./klart-page-content'), {
   ssr: false,
   loading: () => (
     <div className="min-h-screen bg-white flex items-center justify-center">

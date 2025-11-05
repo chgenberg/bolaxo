@@ -1,12 +1,12 @@
 'use client'
 
-import dynamic from 'next/dynamic'
+import dynamicImport from 'next/dynamic'
 
 /**
  * Client-only wrapper for BuyerStartPage
  * Prevents SSR rendering issues with AuthProvider
  */
-const BuyerStartPageContent = dynamic(() => import('./buyer-start-page-content'), {
+const BuyerStartPageContent = dynamicImport(() => import('./buyer-start-page-content'), {
   ssr: false,
   loading: () => (
     <div className="min-h-screen bg-white flex items-center justify-center">
