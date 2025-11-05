@@ -8,6 +8,10 @@ import CookieConsent from '@/components/CookieConsent'
 import ChatWidget from '@/components/ChatWidget'
 import ErrorBoundary from '@/components/ErrorBoundary'
 
+// Ensure dynamic rendering for locale routes
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 export default async function LocaleLayout({
   children,
   params,
