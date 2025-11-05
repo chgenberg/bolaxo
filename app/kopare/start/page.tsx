@@ -7,6 +7,11 @@ import { useToast } from '@/contexts/ToastContext'
 import { Building, MapPin, TrendingUp, CheckCircle, ArrowRight, ArrowLeft, Check } from 'lucide-react'
 import Link from 'next/link'
 
+// Prevent static generation - this page requires AuthProvider
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
+
 const INDUSTRIES = [
   'IT-konsult & utveckling',
   'E-handel/D2C',

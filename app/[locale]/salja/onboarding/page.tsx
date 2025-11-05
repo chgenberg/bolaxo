@@ -6,6 +6,11 @@ import { useAuth } from '@/contexts/AuthContext'
 import Link from 'next/link'
 import { Building2, CheckCircle2, ArrowRight, User, FileText } from 'lucide-react'
 
+// Prevent static generation - this page requires AuthProvider
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
+
 export default function SellerOnboardingPage() {
   const router = useRouter()
   const { user } = useAuth()

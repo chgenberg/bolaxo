@@ -11,6 +11,11 @@ import PriceRangeSlider from '@/components/PriceRangeSlider'
 import AdvancedFilterDropdown from '@/components/AdvancedFilterDropdown'
 import { Search, SlidersHorizontal, ChevronDown, X, TrendingUp, AlertCircle, MapPin, Briefcase, DollarSign, Users, Calendar, Shield, BarChart3, Filter, Zap, HelpCircle } from 'lucide-react'
 
+// Prevent static generation - this page requires AuthProvider
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
+
 export default function SearchPage() {
   const router = useRouter()
   const { user } = useAuth()
