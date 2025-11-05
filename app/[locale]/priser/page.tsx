@@ -114,18 +114,18 @@ export default function PricingPage() {
 
                 {/* Features List */}
                 <div className="p-8 space-y-4">
-                  {plan.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      {feature.included !== false ? (
-                        <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      ) : (
-                        <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
-                      )}
-                      <span className={feature.included === false ? 'text-text-gray line-through' : 'text-text-dark'}>
-                        {feature.text}
-                      </span>
-                    </div>
-                  ))}
+              {plan.features.map((feature: { text: string; included: boolean }, idx: number) => (
+                <div key={idx} className="flex items-start gap-3">
+                  {feature.included !== false ? (
+                    <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <X className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
+                  )}
+                  <span className={feature.included === false ? 'text-text-gray line-through' : 'text-text-dark'}>
+                    {feature.text}
+                  </span>
+                </div>
+              ))}
                 </div>
               </div>
             ))}
