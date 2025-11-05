@@ -1768,5 +1768,132 @@
       "financialStatement": "Latest annual report"
     },
     "continueToValuation": "Continue to valuation"
+  },
+  "checkout": {
+    "heroTitle": "The future platform for business transfers",
+    "heroSubtitle": "A digital intermediary that handles the entire journey from first contact to ownership transfer. By combining AI, legal automation and direct API connections, we make the process seamless, secure and almost completely self-service.",
+    "whatWeSolve": "What we solve",
+    "solutions": [
+      "Everything happens digitally – without paper, without legal costs",
+      "No one needs to chase certificates, signatures or administrative updates",
+      "From sales interest to final legal ownership transfer in days, not months",
+      "Buyers and sellers get immediate transparency and security through AI"
+    ],
+    "howItWorks": "How it works",
+    "ctaTitle": "Ready to get started?",
+    "ctaSubtitle": "Whether you're a seller or buyer, you can get started in minutes. No complicated process, just the digital transformation your business transfer needs.",
+    "ctaSeller": "I want to sell",
+    "ctaBuyer": "I want to buy",
+    "steps": {
+      "analysis": {
+        "title": "Automatic company analysis",
+        "description": "AI analyzes the company and generates valuation",
+        "dataCollection": {
+          "subtitle": "Data collection via API",
+          "items": [
+            "Companies House – registration details, ownership structure, share capital",
+            "Tax Agency – revenue, VAT, debts",
+            "Statistics Bureau and industry data – benchmark against comparable companies",
+            "Supplier data and creditworthiness"
+          ]
+        },
+        "aiAnalysis": {
+          "subtitle": "AI analysis and valuation",
+          "items": [
+            "Analysis of finances, assets and risk profile",
+            "Valuation based on multiples, cash flows and industry standards",
+            "Valuation range presented to seller",
+            "Summary of strengths, weaknesses and action recommendations"
+          ]
+        }
+      },
+      "matchmaking": {
+        "title": "Automated listing and matching",
+        "description": "Platform matches sellers with the right buyers",
+        "automaticListing": {
+          "subtitle": "Automatic listing",
+          "items": [
+            "AI writes pitch text based on valuation and industry data",
+            "Anonymous company profile published automatically",
+            "System indexes company data for SEO"
+          ]
+        },
+        "realtimeMatching": {
+          "subtitle": "Real-time matching",
+          "items": [
+            "AI matches companies against buyer database by budget, industry and geography",
+            "Automatic notifications on matching",
+            "Smart recommendations based on historical data"
+          ]
+        }
+      },
+      "onboarding": {
+        "title": "Secure buyer onboarding",
+        "description": "Verification and access to secure data room",
+        "verification": {
+          "subtitle": "Identity and financial verification",
+          "items": [
+            "KYC (Know Your Customer) via BankID or equivalent",
+            "Financial verification via credit check or bank statements",
+            "Automatic risk assessment"
+          ]
+        },
+        "confidentiality": {
+          "subtitle": "Confidentiality and access",
+          "items": [
+            "AI generates NDA automatically",
+            "E-signing of confidentiality agreement",
+            "Opening of personal data room after verification",
+            "Secure communication channel between parties"
+          ]
+        }
+      },
+      "diligence": {
+        "title": "Digital due diligence",
+        "description": "AI-driven review and document management",
+        "documentManagement": {
+          "subtitle": "Automatic document management",
+          "items": [
+            "AI creates checklists based on industry and size",
+            "Seller uploads files for analysis",
+            "Automatic detection of deviations",
+            "Version control and timestamping of all documents"
+          ]
+        },
+        "collaboration": {
+          "subtitle": "Collaboration and reporting",
+          "items": [
+            "Buyer can comment directly in the system",
+            "AI suggests answers and explanations",
+            "Automatic due diligence report generated",
+            "Summarized findings and recommendations for negotiation"
+          ]
+        }
+      },
+      "contract": {
+        "title": "AI-generated contract and transaction",
+        "description": "Digital contracts and secure payments",
+        "automaticContract": {
+          "subtitle": "Automatic contract management",
+          "items": [
+            "Purchase agreement generated automatically from process data",
+            "Digital interface for contract review",
+            "Plain language explanations of all clauses",
+            "Alternative clauses selectable with one click",
+            "Digital signing for both parties"
+          ]
+        },
+        "payment": {
+          "subtitle": "Payment and follow-up",
+          "items": [
+            "Escrow function – secure payment until closing",
+            "Automatic notification on transaction",
+            "Automatic update of Companies House",
+            "Tax Agency notification for VAT and corporate tax",
+            "Bank updates for company account and assets"
+          ]
+        }
+      }
+    }
   }
 }

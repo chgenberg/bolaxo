@@ -1768,5 +1768,132 @@
       "financialStatement": "Senaste årsredovisning"
     },
     "continueToValuation": "Fortsätt till värdering"
+  },
+  "checkout": {
+    "heroTitle": "Framtidens plattform för företagsöverlåtelser",
+    "heroSubtitle": "En digital medlare som hanterar hela resan från första kontakt till ägarbyte. Genom att kombinera AI, juridisk automation och direkta API-kopplingar gör vi processen sömlös, trygg och nästan helt självgående.",
+    "whatWeSolve": "Vad vi löser",
+    "solutions": [
+      "Allt sker digitalt – utan papper, utan advokatkostnader",
+      "Ingen behöver jaga intyg, signaturer eller administrativa uppdateringar",
+      "Från försäljningsintresse till sluträttslig ägarbyte på dagar, inte månader",
+      "Köpare och säljare får omedelbar transparens och säkerhet genom AI"
+    ],
+    "howItWorks": "Så fungerar det",
+    "ctaTitle": "Redo att börja?",
+    "ctaSubtitle": "Antingen du är säljare eller köpare, kan du komma igång på minuter. Ingen komplicerad process, bara den digitala transformation din företagsöverlåtelse behöver.",
+    "ctaSeller": "Jag vill sälja",
+    "ctaBuyer": "Jag vill köpa",
+    "steps": {
+      "analysis": {
+        "title": "Automatisk företagsanalys",
+        "description": "AI analyserar företaget och genererar värdering",
+        "dataCollection": {
+          "subtitle": "Datainsamling via API",
+          "items": [
+            "Bolagsverket – registreringsuppgifter, ägarstruktur, aktiekapital",
+            "Skatteverket – omsättning, moms, skulder",
+            "SCB och branschdata – benchmark mot jämförbara företag",
+            "Leverantörsdata och kreditvärdighet"
+          ]
+        },
+        "aiAnalysis": {
+          "subtitle": "AI-analys och värdering",
+          "items": [
+            "Analys av ekonomi, tillgångar och riskprofil",
+            "Värdering baserad på multiplar, kassaflöden och branschstandarder",
+            "Värderingsintervall presenteras för säljaren",
+            "Sammanfattning av styrkor, svagheter och åtgärdsförslag"
+          ]
+        }
+      },
+      "matchmaking": {
+        "title": "Automatiserad annons och matchning",
+        "description": "Plattformen matchar säljare med rätt köpare",
+        "automaticListing": {
+          "subtitle": "Automatisk annonsering",
+          "items": [
+            "AI skriver pitchtext baserad på värdering och branschdata",
+            "Anonym företagsprofil publiceras automatiskt",
+            "Systemet indexerar företagsdata för SEO"
+          ]
+        },
+        "realtimeMatching": {
+          "subtitle": "Realtids-matchning",
+          "items": [
+            "AI matchar företag mot köpardatabas efter budget, bransch och geografi",
+            "Automatiska notiser vid matchning",
+            "Smarta rekommendationer baserade på historiska data"
+          ]
+        }
+      },
+      "onboarding": {
+        "title": "Säker onboarding av köpare",
+        "description": "Verifiering och åtkomst till säkert datarum",
+        "verification": {
+          "subtitle": "Identitets- och ekonomisk verifiering",
+          "items": [
+            "KYC (Know Your Customer) via BankID eller motsvarande",
+            "Ekonomisk verifiering via kreditupplysning eller kontoutdrag",
+            "Automatisk riskbedömning"
+          ]
+        },
+        "confidentiality": {
+          "subtitle": "Sekretess och åtkomst",
+          "items": [
+            "AI genererar NDA automatiskt",
+            "E-signering av sekretessavtal",
+            "Öppning av personligt datarum efter verifiering",
+            "Säker kommunikationskanal mellan parterna"
+          ]
+        }
+      },
+      "diligence": {
+        "title": "Digital due diligence",
+        "description": "AI-styrd granskning och dokumenthantering",
+        "documentManagement": {
+          "subtitle": "Automatisk dokumenthantering",
+          "items": [
+            "AI skapar checklistor baserat på bransch och storlek",
+            "Säljaren laddar upp filer för analys",
+            "Automatisk detektion av avvikelser",
+            "Versionshantering och tidsmärkning av alla dokument"
+          ]
+        },
+        "collaboration": {
+          "subtitle": "Samarbete och rapportering",
+          "items": [
+            "Köparen kan kommentera direkt i systemet",
+            "AI föreslår svar och förklaringar",
+            "Automatisk due diligence-rapport genereras",
+            "Summerade fynd och rekommendationer för förhandling"
+          ]
+        }
+      },
+      "contract": {
+        "title": "AI-genererat avtal och transaktion",
+        "description": "Digitala kontrakt och säkra betalningar",
+        "automaticContract": {
+          "subtitle": "Automatisk avtalshantering",
+          "items": [
+            "Köpeavtal genereras automatiskt från processdata",
+            "Digitalt gränssnitt för avtalsöversyn",
+            "Klarspråks-förklaringar av alla klausuler",
+            "Alternativklausuler väljbara med ett klick",
+            "Digital signering för båda parter"
+          ]
+        },
+        "payment": {
+          "subtitle": "Betalning och efterföljande",
+          "items": [
+            "Escrow-funktion – säker betalning till closing",
+            "Automatisk avisering vid transaktion",
+            "Automatisk uppdatering av Bolagsverket",
+            "Skatteverket-anmälan för moms och F-skatt",
+            "Bankuppdateringar för företagskonto och tillgångar"
+          ]
+        }
+      }
+    }
   }
 }
