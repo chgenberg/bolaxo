@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { Cookie, X } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 export default function CookieConsent() {
+  const t = useTranslations('cookieConsent')
   const [showBanner, setShowBanner] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [preferences, setPreferences] = useState({
@@ -76,11 +78,10 @@ export default function CookieConsent() {
               <Cookie className="w-6 h-6 text-primary-blue mr-3 flex-shrink-0 mt-1" />
               <div>
                 <h3 className="font-bold text-lg text-text-dark mb-2">
-                  Vi använder cookies
+                  {t('title')}
                 </h3>
                 <p className="text-sm text-text-gray mb-4">
-                  Vi använder cookies för att förbättra din upplevelse, analysera trafik och visa relevanta annonser. 
-                  Du kan välja vilka cookies du accepterar.
+                  {t('description')}
                 </p>
               </div>
             </div>
@@ -98,19 +99,19 @@ export default function CookieConsent() {
                 onClick={() => setShowDetails(true)}
                 className="btn-ghost text-sm"
               >
-                Anpassa
+                {t('customize')}
               </button>
               <button
                 onClick={handleRejectAll}
                 className="btn-secondary text-sm flex-1 sm:flex-initial"
               >
-                Avvisa alla
+                {t('rejectAll')}
               </button>
               <button
                 onClick={handleAcceptAll}
                 className="btn-primary text-sm flex-1 sm:flex-initial"
               >
-                Acceptera alla
+                {t('acceptAll')}
               </button>
             </div>
           ) : (
@@ -128,15 +129,15 @@ export default function CookieConsent() {
                         className="w-4 h-4 text-primary-blue border-gray-300 rounded mr-3"
                       />
                       <div>
-                        <h4 className="font-semibold text-sm">Nödvändiga cookies</h4>
+                        <h4 className="font-semibold text-sm">{t('categories.necessary.title')}</h4>
                         <p className="text-xs text-text-gray mt-1">
-                          Krävs för att webbplatsen ska fungera (inloggning, session, etc)
+                          {t('categories.necessary.description')}
                         </p>
                       </div>
                     </div>
                   </div>
                   <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
-                    Alltid aktiv
+                    {t('categories.necessary.alwaysActive')}
                   </span>
                 </div>
 
@@ -149,9 +150,9 @@ export default function CookieConsent() {
                     className="w-4 h-4 text-primary-blue border-gray-300 rounded mr-3 mt-0.5"
                   />
                   <div className="flex-1">
-                    <h4 className="font-semibold text-sm">Analys & Statistik</h4>
+                    <h4 className="font-semibold text-sm">{t('categories.analytics.title')}</h4>
                     <p className="text-xs text-text-gray mt-1">
-                      Hjälper oss förstå hur du använder sidan (Google Analytics, heatmaps)
+                      {t('categories.analytics.description')}
                     </p>
                   </div>
                 </div>
@@ -165,22 +166,22 @@ export default function CookieConsent() {
                     className="w-4 h-4 text-primary-blue border-gray-300 rounded mr-3 mt-0.5"
                   />
                   <div className="flex-1">
-                    <h4 className="font-semibold text-sm">Marknadsföring</h4>
+                    <h4 className="font-semibold text-sm">{t('categories.marketing.title')}</h4>
                     <p className="text-xs text-text-gray mt-1">
-                      Används för riktad annonsering och remarketing (Meta, Google Ads)
+                      {t('categories.marketing.description')}
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="text-xs text-text-gray">
-                Läs mer i vår{' '}
+                {t('readMore')}{' '}
                 <Link href="/juridiskt/cookies" className="text-primary-blue hover:underline">
-                  cookie-policy
+                  {t('cookiePolicy')}
                 </Link>
-                {' '}och{' '}
+                {' '}{t('and')}{' '}
                 <Link href="/juridiskt/integritetspolicy" className="text-primary-blue hover:underline">
-                  integritetspolicy
+                  {t('privacyPolicy')}
                 </Link>
               </div>
 
@@ -189,19 +190,19 @@ export default function CookieConsent() {
                   onClick={() => setShowDetails(false)}
                   className="btn-ghost text-sm"
                 >
-                  ← Tillbaka
+                  {t('back')}
                 </button>
                 <button
                   onClick={handleRejectAll}
                   className="btn-secondary text-sm flex-1 sm:flex-initial"
                 >
-                  Spara val
+                  {t('saveChoice')}
                 </button>
                 <button
                   onClick={handleAcceptSelected}
                   className="btn-primary text-sm flex-1"
                 >
-                  Spara och fortsätt
+                  {t('saveAndContinue')}
                 </button>
               </div>
             </div>

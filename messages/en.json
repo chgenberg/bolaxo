@@ -728,5 +728,34 @@
         "a": "It's optional and only paid when the deal is completed via our platform."
       }
     ]
+  },
+  "cookieConsent": {
+    "title": "We use cookies",
+    "description": "We use cookies to improve your experience, analyze traffic and show relevant ads. You can choose which cookies you accept.",
+    "customize": "Customize",
+    "rejectAll": "Reject all",
+    "acceptAll": "Accept all",
+    "back": "← Back",
+    "saveChoice": "Save choice",
+    "saveAndContinue": "Save and continue",
+    "readMore": "Read more in our",
+    "cookiePolicy": "cookie policy",
+    "and": "and",
+    "privacyPolicy": "privacy policy",
+    "categories": {
+      "necessary": {
+        "title": "Necessary cookies",
+        "description": "Required for the website to function (login, session, etc)",
+        "alwaysActive": "Always active"
+      },
+      "analytics": {
+        "title": "Analytics & Statistics",
+        "description": "Helps us understand how you use the site (Google Analytics, heatmaps)"
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Used for targeted advertising and remarketing (Meta, Google Ads)"
+      }
+    }
   }
 }

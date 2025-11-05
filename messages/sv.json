@@ -728,5 +728,34 @@
         "a": "Det är frivilligt och betalas endast när affären är genomförd via vår plattform."
       }
     ]
+  },
+  "cookieConsent": {
+    "title": "Vi använder cookies",
+    "description": "Vi använder cookies för att förbättra din upplevelse, analysera trafik och visa relevanta annonser. Du kan välja vilka cookies du accepterar.",
+    "customize": "Anpassa",
+    "rejectAll": "Avvisa alla",
+    "acceptAll": "Acceptera alla",
+    "back": "← Tillbaka",
+    "saveChoice": "Spara val",
+    "saveAndContinue": "Spara och fortsätt",
+    "readMore": "Läs mer i vår",
+    "cookiePolicy": "cookie-policy",
+    "and": "och",
+    "privacyPolicy": "integritetspolicy",
+    "categories": {
+      "necessary": {
+        "title": "Nödvändiga cookies",
+        "description": "Krävs för att webbplatsen ska fungera (inloggning, session, etc)",
+        "alwaysActive": "Alltid aktiv"
+      },
+      "analytics": {
+        "title": "Analys & Statistik",
+        "description": "Hjälper oss förstå hur du använder sidan (Google Analytics, heatmaps)"
+      },
+      "marketing": {
+        "title": "Marknadsföring",
+        "description": "Används för riktad annonsering och remarketing (Meta, Google Ads)"
+      }
+    }
   }
 }
