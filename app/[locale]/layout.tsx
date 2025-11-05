@@ -7,6 +7,7 @@ import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 import ChatWidget from '@/components/ChatWidget'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import AuthProviderWrapper from '@/components/AuthProviderWrapper'
 
 // Ensure dynamic rendering for locale routes
 export const dynamic = 'force-dynamic'
@@ -44,13 +45,15 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <ErrorBoundary>
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <CookieConsent />
-            <ChatWidget />
-          </ErrorBoundary>
+          <AuthProviderWrapper>
+            <ErrorBoundary>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+              <CookieConsent />
+              <ChatWidget />
+            </ErrorBoundary>
+          </AuthProviderWrapper>
         </NextIntlClientProvider>
       </body>
     </html>
