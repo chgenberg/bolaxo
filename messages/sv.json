@@ -475,5 +475,43 @@
       "button": "Kom igång gratis",
       "subtext": "Börja med att skapa din första annons."
     }
+  },
+  "kopare": {
+    "heroTitle": "Köp företag i Sverige",
+    "heroSubtitle": "Utforska verifierade akquisitionsmöjligheter i hundratals svenska städer. Från Stockholm till Hemse - hitta ditt nästa företag med BOLAXO.",
+    "browseButton": "Bläddra bland alla företag",
+    "citiesTitle": "Städer i Sverige",
+    "whyBuyTitle": "Köp företag med BOLAXO",
+    "benefits": [
+      {
+        "title": "Nationell räckvidd",
+        "desc": "100+ städer med verifierade företag"
+      },
+      {
+        "title": "Transparenta data",
+        "desc": "Detaljerade företagsprofiler och värderingar"
+      },
+      {
+        "title": "NDA-säkerhet",
+        "desc": "Skydda dina analyser med konfidentialitetsavtal"
+      },
+      {
+        "title": "Strukturerad process",
+        "desc": "Från intresse till stängning med milstolpar"
+      },
+      {
+        "title": "Expert support",
+        "desc": "M&A-professionaler guidar genom processen"
+      },
+      {
+        "title": "Gratis att börja",
+        "desc": "Registrera dig gratis och börja söka idag"
+      }
+    ],
+    "popularCitiesTitle": "Populära städer för akquisitioner",
+    "seeCompanies": "Se lediga företag",
+    "ctaTitle": "Redo att hitta ditt nästa företag?",
+    "ctaSubtitle": "Registrera dig gratis och få tillgång till alla lediga företag i Sverige.",
+    "ctaButton": "Registrera dig gratis"
   }
 }

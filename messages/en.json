@@ -475,5 +475,43 @@
       "button": "Get started free",
       "subtext": "Start by creating your first listing."
     }
+  },
+  "kopare": {
+    "heroTitle": "Buy companies in Sweden",
+    "heroSubtitle": "Explore verified acquisition opportunities in hundreds of Swedish cities. From Stockholm to Hemse - find your next company with BOLAXO.",
+    "browseButton": "Browse all companies",
+    "citiesTitle": "Cities in Sweden",
+    "whyBuyTitle": "Buy companies with BOLAXO",
+    "benefits": [
+      {
+        "title": "National reach",
+        "desc": "100+ cities with verified companies"
+      },
+      {
+        "title": "Transparent data",
+        "desc": "Detailed company profiles and valuations"
+      },
+      {
+        "title": "NDA security",
+        "desc": "Protect your analyses with confidentiality agreements"
+      },
+      {
+        "title": "Structured process",
+        "desc": "From interest to closing with milestones"
+      },
+      {
+        "title": "Expert support",
+        "desc": "M&A professionals guide through the process"
+      },
+      {
+        "title": "Free to start",
+        "desc": "Register for free and start searching today"
+      }
+    ],
+    "popularCitiesTitle": "Popular cities for acquisitions",
+    "seeCompanies": "See available companies",
+    "ctaTitle": "Ready to find your next company?",
+    "ctaSubtitle": "Register for free and get access to all available companies in Sweden.",
+    "ctaButton": "Register for free"
   }
 }
