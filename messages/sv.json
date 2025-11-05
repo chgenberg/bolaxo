@@ -113,7 +113,14 @@
     "contactTime": "Vi kontaktar dig på vald tid",
     "whenCall": "När passar det att vi ringer?",
     "selectTime": "Välj tid",
-    "clear": "Rensa"
+    "clear": "Rensa",
+    "subjectLabel": "Beskriv din fråga (1 mening)",
+    "subjectPlaceholder": "T.ex. Jag vill sälja mitt IT-företag",
+    "namePlaceholder": "Ditt namn",
+    "emailPlaceholder": "din@email.se",
+    "phonePlaceholder": "+46 70 123 45 67",
+    "demoDuration": "ca 20 min",
+    "country": "Sverige"
   },
   "about": {
     "title": "Om oss",

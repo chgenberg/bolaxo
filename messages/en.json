@@ -113,7 +113,14 @@
     "contactTime": "We will contact you at the selected time",
     "whenCall": "When would it be convenient for us to call?",
     "selectTime": "Select time",
-    "clear": "Clear"
+    "clear": "Clear",
+    "subjectLabel": "Describe your question (1 sentence)",
+    "subjectPlaceholder": "E.g. I want to sell my IT company",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "your@email.com",
+    "phonePlaceholder": "+46 70 123 45 67",
+    "demoDuration": "approx. 20 min",
+    "country": "Sweden"
   },
   "about": {
     "title": "About us",

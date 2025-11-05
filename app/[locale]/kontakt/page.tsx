@@ -194,7 +194,7 @@ export default function ContactPage() {
                   <p className="text-gray-700">
                     Norrmälarstrand 10<br />
                     111 19 Stockholm<br />
-                    {locale === 'sv' ? 'Sverige' : 'Sweden'}
+                    {t('country')}
                   </p>
                 </div>
               </div>
@@ -281,7 +281,7 @@ export default function ContactPage() {
                         <Calendar className="w-5 h-5 text-gray-600" />
                         <div>
                           <p className="text-base font-medium">{t('demoBook')}</p>
-                          <p className="text-sm text-gray-500">{locale === 'sv' ? 'ca 20 min' : 'approx. 20 min'}</p>
+                          <p className="text-sm text-gray-500">{t('demoDuration')}</p>
                         </div>
                       </div>
                     </label>
@@ -292,7 +292,7 @@ export default function ContactPage() {
                 {(contactForm.contactMethod === 'phone' || contactForm.contactMethod === 'demo') && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {locale === 'sv' ? 'Beskriv din fråga (1 mening)' : 'Describe your question (1 sentence)'} *
+                      {t('subjectLabel')} *
                     </label>
                     <input
                       type="text"
@@ -300,7 +300,7 @@ export default function ContactPage() {
                       value={contactForm.subject}
                       onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
-                      placeholder={locale === 'sv' ? 'T.ex. Jag vill sälja mitt IT-företag' : 'E.g. I want to sell my IT company'}
+                      placeholder={t('subjectPlaceholder')}
                       maxLength={100}
                     />
                   </div>
@@ -366,7 +366,7 @@ export default function ContactPage() {
                       value={contactForm.name}
                       onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                       className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
-                      placeholder={locale === 'sv' ? 'Ditt namn' : 'Your name'}
+                      placeholder={t('namePlaceholder')}
                     />
                   </div>
                 </div>
@@ -385,7 +385,7 @@ export default function ContactPage() {
                         value={contactForm.email}
                         onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                         className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
-                        placeholder={locale === 'sv' ? 'din@email.se' : 'your@email.com'}
+                        placeholder={t('emailPlaceholder')}
                       />
                     </div>
                   </div>
@@ -406,7 +406,7 @@ export default function ContactPage() {
                           value={contactForm.phone}
                           onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
                           className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#1F3C58] focus:outline-none"
-                          placeholder={locale === 'sv' ? '+46 70 123 45 67' : '+46 70 123 45 67'}
+                          placeholder={t('phonePlaceholder')}
                         />
                       </div>
                     </div>
