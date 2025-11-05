@@ -197,7 +197,7 @@ export default function CheckoutPage() {
                       {detail.subtitle}
                     </h4>
                     <ul className="space-y-3 ml-7">
-                      {detail.items.map((item, itemIdx) => (
+                      {detail.items.map((item: string, itemIdx: number) => (
                         <li key={itemIdx} className="flex items-start gap-3 text-gray-700">
                           <span className="inline-block w-2 h-2 bg-blue-900 rounded-full mt-2 flex-shrink-0" />
                           <span>{item}</span>
