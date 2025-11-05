@@ -6,6 +6,10 @@ import Image from 'next/image'
 import { Star, ArrowRight, TrendingUp, ChevronDown, X, CheckCircle, Lightbulb, Zap, Lock, MessageCircle } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
 
+// Prevent static generation - this page uses ValuationWizard which uses useAuth
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 export default function Home() {
   const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)
   const [activeReview, setActiveReview] = useState(0)
