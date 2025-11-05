@@ -461,18 +461,18 @@ export default function SearchPageContent() {
                     {/* Locations Multi-Select */}
                     <div>
                       <MultiSelect
-                        label="Välj platser"
+                        label={t('selectLocations')}
                         icon={<MapPin className="w-4 h-4" />}
                         options={[
-                          { value: 'stockholm-malardalen', label: 'Stockholm & Mälardalen' },
-                          { value: 'vastsverige', label: 'Västsverige' },
-                          { value: 'syd', label: 'Syd' },
-                          { value: 'ostra-smaland', label: 'Östra & Småland' },
-                          { value: 'norr-mitt', label: 'Norr & Mitt' }
+                          { value: 'stockholm-malardalen', label: t('locations.stockholm') },
+                          { value: 'vastsverige', label: t('locations.west') },
+                          { value: 'syd', label: t('locations.south') },
+                          { value: 'ostra-smaland', label: t('locations.east') },
+                          { value: 'norr-mitt', label: t('locations.north') }
                         ]}
                         value={filters.locations}
                         onChange={(value) => setFilters({...filters, locations: value})}
-                        placeholder="Välj platser"
+                        placeholder={t('selectLocations')}
                       />
                     </div>
 
@@ -482,13 +482,13 @@ export default function SearchPageContent() {
                         label={t('revenueRange')}
                         icon={<BarChart3 className="w-4 h-4" />}
                         options={[
-                          { value: '', label: 'Alla omsättningar', description: 'Visa alla' },
-                          { value: '0-1', label: '0-1 MSEK', description: 'Små företag' },
-                          { value: '1-5', label: '1-5 MSEK', description: 'Mindre företag' },
-                          { value: '5-10', label: '5-10 MSEK', description: 'Mellanstora' },
-                          { value: '10-25', label: '10-25 MSEK', description: 'Större företag' },
-                          { value: '25-50', label: '25-50 MSEK', description: 'Stora företag' },
-                          { value: '50+', label: '50+ MSEK', description: 'Mycket stora' }
+                          { value: '', label: t('revenueOptions.all'), description: t('revenueOptions.showAll') },
+                          { value: '0-1', label: t('revenueOptions.0-1'), description: t('revenueOptions.0-1Desc') },
+                          { value: '1-5', label: t('revenueOptions.1-5'), description: t('revenueOptions.1-5Desc') },
+                          { value: '5-10', label: t('revenueOptions.5-10'), description: t('revenueOptions.5-10Desc') },
+                          { value: '10-25', label: t('revenueOptions.10-25'), description: t('revenueOptions.10-25Desc') },
+                          { value: '25-50', label: t('revenueOptions.25-50'), description: t('revenueOptions.25-50Desc') },
+                          { value: '50+', label: t('revenueOptions.50+'), description: t('revenueOptions.50+Desc') }
                         ]}
                         value={filters.revenueRange}
                         onChange={(value) => setFilters({...filters, revenueRange: value})}
@@ -501,11 +501,11 @@ export default function SearchPageContent() {
                         label={t('sortBy')}
                         icon={<TrendingUp className="w-4 h-4" />}
                         options={[
-                          { value: 'newest', label: 'Nyast först', icon: <Calendar className="w-4 h-4" /> },
-                          { value: 'price-low', label: 'Lägsta pris', icon: <DollarSign className="w-4 h-4" /> },
-                          { value: 'price-high', label: 'Högsta pris', icon: <DollarSign className="w-4 h-4" /> },
-                          { value: 'revenue-high', label: 'Högsta omsättning', icon: <BarChart3 className="w-4 h-4" /> },
-                          { value: 'most-viewed', label: 'Mest visade', icon: <TrendingUp className="w-4 h-4" /> }
+                          { value: 'newest', label: t('sortOptions.newest'), icon: <Calendar className="w-4 h-4" /> },
+                          { value: 'price-low', label: t('sortOptions.priceLow'), icon: <DollarSign className="w-4 h-4" /> },
+                          { value: 'price-high', label: t('sortOptions.priceHigh'), icon: <DollarSign className="w-4 h-4" /> },
+                          { value: 'revenue-high', label: t('sortOptions.revenueHigh'), icon: <BarChart3 className="w-4 h-4" /> },
+                          { value: 'most-viewed', label: t('sortOptions.mostViewed'), icon: <TrendingUp className="w-4 h-4" /> }
                         ]}
                         value={filters.sortBy}
                         onChange={(value) => setFilters({...filters, sortBy: value})}
@@ -515,7 +515,7 @@ export default function SearchPageContent() {
 
                   {/* Price Range Slider - Compact */}
                   <div className="mb-4 sm:mb-6">
-                    <div className="text-xs font-medium text-gray-700 mb-2">Prisintervall</div>
+                    <div className="text-xs font-medium text-gray-700 mb-2">{t('priceRange')}</div>
                     <div className="bg-gray-50 rounded-lg p-2 sm:p-3">
                       <PriceRangeSlider
                         min={0}
@@ -533,28 +533,28 @@ export default function SearchPageContent() {
                     {/* Employees - Multi-Select */}
                     <div>
                       <MultiSelect
-                        label="Antal anställda"
+                        label={t('employees')}
                         icon={<Users className="w-4 h-4" />}
                         options={[
-                          { value: '1-5', label: '1-5 anställda' },
-                          { value: '6-10', label: '6-10 anställda' },
-                          { value: '11-25', label: '11-25 anställda' },
-                          { value: '26-50', label: '26-50 anställda' }
+                          { value: '1-5', label: t('employeeOptions.1-5') },
+                          { value: '6-10', label: t('employeeOptions.6-10') },
+                          { value: '11-25', label: t('employeeOptions.11-25') },
+                          { value: '26-50', label: t('employeeOptions.26-50') }
                         ]}
                         value={filters.employees}
                         onChange={(value) => setFilters({...filters, employees: value})}
-                        placeholder="Antal anställda"
+                        placeholder={t('employees')}
                       />
                     </div>
 
                     {/* Verified Status */}
                     <AdvancedFilterDropdown
-                      label="Verifiering"
+                      label={t('verification')}
                       icon={<Shield className="w-4 h-4" />}
                       options={[
-                        { value: 'all', label: 'Alla annonser' },
-                        { value: 'verified', label: 'Endast verifierade', icon: <Shield className="w-4 h-4 text-success" /> },
-                        { value: 'unverified', label: 'Ej verifierade' }
+                        { value: 'all', label: t('verificationOptions.all') },
+                        { value: 'verified', label: t('verificationOptions.verified'), icon: <Shield className="w-4 h-4 text-success" /> },
+                        { value: 'unverified', label: t('verificationOptions.unverified') }
                       ]}
                       value={filters.verified}
                       onChange={(value) => setFilters({...filters, verified: value})}
@@ -562,12 +562,12 @@ export default function SearchPageContent() {
 
                     {/* Broker Status */}
                     <AdvancedFilterDropdown
-                      label="Förmedlare"
+                      label={t('broker')}
                       icon={<Briefcase className="w-4 h-4" />}
                       options={[
-                        { value: 'all', label: 'Alla säljare' },
-                        { value: 'broker', label: 'Via mäklare', icon: <Briefcase className="w-4 h-4" /> },
-                        { value: 'owner', label: 'Direkt från ägare' }
+                        { value: 'all', label: t('brokerOptions.all') },
+                        { value: 'broker', label: t('brokerOptions.broker'), icon: <Briefcase className="w-4 h-4" /> },
+                        { value: 'owner', label: t('brokerOptions.owner') }
                       ]}
                       value={filters.broker}
                       onChange={(value) => setFilters({...filters, broker: value})}
@@ -576,21 +576,21 @@ export default function SearchPageContent() {
                     {/* Why Selling - Multi-Select */}
                     <div>
                       <MultiSelect
-                        label="Anledning till försäljning"
+                        label={t('whySelling')}
                         icon={<HelpCircle className="w-4 h-4" />}
                         options={[
-                          { value: 'pension', label: 'Ägarens pension/generationsskifte' },
-                          { value: 'fokus', label: 'Fokus på annat bolag/projekt' },
-                          { value: 'tillväxt', label: 'Tillväxtpartner söks/kapitalbehov' },
-                          { value: 'strategisk', label: 'Strategisk avyttring' },
-                          { value: 'flytt', label: 'Flytt/ändrad livssituation' },
-                          { value: 'kompetens', label: 'Kompetensväxling behövs' },
-                          { value: 'sjukdom', label: 'Sjukdom/utbrändhet i ägarled' },
-                          { value: 'marknad', label: 'Marknads-/regelförändringar' }
+                          { value: 'pension', label: t('whySellingOptions.pension') },
+                          { value: 'fokus', label: t('whySellingOptions.fokus') },
+                          { value: 'tillväxt', label: t('whySellingOptions.tillväxt') },
+                          { value: 'strategisk', label: t('whySellingOptions.strategisk') },
+                          { value: 'flytt', label: t('whySellingOptions.flytt') },
+                          { value: 'kompetens', label: t('whySellingOptions.kompetens') },
+                          { value: 'sjukdom', label: t('whySellingOptions.sjukdom') },
+                          { value: 'marknad', label: t('whySellingOptions.marknad') }
                         ]}
                         value={filters.whySelling}
                         onChange={(value) => setFilters({...filters, whySelling: value})}
-                        placeholder="Anledning till försäljning"
+                        placeholder={t('whySelling')}
                       />
                     </div>
                   </div>

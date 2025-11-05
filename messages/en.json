@@ -375,14 +375,66 @@
     "sortBy": "Sort by",
     "revenueRange": "Revenue",
     "revenueOptions": {
+      "all": "All revenue",
+      "showAll": "Show all",
       "0-1": "0-1 MSEK",
       "0-1Desc": "Small companies",
       "1-5": "1-5 MSEK",
       "1-5Desc": "Smaller companies",
+      "5-10": "5-10 MSEK",
+      "5-10Desc": "Medium-sized",
       "10-25": "10-25 MSEK",
       "10-25Desc": "Larger companies",
       "25-50": "25-50 MSEK",
-      "25-50Desc": "Large companies"
+      "25-50Desc": "Large companies",
+      "50+": "50+ MSEK",
+      "50+Desc": "Very large"
+    },
+    "sortOptions": {
+      "newest": "Newest first",
+      "priceLow": "Lowest price",
+      "priceHigh": "Highest price",
+      "revenueHigh": "Highest revenue",
+      "mostViewed": "Most viewed"
+    },
+    "priceRange": "Price range",
+    "selectLocations": "Select locations",
+    "locations": {
+      "stockholm": "Stockholm & Mälardalen",
+      "west": "West Sweden",
+      "south": "South",
+      "east": "East & Småland",
+      "north": "North & Central"
+    },
+    "employees": "Number of employees",
+    "employeeOptions": {
+      "1-5": "1-5 employees",
+      "6-10": "6-10 employees",
+      "11-25": "11-25 employees",
+      "26-50": "26-50 employees"
+    },
+    "verification": "Verification",
+    "verificationOptions": {
+      "all": "All listings",
+      "verified": "Verified only",
+      "unverified": "Unverified"
+    },
+    "broker": "Broker",
+    "brokerOptions": {
+      "all": "All sellers",
+      "broker": "Via broker",
+      "owner": "Direct from owner"
+    },
+    "whySelling": "Reason for sale",
+    "whySellingOptions": {
+      "pension": "Owner's retirement/succession",
+      "fokus": "Focus on other company/project",
+      "tillväxt": "Growth partner sought/capital need",
+      "strategisk": "Strategic divestment",
+      "flytt": "Relocation/changed life situation",
+      "kompetens": "Skills transition needed",
+      "sjukdom": "Illness/burnout in ownership",
+      "marknad": "Market/regulatory changes"
     },
     "completeProfile": "You need to complete your profile before you can search",
     "selectIndustries": "Select industries",

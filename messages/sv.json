@@ -375,14 +375,66 @@
     "sortBy": "Sortera efter",
     "revenueRange": "Omsättning",
     "revenueOptions": {
+      "all": "Alla omsättningar",
+      "showAll": "Visa alla",
       "0-1": "0-1 MSEK",
       "0-1Desc": "Små företag",
       "1-5": "1-5 MSEK",
       "1-5Desc": "Mindre företag",
+      "5-10": "5-10 MSEK",
+      "5-10Desc": "Mellanstora",
       "10-25": "10-25 MSEK",
       "10-25Desc": "Större företag",
       "25-50": "25-50 MSEK",
-      "25-50Desc": "Stora företag"
+      "25-50Desc": "Stora företag",
+      "50+": "50+ MSEK",
+      "50+Desc": "Mycket stora"
+    },
+    "sortOptions": {
+      "newest": "Nyast först",
+      "priceLow": "Lägsta pris",
+      "priceHigh": "Högsta pris",
+      "revenueHigh": "Högsta omsättning",
+      "mostViewed": "Mest visade"
+    },
+    "priceRange": "Prisintervall",
+    "selectLocations": "Välj platser",
+    "locations": {
+      "stockholm": "Stockholm & Mälardalen",
+      "west": "Västsverige",
+      "south": "Syd",
+      "east": "Östra & Småland",
+      "north": "Norr & Mitt"
+    },
+    "employees": "Antal anställda",
+    "employeeOptions": {
+      "1-5": "1-5 anställda",
+      "6-10": "6-10 anställda",
+      "11-25": "11-25 anställda",
+      "26-50": "26-50 anställda"
+    },
+    "verification": "Verifiering",
+    "verificationOptions": {
+      "all": "Alla annonser",
+      "verified": "Endast verifierade",
+      "unverified": "Ej verifierade"
+    },
+    "broker": "Förmedlare",
+    "brokerOptions": {
+      "all": "Alla säljare",
+      "broker": "Via mäklare",
+      "owner": "Direkt från ägare"
+    },
+    "whySelling": "Anledning till försäljning",
+    "whySellingOptions": {
+      "pension": "Ägarens pension/generationsskifte",
+      "fokus": "Fokus på annat bolag/projekt",
+      "tillväxt": "Tillväxtpartner söks/kapitalbehov",
+      "strategisk": "Strategisk avyttring",
+      "flytt": "Flytt/ändrad livssituation",
+      "kompetens": "Kompetensväxling behövs",
+      "sjukdom": "Sjukdom/utbrändhet i ägarled",
+      "marknad": "Marknads-/regelförändringar"
     },
     "completeProfile": "Du behöver slutföra din profil innan du kan söka",
     "selectIndustries": "Välj branscher",
