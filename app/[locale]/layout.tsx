@@ -21,13 +21,23 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params
   
+  console.log('🔍 [Layout] Rendering layout for locale:', locale)
+  
   // Validate locale
   if (!locales.includes(locale as any)) {
+    console.error('❌ [Layout] Invalid locale:', locale)
     notFound()
   }
 
   // Load messages for the locale
-  const messages = await getMessages()
+  let messages
+  try {
+    messages = await getMessages()
+    console.log('✅ [Layout] Messages loaded successfully for locale:', locale)
+  } catch (error) {
+    console.error('❌ [Layout] Error loading messages:', error)
+    throw error
+  }
 
   return (
     <html lang={locale}>

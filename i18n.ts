@@ -6,10 +6,19 @@ export type Locale = (typeof locales)[number]
 
 export default getRequestConfig(async ({ locale }) => {
   // Validate that the incoming `locale` parameter is valid
-  if (!locale || !locales.includes(locale as Locale)) notFound()
+  if (!locale || !locales.includes(locale as Locale)) {
+    console.error('❌ [i18n] Invalid locale:', locale)
+    notFound()
+  }
 
-  return {
-    locale: locale as string,
-    messages: (await import(`./messages/${locale}.json`)).default
+  try {
+    const messages = (await import(`./messages/${locale}.json`)).default
+    return {
+      locale: locale as string,
+      messages
+    }
+  } catch (error) {
+    console.error('❌ [i18n] Error loading messages for locale:', locale, error)
+    notFound()
   }
 })
