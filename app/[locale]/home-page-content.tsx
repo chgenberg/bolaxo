@@ -1,41 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import { useState, useEffect, useMemo } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, ArrowRight, TrendingUp, ChevronDown, X, CheckCircle, Lightbulb, Zap, Lock, MessageCircle } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
-
-const reviews = [
-  {
-    text: "Fantastisk plattform för företagsförsäljning. Processen var smidig och professionell från start till mål.",
-    author: "Maria Andersson",
-    company: "VD, TechStart AB",
-    rating: 5,
-    date: "Oktober 2024"
-  },
-  {
-    text: "Värderingen var spot on och hjälpte oss att sätta rätt pris. Fick kontakt med seriösa köpare inom en vecka.",
-    author: "Johan Eriksson",
-    company: "Grundare, Eriksson Bygg",
-    rating: 5,
-    date: "September 2024"
-  },
-  {
-    text: "Professionell hantering av hela processen. NDA-funktionen och säker datarum gjorde due diligence enkelt.",
-    author: "Anna Lindberg",
-    company: "Ägare, Lindbergs Konsult",
-    rating: 5,
-    date: "November 2024"
-  }
-]
 
 export default function HomePageContent() {
   const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)
   const [activeReview, setActiveReview] = useState(0)
   const [selectedStep, setSelectedStep] = useState<number | null>(null)
   const t = useTranslations('home')
+  const locale = useLocale()
+
+  const reviews = useMemo(() => t.raw('reviews'), [t])
 
   // Auto-rotate reviews
   useEffect(() => {
@@ -115,7 +94,7 @@ export default function HomePageContent() {
               {/* Small discreet buyer link */}
               <div className="mt-3 sm:mt-4 text-center">
                 <Link 
-                  href="/kopare" 
+                  href={`/${locale}/kopare`} 
                   className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-navy transition-colors font-medium"
                 >
                   {t('buyerLink')} <span className="text-gray-400">→</span>
@@ -145,33 +124,33 @@ export default function HomePageContent() {
                 num: 1, 
                 title: t('step1'), 
                 desc: t('step1Desc'),
-                link: "/registrera",
+                link: `/${locale}/registrera`,
                 image: "/1.png",
-                cashback: "Gratis"
+                cashback: t('steps.cashback.free')
               },
               { 
                 num: 2, 
                 title: t('step2'), 
                 desc: t('step2Desc'),
-                link: "/vardering",
+                link: `/${locale}/vardering`,
                 image: "/2.png",
-                cashback: "5 min"
+                cashback: t('steps.cashback.fiveMin')
               },
               { 
                 num: 3, 
                 title: t('step3'), 
                 desc: t('step3Desc'),
-                link: "/salja",
+                link: `/${locale}/salja`,
                 image: "/3.png",
-                cashback: "87% match"
+                cashback: t('steps.cashback.match')
               },
               { 
                 num: 4, 
                 title: t('step4'), 
                 desc: t('step4Desc'),
-                link: "/salja/start",
+                link: `/${locale}/salja/start`,
                 image: "/4.png",
-                cashback: "100% säkert"
+                cashback: t('steps.cashback.secure')
               }
             ].map((step, index) => (
               <Link
@@ -226,7 +205,7 @@ export default function HomePageContent() {
           {/* CTA Button */}
           <div className="text-center mt-8 sm:mt-12">
             <Link
-              href="/salja/start"
+              href={`/${locale}/salja/start`}
               className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-accent-pink text-primary-navy font-bold rounded-xl hover:shadow-xl transition-all transform hover:scale-105 text-sm sm:text-base"
             >
               {t('getStarted')}
@@ -247,22 +226,22 @@ export default function HomePageContent() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 auto-rows-auto">
             {[
               {
-                link: "/sok",
+                link: `/${locale}/sok`,
                 image: "/Badringar/badring1.png",
                 shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2"
               },
               {
-                link: "/salja",
+                link: `/${locale}/salja`,
                 image: "/Badringar/badring2.png",
                 shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
               },
               {
-                link: "/kopare",
+                link: `/${locale}/kopare`,
                 image: "/Badringar/badring3.png",
                 shape: "col-span-1 row-span-1"
               },
               {
-                link: "/priser",
+                link: `/${locale}/priser`,
                 image: "/Badringar/badring4.png",
                 shape: "col-span-1 row-span-1"
               },
@@ -272,7 +251,7 @@ export default function HomePageContent() {
                 shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2"
               },
               {
-                link: "/vardering",
+                link: `/${locale}/vardering`,
                 image: "/Badringar/badring6.png",
                 shape: "col-span-1 row-span-1"
               },
@@ -454,10 +433,10 @@ export default function HomePageContent() {
 
               <div className="text-center mb-8">
                 <h2 className="text-4xl font-black text-primary-navy uppercase tracking-wide mb-4">
-                  {selectedStep === 1 && "STEG 1: REGISTRERA"}
-                  {selectedStep === 2 && "STEG 2: VÄRDERA"}
-                  {selectedStep === 3 && "STEG 3: MATCHA"}
-                  {selectedStep === 4 && "STEG 4: FÖRHANDLA"}
+                  {selectedStep === 1 && t('stepModal.step1.title')}
+                  {selectedStep === 2 && t('stepModal.step2.title')}
+                  {selectedStep === 3 && t('stepModal.step3.title')}
+                  {selectedStep === 4 && t('stepModal.step4.title')}
                 </h2>
                 <div className="w-24 h-1 bg-gradient-to-r from-accent-pink to-primary-navy mx-auto" />
               </div>
@@ -466,9 +445,9 @@ export default function HomePageContent() {
                 {selectedStep === 1 && (
                   <>
                     <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
-                      <h3 className="text-2xl font-bold text-primary-navy mb-3">Börja din resa på BOLAXO</h3>
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">{t('stepModal.step1.header')}</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        Registrering på BOLAXO är helt enkelt och tar bara 2-3 minuter. Du behöver bara fylla i några grundläggande uppgifter om dig själv och ditt företag för att komma igång.
+                        {t('stepModal.step1.description')}
                       </p>
                     </div>
 
@@ -476,29 +455,29 @@ export default function HomePageContent() {
                       <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
                         <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
                         <div>
-                          <h4 className="font-bold text-primary-navy mb-1">Skapa ditt konto</h4>
-                          <p className="text-gray-600 text-sm">Använd e-post eller BankID för att registrera dig. BankID ger dig extra säkerhet och verifiering från start.</p>
+                          <h4 className="font-bold text-primary-navy mb-1">{t('stepModal.step1.step1Title')}</h4>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step1.step1Desc')}</p>
                         </div>
                       </div>
                       <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
                         <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
                         <div>
-                          <h4 className="font-bold text-primary-navy mb-1">Fyll i företagsinformation</h4>
-                          <p className="text-gray-600 text-sm">Berätta om ditt företag: namn, bransch, storlek och vad du söker. Du kan alltid uppdatera denna senare.</p>
+                          <h4 className="font-bold text-primary-navy mb-1">{t('stepModal.step1.step2Title')}</h4>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step1.step2Desc')}</p>
                         </div>
                       </div>
                       <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
                         <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
                         <div>
-                          <h4 className="font-bold text-primary-navy mb-1">Verifiera din identitet</h4>
-                          <p className="text-gray-600 text-sm">Genomför en snabb BankID-verifiering för att låsa upp alla funktioner och få "Verifierad säljare"-badge.</p>
+                          <h4 className="font-bold text-primary-navy mb-1">{t('stepModal.step1.step3Title')}</h4>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step1.step3Desc')}</p>
                         </div>
                       </div>
                       <div className="flex gap-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:shadow-lg transition-all">
                         <div className="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">4</div>
                         <div>
-                          <h4 className="font-bold text-primary-navy mb-1">Du är redo!</h4>
-                          <p className="text-gray-600 text-sm">Nu kan du värdera ditt företag, skapa annonser, få matchningar och börja förhandla med köpare.</p>
+                          <h4 className="font-bold text-primary-navy mb-1">{t('stepModal.step1.step4Title')}</h4>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step1.step4Desc')}</p>
                         </div>
                       </div>
                     </div>
@@ -506,7 +485,7 @@ export default function HomePageContent() {
                     <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                       <div className="flex items-center gap-3">
                         <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                        <p className="text-sm text-green-800"><strong>Helt kostnadsfritt</strong> - Du betalar ingenting för registrering eller för att använda plattformen för att söka köpare.</p>
+                        <p className="text-sm text-green-800"><strong>{t('stepModal.step1.free')}</strong> {t('stepModal.step1.freeDesc')}</p>
                       </div>
                     </div>
                   </>
@@ -515,30 +494,30 @@ export default function HomePageContent() {
                 {selectedStep === 2 && (
                   <>
                     <div className="bg-gradient-to-br from-yellow-50 to-amber-100 rounded-2xl p-6 border border-amber-200">
-                      <h3 className="text-2xl font-bold text-primary-navy mb-3">AI-driven värdering på 5 minuter</h3>
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">{t('stepModal.step2.header')}</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        Vår avancerade värderingsalgoritm analyserar ditt företag från flera vinklar och ger dig ett professionellt värdeintervall - helt gratis. Lämpligt för allt från små startups till etablerade mittenföretag.
+                        {t('stepModal.step2.description')}
                       </p>
                     </div>
 
                     <div>
-                      <h4 className="font-bold text-primary-navy mb-4">Hur fungerar värderingen?</h4>
+                      <h4 className="font-bold text-primary-navy mb-4">{t('stepModal.step2.howWorks')}</h4>
                       <div className="space-y-3">
                         <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1">Finansiell analys</h5>
-                          <p className="text-gray-600 text-sm">Vi analyserar din omsättning, resultat, kassaflöde och tillväxttakt över senaste 3 åren för att skapa en solid grund.</p>
+                          <h5 className="font-bold text-primary-navy mb-1">{t('stepModal.step2.financial.title')}</h5>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step2.financial.desc')}</p>
                         </div>
                         <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1">Branschjämförelse</h5>
-                          <p className="text-gray-600 text-sm">Vi jämför ditt företag med liknande bolag som sålts nyligen för att sätta rätt multipel baserat på marknaden.</p>
+                          <h5 className="font-bold text-primary-navy mb-1">{t('stepModal.step2.comparison.title')}</h5>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step2.comparison.desc')}</p>
                         </div>
                         <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1">Värderingsmetoder</h5>
-                          <p className="text-gray-600 text-sm">Vi använder EBITDA-multipel, avkastningsvärdering och omsättningsmultipel för att triangulera ett rättvist värde.</p>
+                          <h5 className="font-bold text-primary-navy mb-1">{t('stepModal.step2.methods.title')}</h5>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step2.methods.desc')}</p>
                         </div>
                         <div className="bg-white border-l-4 border-amber-500 p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1">Detaljerad rapport</h5>
-                          <p className="text-gray-600 text-sm">Du får en PDF-rapport med värdeintervall, antaganden, diagrammar och konkreta tips för att höja värdet.</p>
+                          <h5 className="font-bold text-primary-navy mb-1">{t('stepModal.step2.report.title')}</h5>
+                          <p className="text-gray-600 text-sm">{t('stepModal.step2.report.desc')}</p>
                         </div>
                       </div>
                     </div>
@@ -546,7 +525,7 @@ export default function HomePageContent() {
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                       <div className="flex items-center gap-3">
                         <Lightbulb className="w-5 h-5 text-amber-600 flex-shrink-0" />
-                        <p className="text-sm text-amber-900"><strong>Tips:</strong> Använd värderingen för att sätta rimligt pris på din annons och ha som utgångspunkt i förhandlingar.</p>
+                        <p className="text-sm text-amber-900"><strong>{t('stepModal.step2.tip')}</strong> {t('stepModal.step2.tipDesc')}</p>
                       </div>
                     </div>
                   </>
@@ -555,42 +534,42 @@ export default function HomePageContent() {
                 {selectedStep === 3 && (
                   <>
                     <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl p-6 border border-pink-200">
-                      <h3 className="text-2xl font-bold text-primary-navy mb-3">Intelligent matchning med rätt köpare</h3>
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">{t('stepModal.step3.header')}</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        Vår AI-algoritm analyserar profiler och behov för att hitta de bästa matchningarna. Vi presenterar bara seriösa, verifierade köpare som faktiskt passar ditt företag.
+                        {t('stepModal.step3.description')}
                       </p>
                     </div>
 
                     <div>
-                      <h4 className="font-bold text-primary-navy mb-4">Så funkar matchningen</h4>
+                      <h4 className="font-bold text-primary-navy mb-4">{t('stepModal.step3.howWorks')}</h4>
                       <div className="bg-white p-6 rounded-2xl border-2 border-pink-200 mb-4">
                         <div className="space-y-3">
                           <div className="flex gap-4 mb-4">
                             <Zap className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
                             <div>
-                              <h5 className="font-bold text-primary-navy mb-2">AI-analys av köpare</h5>
-                              <p className="text-gray-600">Systemet analyserar vad varje köpare söker: bransch, region, storlek, EBITDA-nivå och andra kriterier.</p>
+                              <h5 className="font-bold text-primary-navy mb-2">{t('stepModal.step3.aiAnalysis.title')}</h5>
+                              <p className="text-gray-600">{t('stepModal.step3.aiAnalysis.desc')}</p>
                             </div>
                           </div>
                           <div className="flex gap-4 mb-4">
                             <Zap className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
                             <div>
-                              <h5 className="font-bold text-primary-navy mb-2">Automatisk matchning</h5>
-                              <p className="text-gray-600">Din annons matchas automatiskt med köpare vars kriterier stämmer överens med din profil.</p>
+                              <h5 className="font-bold text-primary-navy mb-2">{t('stepModal.step3.automatic.title')}</h5>
+                              <p className="text-gray-600">{t('stepModal.step3.automatic.desc')}</p>
                             </div>
                           </div>
                           <div className="flex gap-4 mb-4">
                             <CheckCircle className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
                             <div>
-                              <h5 className="font-bold text-primary-navy mb-2">Verifierade köpare</h5>
-                              <p className="text-gray-600">Alla köpare är verifierade med BankID, vilket garanterar att de är seriösa och relevanta.</p>
+                              <h5 className="font-bold text-primary-navy mb-2">{t('stepModal.step3.verified.title')}</h5>
+                              <p className="text-gray-600">{t('stepModal.step3.verified.desc')}</p>
                             </div>
                           </div>
                           <div className="flex gap-4">
                             <Lock className="w-6 h-6 text-pink-500 flex-shrink-0 mt-1" />
                             <div>
-                              <h5 className="font-bold text-primary-navy mb-2">Din kontroll bevaras</h5>
-                              <p className="text-gray-600">Du bestämmer vad matchningar får se innan de signerar NDA - du kan vara helt anonym om du vill.</p>
+                              <h5 className="font-bold text-primary-navy mb-2">{t('stepModal.step3.control.title')}</h5>
+                              <p className="text-gray-600">{t('stepModal.step3.control.desc')}</p>
                             </div>
                           </div>
                         </div>
@@ -598,7 +577,7 @@ export default function HomePageContent() {
                     </div>
 
                     <div className="bg-pink-50 border border-pink-200 rounded-xl p-4">
-                      <p className="text-sm text-pink-900"><strong>⚡ Spara tid:</strong> Istället för att vänta på slumpmässiga förfrågningar får du relevanta köpare presenterade automatiskt.</p>
+                      <p className="text-sm text-pink-900"><strong>{t('stepModal.step3.saveTime')}</strong> {t('stepModal.step3.saveTimeDesc')}</p>
                     </div>
                   </>
                 )}
@@ -606,9 +585,9 @@ export default function HomePageContent() {
                 {selectedStep === 4 && (
                   <>
                     <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200">
-                      <h3 className="text-2xl font-bold text-primary-navy mb-3">Säker förhandling från start till mål</h3>
+                      <h3 className="text-2xl font-bold text-primary-navy mb-3">{t('stepModal.step4.header')}</h3>
                       <p className="text-gray-700 leading-relaxed">
-                        BOLAXO säkerställer en trygg och professionell förhandlingsprocess med automatisk NDA, säkert datarum och juridiska verktyg som sparar både tid och pengar.
+                        {t('stepModal.step4.description')}
                       </p>
                     </div>
 
@@ -616,37 +595,37 @@ export default function HomePageContent() {
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
                         <div className="flex items-center gap-3 mb-2">
                           <Lock className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy">Automatisk NDA</h5>
+                          <h5 className="font-bold text-primary-navy">{t('stepModal.step4.nda.title')}</h5>
                         </div>
-                        <p className="text-gray-600 text-sm">Innan köparen ser känslig information måste de signera digitalt sekretesspakt med BankID. Du är alltid skyddad.</p>
+                        <p className="text-gray-600 text-sm">{t('stepModal.step4.nda.desc')}</p>
                       </div>
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
                         <div className="flex items-center gap-3 mb-2">
                           <MessageCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy">Krypterad kommunikation</h5>
+                          <h5 className="font-bold text-primary-navy">{t('stepModal.step4.encrypted.title')}</h5>
                         </div>
-                        <p className="text-gray-600 text-sm">Diskutera detaljer genom plattformens inbyggda meddelandesystem med end-to-end kryptering. Ingen osäkerhet.</p>
+                        <p className="text-gray-600 text-sm">{t('stepModal.step4.encrypted.desc')}</p>
                       </div>
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
                         <div className="flex items-center gap-3 mb-2">
                           <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy">Juridiska mallar</h5>
+                          <h5 className="font-bold text-primary-navy">{t('stepModal.step4.templates.title')}</h5>
                         </div>
-                        <p className="text-gray-600 text-sm">Få mallar för LOI, SPA och andra kritiska dokument - sparar massiva advokatkostnader och accelererar processen.</p>
+                        <p className="text-gray-600 text-sm">{t('stepModal.step4.templates.desc')}</p>
                       </div>
                       <div className="bg-white border-l-4 border-emerald-500 p-4 rounded-r-lg">
                         <div className="flex items-center gap-3 mb-2">
                           <TrendingUp className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy">Deal Management</h5>
+                          <h5 className="font-bold text-primary-navy">{t('stepModal.step4.dealManagement.title')}</h5>
                         </div>
-                        <p className="text-gray-600 text-sm">Spåra progress, milestolpar, dokument och betalningar på ett ställe. Allt organiserat och transparent.</p>
+                        <p className="text-gray-600 text-sm">{t('stepModal.step4.dealManagement.desc')}</p>
                       </div>
                     </div>
 
                     <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
                       <div className="flex items-center gap-3">
                         <Zap className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                        <p className="text-sm text-emerald-900"><strong>Resultat:</strong> Typiskt 60-90 dagar från LOI till avslut - mycket snabbare än traditionell väg med externa mäklare.</p>
+                        <p className="text-sm text-emerald-900"><strong>{t('stepModal.step4.result')}</strong> {t('stepModal.step4.resultDesc')}</p>
                       </div>
                     </div>
                   </>

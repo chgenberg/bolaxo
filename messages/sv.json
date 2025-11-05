@@ -38,7 +38,126 @@
     "ctaButton": "Starta gratis värdering",
     "howEasyTitle": "Så enkelt säljer du ditt företag",
     "howEasySubtitle": "Från registrering till avslut på rekordtid",
-    "satisfiedSellers": "500+ nöjda säljare"
+    "satisfiedSellers": "500+ nöjda säljare",
+    "steps": {
+      "cashback": {
+        "free": "Gratis",
+        "fiveMin": "5 min",
+        "match": "87% match",
+        "secure": "100% säkert"
+      }
+    },
+    "reviews": [
+      {
+        "text": "Fantastisk plattform för företagsförsäljning. Processen var smidig och professionell från start till mål.",
+        "author": "Maria Andersson",
+        "company": "VD, TechStart AB",
+        "rating": 5,
+        "date": "Oktober 2024"
+      },
+      {
+        "text": "Värderingen var spot on och hjälpte oss att sätta rätt pris. Fick kontakt med seriösa köpare inom en vecka.",
+        "author": "Johan Eriksson",
+        "company": "Grundare, Eriksson Bygg",
+        "rating": 5,
+        "date": "September 2024"
+      },
+      {
+        "text": "Professionell hantering av hela processen. NDA-funktionen och säker datarum gjorde due diligence enkelt.",
+        "author": "Anna Lindberg",
+        "company": "Ägare, Lindbergs Konsult",
+        "rating": 5,
+        "date": "November 2024"
+      }
+    ],
+    "stepModal": {
+      "step1": {
+        "title": "STEG 1: REGISTRERA",
+        "header": "Börja din resa på BOLAXO",
+        "description": "Registrering på BOLAXO är helt enkelt och tar bara 2-3 minuter. Du behöver bara fylla i några grundläggande uppgifter om dig själv och ditt företag för att komma igång.",
+        "step1Title": "Skapa ditt konto",
+        "step1Desc": "Använd e-post eller BankID för att registrera dig. BankID ger dig extra säkerhet och verifiering från start.",
+        "step2Title": "Fyll i företagsinformation",
+        "step2Desc": "Berätta om ditt företag: namn, bransch, storlek och vad du söker. Du kan alltid uppdatera denna senare.",
+        "step3Title": "Verifiera din identitet",
+        "step3Desc": "Genomför en snabb BankID-verifiering för att låsa upp alla funktioner och få \"Verifierad säljare\"-badge.",
+        "step4Title": "Du är redo!",
+        "step4Desc": "Nu kan du värdera ditt företag, skapa annonser, få matchningar och börja förhandla med köpare.",
+        "free": "Helt kostnadsfritt",
+        "freeDesc": "- Du betalar ingenting för registrering eller för att använda plattformen för att söka köpare."
+      },
+      "step2": {
+        "title": "STEG 2: VÄRDERA",
+        "header": "AI-driven värdering på 5 minuter",
+        "description": "Vår avancerade värderingsalgoritm analyserar ditt företag från flera vinklar och ger dig ett professionellt värdeintervall - helt gratis. Lämpligt för allt från små startups till etablerade mittenföretag.",
+        "howWorks": "Hur fungerar värderingen?",
+        "financial": {
+          "title": "Finansiell analys",
+          "desc": "Vi analyserar din omsättning, resultat, kassaflöde och tillväxttakt över senaste 3 åren för att skapa en solid grund."
+        },
+        "comparison": {
+          "title": "Branschjämförelse",
+          "desc": "Vi jämför ditt företag med liknande bolag som sålts nyligen för att sätta rätt multipel baserat på marknaden."
+        },
+        "methods": {
+          "title": "Värderingsmetoder",
+          "desc": "Vi använder EBITDA-multipel, avkastningsvärdering och omsättningsmultipel för att triangulera ett rättvist värde."
+        },
+        "report": {
+          "title": "Detaljerad rapport",
+          "desc": "Du får en PDF-rapport med värdeintervall, antaganden, diagrammar och konkreta tips för att höja värdet."
+        },
+        "tip": "Tips:",
+        "tipDesc": "Använd värderingen för att sätta rimligt pris på din annons och ha som utgångspunkt i förhandlingar."
+      },
+      "step3": {
+        "title": "STEG 3: MATCHA",
+        "header": "Intelligent matchning med rätt köpare",
+        "description": "Vår AI-algoritm analyserar profiler och behov för att hitta de bästa matchningarna. Vi presenterar bara seriösa, verifierade köpare som faktiskt passar ditt företag.",
+        "howWorks": "Så funkar matchningen",
+        "aiAnalysis": {
+          "title": "AI-analys av köpare",
+          "desc": "Systemet analyserar vad varje köpare söker: bransch, region, storlek, EBITDA-nivå och andra kriterier."
+        },
+        "automatic": {
+          "title": "Automatisk matchning",
+          "desc": "Din annons matchas automatiskt med köpare vars kriterier stämmer överens med din profil."
+        },
+        "verified": {
+          "title": "Verifierade köpare",
+          "desc": "Alla köpare är verifierade med BankID, vilket garanterar att de är seriösa och relevanta."
+        },
+        "control": {
+          "title": "Din kontroll bevaras",
+          "desc": "Du bestämmer vad matchningar får se innan de signerar NDA - du kan vara helt anonym om du vill."
+        },
+        "saveTime": "⚡ Spara tid:",
+        "saveTimeDesc": "Istället för att vänta på slumpmässiga förfrågningar får du relevanta köpare presenterade automatiskt."
+      },
+      "step4": {
+        "title": "STEG 4: FÖRHANDLA",
+        "header": "Säker förhandling från start till mål",
+        "description": "BOLAXO säkerställer en trygg och professionell förhandlingsprocess med automatisk NDA, säkert datarum och juridiska verktyg som sparar både tid och pengar.",
+        "nda": {
+          "title": "Automatisk NDA",
+          "desc": "Innan köparen ser känslig information måste de signera digitalt sekretesspakt med BankID. Du är alltid skyddad."
+        },
+        "encrypted": {
+          "title": "Krypterad kommunikation",
+          "desc": "Diskutera detaljer genom plattformens inbyggda meddelandesystem med end-to-end kryptering. Ingen osäkerhet."
+        },
+        "templates": {
+          "title": "Juridiska mallar",
+          "desc": "Få mallar för LOI, SPA och andra kritiska dokument - sparar massiva advokatkostnader och accelererar processen."
+        },
+        "dealManagement": {
+          "title": "Deal Management",
+          "desc": "Spåra progress, milstolpar, dokument och betalningar på ett ställe. Allt organiserat och transparent."
+        },
+        "result": "Resultat:",
+        "resultDesc": "Typiskt 60-90 dagar från LOI till avslut - mycket snabbare än traditionell väg med externa mäklare."
+      }
+    }
   },
   "header": {
     "forSellers": "För säljare",
