@@ -30,9 +30,10 @@ export default async function LocaleLayout({
   }
 
   // Load messages for the locale
+  // Important: Pass locale explicitly to getMessages() so it can be used in getRequestConfig
   let messages
   try {
-    messages = await getMessages()
+    messages = await getMessages({ locale })
     console.log('✅ [Layout] Messages loaded successfully for locale:', locale)
   } catch (error) {
     console.error('❌ [Layout] Error loading messages:', error)
