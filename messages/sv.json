@@ -166,6 +166,8 @@
     "namePlaceholder": "För- och efternamn",
     "phone": "Telefon",
     "phonePlaceholder": "070-123 45 67",
+    "emailPlaceholder": "ch.genberg@gmail.com",
+    "passwordPlaceholder": "••••••••",
     "creatingAccount": "Skapar konto...",
     "createAccount": "Skapa konto",
     "acceptTerms": "Genom att skapa konto godkänner du våra",

@@ -166,6 +166,8 @@
     "namePlaceholder": "First and last name",
     "phone": "Phone",
     "phonePlaceholder": "+46 70 123 45 67",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "••••••••",
     "creatingAccount": "Creating account...",
     "createAccount": "Create account",
     "acceptTerms": "By creating an account you accept our",
