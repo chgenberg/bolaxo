@@ -329,5 +329,151 @@
     "allVerified": "Alla annonser är verifierade",
     "results": "resultat",
     "adjustFilters": "Prova att justera dina filter eller sökord för att se fler resultat"
+  },
+  "salja": {
+    "heroTitle": "Från annons till avslut – steg för steg",
+    "heroSubtitle": "Vi automatiserar det komplicerade och ger dig full kontroll över processen",
+    "processTitle": "Processen i 5 steg",
+    "sellerLabel": "SÄLJARE",
+    "steps": {
+      "step1": {
+        "title": "Skapa annonsen",
+        "shortTitle": "Skapa annonsen",
+        "description": "Fyll i nyckeltal och relevant data, lägg till bilder och en kort pitch. Behöver du ett komplett pitchdeck? Vi fixar det åt dig.",
+        "time": "8-12 min"
+      },
+      "step2": {
+        "title": "Publicera och nå köpare",
+        "shortTitle": "Publicera och nå köpare",
+        "description": "Annonsen pushas till bevakningar och topplistor. Köpare verifieras och kontaktar dig via plattformen. Du ser livedata på visningar och förfrågningar från potentiella köpare.",
+        "time": "Löpande"
+      },
+      "step3": {
+        "title": "NDA & frågor",
+        "shortTitle": "NDA & frågor",
+        "description": "Köpare signerar NDA med BankID och kan ställa frågor. Du får mail / pushnotiser vid nya NDA-förfrågningar och väljer själv att godkänna eller avvisa. Du kan vara helt anonym tills du har godkänt NDA.",
+        "time": "Efter behov"
+      },
+      "step4": {
+        "title": "Datarum & DD",
+        "shortTitle": "Datarum & DD",
+        "description": "Dela rätt dokument med rätt personer och följ intresset i realtid. Säker dokumentlagring med versionshistorik, vattenmärkning och logg över visningar. Ta emot indikativa bud (LOI) via ett strukturerat formulär.",
+        "time": "Efter behov"
+      },
+      "step5": {
+        "title": "LOI till avslut",
+        "shortTitle": "LOI till avslut",
+        "description": "Starta den formella försäljningen med våra mallar och en milstolpsplan. Vi effektiviserar processen och minimerar onödigt arbete så att jurist/revisor kliver in först när det verkligen behövs—det sparar både tid och pengar. Vill du ha hjälp med slutförhandling och avtal? Vi matchar dig med rätt rådgivare.",
+        "time": "60-90 dagar"
+      }
+    },
+    "ndaComparison": {
+      "title": "FÖRE VS Efter NDA",
+      "before": {
+        "title": "FÖRE NDA",
+        "label": "Publik info",
+        "items": [
+          "Bransch & typ av företag",
+          "Ort/region",
+          "Omsättningsintervall",
+          "Antal anställda",
+          "Allmän beskrivning"
+        ]
+      },
+      "after": {
+        "title": "Efter NDA",
+        "label": "Låst upp",
+        "items": [
+          "Företagsnamn & org.nr",
+          "Exakta nyckeltal (EBITDA, etc)",
+          "Prisidé & värdering",
+          "Kundlista & kontrakt",
+          "Fullständigt datarum"
+        ]
+      }
+    },
+    "pricing": {
+      "title": "PRISÖVERSIKT",
+      "subtitle": "Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.",
+      "draft": {
+        "name": "Utkast",
+        "price": "0 kr",
+        "period": "Gratis",
+        "features": [
+          "Skapa annons (utkast)",
+          "Automatisk copywriting",
+          "Spara utkast"
+        ],
+        "cta": "Skapa utkast"
+      },
+      "basic": {
+        "name": "Basic",
+        "price": "495 kr",
+        "period": "/ mån",
+        "features": [
+          "Annons i 90 dagar",
+          "Upp till 5 bilder",
+          "Standardplacering",
+          "Standard-NDA",
+          "E-postsupport"
+        ],
+        "cta": "Publicera"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "995 kr",
+        "period": "/ mån",
+        "popular": "POPULÄR",
+        "features": [
+          "Annons i 180 dagar",
+          "Upp till 20 bilder",
+          "Framhävning + Boost",
+          "Prioriterad NDA",
+          "Telefonstöd 9-16"
+        ],
+        "cta": "Välj Pro"
+      },
+      "seeDetails": "Se detaljerad jämförelse"
+    },
+    "faq": {
+      "title": "VANLIGA FRÅGOR",
+      "items": [
+        {
+          "q": "Vad är värderingen och hur funkar den?",
+          "a": "Vår automatiska värdering analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar data från 10 källor automatiskt. Du får ett realistiskt värdeintervall, professionell rapport och konkreta tips. Helt gratis och tar 5 minuter."
+        },
+        {
+          "q": "Kan jag vara helt anonym?",
+          "a": "Ja! Du väljer själv vad som ska synas före NDA. Många väljer att endast visa bransch, region och ungefärlig omsättning tills köparen signerat sekretessavtal med BankID."
+        },
+        {
+          "q": "Vad är Deal Management?",
+          "a": "När köpare lämnat LOI kan ni starta en formell transaktion med automatiska milstolpar, dokumenthantering, betalningsspårning och aktivitetslogg. Bjud in rådgivare med olika rättigheter."
+        },
+        {
+          "q": "Vilka analytics får jag se?",
+          "a": "Du ser: visningar över tid, NDA-förfrågningar, konverteringstratt, geografisk fördelning av köpare, och tillväxtkurva. Uppdateras i realtid på din dashboard."
+        },
+        {
+          "q": "Hur säkerställer ni att köparna är seriösa?",
+          "a": "Alla köpare verifieras med BankID och måste signera NDA. Vi har smart matching (87-94% match score) som hjälper rätt köpare hitta rätt företag."
+        },
+        {
+          "q": "Tar ni provision vid försäljning?",
+          "a": "Nej provision på annonspaket. För Deal Management (optional): 1-3% av transaktionsvärde delat mellan köpare och säljare. Traditionella mäklare tar 8-15%."
+        }
+      ]
+    },
+    "smeKit": {
+      "title": "SME Kit",
+      "description": "Automatisera dina försäljningsprocesser med vår nya SME Kit.",
+      "cta": "Läs mer om SME Kit"
+    },
+    "cta": {
+      "title": "Redo att sälja?",
+      "description": "Börja med en gratis värdering. Det tar 5 minuter och du får en detaljerad rapport direkt.",
+      "button": "Kom igång gratis",
+      "subtext": "Börja med att skapa din första annons."
+    }
   }
 }

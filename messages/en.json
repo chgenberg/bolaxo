@@ -329,5 +329,151 @@
     "allVerified": "All ads are verified",
     "results": "results",
     "adjustFilters": "Try adjusting your filters or search terms to see more results"
+  },
+  "salja": {
+    "heroTitle": "From listing to closing – step by step",
+    "heroSubtitle": "We automate the complex and give you full control over the process",
+    "processTitle": "The process in 5 steps",
+    "sellerLabel": "SELLER",
+    "steps": {
+      "step1": {
+        "title": "Create the listing",
+        "shortTitle": "Create listing",
+        "description": "Fill in key figures and relevant data, add images and a short pitch. Need a complete pitch deck? We'll take care of it for you.",
+        "time": "8-12 min"
+      },
+      "step2": {
+        "title": "Publish and reach buyers",
+        "shortTitle": "Publish & reach",
+        "description": "The listing is pushed to watchlists and top lists. Buyers are verified and contact you via the platform. You see live data on views and inquiries from potential buyers.",
+        "time": "Ongoing"
+      },
+      "step3": {
+        "title": "NDA & questions",
+        "shortTitle": "NDA & questions",
+        "description": "Buyers sign NDA with BankID and can ask questions. You receive email / push notifications for new NDA requests and choose to approve or reject. You can be completely anonymous until you have approved the NDA.",
+        "time": "As needed"
+      },
+      "step4": {
+        "title": "Data room & DD",
+        "shortTitle": "Data room & DD",
+        "description": "Share the right documents with the right people and follow interest in real time. Secure document storage with version history, watermarking and viewing logs. Receive indicative bids (LOI) via a structured form.",
+        "time": "As needed"
+      },
+      "step5": {
+        "title": "LOI to closing",
+        "shortTitle": "LOI to closing",
+        "description": "Start the formal sale with our templates and a milestone plan. We streamline the process and minimize unnecessary work so that lawyer/accountant steps in only when really needed—this saves both time and money. Need help with final negotiation and agreements? We match you with the right advisor.",
+        "time": "60-90 days"
+      }
+    },
+    "ndaComparison": {
+      "title": "BEFORE VS AFTER NDA",
+      "before": {
+        "title": "BEFORE NDA",
+        "label": "Public info",
+        "items": [
+          "Industry & company type",
+          "Location/region",
+          "Revenue range",
+          "Number of employees",
+          "General description"
+        ]
+      },
+      "after": {
+        "title": "AFTER NDA",
+        "label": "Unlocked",
+        "items": [
+          "Company name & registration number",
+          "Exact key figures (EBITDA, etc)",
+          "Price idea & valuation",
+          "Customer list & contracts",
+          "Complete data room"
+        ]
+      }
+    },
+    "pricing": {
+      "title": "PRICING OVERVIEW",
+      "subtitle": "Transparent pricing without hidden fees. Start free, upgrade when you want.",
+      "draft": {
+        "name": "Draft",
+        "price": "0 SEK",
+        "period": "Free",
+        "features": [
+          "Create listing (draft)",
+          "Automatic copywriting",
+          "Save draft"
+        ],
+        "cta": "Create draft"
+      },
+      "basic": {
+        "name": "Basic",
+        "price": "495 SEK",
+        "period": "/ month",
+        "features": [
+          "Listing for 90 days",
+          "Up to 5 images",
+          "Standard placement",
+          "Standard NDA",
+          "Email support"
+        ],
+        "cta": "Publish"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "995 SEK",
+        "period": "/ month",
+        "popular": "POPULAR",
+        "features": [
+          "Listing for 180 days",
+          "Up to 20 images",
+          "Highlighting + Boost",
+          "Priority NDA",
+          "Phone support 9-16"
+        ],
+        "cta": "Choose Pro"
+      },
+      "seeDetails": "See detailed comparison"
+    },
+    "faq": {
+      "title": "FREQUENTLY ASKED QUESTIONS",
+      "items": [
+        {
+          "q": "What is the valuation and how does it work?",
+          "a": "Our automatic valuation analyzes your company using three methods: EBITDA multiple, return valuation and revenue multiple. We automatically fetch data from 10 sources. You get a realistic value range, professional report and concrete tips. Completely free and takes 5 minutes."
+        },
+        {
+          "q": "Can I be completely anonymous?",
+          "a": "Yes! You choose yourself what should be visible before NDA. Many choose to only show industry, region and approximate revenue until the buyer has signed a confidentiality agreement with BankID."
+        },
+        {
+          "q": "What is Deal Management?",
+          "a": "When buyers have submitted LOI, you can start a formal transaction with automatic milestones, document management, payment tracking and activity log. Invite advisors with different rights."
+        },
+        {
+          "q": "What analytics do I get to see?",
+          "a": "You see: views over time, NDA requests, conversion funnel, geographic distribution of buyers, and growth curve. Updated in real time on your dashboard."
+        },
+        {
+          "q": "How do you ensure that buyers are serious?",
+          "a": "All buyers are verified with BankID and must sign NDA. We have smart matching (87-94% match score) that helps the right buyers find the right company."
+        },
+        {
+          "q": "Do you take commission on sale?",
+          "a": "No commission on listing packages. For Deal Management (optional): 1-3% of transaction value split between buyer and seller. Traditional brokers take 8-15%."
+        }
+      ]
+    },
+    "smeKit": {
+      "title": "SME Kit",
+      "description": "Automate your sales processes with our new SME Kit.",
+      "cta": "Learn more about SME Kit"
+    },
+    "cta": {
+      "title": "Ready to sell?",
+      "description": "Start with a free valuation. It takes 5 minutes and you get a detailed report immediately.",
+      "button": "Get started free",
+      "subtext": "Start by creating your first listing."
+    }
   }
 }

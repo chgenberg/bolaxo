@@ -1,55 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CheckCircle, ArrowRight, Shield, TrendingUp, Users, FileText } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export default function SaljaInfoPage() {
+  const t = useTranslations('salja')
   const [activeStep, setActiveStep] = useState(1)
 
-  const steps = [
+  const steps = useMemo(() => [
     {
       step: 1,
-      title: 'Skapa annonsen',
-      shortTitle: 'Skapa annonsen',
-      description: 'Fyll i nyckeltal och relevant data, lägg till bilder och en kort pitch. Behöver du ett komplett pitchdeck? Vi fixar det åt dig.',
-      time: '8-12 min',
+      title: t('steps.step1.title'),
+      shortTitle: t('steps.step1.shortTitle'),
+      description: t('steps.step1.description'),
+      time: t('steps.step1.time'),
       icon: <FileText className="w-6 h-6" />,
     },
     {
       step: 2,
-      title: 'Publicera och nå köpare',
-      shortTitle: 'Publicera och nå köpare',
-      description: 'Annonsen pushas till bevakningar och topplistor. Köpare verifieras och kontaktar dig via plattformen. Du ser livedata på visningar och förfrågningar från potentiella köpare.',
-      time: 'Löpande',
+      title: t('steps.step2.title'),
+      shortTitle: t('steps.step2.shortTitle'),
+      description: t('steps.step2.description'),
+      time: t('steps.step2.time'),
       icon: <Users className="w-6 h-6" />,
     },
     {
       step: 3,
-      title: 'NDA & frågor',
-      shortTitle: 'NDA & frågor',
-      description: 'Köpare signerar NDA med BankID och kan ställa frågor. Du får mail / pushnotiser vid nya NDA-förfrågningar och väljer själv att godkänna eller avvisa. Du kan vara helt anonym tills du har godkänt NDA.',
-      time: 'Efter behov',
+      title: t('steps.step3.title'),
+      shortTitle: t('steps.step3.shortTitle'),
+      description: t('steps.step3.description'),
+      time: t('steps.step3.time'),
       icon: <Shield className="w-6 h-6" />,
     },
     {
       step: 4,
-      title: 'Datarum & DD',
-      shortTitle: 'Datarum & DD',
-      description: 'Dela rätt dokument med rätt personer och följ intresset i realtid. Säker dokumentlagring med versionshistorik, vattenmärkning och logg över visningar. Ta emot indikativa bud (LOI) via ett strukturerat formulär.',
-      time: 'Efter behov',
+      title: t('steps.step4.title'),
+      shortTitle: t('steps.step4.shortTitle'),
+      description: t('steps.step4.description'),
+      time: t('steps.step4.time'),
       icon: <FileText className="w-6 h-6" />,
     },
     {
       step: 5,
-      title: 'LOI till avslut',
-      shortTitle: 'LOI till avslut',
-      description: 'Starta den formella försäljningen med våra mallar och en milstolpsplan. Vi effektiviserar processen och minimerar onödigt arbete så att jurist/revisor kliver in först när det verkligen behövs—det sparar både tid och pengar. Vill du ha hjälp med slutförhandling och avtal? Vi matchar dig med rätt rådgivare.',
-      time: '60-90 dagar',
+      title: t('steps.step5.title'),
+      shortTitle: t('steps.step5.shortTitle'),
+      description: t('steps.step5.description'),
+      time: t('steps.step5.time'),
       icon: <TrendingUp className="w-6 h-6" />,
     },
-  ]
+  ], [t])
 
   return (
     <main className="bg-neutral-white">
@@ -70,10 +72,10 @@ export default function SaljaInfoPage() {
         <div className="relative z-10 w-full">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 sm:py-24 md:py-32">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-4 sm:mb-6 uppercase">
-              Från annons till avslut – steg för steg
+              {t('heroTitle')}
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-primary-navy leading-relaxed px-4 sm:px-0">
-              Vi automatiserar det komplicerade och ger dig full kontroll över processen.
+              {t('heroSubtitle')}
             </p>
           </div>
         </div>
@@ -82,8 +84,8 @@ export default function SaljaInfoPage() {
         {/* Interactive Steps Section */}
         <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 text-center uppercase">Processen i 5 steg</h2>
-            <p className="text-center text-primary-navy mb-12 sm:mb-16 text-lg sm:text-xl font-semibold uppercase">SÄLJARE</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 text-center uppercase">{t('processTitle')}</h2>
+            <p className="text-center text-primary-navy mb-12 sm:mb-16 text-lg sm:text-xl font-semibold uppercase">{t('sellerLabel')}</p>
             
             {/* Modern Tab Navigation */}
             <div className="mb-12 sm:mb-16">
@@ -164,7 +166,7 @@ export default function SaljaInfoPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl border-2 border-primary-navy/10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-6 sm:mb-8 md:mb-12 text-center uppercase">
-            FÖRE VS Efter NDA
+            {t('ndaComparison.title')}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
@@ -172,17 +174,11 @@ export default function SaljaInfoPage() {
             <div>
               <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
                 <div className="w-3 sm:w-4 h-3 sm:h-4 bg-accent-orange rounded-full"></div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy">FÖRE NDA</h3>
-                <span className="text-xs sm:text-sm text-gray-600 font-medium">Publik info</span>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy">{t('ndaComparison.before.title')}</h3>
+                <span className="text-xs sm:text-sm text-gray-600 font-medium">{t('ndaComparison.before.label')}</span>
               </div>
               <ul className="space-y-3 sm:space-y-4">
-                {[
-                  'Bransch & typ av företag',
-                  'Ort/region',
-                  'Omsättningsintervall',
-                  'Antal anställda',
-                  'Allmän beskrivning'
-                ].map((item, idx) => (
+                {t.raw('ndaComparison.before.items').map((item: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2 sm:gap-3 text-gray-700">
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-sm sm:text-base">{item}</span>
@@ -195,17 +191,11 @@ export default function SaljaInfoPage() {
             <div>
               <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
                 <div className="w-3 sm:w-4 h-3 sm:h-4 bg-accent-pink rounded-full"></div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy">Efter NDA</h3>
-                <span className="text-xs sm:text-sm text-gray-600 font-medium">Låst upp</span>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-navy">{t('ndaComparison.after.title')}</h3>
+                <span className="text-xs sm:text-sm text-gray-600 font-medium">{t('ndaComparison.after.label')}</span>
               </div>
               <ul className="space-y-3 sm:space-y-4">
-                {[
-                  'Företagsnamn & org.nr',
-                  'Exakta nyckeltal (EBITDA, etc)',
-                  'Prisidé & värdering',
-                  'Kundlista & kontrakt',
-                  'Fullständigt datarum'
-                ].map((item, idx) => (
+                {t.raw('ndaComparison.after.items').map((item: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2 sm:gap-3 text-gray-700">
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-accent-pink flex-shrink-0 mt-0.5" />
                     <span className="text-sm sm:text-base">{item}</span>
@@ -221,21 +211,21 @@ export default function SaljaInfoPage() {
         {/* Pricing Overview */}
         <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 sm:mb-6 text-center uppercase">PRISÖVERSIKT</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-4 sm:mb-6 text-center uppercase">{t('pricing.title')}</h2>
           <p className="text-center text-base sm:text-lg text-gray-700 mb-8 sm:mb-12 md:mb-16 max-w-2xl mx-auto px-4 sm:px-0">
-            Transparent prissättning utan dolda avgifter. Börja gratis, uppgradera när du vill.
+            {t('pricing.subtitle')}
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {/* Free */}
             <div className="bg-white border-2 border-primary-navy/20 rounded-2xl p-6 sm:p-8 hover:shadow-xl transition-all">
               <div className="text-center mb-6 sm:mb-8">
-                <div className="text-xs sm:text-sm font-semibold text-gray-600 mb-2">Utkast</div>
-                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-navy mb-2">0 kr</div>
-                <div className="text-xs sm:text-sm text-gray-600">Gratis</div>
+                <div className="text-xs sm:text-sm font-semibold text-gray-600 mb-2">{t('pricing.draft.name')}</div>
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-navy mb-2">{t('pricing.draft.price')}</div>
+                <div className="text-xs sm:text-sm text-gray-600">{t('pricing.draft.period')}</div>
               </div>
               <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                {['Skapa annons (utkast)', 'Automatisk copywriting', 'Spara utkast'].map((f, i) => (
+                {t.raw('pricing.draft.features').map((f: string, i: number) => (
                   <div key={i} className="flex items-start gap-2 sm:gap-3">
                     <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-accent-pink flex-shrink-0 mt-0.5" />
                     <span className="text-sm sm:text-base text-gray-700">{f}</span>
@@ -243,19 +233,19 @@ export default function SaljaInfoPage() {
                 ))}
               </div>
               <Link href="/vardering" className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
-                Skapa utkast
+                {t('pricing.draft.cta')}
               </Link>
             </div>
 
             {/* Basic */}
             <div className="bg-white border-2 border-primary-navy/20 rounded-2xl p-8 hover:shadow-xl transition-all">
               <div className="text-center mb-8">
-                <div className="text-sm font-semibold text-primary-navy mb-2">Basic</div>
-                <div className="text-5xl font-bold text-primary-navy mb-2">495 kr</div>
-                <div className="text-sm text-gray-600">/ mån</div>
+                <div className="text-sm font-semibold text-primary-navy mb-2">{t('pricing.basic.name')}</div>
+                <div className="text-5xl font-bold text-primary-navy mb-2">{t('pricing.basic.price')}</div>
+                <div className="text-sm text-gray-600">{t('pricing.basic.period')}</div>
               </div>
               <div className="space-y-4 mb-8">
-                {['Annons i 90 dagar', 'Upp till 5 bilder', 'Standardplacering', 'Standard-NDA', 'E-postsupport'].map((f, i) => (
+                {t.raw('pricing.basic.features').map((f: string, i: number) => (
                   <div key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700">{f}</span>
@@ -263,7 +253,7 @@ export default function SaljaInfoPage() {
                 ))}
               </div>
               <Link href="/salja/start" className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
-                Publicera
+                {t('pricing.basic.cta')}
               </Link>
             </div>
 
@@ -271,16 +261,16 @@ export default function SaljaInfoPage() {
             <div className="relative bg-white border-2 border-accent-pink rounded-2xl p-8 shadow-2xl ring-2 ring-accent-pink">
               <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                 <span className="bg-accent-pink text-primary-navy px-4 py-1 rounded-lg text-xs font-bold">
-                  POPULÄR
+                  {t('pricing.pro.popular')}
                 </span>
               </div>
               <div className="text-center mb-8">
-                <div className="text-sm font-semibold text-primary-navy mb-2">Pro</div>
-                <div className="text-5xl font-bold text-primary-navy mb-2">995 kr</div>
-                <div className="text-sm text-gray-600">/ mån</div>
+                <div className="text-sm font-semibold text-primary-navy mb-2">{t('pricing.pro.name')}</div>
+                <div className="text-5xl font-bold text-primary-navy mb-2">{t('pricing.pro.price')}</div>
+                <div className="text-sm text-gray-600">{t('pricing.pro.period')}</div>
               </div>
               <div className="space-y-4 mb-8">
-                {['Annons i 180 dagar', 'Upp till 20 bilder', 'Framhävning + Boost', 'Prioriterad NDA', 'Telefonstöd 9-16'].map((f, i) => (
+                {t.raw('pricing.pro.features').map((f: string, i: number) => (
                   <div key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-accent-pink flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700">{f}</span>
@@ -288,7 +278,7 @@ export default function SaljaInfoPage() {
                 ))}
               </div>
               <Link href="/salja/start" className="block w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg text-center hover:shadow-lg transition-all inline-flex items-center justify-center gap-2">
-                Välj Pro
+                {t('pricing.pro.cta')}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
@@ -296,7 +286,7 @@ export default function SaljaInfoPage() {
 
           <div className="text-center mt-8 sm:mt-12">
             <Link href="/priser" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2 text-base sm:text-lg">
-              Se detaljerad jämförelse
+              {t('pricing.seeDetails')}
               <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
             </Link>
           </div>
@@ -306,36 +296,11 @@ export default function SaljaInfoPage() {
         {/* FAQ */}
         <section className="bg-white py-12 sm:py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-8 sm:mb-12 md:mb-16 text-center uppercase">VANLIGA FRÅGOR</h2>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-navy mb-8 sm:mb-12 md:mb-16 text-center uppercase">{t('faq.title')}</h2>
           
           <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl border-2 border-primary-navy/10">
             <div className="space-y-6 sm:space-y-8">
-            {[
-              {
-                q: 'Vad är värderingen och hur funkar den?',
-                a: 'Vår automatiska värdering analyserar ditt företag med tre metoder: EBITDA-multipel, avkastningsvärdering och omsättningsmultipel. Vi hämtar data från 10 källor automatiskt. Du får ett realistiskt värdeintervall, professionell rapport och konkreta tips. Helt gratis och tar 5 minuter.',
-              },
-              {
-                q: 'Kan jag vara helt anonym?',
-                a: 'Ja! Du väljer själv vad som ska synas före NDA. Många väljer att endast visa bransch, region och ungefärlig omsättning tills köparen signerat sekretessavtal med BankID.',
-              },
-              {
-                q: 'Vad är Deal Management?',
-                a: 'När köpare lämnat LOI kan ni starta en formell transaktion med automatiska milstolpar, dokumenthantering, betalningsspårning och aktivitetslogg. Bjud in rådgivare med olika rättigheter.',
-              },
-              {
-                q: 'Vilka analytics får jag se?',
-                a: 'Du ser: visningar över tid, NDA-förfrågningar, konverteringstratt, geografisk fördelning av köpare, och tillväxtkurva. Uppdateras i realtid på din dashboard.',
-              },
-              {
-                q: 'Hur säkerställer ni att köparna är seriösa?',
-                a: 'Alla köpare verifieras med BankID och måste signera NDA. Vi har smart matching (87-94% match score) som hjälper rätt köpare hitta rätt företag.',
-              },
-              {
-                q: 'Tar ni provision vid försäljning?',
-                a: 'Nej provision på annonspaket. För Deal Management (optional): 1-3% av transaktionsvärde delat mellan köpare och säljare. Traditionella mäklare tar 8-15%.',
-              },
-            ].map((faq, index) => (
+            {t.raw('faq.items').map((faq: { q: string; a: string }, index: number) => (
               <div key={index} className="pb-6 sm:pb-8 border-b border-gray-200 last:border-0">
                 <h3 className="text-lg sm:text-xl font-bold text-primary-navy mb-2 sm:mb-3">{faq.q}</h3>
                 <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{faq.a}</p>
@@ -350,12 +315,12 @@ export default function SaljaInfoPage() {
         <section className="bg-gray-50 py-12 sm:py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-8 sm:p-10 md:p-12 text-center shadow-xl border-2 border-primary-navy/10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4 sm:mb-6">SME Kit</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4 sm:mb-6">{t('smeKit.title')}</h2>
           <p className="text-base sm:text-lg text-primary-navy mb-6 sm:mb-8 max-w-2xl mx-auto px-4 sm:px-0">
-            Automatisera dina försäljningsprocesser med vår nya SME Kit.
+            {t('smeKit.description')}
           </p>
           <Link href="/sme-kit" className="inline-flex items-center gap-2 px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-base sm:text-lg">
-            Läs mer om SME Kit
+            {t('smeKit.cta')}
             <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
           </Link>
           </div>
@@ -366,16 +331,16 @@ export default function SaljaInfoPage() {
         <section className="bg-white py-24 sm:py-32 md:py-48">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-accent-pink rounded-2xl p-8 sm:p-10 md:p-12 text-center shadow-2xl border-2 border-accent-pink">
-          <h2 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4 sm:mb-6">Redo att sälja?</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4 sm:mb-6">{t('cta.title')}</h2>
           <p className="text-base sm:text-lg text-primary-navy mb-6 sm:mb-8 max-w-2xl mx-auto px-4 sm:px-0">
-            Börja med en gratis värdering. Det tar 5 minuter och du får en detaljerad rapport direkt.
+            {t('cta.description')}
           </p>
           <Link href="/salja/start" className="inline-flex items-center gap-2 px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-base sm:text-lg">
-            Kom igång gratis
+            {t('cta.button')}
             <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
           </Link>
           <p className="text-sm text-primary-navy mt-6 opacity-80">
-            Börja med att skapa din första annons.
+            {t('cta.subtext')}
           </p>
           </div>
         </div>
