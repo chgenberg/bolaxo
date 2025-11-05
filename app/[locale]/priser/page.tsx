@@ -67,10 +67,10 @@ export default function PricingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h1 className="text-5xl sm:text-6xl font-bold text-primary-navy mb-6 uppercase">
-              Prisplaner för snabbare, tryggare affärer
+              {t('heroTitle')}
             </h1>
             <p className="text-xl text-primary-navy leading-relaxed max-w-3xl mx-auto">
-              Välj den nivå som passar ditt upplägg. Alla planer kan avslutas när som helst – du behåller din data.
+              {t('heroSubtitle')}
             </p>
           </div>
 
@@ -89,7 +89,7 @@ export default function PricingPage() {
                 {plan.popular && (
                   <div className="absolute top-0 right-0 bg-accent-pink text-primary-navy text-xs font-bold px-4 py-2 rounded-bl-lg flex items-center gap-1">
                     <Star className="w-4 h-4 fill-current" />
-                    Populär
+                    {t('popular')}
                   </div>
                 )}
 
@@ -133,13 +133,13 @@ export default function PricingPage() {
 
           {/* Terms Section */}
           <div className="bg-neutral-off-white rounded-lg p-8 border border-gray-200">
-            <h3 className="text-xl font-bold text-primary-navy mb-4">Villkor i korthet</h3>
+            <h3 className="text-xl font-bold text-primary-navy mb-4">{t('termsTitle')}</h3>
             <div className="space-y-3 text-text-gray">
-              <p>✓ <strong>Månadsdebitering</strong>, ingen bindningstid</p>
-              <p>✓ <strong>15% rabatt vid årsbetalning</strong></p>
-              <p>✓ <strong>Success-fee light (frivillig)</strong>: 0,75–1,5% vid genomförd affär via plattformen</p>
+              {t.raw('terms').map((term: string, idx: number) => (
+                <p key={idx} dangerouslySetInnerHTML={{ __html: term }} />
+              ))}
               <p className="text-sm mt-4 pt-4 border-t border-gray-300">
-                Alla prisplaner inkluderar tillgång till våra marknadsverktyg, statistik och support för att säkerställa en framgångsrik försäljning.
+                {t('termsNote')}
               </p>
             </div>
           </div>
@@ -149,25 +149,15 @@ export default function PricingPage() {
       {/* FAQ Section */}
       <section className="py-16 sm:py-24 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-primary-navy mb-12">Vanliga frågor</h2>
+          <h2 className="text-3xl font-bold text-center text-primary-navy mb-12">{t('faqTitle')}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div>
-              <h4 className="font-bold text-primary-navy mb-2">Kan jag byta plan senare?</h4>
-              <p className="text-text-gray">Ja, du kan uppgradera eller nedgradera din plan när som helst.</p>
-            </div>
-            <div>
-              <h4 className="font-bold text-primary-navy mb-2">Vad händer om jag avslutar?</h4>
-              <p className="text-text-gray">Du behåller all din data och kan logga in för att hämta den när som helst.</p>
-            </div>
-            <div>
-              <h4 className="font-bold text-primary-navy mb-2">Finns det setup-avgift?</h4>
-              <p className="text-text-gray">Nej, det finns inga setup-avgifter eller dolda kostnader.</p>
-            </div>
-            <div>
-              <h4 className="font-bold text-primary-navy mb-2">Hur fungerar success-fee?</h4>
-              <p className="text-text-gray">Det är frivilligt och betalas endast när affären är genomförd via vår plattform.</p>
-            </div>
+            {t.raw('faq').map((faq: { q: string; a: string }, idx: number) => (
+              <div key={idx}>
+                <h4 className="font-bold text-primary-navy mb-2">{faq.q}</h4>
+                <p className="text-text-gray">{faq.a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

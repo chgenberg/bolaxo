@@ -647,5 +647,86 @@
       "watch": "Set watch",
       "importLoi": "Import LOI template"
     }
+  },
+  "priser": {
+    "heroTitle": "Pricing plans for faster, safer deals",
+    "heroSubtitle": "Choose the level that fits your setup. All plans can be cancelled anytime – you keep your data.",
+    "popular": "Popular",
+    "plans": {
+      "basic": {
+        "name": "Basic",
+        "price": "495",
+        "subtitle": "/ month",
+        "features": [
+          { "text": "Listing for 90 days", "included": true, "highlight": true },
+          { "text": "Up to 5 images", "included": true },
+          { "text": "Standard placement in lists", "included": true },
+          { "text": "Standard NDA", "included": true },
+          { "text": "Simple statistics", "included": true },
+          { "text": "Email support", "included": true },
+          { "text": "Highlighting", "included": false },
+          { "text": "Phone support", "included": false }
+        ],
+        "cta": "Choose Basic"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "995",
+        "subtitle": "/ month",
+        "features": [
+          { "text": "Listing for 180 days", "included": true, "highlight": true },
+          { "text": "Up to 20 images", "included": true },
+          { "text": "Highlighting + Boost 7 days/month", "included": true },
+          { "text": "Priority NDA handling", "included": true },
+          { "text": "Pitch deck templates (1–5 pages)", "included": true },
+          { "text": "Phone support weekdays 9–16", "included": true },
+          { "text": "1 due diligence checklist", "included": true },
+          { "text": "Dedicated advisor", "included": false }
+        ],
+        "cta": "Choose Pro"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "1 995",
+        "subtitle": "/ month",
+        "features": [
+          { "text": "Listing until sold", "included": true, "highlight": true },
+          { "text": "Unlimited images", "included": true },
+          { "text": "Top placement and first in watchlists", "included": true },
+          { "text": "Dedicated advisor", "included": true },
+          { "text": "Legal document templates (NDA, LOI, Term Sheet, Transfer Agreement)", "included": true },
+          { "text": "CRM/API integration", "included": true },
+          { "text": "Monthly market reporting view", "included": true },
+          { "text": "Priority matching", "included": true }
+        ],
+        "cta": "Contact us"
+      }
+    },
+    "termsTitle": "Terms in brief",
+    "terms": [
+      "✓ <strong>Monthly billing</strong>, no commitment period",
+      "✓ <strong>15% discount on annual payment</strong>",
+      "✓ <strong>Success fee light (optional)</strong>: 0.75–1.5% on completed deal via platform"
+    ],
+    "termsNote": "All pricing plans include access to our marketing tools, statistics and support to ensure a successful sale.",
+    "faqTitle": "Frequently asked questions",
+    "faq": [
+      {
+        "q": "Can I switch plans later?",
+        "a": "Yes, you can upgrade or downgrade your plan anytime."
+      },
+      {
+        "q": "What happens if I cancel?",
+        "a": "You keep all your data and can log in to retrieve it anytime."
+      },
+      {
+        "q": "Is there a setup fee?",
+        "a": "No, there are no setup fees or hidden costs."
+      },
+      {
+        "q": "How does success fee work?",
+        "a": "It's optional and only paid when the deal is completed via our platform."
+      }
+    ]
   }
 }

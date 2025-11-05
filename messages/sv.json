@@ -647,5 +647,86 @@
       "watch": "Sätt bevakning",
       "importLoi": "Importera LOI-mall"
     }
+  },
+  "priser": {
+    "heroTitle": "Prisplaner för snabbare, tryggare affärer",
+    "heroSubtitle": "Välj den nivå som passar ditt upplägg. Alla planer kan avslutas när som helst – du behåller din data.",
+    "popular": "Populär",
+    "plans": {
+      "basic": {
+        "name": "Basic",
+        "price": "495",
+        "subtitle": "/ mån",
+        "features": [
+          { "text": "Annons i 90 dagar", "included": true, "highlight": true },
+          { "text": "Upp till 5 bilder", "included": true },
+          { "text": "Standardplacering i listor", "included": true },
+          { "text": "Standard-NDA", "included": true },
+          { "text": "Enkel statistik", "included": true },
+          { "text": "E-postsupport", "included": true },
+          { "text": "Framhävning", "included": false },
+          { "text": "Telefonstöd", "included": false }
+        ],
+        "cta": "Välj Basic"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "995",
+        "subtitle": "/ mån",
+        "features": [
+          { "text": "Annons i 180 dagar", "included": true, "highlight": true },
+          { "text": "Upp till 20 bilder", "included": true },
+          { "text": "Framhävning + Boost 7 dagar/mån", "included": true },
+          { "text": "Prioriterad NDA-hantering", "included": true },
+          { "text": "Pitchdeck-mallar (1–5 sidor)", "included": true },
+          { "text": "Telefonstöd vardagar 9–16", "included": true },
+          { "text": "1 st due diligence-checklista", "included": true },
+          { "text": "Dedikerad rådgivare", "included": false }
+        ],
+        "cta": "Välj Pro"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "1 995",
+        "subtitle": "/ mån",
+        "features": [
+          { "text": "Annons tills såld", "included": true, "highlight": true },
+          { "text": "Obegränsat bildmaterial", "included": true },
+          { "text": "Topplacering och först i bevakningar", "included": true },
+          { "text": "Dedikerad rådgivare", "included": true },
+          { "text": "Juridiska dokumentmallar (NDA, LOI, Term Sheet, Överlåtelseavtal)", "included": true },
+          { "text": "CRM/API-integration", "included": true },
+          { "text": "Månatlig marknadsrapporteringsvy", "included": true },
+          { "text": "Prioriterad matchning", "included": true }
+        ],
+        "cta": "Kontakta oss"
+      }
+    },
+    "termsTitle": "Villkor i korthet",
+    "terms": [
+      "✓ <strong>Månadsdebitering</strong>, ingen bindningstid",
+      "✓ <strong>15% rabatt vid årsbetalning</strong>",
+      "✓ <strong>Success-fee light (frivillig)</strong>: 0,75–1,5% vid genomförd affär via plattformen"
+    ],
+    "termsNote": "Alla prisplaner inkluderar tillgång till våra marknadsverktyg, statistik och support för att säkerställa en framgångsrik försäljning.",
+    "faqTitle": "Vanliga frågor",
+    "faq": [
+      {
+        "q": "Kan jag byta plan senare?",
+        "a": "Ja, du kan uppgradera eller nedgradera din plan när som helst."
+      },
+      {
+        "q": "Vad händer om jag avslutar?",
+        "a": "Du behåller all din data och kan logga in för att hämta den när som helst."
+      },
+      {
+        "q": "Finns det setup-avgift?",
+        "a": "Nej, det finns inga setup-avgifter eller dolda kostnader."
+      },
+      {
+        "q": "Hur fungerar success-fee?",
+        "a": "Det är frivilligt och betalas endast när affären är genomförd via vår plattform."
+      }
+    ]
   }
 }
