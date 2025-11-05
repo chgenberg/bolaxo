@@ -14,7 +14,6 @@ import { Search, SlidersHorizontal, ChevronDown, X, TrendingUp, AlertCircle, Map
 // Prevent static generation - this page requires AuthProvider
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
-export const revalidate = 0
 
 export default function SearchPage() {
   const router = useRouter()

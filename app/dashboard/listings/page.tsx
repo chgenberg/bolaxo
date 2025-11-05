@@ -11,7 +11,6 @@ import { useToast } from '@/contexts/ToastContext'
 // Prevent static generation - this page requires AuthProvider
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
-export const revalidate = 0
 
 type ListingStatus = 'active' | 'paused' | 'draft'
 type ListingPackage = 'pro' | 'pro_plus' | 'basic'

@@ -7,7 +7,6 @@ import { Building, MapPin, TrendingUp, Users, Calendar, DollarSign, X, Plus } fr
 // Prevent static generation - this page requires AuthProvider
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
-export const revalidate = 0
 
 export default function ComparePage() {
   const [compareList, setCompareList] = useState(['obj-001', 'obj-002', 'obj-003'])

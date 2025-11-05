@@ -9,7 +9,6 @@ import { Building2, CheckCircle2, ArrowRight, User, FileText } from 'lucide-reac
 // Prevent static generation - this page requires AuthProvider
 export const dynamic = 'force-dynamic'
 export const dynamicParams = true
-export const revalidate = 0
 
 export default function SellerOnboardingPage() {
   const router = useRouter()
