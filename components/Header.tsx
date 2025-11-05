@@ -1,11 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { ChevronDown, Menu, X, User, LogOut, MessageSquare, LayoutDashboard } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { usePathname } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { LAUNCH_CONFIG } from '@/lib/launch-config'
 import LanguageSwitcher from './LanguageSwitcher'
 
@@ -21,10 +21,10 @@ interface NavItem {
   dropdown?: DropdownItem[]
 }
 
-const getNavigation = (): NavItem[] => {
+const getNavigation = (t: (key: string) => string): NavItem[] => {
   const baseNav: NavItem[] = [
     {
-      label: 'För säljare',
+      label: t('header.forSellers'),
       dropdown: [
         { label: 'Gratis företagsvärdering', href: '/vardering' },
         { label: 'Så funkar det', href: '/salja' },
@@ -32,7 +32,7 @@ const getNavigation = (): NavItem[] => {
       ]
     },
     {
-      label: 'För köpare',
+      label: t('header.forBuyers'),
       dropdown: [
         { label: 'Sök företag', href: '/sok' },
         { label: 'Så funkar det', href: '/kopare/sa-fungerar-det' },
@@ -44,13 +44,13 @@ const getNavigation = (): NavItem[] => {
   // Add broker section if enabled in launch config
   if (LAUNCH_CONFIG.NAVIGATION.SHOW_FOR_MAKLARE) {
     baseNav.push({
-      label: 'För mäklare',
+      label: t('header.forBrokers'),
       href: '/for-maklare'
     })
   }
 
   baseNav.push({
-    label: 'Om oss',
+    label: t('header.about'),
     href: '/om-oss',
     dropdown: [
       { label: 'Kontakt', href: '/kontakt' },
@@ -66,7 +66,7 @@ const getNavigation = (): NavItem[] => {
   return [
     ...baseNav,
     {
-      label: 'Mer',
+      label: t('header.more'),
       dropdown: [
         { label: 'Vårt företag', href: '/om-oss' },
         { label: 'Success stories', href: '/success-stories' },
@@ -76,9 +76,8 @@ const getNavigation = (): NavItem[] => {
   ]
 }
 
-const navigation = getNavigation()
-
 export default function Header() {
+  const t = useTranslations()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -89,6 +88,9 @@ export default function Header() {
   const locale = useLocale()
   const isAdminPage = pathname?.startsWith('/admin')
   
+  // Build navigation with translations
+  const navigation = useMemo(() => getNavigation(t), [t])
+
   // Helper function to add locale prefix to paths
   const getLocalizedPath = (path: string) => {
     if (path.startsWith('/admin') || path.startsWith('/api')) {
@@ -245,7 +247,7 @@ export default function Header() {
                     <Link
                       href={getLocalizedPath(user.role === 'buyer' ? '/kopare/chat' : '/salja/chat')}
                       className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
-                      title="Meddelanden"
+                      title={t('header.messages')}
                     >
                       <MessageSquare className="w-5 h-5" />
                     </Link>
@@ -255,7 +257,7 @@ export default function Header() {
                   <Link
                     href={getLocalizedPath('/dashboard')}
                     className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
-                    title="Dashboard"
+                    title={t('header.dashboard')}
                   >
                     <LayoutDashboard className="w-5 h-5" />
                   </Link>
@@ -277,13 +279,13 @@ export default function Header() {
                             href={getLocalizedPath(user.role === 'buyer' ? '/kopare/settings' : '/salja/settings')}
                             className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
                           >
-                            Profil & Inställningar
+                            {t('header.profile')}
                           </Link>
                           <button
                             onClick={logout}
                             className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
                           >
-                            Logga ut
+                            {t('common.logout')}
                           </button>
                         </div>
                       </div>
@@ -297,13 +299,13 @@ export default function Header() {
                   href={getLocalizedPath('/login')}
                   className="hidden lg:block text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
                 >
-                  Logga in
+                  {t('common.login')}
                 </Link>
                 <Link
                   href={getLocalizedPath('/registrera')}
                   className="hidden lg:block px-4 py-2 bg-primary-navy text-white rounded-lg font-medium text-sm hover:bg-primary-navy/90 transition-all duration-200 hover:shadow-md"
                 >
-                  Kom igång
+                  {t('header.getStarted')}
                 </Link>
               </>
             )}
@@ -451,7 +453,7 @@ export default function Header() {
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <MessageSquare className="w-5 h-5" />
-                          <span>Meddelanden</span>
+                          <span>{t('header.messages')}</span>
                         </Link>
                         <Link
                           href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
@@ -459,7 +461,7 @@ export default function Header() {
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <User className="w-5 h-5" />
-                          <span>Profil & Inställningar</span>
+                          <span>{t('header.profile')}</span>
                         </Link>
                       </>
                     )}
@@ -469,7 +471,7 @@ export default function Header() {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <LayoutDashboard className="w-5 h-5" />
-                      <span>Dashboard</span>
+                      <span>{t('header.dashboard')}</span>
                     </Link>
                     <button
                       onClick={() => {
@@ -479,7 +481,7 @@ export default function Header() {
                       className="flex items-center space-x-3 text-base font-medium text-red-600 hover:text-red-700 transition-colors w-full py-3 px-4 rounded-lg hover:bg-red-50 active:bg-red-100 text-left"
                     >
                       <LogOut className="w-5 h-5" />
-                      <span>Logga ut</span>
+                      <span>{t('common.logout')}</span>
                     </button>
                   </div>
                 ) : (
@@ -489,14 +491,14 @@ export default function Header() {
                       className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      Logga in
+                      {t('common.login')}
                     </Link>
                     <Link
                       href="/registrera"
                       className="block w-full text-center px-6 py-4 bg-primary-navy text-white rounded-lg font-semibold text-base hover:bg-primary-navy/90 active:bg-primary-navy/80 transition-all shadow-md active:shadow-sm"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      Kom igång
+                      {t('header.getStarted')}
                     </Link>
                   </div>
                 )}
