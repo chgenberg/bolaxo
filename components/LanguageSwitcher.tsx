@@ -30,10 +30,15 @@ export default function LanguageSwitcher() {
   }, [])
 
   const switchLanguage = (newLocale: string) => {
-    // Remove current locale from pathname and navigate to new locale
-    const pathWithoutLocale = (pathname || '/').replace(/^\/(sv|en)(?=\/|$)/, '') || '/'
-    const newPath = `/${newLocale}${pathWithoutLocale}`
-    router.push(newPath)
+    // Handle root path (/sv or /en) specially
+    if (pathname === `/${locale}` || pathname === '/sv' || pathname === '/en') {
+      router.push(`/${newLocale}`)
+    } else {
+      // Remove current locale from pathname and navigate to new locale
+      const pathWithoutLocale = (pathname || '/').replace(/^\/(sv|en)(?=\/|$)/, '') || '/'
+      const newPath = `/${newLocale}${pathWithoutLocale}`
+      router.push(newPath)
+    }
     setIsOpen(false)
   }
 
