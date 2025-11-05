@@ -15,6 +15,16 @@ const intlMiddleware = createMiddleware({
 })
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+  
+  // Explicit redirect from root to /sv
+  if (pathname === '/') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/sv'
+    console.log('🔄 [MIDDLEWARE] Redirecting root / to /sv')
+    return NextResponse.redirect(url, 308)
+  }
+
   // 0. Redirect Railway domain to bolaxo.com ONLY if custom domain is configured
   // Allow Railway domain to work until custom domain is fully set up
   // TEMPORARILY DISABLED: Uncomment when www.bolaxo.com is confirmed working
@@ -34,10 +44,10 @@ export async function middleware(request: NextRequest) {
   */
 
   // Handle admin routes first (before intl)
-  if (request.nextUrl.pathname.startsWith('/admin') && 
-      !request.nextUrl.pathname.startsWith('/admin/login')) {
+  if (pathname.startsWith('/admin') && 
+      !pathname.startsWith('/admin/login')) {
     
-    console.log('🔐 [MIDDLEWARE] Checking admin auth for:', request.nextUrl.pathname)
+    console.log('🔐 [MIDDLEWARE] Checking admin auth for:', pathname)
     
     const adminToken = request.cookies.get('adminToken')?.value
     
@@ -61,6 +71,8 @@ export async function middleware(request: NextRequest) {
       return res
     }
   }
+
+  console.log('🌐 [MIDDLEWARE] Processing pathname:', pathname)
 
   // Handle internationalization
   const response = intlMiddleware(request)
@@ -105,6 +117,8 @@ export async function middleware(request: NextRequest) {
       'max-age=31536000; includeSubDomains; preload'
     )
   }
+
+  console.log('✅ [MIDDLEWARE] Response status:', response.status, 'URL:', response.url)
 
   return response
 }
