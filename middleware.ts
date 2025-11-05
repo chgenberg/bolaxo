@@ -1,3 +1,4 @@
+import createMiddleware from 'next-intl/middleware'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { jwtVerify } from 'jose'
@@ -5,6 +6,13 @@ import { jwtVerify } from 'jose'
 // Use the same secret as admin-auth.ts
 const JWT_SECRET = process.env.JWT_SECRET || 'bolagsplatsen-admin-secret-key-2024'
 const secret = new TextEncoder().encode(JWT_SECRET)
+
+// Create next-intl middleware
+const intlMiddleware = createMiddleware({
+  locales: ['sv', 'en'],
+  defaultLocale: 'sv',
+  localePrefix: 'always' // Always show locale prefix (e.g., /sv/, /en/)
+})
 
 export async function middleware(request: NextRequest) {
   // 0. Redirect Railway domain to bolaxo.com ONLY if custom domain is configured
@@ -25,18 +33,38 @@ export async function middleware(request: NextRequest) {
   }
   */
 
-  const response = NextResponse.next()
+  // Handle admin routes first (before intl)
+  if (request.nextUrl.pathname.startsWith('/admin') && 
+      !request.nextUrl.pathname.startsWith('/admin/login')) {
+    
+    console.log('🔐 [MIDDLEWARE] Checking admin auth for:', request.nextUrl.pathname)
+    
+    const adminToken = request.cookies.get('adminToken')?.value
+    
+    if (!adminToken) {
+      console.log('❌ [MIDDLEWARE] No adminToken cookie found, redirecting to login')
+      return NextResponse.redirect(new URL('/admin/login', request.url))
+    }
 
-  // 0. Ensure root domain has proper path
-  const url = request.nextUrl
-  // This is handled by Next.js automatically, but we ensure consistency
-  if (url.pathname === '' || url.pathname === '/') {
-    // Allow root path to proceed normally
+    console.log('✅ [MIDDLEWARE] adminToken found, verifying...')
+
+    // Verify JWT token using jose (Edge Runtime compatible)
+    try {
+      const { payload } = await jwtVerify(adminToken, secret)
+      console.log('✅ [MIDDLEWARE] Token valid, user authorized:', payload)
+    } catch (err) {
+      // Token is invalid or expired
+      console.log('❌ [MIDDLEWARE] Token invalid or expired:', err)
+      const loginUrl = new URL('/admin/login', request.url)
+      const res = NextResponse.redirect(loginUrl)
+      res.cookies.delete('adminToken')
+      return res
+    }
   }
 
-  // 1. CSRF Protection via SameSite cookies (redan satt i auth)
-  // Cookies med httpOnly + sameSite='lax' är redan skyddade
-  
+  // Handle internationalization
+  const response = intlMiddleware(request)
+
   // 2. Security Headers
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-Frame-Options', 'DENY')
@@ -78,35 +106,6 @@ export async function middleware(request: NextRequest) {
     )
   }
 
-  // CHECK: Admin routes require authentication
-  if (request.nextUrl.pathname.startsWith('/admin') && 
-      !request.nextUrl.pathname.startsWith('/admin/login')) {
-    
-    console.log('🔐 [MIDDLEWARE] Checking admin auth for:', request.nextUrl.pathname)
-    
-    const adminToken = request.cookies.get('adminToken')?.value
-    
-    if (!adminToken) {
-      console.log('❌ [MIDDLEWARE] No adminToken cookie found, redirecting to login')
-      return NextResponse.redirect(new URL('/admin/login', request.url))
-    }
-
-    console.log('✅ [MIDDLEWARE] adminToken found, verifying...')
-
-    // Verify JWT token using jose (Edge Runtime compatible)
-    try {
-      const { payload } = await jwtVerify(adminToken, secret)
-      console.log('✅ [MIDDLEWARE] Token valid, user authorized:', payload)
-    } catch (err) {
-      // Token is invalid or expired
-      console.log('❌ [MIDDLEWARE] Token invalid or expired:', err)
-      const loginUrl = new URL('/admin/login', request.url)
-      const res = NextResponse.redirect(loginUrl)
-      res.cookies.delete('adminToken')
-      return res
-    }
-  }
-
   return response
 }
 
@@ -118,8 +117,8 @@ export const config = {
      * - _next/image (image optimization)
      * - favicon.ico (favicon file)
      * - public folder
+     * - api routes (handled separately)
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
-

@@ -5,7 +5,9 @@ import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Menu, X, User, LogOut, MessageSquare, LayoutDashboard } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { usePathname } from 'next/navigation'
+import { useLocale } from 'next-intl'
 import { LAUNCH_CONFIG } from '@/lib/launch-config'
+import LanguageSwitcher from './LanguageSwitcher'
 
 interface DropdownItem {
   label: string
@@ -84,7 +86,16 @@ export default function Header() {
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const { user, logout } = useAuth()
   const pathname = usePathname()
+  const locale = useLocale()
   const isAdminPage = pathname?.startsWith('/admin')
+  
+  // Helper function to add locale prefix to paths
+  const getLocalizedPath = (path: string) => {
+    if (path.startsWith('/admin') || path.startsWith('/api')) {
+      return path
+    }
+    return `/${locale}${path}`
+  }
   
   // Hide header on admin pages
   if (isAdminPage) {
@@ -146,7 +157,7 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24 md:h-20 lg:h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href={`/${locale}`} className="flex items-center">
             <span className="text-4xl md:text-3xl lg:text-2xl font-bold tracking-tight text-primary-navy">
               BOLAXO
             </span>
@@ -164,7 +175,7 @@ export default function Header() {
                 {item.href ? (
                   <div className="relative group">
                     <Link
-                      href={item.href}
+                      href={getLocalizedPath(item.href || '/')}
                       className="flex items-center space-x-1 text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
                     >
                       <span>{item.label}</span>
@@ -181,7 +192,7 @@ export default function Header() {
                           {item.dropdown.map((dropdownItem) => (
                             <Link
                               key={dropdownItem.href}
-                              href={dropdownItem.href}
+                              href={getLocalizedPath(dropdownItem.href)}
                               className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
                             >
                               {dropdownItem.label}
@@ -207,7 +218,7 @@ export default function Header() {
                       {item.dropdown.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.href}
-                          href={dropdownItem.href}
+                          href={getLocalizedPath(dropdownItem.href)}
                           className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
                         >
                           {dropdownItem.label}
@@ -222,6 +233,9 @@ export default function Header() {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-3">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
             {user ? (
               <>
                 {/* Desktop user menu */}
@@ -229,7 +243,7 @@ export default function Header() {
                   {/* Chat link */}
                   {(user.role === 'buyer' || user.role === 'seller') && (
                     <Link
-                      href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
+                      href={getLocalizedPath(user.role === 'buyer' ? '/kopare/chat' : '/salja/chat')}
                       className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
                       title="Meddelanden"
                     >
@@ -239,7 +253,7 @@ export default function Header() {
                   
                   {/* Dashboard link */}
                   <Link
-                    href="/dashboard"
+                    href={getLocalizedPath('/dashboard')}
                     className="p-2 rounded-lg text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-all duration-200"
                     title="Dashboard"
                   >
@@ -260,7 +274,7 @@ export default function Header() {
                       <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden">
                         <div className="py-2">
                           <Link
-                            href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
+                            href={getLocalizedPath(user.role === 'buyer' ? '/kopare/settings' : '/salja/settings')}
                             className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-navy transition-colors"
                           >
                             Profil & Inställningar
@@ -280,13 +294,13 @@ export default function Header() {
             ) : (
               <>
                 <Link
-                  href="/login"
+                  href={getLocalizedPath('/login')}
                   className="hidden lg:block text-sm font-medium text-gray-700 hover:text-primary-navy transition-colors duration-200"
                 >
                   Logga in
                 </Link>
                 <Link
-                  href="/registrera"
+                  href={getLocalizedPath('/registrera')}
                   className="hidden lg:block px-4 py-2 bg-primary-navy text-white rounded-lg font-medium text-sm hover:bg-primary-navy/90 transition-all duration-200 hover:shadow-md"
                 >
                   Kom igång

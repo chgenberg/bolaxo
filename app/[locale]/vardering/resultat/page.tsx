@@ -1,0 +1,505 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import WhatIfScenarios from '@/components/WhatIfScenarios'
+import dynamic from 'next/dynamic'
+
+// Dynamisk import av PDF-komponenten för att undvika SSR-problem
+const ValuationPDF = dynamic(() => import('@/components/ValuationPDF'), { ssr: false })
+
+interface ValuationResult {
+  valuationRange: {
+    min: number
+    max: number
+    mostLikely: number
+  }
+  method: string
+  methodology: {
+    multipel?: string
+    avkastningskrav?: string
+    substans?: string
+  }
+  analysis: {
+    strengths: string[]
+    weaknesses: string[]
+    opportunities: string[]
+    risks: string[]
+  }
+  recommendations: Array<{
+    title: string
+    description: string
+    impact: 'high' | 'medium' | 'low'
+  }>
+  marketComparison: string
+  keyMetrics: {
+    label: string
+    value: string
+  }[]
+}
+
+export default function ValuationResultPage() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [result, setResult] = useState<ValuationResult | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [valuationData, setValuationData] = useState<any>(null)
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+
+  useEffect(() => {
+    const fetchValuation = async () => {
+      try {
+        // Hämta data från localStorage
+        const storedData = localStorage.getItem('valuationData')
+        if (!storedData) {
+          router.push('/vardering')
+          return
+        }
+
+        const valuationData = JSON.parse(storedData)
+        setValuationData(valuationData) // Spara för WhatIfScenarios
+        
+        // Hämta även berikad data om den finns
+        const enrichedData = localStorage.getItem('enrichedCompanyData')
+
+        // Anropa API för att få AI-värdering
+        const response = await fetch('/api/valuation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...valuationData,
+            enrichedCompanyData: enrichedData
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Kunde inte generera värdering')
+        }
+
+        const data = await response.json()
+        
+        // Vänta tills result faktiskt finns innan vi döljer loading
+        if (data.result) {
+          setResult(data.result)
+          setLoading(false)
+        } else {
+          throw new Error('Inget resultat mottaget från API')
+        }
+      } catch (err) {
+        setError('Ett fel uppstod vid genereringen av värderingen')
+        console.error(err)
+        setLoading(false)
+      }
+    }
+
+    fetchValuation()
+  }, [router])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background-off-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="heading-3 mb-2">Analyserar ditt företag...</h2>
+          <p className="text-primary-navy">Vår AI gör en djupgående värdering</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !result) {
+    return (
+      <div className="min-h-screen bg-background-off-white flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-2xl shadow-card max-w-md text-center">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="heading-3 mb-2">Något gick fel</h2>
+          <p className="text-primary-navy mb-6">{error}</p>
+          <Link href="/vardering" className="btn-primary">
+            Försök igen
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  const formatCurrency = (value: number) => {
+    return `${value.toLocaleString('sv-SE')} kr`
+  }
+
+  const handleDownloadPDF = async () => {
+    if (isGeneratingPDF) return
+    
+    try {
+      setIsGeneratingPDF(true)
+      
+      if (!result) {
+        alert('Ingen värdering att ladda ner ännu. Vänta på att värderingen är klar.')
+        return
+      }
+
+      // Hämta berikad data om den finns
+      const enrichedDataStr = localStorage.getItem('enrichedCompanyData')
+      const enrichedData = enrichedDataStr ? JSON.parse(enrichedDataStr) : null
+      
+      // Kolla om vi har exakta finansiella siffror
+      const hasExactFinancials = !!(valuationData?.exactRevenue && (valuationData?.salaries || valuationData?.operatingCosts))
+      
+      // Importera dynamiskt för att undvika SSR-problem
+      const ReactPDF = await import('@react-pdf/renderer')
+      
+      if (!ReactPDF) {
+        throw new Error('PDF library not loaded correctly')
+      }
+      
+      // Använd JSX direkt för korrekt typning
+      const pdfDocument = (
+        <ValuationPDF 
+          companyName={valuationData?.companyName || 'Ditt företag'}
+          result={result}
+          generatedAt={new Date().toLocaleDateString('sv-SE', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })}
+          companyInfo={enrichedData ? {
+            orgNumber: valuationData?.orgNumber,
+            website: enrichedData.website,
+            email: enrichedData.email,
+            phone: enrichedData.phone,
+            address: enrichedData.address,
+            industry: enrichedData.industry,
+            employees: enrichedData.employees
+          } : valuationData ? {
+            orgNumber: valuationData?.orgNumber,
+            industry: valuationData?.industry,
+            employees: valuationData?.employees
+          } : undefined}
+          hasExactFinancials={hasExactFinancials}
+        />
+      )
+      
+      // Använd renderToBuffer för att få en buffer, sedan konvertera till blob
+      const pdfBuffer = await ReactPDF.renderToBuffer(pdfDocument)
+      // Konvertera Buffer till Uint8Array för Blob-konstruktorn
+      const uint8Array = new Uint8Array(pdfBuffer)
+      const blob = new Blob([uint8Array], { type: 'application/pdf' })
+      
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `Foretagsvardering_${(valuationData?.companyName || 'foretag').replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      console.error('PDF generation error:', error)
+      alert('Kunde inte generera PDF. Försök igen eller kontakta support om problemet kvarstår.')
+    } finally {
+      setIsGeneratingPDF(false)
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-background-off-white py-12">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-green-100 text-green-800 rounded-full text-sm mb-4">
+            <CheckCircle className="w-4 h-4 mr-2" />
+            Värdering klar!
+          </div>
+          <h1 className="heading-1 mb-4">Din Företagsvärdering</h1>
+          <p className="text-lg text-primary-navy">
+            Baserad på AI-analys med professionella värderingsmetoder
+          </p>
+        </div>
+
+        {/* Main Valuation */}
+        <div className="bg-white p-8 md:p-12 rounded-2xl shadow-card mb-8 border-2" style={{ borderColor: '#1F3C58' }}>
+          <div className="text-center">
+            <TrendingUp className="w-16 h-16 mx-auto mb-6" style={{ color: '#1F3C58' }} />
+            <h2 className="text-xl sm:text-2xl font-semibold mb-2" style={{ color: '#1F3C58' }}>Uppskattat företagsvärde</h2>
+            <div className="text-5xl md:text-6xl font-bold mb-4" style={{ color: '#1F3C58' }}>
+              {formatCurrency(result.valuationRange.mostLikely)}
+            </div>
+            <div className="text-lg mb-4" style={{ color: '#1F3C58' }}>
+              Intervall: {formatCurrency(result.valuationRange.min)} - {formatCurrency(result.valuationRange.max)}
+            </div>
+            <div className="mt-6 p-4 rounded-xl inline-block" style={{ backgroundColor: '#F5F0E8' }}>
+              <p className="text-sm mb-1" style={{ color: '#666666' }}>Metod använd</p>
+              <p className="font-semibold" style={{ color: '#1F3C58' }}>{result.method}</p>
+            </div>
+            
+            {/* PDF Download Button */}
+            <div className="mt-8">
+              <button
+                onClick={handleDownloadPDF}
+                disabled={isGeneratingPDF}
+                className="bg-[#1F3C58] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#1a3147] transition-all shadow-md inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: '#1F3C58', color: '#FFFFFF' }}
+              >
+                {isGeneratingPDF ? (
+                  <>
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Genererar PDF...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    Ladda hem PDF
+                  </>
+                )}
+              </button>
+            </div>
+            
+            {/* CTA to Create Listing */}
+            <div className="mt-6">
+              <Link href="/salja/start" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-button font-semibold bg-accent-pink text-white hover:bg-opacity-90 transition-all shadow-md">
+                Skapa annons nu
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-8">
+          {result.keyMetrics.map((metric, index) => (
+            <div key={index} className="bg-white p-6 rounded-2xl shadow-card">
+              <div className="text-sm text-gray-600 mb-1">{metric.label}</div>
+              <div className="text-xl sm:text-2xl font-bold text-primary-navy">{metric.value}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Methodology Explanation */}
+        <div className="bg-white p-8 rounded-2xl shadow-card mb-8">
+          <div className="flex items-start mb-6">
+            <FileText className="w-6 h-6 text-primary-blue mr-3 flex-shrink-0 mt-1" />
+            <div>
+              <h2 className="heading-3 mb-2 text-primary-navy">Beräkningsunderlag</h2>
+              <p className="text-gray-600">Så har vi kommit fram till värderingen</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {result.methodology.multipel && (
+              <div className="bg-light-blue p-4 rounded-xl">
+                <h3 className="font-semibold text-primary-navy mb-2">Multipelvärdering</h3>
+                <p className="text-sm text-primary-navy">{result.methodology.multipel}</p>
+              </div>
+            )}
+            {result.methodology.avkastningskrav && (
+              <div className="bg-light-blue p-4 rounded-xl">
+                <h3 className="font-semibold text-primary-navy mb-2">Avkastningsvärdering</h3>
+                <p className="text-sm text-primary-navy">{result.methodology.avkastningskrav}</p>
+              </div>
+            )}
+            {result.methodology.substans && (
+              <div className="bg-light-blue p-4 rounded-xl">
+                <h3 className="font-semibold text-primary-navy mb-2">Substansvärde</h3>
+                <p className="text-sm text-primary-navy">{result.methodology.substans}</p>
+              </div>
+            )}
+          </div>
+
+          {result.marketComparison && (
+            <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+              <h3 className="font-semibold text-primary-navy mb-2">Jämförelse med marknaden</h3>
+              <p className="text-sm text-primary-navy">{result.marketComparison}</p>
+            </div>
+          )}
+        </div>
+
+        {/* SWOT Analysis */}
+        <div className="bg-white p-8 rounded-2xl shadow-card mb-8">
+          <div className="flex items-start mb-6">
+            <BarChart3 className="w-6 h-6 text-primary-blue mr-3 flex-shrink-0 mt-1" />
+            <div>
+              <h2 className="heading-3 mb-2 text-primary-navy">Analys av företaget</h2>
+              <p className="text-gray-600">Styrkor, svagheter, möjligheter och risker</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+            {/* Strengths */}
+            <div>
+              <h3 className="font-semibold text-green-700 mb-3 flex items-center">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                Styrkor
+              </h3>
+              <ul className="space-y-2">
+                {result.analysis.strengths.map((strength, index) => (
+                  <li key={index} className="flex items-start text-sm">
+                    <span className="text-green-500 mr-2">•</span>
+                    <span className="text-primary-navy">{strength}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Weaknesses */}
+            <div>
+              <h3 className="font-semibold text-orange-700 mb-3 flex items-center">
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                Svagheter
+              </h3>
+              <ul className="space-y-2">
+                {result.analysis.weaknesses.map((weakness, index) => (
+                  <li key={index} className="flex items-start text-sm">
+                    <span className="text-orange-500 mr-2">•</span>
+                    <span className="text-primary-navy">{weakness}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Opportunities */}
+            <div>
+              <h3 className="font-semibold text-blue-700 mb-3 flex items-center">
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                Möjligheter
+              </h3>
+              <ul className="space-y-2">
+                {result.analysis.opportunities.map((opportunity, index) => (
+                  <li key={index} className="flex items-start text-sm">
+                    <span className="text-blue-500 mr-2">•</span>
+                    <span className="text-primary-navy">{opportunity}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Risks */}
+            <div>
+              <h3 className="font-semibold text-red-700 mb-3 flex items-center">
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                Risker
+              </h3>
+              <ul className="space-y-2">
+                {result.analysis.risks.map((risk, index) => (
+                  <li key={index} className="flex items-start text-sm">
+                    <span className="text-red-500 mr-2">•</span>
+                    <span className="text-primary-navy">{risk}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Recommendations */}
+        <div className="bg-white p-8 rounded-2xl shadow-card mb-8">
+          <div className="flex items-start mb-6">
+            <Lightbulb className="w-6 h-6 text-primary-blue mr-3 flex-shrink-0 mt-1" />
+            <div>
+              <h2 className="heading-3 mb-2">Så ökar du företagsvärdet</h2>
+              <p className="text-primary-navy">Konkreta rekommendationer baserat på analysen</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {result.recommendations.map((rec, index) => (
+              <div
+                key={index}
+                className={`p-4 rounded-xl border-l-4 ${
+                  rec.impact === 'high'
+                    ? 'bg-green-50 border-green-500'
+                    : rec.impact === 'medium'
+                    ? 'bg-yellow-50 border-yellow-500'
+                    : 'bg-blue-50 border-blue-500'
+                }`}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-primary-navy">{rec.title}</h3>
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      rec.impact === 'high'
+                        ? 'bg-green-200 text-green-800'
+                        : rec.impact === 'medium'
+                        ? 'bg-yellow-200 text-yellow-800'
+                        : 'bg-blue-200 text-blue-800'
+                    }`}
+                  >
+                    {rec.impact === 'high' ? 'Hög påverkan' : rec.impact === 'medium' ? 'Medel påverkan' : 'Låg påverkan'}
+                  </span>
+                </div>
+                <p className="text-sm text-primary-navy">{rec.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* What-If Scenarios */}
+        <WhatIfScenarios 
+          baseValuation={result.valuationRange.mostLikely}
+          currentData={{
+            revenue: valuationData?.revenue,
+            profitMargin: valuationData?.profitMargin,
+            industry: valuationData?.industry
+          }}
+        />
+
+        {/* Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-8 mt-8">
+          <button
+            onClick={handleDownloadPDF}
+            disabled={isGeneratingPDF}
+            className="bg-[#1F3C58] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#1a3147] transition-all shadow-md flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: '#1F3C58', color: '#FFFFFF' }}
+          >
+            {isGeneratingPDF ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                Genererar...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4 mr-2" />
+                Ladda hem PDF
+              </>
+            )}
+          </button>
+          <button 
+            onClick={() => window.print()}
+            className="bg-white border-2 border-[#1F3C58] text-[#1F3C58] px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-all shadow-md flex items-center justify-center"
+            style={{ borderColor: '#1F3C58', color: '#1F3C58' }}
+          >
+            <Mail className="w-4 h-4 mr-2" />
+            Skicka till min e-post
+          </button>
+        </div>
+
+        {/* Next Steps */}
+        <div className="bg-primary-blue text-white p-8 rounded-2xl">
+          <h2 className="heading-3 text-white mb-4">Nästa steg</h2>
+          <p className="mb-6 opacity-90">
+            Vill du sälja ditt företag? Vi hjälper dig att hitta rätt köpare och få bästa möjliga pris.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/salja/start" className="btn-primary bg-accent-pink text-white hover:bg-opacity-90 inline-flex items-center justify-center order-first">
+              Skapa annons och starta försäljning
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+            </Link>
+            <Link href="/kontakt" className="btn-secondary bg-white/20 text-white hover:bg-white/30 inline-flex items-center justify-center">
+              Prata med en rådgivare
+            </Link>
+          </div>
+        </div>
+
+        {/* Disclaimer */}
+        <div className="mt-8 text-center text-sm text-primary-navy">
+          <p>
+            Denna värdering är en indikation baserad på AI-analys och bör inte ses som en formell värdering.
+            För en fullständig Due Diligence och professionell värdering, kontakta en auktoriserad värderare.
+          </p>
+        </div>
+      </div>
+    </main>
+  )
+}
