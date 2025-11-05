@@ -1606,5 +1606,40 @@
         }
       }
     }
+  },
+  "dashboard": {
+    "defaultTitle": "Dashboard",
+    "loading": "Loading...",
+    "logout": "Log out",
+    "roles": {
+      "seller": "Seller",
+      "buyer": "Buyer",
+      "broker": "Broker"
+    },
+    "menu": {
+      "overview": "Overview",
+      "myListings": "My Listings",
+      "matchedBuyers": "Matched Buyers",
+      "ndaRequests": "NDA Requests",
+      "messages": "Messages",
+      "analytics": "Analytics",
+      "documents": "Documents",
+      "mySales": "My Sales",
+      "calendar": "Calendar",
+      "settings": "Settings",
+      "searchProfile": "My Search Profile",
+      "savedItems": "Saved Items",
+      "ndaStatus": "NDA Status",
+      "comparisons": "Comparisons",
+      "myDeals": "My Deals",
+      "pipeline": "Pipeline",
+      "clients": "Clients",
+      "activeDeals": "Active Deals",
+      "team": "Team"
+    },
+    "quickActions": {
+      "newListing": "New Listing",
+      "searchCompanies": "Search Companies"
+    }
   }
 }

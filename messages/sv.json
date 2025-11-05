@@ -1606,5 +1606,40 @@
         }
       }
     }
+  },
+  "dashboard": {
+    "defaultTitle": "Dashboard",
+    "loading": "Laddar...",
+    "logout": "Logga ut",
+    "roles": {
+      "seller": "Säljare",
+      "buyer": "Köpare",
+      "broker": "Mäklare"
+    },
+    "menu": {
+      "overview": "Översikt",
+      "myListings": "Mina annonser",
+      "matchedBuyers": "Matchade köpare",
+      "ndaRequests": "NDA-förfrågningar",
+      "messages": "Meddelanden",
+      "analytics": "Analytics",
+      "documents": "Dokument",
+      "mySales": "Mina försäljningar",
+      "calendar": "Kalender",
+      "settings": "Inställningar",
+      "searchProfile": "Min sökprofil",
+      "savedItems": "Sparade objekt",
+      "ndaStatus": "NDA-status",
+      "comparisons": "Jämförelser",
+      "myDeals": "Mina affärer",
+      "pipeline": "Pipeline",
+      "clients": "Klienter",
+      "activeDeals": "Aktiva affärer",
+      "team": "Team"
+    },
+    "quickActions": {
+      "newListing": "Ny annons",
+      "searchCompanies": "Sök företag"
+    }
   }
 }

@@ -9,6 +9,7 @@ import {
   LogOut, ChevronLeft, Bell, Search, Plus, Menu, X
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface MenuItem {
   label: string
@@ -24,6 +25,8 @@ interface DashboardLayoutProps {
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname()
   const { user, logout } = useAuth()
+  const t = useTranslations('dashboard')
+  const locale = useLocale()
   const [collapsed, setCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   
@@ -31,41 +34,40 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const getMenuItems = (): MenuItem[] => {
     if (user?.role === 'seller') {
       return [
-        { label: 'Översikt', href: '/dashboard', icon: LayoutDashboard },
-        { label: 'Mina annonser', href: '/dashboard/listings', icon: Building, badge: 3 },
-        { label: 'Matchade köpare', href: '/dashboard/matches', icon: Users, badge: 12 },
-        { label: 'NDA-förfrågningar', href: '/dashboard/ndas', icon: Shield, badge: 5 },
-        { label: 'Meddelanden', href: '/dashboard/messages', icon: MessageSquare, badge: 2 },
-        { label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-        { label: 'Dokument', href: '/dashboard/documents', icon: FolderOpen },
-        { label: 'Mina försäljningar', href: '/dashboard/sales', icon: TrendingUp },
-        { label: 'Kalender', href: '/dashboard/calendar', icon: Calendar },
-        { label: 'Inställningar', href: '/dashboard/settings', icon: Settings },
+        { label: t('menu.overview'), href: `/${locale}/dashboard`, icon: LayoutDashboard },
+        { label: t('menu.myListings'), href: `/${locale}/dashboard/listings`, icon: Building, badge: 3 },
+        { label: t('menu.matchedBuyers'), href: `/${locale}/dashboard/matches`, icon: Users, badge: 12 },
+        { label: t('menu.ndaRequests'), href: `/${locale}/dashboard/ndas`, icon: Shield, badge: 5 },
+        { label: t('menu.messages'), href: `/${locale}/dashboard/messages`, icon: MessageSquare, badge: 2 },
+        { label: t('menu.analytics'), href: `/${locale}/dashboard/analytics`, icon: BarChart3 },
+        { label: t('menu.documents'), href: `/${locale}/dashboard/documents`, icon: FolderOpen },
+        { label: t('menu.mySales'), href: `/${locale}/dashboard/sales`, icon: TrendingUp },
+        { label: t('menu.calendar'), href: `/${locale}/dashboard/calendar`, icon: Calendar },
+        { label: t('menu.settings'), href: `/${locale}/dashboard/settings`, icon: Settings },
       ]
     } else if (user?.role === 'buyer') {
       return [
-        { label: 'Översikt', href: '/dashboard', icon: LayoutDashboard },
-        { label: 'Min sökprofil', href: '/dashboard/search-profile', icon: Search },
-        { label: 'Sparade objekt', href: '/dashboard/saved', icon: Building, badge: 12 },
-        { label: 'NDA-status', href: '/dashboard/nda-status', icon: Shield, badge: 4 },
-        { label: 'Meddelanden', href: '/dashboard/messages', icon: MessageSquare, badge: 1 },
-        { label: 'Jämförelser', href: '/dashboard/compare', icon: BarChart3 },
-        { label: 'Kalender', href: '/dashboard/calendar', icon: Calendar },
-        // M&A Transaction Features
-        { label: 'Mina affärer', href: '/dashboard/deals', icon: FileText, badge: 0 },
-        { label: 'Inställningar', href: '/dashboard/settings', icon: Settings },
+        { label: t('menu.overview'), href: `/${locale}/dashboard`, icon: LayoutDashboard },
+        { label: t('menu.searchProfile'), href: `/${locale}/dashboard/search-profile`, icon: Search },
+        { label: t('menu.savedItems'), href: `/${locale}/dashboard/saved`, icon: Building, badge: 12 },
+        { label: t('menu.ndaStatus'), href: `/${locale}/dashboard/nda-status`, icon: Shield, badge: 4 },
+        { label: t('menu.messages'), href: `/${locale}/dashboard/messages`, icon: MessageSquare, badge: 1 },
+        { label: t('menu.comparisons'), href: `/${locale}/dashboard/compare`, icon: BarChart3 },
+        { label: t('menu.calendar'), href: `/${locale}/dashboard/calendar`, icon: Calendar },
+        { label: t('menu.myDeals'), href: `/${locale}/dashboard/deals`, icon: FileText, badge: 0 },
+        { label: t('menu.settings'), href: `/${locale}/dashboard/settings`, icon: Settings },
       ]
     } else {
       // Advisor/Broker
       return [
-        { label: 'Översikt', href: '/dashboard', icon: LayoutDashboard },
-        { label: 'Pipeline', href: '/dashboard/pipeline', icon: TrendingUp },
-        { label: 'Klienter', href: '/dashboard/clients', icon: Users, badge: 24 },
-        { label: 'Aktiva affärer', href: '/dashboard/deals', icon: Building, badge: 8 },
-        { label: 'Meddelanden', href: '/dashboard/messages', icon: MessageSquare, badge: 6 },
-        { label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-        { label: 'Team', href: '/dashboard/team', icon: Users },
-        { label: 'Inställningar', href: '/dashboard/settings', icon: Settings },
+        { label: t('menu.overview'), href: `/${locale}/dashboard`, icon: LayoutDashboard },
+        { label: t('menu.pipeline'), href: `/${locale}/dashboard/pipeline`, icon: TrendingUp },
+        { label: t('menu.clients'), href: `/${locale}/dashboard/clients`, icon: Users, badge: 24 },
+        { label: t('menu.activeDeals'), href: `/${locale}/dashboard/deals`, icon: Building, badge: 8 },
+        { label: t('menu.messages'), href: `/${locale}/dashboard/messages`, icon: MessageSquare, badge: 6 },
+        { label: t('menu.analytics'), href: `/${locale}/dashboard/analytics`, icon: BarChart3 },
+        { label: t('menu.team'), href: `/${locale}/dashboard/team`, icon: Users },
+        { label: t('menu.settings'), href: `/${locale}/dashboard/settings`, icon: Settings },
       ]
     }
   }
@@ -125,7 +127,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   {user?.name || user?.email}
                 </div>
                 <div className="text-xs text-gray-600">
-                  {user?.role === 'seller' ? 'Säljare' : user?.role === 'buyer' ? 'Köpare' : 'Mäklare'}
+                  {user?.role === 'seller' ? t('roles.seller') : user?.role === 'buyer' ? t('roles.buyer') : t('roles.broker')}
                 </div>
               </div>
             )}
@@ -175,7 +177,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             }`}
           >
             <LogOut className="w-4 sm:w-5 h-4 sm:h-5" />
-            {!collapsed && <span className="text-xs sm:text-sm font-medium">Logga ut</span>}
+            {!collapsed && <span className="text-xs sm:text-sm font-medium">{t('logout')}</span>}
           </button>
         </div>
       </aside>
@@ -193,22 +195,22 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 <Menu className="w-5 h-5 text-primary-navy" />
               </button>
               <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary-navy uppercase">
-                {menuItems.find(item => item.href === pathname)?.label || 'Dashboard'}
+                {menuItems.find(item => item.href === pathname)?.label || t('defaultTitle')}
               </h1>
             </div>
             
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Quick actions based on role */}
               {user?.role === 'seller' && (
-                <Link href="/salja/start" className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
+                <Link href={`/${locale}/salja/start`} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
                   <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Ny annons</span>
+                  <span className="hidden sm:inline">{t('quickActions.newListing')}</span>
                 </Link>
               )}
               {user?.role === 'buyer' && (
-                <Link href="/sok" className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
+                <Link href={`/${locale}/sok`} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
                   <Search className="w-4 h-4" />
-                  <span className="hidden sm:inline">Sök företag</span>
+                  <span className="hidden sm:inline">{t('quickActions.searchCompanies')}</span>
                 </Link>
               )}
               
