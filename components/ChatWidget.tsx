@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { MessageCircle, X, Send, Phone, Mail, User, Sparkles, Calendar, CheckCircle2, ChevronDown, ShoppingCart, DollarSign, Handshake, HelpCircle } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import { useTranslations, useLocale } from 'next-intl'
 
 interface Message {
   id: string
@@ -23,11 +24,13 @@ interface ContactFormData {
 }
 
 export default function ChatWidget() {
+  const t = useTranslations('chatWidget')
+  const locale = useLocale()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: 'Hej! Jag är din AI-assistent för BOLAXO. Hur kan jag hjälpa dig idag? 🤖',
+      text: t('initialMessage'),
       sender: 'bot',
       timestamp: new Date()
     }
@@ -52,10 +55,10 @@ export default function ChatWidget() {
   const pathname = usePathname()
 
   const interestOptions = [
-    { value: 'buying', label: 'Jag vill köpa', icon: ShoppingCart },
-    { value: 'selling', label: 'Jag vill sälja', icon: DollarSign },
-    { value: 'partnership', label: 'Samarbete/Partnership', icon: Handshake },
-    { value: 'other', label: 'Övrigt', icon: HelpCircle },
+    { value: 'buying', label: t('contactForm.interestBuying'), icon: ShoppingCart },
+    { value: 'selling', label: t('contactForm.interestSelling'), icon: DollarSign },
+    { value: 'partnership', label: t('contactForm.interestPartnership'), icon: Handshake },
+    { value: 'other', label: t('contactForm.interestOther'), icon: HelpCircle },
   ]
 
   // Close interest dropdown when clicking outside
@@ -126,22 +129,22 @@ export default function ChatWidget() {
   // Common questions based on current page
   const getCommonQuestions = () => {
     const baseQuestions = [
-      { text: 'Hur fungerar värderingen?', response: 'Vår AI-baserade värdering analyserar ditt företag utifrån flera faktorer som omsättning, bransch, tillväxt och lönsamhet. Du får en professionell värdering på bara 5 minuter - helt gratis! Värderingen baseras på verkliga affärer och branschstandarder.' },
-      { text: 'Vad kostar det att sälja?', response: 'Det är gratis att skapa en annons och få värdering! Vi har tre paket: Basic (495 kr/mån), Pro (995 kr/mån) och Enterprise (1995 kr/mån). Du betalar endast när din annons är aktiv. Dessutom finns möjlighet till success-fee på 0,75-1,5% vid genomförd affär.' },
-      { text: 'Hur lång tid tar processen?', response: 'Från annons till avslut tar det vanligtvis 90-180 dagar. Värdering tar 5 minuter, NDA-signering 1-2 dagar, due diligence 2-6 veckor och själva transaktionen 60-90 dagar. Vi hjälper dig genom hela processen!' }
+      { text: t('questions.base.valuation'), response: t('questions.base.valuationResponse') },
+      { text: t('questions.base.cost'), response: t('questions.base.costResponse') },
+      { text: t('questions.base.timeline'), response: t('questions.base.timelineResponse') }
     ]
 
     if (pathname.includes('vardering')) {
       return [
-        { text: 'Är värderingen gratis?', response: 'Ja, värderingen är helt gratis och utan förpliktelser! Du får en professionell värdering baserad på AI och verkliga marknadsdata på bara 5 minuter.' },
+        { text: t('questions.valuation.free'), response: t('questions.valuation.freeResponse') },
         ...baseQuestions.slice(1)
       ]
     }
 
     if (pathname.includes('kopare')) {
       return [
-        { text: 'Hur hittar jag rätt företag?', response: 'Vår smarta matchning analyserar dina preferenser och visar företag som passar dig. Du kan filtrera på bransch, region, omsättning och mycket mer. Alla säljare är verifierade med BankID för din trygghet.' },
-        { text: 'Vad ser jag innan NDA?', response: 'Innan NDA ser du bransch, region, ungefärlig omsättning, antal anställda och en allmän beskrivning. Efter signerad NDA får du tillgång till företagsnamn, exakta siffror och detaljerad information.' },
+        { text: t('questions.buyer.find'), response: t('questions.buyer.findResponse') },
+        { text: t('questions.buyer.beforeNda'), response: t('questions.buyer.beforeNdaResponse') },
         baseQuestions[2]
       ]
     }
@@ -190,33 +193,52 @@ export default function ChatWidget() {
       }
     }
 
-    // Specific responses
-    if (input.includes('hej') || input.includes('hallå')) {
-      return 'Hej! Vad kan jag hjälpa dig med idag? 😊'
-    }
-
-    if (input.includes('pris') || input.includes('kosta')) {
-      return 'Vi har tre prisplaner: Basic (495 kr/mån), Pro (995 kr/mån) och Enterprise (1995 kr/mån). Värdering och att skapa annons är helt gratis! Vill du veta mer om vad som ingår i varje paket?'
-    }
-
-    if (input.includes('värdering')) {
-      return 'Vår AI-värdering tar bara 5 minuter och är helt gratis! Du får en professionell bedömning baserad på branschstandarder och verkliga affärer. Vill du starta en värdering nu?'
-    }
-
-    if (input.includes('sälja')) {
-      return 'Perfekt att du vill sälja! Processen är enkel: 1) Gör en gratis värdering, 2) Skapa en annons, 3) Få matchning med köpare, 4) Genomför affären säkert. Ska jag guida dig till värderingen?'
-    }
-
-    if (input.includes('köpa') || input.includes('köpare')) {
-      return 'Som köpare får du tillgång till verifierade säljare och smarta matchningar. Det är helt gratis för köpare! Du kan filtrera på bransch, region och storlek. Vill du skapa ett köparkonto?'
-    }
-
-    if (input.includes('kontakt') || input.includes('hjälp')) {
-      return 'Jag hjälper gärna till! Du kan också klicka på "Jag vill bli kontaktad" nedan så ringer vi upp dig. Eller maila oss på kontakt@bolaxo.se.'
+    // Specific responses - support both Swedish and English
+    const isSwedish = locale === 'sv'
+    
+    if (isSwedish) {
+      if (input.includes('hej') || input.includes('hallå')) {
+        return t('botResponses.greeting')
+      }
+      if (input.includes('pris') || input.includes('kosta')) {
+        return t('botResponses.pricing')
+      }
+      if (input.includes('värdering')) {
+        return t('botResponses.valuation')
+      }
+      if (input.includes('sälja')) {
+        return t('botResponses.selling')
+      }
+      if (input.includes('köpa') || input.includes('köpare')) {
+        return t('botResponses.buying')
+      }
+      if (input.includes('kontakt') || input.includes('hjälp')) {
+        return t('botResponses.contact')
+      }
+    } else {
+      // English keywords
+      if (input.includes('hi') || input.includes('hello')) {
+        return t('botResponses.greeting')
+      }
+      if (input.includes('price') || input.includes('cost')) {
+        return t('botResponses.pricing')
+      }
+      if (input.includes('valuation') || input.includes('value')) {
+        return t('botResponses.valuation')
+      }
+      if (input.includes('sell') || input.includes('selling')) {
+        return t('botResponses.selling')
+      }
+      if (input.includes('buy') || input.includes('buyer') || input.includes('buying')) {
+        return t('botResponses.buying')
+      }
+      if (input.includes('contact') || input.includes('help')) {
+        return t('botResponses.contact')
+      }
     }
 
     // Default response
-    return 'Tack för din fråga! Jag är här för att hjälpa dig med allt som rör företagsförsäljning och köp. Kan du berätta lite mer om vad du behöver hjälp med? Du kan också klicka på "Jag vill bli kontaktad" om du föredrar att prata med en människa.'
+    return t('botResponses.default')
   }
 
   const handleContactSubmit = (e: React.FormEvent) => {
@@ -265,7 +287,7 @@ export default function ChatWidget() {
       >
         <div className="flex items-center gap-2 px-4 py-3 md:px-6 md:py-4">
           <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
-          <span className="hidden md:block font-bold">Chatt</span>
+          <span className="hidden md:block font-bold">{t('button')}</span>
         </div>
         
         {/* Pulsing effect */}
@@ -285,8 +307,8 @@ export default function ChatWidget() {
               <Sparkles className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div>
-              <h3 className="font-bold text-base md:text-lg text-white">BOLAXO Support</h3>
-              <p className="text-xs md:text-sm opacity-90">Alltid redo att hjälpa</p>
+              <h3 className="font-bold text-base md:text-lg text-white">{t('header.title')}</h3>
+              <p className="text-xs md:text-sm opacity-90">{t('header.subtitle')}</p>
             </div>
           </div>
           <button
@@ -338,7 +360,7 @@ export default function ChatWidget() {
 
         {/* Common Questions */}
         <div className="px-3 md:px-4 py-2 md:py-3 bg-white border-t border-gray-100">
-          <p className="text-xs text-gray-500 mb-2">Vanliga frågor:</p>
+          <p className="text-xs text-gray-500 mb-2">{t('commonQuestions')}</p>
           <div className="space-y-2">
             {commonQuestions.map((q, index) => (
               <button
@@ -355,7 +377,7 @@ export default function ChatWidget() {
               className="w-full text-left text-sm px-3 py-2 bg-navy text-white rounded-lg hover:shadow-md transition-all flex items-center gap-2"
             >
               <Phone className="w-4 h-4" />
-              Jag vill bli kontaktad
+              {t('contactMe')}
             </button>
           </div>
         </div>
@@ -371,7 +393,7 @@ export default function ChatWidget() {
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Skriv ditt meddelande..."
+              placeholder={t('inputPlaceholder')}
               className="flex-1 px-3 md:px-4 py-2 md:py-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-accent-pink text-sm"
             />
             <button
@@ -394,8 +416,8 @@ export default function ChatWidget() {
                 {/* Header */}
                 <div className="bg-navy text-white p-4 md:p-6 flex items-start justify-between">
                   <div>
-                    <h3 className="text-xl md:text-2xl font-bold mb-1 md:mb-2 text-white">Vi kontaktar dig!</h3>
-                    <p className="text-sm md:text-base text-white/90">Välj hur du vill bli kontaktad</p>
+                    <h3 className="text-xl md:text-2xl font-bold mb-1 md:mb-2 text-white">{t('contactForm.title')}</h3>
+                    <p className="text-sm md:text-base text-white/90">{t('contactForm.subtitle')}</p>
                   </div>
                   <button
                     type="button"
@@ -411,7 +433,7 @@ export default function ChatWidget() {
                   {/* Contact Method Selection */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Hur vill du bli kontaktad? *
+                      {t('contactForm.contactMethod')}
                     </label>
                     <div className="space-y-2">
                       <label className="flex items-center p-3 md:p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
@@ -427,8 +449,8 @@ export default function ChatWidget() {
                         <div className="flex items-center gap-2 md:gap-3">
                           <Mail className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                           <div>
-                            <p className="text-sm md:text-base font-medium">E-post</p>
-                            <p className="text-xs md:text-sm text-gray-500">Få svar inom 24 timmar</p>
+                            <p className="text-sm md:text-base font-medium">{t('contactForm.email')}</p>
+                            <p className="text-xs md:text-sm text-gray-500">{t('contactForm.emailDesc')}</p>
                           </div>
                         </div>
                       </label>
@@ -446,8 +468,8 @@ export default function ChatWidget() {
                         <div className="flex items-center gap-2 md:gap-3">
                           <Phone className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                           <div>
-                            <p className="text-sm md:text-base font-medium">Telefon</p>
-                            <p className="text-xs md:text-sm text-gray-500">Boka tid för uppringning</p>
+                            <p className="text-sm md:text-base font-medium">{t('contactForm.phone')}</p>
+                            <p className="text-xs md:text-sm text-gray-500">{t('contactForm.phoneDesc')}</p>
                           </div>
                         </div>
                       </label>
@@ -465,8 +487,8 @@ export default function ChatWidget() {
                         <div className="flex items-center gap-2 md:gap-3">
                           <Calendar className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                           <div>
-                            <p className="text-sm md:text-base font-medium">Jag vill boka en demo</p>
-                            <p className="text-xs md:text-sm text-gray-500">ca 20 min</p>
+                            <p className="text-sm md:text-base font-medium">{t('contactForm.demo')}</p>
+                            <p className="text-xs md:text-sm text-gray-500">{t('contactForm.demoDesc')}</p>
                           </div>
                         </div>
                       </label>
@@ -477,7 +499,7 @@ export default function ChatWidget() {
                   {(contactForm.contactMethod === 'phone' || contactForm.contactMethod === 'demo') && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Beskriv din fråga (1 mening) *
+                        {t('contactForm.subject')}
                       </label>
                       <input
                         type="text"
@@ -485,7 +507,7 @@ export default function ChatWidget() {
                         value={contactForm.subject}
                         onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
-                        placeholder="T.ex. Jag vill sälja mitt IT-företag"
+                        placeholder={t('contactForm.subjectPlaceholder')}
                         maxLength={100}
                       />
                     </div>
@@ -494,7 +516,7 @@ export default function ChatWidget() {
                   {/* Interest Dropdown */}
                   <div className="relative" ref={interestDropdownRef}>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Intresse *
+                      {t('contactForm.interest')}
                     </label>
                     <button
                       type="button"
@@ -542,7 +564,7 @@ export default function ChatWidget() {
                   {/* Name */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Namn *
+                      {t('contactForm.name')}
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -552,7 +574,7 @@ export default function ChatWidget() {
                         value={contactForm.name}
                         onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                         className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
-                        placeholder="Ditt namn"
+                        placeholder={t('contactForm.namePlaceholder')}
                       />
                     </div>
                   </div>
@@ -561,7 +583,7 @@ export default function ChatWidget() {
                   {contactForm.contactMethod === 'email' && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        E-post *
+                        {t('contactForm.emailLabel')}
                       </label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -571,7 +593,7 @@ export default function ChatWidget() {
                           value={contactForm.email}
                           onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                           className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
-                          placeholder="din@email.se"
+                          placeholder={t('contactForm.emailPlaceholder')}
                         />
                       </div>
                     </div>
@@ -582,7 +604,7 @@ export default function ChatWidget() {
                     <>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Telefonnummer *
+                          {t('contactForm.phoneLabel')}
                         </label>
                         <div className="relative">
                           <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -592,7 +614,7 @@ export default function ChatWidget() {
                             value={contactForm.phone}
                             onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
                             className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-accent-pink focus:outline-none"
-                            placeholder="+46 70 123 45 67"
+                            placeholder={t('contactForm.phonePlaceholder')}
                           />
                         </div>
                       </div>
@@ -601,7 +623,7 @@ export default function ChatWidget() {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           <Calendar className="inline w-4 h-4 mr-1" />
-                          När passar det att vi ringer? *
+                          {t('contactForm.whenCall')}
                         </label>
                         <div className="grid grid-cols-2 gap-2">
                           {getAvailableTimeSlots().map((slot) => (
@@ -625,7 +647,7 @@ export default function ChatWidget() {
                       {contactForm.preferredDate && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Välj tid *
+                            {t('contactForm.selectTime')}
                           </label>
                           <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
                             {timeSlots.map((slot) => (
@@ -654,13 +676,13 @@ export default function ChatWidget() {
                       onClick={() => setShowContactForm(false)}
                       className="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                     >
-                      Avbryt
+                      {t('contactForm.cancel')}
                     </button>
                     <button
                       type="submit"
                       className="flex-1 px-6 py-3 bg-navy text-white rounded-xl hover:shadow-lg transition-all font-medium"
                     >
-                      Skicka
+                      {t('contactForm.submit')}
                     </button>
                   </div>
                 </form>
@@ -670,13 +692,13 @@ export default function ChatWidget() {
                   <div className="w-16 h-16 md:w-20 md:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
                     <CheckCircle2 className="w-8 h-8 md:w-10 md:h-10 text-green-600" />
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Tack!</h3>
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{t('contactForm.thankYou')}</h3>
                   <p className="text-sm md:text-base text-gray-600">
                     {contactForm.contactMethod === 'email' 
-                      ? 'Vi kontaktar dig via e-post inom 24 timmar' 
+                      ? t('contactForm.successEmail')
                       : contactForm.contactMethod === 'demo'
-                      ? 'Vi kontaktar dig för att boka demo'
-                      : 'Vi kontaktar dig på vald tid'}
+                      ? t('contactForm.successDemo')
+                      : t('contactForm.successPhone')}
                   </p>
                 </div>
             )}

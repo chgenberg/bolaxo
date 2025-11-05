@@ -757,5 +757,77 @@
         "description": "Används för riktad annonsering och remarketing (Meta, Google Ads)"
       }
     }
+  },
+  "chatWidget": {
+    "button": "Chatt",
+    "header": {
+      "title": "BOLAXO Support",
+      "subtitle": "Alltid redo att hjälpa"
+    },
+    "initialMessage": "Hej! Jag är din AI-assistent för BOLAXO. Hur kan jag hjälpa dig idag? 🤖",
+    "commonQuestions": "Vanliga frågor:",
+    "contactMe": "Jag vill bli kontaktad",
+    "inputPlaceholder": "Skriv ditt meddelande...",
+    "questions": {
+      "base": {
+        "valuation": "Hur fungerar värderingen?",
+        "valuationResponse": "Vår AI-baserade värdering analyserar ditt företag utifrån flera faktorer som omsättning, bransch, tillväxt och lönsamhet. Du får en professionell värdering på bara 5 minuter - helt gratis! Värderingen baseras på verkliga affärer och branschstandarder.",
+        "cost": "Vad kostar det att sälja?",
+        "costResponse": "Det är gratis att skapa en annons och få värdering! Vi har tre paket: Basic (495 kr/mån), Pro (995 kr/mån) och Enterprise (1995 kr/mån). Du betalar endast när din annons är aktiv. Dessutom finns möjlighet till success-fee på 0,75-1,5% vid genomförd affär.",
+        "timeline": "Hur lång tid tar processen?",
+        "timelineResponse": "Från annons till avslut tar det vanligtvis 90-180 dagar. Värdering tar 5 minuter, NDA-signering 1-2 dagar, due diligence 2-6 veckor och själva transaktionen 60-90 dagar. Vi hjälper dig genom hela processen!"
+      },
+      "valuation": {
+        "free": "Är värderingen gratis?",
+        "freeResponse": "Ja, värderingen är helt gratis och utan förpliktelser! Du får en professionell värdering baserad på AI och verkliga marknadsdata på bara 5 minuter."
+      },
+      "buyer": {
+        "find": "Hur hittar jag rätt företag?",
+        "findResponse": "Vår smarta matchning analyserar dina preferenser och visar företag som passar dig. Du kan filtrera på bransch, region, omsättning och mycket mer. Alla säljare är verifierade med BankID för din trygghet.",
+        "beforeNda": "Vad ser jag innan NDA?",
+        "beforeNdaResponse": "Innan NDA ser du bransch, region, ungefärlig omsättning, antal anställda och en allmän beskrivning. Efter signerad NDA får du tillgång till företagsnamn, exakta siffror och detaljerad information."
+      }
+    },
+    "botResponses": {
+      "greeting": "Hej! Vad kan jag hjälpa dig med idag? 😊",
+      "pricing": "Vi har tre prisplaner: Basic (495 kr/mån), Pro (995 kr/mån) och Enterprise (1995 kr/mån). Värdering och att skapa annons är helt gratis! Vill du veta mer om vad som ingår i varje paket?",
+      "valuation": "Vår AI-värdering tar bara 5 minuter och är helt gratis! Du får en professionell bedömning baserad på branschstandarder och verkliga affärer. Vill du starta en värdering nu?",
+      "selling": "Perfekt att du vill sälja! Processen är enkel: 1) Gör en gratis värdering, 2) Skapa en annons, 3) Få matchning med köpare, 4) Genomför affären säkert. Ska jag guida dig till värderingen?",
+      "buying": "Som köpare får du tillgång till verifierade säljare och smarta matchningar. Det är helt gratis för köpare! Du kan filtrera på bransch, region och storlek. Vill du skapa ett köparkonto?",
+      "contact": "Jag hjälper gärna till! Du kan också klicka på \"Jag vill bli kontaktad\" nedan så ringer vi upp dig. Eller maila oss på kontakt@bolaxo.se.",
+      "default": "Tack för din fråga! Jag är här för att hjälpa dig med allt som rör företagsförsäljning och köp. Kan du berätta lite mer om vad du behöver hjälp med? Du kan också klicka på \"Jag vill bli kontaktad\" om du föredrar att prata med en människa."
+    },
+    "contactForm": {
+      "title": "Vi kontaktar dig!",
+      "subtitle": "Välj hur du vill bli kontaktad",
+      "contactMethod": "Hur vill du bli kontaktad?",
+      "email": "E-post",
+      "emailDesc": "Få svar inom 24 timmar",
+      "phone": "Telefon",
+      "phoneDesc": "Boka tid för uppringning",
+      "demo": "Jag vill boka en demo",
+      "demoDesc": "ca 20 min",
+      "subject": "Beskriv din fråga (1 mening) *",
+      "subjectPlaceholder": "T.ex. Jag vill sälja mitt IT-företag",
+      "interest": "Intresse *",
+      "interestBuying": "Jag vill köpa",
+      "interestSelling": "Jag vill sälja",
+      "interestPartnership": "Samarbete/Partnership",
+      "interestOther": "Övrigt",
+      "name": "Namn *",
+      "namePlaceholder": "Ditt namn",
+      "emailLabel": "E-post *",
+      "emailPlaceholder": "din@email.se",
+      "phoneLabel": "Telefonnummer *",
+      "phonePlaceholder": "+46 70 123 45 67",
+      "whenCall": "När passar det att vi ringer? *",
+      "selectTime": "Välj tid *",
+      "cancel": "Avbryt",
+      "submit": "Skicka",
+      "thankYou": "Tack!",
+      "successEmail": "Vi kontaktar dig via e-post inom 24 timmar",
+      "successDemo": "Vi kontaktar dig för att boka demo",
+      "successPhone": "Vi kontaktar dig på vald tid"
+    }
   }
 }

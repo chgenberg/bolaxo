@@ -757,5 +757,77 @@
         "description": "Used for targeted advertising and remarketing (Meta, Google Ads)"
       }
     }
+  },
+  "chatWidget": {
+    "button": "Chat",
+    "header": {
+      "title": "BOLAXO Support",
+      "subtitle": "Always ready to help"
+    },
+    "initialMessage": "Hi! I'm your AI assistant for BOLAXO. How can I help you today? 🤖",
+    "commonQuestions": "Common questions:",
+    "contactMe": "I want to be contacted",
+    "inputPlaceholder": "Type your message...",
+    "questions": {
+      "base": {
+        "valuation": "How does the valuation work?",
+        "valuationResponse": "Our AI-based valuation analyzes your company based on several factors such as revenue, industry, growth and profitability. You get a professional valuation in just 5 minutes - completely free! The valuation is based on real deals and industry standards.",
+        "cost": "What does it cost to sell?",
+        "costResponse": "It's free to create an ad and get a valuation! We have three packages: Basic (495 SEK/month), Pro (995 SEK/month) and Enterprise (1995 SEK/month). You only pay when your ad is active. There is also the option of a success fee of 0.75-1.5% on completed deals.",
+        "timeline": "How long does the process take?",
+        "timelineResponse": "From listing to closing usually takes 90-180 days. Valuation takes 5 minutes, NDA signing 1-2 days, due diligence 2-6 weeks and the actual transaction 60-90 days. We help you through the entire process!"
+      },
+      "valuation": {
+        "free": "Is the valuation free?",
+        "freeResponse": "Yes, the valuation is completely free and without obligations! You get a professional valuation based on AI and real market data in just 5 minutes."
+      },
+      "buyer": {
+        "find": "How do I find the right company?",
+        "findResponse": "Our smart matching analyzes your preferences and shows companies that suit you. You can filter by industry, region, revenue and much more. All sellers are verified with BankID for your security.",
+        "beforeNda": "What do I see before NDA?",
+        "beforeNdaResponse": "Before NDA you see industry, region, approximate revenue, number of employees and a general description. After signed NDA you get access to company name, exact figures and detailed information."
+      }
+    },
+    "botResponses": {
+      "greeting": "Hi! How can I help you today? 😊",
+      "pricing": "We have three pricing plans: Basic (495 SEK/month), Pro (995 SEK/month) and Enterprise (1995 SEK/month). Valuation and creating an ad is completely free! Would you like to know more about what's included in each package?",
+      "valuation": "Our AI valuation takes only 5 minutes and is completely free! You get a professional assessment based on industry standards and real deals. Would you like to start a valuation now?",
+      "selling": "Perfect that you want to sell! The process is simple: 1) Do a free valuation, 2) Create an ad, 3) Get matched with buyers, 4) Complete the deal safely. Should I guide you to the valuation?",
+      "buying": "As a buyer you get access to verified sellers and smart matches. It's completely free for buyers! You can filter by industry, region and size. Would you like to create a buyer account?",
+      "contact": "I'm happy to help! You can also click on \"I want to be contacted\" below and we'll call you. Or email us at kontakt@bolaxo.se.",
+      "default": "Thanks for your question! I'm here to help you with everything related to business sales and purchases. Can you tell me a bit more about what you need help with? You can also click on \"I want to be contacted\" if you prefer to talk to a human."
+    },
+    "contactForm": {
+      "title": "We'll contact you!",
+      "subtitle": "Choose how you want to be contacted",
+      "contactMethod": "How would you like to be contacted?",
+      "email": "Email",
+      "emailDesc": "Get a response within 24 hours",
+      "phone": "Phone",
+      "phoneDesc": "Book a time for a callback",
+      "demo": "I want to book a demo",
+      "demoDesc": "ca 20 min",
+      "subject": "Describe your question (1 sentence) *",
+      "subjectPlaceholder": "E.g. I want to sell my IT company",
+      "interest": "Interest *",
+      "interestBuying": "I want to buy",
+      "interestSelling": "I want to sell",
+      "interestPartnership": "Partnership",
+      "interestOther": "Other",
+      "name": "Name *",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Email *",
+      "emailPlaceholder": "your@email.com",
+      "phoneLabel": "Phone number *",
+      "phonePlaceholder": "+46 70 123 45 67",
+      "whenCall": "When would it be convenient for us to call? *",
+      "selectTime": "Select time *",
+      "cancel": "Cancel",
+      "submit": "Send",
+      "thankYou": "Thank you!",
+      "successEmail": "We will contact you by email within 24 hours",
+      "successDemo": "We will contact you to book a demo",
+      "successPhone": "We will contact you at the selected time"
+    }
   }
 }
