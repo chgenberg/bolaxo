@@ -64,14 +64,6 @@ export default function SMEKitPage() {
   const [assessment, setAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const [activeTab, setActiveTab] = useState('company-basics')
-  const [completedSteps, setCompletedSteps] = useState<string[]>(['company-basics'])
-  const [formData, setFormData] = useState<any>({})
-  const [showTips, setShowTips] = useState(false)
-  const [currentTip, setCurrentTip] = useState<TipItem | null>(null)
-  const [assessment, setAssessment] = useState<Assessment | null>(null)
-  const [loading, setLoading] = useState(false)
-
   // Build steps dynamically from translations
   const steps: Step[] = [
     // SECTION 1: COMPANY BASICS
