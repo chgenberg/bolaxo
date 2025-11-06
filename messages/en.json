@@ -268,8 +268,18 @@
     "cookies": "Cookies",
     "gdpr": "GDPR",
     "security": "Security & Privacy",
+    "securityDesc": "Bank-level security for your information and data",
     "partners": "Our partners",
-    "copyright": "© {year} BOLAXO AB. All rights reserved."
+    "partnersDesc": "Partnerships with leading players in the financial world",
+    "copyright": "© {year} BOLAXO AB. All rights reserved.",
+    "description": "Security & Privacy Our partners",
+    "address": "Norrmälarstrand 10\n114 62 Stockholm\nSweden",
+    "sellInYourCity": "Sell in your city",
+    "pricing": "Pricing & packages",
+    "faq": "FAQ",
+    "buyInYourCity": "Buy in your city",
+    "blog": "Blog",
+    "howItWorksDesc": "How Bolaxo works"
   },
   "register": {
     "title": "CREATE ACCOUNT",
