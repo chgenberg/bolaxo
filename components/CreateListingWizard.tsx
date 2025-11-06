@@ -963,7 +963,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Bransch:</span>
-                      <span className="font-medium">{industries.find(i => i.value === data.industry)?.label}</span>
+                      <span className="font-medium">{industries.find((i: any) => i.value === data.industry)?.label}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Plats:</span>
