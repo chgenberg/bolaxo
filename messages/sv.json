@@ -248,7 +248,47 @@
     "missionTitle": "Vår mission",
     "missionText": "Att demokratisera företagsförsäljning genom att göra processen transparent, säker och tillgänglig för alla svenska företagare.",
     "visionTitle": "Vår vision",
-    "visionText": "Att bli Nordens ledande plattform för företagstransaktioner där varje företagare kan sälja och köpa företag digitalt."
+    "visionText": "Att bli Nordens ledande plattform för företagstransaktioner där varje företagare kan sälja och köpa företag digitalt.",
+    "whyStartedTitle": "Varför vi startade",
+    "whyStartedText1": "Vi såg hur många små och medelstora företagare som ville sälja sitt livsverk, men saknade en modern, digital plattform för det. De flesta tvingades att engagera dyra traditionella mäklare eller leta långt och brett utan struktur.",
+    "whyStartedText2": "Vi tror att teknologi kan göra denna process enklare, snabbare och mer tillgänglig. Därför skapade vi Bolagsplatsen - en plattform som automatiserar det omständiga och låter säljare och köpare fokusera på det som räknas.",
+    "teamTitle": "Teamet bakom Bolagsplatsen",
+    "teamSubtitle": "Erfarna entreprenörer och tech-builders med passion för M&A",
+    "team": [
+      {
+        "name": "Erik Andersson",
+        "title": "Grundare & VD",
+        "desc": "15+ år inom M&A och PE. Tidigare Investment Manager på Investor AB.",
+        "initials": "EA"
+      },
+      {
+        "name": "Sara Bergström",
+        "title": "CTO",
+        "desc": "Tech entrepreneur med 12 år erfarenhet. Tidigare Senior Tech Lead på iZettle.",
+        "initials": "SB"
+      },
+      {
+        "name": "David Lundström",
+        "title": "CFO",
+        "desc": "Finansanalytiker. 10 år på Goldman Sachs. Expert på värderingsmodeller.",
+        "initials": "DL"
+      }
+    ],
+    "valuesTitle": "VÅRA VÄRDEN",
+    "values": [
+      {
+        "title": "Transparens",
+        "desc": "Vi är öppna och ärliga om hur allt fungerar"
+      },
+      {
+        "title": "Trygghet",
+        "desc": "Din data och transaktioner är alltid säkra hos oss"
+      },
+      {
+        "title": "Innovation",
+        "desc": "Vi använder teknologi för att lösa verkliga problem"
+      }
+    ]
   },
   "footer": {
     "forSellers": "För säljare",

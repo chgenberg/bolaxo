@@ -248,7 +248,47 @@
     "missionTitle": "Our mission",
     "missionText": "To democratize business sales by making the process transparent, secure and accessible to all Swedish entrepreneurs.",
     "visionTitle": "Our vision",
-    "visionText": "To become the Nordic region's leading platform for business transactions where every entrepreneur can sell and buy companies digitally."
+    "visionText": "To become the Nordic region's leading platform for business transactions where every entrepreneur can sell and buy companies digitally.",
+    "whyStartedTitle": "Why we started",
+    "whyStartedText1": "We saw how many small and medium-sized entrepreneurs wanted to sell their life's work, but lacked a modern, digital platform for it. Most were forced to engage expensive traditional brokers or search far and wide without structure.",
+    "whyStartedText2": "We believe that technology can make this process easier, faster and more accessible. That's why we created BOLAXO - a platform that automates the cumbersome and lets sellers and buyers focus on what matters.",
+    "teamTitle": "The team behind BOLAXO",
+    "teamSubtitle": "Experienced entrepreneurs and tech-builders with a passion for M&A",
+    "team": [
+      {
+        "name": "Erik Andersson",
+        "title": "Founder & CEO",
+        "desc": "15+ years in M&A and PE. Former Investment Manager at Investor AB.",
+        "initials": "EA"
+      },
+      {
+        "name": "Sara Bergström",
+        "title": "CTO",
+        "desc": "Tech entrepreneur with 12 years of experience. Former Senior Tech Lead at iZettle.",
+        "initials": "SB"
+      },
+      {
+        "name": "David Lundström",
+        "title": "CFO",
+        "desc": "Financial analyst. 10 years at Goldman Sachs. Expert in valuation models.",
+        "initials": "DL"
+      }
+    ],
+    "valuesTitle": "OUR VALUES",
+    "values": [
+      {
+        "title": "Transparency",
+        "desc": "We are open and honest about how everything works"
+      },
+      {
+        "title": "Security",
+        "desc": "Your data and transactions are always safe with us"
+      },
+      {
+        "title": "Innovation",
+        "desc": "We use technology to solve real problems"
+      }
+    ]
   },
   "footer": {
     "forSellers": "For sellers",

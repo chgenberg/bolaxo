@@ -5,14 +5,17 @@ import { useRouter } from 'next/navigation'
 import CreateListingWizard from '@/components/CreateListingWizard'
 import { ArrowLeft, Sparkles } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function SaljaStartPageContent() {
   const router = useRouter()
+  const t = useTranslations('saljaStart')
+  const locale = useLocale()
   const [showWizard, setShowWizard] = useState(true)
 
   const handleClose = () => {
     setShowWizard(false)
-    router.push('/salja')
+    router.push(`/${locale}/salja`)
   }
 
   // Om wizard är stängd, visa en landningssida
@@ -21,11 +24,11 @@ export default function SaljaStartPageContent() {
       <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-4xl mx-auto px-4 py-16">
           <Link 
-            href="/salja"
+            href={`/${locale}/salja`}
             className="inline-flex items-center gap-2 text-navy hover:text-accent-pink transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
-            Tillbaka
+            {t('back')}
           </Link>
 
           <div className="text-center">
@@ -33,14 +36,14 @@ export default function SaljaStartPageContent() {
               <Sparkles className="w-12 h-12 text-navy" />
             </div>
             
-            <h1 className="text-4xl font-black text-navy mb-4">Redo att sälja?</h1>
-            <p className="text-xl text-gray-600 mb-8">Skapa din annons och nå tusentals kvalificerade köpare</p>
+            <h1 className="text-4xl font-black text-navy mb-4">{t('readyTitle')}</h1>
+            <p className="text-xl text-gray-600 mb-8">{t('readySubtitle')}</p>
             
             <button
               onClick={() => setShowWizard(true)}
               className="px-8 py-4 bg-gradient-to-r from-accent-pink to-navy text-white font-bold rounded-full hover:shadow-xl transform hover:scale-105 transition-all text-lg"
             >
-              Starta här
+              {t('startButton')}
             </button>
           </div>
         </div>
