@@ -4,10 +4,11 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CheckCircle, Lock, User, Search, Shield, ChartBar, Building2, Key, Eye, FileText, MessagesSquare, BarChart3, Target } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function BuyerInfoPage() {
   const t = useTranslations('kopareSaFungerarDet')
+  const locale = useLocale()
   const [activeStep, setActiveStep] = useState(1)
 
   const steps = useMemo(() => [
@@ -322,13 +323,13 @@ export default function BuyerInfoPage() {
           <div className="bg-gradient-to-r from-primary-navy to-primary-navy/90 rounded-2xl p-8 sm:p-12 text-center text-white shadow-2xl">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6">{t('cta.title')}</h2>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/registrera" className="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-navy font-bold rounded-lg hover:bg-gray-100 transition-all shadow-lg">
+              <Link href={`/${locale}/registrera`} className="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-navy font-bold rounded-lg hover:bg-gray-100 transition-all shadow-lg">
                 {t('cta.createProfile')}
               </Link>
-              <Link href="/sok" className="inline-flex items-center justify-center px-8 py-4 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white">
+              <Link href={`/${locale}/sok`} className="inline-flex items-center justify-center px-8 py-4 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white">
                 {t('cta.watch')}
               </Link>
-              <Link href="/loi-mall" className="inline-flex items-center justify-center px-8 py-4 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white">
+              <Link href={`/${locale}/loi-mall`} className="inline-flex items-center justify-center px-8 py-4 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-all border-2 border-white">
                 {t('cta.importLoi')}
               </Link>
             </div>
