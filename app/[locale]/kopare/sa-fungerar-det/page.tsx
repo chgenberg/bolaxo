@@ -67,14 +67,15 @@ export default function BuyerInfoPage() {
   return (
     <main className="bg-neutral-white">
       {/* Hero Section with Background Image */}
-      <section className="relative min-h-screen flex items-center bg-cover bg-center">
+      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-20 sm:pt-24 md:pt-20 lg:pt-24">
         {/* Background Image - Only in hero */}
         <div className="absolute inset-0 z-0">
           <Image 
             src="/1.png" 
             alt="Köparprocess" 
             fill
-            className="object-cover"
+            className="object-cover object-center"
+            style={{ objectPosition: 'center 20%' }}
             priority
           />
         </div>

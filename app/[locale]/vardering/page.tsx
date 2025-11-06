@@ -82,21 +82,23 @@ export default function ValuationPage() {
     <>
       <main className="min-h-screen bg-neutral-white">
         {/* Hero Section */}
-        <section className="relative min-h-screen flex items-center bg-cover bg-center">
+        <section className="relative min-h-screen flex items-center bg-cover bg-center pt-20 sm:pt-24 md:pt-20 lg:pt-24">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
               src="/hero_kop.png"
               alt="Hero background"
               fill
-              className="object-cover hidden md:block"
+              className="object-cover object-center hidden md:block"
+              style={{ objectPosition: 'center 20%' }}
               priority
             />
             <Image
               src="/kop_hero_mobile.png"
               alt="Hero background mobile"
               fill
-              className="object-cover md:hidden"
+              className="object-cover object-center md:hidden"
+              style={{ objectPosition: 'center 20%' }}
               priority
             />
           </div>

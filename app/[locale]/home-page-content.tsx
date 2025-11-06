@@ -27,21 +27,23 @@ export default function HomePageContent() {
   return (
     <main className="bg-cream">
       {/* HERO SECTION - Fullscreen */}
-      <section className="relative min-h-screen flex items-start md:items-center bg-cover bg-center pt-20 sm:pt-24 md:pt-0 pb-8 md:pb-0">
+      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-20 sm:pt-24 md:pt-20 lg:pt-24 pb-8 md:pb-0">
         {/* Background Image - Fullscreen with no overlay */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/hero.png"
             alt="Hero background"
             fill
-            className="object-cover hidden md:block"
+            className="object-cover object-center hidden md:block"
+            style={{ objectPosition: 'center 20%' }}
             priority
           />
           <Image
             src="/hero_mobile.png"
             alt="Hero background mobile"
             fill
-            className="object-cover md:hidden"
+            className="object-cover object-center md:hidden"
+            style={{ objectPosition: 'center 20%' }}
             priority
           />
         </div>

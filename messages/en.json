@@ -2071,5 +2071,108 @@
         }
       }
     }
+  },
+  "createListing": {
+    "title": "Create listing",
+    "stepProgress": "Step {current} of {total}",
+    "defaultCompany": "Company",
+    "defaultCountry": "Sweden",
+    "anonymousTitleTemplate": "{industry} in {region}",
+    "step1": {
+      "title": "Basic information",
+      "subtitle": "Start by providing basic information about your company",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "your@email.com",
+      "companyNameLabel": "Company name",
+      "companyNamePlaceholder": "Your Company AB",
+      "websiteLabel": "Website (optional)",
+      "websitePlaceholder": "https://example.com",
+      "industryLabel": "Industry",
+      "industryPlaceholder": "Select industry",
+      "orgNumberLabel": "Organization number (optional)",
+      "orgNumberPlaceholder": "123456-7890"
+    },
+    "industries": [
+      { "value": "it-konsult-utveckling", "label": "IT consulting & development" },
+      { "value": "ehandel-d2c", "label": "E-commerce/D2C" },
+      { "value": "saas-licensmjukvara", "label": "SaaS & licensed software" },
+      { "value": "bygg-anlaggning", "label": "Construction & infrastructure" },
+      { "value": "restaurang-cafe", "label": "Restaurant & café" },
+      { "value": "detaljhandel-fysisk", "label": "Retail (physical)" },
+      { "value": "grossist-partihandel", "label": "Wholesale/trade" },
+      { "value": "latt-tillverkning-verkstad", "label": "Light manufacturing/workshop" },
+      { "value": "ekonomitjanster-redovisning", "label": "Financial services & accounting" },
+      { "value": "marknadsforing-kommunikation-pr", "label": "Marketing, communication & PR" },
+      { "value": "halsa-skönhet", "label": "Health/beauty (salons, clinics, spa)" },
+      { "value": "gym-fitness-wellness", "label": "Gym, fitness & wellness" },
+      { "value": "stad-facility-services", "label": "Cleaning & facility services" },
+      { "value": "lager-logistik-3pl", "label": "Warehouse, logistics & 3PL" },
+      { "value": "el-vvs-installation", "label": "Electrical, plumbing & installation" },
+      { "value": "fastighetsservice-forvaltning", "label": "Property service & management" },
+      { "value": "event-konferens-upplevelser", "label": "Event, conference & experiences" },
+      { "value": "utbildning-kurser-edtech", "label": "Education, courses & edtech small scale" },
+      { "value": "bilverkstad-fordonsservice", "label": "Auto repair & vehicle service" },
+      { "value": "jord-skog-tradgard-gronyteskotsel", "label": "Agriculture/forestry, garden & green space management" }
+    ],
+    "regions": [
+      { "value": "hela-sverige", "label": "All of Sweden" },
+      { "value": "stockholm-malardalen", "label": "Stockholm & Mälardalen" },
+      { "value": "vastsverige", "label": "West Sweden" },
+      { "value": "syd", "label": "South" },
+      { "value": "ostra-smaland", "label": "East & Småland" },
+      { "value": "norr-mitt", "label": "North & Central" }
+    ],
+    "industryQuestions": {
+      "consulting": [
+        { "key": "consultantCount", "label": "Number of consultants", "type": "text" },
+        { "key": "utilizationRate", "label": "Utilization rate (%)", "type": "text", "fieldType": "percent" },
+        { "key": "avgHourlyRate", "label": "Average hourly rate (SEK)", "type": "text", "fieldType": "currency" }
+      ],
+      "ecommerce": [
+        { "key": "monthlyVisitors", "label": "Visitors per month", "type": "text" },
+        { "key": "conversionRate", "label": "Conversion rate (%)", "type": "text", "fieldType": "percent" },
+        { "key": "avgOrderValue", "label": "Average order value (SEK)", "type": "text", "fieldType": "currency" }
+      ],
+      "tech": [
+        { "key": "businessModel", "label": "Business model", "type": "select", "options": [
+          { "value": "saas", "label": "SaaS (Software as a Service)" },
+          { "value": "license", "label": "License sales" },
+          { "value": "services", "label": "Services/consulting" }
+        ]},
+        { "key": "recurringRevenue", "label": "Recurring revenue share / MRR", "type": "text", "fieldType": "percent" }
+      ],
+      "construction": [
+        { "key": "projectBacklog", "label": "Project backlog (SEK)", "type": "text", "fieldType": "currency" },
+        { "key": "avgProjectSize", "label": "Average project size (SEK)", "type": "text", "fieldType": "currency" }
+      ],
+      "restaurant": [
+        { "key": "seatingCapacity", "label": "Number of seats", "type": "text" },
+        { "key": "avgCheckSize", "label": "Average check size (SEK)", "type": "text", "fieldType": "currency" }
+      ],
+      "retail": [
+        { "key": "storeLocation", "label": "Store location", "type": "select", "options": [
+          { "value": "prime", "label": "Prime location (city center, mall)" },
+          { "value": "good", "label": "Good location" },
+          { "value": "average", "label": "Average location" }
+        ]},
+        { "key": "leaseLength", "label": "How long is the lease remaining?", "type": "select", "options": [
+          { "value": "0-1", "label": "0-1 years" },
+          { "value": "2-3", "label": "2-3 years" },
+          { "value": "4-5", "label": "4-5 years" }
+        ]}
+      ],
+      "manufacturing": [
+        { "key": "productionCapacity", "label": "Capacity utilization", "type": "text", "fieldType": "percent" },
+        { "key": "equipmentAge", "label": "Average age of machinery (years)", "type": "text" }
+      ],
+      "services": [
+        { "key": "serviceType", "label": "Type of service", "type": "text" },
+        { "key": "contractRenewalRate", "label": "Contract renewal rate (%)", "type": "text", "fieldType": "percent" }
+      ],
+      "healthcare": [
+        { "key": "patientBase", "label": "Number of active patients/clients", "type": "text" },
+        { "key": "avgRevenuePerPatient", "label": "Average revenue per patient/year (SEK)", "type": "text", "fieldType": "currency" }
+      ]
+    }
   }
 }

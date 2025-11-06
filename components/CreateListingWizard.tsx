@@ -83,9 +83,18 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
   const formRef = useRef<HTMLDivElement>(null)
   
   // Get translated industries and regions
-  const industries = useMemo(() => t.raw('industries'), [t])
-  const regions = useMemo(() => t.raw('regions'), [t])
-  const industryQuestions = useMemo(() => t.raw('industryQuestions'), [t])
+  const industries = useMemo(() => {
+    const data = t.raw('industries')
+    return Array.isArray(data) ? data : []
+  }, [t])
+  const regions = useMemo(() => {
+    const data = t.raw('regions')
+    return Array.isArray(data) ? data : []
+  }, [t])
+  const industryQuestions = useMemo(() => {
+    const data = t.raw('industryQuestions')
+    return data && typeof data === 'object' ? data : {}
+  }, [t])
   
   const [data, setData] = useState<ListingData>({
     email: user?.email || '',
