@@ -26,6 +26,33 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308)
   }
 
+  // Check if pathname already has a locale prefix - if so, preserve it
+  const hasLocalePrefix = pathname.startsWith('/sv/') || pathname.startsWith('/en/') || pathname === '/sv' || pathname === '/en'
+  
+  // If pathname doesn't have locale prefix and isn't root, let next-intl handle it
+  // But we need to ensure it doesn't redirect to defaultLocale
+  if (!hasLocalePrefix && pathname !== '/') {
+    // Extract locale from referer header if available
+    const referer = request.headers.get('referer')
+    if (referer) {
+      try {
+        const refererUrl = new URL(referer)
+        const refererPath = refererUrl.pathname
+        const refererLocale = refererPath.split('/')[1]
+        
+        // If referer has a valid locale, preserve it
+        if (refererLocale === 'sv' || refererLocale === 'en') {
+          const url = request.nextUrl.clone()
+          url.pathname = `/${refererLocale}${pathname}`
+          console.log('🔄 [MIDDLEWARE] Preserving locale from referer:', refererLocale, '->', url.pathname)
+          return NextResponse.redirect(url, 307)
+        }
+      } catch (e) {
+        // Invalid referer URL, continue with normal flow
+      }
+    }
+  }
+
   // 0. Redirect Railway domain to bolaxo.com ONLY if custom domain is configured
   // Allow Railway domain to work until custom domain is fully set up
   // TEMPORARILY DISABLED: Uncomment when www.bolaxo.com is confirmed working

@@ -22,7 +22,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-12 md:mb-16">
           {/* Company Info */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-block mb-6">
+            <Link href={`/${locale}`} className="inline-block mb-6">
               <Image 
                 src="/BOLAXO_logo.png" 
                 alt="BOLAXO" 
