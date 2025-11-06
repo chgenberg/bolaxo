@@ -179,7 +179,7 @@ function LoginForm() {
                 <label className="block text-sm font-bold text-primary-navy mb-4 uppercase tracking-wide">
                   {locale === 'sv' ? 'Jag är' : 'I am'}
                 </label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                   {/* Seller */}
                   <div
                     onClick={() => setSelectedRole('seller')}
@@ -206,8 +206,8 @@ function LoginForm() {
                     <span className="font-bold text-primary-navy text-sm">{t('buyer')}</span>
                   </div>
 
-                  {/* Broker */}
-                  <div
+                  {/* Broker - Hidden for now */}
+                  {/* <div
                     onClick={() => setSelectedRole('broker')}
                     className={`p-4 border-2 rounded-xl cursor-pointer transition-all text-center ${
                       selectedRole === 'broker'
@@ -217,7 +217,7 @@ function LoginForm() {
                   >
                     <Handshake className="w-8 h-8 text-primary-navy mx-auto mb-2" />
                     <span className="font-bold text-primary-navy text-sm">{t('broker')}</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
