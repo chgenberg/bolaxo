@@ -3,10 +3,11 @@
 import Link from 'next/link'
 import { SWEDISH_CITIES } from '@/lib/cities'
 import { ArrowRight, Search } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function BuyerAllCitiesPage() {
   const t = useTranslations('kopare')
+  const locale = useLocale()
   
   return (
     <div className="min-h-screen bg-white">
@@ -20,7 +21,7 @@ export default function BuyerAllCitiesPage() {
             {t('heroSubtitle')}
           </p>
           <Link
-            href="/sok"
+            href={`/${locale}/sok`}
             className="inline-block bg-primary-navy text-white px-8 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition flex items-center gap-2 justify-center mb-4"
           >
             {t('browseButton')} <ArrowRight className="w-5 h-5" />
@@ -34,7 +35,7 @@ export default function BuyerAllCitiesPage() {
             {SWEDISH_CITIES.map((city) => (
               <Link
                 key={city.slug}
-                href={`/kopare/${city.slug}`}
+                href={`/${locale}/kopare/${city.slug}`}
                 className="border border-gray-200 rounded-lg p-4 text-center hover:shadow-lg hover:border-primary-navy transition group"
               >
                 <h3 className="font-semibold text-primary-navy group-hover:text-opacity-80">{city.name}</h3>

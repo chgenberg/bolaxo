@@ -102,9 +102,21 @@ export async function middleware(request: NextRequest) {
 
   console.log('🌐 [MIDDLEWARE] Processing pathname:', pathname)
 
-  // Handle internationalization
-  // next-intl middleware handles locale routing automatically
-  const response = intlMiddleware(request)
+  // If pathname already has a valid locale prefix, skip next-intl middleware
+  // to prevent any unwanted redirects
+  const hasValidLocalePrefix = pathname.startsWith('/sv/') || pathname.startsWith('/en/') || pathname === '/sv' || pathname === '/en'
+  
+  let response: NextResponse
+  
+  if (hasValidLocalePrefix) {
+    // Path already has locale prefix - don't let next-intl middleware process it
+    // This prevents unwanted redirects
+    console.log('✅ [MIDDLEWARE] Path already has locale prefix, skipping intl middleware')
+    response = NextResponse.next()
+  } else {
+    // Handle internationalization for paths without locale prefix
+    response = intlMiddleware(request)
+  }
   
   // Log the response to debug routing issues
   if (pathname.startsWith('/sv') || pathname.startsWith('/en')) {
