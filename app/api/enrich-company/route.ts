@@ -410,28 +410,6 @@ export async function POST(request: Request) {
   }
 }
 
-// BOLAGSVERKET API - Använder ny centraliserad funktion
-async function fetchBolagsverketData(orgNumber: string) {
-  try {
-    const data = await fetchBolagsverketCompanyData(orgNumber)
-    
-    if (!data) {
-      return null
-    }
-
-    // Hämta även årsredovisningar om möjligt
-    const annualReports = await fetchAnnualReports(orgNumber)
-    
-    return {
-      ...data,
-      annualReports: annualReports.length > 0 ? annualReports : undefined
-    }
-  } catch (error) {
-    console.error('Bolagsverket fetch error:', error)
-    return null
-  }
-}
-
 // WEB SCRAPING
 async function scrapeWebsite(url: string, companyName: string): Promise<string> {
   const visited = new Set<string>()
