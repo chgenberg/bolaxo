@@ -867,10 +867,25 @@ export default function SMEKitPage() {
               <div className="space-y-6">
                 {step.fields.map((field) => (
                   <div key={field.id}>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {field.label}
+                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                      <span>{field.label}</span>
                       {field.required && <span className="text-red-500 ml-1">*</span>}
                       {field.aiAssisted && <span className="text-blue-500 text-xs ml-2">{t('gptAnalyzed')}</span>}
+                      {FIELD_TIPS[step.id]?.[field.id] && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setCurrentTipField({ stepId: step.id, fieldId: field.id })
+                            setCurrentTipStep(null)
+                            setShowTips(true)
+                          }}
+                          className="p-0.5 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                          title="Hjälp för detta fält"
+                        >
+                          <HelpCircle className="w-4 h-4 text-gray-500 hover:text-primary-navy" />
+                        </button>
+                      )}
                     </label>
                     {field.type === 'textarea' && (
                       <textarea
