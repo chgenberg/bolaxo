@@ -95,7 +95,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Logo */}
         <div className="p-4 sm:p-6 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <Link href="/dashboard" className={`font-bold text-xl sm:text-2xl text-primary-navy ${collapsed ? 'hidden' : ''}`}>
+            <Link href={`/${locale}/dashboard`} className={`font-bold text-xl sm:text-2xl text-primary-navy ${collapsed ? 'hidden' : ''}`}>
               BOLAXO
             </Link>
             <div className="flex items-center gap-2">

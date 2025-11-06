@@ -481,7 +481,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     }
     
     // Navigera till resultatsidan
-    router.push('/vardering/resultat')
+    router.push(`/${locale}/vardering/resultat`)
   }
 
   const canProceed = () => {
