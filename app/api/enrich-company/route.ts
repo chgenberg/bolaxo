@@ -145,27 +145,18 @@ export async function POST(request: Request) {
       enrichedData.rawData.scbData = scbResult.value
     }
 
-    // ALLABOLAG DATA - Auto-fill finansiella siffror!
+    // Ytterligare Allabolag-bearbetning för avancerade fält
     if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
       const allabolagData = allabolagResult.value
-      enrichedData.rawData.allabolagData = allabolagData
       
-      // Auto-fill exakta finansiella siffror
-      if (allabolagData.financials.revenue) {
+      // Auto-fill exakta finansiella siffror (kompletterar tidigare auto-fill)
+      if (allabolagData.financials.revenue && !enrichedData.autoFill.exactRevenue) {
         enrichedData.autoFill.exactRevenue = allabolagData.financials.revenue.toString()
       }
       
       if (allabolagData.financials.revenue && allabolagData.financials.profit) {
         const operatingCosts = allabolagData.financials.revenue - allabolagData.financials.profit
         enrichedData.autoFill.operatingCosts = operatingCosts.toString()
-      }
-      
-      if (allabolagData.financials.employees) {
-        enrichedData.autoFill.employees = mapEmployeeCount(allabolagData.financials.employees)
-      }
-      
-      if (allabolagData.registrationDate) {
-        enrichedData.autoFill.companyAge = calculateCompanyAge(allabolagData.registrationDate)
       }
       
       // Trend-data
@@ -185,8 +176,6 @@ export async function POST(request: Request) {
       
       // 1. Total Debt (från balansräkning)
       if (allabolagData.financials.liabilities && allabolagData.financials.equity) {
-        // Approximation: Totala skulder - kortfristiga skulder ≈ långfristiga lån
-        // För enkelhetens skull, använd liabilities som proxy
         enrichedData.autoFill.totalDebt = allabolagData.financials.liabilities.toString()
       }
       
@@ -197,10 +186,8 @@ export async function POST(request: Request) {
       
       // 3. Gross Margin (från årsredovisning om tillgänglig, annars uppskatta)
       if (allabolagData.financials.grossMargin) {
-        // Vi har faktisk gross margin från bruttovinst!
         enrichedData.autoFill.grossMargin = Math.round(allabolagData.financials.grossMargin).toString()
       } else if (allabolagData.financials.profitMargin && industry) {
-        // Fallback: uppskatta från EBITDA margin
         const grossMarginEstimate = estimateGrossMarginFromIndustry(
           industry, 
           allabolagData.financials.profitMargin
@@ -210,24 +197,20 @@ export async function POST(request: Request) {
         }
       }
       
-      // 3. Payment Terms (bransch-baserat default)
+      // 4. Payment Terms (bransch-baserat default)
       enrichedData.autoFill.paymentTerms = getDefaultPaymentTerms(industry)
       
-      // 4. Regulatory Licenses (bransch-baserat)
+      // 5. Regulatory Licenses (bransch-baserat)
       enrichedData.autoFill.regulatoryLicenses = getDefaultRegulatoryStatus(industry)
       
-      // 5. Customer Concentration (conservative default - användaren kan ändra)
-      // Default till 'low' för att vara konservativ, användaren ändrar om annorlunda
+      // 6. Customer Concentration (conservative default)
       enrichedData.autoFill.customerConcentrationRisk = 'low'
       
-      console.log('✓ Allabolag auto-filled:', {
+      console.log('✓ Allabolag advanced auto-fill:', {
         revenue: enrichedData.autoFill.exactRevenue,
-        employees: enrichedData.autoFill.employees,
         trend: enrichedData.autoFill.revenue3Years,
         debt: enrichedData.autoFill.totalDebt ? 'Yes' : 'No',
         grossMargin: enrichedData.autoFill.grossMargin,
-        paymentTerms: enrichedData.autoFill.paymentTerms,
-        licenses: enrichedData.autoFill.regulatoryLicenses,
       })
     }
 
