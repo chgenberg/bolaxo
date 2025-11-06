@@ -92,6 +92,72 @@ export default function SMEKitPage() {
     }
   }, [user])
 
+  // Auto-fetch company data from Bolagsverket when org number is entered
+  useEffect(() => {
+    const orgNumber = formData['company-basics']?.orgNumber
+    const companyName = formData['company-basics']?.companyName
+    
+    // Only fetch if org number is entered and we don't already have registration date
+    if (orgNumber && orgNumber.length >= 10 && !formData['company-basics']?.registrationDate) {
+      const fetchCompanyData = async () => {
+        try {
+          setLoading(true)
+          const response = await fetch('/api/enrich-company', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              orgNumber: orgNumber.replace(/\D/g, ''),
+              companyName: companyName || '',
+              industry: formData['company-basics']?.industry || ''
+            })
+          })
+
+          if (response.ok) {
+            const enrichedData = await response.json()
+            
+            // Auto-fill form fields with fetched data
+            if (enrichedData.rawData?.bolagsverketData) {
+              const bolagsData = enrichedData.rawData.bolagsverketData
+              
+              setFormData((prev: any) => ({
+                ...prev,
+                'company-basics': {
+                  ...prev['company-basics'],
+                  companyName: bolagsData.name || prev['company-basics']?.companyName,
+                  registrationDate: bolagsData.registrationDate || prev['company-basics']?.registrationDate,
+                  employees: bolagsData.employees?.toString() || prev['company-basics']?.employees
+                }
+              }))
+
+              // If annual reports are available, store them for later use
+              if (bolagsData.annualReports && bolagsData.annualReports.length > 0) {
+                // Store latest annual report info
+                const latestReport = bolagsData.annualReports[0]
+                setFormData((prev: any) => ({
+                  ...prev,
+                  'financials-core': {
+                    ...prev['financials-core'],
+                    // Note: We can't auto-fill revenue from reports without parsing the PDF
+                    // But we can store the document URL for reference
+                    annualReportYear: latestReport.year
+                  }
+                }))
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching company data:', error)
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      // Debounce the API call
+      const timeoutId = setTimeout(fetchCompanyData, 1000)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [formData['company-basics']?.orgNumber])
+
   // Build steps dynamically from translations
   const steps: Step[] = [
     // SECTION 1: COMPANY BASICS

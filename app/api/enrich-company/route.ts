@@ -8,6 +8,7 @@ import { scrapeLinkedIn, estimateEmployeeGrowth } from '@/lib/scrapers/linkedin'
 import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/google-mybusiness'
 import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
 import { searchGoogle } from '@/lib/scrapers/google-search'
+import { fetchBolagsverketCompanyData, fetchAnnualReports } from '@/lib/bolagsverket-api'
 
 const prisma = new PrismaClient()
 
@@ -397,77 +398,25 @@ export async function POST(request: Request) {
   }
 }
 
-// BOLAGSVERKET API
+// BOLAGSVERKET API - Använder ny centraliserad funktion
 async function fetchBolagsverketData(orgNumber: string) {
   try {
-    const cleanOrgNumber = orgNumber.replace(/\D/g, '')
+    const data = await fetchBolagsverketCompanyData(orgNumber)
     
-    // Försök med Bolagsverkets officiella öppna data
-    // Notera: Bolagsverket har olika endpoints beroende på företagsform
+    if (!data) {
+      return null
+    }
+
+    // Hämta även årsredovisningar om möjligt
+    const annualReports = await fetchAnnualReports(orgNumber)
     
-    // Alternativ 1: Allabolag.se public search (följ robots.txt)
-    // Alternativ 2: Direkt från Bolagsverket via deras sökportal
-    
-    // För detta demo/MVP skapar vi mock-data baserat på org.nr pattern
-    // I produktion skulle detta ersättas med riktig API-integration
-    
-    const mockData = await generateMockBolagsverketData(cleanOrgNumber, orgNumber)
-    return mockData
-    
+    return {
+      ...data,
+      annualReports: annualReports.length > 0 ? annualReports : undefined
+    }
   } catch (error) {
     console.error('Bolagsverket fetch error:', error)
     return null
-  }
-}
-
-async function generateMockBolagsverketData(cleanOrgNumber: string, originalOrgNumber: string) {
-  // Försök först hämta från Allabolag (public search)
-  try {
-    const response = await fetch(`https://www.allabolag.se/what/${cleanOrgNumber}`, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-      },
-      signal: AbortSignal.timeout(5000)
-    })
-    
-    if (response.ok) {
-      const html = await response.text()
-      const $ = cheerio.load(html)
-      
-      // Extrahera grundläggande info
-      const companyName = $('h1').first().text().trim()
-      const registrationDateText = html.match(/Registrerat:\s*(\d{4}-\d{2}-\d{2})/)?.[1]
-      const employeesText = html.match(/Antal anställda:\s*(\d+)/)?.[1]
-      
-      return {
-        name: companyName || 'Okänt företag',
-        registrationDate: registrationDateText || '2010-01-01',
-        legalForm: 'Aktiebolag',
-        status: 'Aktiv',
-        employees: employeesText ? parseInt(employeesText) : null,
-        address: 'Hämtat från register',
-        source: 'allabolag'
-      }
-    }
-  } catch (error) {
-    console.log('Allabolag fetch failed, using estimate:', error)
-  }
-  
-  // Fallback: generera uppskattning baserat på org.nr
-  const century = cleanOrgNumber.substring(0, 2)
-  const year = parseInt(century) > 50 ? `19${century}` : `20${century}`
-  
-  await new Promise(resolve => setTimeout(resolve, 300))
-  
-  return {
-    name: 'Företagsnamn (ange manuellt om felaktigt)',
-    registrationDate: `${year}-06-15`,
-    legalForm: 'Aktiebolag',
-    status: 'Aktiv (uppskattning)',
-    employees: null,
-    address: 'Sverige',
-    source: 'estimated',
-    note: 'Uppskattad data - registrera dig på Bolagsverket för exakt information'
   }
 }
 
