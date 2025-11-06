@@ -249,109 +249,99 @@ const STEP_TIPS: Record<string, { title: string; description: string; tips: TipI
   }
 }
 
-// Field-specific tips
+// Field-specific tips for all sections
 const FIELD_TIPS: Record<string, Record<string, { title: string; description: string; content: string[] }>> = {
+  'company-basics': {
+    'companyName': { title: 'Företagsnamn', description: 'Det juridiska registrerade namnet', content: ['Måste matcha registreringen på Bolagsverket', 'Viktigt för kontraktsrättigheter'] },
+    'orgNumber': { title: 'Organisationsnummer', description: '10-siffrig identifierare', content: ['Format: YYMMDDNNNN (utan bindestreck)', 'Hittas på Bolagsverkets hemsida'] },
+    'registrationDate': { title: 'Registreringsdatum', description: 'Datum för företagsregistrering', content: ['Visar företagets ålder', 'Viktigt för tillväxtanalys'] },
+    'industry': { title: 'Bransch', description: 'Huvudsaklig verksamhetsgren', content: ['Påverkar värdering och multipler', 'Hjälper köpare att hitta relevanta jämförelser'] },
+    'description': { title: 'Företagsbeskrivning', description: 'Kort sammanfattning av verksamheten', content: ['2-3 meningar om vad företaget gör', 'AI kan analysera detta automatiskt'] },
+    'employees': { title: 'Antal anställda', description: 'Aktuellt antal FTE', content: ['Genomsnitt senaste 12 månader', 'Inkluderar både hel- och deltidsanställda'] },
+    'businessModel': { title: 'Affärsmodell', description: 'Hur företaget tjänar pengar', content: ['B2B, B2C, eller hybrid?', 'Subscription, licensing, eller engångskäp?'] }
+  },
+  'financials-core': {
+    'financialStatement': { title: 'Årsredovisning (PDF)', description: 'Senaste officiella årsredovisning', content: ['Ladda upp senaste 1-3 år', 'AI analyserar och fyller i nyckeltal automatiskt'] },
+    'revenue2024': { title: 'Omsättning 2024', description: 'Totala intäkter innevarande år', content: ['I SEK eller annan valuta', 'Bör matcha årsredovisningen'] },
+    'revenue2023': { title: 'Omsättning 2023', description: 'Förra årets totala intäkter', content: ['Visar tillväxttakt', 'Användes för trendanalys'] },
+    'revenue2022': { title: 'Omsättning 2022', description: 'Två år sedan', content: ['Hjälper att se långsiktig trend', 'Säljare kan visa 3-årig utveckling'] },
+    'ebitda2024': { title: 'EBITDA 2024', description: 'Resultat före räntor, skatter, av- och nedskrivningar', content: ['Visar operativ lönsamhet', 'Ofta 20-40% av omsättning'] },
+    'ebitda2023': { title: 'EBITDA 2023', description: 'Förra årets operativa resultat', content: ['Jämför utveckling', 'Viktigt för värderings-multipler'] },
+    'ebitda2022': { title: 'EBITDA 2022', description: 'Två år sedan operativ resultat', content: ['Se långsiktig trend i lönsamhet'] }
+  },
   'financials-advanced': {
-    'daysSales': {
-      title: 'Days Sales Outstanding (DSO)',
-      description: 'Genomsnittligt antal dagar det tar att få betalt från kunder',
-      content: [
-        'Beräknas som: (Kundfordringar / Årsomsättning) × 365',
-        'Lägre DSO = bättre kassaflöde',
-        'Typiskt värde: 30-60 dagar för B2B, 0-30 dagar för B2C',
-        'Hittar du i balansräkningen (kundfordringar) och resultaträkningen (omsättning)'
-      ]
-    },
-    'cashPosition': {
-      title: 'Kassaposition (SEK)',
-      description: 'Totalt belopp i kassa och bankkonton',
-      content: [
-        'Inkluderar: kontanter, bankkonton, likvida medel',
-        'Exkluderar: investeringar, aktier, andra tillgångar',
-        'Hittar du i balansräkningen under "Likvida medel" eller "Kassa och bank"',
-        'Viktigt för att visa likviditet och finansiell styrka'
-      ]
-    },
-    'rd': {
-      title: 'Årlig R&D (SEK)',
-      description: 'Årliga kostnader för forskning och utveckling',
-      content: [
-        'Inkluderar: löner för utvecklare, licenser, utrustning för R&D',
-        'Hittar du i resultaträkningen under "Forskning och utveckling"',
-        'Viktigt för tech-bolag och SaaS-företag',
-        'Visar investering i framtida produkter och innovation'
-      ]
-    },
-    'daysInventory': {
-      title: 'Days Inventory Outstanding (DIO)',
-      description: 'Genomsnittligt antal dagar lager ligger inne',
-      content: [
-        'Beräknas som: (Lager / Kostnad för sålda varor) × 365',
-        'Lägre DIO = effektivare lagerhantering',
-        'Gäller endast för företag med fysiskt lager',
-        'Hittar du i balansräkningen (lager) och resultaträkningen (KGV)'
-      ]
-    },
-    'daysPayable': {
-      title: 'Days Payable Outstanding (DPO)',
-      description: 'Genomsnittligt antal dagar det tar att betala leverantörer',
-      content: [
-        'Beräknas som: (Leverantörsskulder / KGV) × 365',
-        'Högre DPO = längre betalningstid till leverantörer',
-        'Visar hur länge företaget kan hålla kvar pengar',
-        'Hittar du i balansräkningen (leverantörsskulder) och resultaträkningen (KGV)'
-      ]
-    },
-    'grossMargin': {
-      title: 'Bruttovinstmarginal (%)',
-      description: 'Bruttovinst i procent av omsättningen',
-      content: [
-        'Beräknas som: ((Omsättning - KGV) / Omsättning) × 100',
-        'Visar lönsamhet efter direkta kostnader',
-        'Hittar du i resultaträkningen',
-        'Typiskt värde: 20-80% beroende på bransch'
-      ]
-    },
-    'operatingMargin': {
-      title: 'Rörelsevinstmarginal (%)',
-      description: 'Rörelseresultat i procent av omsättningen',
-      content: [
-        'Beräknas som: (Rörelseresultat / Omsättning) × 100',
-        'Visar lönsamhet efter alla rörelsekostnader',
-        'Hittar du i resultaträkningen',
-        'Typiskt värde: 5-30% beroende på bransch'
-      ]
-    },
-    'netMargin': {
-      title: 'Nettovinstmarginal (%)',
-      description: 'Årets resultat i procent av omsättningen',
-      content: [
-        'Beräknas som: (Årets resultat / Omsättning) × 100',
-        'Visar slutlig lönsamhet efter skatter',
-        'Hittar du i resultaträkningen',
-        'Typiskt värde: 3-20% beroende på bransch'
-      ]
-    },
-    'totalDebt': {
-      title: 'Totala skulder (SEK)',
-      description: 'Summa av alla skulder och lån',
-      content: [
-        'Inkluderar: banklån, obligationslån, leverantörsskulder, skatteskulder',
-        'Hittar du i balansräkningen under "Skulder"',
-        'Viktigt för att förstå finansiell hälsa',
-        'Jämför med eget kapital för att se skuldsättningsgrad'
-      ]
-    },
-    'capex': {
-      title: 'Kapitalutgifter (CAPEX) (SEK)',
-      description: 'Årliga investeringar i anläggningstillgångar',
-      content: [
-        'Inkluderar: maskiner, byggnader, IT-utrustning, fordon',
-        'Hittar du i kassaflödesanalysen eller balansräkningen',
-        'Viktigt för att visa investeringar i tillväxt',
-        'Skillnad mellan CAPEX och OPEX (driftskostnader)'
-      ]
-    }
+    'daysSales': { title: 'Days Sales Outstanding (DSO)', description: 'Genomsnittligt antal dagar det tar att få betalt från kunder', content: ['Beräknas som: (Kundfordringar / Årsomsättning) × 365', 'Lägre DSO = bättre kassaflöde', 'Typiskt värde: 30-60 dagar för B2B, 0-30 dagar för B2C', 'Hittar du i balansräkningen (kundfordringar) och resultaträkningen (omsättning)'] },
+    'cashPosition': { title: 'Kassaposition (SEK)', description: 'Totalt belopp i kassa och bankkonton', content: ['Inkluderar: kontanter, bankkonton, likvida medel', 'Exkluderar: investeringar, aktier, andra tillgångar', 'Hittar du i balansräkningen under "Likvida medel" eller "Kassa och bank"', 'Viktigt för att visa likviditet och finansiell styrka'] },
+    'rd': { title: 'Årlig R&D (SEK)', description: 'Årliga kostnader för forskning och utveckling', content: ['Inkluderar: löner för utvecklare, licenser, utrustning för R&D', 'Hittar du i resultaträkningen under "Forskning och utveckling"', 'Viktigt för tech-bolag och SaaS-företag', 'Visar investering i framtida produkter och innovation'] },
+    'daysInventory': { title: 'Days Inventory Outstanding (DIO)', description: 'Genomsnittligt antal dagar lager ligger inne', content: ['Beräknas som: (Lager / Kostnad för sålda varor) × 365', 'Lägre DIO = effektivare lagerhantering', 'Gäller endast för företag med fysiskt lager', 'Hittar du i balansräkningen (lager) och resultaträkningen (KGV)'] },
+    'daysPayable': { title: 'Days Payable Outstanding (DPO)', description: 'Genomsnittligt antal dagar det tar att betala leverantörer', content: ['Beräknas som: (Leverantörsskulder / KGV) × 365', 'Högre DPO = längre betalningstid till leverantörer', 'Visar hur länge företaget kan hålla kvar pengar', 'Hittar du i balansräkningen (leverantörsskulder) och resultaträkningen (KGV)'] },
+    'grossMargin': { title: 'Bruttovinstmarginal (%)', description: 'Bruttovinst i procent av omsättningen', content: ['Beräknas som: ((Omsättning - KGV) / Omsättning) × 100', 'Visar lönsamhet efter direkta kostnader', 'Hittar du i resultaträkningen', 'Typiskt värde: 20-80% beroende på bransch'] },
+    'operatingMargin': { title: 'Rörelsevinstmarginal (%)', description: 'Rörelseresultat i procent av omsättningen', content: ['Beräknas som: (Rörelseresultat / Omsättning) × 100', 'Visar lönsamhet efter alla rörelsekostnader', 'Hittar du i resultaträkningen', 'Typiskt värde: 5-30% beroende på bransch'] },
+    'netMargin': { title: 'Nettovinstmarginal (%)', description: 'Årets resultat i procent av omsättningen', content: ['Beräknas som: (Årets resultat / Omsättning) × 100', 'Visar slutlig lönsamhet efter skatter', 'Hittar du i resultaträkningen', 'Typiskt värde: 3-20% beroende på bransch'] },
+    'totalDebt': { title: 'Totala skulder (SEK)', description: 'Summa av alla skulder och lån', content: ['Inkluderar: banklån, obligationslån, leverantörsskulder, skatteskulder', 'Hittar du i balansräkningen under "Skulder"', 'Viktigt för att förstå finansiell hälsa', 'Jämför med eget kapital för att se skuldsättningsgrad'] },
+    'capex': { title: 'Kapitalutgifter (CAPEX) (SEK)', description: 'Årliga investeringar i anläggningstillgångar', content: ['Inkluderar: maskiner, byggnader, IT-utrustning, fordon', 'Hittar du i kassaflödesanalysen eller balansräkningen', 'Viktigt för att visa investeringar i tillväxt', 'Skillnad mellan CAPEX och OPEX (driftskostnader)'] }
+  },
+  'customers': {
+    'totalCustomers': { title: 'Totalt antal kunder', description: 'Aktuella aktiva kunder', content: ['Viktig för att bedöma marknadsposition', 'Visar spridning av försäljning'] },
+    'topCustomerRevenue': { title: 'Största kundens omsättning (%)', description: 'Andel av total omsättning från största kund', content: ['Risk om över 30-40% från en kund', 'Visar beroende av enskilda kunder'] },
+    'top3Revenue': { title: 'Top 3 kunders omsättning (%)', description: 'Andel från tre största kunder', content: ['Visar försäljningskoncentration', 'Diversifiering är positivt'] },
+    'top10Revenue': { title: 'Top 10 kunders omsättning (%)', description: 'Andel från tio största kunder', content: ['Vanligt 50-70% för företag', 'Visar Pareto-principen i action'] },
+    'churnRate': { title: 'Kundomsättning/Churn (%)', description: 'Andel kunder som slutar per år', content: ['Låg churn är bra (under 5-10% årligt)', 'Visar kundnöjdhet', 'Viktigt för prenumerationsmodeller'] },
+    'nps': { title: 'NPS Score (0-100)', description: 'Net Promoter Score - kundlojalitet', content: ['0-30: Risky, 30-50: Good, 50-70: Excellent, 70+: World-class', 'Visar hur många kunder rekommenderar företaget', 'Påverkad av kundservice och produktkvalitet'] },
+    'customerContracts': { title: 'Huvudsakliga affärskontrakt (PDF)', description: 'De viktigaste kundkontrakten', content: ['Ladda upp 3-5 största kunders kontrakt', 'AI analyserar villkor och risker automatiskt', 'Viktigt för att identifiera bindning och loyalitet'] },
+    'customerList': { title: 'Kundlista (PDF/Excel)', description: 'Kompletta listan över alla kunder', content: ['Med omsättning, kontaktperson, kontaktinfo', 'Hjälper köpare att förstå marknaden'] },
+    'marketPosition': { title: 'Marknadsposition', description: 'Din position i marknaden', content: ['Konkurrenter och din differentieringsmöjlighet', 'Unika fördelar eller proprietary tech?', 'Marknadsandel eller målgrupp'] }
+  },
+  'organization': {
+    'orgChart': { title: 'Organisationsdiagram (PDF)', description: 'Visuell struktur av företaget', content: ['Visar rapportvägar och ansvar', 'AI analyserar automatiskt och flaggar risker'] },
+    'employeeList': { title: 'Personallista (PDF/Excel)', description: 'Anställda med titel, lön, anställningsform', content: ['Viktig för DD och risköversikt', 'AI analyserar kompetens och risker'] },
+    'ceoName': { title: 'VD namn och bakgrund', description: 'Verkställande direktör', content: ['Vilken erfarenhet har VD?', 'Kan skapa nyckelperson-beroende'] },
+    'cfoName': { title: 'CFO namn', description: 'Finanschef', content: ['Viktigt för finansiell stabilitet', 'Påverkar kassaflödeskontroll'] },
+    'ctoName': { title: 'CTO/teknikchef namn', description: 'Chief Technology Officer', content: ['Viktig för tech-bolag', 'Risker om nyckelperson'] },
+    'avgTenure': { title: 'Genomsnittlig tjänstgöring (år)', description: 'Medelvärde för hur länge anställda varit kvar', content: ['Över 3 år indikerar stabilitet', 'Under 2 år kan vara riskflagga'] },
+    'turnover': { title: 'Personalomsättning (%)', description: 'Andel som slutar per år', content: ['Industrinorm 10-20%', 'Låg turnover = stabil organisation'] },
+    'keyPersonDependency': { title: 'Nyckelperson-beroende', description: 'Risk för att verksamheten beror på enskilda personer', content: ['Vilka kan inte ersättas lätt?', 'Affärsrisker om de slutar'] },
+    'employeeContracts': { title: 'Anställningsavtal (PDF)', description: 'Standardavtal för anställda', content: ['Viktig för juridisk compliance', 'Visa konkurrensbegränsningar och IPR-överföring'] }
+  },
+  'legal': {
+    'companyRegistration': { title: 'Registreringsbevis', description: 'Från Bolagsverket', content: ['Måste vara uppdaterat (från senaste året)', 'Visar ägarstruktur och styrelse'] },
+    'mainContracts': { title: 'Huvudsakliga affärskontrakt (PDF)', description: 'De viktigaste avtalen för verksamheten', content: ['Leverantörsavtal, licensavtal, partnerskapavtal', 'AI analyserar automatiskt viktiga klausuler'] },
+    'leaseAgreement': { title: 'Hyresavtal (PDF)', description: 'För lokaler eller egendom', content: ['Viktigt för att förstå fasta kostnader', 'Uppsägningstid och villkor?'] },
+    'taxCertificate': { title: 'Skatteattest (PDF)', description: 'Bevis på att skatter är betalda', content: ['Från Skatteverket', 'Måste vara aktuell'] },
+    'licensePermits': { title: 'Licenser och tillstånd (PDF)', description: 'Alla nödvändiga tillstånd för verksamheten', content: ['Industri- och verksamhetsspecifika', 'Viktigt för compliance'] },
+    'gdprDocumentation': { title: 'GDPR-dokumentation (PDF)', description: 'Dataskyddsdokumentation', content: ['Dataskyddspolicy', 'Dataskyddsdirektivet-avtal med leverantörer'] },
+    'pendingLitigation': { title: 'Pågående rättegångar', description: 'Juridiska tvister eller hot', content: ['Vilka tvister pågår?', 'Risk för höga kostnader eller domar'] },
+    'changeOfControl': { title: 'Ägarskiftes-klausul', description: 'Avtal som triggas vid försäljning', content: ['Finns "change of control"-bestämmelser?', 'Kan påverka avtalen efter försäljning'] },
+    'ipOwnership': { title: 'Immateriell egendom', description: 'Patent, varumärken, upphovsrätt', content: ['Ägs allt av företaget eller licenseras?', 'Viktigt för långsiktig värde'] }
+  },
+  'technical': {
+    'techStack': { title: 'Tech Stack', description: 'Programmeringsspråk och ramverk', content: ['Frontend, backend, databaser', 'Modernt eller äldre teknik?', 'Påverkar framtida underhållskostnader'] },
+    'cloudVsOnpremise': { title: 'Cloud vs On-Premise', description: 'Var körs systemen?', content: ['AWS, Azure, Google Cloud, eller eget datacenter?', 'Påverkar flexibilitet och kostnader'] },
+    'datacenters': { title: 'Datacenters och regioner', description: 'Redundans och geografisk spridning', content: ['En eller flera lokationer?', 'Disaster recovery setup?'] },
+    'testCoverage': { title: 'Test Coverage (%)', description: 'Andel kod som täcks av automatiserade tester', content: ['Över 80% är bra', 'Visar kodkvalitet'] },
+    'uptime': { title: 'Uptime/Tillgänglighet (%)', description: 'Procent av tid systemet är tillgängligt', content: ['99.9% = 9 timmar downtime/år', 'SLA är viktigt för SaaS-bolag'] },
+    'backupStrategy': { title: 'Backup-strategi', description: 'Hur data säkersäkertställs', content: ['Dagliga, veckovisa eller kontinuerliga backups?', 'Restore-tid (RTO) och data-loss (RPO)?'] },
+    'securityCertification': { title: 'Säkerhetscertifieringar', description: 'ISO 27001, SOC 2, etc', content: ['Vilka certifieringar?', 'Viktigt för försäljning till större kunder'] },
+    'dataProtection': { title: 'Dataskydd och kryptering', description: 'Hur är data skyddad?', content: ['Kryptering i transit och at rest?', 'GDPR-kompatibelt?'] },
+    'penetrationTest': { title: 'Penetrationtest (PDF)', description: 'Säkerhetstestning av systemen', content: ['Senaste rapporter från externa tester', 'Visar sårbarheter och åtgärder'] },
+    'technicalDocs': { title: 'Teknisk dokumentation', description: 'Arkitektur, API-dokumentation', content: ['Viktig för integration med nya ägare', 'Påverkar övergångskostnad'] }
+  },
+  'strategic': {
+    'growthStrategy': { title: 'Tillväxtstrategi', description: 'Plan för framtida tillväxt', content: ['Nya marknader, produkter, eller akvisitioner?', 'Realistiska eller optimistiska mål?'] },
+    'priorCompetitors': { title: 'Konkurrenter och marknadsposition', description: 'Vad skiljer er?', content: ['Vilka är huvudkonkurrenterna?', 'Unika fördelar eller proprietary teknik?'] },
+    'marketShare': { title: 'Marknadsandel (%)', description: 'Andel av total marknad', content: ['Hur stor är marknaden?', 'Växande eller stabil marknad?'] },
+    'tam': { title: 'TAM - Total Addressable Market', description: 'Totala marknadsstorlek i SEK', content: ['Potentiell marknad för expansion', 'Visar långsiktig tillväxtpotential'] },
+    'productRoadmap': { title: 'Produktöversikt och roadmap', description: 'Kommande produkter eller features', content: ['Vad ska lanseras framöver?', 'Hur säkerställs relevans på marknaden?'] },
+    'ipDescription': { title: 'Immateriell egendom', description: 'Patent, algoritmer, trade secrets', content: ['Vad är proprietary och unikt?', 'Hur långt är patentskyddet?'] },
+    'synergies': { title: 'Möjliga synergier', description: 'Vad kan en köpare få ut av att köpa', content: ['Korsförsäljning till befintliga kunder?', 'Teknikintegrationer eller kostnadsreduktioner?'] }
+  },
+  'valuation': {
+    'expectedValuation': { title: 'Förväntad värdering (SEK)', description: 'Försäljningspris eller värderings-intervall', content: ['Baserat på branschmultipler eller DCF?', 'Realistisk eller optimistisk?'] },
+    'valuationMultiple': { title: 'Värderings-multipel (x omsättning)', description: 'Bransch-standard för liknande bolag', content: ['SaaS ofta 6-12x omsättning EBITDA', 'Beroende på tillväxt och lönsamhet'] },
+    'earnoutExpectation': { title: 'Earnout-förväntan', description: 'Vilken del av priset är earnout?', content: ['0-30% earnout är vanligt', 'Baserat på framtida resultat'] },
+    'earnoutTerms': { title: 'Earnout-villkor', description: 'Specifika mål och perioder', content: ['3-5 år framåt', 'EBITDA eller omsättnings-mål?'] },
+    'sellingReason': { title: 'Säljorsak', description: 'Varför säljer du?', content: ['Generationsskifte, exit, eller strategisk?', 'Påverkar köparens intresse'] },
+    'newOwnerVision': { title: 'Vision för ny ägare', description: 'Framtida möjligheter under ny ägare', content: ['Expansion eller fokus på profitabilitet?', 'Vad kan en köpare göra med verksamheten?'] }
   }
 }
 
@@ -867,10 +857,12 @@ export default function SMEKitPage() {
               <div className="space-y-6">
                 {step.fields.map((field) => (
                   <div key={field.id}>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                      <span>{field.label}</span>
-                      {field.required && <span className="text-red-500 ml-1">*</span>}
-                      {field.aiAssisted && <span className="text-blue-500 text-xs ml-2">{t('gptAnalyzed')}</span>}
+                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2 justify-between">
+                      <span className="flex items-center gap-2">
+                        {field.label}
+                        {field.required && <span className="text-red-500 font-bold">*</span>}
+                        {field.aiAssisted && <span className="text-blue-500 text-xs px-2 py-0.5 bg-blue-50 rounded">{t('gptAnalyzed')}</span>}
+                      </span>
                       {FIELD_TIPS[step.id]?.[field.id] && (
                         <button
                           type="button"
@@ -880,10 +872,10 @@ export default function SMEKitPage() {
                             setCurrentTipStep(null)
                             setShowTips(true)
                           }}
-                          className="p-0.5 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                          className="p-1 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0 group"
                           title="Hjälp för detta fält"
                         >
-                          <HelpCircle className="w-4 h-4 text-gray-500 hover:text-primary-navy" />
+                          <HelpCircle className="w-4 h-4 text-gray-400 group-hover:text-primary-navy" />
                         </button>
                       )}
                     </label>
