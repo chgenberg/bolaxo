@@ -334,7 +334,7 @@ export default function HomePageContent() {
 
           {/* Review Cards - Animated */}
           <div className="relative h-[350px] sm:h-[400px] flex items-center justify-center">
-            {reviews.map((review, index) => (
+            {reviews.map((review: { text: string; author: string; company: string; date: string; rating: number }, index: number) => (
               <div
                 key={index}
                 className={`absolute w-full max-w-2xl transition-all duration-700 ${
@@ -348,7 +348,7 @@ export default function HomePageContent() {
                 <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 shadow-hover border border-sand">
                   {/* Stars */}
                   <div className="flex gap-1 mb-4 sm:mb-6">
-                    {[...Array(5)].map((_, i) => (
+                    {[...Array(review.rating)].map((_, i) => (
                       <Star key={i} className="w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6 fill-butter text-butter" />
                     ))}
                   </div>
