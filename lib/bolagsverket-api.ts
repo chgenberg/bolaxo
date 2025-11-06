@@ -16,6 +16,7 @@ interface BolagsverketCompanyData {
   industryCode?: string
   annualReports?: AnnualReport[]
   source: 'bolagsverket-api' | 'allabolag' | 'estimated'
+  note?: string
 }
 
 interface AnnualReport {
