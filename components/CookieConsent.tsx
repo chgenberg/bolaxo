@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react'
 import { Cookie, X } from 'lucide-react'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function CookieConsent() {
   const t = useTranslations('cookieConsent')
+  const locale = useLocale()
   const [showBanner, setShowBanner] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [preferences, setPreferences] = useState({
