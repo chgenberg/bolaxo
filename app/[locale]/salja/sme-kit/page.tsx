@@ -249,6 +249,112 @@ const STEP_TIPS: Record<string, { title: string; description: string; tips: TipI
   }
 }
 
+// Field-specific tips
+const FIELD_TIPS: Record<string, Record<string, { title: string; description: string; content: string[] }>> = {
+  'financials-advanced': {
+    'daysSales': {
+      title: 'Days Sales Outstanding (DSO)',
+      description: 'Genomsnittligt antal dagar det tar att få betalt från kunder',
+      content: [
+        'Beräknas som: (Kundfordringar / Årsomsättning) × 365',
+        'Lägre DSO = bättre kassaflöde',
+        'Typiskt värde: 30-60 dagar för B2B, 0-30 dagar för B2C',
+        'Hittar du i balansräkningen (kundfordringar) och resultaträkningen (omsättning)'
+      ]
+    },
+    'cashPosition': {
+      title: 'Kassaposition (SEK)',
+      description: 'Totalt belopp i kassa och bankkonton',
+      content: [
+        'Inkluderar: kontanter, bankkonton, likvida medel',
+        'Exkluderar: investeringar, aktier, andra tillgångar',
+        'Hittar du i balansräkningen under "Likvida medel" eller "Kassa och bank"',
+        'Viktigt för att visa likviditet och finansiell styrka'
+      ]
+    },
+    'rd': {
+      title: 'Årlig R&D (SEK)',
+      description: 'Årliga kostnader för forskning och utveckling',
+      content: [
+        'Inkluderar: löner för utvecklare, licenser, utrustning för R&D',
+        'Hittar du i resultaträkningen under "Forskning och utveckling"',
+        'Viktigt för tech-bolag och SaaS-företag',
+        'Visar investering i framtida produkter och innovation'
+      ]
+    },
+    'daysInventory': {
+      title: 'Days Inventory Outstanding (DIO)',
+      description: 'Genomsnittligt antal dagar lager ligger inne',
+      content: [
+        'Beräknas som: (Lager / Kostnad för sålda varor) × 365',
+        'Lägre DIO = effektivare lagerhantering',
+        'Gäller endast för företag med fysiskt lager',
+        'Hittar du i balansräkningen (lager) och resultaträkningen (KGV)'
+      ]
+    },
+    'daysPayable': {
+      title: 'Days Payable Outstanding (DPO)',
+      description: 'Genomsnittligt antal dagar det tar att betala leverantörer',
+      content: [
+        'Beräknas som: (Leverantörsskulder / KGV) × 365',
+        'Högre DPO = längre betalningstid till leverantörer',
+        'Visar hur länge företaget kan hålla kvar pengar',
+        'Hittar du i balansräkningen (leverantörsskulder) och resultaträkningen (KGV)'
+      ]
+    },
+    'grossMargin': {
+      title: 'Bruttovinstmarginal (%)',
+      description: 'Bruttovinst i procent av omsättningen',
+      content: [
+        'Beräknas som: ((Omsättning - KGV) / Omsättning) × 100',
+        'Visar lönsamhet efter direkta kostnader',
+        'Hittar du i resultaträkningen',
+        'Typiskt värde: 20-80% beroende på bransch'
+      ]
+    },
+    'operatingMargin': {
+      title: 'Rörelsevinstmarginal (%)',
+      description: 'Rörelseresultat i procent av omsättningen',
+      content: [
+        'Beräknas som: (Rörelseresultat / Omsättning) × 100',
+        'Visar lönsamhet efter alla rörelsekostnader',
+        'Hittar du i resultaträkningen',
+        'Typiskt värde: 5-30% beroende på bransch'
+      ]
+    },
+    'netMargin': {
+      title: 'Nettovinstmarginal (%)',
+      description: 'Årets resultat i procent av omsättningen',
+      content: [
+        'Beräknas som: (Årets resultat / Omsättning) × 100',
+        'Visar slutlig lönsamhet efter skatter',
+        'Hittar du i resultaträkningen',
+        'Typiskt värde: 3-20% beroende på bransch'
+      ]
+    },
+    'totalDebt': {
+      title: 'Totala skulder (SEK)',
+      description: 'Summa av alla skulder och lån',
+      content: [
+        'Inkluderar: banklån, obligationslån, leverantörsskulder, skatteskulder',
+        'Hittar du i balansräkningen under "Skulder"',
+        'Viktigt för att förstå finansiell hälsa',
+        'Jämför med eget kapital för att se skuldsättningsgrad'
+      ]
+    },
+    'capex': {
+      title: 'Kapitalutgifter (CAPEX) (SEK)',
+      description: 'Årliga investeringar i anläggningstillgångar',
+      content: [
+        'Inkluderar: maskiner, byggnader, IT-utrustning, fordon',
+        'Hittar du i kassaflödesanalysen eller balansräkningen',
+        'Viktigt för att visa investeringar i tillväxt',
+        'Skillnad mellan CAPEX och OPEX (driftskostnader)'
+      ]
+    }
+  }
+}
+
 interface Assessment {
   completeness: number
   status: string
@@ -268,6 +374,7 @@ export default function SMEKitPage() {
   const [formData, setFormData] = useState<any>({})
   const [showTips, setShowTips] = useState(false)
   const [currentTipStep, setCurrentTipStep] = useState<string | null>(null)
+  const [currentTipField, setCurrentTipField] = useState<{ stepId: string; fieldId: string } | null>(null)
   const [assessment, setAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -808,7 +915,8 @@ export default function SMEKitPage() {
                       />
                     )}
                   </div>
-                ))}
+                  )
+                })}
               </div>
 
               {/* ACTION BUTTONS */}
@@ -917,7 +1025,7 @@ export default function SMEKitPage() {
     </div>
 
     {/* TIPS MODAL */}
-    {showTips && currentTipStep && STEP_TIPS[currentTipStep] && (
+    {(showTips && (currentTipStep || currentTipField)) && (
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           {/* Backdrop */}
@@ -926,6 +1034,7 @@ export default function SMEKitPage() {
             onClick={() => {
               setShowTips(false)
               setCurrentTipStep(null)
+              setCurrentTipField(null)
             }}
           />
           
@@ -934,15 +1043,27 @@ export default function SMEKitPage() {
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
               <div>
-                <h3 className="text-2xl font-bold text-primary-navy mb-1">
-                  {STEP_TIPS[currentTipStep].title}
-                </h3>
-                <p className="text-gray-600 text-sm">{STEP_TIPS[currentTipStep].description}</p>
+                {currentTipField && FIELD_TIPS[currentTipField.stepId]?.[currentTipField.fieldId] ? (
+                  <>
+                    <h3 className="text-2xl font-bold text-primary-navy mb-1">
+                      {FIELD_TIPS[currentTipField.stepId][currentTipField.fieldId].title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">{FIELD_TIPS[currentTipField.stepId][currentTipField.fieldId].description}</p>
+                  </>
+                ) : currentTipStep && STEP_TIPS[currentTipStep] ? (
+                  <>
+                    <h3 className="text-2xl font-bold text-primary-navy mb-1">
+                      {STEP_TIPS[currentTipStep].title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">{STEP_TIPS[currentTipStep].description}</p>
+                  </>
+                ) : null}
               </div>
               <button
                 onClick={() => {
                   setShowTips(false)
                   setCurrentTipStep(null)
+                  setCurrentTipField(null)
                 }}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
@@ -952,47 +1073,62 @@ export default function SMEKitPage() {
 
             {/* Tips Content */}
             <div className="space-y-4">
-              {STEP_TIPS[currentTipStep].tips.map((tip, index) => (
-                <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <div className="flex items-start gap-3">
-                    <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${
-                      tip.required ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
-                    }`}>
-                      {index + 1}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-primary-navy mb-2 flex items-center gap-2">
-                        {tip.title}
-                        {tip.required && (
-                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
-                            Obligatoriskt
-                          </span>
+              {currentTipField && FIELD_TIPS[currentTipField.stepId]?.[currentTipField.fieldId] ? (
+                // Field-specific tip
+                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <ul className="space-y-2">
+                    {FIELD_TIPS[currentTipField.stepId][currentTipField.fieldId].content.map((item, i) => (
+                      <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                        <span className="text-primary-navy mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : currentTipStep && STEP_TIPS[currentTipStep] ? (
+                // Step tips
+                STEP_TIPS[currentTipStep].tips.map((tip, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <div className="flex items-start gap-3">
+                      <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${
+                        tip.required ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-primary-navy mb-2 flex items-center gap-2">
+                          {tip.title}
+                          {tip.required && (
+                            <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
+                              Obligatoriskt
+                            </span>
+                          )}
+                        </h4>
+                        <ul className="space-y-1">
+                          {tip.content.map((item, i) => (
+                            <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                              <span className="text-primary-navy mt-1">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        {tip.examples && tip.examples.length > 0 && (
+                          <div className="mt-2 pt-2 border-t border-gray-200">
+                            <p className="text-xs font-medium text-gray-600 mb-1">Exempel:</p>
+                            <ul className="space-y-1">
+                              {tip.examples.map((example, i) => (
+                                <li key={i} className="text-xs text-gray-600 italic">
+                                  "{example}"
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         )}
-                      </h4>
-                      <ul className="space-y-1">
-                        {tip.content.map((item, i) => (
-                          <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
-                            <span className="text-primary-navy mt-1">•</span>
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      {tip.examples && tip.examples.length > 0 && (
-                        <div className="mt-2 pt-2 border-t border-gray-200">
-                          <p className="text-xs font-medium text-gray-600 mb-1">Exempel:</p>
-                          <ul className="space-y-1">
-                            {tip.examples.map((example, i) => (
-                              <li key={i} className="text-xs text-gray-600 italic">
-                                "{example}"
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : null}
             </div>
 
             {/* Footer */}
@@ -1001,6 +1137,7 @@ export default function SMEKitPage() {
                 onClick={() => {
                   setShowTips(false)
                   setCurrentTipStep(null)
+                  setCurrentTipField(null)
                 }}
                 className="w-full bg-primary-navy text-white py-2 px-4 rounded-lg font-medium hover:bg-primary-navy/90 transition-colors"
               >
