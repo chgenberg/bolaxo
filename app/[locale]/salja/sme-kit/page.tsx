@@ -930,8 +930,7 @@ export default function SMEKitPage() {
                       />
                     )}
                   </div>
-                  )
-                })}
+                ))}
               </div>
 
               {/* ACTION BUTTONS */}
