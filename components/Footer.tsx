@@ -47,7 +47,7 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-3 text-gray-300">
                 <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                <span>{t('address')}</span>
+                <span dangerouslySetInnerHTML={{ __html: t('address').replace(/\n/g, '<br />') }} />
               </div>
             </div>
           </div>
