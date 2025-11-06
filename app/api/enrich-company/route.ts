@@ -8,7 +8,6 @@ import { scrapeLinkedIn, estimateEmployeeGrowth } from '@/lib/scrapers/linkedin'
 import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/google-mybusiness'
 import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
 import { searchGoogle } from '@/lib/scrapers/google-search'
-import { fetchBolagsverketCompanyData, fetchAnnualReports } from '@/lib/bolagsverket-api'
 
 const prisma = new PrismaClient()
 
@@ -41,9 +40,8 @@ export async function POST(request: Request) {
       autoFill: {},
       rawData: {
         websiteContent: '',
-        bolagsverketData: null,
-        scbData: null,
         allabolagData: null,
+        scbData: null,
         ratsitData: null,
         proffData: null,
         linkedinData: null,
@@ -57,10 +55,9 @@ export async function POST(request: Request) {
     const startTime = Date.now()
     
     const [
-      bolagsverketResult,
+      allabolagResult,
       scrapingResult,
       scbResult,
-      allabolagResult,
       ratsitResult,
       proffResult,
       linkedinResult,
@@ -68,28 +65,60 @@ export async function POST(request: Request) {
       trustpilotResult,
       googleSearchResult
     ] = await Promise.allSettled([
-      orgNumber ? fetchBolagsverketData(orgNumber) : Promise.resolve(null),
+      orgNumber ? scrapeAllabolag(orgNumber) : Promise.resolve(null),
       website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
       fetchSCBIndustryData(industry),
-      orgNumber ? scrapeAllabolag(orgNumber) : Promise.resolve(null),
       orgNumber ? scrapeRatsit(orgNumber) : Promise.resolve(null),
       orgNumber ? scrapeProff(orgNumber) : Promise.resolve(null),
       companyName ? scrapeLinkedIn(companyName, website) : Promise.resolve(null),
-      companyName ? scrapeGoogleMyBusiness(companyName, enrichedData.rawData.bolagsverketData?.address) : Promise.resolve(null),
+      companyName ? scrapeGoogleMyBusiness(companyName, enrichedData.rawData.allabolagData?.address) : Promise.resolve(null),
       companyName && website ? scrapeTrustpilot(companyName, website) : Promise.resolve(null),
       companyName ? searchGoogle(companyName, orgNumber) : Promise.resolve(null),
     ])
 
     console.log(`Parallel fetch completed in ${Date.now() - startTime}ms`)
 
-    // 3. PROCESS RESULTS
-    if (bolagsverketResult.status === 'fulfilled' && bolagsverketResult.value) {
-      enrichedData.rawData.bolagsverketData = bolagsverketResult.value
-      if (bolagsverketResult.value.registrationDate) {
-        enrichedData.autoFill.companyAge = calculateCompanyAge(bolagsverketResult.value.registrationDate)
+    // 3. PROCESS RESULTS - Allabolag är nu primär källa
+    if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
+      const allabolagData = allabolagResult.value
+      enrichedData.rawData.allabolagData = allabolagData
+      
+      // Auto-fill grundläggande data
+      if (allabolagData.registrationDate) {
+        enrichedData.autoFill.companyAge = calculateCompanyAge(allabolagData.registrationDate)
+        enrichedData.autoFill.registrationDate = allabolagData.registrationDate
       }
-      if (bolagsverketResult.value.employees) {
-        enrichedData.autoFill.employees = mapEmployeeCount(bolagsverketResult.value.employees)
+      if (allabolagData.financials?.employees) {
+        enrichedData.autoFill.employees = mapEmployeeCount(allabolagData.financials.employees)
+      }
+      
+      // Auto-fill finansiella data om tillgängligt
+      if (allabolagData.financials?.revenue) {
+        enrichedData.autoFill.revenue = allabolagData.financials.revenue.toString()
+        enrichedData.autoFill.revenue2024 = allabolagData.financials.revenue.toString()
+      }
+      if (allabolagData.financials?.profit) {
+        enrichedData.autoFill.profit = allabolagData.financials.profit.toString()
+      }
+      if (allabolagData.financials?.operatingProfit) {
+        enrichedData.autoFill.ebitda2024 = allabolagData.financials.operatingProfit.toString()
+      }
+      if (allabolagData.financials?.equity) {
+        enrichedData.autoFill.equity = allabolagData.financials.equity.toString()
+      }
+      
+      // Historisk data för flera år
+      if (allabolagData.history && allabolagData.history.length > 0) {
+        const sortedHistory = allabolagData.history.sort((a, b) => b.year - a.year)
+        if (sortedHistory[0]?.revenue) {
+          enrichedData.autoFill.revenue2024 = sortedHistory[0].revenue.toString()
+        }
+        if (sortedHistory[1]?.revenue) {
+          enrichedData.autoFill.revenue2023 = sortedHistory[1].revenue.toString()
+        }
+        if (sortedHistory[2]?.revenue) {
+          enrichedData.autoFill.revenue2022 = sortedHistory[2].revenue.toString()
+        }
       }
     }
 

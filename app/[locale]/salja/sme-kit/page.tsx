@@ -115,34 +115,48 @@ export default function SMEKitPage() {
           if (response.ok) {
             const enrichedData = await response.json()
             
-            // Auto-fill form fields with fetched data
-            if (enrichedData.rawData?.bolagsverketData) {
-              const bolagsData = enrichedData.rawData.bolagsverketData
+            // Auto-fill form fields with fetched data from Allabolag
+            if (enrichedData.rawData?.allabolagData) {
+              const allabolagData = enrichedData.rawData.allabolagData
               
               setFormData((prev: any) => ({
                 ...prev,
                 'company-basics': {
                   ...prev['company-basics'],
-                  companyName: bolagsData.name || prev['company-basics']?.companyName,
-                  registrationDate: bolagsData.registrationDate || prev['company-basics']?.registrationDate,
-                  employees: bolagsData.employees?.toString() || prev['company-basics']?.employees
+                  companyName: allabolagData.companyName || prev['company-basics']?.companyName,
+                  registrationDate: allabolagData.registrationDate || prev['company-basics']?.registrationDate,
+                  employees: allabolagData.financials?.employees?.toString() || prev['company-basics']?.employees
+                },
+                'financials-core': {
+                  ...prev['financials-core'],
+                  // Auto-fill financial data if available
+                  revenue2024: allabolagData.financials?.revenue?.toString() || prev['financials-core']?.revenue2024,
+                  revenue2023: allabolagData.history?.find((h: any) => h.year === new Date().getFullYear() - 1)?.revenue?.toString() || prev['financials-core']?.revenue2023,
+                  revenue2022: allabolagData.history?.find((h: any) => h.year === new Date().getFullYear() - 2)?.revenue?.toString() || prev['financials-core']?.revenue2022,
+                  ebitda2024: allabolagData.financials?.operatingProfit?.toString() || prev['financials-core']?.ebitda2024,
+                  ebitda2023: prev['financials-core']?.ebitda2023,
+                  ebitda2022: prev['financials-core']?.ebitda2022
                 }
               }))
-
-              // If annual reports are available, store them for later use
-              if (bolagsData.annualReports && bolagsData.annualReports.length > 0) {
-                // Store latest annual report info
-                const latestReport = bolagsData.annualReports[0]
-                setFormData((prev: any) => ({
-                  ...prev,
-                  'financials-core': {
-                    ...prev['financials-core'],
-                    // Note: We can't auto-fill revenue from reports without parsing the PDF
-                    // But we can store the document URL for reference
-                    annualReportYear: latestReport.year
-                  }
-                }))
-              }
+            }
+            
+            // Also use autoFill data if available (from other sources)
+            if (enrichedData.autoFill) {
+              setFormData((prev: any) => ({
+                ...prev,
+                'company-basics': {
+                  ...prev['company-basics'],
+                  registrationDate: enrichedData.autoFill.registrationDate || prev['company-basics']?.registrationDate,
+                  employees: enrichedData.autoFill.employees || prev['company-basics']?.employees
+                },
+                'financials-core': {
+                  ...prev['financials-core'],
+                  revenue2024: enrichedData.autoFill.revenue2024 || prev['financials-core']?.revenue2024,
+                  revenue2023: enrichedData.autoFill.revenue2023 || prev['financials-core']?.revenue2023,
+                  revenue2022: enrichedData.autoFill.revenue2022 || prev['financials-core']?.revenue2022,
+                  ebitda2024: enrichedData.autoFill.ebitda2024 || prev['financials-core']?.ebitda2024
+                }
+              }))
             }
           }
         } catch (error) {
