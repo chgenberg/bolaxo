@@ -688,7 +688,7 @@ export default function SMEKitPage() {
   return (
     <>
       {/* HEADER - Below main header */}
-      <div className="bg-white border-b border-gray-200 sticky top-16 md:top-20 lg:top-16 z-40 mt-16 md:mt-20 lg:mt-16">
+      <div className="bg-white border-b border-gray-200 sticky top-16 md:top-20 lg:top-16 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <h1 className="text-3xl font-bold text-primary-navy mb-1">{t('title')}</h1>
           <p className="text-gray-600 text-sm">{t('subtitle')}</p>
@@ -696,7 +696,7 @@ export default function SMEKitPage() {
       </div>
       
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-        <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="max-w-7xl mx-auto px-4 pt-28 md:pt-32 lg:pt-28 pb-12">
 
         {/* TAB NAVIGATION */}
         <div className="bg-white rounded-lg shadow-sm p-4 mb-8 overflow-x-auto">
