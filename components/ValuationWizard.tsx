@@ -770,7 +770,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                         className="mt-0.5"
                       />
                       <span className="text-sm" style={{ color: '#666666' }}>
-                        Jag godkänner <a href="/juridiskt/integritetspolicy" className="underline" style={{ color: '#FF69B4' }}>integritetspolicyn</a> och 
+                        Jag godkänner <a href={`/${locale}/juridiskt/integritetspolicy`} className="underline" style={{ color: '#FF69B4' }}>integritetspolicyn</a> och 
                         får ett konto för att spara min värdering
                     </span>
                   </label>

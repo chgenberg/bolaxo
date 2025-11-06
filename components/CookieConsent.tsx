@@ -176,11 +176,11 @@ export default function CookieConsent() {
 
               <div className="text-xs text-text-gray">
                 {t('readMore')}{' '}
-                <Link href="/juridiskt/cookies" className="text-primary-blue hover:underline">
+                <Link href={`/${locale}/juridiskt/cookies`} className="text-primary-blue hover:underline">
                   {t('cookiePolicy')}
                 </Link>
                 {' '}{t('and')}{' '}
-                <Link href="/juridiskt/integritetspolicy" className="text-primary-blue hover:underline">
+                <Link href={`/${locale}/juridiskt/integritetspolicy`} className="text-primary-blue hover:underline">
                   {t('privacyPolicy')}
                 </Link>
               </div>

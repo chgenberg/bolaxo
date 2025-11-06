@@ -994,7 +994,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       <p className="font-medium text-yellow-800 mb-1">Viktig information</p>
                       <p className="text-yellow-700">
                         Genom att publicera godkänner du våra{' '}
-                        <Link href="/juridiskt/anvandarvillkor" className="underline">
+                        <Link href={`/${locale}/juridiskt/anvandarvillkor`} className="underline">
                           användarvillkor
                         </Link>{' '}
                         och bekräftar att all information är korrekt. Annonsen granskas innan publicering.

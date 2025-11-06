@@ -88,10 +88,10 @@ export default function BuyerInfoPage() {
               {t('heroSubtitle')}
             </p>
             <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/registrera" className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:bg-primary-navy/90 transition-all text-base sm:text-lg shadow-lg hover:shadow-xl">
+              <Link href={`/${locale}/registrera`} className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:bg-primary-navy/90 transition-all text-base sm:text-lg shadow-lg hover:shadow-xl">
                 {t('createProfileButton')}
               </Link>
-              <Link href="/sok" className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary-navy font-bold rounded-lg hover:bg-gray-50 transition-all text-base sm:text-lg border-2 border-primary-navy">
+              <Link href={`/${locale}/sok`} className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary-navy font-bold rounded-lg hover:bg-gray-50 transition-all text-base sm:text-lg border-2 border-primary-navy">
                 {t('watchButton')}
               </Link>
             </div>
