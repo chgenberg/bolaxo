@@ -436,7 +436,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 </div>
 
                 <div className="space-y-4">
-                  {currentIndustryQuestions.slice(0, 4).map((question) => {
+                  {currentIndustryQuestions.slice(0, 4).map((question: any) => {
                     if (question.type === 'select' && question.options) {
                       return (
                         <CustomSelect
