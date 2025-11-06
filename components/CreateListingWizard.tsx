@@ -432,7 +432,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                     <Target className="w-8 h-8 text-navy" />
                   </div>
                   <h3 className="text-2xl font-bold text-navy mb-2">Branschspecifika detaljer</h3>
-                  <p className="text-gray-600">Några extra frågor specifika för {industries.find(i => i.value === data.industry)?.label}</p>
+                  <p className="text-gray-600">Några extra frågor specifika för {industries.find((i: any) => i.value === data.industry)?.label}</p>
                 </div>
 
                 <div className="space-y-4">
