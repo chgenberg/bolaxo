@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { TrendingUp, Eye, Users, CheckCircle, XCircle, Clock, Edit, Pause, Play, MessageSquare, BarChart3, HelpCircle, FileText, Target } from 'lucide-react'
 import { DEMO_DEALS, DEMO_QA_QUESTIONS } from '@/lib/demo-data'
+import { useLocale } from 'next-intl'
 
 const DEMO_MODE = true // Set to true to show demo data
 
@@ -12,6 +13,7 @@ interface SellerDashboardProps {
 }
 
 export default function SellerDashboard({ userId }: SellerDashboardProps) {
+  const locale = useLocale()
   const [listings, setListings] = useState<any[]>([])
   const [ndaRequests, setNdaRequests] = useState<any[]>([])
   const [messages, setMessages] = useState<any[]>([])
@@ -173,7 +175,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
       <div>
         <h2 className="text-xl font-bold text-text-dark mb-4">Snabblänkar för säljare</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Link href="/salja/sme-kit" className="bg-accent-pink/10 border border-accent-pink/30 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+          <Link href={`/${locale}/salja/sme-kit`} className="bg-accent-pink/10 border border-accent-pink/30 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
             <FileText className="w-8 h-8 text-accent-pink mx-auto mb-2" />
             <p className="font-semibold text-primary-navy">SME Kit</p>
             <p className="text-xs text-gray-600">Förbered försäljning</p>
@@ -181,19 +183,19 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
           
           {activeListings[0] && (
             <>
-              <Link href={`/salja/heat-map/${activeListings[0].id}`} className="bg-blue-50 border border-blue-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+              <Link href={`/${locale}/salja/heat-map/${activeListings[0].id}`} className="bg-blue-50 border border-blue-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
                 <BarChart3 className="w-8 h-8 text-blue-600 mx-auto mb-2" />
                 <p className="font-semibold text-primary-navy">Heat Map</p>
                 <p className="text-xs text-gray-600">Se köparengagemang</p>
               </Link>
               
-              <Link href={`/kopare/qa/${activeListings[0].id}`} className="bg-green-50 border border-green-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+              <Link href={`/${locale}/kopare/qa/${activeListings[0].id}`} className="bg-green-50 border border-green-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
                 <HelpCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
                 <p className="font-semibold text-primary-navy">Q&A Center</p>
                 <p className="text-xs text-gray-600">Svara på frågor</p>
               </Link>
               
-              <Link href={`/salja/earnout/${activeListings[0].id}`} className="bg-purple-50 border border-purple-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
+              <Link href={`/${locale}/salja/earnout/${activeListings[0].id}`} className="bg-purple-50 border border-purple-200 p-4 rounded-lg hover:shadow-lg transition-shadow text-center">
                 <Target className="w-8 h-8 text-purple-600 mx-auto mb-2" />
                 <p className="font-semibold text-primary-navy">Earnout</p>
                 <p className="text-xs text-gray-600">Spåra KPI</p>
@@ -207,7 +209,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
       <div className="bg-white p-6 rounded-xl border border-gray-100">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-text-dark">Dina annonser</h2>
-          <Link href="/salja/start" className="text-sm text-primary-blue hover:underline">
+          <Link href={`/${locale}/salja/start`} className="text-sm text-primary-blue hover:underline">
             + Skapa ny annons
           </Link>
         </div>
@@ -215,7 +217,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
         {listings.length === 0 ? (
           <div className="text-center py-8 text-text-gray">
             <p className="mb-4">Du har inga annonser än</p>
-            <Link href="/salja/start" className="btn-primary inline-flex items-center">
+            <Link href={`/${locale}/salja/start`} className="btn-primary inline-flex items-center">
               Skapa din första annons
             </Link>
           </div>
@@ -248,7 +250,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Link href={`/objekt/${listing.id}`} className="p-2 hover:bg-gray-100 rounded-lg">
+                    <Link href={`/${locale}/objekt/${listing.id}`} className="p-2 hover:bg-gray-100 rounded-lg">
                       <Eye className="w-4 h-4" />
                     </Link>
                     <button 
