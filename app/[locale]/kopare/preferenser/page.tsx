@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 import BuyerPreferences from '@/components/BuyerPreferences'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 export default function PreferencesPage() {
   const router = useRouter()
+  const locale = useLocale()
   const [saved, setSaved] = useState(false)
 
   const handleSave = (preferences: any) => {
@@ -18,7 +20,7 @@ export default function PreferencesPage() {
     
     // Redirect after a short delay
     setTimeout(() => {
-      router.push('/sok')
+      router.push(`/${locale}/sok`)
     }, 2000)
   }
 
@@ -27,7 +29,7 @@ export default function PreferencesPage() {
       <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link 
-          href="/kopare"
+          href={`/${locale}/kopare`}
           className="inline-flex items-center text-primary-blue hover:underline mb-8"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
