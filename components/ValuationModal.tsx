@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { X, TrendingUp, Building2, Calculator } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 interface ValuationModalProps {
   isOpen: boolean
@@ -11,6 +12,7 @@ interface ValuationModalProps {
 
 export default function ValuationModal({ isOpen, onClose }: ValuationModalProps) {
   const router = useRouter()
+  const locale = useLocale()
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
 
   if (!isOpen) return null
@@ -19,7 +21,7 @@ export default function ValuationModal({ isOpen, onClose }: ValuationModalProps)
     setSelectedOption(option)
     // Redirect to valuation page after selection
     setTimeout(() => {
-      router.push('/vardering')
+      router.push(`/${locale}/vardering`)
       onClose()
     }, 500)
   }

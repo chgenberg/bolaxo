@@ -5,6 +5,7 @@ import { X, ArrowRight, ArrowLeft, Mail, Building, TrendingUp, Users, Target, Fi
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
+import { useTranslations, useLocale } from 'next-intl'
 import FormField from './FormField'
 import FormTextarea from './FormTextarea'
 import CustomSelect from './CustomSelect'
@@ -68,240 +69,23 @@ interface WizardProps {
   onClose?: () => void
 }
 
-const industries = [
-  { value: 'it-konsult-utveckling', label: 'IT-konsult & utveckling' },
-  { value: 'ehandel-d2c', label: 'E-handel/D2C' },
-  { value: 'saas-licensmjukvara', label: 'SaaS & licensmjukvara' },
-  { value: 'bygg-anlaggning', label: 'Bygg & anläggning' },
-  { value: 'el-vvs-installation', label: 'El, VVS & installation' },
-  { value: 'stad-facility-services', label: 'Städ & facility services' },
-  { value: 'lager-logistik-3pl', label: 'Lager, logistik & 3PL' },
-  { value: 'restaurang-cafe', label: 'Restaurang & café' },
-  { value: 'detaljhandel-fysisk', label: 'Detaljhandel (fysisk)' },
-  { value: 'grossist-partihandel', label: 'Grossist/partihandel' },
-  { value: 'latt-tillverkning-verkstad', label: 'Lätt tillverkning/verkstad' },
-  { value: 'fastighetsservice-forvaltning', label: 'Fastighetsservice & förvaltning' },
-  { value: 'marknadsforing-kommunikation-pr', label: 'Marknadsföring, kommunikation & PR' },
-  { value: 'ekonomitjanster-redovisning', label: 'Ekonomitjänster & redovisning' },
-  { value: 'halsa-skönhet', label: 'Hälsa/skönhet (salonger, kliniker, spa)' },
-  { value: 'gym-fitness-wellness', label: 'Gym, fitness & wellness' },
-  { value: 'event-konferens-upplevelser', label: 'Event, konferens & upplevelser' },
-  { value: 'utbildning-kurser-edtech', label: 'Utbildning, kurser & edtech småskaligt' },
-  { value: 'bilverkstad-fordonsservice', label: 'Bilverkstad & fordonsservice' },
-  { value: 'jord-skog-tradgard-gronyteskotsel', label: 'Jord/skog, trädgård & grönyteskötsel' },
-]
-
-const regions = [
-  { value: 'stockholm-malardalen', label: 'Stockholm & Mälardalen' },
-  { value: 'vastsverige', label: 'Västsverige' },
-  { value: 'syd', label: 'Syd' },
-  { value: 'ostra-smaland', label: 'Östra & Småland' },
-  { value: 'norr-mitt', label: 'Norr & Mitt' },
-]
-
-// Branschspecifika frågor (samma som i ValuationWizard)
-const industryQuestions: Record<string, Array<{ key: string; label: string; type: 'text' | 'select' | 'textarea'; options?: {value: string; label: string}[]; tooltip?: string; fieldType?: 'currency' | 'percent' }>> = {
-  tech: [
-    { key: 'businessModel', label: 'Affärsmodell', type: 'select', options: [
-      { value: 'saas', label: 'SaaS (Software as a Service)' },
-      { value: 'license', label: 'Licensförsäljning' },
-      { value: 'services', label: 'Tjänster/konsultation' },
-      { value: 'marketplace', label: 'Marketplace/plattform' },
-      { value: 'hybrid', label: 'Hybrid' }
-    ]},
-    { key: 'recurringRevenue', label: 'Andel återkommande intäkter / MRR', type: 'text', tooltip: 'T.ex. prenumerationer, support-avtal. För SaaS: ange MRR/ARR-andel.', fieldType: 'percent' },
-    { key: 'monthlyRecurringRevenue', label: 'MRR - Monthly Recurring Revenue', type: 'text', tooltip: 'Endast för SaaS: månatliga återkommande intäkter', fieldType: 'currency' },
-    { key: 'customerChurn', label: 'Årlig kundavgång (churn rate)', type: 'text', tooltip: 'Andel kunder som slutar per år. <5% är excellent för SaaS', fieldType: 'percent' },
-    { key: 'netRevenueRetention', label: 'NRR - Net Revenue Retention', type: 'text', tooltip: 'För SaaS: intäkter från befintliga kunder vs förra året. >100% = expansion!', fieldType: 'percent' },
-    { key: 'customerAcquisitionCost', label: 'CAC - Customer Acquisition Cost (kr)', type: 'text', tooltip: 'Kostnad för att värva en ny kund' },
-    { key: 'lifetimeValue', label: 'LTV - Lifetime Value per kund (kr)', type: 'text', tooltip: 'Total intäkt från en genomsnittlig kund' },
-    { key: 'cacPaybackMonths', label: 'CAC Payback Period', type: 'select', tooltip: 'Hur många månader för att tjäna tillbaka kundanskaffningskostnad? <12 mån excellent', options: [
-      { value: '0-6', label: '0-6 månader' },
-      { value: '7-12', label: '7-12 månader' },
-      { value: '13-18', label: '13-18 månader' },
-      { value: '19-24', label: '19-24 månader' },
-      { value: '24+', label: 'Över 24 månader' }
-    ]},
-    { key: 'techStack', label: 'Beskriv er tekniska plattform', type: 'textarea' },
-    { key: 'scalability', label: 'Hur skalbar är er lösning?', type: 'select', options: [
-      { value: 'high', label: 'Hög - kan lätt växa utan extra kostnad' },
-      { value: 'medium', label: 'Medel - viss skalbarhet' },
-      { value: 'low', label: 'Låg - resurskrävande att växa' }
-    ]},
-    { key: 'ipRights', label: 'Har ni patent eller unik teknologi?', type: 'select', options: [
-      { value: 'yes', label: 'Ja, patent eller skyddad IP' },
-      { value: 'partial', label: 'Delvis, varumärken/copyright' },
-      { value: 'no', label: 'Nej' }
-    ]},
-  ],
-  retail: [
-    { key: 'storeLocation', label: 'Butiksläge', type: 'select', options: [
-      { value: 'prime', label: 'Toppläge (centrum, galleria)' },
-      { value: 'good', label: 'Bra läge' },
-      { value: 'average', label: 'Genomsnittligt läge' }
-    ]},
-    { key: 'leaseLength', label: 'Hur långt hyresavtal återstår?', type: 'select', tooltip: 'Långt hyresavtal = mer värt (mindre risk)', options: [
-      { value: '0-1', label: '0-1 år' },
-      { value: '2-3', label: '2-3 år' },
-      { value: '4-5', label: '4-5 år' },
-      { value: '6-10', label: '6-10 år' },
-      { value: '10+', label: 'Över 10 år' }
-    ]},
-    { key: 'monthlyRent', label: 'Månadshyra', type: 'text', tooltip: 'Total lokalkostnad per månad', fieldType: 'currency' },
-    { key: 'footTraffic', label: 'Uppskattat antal kunder per dag', type: 'select', options: [
-      { value: '0-50', label: '0-50 kunder' },
-      { value: '51-100', label: '51-100 kunder' },
-      { value: '101-200', label: '101-200 kunder' },
-      { value: '201-500', label: '201-500 kunder' },
-      { value: '501-1000', label: '501-1000 kunder' },
-      { value: '1000+', label: 'Över 1000 kunder' }
-    ]},
-    { key: 'avgTransactionSize', label: 'Genomsnittligt köp per kund', type: 'text', fieldType: 'currency' },
-    { key: 'inventoryTurnover', label: 'Lageromsättning per år', type: 'select', tooltip: 'Hur många gånger per år säljs lagret. Högre = bättre cash flow', options: [
-      { value: '0-2', label: '0-2 gånger' },
-      { value: '3-4', label: '3-4 gånger' },
-      { value: '5-6', label: '5-6 gånger' },
-      { value: '7-10', label: '7-10 gånger' },
-      { value: '10+', label: 'Över 10 gånger' }
-    ]},
-    { key: 'inventoryValue', label: 'Genomsnittligt lagervärde', type: 'text', tooltip: 'Värde på lager i butik. Påverkar working capital', fieldType: 'currency' },
-    { key: 'sameStoreSalesGrowth', label: 'Årlig försäljningstillväxt', type: 'text', tooltip: 'Tillväxt för befintlig butik', fieldType: 'percent' },
-    { key: 'onlinePresence', label: 'Har ni e-handel?', type: 'select', options: [
-      { value: 'yes-integrated', label: 'Ja, integrerad med butik' },
-      { value: 'yes-separate', label: 'Ja, separat e-handel' },
-      { value: 'no', label: 'Nej, endast fysisk butik' }
-    ]},
-    { key: 'brandStrength', label: 'Varumärkesstyrka', type: 'select', options: [
-      { value: 'strong', label: 'Starkt - välkänt lokalt/nationellt' },
-      { value: 'medium', label: 'Medel - etablerat bland stamkunder' },
-      { value: 'weak', label: 'Svagt - nytt/okänt' }
-    ]},
-  ],
-  manufacturing: [
-    { key: 'productionCapacity', label: 'Kapacitetsutnyttjande', type: 'text', tooltip: 'Hur mycket av produktionskapaciteten används?', fieldType: 'percent' },
-    { key: 'equipmentAge', label: 'Genomsnittlig ålder på maskiner (år)', type: 'text' },
-    { key: 'equipmentValue', label: 'Bokfört värde på maskiner', type: 'text', tooltip: 'Sammanlagt värde på produktionsutrustning', fieldType: 'currency' },
-    { key: 'depreciation', label: 'Årlig avskrivning', type: 'text', fieldType: 'currency' },
-    { key: 'productMix', label: 'Antal produktlinjer', type: 'text' },
-    { key: 'rawMaterialCosts', label: 'Råvarukostnader (% av omsättning)', type: 'text', fieldType: 'percent' },
-    { key: 'productionStaff', label: 'Antal produktionsanställda', type: 'text' },
-    { key: 'qualityCertifications', label: 'Har ni kvalitetscertifieringar?', type: 'select', options: [
-      { value: 'iso9001', label: 'Ja, ISO 9001 eller liknande' },
-      { value: 'other', label: 'Ja, andra certifieringar' },
-      { value: 'no', label: 'Nej' }
-    ]},
-    { key: 'exportShare', label: 'Exportandel', type: 'text', tooltip: 'Hur stor del av försäljningen är export?', fieldType: 'percent' },
-    { key: 'supplierDependency', label: 'Beroende av enskilda leverantörer?', type: 'select', options: [
-      { value: 'low', label: 'Lågt - flera alternativ' },
-      { value: 'medium', label: 'Medel - 2-3 huvudleverantörer' },
-      { value: 'high', label: 'Högt - en kritisk leverantör' }
-    ]},
-  ],
-  services: [
-    { key: 'serviceType', label: 'Typ av tjänst', type: 'text', tooltip: 'Ex: redovisning, städning, konsult' },
-    { key: 'contractRenewalRate', label: 'Förnyelserate på kontrakt (%)', type: 'text', tooltip: 'Andel kunder som förnyas årligen', fieldType: 'percent' },
-    { key: 'avgRevenuePerCustomer', label: 'Genomsnittlig intäkt per kund/år (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'billableHours', label: 'Debiteringsgrad (%)', type: 'text', tooltip: 'Andel av arbetstid som kan faktureras', fieldType: 'percent' },
-    { key: 'clientRetention', label: 'Genomsnittlig kundlivslängd (år)', type: 'text' },
-    { key: 'customerGrowthRate', label: 'Årlig kundtillväxt (%)', type: 'text', fieldType: 'percent' },
-    { key: 'keyPersonDependency', label: 'Beroende av nyckelpersoner?', type: 'select', options: [
-      { value: 'low', label: 'Lågt - processer på plats' },
-      { value: 'medium', label: 'Medel - viss nyckelperson' },
-      { value: 'high', label: 'Högt - kritiskt beroende' }
-    ]},
-  ],
-  restaurant: [
-    { key: 'seatingCapacity', label: 'Antal sittplatser', type: 'text' },
-    { key: 'avgCheckSize', label: 'Genomsnittlig nota (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'monthlyCovers', label: 'Antal gäster per månad', type: 'text' },
-    { key: 'foodCostPercentage', label: 'Råvarukostnad (% av försäljning)', type: 'text', tooltip: 'Typiskt 25-35% för restaurang', fieldType: 'percent' },
-    { key: 'liquorLicense', label: 'Alkoholtillstånd', type: 'select', options: [
-      { value: 'full', label: 'Fullständiga rättigheter' },
-      { value: 'beer-wine', label: 'Öl och vin' },
-      { value: 'none', label: 'Inget alkoholtillstånd' }
-    ]},
-    { key: 'leaseYearsRemaining', label: 'År kvar på hyresavtal', type: 'text' },
-    { key: 'deliveryRevenue', label: 'Andel take-away/delivery (%)', type: 'text', fieldType: 'percent' },
-    { key: 'peakSeasonVariation', label: 'Säsongsvariationer', type: 'select', options: [
-      { value: 'low', label: 'Låg - jämn beläggning året om' },
-      { value: 'medium', label: 'Medel - viss säsongsvariation' },
-      { value: 'high', label: 'Hög - stark säsongsberoende' }
-    ]},
-  ],
-  construction: [
-    { key: 'projectBacklog', label: 'Orderstock (kr)', type: 'text', tooltip: 'Värde av bekräftade projekt', fieldType: 'currency' },
-    { key: 'avgProjectSize', label: 'Genomsnittlig projektstorlek (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'projectCompletionRate', label: 'Projekt i tid (%)', type: 'text', tooltip: 'Andel projekt som slutförs enligt plan', fieldType: 'percent' },
-    { key: 'equipmentValue', label: 'Värde på maskiner/utrustning (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'subcontractorShare', label: 'Andel underentreprenörer (%)', type: 'text', fieldType: 'percent' },
-    { key: 'publicPrivateMix', label: 'Fördelning offentlig/privat (%)', type: 'text', tooltip: 'Ex: 60/40' },
-    { key: 'geographicReach', label: 'Geografisk räckvidd', type: 'select', options: [
-      { value: 'local', label: 'Lokal - inom kommunen' },
-      { value: 'regional', label: 'Regional - inom länet' },
-      { value: 'national', label: 'Nationell' }
-    ]},
-    { key: 'specializations', label: 'Specialiseringar', type: 'textarea', tooltip: 'Ex: ROT, nybyggnation, kommersiellt' },
-  ],
-  healthcare: [
-    { key: 'patientBase', label: 'Antal aktiva patienter/klienter', type: 'text' },
-    { key: 'avgRevenuePerPatient', label: 'Genomsnittlig intäkt per patient/år (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'appointmentCapacity', label: 'Behandlingar per dag', type: 'text' },
-    { key: 'insuranceRevenue', label: 'Andel försäkringsintäkter (%)', type: 'text', fieldType: 'percent' },
-    { key: 'privatePayRevenue', label: 'Andel privata betalningar (%)', type: 'text', fieldType: 'percent' },
-    { key: 'specializations', label: 'Specialiseringar', type: 'textarea' },
-    { key: 'staffingModel', label: 'Personalmodell', type: 'select', options: [
-      { value: 'employed', label: 'Anställda behandlare' },
-      { value: 'contractors', label: 'Inhyrda/konsulter' },
-      { value: 'mixed', label: 'Blandad modell' }
-    ]},
-    { key: 'equipmentValue', label: 'Värde på medicinsk utrustning', type: 'text', fieldType: 'currency' },
-  ],
-  ecommerce: [
-    { key: 'platformType', label: 'E-handelsplattform', type: 'select', options: [
-      { value: 'custom', label: 'Egen utvecklad plattform' },
-      { value: 'shopify', label: 'Shopify' },
-      { value: 'woocommerce', label: 'WooCommerce' },
-      { value: 'other-saas', label: 'Annan SaaS-lösning' }
-    ]},
-    { key: 'avgOrderValue', label: 'Genomsnittligt ordervärde (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'conversionRate', label: 'Konverteringsgrad (%)', type: 'text', tooltip: 'Besökare som blir kunder', fieldType: 'percent' },
-    { key: 'returnRate', label: 'Returgrad (%)', type: 'text', fieldType: 'percent' },
-    { key: 'customerAcquisitionCost', label: 'Kostnad per ny kund (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'repeatPurchaseRate', label: 'Andel återköpande kunder (%)', type: 'text', fieldType: 'percent' },
-    { key: 'inventoryModel', label: 'Lagermodell', type: 'select', options: [
-      { value: 'own-inventory', label: 'Eget lager' },
-      { value: 'dropshipping', label: 'Dropshipping' },
-      { value: 'hybrid', label: 'Kombinerad modell' }
-    ]},
-    { key: 'marketplacePresence', label: 'Säljer ni på marknadsplatser?', type: 'select', options: [
-      { value: 'no', label: 'Nej, endast egen e-handel' },
-      { value: 'yes-minor', label: 'Ja, <20% av försäljning' },
-      { value: 'yes-major', label: 'Ja, >20% av försäljning' }
-    ]},
-  ],
-  consulting: [
-    { key: 'consultantCount', label: 'Antal konsulter', type: 'text' },
-    { key: 'seniorityMix', label: 'Andel seniora konsulter (%)', type: 'text', fieldType: 'percent' },
-    { key: 'billableRate', label: 'Genomsnittlig timtaxa (kr)', type: 'text', fieldType: 'currency' },
-    { key: 'utilizationRate', label: 'Beläggningsgrad (%)', type: 'text', tooltip: 'Debiterbara timmar / totala timmar', fieldType: 'percent' },
-    { key: 'clientConcentration', label: 'Största kundens andel av intäkter (%)', type: 'text', fieldType: 'percent' },
-    { key: 'contractLength', label: 'Genomsnittlig kontraktslängd', type: 'select', options: [
-      { value: 'spot', label: 'Korta uppdrag (<3 mån)' },
-      { value: 'medium', label: 'Medellånga (3-12 mån)' },
-      { value: 'long', label: 'Långa kontrakt (>12 mån)' }
-    ]},
-    { key: 'serviceLines', label: 'Tjänsteområden', type: 'textarea', tooltip: 'Lista era konsultområden' },
-  ],
-  // Lägg till fler branscher här vid behov
-}
+// Industries, regions och industryQuestions kommer från translations
+// Se messages/sv.json och messages/en.json under "createListing"
 
 export default function CreateListingWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user } = useAuth()
   const { success, error } = useToast()
+  const t = useTranslations('createListing')
+  const locale = useLocale()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const formRef = useRef<HTMLDivElement>(null)
+  
+  // Get translated industries and regions
+  const industries = useMemo(() => t.raw('industries'), [t])
+  const regions = useMemo(() => t.raw('regions'), [t])
+  const industryQuestions = useMemo(() => t.raw('industryQuestions'), [t])
   
   const [data, setData] = useState<ListingData>({
     email: user?.email || '',
@@ -337,14 +121,14 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
   // Auto-generate anonymous title
   useEffect(() => {
     if (data.industry && data.region) {
-      const industryLabel = industries.find(i => i.value === data.industry)?.label || 'Företag'
-      const regionLabel = regions.find(r => r.value === data.region)?.label || 'Sverige'
+      const industryLabel = industries.find((i: any) => i.value === data.industry)?.label || t('defaultCompany')
+      const regionLabel = regions.find((r: any) => r.value === data.region)?.label || t('defaultCountry')
       setData(prev => ({
         ...prev,
-        anonymousTitle: `${industryLabel} i ${regionLabel}`
+        anonymousTitle: t('anonymousTitleTemplate', { industry: industryLabel, region: regionLabel })
       }))
     }
-  }, [data.industry, data.region])
+  }, [data.industry, data.region, industries, regions, t])
 
   // Auto-scroll to top on step change
   useEffect(() => {
@@ -406,7 +190,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
 
       if (response.ok) {
         const listing = await response.json()
-        router.push(`/dashboard/listings?success=published&id=${listing.id}`)
+        router.push(`/${locale}/dashboard/listings?success=published&id=${listing.id}`)
         success('Annonsen har publicerats!')
       } else {
         console.error('Failed to publish listing')
@@ -446,7 +230,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
   }
 
   const mappedIndustry = data.industry ? industryMapping[data.industry] || data.industry : ''
-  const currentIndustryQuestions = mappedIndustry ? industryQuestions[mappedIndustry] || [] : []
+  const currentIndustryQuestions = mappedIndustry && industryQuestions ? (industryQuestions[mappedIndustry] || []) : []
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -464,7 +248,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
             <div className="px-6 py-4">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-black text-navy uppercase tracking-tight">
-                  Skapa annons
+                  {t('title')}
                 </h2>
                 <button
                   onClick={onClose}
@@ -485,7 +269,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   </div>
                 </div>
                 <span className="text-sm font-medium text-gray-600">
-                  Steg {step} av {totalSteps}
+                  {t('stepProgress', { current: step, total: totalSteps })}
                 </span>
               </div>
             </div>
@@ -500,49 +284,49 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
                     <Building className="w-8 h-8 text-navy" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Låt oss börja med grunderna</h3>
-                  <p className="text-gray-600">Berätta lite om ditt företag så vi kan skapa en perfekt annons</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">{t('step1.title')}</h3>
+                  <p className="text-gray-600">{t('step1.subtitle')}</p>
                 </div>
 
                 <div className="space-y-4">
                   <FormField
-                    label="Din e-postadress"
+                    label={t('step1.emailLabel')}
                     type="email"
                     value={data.email}
                     onChange={(e) => updateField('email', e.target.value)}
-                    placeholder="namn@foretag.se"
+                    placeholder={t('step1.emailPlaceholder')}
                     required
                   />
 
                   <FormField
-                    label="Företagets namn"
+                    label={t('step1.companyNameLabel')}
                     value={data.companyName}
                     onChange={(e) => updateField('companyName', e.target.value)}
-                    placeholder="AB Exempel"
+                    placeholder={t('step1.companyNamePlaceholder')}
                     required
                   />
 
                   <FormField
-                    label="Webbsida (valfritt)"
+                    label={t('step1.websiteLabel')}
                     value={data.website}
                     onChange={(e) => updateField('website', e.target.value)}
-                    placeholder="www.exempel.se"
+                    placeholder={t('step1.websitePlaceholder')}
                   />
 
                   <CustomSelect
-                    label="Bransch"
+                    label={t('step1.industryLabel')}
                     value={data.industry}
                     onChange={(value) => updateField('industry', value)}
                     options={industries}
-                    placeholder="Välj bransch"
+                    placeholder={t('step1.industryPlaceholder')}
                     required
                   />
 
                   <FormField
-                    label="Organisationsnummer"
+                    label={t('step1.orgNumberLabel')}
                     value={data.orgNumber}
                     onChange={(e) => updateField('orgNumber', e.target.value)}
-                    placeholder="556677-8899"
+                    placeholder={t('step1.orgNumberPlaceholder')}
                   />
                 </div>
               </div>
