@@ -11,7 +11,8 @@ const secret = new TextEncoder().encode(JWT_SECRET)
 const intlMiddleware = createMiddleware({
   locales: ['sv', 'en'],
   defaultLocale: 'sv',
-  localePrefix: 'always' // Always show locale prefix (e.g., /sv/, /en/)
+  localePrefix: 'always', // Always show locale prefix (e.g., /sv/, /en/)
+  localeDetection: false // Disable automatic locale detection - always use URL locale
 })
 
 export async function middleware(request: NextRequest) {
