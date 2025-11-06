@@ -1398,6 +1398,13 @@
       "seeAll": "See all frequently asked questions →"
     }
   },
+  "saljaStart": {
+    "loading": "Loading...",
+    "back": "Back",
+    "readyTitle": "Ready to sell?",
+    "readySubtitle": "Create your listing and reach thousands of qualified buyers",
+    "startButton": "Get started"
+  },
   "smeKit": {
     "title": "SME Sales Automation Kit",
     "subtitle": "Compile all information for professional DD and SPA",

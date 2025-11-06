@@ -1398,6 +1398,13 @@
       "seeAll": "Se alla vanliga frågor →"
     }
   },
+  "saljaStart": {
+    "loading": "Laddar...",
+    "back": "Tillbaka",
+    "readyTitle": "Redo att sälja?",
+    "readySubtitle": "Skapa din annons och nå tusentals kvalificerade köpare",
+    "startButton": "Starta här"
+  },
   "smeKit": {
     "title": "SME Sales Automation Kit",
     "subtitle": "Sammanställ all information för professionell DD och SPA",
