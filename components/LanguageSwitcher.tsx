@@ -2,7 +2,7 @@
 
 import { useLocale } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 
 export default function LanguageSwitcher() {
   const locale = useLocale()
@@ -16,7 +16,13 @@ export default function LanguageSwitcher() {
     { code: 'en', label: 'English', flag: '🇬🇧' },
   ]
 
-  const currentLanguage = languages.find(lang => lang.code === locale) || languages[0]
+  // Extract locale from pathname to ensure it updates immediately
+  const currentLocale = useMemo(() => {
+    const pathLocale = pathname?.split('/')[1]
+    return (pathLocale === 'sv' || pathLocale === 'en') ? pathLocale : locale
+  }, [pathname, locale])
+
+  const currentLanguage = languages.find(lang => lang.code === currentLocale) || languages[0]
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -31,7 +37,7 @@ export default function LanguageSwitcher() {
 
   const switchLanguage = (newLocale: string) => {
     // Handle root path (/sv or /en) specially
-    if (pathname === `/${locale}` || pathname === '/sv' || pathname === '/en') {
+    if (pathname === `/${currentLocale}` || pathname === '/sv' || pathname === '/en') {
       router.push(`/${newLocale}`)
     } else {
       // Remove current locale from pathname and navigate to new locale
