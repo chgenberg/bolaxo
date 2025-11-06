@@ -395,7 +395,7 @@ export default function Header() {
                   {item.href ? (
                     <div className="space-y-1">
                       <Link
-                        href={item.href}
+                        href={getLocalizedPath(item.href || '/')}
                         className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                         onClick={() => setIsMenuOpen(false)}
                       >
@@ -406,7 +406,7 @@ export default function Header() {
                           {item.dropdown.map((dropdownItem) => (
                             <Link
                               key={dropdownItem.href}
-                              href={dropdownItem.href}
+                              href={getLocalizedPath(dropdownItem.href)}
                               className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-6 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                               onClick={() => setIsMenuOpen(false)}
                             >
@@ -424,7 +424,7 @@ export default function Header() {
                           {item.dropdown.map((dropdownItem) => (
                             <Link
                               key={dropdownItem.href}
-                              href={dropdownItem.href}
+                              href={getLocalizedPath(dropdownItem.href)}
                               className="block text-base text-gray-600 hover:text-primary-navy transition-colors py-2.5 px-6 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                               onClick={() => setIsMenuOpen(false)}
                             >
