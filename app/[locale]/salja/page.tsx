@@ -4,10 +4,11 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CheckCircle, ArrowRight, Shield, TrendingUp, Users, FileText } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function SaljaInfoPage() {
   const t = useTranslations('salja')
+  const locale = useLocale()
   const [activeStep, setActiveStep] = useState(1)
 
   const steps = useMemo(() => [
@@ -232,7 +233,7 @@ export default function SaljaInfoPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/vardering" className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
+              <Link href={`/${locale}/vardering`} className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
                 {t('pricing.draft.cta')}
               </Link>
             </div>
@@ -252,7 +253,7 @@ export default function SaljaInfoPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/salja/start" className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
+              <Link href={`/${locale}/salja/start`} className="block w-full py-3 px-6 border-2 border-primary-navy text-primary-navy font-bold rounded-lg text-center hover:bg-primary-navy/5 transition-all">
                 {t('pricing.basic.cta')}
               </Link>
             </div>
@@ -277,7 +278,7 @@ export default function SaljaInfoPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/salja/start" className="block w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg text-center hover:shadow-lg transition-all inline-flex items-center justify-center gap-2">
+              <Link href={`/${locale}/salja/start`} className="block w-full py-3 px-6 bg-accent-pink text-primary-navy font-bold rounded-lg text-center hover:shadow-lg transition-all inline-flex items-center justify-center gap-2">
                 {t('pricing.pro.cta')}
                 <ArrowRight className="w-5 h-5" />
               </Link>
@@ -285,7 +286,7 @@ export default function SaljaInfoPage() {
           </div>
 
           <div className="text-center mt-8 sm:mt-12">
-            <Link href="/priser" className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2 text-base sm:text-lg">
+            <Link href={`/${locale}/priser`} className="text-primary-navy font-semibold hover:underline inline-flex items-center gap-2 text-base sm:text-lg">
               {t('pricing.seeDetails')}
               <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
             </Link>
@@ -319,7 +320,7 @@ export default function SaljaInfoPage() {
           <p className="text-base sm:text-lg text-primary-navy mb-6 sm:mb-8 max-w-2xl mx-auto px-4 sm:px-0">
             {t('smeKit.description')}
           </p>
-          <Link href="/sme-kit" className="inline-flex items-center gap-2 px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-base sm:text-lg">
+          <Link href={`/${locale}/sme-kit`} className="inline-flex items-center gap-2 px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:shadow-lg transition-all text-base sm:text-lg">
             {t('smeKit.cta')}
             <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
           </Link>

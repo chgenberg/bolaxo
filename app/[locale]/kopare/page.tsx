@@ -66,17 +66,16 @@ export default function BuyerAllCitiesPage() {
         <h2 className="text-2xl font-bold text-primary-navy mb-8">{t('popularCitiesTitle')}</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {SWEDISH_CITIES.slice(0, 9).map((city) => (
-            <Link
-              key={city.slug}
-              href={`/kopare/${city.slug}`}
-              className="bg-gradient-to-br from-primary-navy/5 to-transparent border border-primary-navy/20 rounded-lg p-6 hover:shadow-lg transition"
-            >
-              <h3 className="font-semibold text-lg text-primary-navy mb-2">{city.name}</h3>
-              <p className="text-gray-600 text-sm mb-4">{city.region} länet</p>
-              <span className="inline-block text-primary-navy text-sm font-semibold hover:gap-2">
-                {t('seeCompanies')} →
-              </span>
-            </Link>
+          <Link
+            href={`/${locale}/kopare/${city.slug}`}
+            className="bg-gradient-to-br from-primary-navy/5 to-transparent border border-primary-navy/20 rounded-lg p-6 hover:shadow-lg transition"
+          >
+            <h3 className="font-semibold text-lg text-primary-navy mb-2">{city.name}</h3>
+            <p className="text-gray-600 text-sm mb-4">{city.region} länet</p>
+            <span className="inline-block text-primary-navy text-sm font-semibold hover:gap-2">
+              {t('seeCompanies')} →
+            </span>
+          </Link>
           ))}
         </div>
       </div>
@@ -88,7 +87,7 @@ export default function BuyerAllCitiesPage() {
           {t('ctaSubtitle')}
         </p>
         <Link
-          href="/registrera"
+          href={`/${locale}/registrera`}
           className="inline-block bg-white text-primary-navy px-10 py-4 rounded-lg font-semibold hover:bg-opacity-90 transition"
         >
           {t('ctaButton')}
