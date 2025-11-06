@@ -257,6 +257,7 @@
     "contact": "Kontakt",
     "freeValuation": "Gratis värdering",
     "howItWorks": "Så funkar det",
+    "howItWorksDesc": "Så funkar Bolaxo",
     "startSelling": "Börja sälja",
     "searchCompany": "Sök företag",
     "buyerSignup": "Skapa konto",
@@ -268,8 +269,17 @@
     "cookies": "Cookies",
     "gdpr": "GDPR",
     "security": "Säkerhet & Integritet",
+    "securityDesc": "Bank-nivå säkerhet för dina uppgifter och data",
     "partners": "Våra partners",
-    "copyright": "© {year} BOLAXO AB. Alla rättigheter förbehållna."
+    "partnersDesc": "Samarbeten med ledande aktörer i finansvärlden",
+    "copyright": "© {year} BOLAXO AB. Alla rättigheter förbehållna.",
+    "description": "Säkerhet & Integritet Våra partners",
+    "address": "Norrmälarstrand 10\n114 62 Stockholm\nSverige",
+    "sellInYourCity": "Sälja i din stad",
+    "pricing": "Priser & paket",
+    "faq": "FAQ",
+    "buyInYourCity": "Köp i din stad",
+    "blog": "Blogg"
   },
   "register": {
     "title": "SKAPA KONTO",
