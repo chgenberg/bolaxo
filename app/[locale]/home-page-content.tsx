@@ -373,7 +373,7 @@ export default function HomePageContent() {
 
           {/* Review Indicators */}
           <div className="flex justify-center gap-2 mt-8">
-            {reviews.map((_, index) => (
+            {reviews.map((_: any, index: number) => (
               <button
                 key={index}
                 onClick={() => setActiveReview(index)}
