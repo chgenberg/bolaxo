@@ -448,7 +448,7 @@ export default function Header() {
                     {(user.role === 'buyer' || user.role === 'seller') && (
                       <>
                         <Link
-                          href={user.role === 'buyer' ? '/kopare/chat' : '/salja/chat'}
+                          href={getLocalizedPath(user.role === 'buyer' ? '/kopare/chat' : '/salja/chat')}
                           className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                           onClick={() => setIsMenuOpen(false)}
                         >
@@ -456,7 +456,7 @@ export default function Header() {
                           <span>{t('header.messages')}</span>
                         </Link>
                         <Link
-                          href={user.role === 'buyer' ? '/kopare/settings' : '/salja/settings'}
+                          href={getLocalizedPath(user.role === 'buyer' ? '/kopare/settings' : '/salja/settings')}
                           className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                           onClick={() => setIsMenuOpen(false)}
                         >
@@ -466,7 +466,7 @@ export default function Header() {
                       </>
                     )}
                     <Link
-                      href="/dashboard"
+                      href={getLocalizedPath('/dashboard')}
                       className="flex items-center space-x-3 text-base font-medium text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
@@ -487,14 +487,14 @@ export default function Header() {
                 ) : (
                   <div className="space-y-3">
                     <Link
-                      href="/login"
+                      href={getLocalizedPath('/login')}
                       className="block text-lg font-semibold text-gray-900 hover:text-primary-navy transition-colors py-3 px-4 rounded-lg hover:bg-gray-50 active:bg-gray-100"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {t('common.login')}
                     </Link>
                     <Link
-                      href="/registrera"
+                      href={getLocalizedPath('/registrera')}
                       className="block w-full text-center px-6 py-4 bg-primary-navy text-white rounded-lg font-semibold text-base hover:bg-primary-navy/90 active:bg-primary-navy/80 transition-all shadow-md active:shadow-sm"
                       onClick={() => setIsMenuOpen(false)}
                     >
