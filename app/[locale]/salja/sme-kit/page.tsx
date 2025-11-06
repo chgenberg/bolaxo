@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, FileText, DollarSign, Lock, BookOpen, Users, Package, Check, Upload, Edit3, ChevronRight, Building2, FileSpreadsheet, Shield, Search, FileSignature, Send, Download, HelpCircle, X, TrendingUp, AlertCircle, BarChart3, RefreshCw, Users2, Code2, Rocket, PieChart } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
+import { useAuth } from '@/contexts/AuthContext'
 
 interface Step {
   id: string
@@ -55,6 +56,7 @@ interface Assessment {
 export default function SMEKitPage() {
   const t = useTranslations('smeKit')
   const locale = useLocale()
+  const { user } = useAuth()
   
   const [activeTab, setActiveTab] = useState('company-basics')
   const [completedSteps, setCompletedSteps] = useState<string[]>(['company-basics'])
@@ -63,6 +65,32 @@ export default function SMEKitPage() {
   const [currentTip, setCurrentTip] = useState<TipItem | null>(null)
   const [assessment, setAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(false)
+
+  // Pre-fill company information from user profile
+  useEffect(() => {
+    if (user) {
+      const initialData: any = {}
+      
+      // Pre-fill company name and org number if available
+      if (user.companyName) {
+        initialData.companyName = user.companyName
+      }
+      if (user.orgNumber) {
+        initialData.orgNumber = user.orgNumber
+      }
+      
+      // Only set if we have data to pre-fill and it's not already set
+      if (Object.keys(initialData).length > 0) {
+        setFormData((prev: any) => ({
+          ...prev,
+          'company-basics': {
+            ...prev['company-basics'],
+            ...initialData
+          }
+        }))
+      }
+    }
+  }, [user])
 
   // Build steps dynamically from translations
   const steps: Step[] = [
@@ -373,13 +401,17 @@ export default function SMEKitPage() {
   const completionPercentage = Math.round((completedSteps.length / steps.length) * 100)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* HEADER */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-primary-navy mb-2">{t('title')}</h1>
-          <p className="text-gray-600">{t('subtitle')}</p>
+    <>
+      {/* HEADER - Above main header */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <h1 className="text-3xl font-bold text-primary-navy mb-1">{t('title')}</h1>
+          <p className="text-gray-600 text-sm">{t('subtitle')}</p>
         </div>
+      </div>
+      
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="max-w-7xl mx-auto px-4 py-12">
 
         {/* TAB NAVIGATION */}
         <div className="bg-white rounded-lg shadow-sm p-4 mb-8 overflow-x-auto">
@@ -431,7 +463,7 @@ export default function SMEKitPage() {
                     </label>
                     {field.type === 'textarea' && (
                       <textarea
-                        value={formData[field.id] || ''}
+                        value={formData[step.id]?.[field.id] || ''}
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
                         placeholder={field.placeholder}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-navy focus:border-transparent"
@@ -440,7 +472,7 @@ export default function SMEKitPage() {
                     )}
                     {field.type === 'select' && (
                       <select
-                        value={formData[field.id] || ''}
+                        value={formData[step.id]?.[field.id] || ''}
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-navy focus:border-transparent"
                       >
@@ -451,7 +483,7 @@ export default function SMEKitPage() {
                     {(field.type === 'text' || field.type === 'number' || field.type === 'date' || field.type === 'email') && (
                       <input
                         type={field.type}
-                        value={formData[field.id] || ''}
+                        value={formData[step.id]?.[field.id] || ''}
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.value)}
                         placeholder={field.placeholder}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-navy focus:border-transparent"
@@ -466,7 +498,7 @@ export default function SMEKitPage() {
                     {field.type === 'checkbox' && (
                       <input
                         type="checkbox"
-                        checked={formData[field.id] || false}
+                        checked={formData[step.id]?.[field.id] || false}
                         onChange={(e) => handleFieldChange(step.id, field.id, e.target.checked)}
                         className="w-4 h-4"
                       />
@@ -579,5 +611,6 @@ export default function SMEKitPage() {
         )}
       </div>
     </div>
+    </>
   )
 }
