@@ -31,13 +31,218 @@ interface TipItem {
   required?: boolean
 }
 
-const STEP_TIPS: Record<string, { title: string; tips: TipItem[] }> = {
-  identity: {
-    title: 'Företagsidentitet - Vad behövs?',
+const STEP_TIPS: Record<string, { title: string; description: string; tips: TipItem[] }> = {
+  'company-basics': {
+    title: '1. Företagsidentitet',
+    description: 'Grundläggande information om ditt företag',
     tips: [
       {
         title: 'Företagsnamn',
-        content: ['Det exakta registrerade namnet från Bolagsverket', 'Detta är juridiskt bindande'],
+        content: ['Det exakta registrerade namnet från Bolagsverket', 'Detta är juridiskt bindande och måste matcha registreringen'],
+        required: true
+      },
+      {
+        title: 'Organisationsnummer',
+        content: ['10 siffror utan bindestreck (t.ex. 5561234567)', 'Hittar du på Bolagsverkets hemsida eller i årsredovisningen'],
+        required: true
+      },
+      {
+        title: 'Registreringsdatum',
+        content: ['Datumet när företaget registrerades', 'Hittar du på Bolagsverkets hemsida'],
+        required: true
+      },
+      {
+        title: 'Bransch',
+        content: ['Välj den bransch som bäst beskriver din verksamhet', 'Detta hjälper köpare att hitta rätt företag'],
+        required: true
+      }
+    ]
+  },
+  'financials-core': {
+    title: '2. Finansiell Bas',
+    description: 'Kärnfinansiell data för värdering',
+    tips: [
+      {
+        title: 'Årsredovisning',
+        content: ['Ladda upp senaste årsredovisningen (PDF)', 'AI analyserar automatiskt och fyller i finansiella nyckeltal'],
+        required: true
+      },
+      {
+        title: 'Omsättning',
+        content: ['Ange omsättning för senaste 3 åren', 'Hittar du i resultaträkningen i årsredovisningen'],
+        required: true
+      },
+      {
+        title: 'EBITDA',
+        content: ['Rörelseresultat före räntor, skatter och avskrivningar', 'Beräknas från resultaträkningen'],
+        required: false
+      }
+    ]
+  },
+  'financials-advanced': {
+    title: '3. Avancerad Finansiell Data',
+    description: 'Detaljerade finansiella nyckeltal',
+    tips: [
+      {
+        title: 'Marginaler',
+        content: ['Brutto-, rörelse- och nettovinstmarginal', 'Beräknas från resultaträkningen'],
+        required: false
+      },
+      {
+        title: 'Working Capital',
+        content: ['Dagar i lager, kundfordringar och leverantörsskulder', 'Visar effektiviteten i kassaflödet'],
+        required: false
+      },
+      {
+        title: 'Skulder & Likviditet',
+        content: ['Totala skulder, kassaposition och kapitalutgifter', 'Viktigt för köparens riskbedömning'],
+        required: false
+      }
+    ]
+  },
+  'customers': {
+    title: '4. Kundbas & Kommersiell',
+    description: 'Information om kunder och marknadsposition',
+    tips: [
+      {
+        title: 'Kundstatistik',
+        content: ['Totalt antal kunder och koncentration', 'Hur mycket av omsättningen kommer från top 3/10 kunder'],
+        required: true
+      },
+      {
+        title: 'Churn & NPS',
+        content: ['Kundomsättning och Net Promoter Score', 'Visar kundnöjdhet och lojalitet'],
+        required: false
+      },
+      {
+        title: 'Marknadsposition',
+        content: ['Beskriv din position på marknaden', 'Konkurrenter, unika fördelar och marknadsandel'],
+        required: false
+      }
+    ]
+  },
+  'organization': {
+    title: '5. Organisation & Personal',
+    description: 'Struktur och personalinformation',
+    tips: [
+      {
+        title: 'Organisationsdiagram',
+        content: ['Ladda upp organisationsdiagram', 'AI analyserar strukturen automatiskt'],
+        required: true
+      },
+      {
+        title: 'Nyckelpersoner',
+        content: ['VD, CFO, CTO och andra viktiga roller', 'Viktigt för köparen att förstå ledningsstrukturen'],
+        required: true
+      },
+      {
+        title: 'Personalstatistik',
+        content: ['Genomsnittlig anställningstid och personalomsättning', 'Visar stabilitet i organisationen'],
+        required: false
+      }
+    ]
+  },
+  'legal': {
+    title: '6. Juridik & Complian',
+    description: 'Juridisk dokumentation och compliance',
+    tips: [
+      {
+        title: 'Företagsregistrering',
+        content: ['Registreringsbevis från Bolagsverket', 'Måste vara uppdaterat'],
+        required: true
+      },
+      {
+        title: 'Huvudkontrakt',
+        content: ['Viktiga avtal och kontrakt', 'AI analyserar automatiskt viktiga klausuler'],
+        required: true
+      },
+      {
+        title: 'Skatt & Licenser',
+        content: ['Skattbevis och nödvändiga tillstånd', 'Viktigt för compliance'],
+        required: true
+      }
+    ]
+  },
+  'technical': {
+    title: '7. Teknisk',
+    description: 'Teknisk infrastruktur och säkerhet',
+    tips: [
+      {
+        title: 'Tech Stack',
+        content: ['Beskriv din tekniska plattform', 'Programmeringsspråk, ramverk, databaser'],
+        required: true
+      },
+      {
+        title: 'Infrastruktur',
+        content: ['Cloud vs on-premise', 'Var körs systemen och hur är de säkrade'],
+        required: true
+      },
+      {
+        title: 'Säkerhet',
+        content: ['Säkerhetscertifieringar och dataskydd', 'Viktigt för GDPR och säkerhet'],
+        required: false
+      }
+    ]
+  },
+  'strategic': {
+    title: '8. Strategisk Info',
+    description: 'Tillväxtstrategi och marknadspotential',
+    tips: [
+      {
+        title: 'Tillväxtstrategi',
+        content: ['Beskriv din plan för tillväxt', 'Marknader, produkter, expansion'],
+        required: true
+      },
+      {
+        title: 'Marknadspotential',
+        content: ['TAM (Total Addressable Market)', 'Hur stor är marknaden'],
+        required: false
+      },
+      {
+        title: 'Synergier',
+        content: ['Vad kan en köpare få ut av att köpa ditt företag', 'Synergier och möjligheter'],
+        required: false
+      }
+    ]
+  },
+  'valuation': {
+    title: '9. Värdering & Exit',
+    description: 'Förväntad värdering och exitvillkor',
+    tips: [
+      {
+        title: 'Förväntad värdering',
+        content: ['Vad förväntar du dig att få för företaget', 'Baserat på branschmultipler och jämförelser'],
+        required: false
+      },
+      {
+        title: 'Earnout',
+        content: ['Önskad earnout-struktur', 'Vill du ha en del av köpeskillingen kopplad till framtida resultat'],
+        required: false
+      },
+      {
+        title: 'Säljorsak',
+        content: ['Varför säljer du företaget', 'Viktigt för köparen att förstå motivationen'],
+        required: true
+      }
+    ]
+  },
+  'export': {
+    title: '10. Dokument för Export',
+    description: 'Generera professionella rapporter',
+    tips: [
+      {
+        title: 'Due Diligence Rapport',
+        content: ['Komplett DD-rapport med all information', 'Professionellt formaterad för köpare'],
+        required: true
+      },
+      {
+        title: 'SPA Avtal',
+        content: ['Förslag till Share Purchase Agreement', 'Juridiskt avtal för köpet'],
+        required: true
+      },
+      {
+        title: 'Export',
+        content: ['Välj vilka dokument du vill generera', 'Du kan välja snabbversion eller komplett'],
         required: true
       }
     ]
@@ -62,7 +267,7 @@ export default function SMEKitPage() {
   const [completedSteps, setCompletedSteps] = useState<string[]>(['company-basics'])
   const [formData, setFormData] = useState<any>({})
   const [showTips, setShowTips] = useState(false)
-  const [currentTip, setCurrentTip] = useState<TipItem | null>(null)
+  const [currentTipStep, setCurrentTipStep] = useState<string | null>(null)
   const [assessment, setAssessment] = useState<Assessment | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -482,8 +687,8 @@ export default function SMEKitPage() {
 
   return (
     <>
-      {/* HEADER - Above main header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+      {/* HEADER - Below main header */}
+      <div className="bg-white border-b border-gray-200 sticky top-16 md:top-20 lg:top-16 z-40 mt-16 md:mt-20 lg:mt-16">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <h1 className="text-3xl font-bold text-primary-navy mb-1">{t('title')}</h1>
           <p className="text-gray-600 text-sm">{t('subtitle')}</p>
@@ -497,17 +702,33 @@ export default function SMEKitPage() {
         <div className="bg-white rounded-lg shadow-sm p-4 mb-8 overflow-x-auto">
           <div className="flex gap-2 min-w-max">
             {steps.map((step) => (
-              <button
-                key={step.id}
-                onClick={() => setActiveTab(step.id)}
-                className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
-                  activeTab === step.id
-                    ? 'bg-primary-navy text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {step.title}
-              </button>
+              <div key={step.id} className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setActiveTab(step.id)}
+                  className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
+                    activeTab === step.id
+                      ? 'bg-primary-navy text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {step.title}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setCurrentTipStep(step.id)
+                    setShowTips(true)
+                  }}
+                  className={`p-1.5 rounded-full transition-colors ${
+                    activeTab === step.id
+                      ? 'text-white hover:bg-primary-navy/80'
+                      : 'text-gray-500 hover:bg-gray-200 hover:text-primary-navy'
+                  }`}
+                  title="Hjälp för detta steg"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -517,19 +738,22 @@ export default function SMEKitPage() {
           {steps.map((step) => (
             <div key={step.id} hidden={activeTab !== step.id}>
               <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-primary-navy mb-2">{step.title}</h2>
-                  <p className="text-gray-600">{step.description}</p>
+                <div className="flex items-start gap-3">
+                  <div>
+                    <h2 className="text-2xl font-bold text-primary-navy mb-2">{step.title}</h2>
+                    <p className="text-gray-600">{step.description}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setCurrentTipStep(step.id)
+                      setShowTips(true)
+                    }}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                    title="Hjälp för detta steg"
+                  >
+                    <HelpCircle className="w-6 h-6 text-primary-navy" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => {
-                    setShowTips(true)
-                    setCurrentTip(STEP_TIPS[step.id]?.tips?.[0] || null)
-                  }}
-                  className="p-2 hover:bg-gray-100 rounded-full"
-                >
-                  <HelpCircle className="w-6 h-6 text-primary-navy" />
-                </button>
               </div>
 
               {/* FORM FIELDS */}
@@ -691,6 +915,102 @@ export default function SMEKitPage() {
         )}
       </div>
     </div>
+
+    {/* TIPS MODAL */}
+    {showTips && currentTipStep && STEP_TIPS[currentTipStep] && (
+      <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-sm"
+            onClick={() => {
+              setShowTips(false)
+              setCurrentTipStep(null)
+            }}
+          />
+          
+          {/* Modal */}
+          <div className="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+            {/* Header */}
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-primary-navy mb-1">
+                  {STEP_TIPS[currentTipStep].title}
+                </h3>
+                <p className="text-gray-600 text-sm">{STEP_TIPS[currentTipStep].description}</p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowTips(false)
+                  setCurrentTipStep(null)
+                }}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+
+            {/* Tips Content */}
+            <div className="space-y-4">
+              {STEP_TIPS[currentTipStep].tips.map((tip, index) => (
+                <div key={index} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div className="flex items-start gap-3">
+                    <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${
+                      tip.required ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-primary-navy mb-2 flex items-center gap-2">
+                        {tip.title}
+                        {tip.required && (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">
+                            Obligatoriskt
+                          </span>
+                        )}
+                      </h4>
+                      <ul className="space-y-1">
+                        {tip.content.map((item, i) => (
+                          <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                            <span className="text-primary-navy mt-1">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      {tip.examples && tip.examples.length > 0 && (
+                        <div className="mt-2 pt-2 border-t border-gray-200">
+                          <p className="text-xs font-medium text-gray-600 mb-1">Exempel:</p>
+                          <ul className="space-y-1">
+                            {tip.examples.map((example, i) => (
+                              <li key={i} className="text-xs text-gray-600 italic">
+                                "{example}"
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <button
+                onClick={() => {
+                  setShowTips(false)
+                  setCurrentTipStep(null)
+                }}
+                className="w-full bg-primary-navy text-white py-2 px-4 rounded-lg font-medium hover:bg-primary-navy/90 transition-colors"
+              >
+                Förstått
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
     </>
   )
 }
