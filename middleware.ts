@@ -111,6 +111,30 @@ export async function middleware(request: NextRequest) {
     console.log('🔍 [MIDDLEWARE] Locale route detected:', pathname)
     console.log('🔍 [MIDDLEWARE] Response status:', response.status)
     console.log('🔍 [MIDDLEWARE] Response URL:', response.url)
+    
+    // If next-intl middleware tries to redirect to a different locale, prevent it
+    // This can happen if middleware thinks the locale is wrong
+    if (response.status === 307 || response.status === 308) {
+      const responseUrl = response.url
+      const currentLocale = pathname.split('/')[1]
+      const responseLocale = responseUrl.split('/')[3] || responseUrl.split('/')[1]
+      
+      // If the redirect would change the locale, prevent it
+      if (currentLocale === 'sv' || currentLocale === 'en') {
+        if (responseLocale !== currentLocale && (responseLocale === 'sv' || responseLocale === 'en')) {
+          console.log('⚠️ [MIDDLEWARE] Preventing locale change redirect:', currentLocale, '->', responseLocale)
+          // Create a new response without the redirect
+          const newUrl = request.nextUrl.clone()
+          newUrl.pathname = pathname
+          const newResponse = NextResponse.next()
+          // Copy headers from original response
+          response.headers.forEach((value, key) => {
+            newResponse.headers.set(key, value)
+          })
+          return newResponse
+        }
+      }
+    }
   }
 
   // 2. Security Headers
