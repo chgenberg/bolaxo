@@ -388,7 +388,7 @@ export default function Header() {
               overflowX: 'hidden'
             }}
           >
-            <div className="px-6 pt-6 pb-8 space-y-1">
+            <div className="px-6 pt-6 pb-32 space-y-1">
               {/* Mobile navigation */}
               {navigation.map((item, index) => (
                 <div key={item.label}>
