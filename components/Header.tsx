@@ -357,7 +357,7 @@ export default function Header() {
             height: '100vh',
             backgroundColor: '#ffffff',
             zIndex: 10000,
-            overflow: 'hidden',
+            overflow: 'visible',
             display: 'flex',
             flexDirection: 'column'
           }}
