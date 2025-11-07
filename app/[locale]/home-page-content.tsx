@@ -49,7 +49,7 @@ export default function HomePageContent() {
         </div>
 
         {/* Minimalist Content Box */}
-        <div className="relative w-full flex items-start justify-center md:justify-start px-4 sm:px-6 md:px-12 lg:px-24 z-10 -mt-12 sm:-mt-8 md:pt-28 lg:pt-24">
+        <div className="relative w-full flex items-start justify-center md:justify-start px-4 sm:px-6 md:px-12 lg:px-24 z-10 -mt-48 sm:-mt-32 md:pt-28 lg:pt-24">
           <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
             {/* Pulsing shadow effect */}
             <div className="absolute -inset-2 sm:-inset-4 bg-black/30 sm:bg-black/50 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl animate-pulse-shadow" />
