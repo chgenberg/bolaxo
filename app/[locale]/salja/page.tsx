@@ -59,13 +59,13 @@ export default function SaljaInfoPage() {
       {/* Hero Section with Background Image */}
       <section className="relative min-h-screen flex items-center bg-cover bg-center pt-24 md:pt-20 lg:pt-16">
         {/* Background Image - Only in hero */}
-        <div className="absolute inset-0 z-0 top-24 md:top-20 lg:top-16">
+        <div className="absolute left-0 right-0 top-24 md:top-20 lg:top-16 bottom-0 z-0">
           <Image 
             src="/2.png" 
             alt="Säljprocess" 
             fill
-            className="object-cover object-center"
-            style={{ objectPosition: 'center 20%' }}
+            className="object-cover object-top"
+            style={{ objectPosition: 'center top' }}
             priority
           />
         </div>

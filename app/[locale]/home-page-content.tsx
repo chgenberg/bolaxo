@@ -29,21 +29,21 @@ export default function HomePageContent() {
       {/* HERO SECTION - Fullscreen */}
       <section className="relative min-h-screen flex items-center bg-cover bg-center pt-24 md:pt-20 lg:pt-16 pb-8 md:pb-0">
         {/* Background Image - Fullscreen with no overlay */}
-        <div className="absolute inset-0 z-0 top-24 md:top-20 lg:top-16">
+        <div className="absolute left-0 right-0 top-24 md:top-20 lg:top-16 bottom-0 z-0">
           <Image
             src="/hero.png"
             alt="Hero background"
             fill
-            className="object-cover object-center hidden md:block"
-            style={{ objectPosition: 'center 20%' }}
+            className="object-cover object-top hidden md:block"
+            style={{ objectPosition: 'center top' }}
             priority
           />
           <Image
             src="/hero_mobile.png"
             alt="Hero background mobile"
             fill
-            className="object-cover object-center md:hidden"
-            style={{ objectPosition: 'center 20%' }}
+            className="object-cover object-top md:hidden"
+            style={{ objectPosition: 'center top' }}
             priority
           />
         </div>
