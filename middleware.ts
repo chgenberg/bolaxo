@@ -120,6 +120,12 @@ export async function middleware(request: NextRequest) {
       response.headers.set('x-next-intl-locale', currentLocale)
       // Also set it as a cookie header for next-intl
       response.headers.set('x-next-intl-locale-header', currentLocale)
+      // Set cookie to preserve locale
+      response.cookies.set('NEXT_LOCALE', currentLocale, {
+        path: '/',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 365 // 1 year
+      })
     }
   } else {
     // Handle internationalization for paths without locale prefix
