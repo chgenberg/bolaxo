@@ -113,6 +113,14 @@ export async function middleware(request: NextRequest) {
     // This prevents unwanted redirects
     console.log('✅ [MIDDLEWARE] Path already has locale prefix, skipping intl middleware')
     response = NextResponse.next()
+    
+    // Set locale header so next-intl knows which locale to use
+    const currentLocale = pathname.split('/')[1]
+    if (currentLocale === 'sv' || currentLocale === 'en') {
+      response.headers.set('x-next-intl-locale', currentLocale)
+      // Also set it as a cookie header for next-intl
+      response.headers.set('x-next-intl-locale-header', currentLocale)
+    }
   } else {
     // Handle internationalization for paths without locale prefix
     response = intlMiddleware(request)
@@ -144,7 +152,14 @@ export async function middleware(request: NextRequest) {
           response.headers.forEach((value, key) => {
             newResponse.headers.set(key, value)
           })
+          // Ensure locale header is set
+          newResponse.headers.set('x-next-intl-locale', currentLocale)
           return newResponse
+        }
+        
+        // If redirect is to same locale but different path, allow it (might be trailing slash or similar)
+        if (responseLocale === currentLocale) {
+          console.log('✅ [MIDDLEWARE] Redirect preserves locale:', currentLocale)
         }
       } catch (e) {
         // Invalid URL, continue with normal flow
