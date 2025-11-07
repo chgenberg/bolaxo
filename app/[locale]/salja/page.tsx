@@ -57,9 +57,9 @@ export default function SaljaInfoPage() {
   return (
     <main className="bg-neutral-white">
       {/* Hero Section with Background Image */}
-      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-20 sm:pt-24 md:pt-20 lg:pt-24">
+      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-24 md:pt-20 lg:pt-16">
         {/* Background Image - Only in hero */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 top-24 md:top-20 lg:top-16">
           <Image 
             src="/2.png" 
             alt="Säljprocess" 

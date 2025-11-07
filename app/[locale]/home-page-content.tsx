@@ -27,9 +27,9 @@ export default function HomePageContent() {
   return (
     <main className="bg-cream">
       {/* HERO SECTION - Fullscreen */}
-      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-20 sm:pt-24 md:pt-20 lg:pt-24 pb-8 md:pb-0">
+      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-24 md:pt-20 lg:pt-16 pb-8 md:pb-0">
         {/* Background Image - Fullscreen with no overlay */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 top-24 md:top-20 lg:top-16">
           <Image
             src="/hero.png"
             alt="Hero background"
