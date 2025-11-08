@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import BuyerPreferences from '@/components/BuyerPreferences'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -10,6 +10,7 @@ import Link from 'next/link'
 export default function PreferencesPage() {
   const router = useRouter()
   const locale = useLocale()
+  const t = useTranslations('buyerPreferences')
   const [saved, setSaved] = useState(false)
 
   const handleSave = (preferences: any) => {
@@ -33,7 +34,7 @@ export default function PreferencesPage() {
           className="inline-flex items-center text-primary-blue hover:underline mb-8"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Tillbaka
+          {t('back')}
         </Link>
 
         {saved ? (
@@ -43,8 +44,8 @@ export default function PreferencesPage() {
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">Preferenser sparade!</h2>
-            <p className="text-text-gray">Du skickas nu till sökresultaten...</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">{t('saved')}</h2>
+            <p className="text-text-gray">{t('redirecting')}</p>
           </div>
         ) : (
           <BuyerPreferences onSave={handleSave} />

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useLocale, useTranslations } from 'next-intl'
 import { ArrowLeft, MapPin, TrendingUp, Users, Eye, Bookmark, Shield, AlertCircle, Calendar, FileText, BarChart, CheckCircle } from 'lucide-react'
 import { useBuyerStore } from '@/stores/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
@@ -13,6 +14,8 @@ import { ListingStructuredData } from '@/components/ListingStructuredData'
 export default function ObjectDetailPage() {
   const params = useParams()
   const objectId = params.id as string
+  const locale = useLocale()
+  const t = useTranslations('objectDetail')
   const { user } = useAuth()
   
   const [object, setObject] = useState<any>(null)
@@ -97,9 +100,9 @@ export default function ObjectDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-text-dark mb-2">Objekt hittades inte</h1>
-          <Link href="/sok" className="text-primary-blue hover:underline">
-            Tillbaka till sök
+          <h1 className="text-2xl font-bold text-text-dark mb-2">{t('notFound')}</h1>
+          <Link href={`/${locale}/sok`} className="text-primary-blue hover:underline">
+            {t('backToSearch')}
           </Link>
         </div>
       </div>
@@ -107,9 +110,9 @@ export default function ObjectDetailPage() {
   }
 
   const tabs = [
-    { id: 'overview', label: 'Översikt', icon: FileText },
-    { id: 'economics', label: 'Ekonomi', icon: BarChart },
-    { id: 'strengths', label: 'Styrkor & Risker', icon: CheckCircle }
+    { id: 'overview', label: t('tabs.overview'), icon: FileText },
+    { id: 'economics', label: t('tabs.economics'), icon: BarChart },
+    { id: 'strengths', label: t('tabs.strengths'), icon: CheckCircle }
   ]
 
   const calculateEBITDARange = () => {
@@ -151,12 +154,12 @@ export default function ObjectDetailPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <Link 
-              href="/sok" 
+              href={`/${locale}/sok`} 
               className="inline-flex items-center text-sm sm:text-base text-text-gray hover:text-text-dark transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
-              <span className="hidden sm:inline">Tillbaka till sök</span>
-              <span className="sm:hidden">Tillbaka</span>
+              <span className="hidden sm:inline">{t('backToSearch')}</span>
+              <span className="sm:hidden">{t('back')}</span>
             </Link>
             <button
               onClick={handleToggleSaved}
@@ -409,7 +412,7 @@ export default function ObjectDetailPage() {
                           Signera NDA för att se detaljerad finansiell information
                         </p>
                         <Link
-                          href={`/nda/${objectId}`}
+                          href={`/${locale}/nda/${objectId}`}
                           className="inline-flex items-center px-3 sm:px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm sm:text-base"
                         >
                           <Shield className="w-3 sm:w-4 h-3 sm:h-4 mr-1.5 sm:mr-2" />

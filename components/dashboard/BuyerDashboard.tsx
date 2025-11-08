@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle, MessageSquare, FileText, ClipboardCheck, Scale } from 'lucide-react'
 import { DEMO_DEALS, DEMO_QA_QUESTIONS } from '@/lib/demo-data'
+import { useLocale, useTranslations } from 'next-intl'
 
 const DEMO_MODE = true // Set to true to show demo data
 
@@ -12,6 +13,8 @@ interface BuyerDashboardProps {
 }
 
 export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
+  const t = useTranslations('buyerDashboard')
+  const locale = useLocale()
   const [savedListings, setSavedListings] = useState<any[]>([])
   const [ndaRequests, setNdaRequests] = useState<any[]>([])
   const [matchedListings, setMatchedListings] = useState<any[]>([])
@@ -19,6 +22,10 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
 
   useEffect(() => {
     fetchBuyerData()
+
+    // Poll for updates every 15 seconds
+    const interval = setInterval(fetchBuyerData, 15000)
+    return () => clearInterval(interval)
   }, [userId])
 
   const fetchBuyerData = async () => {
@@ -76,7 +83,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
       <div className="grid md:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-lg border border-gray-100">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-gray">Sparade objekt</span>
+            <span className="text-sm text-text-gray">{t('savedListings')}</span>
             <Bookmark className="w-4 h-4 text-primary-blue" />
           </div>
           <div className="text-2xl font-bold text-text-dark">{savedListings.length}</div>
@@ -84,7 +91,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
         
         <div className="bg-white p-4 rounded-lg border border-gray-100">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-gray">Godkända NDA</span>
+            <span className="text-sm text-text-gray">{t('approvedNDAs')}</span>
             <Shield className="w-4 h-4 text-primary-blue" />
           </div>
           <div className="text-2xl font-bold text-text-dark">{approvedNDAs.length}</div>
@@ -92,7 +99,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
         
         <div className="bg-white p-4 rounded-lg border border-gray-100">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-gray">Väntande NDA</span>
+            <span className="text-sm text-text-gray">{t('pendingNDAs')}</span>
             <Clock className="w-4 h-4 text-primary-blue" />
           </div>
           <div className="text-2xl font-bold text-text-dark">{pendingNDAs.length}</div>
@@ -100,7 +107,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
         
         <div className="bg-white p-4 rounded-lg border border-gray-100">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-text-gray">Nya matchningar</span>
+            <span className="text-sm text-text-gray">{t('newMatches')}</span>
             <TrendingUp className="w-4 h-4 text-primary-blue" />
           </div>
           <div className="text-2xl font-bold text-text-dark">{matchedListings.length}</div>
@@ -110,17 +117,17 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
       {/* Matched Listings Feed */}
       <div className="bg-white p-6 rounded-xl border border-gray-100">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-text-dark">Rekommenderade för dig</h2>
-          <Link href="/sok" className="text-sm text-primary-blue hover:underline">
-            Se alla →
+          <h2 className="text-xl font-bold text-text-dark">{t('recommendedForYou')}</h2>
+          <Link href={`/${locale}/sok`} className="text-sm text-primary-blue hover:underline">
+            {t('seeAll')}
           </Link>
         </div>
         
         {matchedListings.length === 0 ? (
           <div className="text-center py-8 text-text-gray">
-            <p className="mb-4">Inga nya matchningar just nu</p>
-            <Link href="/kopare/preferenser" className="text-primary-blue hover:underline">
-              Uppdatera dina preferenser
+            <p className="mb-4">{t('noNewMatches')}</p>
+            <Link href={`/${locale}/kopare/preferenser`} className="text-primary-blue hover:underline">
+              {t('updatePreferences')}
             </Link>
           </div>
         ) : (
@@ -134,7 +141,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="font-semibold text-sm text-text-dark">{listing.anonymousTitle}</h3>
                   {listing.isNew && (
-                    <span className="text-xs bg-primary-blue text-white px-2 py-0.5 rounded-full">Ny</span>
+                    <span className="text-xs bg-primary-blue text-white px-2 py-0.5 rounded-full">{t('new')}</span>
                   )}
                 </div>
                 <div className="flex items-center text-xs text-text-gray mb-2">
@@ -142,17 +149,17 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                   {listing.region}
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="text-text-gray">Omsättning: <span className="font-medium text-text-dark">{listing.revenueRange}</span></div>
-                  <div className="text-text-gray">Pris: <span className="font-medium text-primary-blue">
+                  <div className="text-text-gray">{t('revenue')} <span className="font-medium text-text-dark">{listing.revenueRange}</span></div>
+                  <div className="text-text-gray">{t('price')} <span className="font-medium text-primary-blue">
                     {listing.abstainPriceMin && listing.abstainPriceMax ? 
-                      'Ej angivet' :
+                      t('priceNotSpecified') :
                     listing.abstainPriceMin ? 
-                      `Från ${(listing.priceMax / 1000000).toFixed(1)} MSEK` :
+                      t('priceFrom', { amount: (listing.priceMax / 1000000).toFixed(1) }) :
                     listing.abstainPriceMax ?
-                      `Upp till ${(listing.priceMin / 1000000).toFixed(1)} MSEK` :
+                      t('priceUpTo', { amount: (listing.priceMin / 1000000).toFixed(1) }) :
                     listing.priceMin && listing.priceMax ?
-                      `${(listing.priceMin / 1000000).toFixed(1)}-${(listing.priceMax / 1000000).toFixed(1)} MSEK`
-                      : 'Ej angivet'}
+                      t('priceRange', { min: (listing.priceMin / 1000000).toFixed(1), max: (listing.priceMax / 1000000).toFixed(1) })
+                      : t('priceNotSpecified')}
                   </span></div>
                 </div>
               </Link>
@@ -163,14 +170,14 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
 
       {/* Saved Listings */}
       <div className="bg-white p-6 rounded-xl border border-gray-100">
-        <h2 className="text-xl font-bold text-text-dark mb-6">Sparade objekt</h2>
+        <h2 className="text-xl font-bold text-text-dark mb-6">{t('savedListings')}</h2>
         
         {savedListings.length === 0 ? (
           <div className="text-center py-8 text-text-gray">
             <Bookmark className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="mb-4">Du har inga sparade objekt än</p>
-            <Link href="/sok" className="btn-primary inline-flex items-center">
-              Börja söka företag
+            <p className="mb-4">{t('noSavedListings')}</p>
+            <Link href={`/${locale}/sok`} className="btn-primary inline-flex items-center">
+              {t('startSearching')}
             </Link>
           </div>
         ) : (
@@ -190,14 +197,14 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                     </div>
                     <div className="text-sm text-primary-blue font-medium">
                       {listing.abstainPriceMin && listing.abstainPriceMax ? 
-                        'Pris ej angivet' :
+                        t('priceNotSet') :
                       listing.abstainPriceMin ? 
-                        `Från ${(listing.priceMax / 1000000).toFixed(1)} MSEK` :
+                        t('priceFrom', { amount: (listing.priceMax / 1000000).toFixed(1) }) :
                       listing.abstainPriceMax ?
-                        `Upp till ${(listing.priceMin / 1000000).toFixed(1)} MSEK` :
+                        t('priceUpTo', { amount: (listing.priceMin / 1000000).toFixed(1) }) :
                       listing.priceMin && listing.priceMax ?
-                        `${(listing.priceMin / 1000000).toFixed(1)}-${(listing.priceMax / 1000000).toFixed(1)} MSEK`
-                        : 'Ej angivet'}
+                        t('priceRange', { min: (listing.priceMin / 1000000).toFixed(1), max: (listing.priceMax / 1000000).toFixed(1) })
+                        : t('priceNotSpecified')}
                     </div>
                   </div>
                   <Bookmark className="w-5 h-5 text-primary-blue fill-current" />
@@ -211,7 +218,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
       {/* Quick Actions for Approved NDAs */}
       {approvedNDAs.length > 0 && (
         <div>
-          <h2 className="text-xl font-bold text-text-dark mb-4">Hantera dina affärer</h2>
+          <h2 className="text-xl font-bold text-text-dark mb-4">{t('manageDeals')}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {approvedNDAs.slice(0, 3).map((nda) => (
               <div key={nda.id} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
@@ -256,10 +263,10 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-sm text-text-dark mb-2">
-                      Företag (ID: {nda.listingId.slice(0, 8)}...)
+                      {t('company', { id: nda.listingId.slice(0, 8) })}
                     </h3>
                     <div className="text-xs text-text-gray mb-2">
-                      Skickad {new Date(nda.createdAt).toLocaleDateString('sv-SE')}
+                      {t('sent')} {new Date(nda.createdAt).toLocaleDateString('sv-SE')}
                     </div>
                     <span className={`inline-flex items-center text-xs px-2 py-1 rounded-full ${
                       nda.status === 'approved' 
@@ -269,11 +276,11 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                         : 'bg-amber-100 text-amber-700'
                     }`}>
                       {nda.status === 'approved' ? (
-                        <><CheckCircle className="w-3 h-3 mr-1" /> Godkänd</>
+                        <><CheckCircle className="w-3 h-3 mr-1" /> {t('approved')}</>
                       ) : nda.status === 'rejected' ? (
-                        <><XCircle className="w-3 h-3 mr-1" /> Avslagen</>
+                        <><XCircle className="w-3 h-3 mr-1" /> {t('rejected')}</>
                       ) : (
-                        <><Clock className="w-3 h-3 mr-1" /> Väntar på svar</>
+                        <><Clock className="w-3 h-3 mr-1" /> {t('waitingForResponse')}</>
                       )}
                     </span>
                   </div>
@@ -282,7 +289,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                       href={`/objekt/${nda.listingId}`}
                       className="text-xs text-primary-blue hover:underline"
                     >
-                      Visa detaljer →
+                      {t('viewDetails')}
                     </Link>
                   )}
                 </div>

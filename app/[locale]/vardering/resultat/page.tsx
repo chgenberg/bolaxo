@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import WhatIfScenarios from '@/components/WhatIfScenarios'
@@ -42,6 +43,8 @@ interface ValuationResult {
 
 export default function ValuationResultPage() {
   const router = useRouter()
+  const locale = useLocale()
+  const t = useTranslations('valuationResult')
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState<ValuationResult | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -54,7 +57,7 @@ export default function ValuationResultPage() {
         // Hämta data från localStorage
         const storedData = localStorage.getItem('valuationData')
         if (!storedData) {
-          router.push('/vardering')
+          router.push(`/${locale}/vardering`)
           return
         }
 
@@ -116,10 +119,10 @@ export default function ValuationResultPage() {
       <div className="min-h-screen bg-background-off-white flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-2xl shadow-card max-w-md text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="heading-3 mb-2">Något gick fel</h2>
+          <h2 className="heading-3 mb-2">{t('error')}</h2>
           <p className="text-primary-navy mb-6">{error}</p>
-          <Link href="/vardering" className="btn-primary">
-            Försök igen
+          <Link href={`/${locale}/vardering`} className="btn-primary">
+            {t('tryAgain')}
           </Link>
         </div>
       </div>
@@ -137,7 +140,7 @@ export default function ValuationResultPage() {
       setIsGeneratingPDF(true)
       
       if (!result) {
-        alert('Ingen värdering att ladda ner ännu. Vänta på att värderingen är klar.')
+        alert(t('noValuationYet'))
         return
       }
 
@@ -198,7 +201,7 @@ export default function ValuationResultPage() {
       URL.revokeObjectURL(url)
     } catch (error) {
       console.error('PDF generation error:', error)
-      alert('Kunde inte generera PDF. Försök igen eller kontakta support om problemet kvarstår.')
+        alert(t('pdfError'))
     } finally {
       setIsGeneratingPDF(false)
     }
@@ -259,8 +262,8 @@ export default function ValuationResultPage() {
             
             {/* CTA to Create Listing */}
             <div className="mt-6">
-              <Link href="/salja/start" className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-button font-semibold bg-accent-pink text-white hover:bg-opacity-90 transition-all shadow-md">
-                Skapa annons nu
+              <Link href={`/${locale}/salja/start`} className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-button font-semibold bg-accent-pink text-white hover:bg-opacity-90 transition-all shadow-md">
+                {t('createListingNow')}
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
             </div>
@@ -482,12 +485,12 @@ export default function ValuationResultPage() {
             Vill du sälja ditt företag? Vi hjälper dig att hitta rätt köpare och få bästa möjliga pris.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/salja/start" className="btn-primary bg-accent-pink text-white hover:bg-opacity-90 inline-flex items-center justify-center order-first">
-              Skapa annons och starta försäljning
+            <Link href={`/${locale}/salja/start`} className="btn-primary bg-accent-pink text-white hover:bg-opacity-90 inline-flex items-center justify-center order-first">
+              {t('createListingAndStart')}
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
             </Link>
-            <Link href="/kontakt" className="btn-secondary bg-white/20 text-white hover:bg-white/30 inline-flex items-center justify-center">
-              Prata med en rådgivare
+            <Link href={`/${locale}/kontakt`} className="btn-secondary bg-white/20 text-white hover:bg-white/30 inline-flex items-center justify-center">
+              {t('talkToAdvisor')}
             </Link>
           </div>
         </div>

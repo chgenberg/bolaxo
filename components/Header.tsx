@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { LAUNCH_CONFIG } from '@/lib/launch-config'
 import LanguageSwitcher from './LanguageSwitcher'
+import NotificationCenter from './NotificationCenter'
 
 interface DropdownItem {
   label: string
@@ -242,6 +243,9 @@ export default function Header() {
               <>
                 {/* Desktop user menu */}
                 <div className="hidden lg:flex items-center space-x-1">
+                  {/* Notifications */}
+                  <NotificationCenter />
+                  
                   {/* Chat link */}
                   {(user.role === 'buyer' || user.role === 'seller') && (
                     <Link
@@ -314,7 +318,7 @@ export default function Header() {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="lg:hidden p-2.5 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors active:bg-gray-200"
-              aria-label="Öppna meny"
+              aria-label={t('common.openMenu')}
             >
               {isMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
             </button>
@@ -372,7 +376,7 @@ export default function Header() {
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors"
-                aria-label="Stäng meny"
+                aria-label={t('common.closeMenu')}
               >
                 <X className="w-7 h-7 text-gray-700" />
               </button>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { TrendingUp, Eye, Users, CheckCircle, XCircle, Clock, Edit, Pause, Play, MessageSquare, BarChart3, HelpCircle, FileText, Target } from 'lucide-react'
 import { DEMO_DEALS, DEMO_QA_QUESTIONS } from '@/lib/demo-data'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 const DEMO_MODE = true // Set to true to show demo data
 
@@ -14,6 +14,7 @@ interface SellerDashboardProps {
 
 export default function SellerDashboard({ userId }: SellerDashboardProps) {
   const locale = useLocale()
+  const t = useTranslations('sellerDashboard')
   const [listings, setListings] = useState<any[]>([])
   const [ndaRequests, setNdaRequests] = useState<any[]>([])
   const [messages, setMessages] = useState<any[]>([])
@@ -21,6 +22,10 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
 
   useEffect(() => {
     fetchSellerData()
+
+    // Poll for updates every 15 seconds
+    const interval = setInterval(fetchSellerData, 15000)
+    return () => clearInterval(interval)
   }, [userId])
 
   const fetchSellerData = async () => {
@@ -208,17 +213,17 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
       {/* Active Listings */}
       <div className="bg-white p-6 rounded-xl border border-gray-100">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-text-dark">Dina annonser</h2>
+          <h2 className="text-xl font-bold text-text-dark">{t('yourListings')}</h2>
           <Link href={`/${locale}/salja/start`} className="text-sm text-primary-blue hover:underline">
-            + Skapa ny annons
+            {t('createNewListing')}
           </Link>
         </div>
         
         {listings.length === 0 ? (
           <div className="text-center py-8 text-text-gray">
-            <p className="mb-4">Du har inga annonser än</p>
+            <p className="mb-4">{t('noListings')}</p>
             <Link href={`/${locale}/salja/start`} className="btn-primary inline-flex items-center">
-              Skapa din första annons
+              {t('createFirstListing')}
             </Link>
           </div>
         ) : (
@@ -236,7 +241,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
                           ? 'bg-amber-100 text-amber-700'
                           : 'bg-gray-100 text-text-gray'
                       }`}>
-                        {listing.status === 'active' ? 'Aktiv' : listing.status === 'paused' ? 'Pausad' : 'Utkast'}
+                        {listing.status === 'active' ? t('active') : listing.status === 'paused' ? t('paused') : t('draft')}
                       </span>
                     </div>
                     <div className="grid grid-cols-3 gap-4 text-sm text-text-gray">
@@ -269,11 +274,11 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
 
       {/* NDA Requests */}
       <div className="bg-white p-6 rounded-xl border border-gray-100">
-        <h2 className="text-xl font-bold text-text-dark mb-6">NDA-förfrågningar</h2>
+        <h2 className="text-xl font-bold text-text-dark mb-6">{t('ndaRequests')}</h2>
         
         {pendingNDAs.length === 0 ? (
           <div className="text-center py-8 text-text-gray">
-            <p>Inga väntande NDA-förfrågningar</p>
+            <p>{t('noPendingNDAs')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -282,13 +287,13 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-semibold text-text-dark mb-2">
-                      NDA-förfrågan för annons (ID: {nda.listingId.slice(0, 8)}...)
+                      {t('ndaRequestFor', { id: nda.listingId.slice(0, 8) })}
                     </h3>
                     {nda.message && (
                       <p className="text-sm text-text-gray mb-3">"{nda.message}"</p>
                     )}
                     <div className="text-xs text-text-gray">
-                      Mottagen {new Date(nda.createdAt).toLocaleDateString('sv-SE')}
+                      {t('received')} {new Date(nda.createdAt).toLocaleDateString('sv-SE')}
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -297,14 +302,14 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
                       className="px-3 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
                     >
                       <CheckCircle className="w-4 h-4 inline mr-1" />
-                      Godkänn
+                      {t('approve')}
                     </button>
                     <button
                       onClick={() => handleNDAResponse(nda.id, 'rejected')}
                       className="px-3 py-1.5 bg-gray-200 text-text-dark text-sm rounded-lg hover:bg-gray-300 transition-colors"
                     >
                       <XCircle className="w-4 h-4 inline mr-1" />
-                      Avslå
+                      {t('reject')}
                     </button>
                   </div>
                 </div>
@@ -316,11 +321,11 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
 
       {/* Messages */}
       <div className="bg-white p-6 rounded-xl border border-gray-100">
-        <h2 className="text-xl font-bold text-text-dark mb-6">Meddelanden</h2>
+        <h2 className="text-xl font-bold text-text-dark mb-6">{t('messages')}</h2>
         
         {unreadMessages.length === 0 ? (
           <div className="text-center py-8 text-text-gray">
-            <p>Inga nya meddelanden</p>
+            <p>{t('noNewMessages')}</p>
           </div>
         ) : (
           <div className="space-y-3">

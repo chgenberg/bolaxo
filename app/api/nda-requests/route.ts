@@ -204,6 +204,23 @@ export async function PATCH(request: NextRequest) {
     }
 
     try {
+      // Get current NDA request to verify and get buyer/seller info
+      const currentRequest = await prisma.nDARequest.findUnique({
+        where: { id },
+        select: {
+          sellerId: true,
+          buyerId: true,
+          listingId: true,
+        },
+      })
+
+      if (!currentRequest) {
+        return NextResponse.json(
+          { error: 'NDA request not found' },
+          { status: 404 }
+        )
+      }
+
       const data: any = { status }
       if (status === 'approved') {
         data.approvedAt = new Date()
@@ -219,6 +236,25 @@ export async function PATCH(request: NextRequest) {
         where: { id },
         data,
       })
+
+      // If approved, create initial message from seller to buyer (same as in /api/nda-requests/[id])
+      if (status === 'approved') {
+        try {
+          await prisma.message.create({
+            data: {
+              listingId: currentRequest.listingId,
+              senderId: currentRequest.sellerId,
+              recipientId: currentRequest.buyerId,
+              subject: 'Din NDA-förfrågan har godkänts',
+              content: `Hej! Din NDA-förfrågan har godkänts. Du kan nu se all information om företaget och vi kan börja diskutera möjligheterna. Tveka inte att kontakta mig om du har några frågor.`,
+            },
+          })
+        } catch (msgError) {
+          console.error('Error creating initial message:', msgError)
+          // Don't fail the request if message creation fails
+        }
+      }
+
       return NextResponse.json({ request: updated })
     } catch (dbError) {
       console.error('Database error updating NDA request:', dbError)

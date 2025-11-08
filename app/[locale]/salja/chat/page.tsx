@@ -63,6 +63,10 @@ function SellerChatContent() {
     }
 
     fetchData()
+
+    // Poll for updates every 10 seconds
+    const interval = setInterval(fetchData, 10000)
+    return () => clearInterval(interval)
   }, [user])
 
   const handleApproveContact = async (request: ContactRequest) => {

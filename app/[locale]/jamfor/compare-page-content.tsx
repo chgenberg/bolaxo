@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useBuyerStore } from '@/store/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLocale, useTranslations } from 'next-intl'
 import { CheckCircle, AlertTriangle } from 'lucide-react'
 
 export default function ComparePageContent() {
   const { compareList, toggleCompare, clearCompare, loadFromLocalStorage } = useBuyerStore()
   const { user } = useAuth()
+  const locale = useLocale()
+  const t = useTranslations('compare')
   const [objects, setObjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -62,13 +65,13 @@ export default function ComparePageContent() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
           <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
-            Ingen jämförelse ännu
+            {t('noComparison')}
           </h1>
           <p className="text-text-gray mb-8">
-            Lägg till objekt från sökresultaten för att jämföra dem här
+            {t('addFromSearch')}
           </p>
-          <Link href="/sok" className="btn-primary inline-block">
-            Börja söka →
+          <Link href={`/${locale}/sok`} className="btn-primary inline-block">
+            {t('startSearching')}
           </Link>
         </div>
       </div>
@@ -82,18 +85,18 @@ export default function ComparePageContent() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-2">
-              Jämför objekt
+              {t('title')}
             </h1>
             <p className="text-text-gray">
-              {objects.length} av 4 objekt i jämförelse
+              {objects.length} {t('of4Objects')}
             </p>
           </div>
           <div className="flex gap-3">
             <button onClick={clearCompare} className="btn-ghost">
-              Rensa alla
+              {t('clearAll')}
             </button>
-            <Link href="/sok" className="btn-secondary">
-              Lägg till fler
+            <Link href={`/${locale}/sok`} className="btn-secondary">
+              {t('addMore')}
             </Link>
           </div>
         </div>
@@ -110,7 +113,7 @@ export default function ComparePageContent() {
                   {objects.map(obj => (
                     <th key={obj.id} className="py-4 px-3 sm:px-4 text-left">
                       <div>
-                        <Link href={`/objekt/${obj.id}`} className="font-semibold text-primary-blue hover:underline">
+                        <Link href={`/${locale}/objekt/${obj.id}`} className="font-semibold text-primary-blue hover:underline">
                           {obj.anonymousTitle || obj.companyName || 'Företag'}
                         </Link>
                         <div className="flex gap-2 mt-2">

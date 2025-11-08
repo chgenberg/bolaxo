@@ -5,11 +5,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useFormStore } from '@/store/formStore'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLocale, useTranslations } from 'next-intl'
 import { Share2, UserPlus, FolderOpen, Lightbulb, ArrowRight, X } from 'lucide-react'
 
 export default function KlartPageContent() {
   const router = useRouter()
   const { user } = useAuth()
+  const locale = useLocale()
+  const t = useTranslations('klart')
   const { formData, resetForm } = useFormStore()
   const [listingId, setListingId] = useState<string | null>(null)
   const [publishing, setPublishing] = useState(true)
@@ -18,7 +21,7 @@ export default function KlartPageContent() {
   useEffect(() => {
     const publishListing = async () => {
       if (!user?.id) {
-        setError('Du måste vara inloggad för att publicera')
+        setError(t('mustBeLoggedIn'))
         setPublishing(false)
         return
       }
@@ -71,7 +74,7 @@ export default function KlartPageContent() {
         setTimeout(() => resetForm(), 3000)
       } catch (err) {
         console.error('Error publishing listing:', err)
-        setError('Något gick fel vid publicering. Försök igen.')
+        setError(t('errorPublishing'))
         setPublishing(false)
       }
     }
@@ -84,8 +87,8 @@ export default function KlartPageContent() {
       <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
           <div className="w-16 h-16 border-4 border-primary-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">Publicerar din annons...</h2>
-          <p className="text-text-gray">Detta tar bara några sekunder</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">{t('publishing')}</h2>
+          <p className="text-text-gray">{t('publishingDesc')}</p>
         </div>
       </div>
     )
@@ -98,10 +101,10 @@ export default function KlartPageContent() {
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <X className="w-6 h-6 sm:w-8 sm:h-8 text-red-600" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">Något gick fel</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-text-dark mb-2">{t('error')}</h2>
           <p className="text-text-gray mb-6">{error}</p>
-          <button onClick={() => router.push('/salja/preview')} className="btn-primary">
-            Tillbaka till förhandsvisning
+          <button onClick={() => router.push(`/${locale}/salja/preview`)} className="btn-primary">
+            {t('backToPreview')}
           </button>
         </div>
       </div>
@@ -123,29 +126,29 @@ export default function KlartPageContent() {
 
           {/* Headline */}
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-text-dark mb-4">
-            Klart! Din annons är nu publicerad
+            {t('success')}
           </h1>
 
           <p className="text-lg text-text-gray mb-8">
-            Du tar nu emot NDA-förfrågningar från kvalificerade köpare
+            {t('successDesc')}
           </p>
 
           {/* Status Card */}
           <div className="bg-light-blue p-6 rounded-xl mb-8">
             <div className="flex items-center justify-between mb-4">
-              <span className="font-semibold text-text-dark">Status:</span>
+              <span className="font-semibold text-text-dark">{t('status')}</span>
               <span className="px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-success text-white rounded-full text-sm font-semibold">
-                Live
+                {t('live')}
               </span>
             </div>
             <div className="flex items-center justify-between mb-4">
-              <span className="font-semibold text-text-dark">Paket:</span>
+              <span className="font-semibold text-text-dark">{t('package')}</span>
               <span className="text-text-dark">
                 {formData.selectedPackage === 'basic' ? 'Basic' : formData.selectedPackage === 'featured' ? 'Featured' : 'Premium'}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-text-dark">Synlig till:</span>
+              <span className="font-semibold text-text-dark">{t('visibleUntil')}</span>
               <span className="text-text-dark">
                 {new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
               </span>
@@ -154,12 +157,12 @@ export default function KlartPageContent() {
 
           {/* Next Actions */}
           <div className="space-y-4 mb-8">
-            <h2 className="text-xl font-semibold text-text-dark mb-4">Nästa steg</h2>
+            <h2 className="text-xl font-semibold text-text-dark mb-4">{t('nextSteps')}</h2>
             
             <button className="w-full btn-primary py-4 flex items-center justify-between">
               <span className="flex items-center">
                 <Share2 className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Dela annons
+                {t('shareListing')}
               </span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
@@ -167,7 +170,7 @@ export default function KlartPageContent() {
             <button className="w-full btn-secondary py-4 flex items-center justify-between">
               <span className="flex items-center">
                 <UserPlus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Bjud in rådgivare
+                {t('inviteAdvisor')}
               </span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
@@ -175,7 +178,7 @@ export default function KlartPageContent() {
             <button className="w-full btn-secondary py-4 flex items-center justify-between">
               <span className="flex items-center">
                 <FolderOpen className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                Öppna datarum light
+                {t('openDataroom')}
               </span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
@@ -188,22 +191,21 @@ export default function KlartPageContent() {
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>
-              Notifikationer
+              {t('notifications')}
             </h3>
             <p className="text-sm text-text-gray">
-              Du får mail när någon vill signera NDA eller ställer en fråga. 
-              Du kan också logga in här för att följa intresset i realtid.
+              {t('notificationsDesc')}
             </p>
           </div>
 
           {/* Bottom Actions */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/" className="btn-ghost">
-                ← Till startsidan
+              <Link href={`/${locale}/`} className="btn-ghost">
+                {t('backToHome')}
               </Link>
-              <Link href="/dashboard" className="btn-primary">
-                Gå till din översikt →
+              <Link href={`/${locale}/dashboard`} className="btn-primary">
+                {t('goToOverview')}
               </Link>
             </div>
           </div>
@@ -211,7 +213,7 @@ export default function KlartPageContent() {
           {/* Microcopy */}
           <p className="text-xs text-text-gray mt-6 flex items-center justify-center">
             <Lightbulb className="w-4 h-4 mr-1 text-primary-blue" />
-            <span>Tips: Förbered dokument för datarummet redan nu så att du kan svara snabbt på köpares förfrågningar</span>
+            <span>{t('tip')}</span>
           </p>
         </div>
       </div>

@@ -312,7 +312,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [autoAccountCreated, setAutoAccountCreated] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
-  const [loadingText, setLoadingText] = useState('Analyserar din information...')
+  const [loadingText, setLoadingText] = useState(t('loading.analyzing'))
   const [showOrgNumberTooltip, setShowOrgNumberTooltip] = useState(false)
   const cogsManuallySetRef = useRef(false)
 
@@ -432,7 +432,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     setLoadingProgress(0)
-    setLoadingText('Analyserar din information...')
+    setLoadingText(t('loading.analyzing'))
     
     // AUTO-SKAPA KONTO om användaren inte är inloggad
     if (!user && data.email && acceptedPrivacy) {
@@ -544,10 +544,9 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
   // Laddningstexterna som ska visas i sekvens
   const loadingTexts = [
-    'Analyserar din information...',
-    'Beräknar branschvärden...',
-    'Skapar värderingsunderlag...',
-    'Snart har vi resultatet...'
+    t('loading.analyzing'),
+    t('loading.creatingValuation'),
+    t('loading.almostDone')
   ]
 
   // Uppdatera progress och text under laddning
@@ -667,21 +666,21 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="text-center mb-6 md:mb-8">
                 <Mail className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4" style={{ color: '#1F3C58' }} />
                 <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: '#1F3C58' }}>
-                  Grunduppgifter
+                  {t('step1.title')}
                 </h3>
-                <p style={{ color: '#666666' }}>Vi börjar med det mest grundläggande</p>
+                <p style={{ color: '#666666' }}>{t('step1.subtitle')}</p>
               </div>
 
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    E-postadress *
+                    {t('common.emailAddress')}
                   </label>
                   <input
                 type="email"
                 value={data.email || ''}
                     onChange={(e) => setData({ ...data, email: e.target.value })}
-                placeholder="din@email.se"
+                placeholder={t('common.emailPlaceholder')}
                     className="input-field"
                 required
               />
@@ -689,13 +688,13 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Företagsnamn *
+                    {t('common.companyName')}
                   </label>
                   <input
                     type="text"
                 value={data.companyName || ''}
                     onChange={(e) => setData({ ...data, companyName: e.target.value })}
-                placeholder="Ditt Företag AB"
+                placeholder={t('common.companyPlaceholder')}
                     className="input-field"
                 required
               />
@@ -703,33 +702,33 @@ export default function ValuationWizard({ onClose }: WizardProps) {
 
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Bransch *
+                    {t('step1.industry')}
                   </label>
                   <CustomSelect
                     value={data.industry || ''}
                     onChange={(value) => setData({ ...data, industry: value })}
                     options={industries}
-                    placeholder="Välj bransch"
+                    placeholder={t('step1.industryPlaceholder')}
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                      Hemsida (valfritt)
+                      {t('step1.website')}
                     </label>
                     <input
                       type="url"
                       value={data.website || ''}
                       onChange={(e) => setData({ ...data, website: e.target.value })}
-                      placeholder="www.dittforetag.se"
+                      placeholder={t('step1.websitePlaceholder')}
                       className="input-field"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2 flex items-center gap-2" style={{ color: '#1F3C58' }}>
-                      <span>Organisationsnummer (valfritt)</span>
+                      <span>{t('step1.orgNumber')}</span>
                       <div className="relative">
                         <button
                           type="button"
@@ -738,13 +737,13 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                           onFocus={() => setShowOrgNumberTooltip(true)}
                           onBlur={() => setShowOrgNumberTooltip(false)}
                           className="focus:outline-none"
-                          aria-label="Information om organisationsnummer"
+                          aria-label={t('step1.orgNumberAriaLabel')}
                         >
                           <HelpCircle className="w-4 h-4 text-gray-400 hover:text-primary-navy transition-colors" />
                         </button>
                         {showOrgNumberTooltip && (
                           <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-64 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg z-50">
-                            Fyller du i så hämtas offentliga uppgifter direkt.
+                            {t('step1.orgNumberTooltip')}
                             <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                           </div>
                         )}
@@ -754,7 +753,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       type="text"
                       value={data.orgNumber || ''}
                       onChange={(e) => setData({ ...data, orgNumber: e.target.value })}
-                  placeholder="556123-4567"
+                      placeholder={t('step1.orgNumberPlaceholder')}
                       className="input-field"
                     />
                   </div>
@@ -770,8 +769,8 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                         className="mt-0.5"
                       />
                       <span className="text-sm" style={{ color: '#666666' }}>
-                        Jag godkänner <a href={`/${locale}/juridiskt/integritetspolicy`} className="underline" style={{ color: '#FF69B4' }}>integritetspolicyn</a> och 
-                        får ett konto för att spara min värdering
+                        {t('step1.privacyAccept')} <a href={`/${locale}/juridiskt/integritetspolicy`} className="underline" style={{ color: '#FF69B4' }}>{t('step1.privacyPolicy')}</a> {t('step1.privacyAnd')} 
+                        {t('step1.privacyAccount')}
                     </span>
                   </label>
                 </div>
@@ -792,69 +791,69 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="text-center mb-6 md:mb-8">
                 <AlertCircle className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4" style={{ color: '#1F3C58' }} />
                 <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: '#1F3C58' }}>
-                  Nyckeltal & Risker
+                  {t('step2.title')}
                 </h3>
-                <p style={{ color: '#666666' }}>Viktig information för värderingen</p>
+                <p style={{ color: '#666666' }}>{t('step2.subtitle')}</p>
               </div>
 
               <div className="space-y-4">
                 <FormFieldPercent
-                  label="Bruttovinstmarginal"
+                  label={t('step2.grossMargin')}
                   value={data.grossMargin || ''}
                   onChange={(value) => setData({ ...data, grossMargin: value })}
-                  placeholder="Ex: 45%"
+                  placeholder={t('step2.grossMarginPlaceholder')}
                   required
                 />
 
                 <FormFieldPercent
-                  label="Kundberoende - Största kundens andel"
+                  label={t('step2.customerConcentration')}
                   value={data.customerConcentrationRisk || ''}
                   onChange={(value) => setData({ ...data, customerConcentrationRisk: value })}
-                  placeholder="Ex: 15%"
-                  tooltip="Hur stor del av omsättningen kommer från er största kund?"
+                  placeholder={t('step2.customerConcentrationPlaceholder')}
+                  tooltip={t('step2.customerConcentrationTooltip')}
                   required
                 />
 
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Har ni nödvändiga tillstånd/licenser? *
+                    {t('step2.regulatoryLicenses')}
                   </label>
                   <CustomSelect
                     value={data.regulatoryLicenses || ''}
                     onChange={(value) => setData({ ...data, regulatoryLicenses: value })}
                     options={[
-                      { value: 'yes', label: 'Ja, alla tillstånd på plats' },
-                      { value: 'partial', label: 'Delvis, vissa saknas' },
-                      { value: 'no', label: 'Nej/Ej tillämpligt' }
+                      { value: 'yes', label: t('step2.regulatoryLicensesYes') },
+                      { value: 'partial', label: t('step2.regulatoryLicensesPartial') },
+                      { value: 'no', label: t('step2.regulatoryLicensesNo') }
                     ]}
-                    placeholder="Välj alternativ"
+                    placeholder={t('step2.regulatoryLicensesPlaceholder')}
                   />
                 </div>
 
                 <FormFieldCurrency
-                  label="Räntebärande skulder totalt"
+                  label={t('step2.totalDebt')}
                   value={data.totalDebt || ''}
                   onChange={(value) => setData({ ...data, totalDebt: value })}
-                  placeholder="Ex: 1.850.000 kr"
-                  helpText="Ange summa för alla räntebärande skulder: banklån inkl. kortfristig del, utnyttjad checkkredit, leasing (bilar/maskiner/lokaler), aktieägarlån. Exkludera leverantörsskulder och skatteskulder."
+                  placeholder={t('step2.totalDebtPlaceholder')}
+                  helpText={t('step2.totalDebtHelpText')}
                 />
 
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                    Genomsnittlig betalningstid från kunder
+                    {t('step2.paymentTerms')}
                   </label>
                   <CustomSelect
                     value={data.paymentTerms || ''}
                     onChange={(value) => setData({ ...data, paymentTerms: value })}
                     options={[
-                      { value: '0-15', label: '0-15 dagar' },
-                      { value: '16-30', label: '16-30 dagar' },
-                      { value: '31-45', label: '31-45 dagar' },
-                      { value: '46-60', label: '46-60 dagar' },
-                      { value: '61-90', label: '61-90 dagar' },
-                      { value: '91+', label: 'Över 90 dagar' }
+                      { value: '0-15', label: t('step2.paymentTerms0to15') },
+                      { value: '16-30', label: t('step2.paymentTerms16to30') },
+                      { value: '31-45', label: t('step2.paymentTerms31to45') },
+                      { value: '46-60', label: t('step2.paymentTerms46to60') },
+                      { value: '61-90', label: t('step2.paymentTerms61to90') },
+                      { value: '91+', label: t('step2.paymentTerms91plus') }
                     ]}
-                    placeholder="Välj betalningsvillkor"
+                    placeholder={t('step2.paymentTermsPlaceholder')}
                   />
                 </div>
               </div>
@@ -867,52 +866,52 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="text-center mb-6 md:mb-8">
                 <TrendingUp className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4" style={{ color: '#1F3C58' }} />
                 <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: '#1F3C58' }}>
-                  Finansiella uppgifter
+                  {t('step3.title')}
                 </h3>
-                <p style={{ color: '#666666' }}>Ekonomisk översikt</p>
+                <p style={{ color: '#666666' }}>{t('step3.subtitle')}</p>
               </div>
 
               <div className="space-y-4">
                 <FormFieldCurrency
-                  label="Nettoomsättning"
+                  label={t('step3.exactRevenue')}
                   value={data.exactRevenue || ''}
                   onChange={(value) => setData({ ...data, exactRevenue: value })}
-                  placeholder="Ex: 12.000.000 kr"
+                  placeholder={t('step3.exactRevenuePlaceholder')}
                   required
                 />
 
                 <div>
                   <h4 className="text-base font-semibold mb-3" style={{ color: '#1F3C58' }}>
-                    Rörelsekostnader
+                    {t('step3.operatingCosts')}
                   </h4>
                   <div className="space-y-4 pl-4 border-l-2 border-gray-200">
                     <FormFieldCurrency
-                      label="Löner & sociala avgifter"
+                      label={t('step3.salaries')}
                       value={data.salaries || ''}
                       onChange={(value) => setData({ ...data, salaries: value })}
-                      placeholder="Ex: 4.500.000 kr"
+                      placeholder={t('step3.salariesPlaceholder')}
                     />
                     
                     <FormFieldCurrency
-                      label="Hyra & lokaler"
+                      label={t('step3.rentCosts')}
                       value={data.rentCosts || ''}
                       onChange={(value) => setData({ ...data, rentCosts: value })}
-                      placeholder="Ex: 800.000 kr"
+                      placeholder={t('step3.rentCostsPlaceholder')}
                     />
                     
                     <FormFieldCurrency
-                      label="Marknadsföring & försäljning"
+                      label={t('step3.marketingCosts')}
                       value={data.marketingCosts || ''}
                       onChange={(value) => setData({ ...data, marketingCosts: value })}
-                      placeholder="Ex: 600.000 kr"
+                      placeholder={t('step3.marketingCostsPlaceholder')}
                     />
                     
                     <FormFieldCurrency
-                      label="Övriga rörelsekostnader"
+                      label={t('step3.otherOperatingCosts')}
                       value={data.otherOperatingCosts || ''}
                       onChange={(value) => setData({ ...data, otherOperatingCosts: value })}
-                      placeholder="Ex: 1.200.000 kr"
-                      helpText="T.ex. administration, IT, konsulter, försäkringar, el/värme/vatten, reparationer & underhåll, etc."
+                      placeholder={t('step3.otherOperatingCostsPlaceholder')}
+                      helpText={t('step3.otherOperatingCostsHelpText')}
                     />
                   </div>
                 </div>
@@ -920,51 +919,51 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                      Företagets ålder *
+                      {t('step3.companyAge')}
                     </label>
                     <CustomSelect
                 value={data.companyAge || ''}
                       onChange={(value) => setData({ ...data, companyAge: value })}
                 options={[
-                        { value: '0-1', label: '0-1 år' },
-                        { value: '2-3', label: '2-3 år' },
-                        { value: '4-5', label: '4-5 år' },
-                  { value: '6-10', label: '6-10 år' },
-                  { value: '11-20', label: '11-20 år' },
-                        { value: '21+', label: 'Över 20 år' }
+                        { value: '0-1', label: t('step3.companyAge0to1') },
+                        { value: '2-3', label: t('step3.companyAge2to3') },
+                        { value: '4-5', label: t('step3.companyAge4to5') },
+                  { value: '6-10', label: t('step3.companyAge6to10') },
+                  { value: '11-20', label: t('step3.companyAge11to20') },
+                        { value: '21+', label: t('step3.companyAge21plus') }
                 ]}
-                placeholder="Välj ålder"
+                placeholder={t('step3.companyAgePlaceholder')}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2" style={{ color: '#1F3C58' }}>
-                      Antal anställda *
+                      {t('step3.employees')}
                     </label>
                     <CustomSelect
                 value={data.employees || ''}
                       onChange={(value) => setData({ ...data, employees: value })}
                 options={[
-                  { value: '1-5', label: '1-5 anställda' },
-                  { value: '6-10', label: '6-10 anställda' },
-                  { value: '11-25', label: '11-25 anställda' },
-                        { value: '26-50', label: '26-50 anställda' },
-                        { value: '51-100', label: '51-100 anställda' },
-                        { value: '101-250', label: '101-250 anställda' },
-                        { value: '251+', label: 'Över 250 anställda' }
+                  { value: '1-5', label: t('step3.employees1to5') },
+                  { value: '6-10', label: t('step3.employees6to10') },
+                  { value: '11-25', label: t('step3.employees11to25') },
+                        { value: '26-50', label: t('step3.employees26to50') },
+                        { value: '51-100', label: t('step3.employees51to100') },
+                        { value: '101-250', label: t('step3.employees101to250') },
+                        { value: '251+', label: t('step3.employees251plus') }
                 ]}
-                placeholder="Välj antal"
+                placeholder={t('step3.employeesPlaceholder')}
                     />
                   </div>
                 </div>
 
                 <div>
                 <FormFieldPercent
-                  label="Tillväxt senaste 3 åren"
+                  label={t('step3.revenue3Years')}
                   value={data.revenue3Years || ''}
                   onChange={(value) => setData({ ...data, revenue3Years: value })}
-                  placeholder="Ex: 25%"
-                  tooltip="Total procentuell ökning från 3 år sedan"
+                  placeholder={t('step3.revenue3YearsPlaceholder')}
+                  tooltip={t('step3.revenue3YearsTooltip')}
                 required
               />
                 </div>
@@ -972,28 +971,28 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <FormFieldCurrency
-                      label="Kostnad sålda varor/tjänster"
+                      label={t('step3.cogs')}
                       value={data.cogs || ''}
                       onChange={(value) => {
                         cogsManuallySetRef.current = true
                         setData({ ...data, cogs: value })
                       }}
-                      placeholder="Ex: 4.000.000 kr"
+                      placeholder={t('step3.cogsPlaceholder')}
                       disabled={!!(data.exactRevenue && data.grossMargin && !cogsManuallySetRef.current)}
                     />
                     {data.exactRevenue && data.grossMargin && !cogsManuallySetRef.current && (
                       <p className="text-xs mt-1 text-gray-500">
-                        Beräknas automatiskt från nettoomsättning och bruttomarginal
+                        {t('step3.cogsAutoCalculated')}
                       </p>
                     )}
                   </div>
 
                   <div>
                     <FormFieldCurrency
-                      label="Lönekostnader (kr)"
+                      label={t('step3.salariesLabel')}
                       value={data.salaries || ''}
                       onChange={(value) => setData({ ...data, salaries: value })}
-                      placeholder="Ex: 500.000 kr"
+                      placeholder={t('step3.salariesLabelPlaceholder')}
                     />
                   </div>
                   </div>
@@ -1007,9 +1006,9 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="text-center mb-6 md:mb-8">
                 <Target className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4" style={{ color: '#1F3C58' }} />
                 <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: '#1F3C58' }}>
-                  {industries.find(i => i.value === data.industry)?.label || 'Bransch'}-specifika frågor
+                  {t('step4.title', { industry: industries.find(i => i.value === data.industry)?.label || t('step1.industry') })}
                 </h3>
-                <p style={{ color: '#666666' }}>Anpassat för er bransch</p>
+                <p style={{ color: '#666666' }}>{t('step4.subtitle')}</p>
               </div>
 
               <div className="space-y-4">
@@ -1024,7 +1023,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       value={data[question.key] as string || ''}
                           onChange={(value) => setData({ ...data, [question.key]: value })}
                           options={question.options || []}
-                          placeholder="Välj alternativ"
+                          placeholder={t('step4.selectPlaceholder')}
                         />
                         {question.tooltip && (
                           <p className="text-xs mt-1" style={{ color: '#666666' }}>{question.tooltip}</p>
@@ -1109,9 +1108,9 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="text-center mb-6 md:mb-8">
                 <Lightbulb className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4" style={{ color: '#1F3C58' }} />
                 <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: '#1F3C58' }}>
-                  Kvalitativ information
+                  {t('step5.title')}
                 </h3>
-                <p style={{ color: '#666666' }}>Hjälp oss förstå företaget bättre</p>
+                <p style={{ color: '#666666' }}>{t('step5.subtitle')}</p>
               </div>
 
               <div className="space-y-4">
@@ -1123,7 +1122,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                     <textarea
                   value={data[question.key] as string || ''}
                   onChange={(e) => setData({ ...data, [question.key]: e.target.value })}
-                  placeholder="Beskriv..."
+                      placeholder={t('common.describe')}
                       rows={3}
                       className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
                   required
@@ -1143,31 +1142,31 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               <div className="text-center mb-6 md:mb-8">
                 <FileText className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-4" style={{ color: '#1F3C58' }} />
                 <h3 className="text-xl md:text-2xl font-bold mb-2" style={{ color: '#1F3C58' }}>
-                  Granska & Skicka
+                  {t('step6.title')}
                 </h3>
-                <p style={{ color: '#666666' }}>Kontrollera dina uppgifter</p>
+                <p style={{ color: '#666666' }}>{t('step6.subtitle')}</p>
               </div>
 
               <div className="p-6 rounded-xl" style={{ backgroundColor: '#F5F0E8' }}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <div className="text-sm" style={{ color: '#666666' }}>Företag</div>
+                    <div className="text-sm" style={{ color: '#666666' }}>{t('step6.company')}</div>
                     <div className="font-semibold" style={{ color: '#1F3C58' }}>{data.companyName}</div>
                 </div>
                 <div>
-                    <div className="text-sm" style={{ color: '#666666' }}>Bransch</div>
+                    <div className="text-sm" style={{ color: '#666666' }}>{t('step6.industry')}</div>
                     <div className="font-semibold" style={{ color: '#1F3C58' }}>
                     {industries.find(i => i.value === data.industry)?.label}
                   </div>
                 </div>
                 <div>
-                    <div className="text-sm" style={{ color: '#666666' }}>Nettoomsättning</div>
+                    <div className="text-sm" style={{ color: '#666666' }}>{t('step6.revenue')}</div>
                     <div className="font-semibold" style={{ color: '#1F3C58' }}>
-                    {data.exactRevenue ? `${(Number(data.exactRevenue) / 1000000).toFixed(2)} MSEK` : 'Ej angiven'}
+                    {data.exactRevenue ? `${(Number(data.exactRevenue) / 1000000).toFixed(2)} MSEK` : t('step6.notSpecified')}
                   </div>
                 </div>
                 <div>
-                    <div className="text-sm" style={{ color: '#666666' }}>EBITDA</div>
+                    <div className="text-sm" style={{ color: '#666666' }}>{t('step6.ebitda')}</div>
                     <div className="font-semibold" style={{ color: '#1F3C58' }}>
                     {(() => {
                       const revenue = Number(data.exactRevenue) || 0
@@ -1178,25 +1177,24 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                       const totalCosts = salaries + rent + marketing + other
                       return revenue > 0 && totalCosts > 0
                         ? `${((revenue - totalCosts) / 1000000).toFixed(2)} MSEK`
-                        : 'Ej angiven'
+                        : t('step6.notSpecified')
                     })()}
                   </div>
                 </div>
                 <div>
-                    <div className="text-sm" style={{ color: '#666666' }}>Anställda</div>
+                    <div className="text-sm" style={{ color: '#666666' }}>{t('step6.employees')}</div>
                     <div className="font-semibold" style={{ color: '#1F3C58' }}>{data.employees}</div>
                 </div>
                   <div>
-                    <div className="text-sm" style={{ color: '#666666' }}>Företagets ålder</div>
-                    <div className="font-semibold" style={{ color: '#1F3C58' }}>{data.companyAge} år</div>
+                    <div className="text-sm" style={{ color: '#666666' }}>{t('step6.companyAge')}</div>
+                    <div className="font-semibold" style={{ color: '#1F3C58' }}>{data.companyAge} {t('step6.years')}</div>
                   </div>
                   </div>
               </div>
 
               <div className="p-4 rounded-xl border" style={{ borderColor: '#FFD700', backgroundColor: '#FFFACD' }}>
                 <p className="text-sm" style={{ color: '#666666' }}>
-                  <strong>Observera:</strong> Värderingen är en indikation baserad på AI-analys. 
-                  För en fullständig värdering rekommenderar vi kontakt med professionell värderare.
+                  <strong>{t('step6.note')}</strong> {t('step6.noteText')}
                 </p>
               </div>
             </div>
@@ -1212,7 +1210,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Tillbaka
+              {t('step6.back')}
           </button>
 
           <button
@@ -1226,16 +1224,16 @@ export default function ValuationWizard({ onClose }: WizardProps) {
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                  Analyserar...
+                  {t('loading.analyzing').replace('...', '')}
                 </>
               ) : step === totalSteps ? (
                 <>
-                  Få Min Värdering
+                  {t('step6.getValuation')}
                   <TrendingUp className="w-4 h-4 ml-2" />
                 </>
               ) : (
                 <>
-                  Nästa
+                  {t('step6.next')}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </>
               )}

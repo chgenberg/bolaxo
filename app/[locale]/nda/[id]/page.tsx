@@ -5,11 +5,14 @@ import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useBuyerStore } from '@/store/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
+import { useLocale, useTranslations } from 'next-intl'
 import InfoPopup from '@/components/InfoPopup'
 
 export default function NDASigningPage() {
   const params = useParams()
   const router = useRouter()
+  const locale = useLocale()
+  const t = useTranslations('nda')
   const { user, loading: authLoading } = useAuth()
   const { ndaSignedObjects, signNDA } = useBuyerStore()
   
@@ -61,13 +64,13 @@ export default function NDASigningPage() {
       <div className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
         <div className="max-w-2xl w-full card text-center">
           <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-4">
-            Du måste logga in först
+            {t('mustLogin')}
           </h1>
           <p className="text-text-gray mb-8">
-            För att signera NDA måste du vara inloggad.
+            {t('mustLoginDesc')}
           </p>
-          <Link href="/login" className="btn-primary inline-block">
-            Gå till inloggning
+          <Link href={`/${locale}/login`} className="btn-primary inline-block">
+            {t('goToLogin')}
           </Link>
         </div>
       </div>
@@ -75,7 +78,7 @@ export default function NDASigningPage() {
   }
 
   if (!object) {
-    return <div>Objekt ej hittat</div>
+    return <div>{t('objectNotFound')}</div>
   }
 
   if (hasSignedNDA) {
@@ -89,40 +92,40 @@ export default function NDASigningPage() {
           </div>
           <div className="flex items-center justify-center gap-2 mb-4">
             <h1 className="text-2xl sm:text-3xl font-bold text-text-dark">
-              NDA redan signerad
+              {t('alreadySigned')}
             </h1>
             <InfoPopup
-              title="Vad händer nu?"
-              content="Säljaren har fått notis och väljer om de vill ge dig åtkomst till datarummet, avvakta eller ställa vidare frågor i chatten. Du får ett meddelande när säljaren har godkänt din åtkomst."
+              title={t('whatHappensNext')}
+              content={t('whatHappensNextContent')}
               size="md"
             />
           </div>
           <p className="text-text-gray mb-8">
-            Du har redan signerat NDA för detta objekt. Väntar på att säljaren ska ge dig åtkomst.
+            {t('alreadySignedDesc')}
           </p>
           <div className="bg-light-blue/50 rounded-xl p-6 mb-8 text-left">
-            <h3 className="font-semibold text-text-dark mb-3 text-center">Nästa steg i processen</h3>
+            <h3 className="font-semibold text-text-dark mb-3 text-center">{t('nextSteps')}</h3>
             <ol className="space-y-2 text-sm text-text-gray">
               <li className="flex items-start">
                 <span className="bg-primary-blue text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mr-3 text-xs">1</span>
-                <span>Säljaren granskar din profil och NDA-förfrågan</span>
+                <span>{t('step1')}</span>
               </li>
               <li className="flex items-start">
                 <span className="bg-primary-blue text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mr-3 text-xs">2</span>
-                <span>De väljer att godkänna, ställa frågor eller avvakta</span>
+                <span>{t('step2')}</span>
               </li>
               <li className="flex items-start">
                 <span className="bg-primary-blue text-white rounded-full w-6 h-6 flex items-center justify-center flex-shrink-0 mr-3 text-xs">3</span>
-                <span>Du får ett mail när du har fått tillgång till datarummet</span>
+                <span>{t('step3')}</span>
               </li>
             </ol>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href={`/objekt/${objectId}`} className="btn-secondary">
-              ← Se objektet
+            <Link href={`/${locale}/objekt/${objectId}`} className="btn-secondary">
+              {t('viewObject')}
             </Link>
-            <Link href="/sok" className="btn-ghost">
-              Fortsätt söka
+            <Link href={`/${locale}/sok`} className="btn-ghost">
+              {t('continueSearching')}
             </Link>
           </div>
         </div>
@@ -150,7 +153,7 @@ export default function NDASigningPage() {
       if (!listing) {
         const response = await fetch(`/api/listings/${objectId}`)
         if (!response.ok) {
-          setError('Kunde inte hitta uppgifter om säljaren')
+          setError(t('errorSellerInfo'))
           setIsSubmitting(false)
           return
         }
@@ -158,7 +161,7 @@ export default function NDASigningPage() {
       }
       
       if (!listing || !listing.userId) {
-        setError('Kunde inte hitta uppgifter om säljaren')
+        setError(t('errorSellerInfo'))
         setIsSubmitting(false)
         return
       }
@@ -171,7 +174,7 @@ export default function NDASigningPage() {
           listingId: objectId,
           buyerId: user.id,
           sellerId: listing.userId,
-          message: interestReason || 'Intresserad av denna verksamhet'
+          message: interestReason || t('defaultInterest')
         })
       })
 
@@ -183,7 +186,7 @@ export default function NDASigningPage() {
           setStep(3)
           return
         }
-        throw new Error(errorData.error || 'Kunde inte skapa NDA-förfrågan')
+        throw new Error(errorData.error || t('errorCreateNDA'))
       }
 
       const ndaData = await ndaResponse.json()
@@ -193,7 +196,7 @@ export default function NDASigningPage() {
       signNDA(objectId)
       setStep(3)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Något gick fel')
+      setError(err instanceof Error ? err.message : t('errorGeneric'))
       console.error('NDA submission error:', err)
     } finally {
       setIsSubmitting(false)
@@ -203,8 +206,8 @@ export default function NDASigningPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-light-blue/20 py-6 sm:py-8 md:py-12">
       <div className="max-w-3xl mx-auto px-3 sm:px-4">
-        <Link href={`/objekt/${objectId}`} className="text-primary-blue hover:underline mb-6 inline-block">
-          ← Tillbaka till objektet
+        <Link href={`/${locale}/objekt/${objectId}`} className="text-primary-blue hover:underline mb-6 inline-block">
+          {t('backToObject')}
         </Link>
 
         {step === 1 && (
@@ -216,10 +219,10 @@ export default function NDASigningPage() {
                 </svg>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-text-dark mb-2">
-                Signera NDA
+                {t('signNDA')}
               </h1>
               <p className="text-text-gray">
-                För {object.anonymousTitle}
+                {t('for')} {object.anonymousTitle}
               </p>
             </div>
 
@@ -230,69 +233,69 @@ export default function NDASigningPage() {
             )}
 
             <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Steg 1: Sammanfattning av NDA-villkor</h2>
+              <h2 className="text-xl font-semibold mb-4">{t('step1Title')}</h2>
               
               <div className="bg-gray-50 p-6 rounded-xl mb-6 max-h-96 overflow-y-auto">
-                <h3 className="font-semibold mb-3">Sekretessavtal (NDA)</h3>
+                <h3 className="font-semibold mb-3">{t('ndaAgreement')}</h3>
                 
                 <div className="space-y-4 text-sm text-text-gray">
                   <p>
-                    <strong>Mellan:</strong> {object.anonymousTitle} ("Säljaren") och dig som köpare ("Mottagaren")
+                    <strong>{t('between')}</strong> {object.anonymousTitle} ("{t('seller')}") {t('andYouAsBuyer')} ("{t('buyer')}")
                   </p>
                   
                   <div>
-                    <strong>1. Syfte</strong>
-                    <p>Detta avtal reglerar utbyte av konfidentiell information i samband med eventuell företagsöverlåtelse.</p>
+                    <strong>1. {t('purpose')}</strong>
+                    <p>{t('purposeDesc')}</p>
                   </div>
 
                   <div>
-                    <strong>2. Konfidentiell information omfattar:</strong>
+                    <strong>2. {t('confidentialInfo')}</strong>
                     <ul className="list-disc ml-5 mt-2 space-y-1">
-                      <li>Företagsnamn och organisationsnummer</li>
-                      <li>Exakta ekonomiska nyckeltal</li>
-                      <li>Kundlistor och leverantörsavtal</li>
-                      <li>Affärshemligheter och processer</li>
-                      <li>All information i datarummet</li>
+                      <li>{t('confidentialInfo1')}</li>
+                      <li>{t('confidentialInfo2')}</li>
+                      <li>{t('confidentialInfo3')}</li>
+                      <li>{t('confidentialInfo4')}</li>
+                      <li>{t('confidentialInfo5')}</li>
                     </ul>
                   </div>
 
                   <div>
-                    <strong>3. Åtaganden</strong>
-                    <p>Mottagaren förbinder sig att:</p>
+                    <strong>3. {t('commitments')}</strong>
+                    <p>{t('commitmentsDesc')}</p>
                     <ul className="list-disc ml-5 mt-2 space-y-1">
-                      <li>Hålla all information konfidentiell</li>
-                      <li>Inte dela information med tredje part utan godkännande</li>
-                      <li>Endast använda informationen för utvärdering av affären</li>
-                      <li>Radera/returnera material om affär ej genomförs</li>
+                      <li>{t('commitment1')}</li>
+                      <li>{t('commitment2')}</li>
+                      <li>{t('commitment3')}</li>
+                      <li>{t('commitment4')}</li>
                     </ul>
                   </div>
 
                   <div>
-                    <strong>4. Giltighetstid</strong>
-                    <p>Avtalet gäller i 24 månader från signeringsdatum.</p>
+                    <strong>4. {t('validity')}</strong>
+                    <p>{t('validityDesc')}</p>
                   </div>
 
                   <div>
-                    <strong>5. Vattenmärkning & spårning</strong>
-                    <p>All information är vattenmärkt med ditt användar-ID. Nedladdningar loggas.</p>
+                    <strong>5. {t('watermarking')}</strong>
+                    <p>{t('watermarkingDesc')}</p>
                   </div>
                 </div>
               </div>
 
               <div className="mb-6">
               <label htmlFor="interest" className="block text-sm font-medium text-text-dark mb-2">
-                Varför är du intresserad av detta företag? (Valfritt)
+                {t('whyInterested')}
               </label>
               <textarea
                 id="interest"
                 value={interestReason}
                 onChange={(e) => setInterestReason(e.target.value)}
-                placeholder="Beskriv kort din bakgrund och varför just detta företag passar dig. Detta hjälper säljaren att fatta beslut snabbare..."
+                placeholder={t('whyInterestedPlaceholder')}
                 className="input-field w-full min-h-[100px] resize-y"
                 maxLength={500}
               />
               <p className="text-xs text-text-gray mt-1">
-                Tips: En välskriven motivation ökar chansen att säljaren godkänner din NDA snabbt
+                {t('whyInterestedTip')}
               </p>
             </div>
 

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { X, TrendingUp, Building2, Calculator } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 interface ValuationModalProps {
   isOpen: boolean
@@ -13,6 +13,7 @@ interface ValuationModalProps {
 export default function ValuationModal({ isOpen, onClose }: ValuationModalProps) {
   const router = useRouter()
   const locale = useLocale()
+  const t = useTranslations('valuationModal')
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
 
   if (!isOpen) return null
@@ -48,10 +49,10 @@ export default function ValuationModal({ isOpen, onClose }: ValuationModalProps)
           {/* Modal content */}
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Vad vill du värdera?
+              {t('title')}
             </h2>
             <p className="text-lg text-gray-600">
-              Välj den typ av verksamhet som bäst beskriver ditt företag
+              {t('subtitle')}
             </p>
           </div>
 
@@ -73,9 +74,9 @@ export default function ValuationModal({ isOpen, onClose }: ValuationModalProps)
                     selectedOption === 'service' ? 'text-white' : 'text-gray-600'
                   }`} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Tjänsteföretag</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{t('serviceCompany')}</h3>
                 <p className="text-sm text-gray-600">
-                  Konsultbolag, byråer, IT-tjänster och andra serviceföretag
+                  {t('serviceCompanyDesc')}
                 </p>
               </div>
             </button>
@@ -96,9 +97,9 @@ export default function ValuationModal({ isOpen, onClose }: ValuationModalProps)
                     selectedOption === 'product' ? 'text-white' : 'text-gray-600'
                   }`} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Produktbolag</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{t('productCompany')}</h3>
                 <p className="text-sm text-gray-600">
-                  E-handel, tillverkning, distribution och fysiska produkter
+                  {t('productCompanyDesc')}
                 </p>
               </div>
             </button>
@@ -119,9 +120,9 @@ export default function ValuationModal({ isOpen, onClose }: ValuationModalProps)
                     selectedOption === 'saas' ? 'text-white' : 'text-gray-600'
                   }`} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">SaaS & Tech</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{t('saasTech')}</h3>
                 <p className="text-sm text-gray-600">
-                  Mjukvaruföretag, appar, plattformar och teknologibolag
+                  {t('saasTechDesc')}
                 </p>
               </div>
             </button>
@@ -132,7 +133,7 @@ export default function ValuationModal({ isOpen, onClose }: ValuationModalProps)
             <div className="mt-8 text-center">
               <div className="inline-flex items-center gap-3 text-purple-600">
                 <div className="w-5 h-5 border-2 border-purple-600 border-t-transparent rounded-full animate-spin" />
-                <span className="font-medium">Förbereder värdering...</span>
+                <span className="font-medium">{t('preparing')}</span>
               </div>
             </div>
           )}

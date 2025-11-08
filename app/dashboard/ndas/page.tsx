@@ -91,7 +91,7 @@ export default function NDAsPage() {
   const handleApprove = async (ndaId: string, nda: any) => {
     setProcessing(ndaId)
     try {
-      // Uppdatera NDA-status
+      // Uppdatera NDA-status (API:et skapar automatiskt meddelande)
       const response = await fetch(`/api/nda-requests/${ndaId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -99,19 +99,6 @@ export default function NDAsPage() {
       })
 
       if (response.ok) {
-        // Auto-create initial chat message
-        await fetch('/api/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            listingId: nda.listingId,
-            senderId: user?.id,
-            recipientId: nda.buyerId,
-            subject: 'Hej! NDA godkänd',
-            content: `Hej ${nda.buyerName},\n\nDin NDA-förfrågan för "${nda.listingTitle}" har godkänts. Du kan nu se all information om företaget och vi kan börja diskutera möjligheterna.\n\nLooking forward to speaking with you!\n\nBest regards`
-          })
-        })
-
         // Refresh requests from API
         const res = await listNDARequests({ sellerId: user?.id })
         setRequests(res.requests)

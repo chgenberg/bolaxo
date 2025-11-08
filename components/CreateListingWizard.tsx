@@ -200,14 +200,14 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
       if (response.ok) {
         const listing = await response.json()
         router.push(`/${locale}/dashboard/listings?success=published&id=${listing.id}`)
-        success('Annonsen har publicerats!')
+        success(t('navigation.publishedSuccess'))
       } else {
         console.error('Failed to publish listing')
-        error('Kunde inte publicera annonsen. Försök igen senare.')
+        error(t('errors.publishFailed'))
       }
     } catch (err) {
       console.error('Error publishing listing:', err)
-      error('Ett fel uppstod vid publiceringen av annonsen.')
+      error(t('errors.publishError'))
     } finally {
       setLoading(false)
     }
@@ -348,86 +348,86 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-3">
                     <TrendingUp className="w-8 h-8 text-navy" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Företagets nyckeltal</h3>
-                  <p className="text-gray-600">Denna information hjälper köpare att förstå ert företag</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">{t('step2.title')}</h3>
+                  <p className="text-gray-600">{t('step2.subtitle')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <CustomSelect
-                    label="Företagets ålder"
+                    label={t('step2.companyAgeLabel')}
                     value={data.companyAge}
                     onChange={(value) => updateField('companyAge', value)}
                     options={[
-                      { value: '0-2', label: '0-2 år' },
-                      { value: '3-5', label: '3-5 år' },
-                      { value: '6-10', label: '6-10 år' },
-                      { value: '11-20', label: '11-20 år' },
-                      { value: '20+', label: 'Över 20 år' }
+                      { value: '0-2', label: t('step2.companyAge0to2') },
+                      { value: '3-5', label: t('step2.companyAge3to5') },
+                      { value: '6-10', label: t('step2.companyAge6to10') },
+                      { value: '11-20', label: t('step2.companyAge11to20') },
+                      { value: '20+', label: t('step2.companyAge20plus') }
                     ]}
                     required
                   />
 
                   <CustomSelect
-                    label="Antal anställda"
+                    label={t('step2.employeesLabel')}
                     value={data.employees}
                     onChange={(value) => updateField('employees', value)}
                     options={[
-                      { value: '1', label: '1 person' },
-                      { value: '2-5', label: '2-5 personer' },
-                      { value: '6-10', label: '6-10 personer' },
-                      { value: '11-25', label: '11-25 personer' },
-                      { value: '26-50', label: '26-50 personer' },
-                      { value: '50+', label: 'Över 50 personer' }
+                      { value: '1', label: t('step2.employees1') },
+                      { value: '2-5', label: t('step2.employees2to5') },
+                      { value: '6-10', label: t('step2.employees6to10') },
+                      { value: '11-25', label: t('step2.employees11to25') },
+                      { value: '26-50', label: t('step2.employees26to50') },
+                      { value: '50+', label: t('step2.employees50plus') }
                     ]}
                     required
                   />
                 </div>
 
                 <FormFieldCurrency
-                  label="Årlig omsättning (senaste året)"
+                  label={t('step2.revenueLabel')}
                   value={data.revenue}
                   onChange={(value) => updateField('revenue', value)}
-                  placeholder="10.000.000 kr"
-                  tooltip="Ange årsomsättning i SEK"
+                  placeholder={t('step2.revenuePlaceholder')}
+                  tooltip={t('step2.revenueTooltip')}
                   required
                 />
 
                 <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-gray-900">Omsättningsutveckling senaste 3 åren</h4>
+                  <h4 className="text-lg font-semibold text-gray-900">{t('step2.revenueDevelopmentTitle')}</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <FormFieldCurrency
-                      label={`Omsättning ${new Date().getFullYear() - 3} (3 år sedan)`}
+                      label={t('step2.revenueYear1Label', { year: new Date().getFullYear() - 3 })}
                       value={data.revenueYear1}
                       onChange={(value) => updateField('revenueYear1', value)}
-                      placeholder="100.000 kr"
-                      tooltip="Årsomsättning för 3 år sedan"
+                      placeholder={t('step2.revenueYearPlaceholder')}
+                      tooltip={t('step2.revenueYear1Tooltip')}
                       required
                     />
                     <FormFieldCurrency
-                      label={`Omsättning ${new Date().getFullYear() - 2} (2 år sedan)`}
+                      label={t('step2.revenueYear2Label', { year: new Date().getFullYear() - 2 })}
                       value={data.revenueYear2}
                       onChange={(value) => updateField('revenueYear2', value)}
-                      placeholder="100.000 kr"
-                      tooltip="Årsomsättning för 2 år sedan"
+                      placeholder={t('step2.revenueYearPlaceholder')}
+                      tooltip={t('step2.revenueYear2Tooltip')}
                       required
                     />
                     <FormFieldCurrency
-                      label={`Omsättning ${new Date().getFullYear() - 1} (förra året)`}
+                      label={t('step2.revenueYear3Label', { year: new Date().getFullYear() - 1 })}
                       value={data.revenueYear3}
                       onChange={(value) => updateField('revenueYear3', value)}
-                      placeholder="100.000 kr"
-                      tooltip="Årsomsättning förra året"
+                      placeholder={t('step2.revenueYearPlaceholder')}
+                      tooltip={t('step2.revenueYear3Tooltip')}
                       required
                     />
                   </div>
                 </div>
 
                 <FormFieldPercent
-                  label="Vinstmarginal (EBITDA %)"
+                  label={t('step2.profitMarginLabel')}
                   value={data.profitMargin}
                   onChange={(value) => updateField('profitMargin', value)}
-                  placeholder="15"
-                  tooltip="EBITDA dividerat med omsättning"
+                  placeholder={t('step2.profitMarginPlaceholder')}
+                  tooltip={t('step2.profitMarginTooltip')}
                   required
                 />
               </div>
@@ -440,8 +440,8 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-6">
                     <Target className="w-8 h-8 text-navy" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Branschspecifika detaljer</h3>
-                  <p className="text-gray-600">Några extra frågor specifika för {industries.find((i: any) => i.value === data.industry)?.label}</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">{t('step3.title')}</h3>
+                  <p className="text-gray-600">{t('step3.subtitle', { industry: industries.find((i: any) => i.value === data.industry)?.label })}</p>
                 </div>
 
                 <div className="space-y-4">
@@ -513,21 +513,21 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-3">
                     <FileText className="w-8 h-8 text-navy" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Beskriv ditt företag</h3>
-                  <p className="text-gray-600">Detta kommer synas i annonsen (efter godkänd NDA)</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">{t('step4.title')}</h3>
+                  <p className="text-gray-600">{t('step4.subtitle')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
-                    label="Stad/Ort"
+                    label={t('step4.locationLabel')}
                     value={data.location}
                     onChange={(e) => updateField('location', e.target.value)}
-                    placeholder="Stockholm"
+                    placeholder={t('step4.locationPlaceholder')}
                     required
                   />
 
                   <CustomSelect
-                    label="Region"
+                    label={t('step4.regionLabel')}
                     value={data.region}
                     onChange={(value) => updateField('region', value)}
                     options={regions}
@@ -536,40 +536,40 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 </div>
 
                 <FormTextarea
-                  label="Beskrivning av verksamheten"
+                  label={t('step4.descriptionLabel')}
                   value={data.description}
                   onChange={(e) => updateField('description', e.target.value)}
                   rows={4}
-                  placeholder="Beskriv vad företaget gör, dess historia, marknadsposition etc."
+                  placeholder={t('step4.descriptionPlaceholder')}
                   required
                 />
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Företagets styrkor (minst 3)
+                    {t('step4.strengthsLabel')}
                   </label>
                   {data.strengths.map((strength, index) => (
                     <FormField
                       key={index}
-                      label={`Styrka ${index + 1}`}
+                      label={t('step4.strengthLabel', { index: index + 1 })}
                       value={strength}
                       onChange={(e) => {
                         const newStrengths = [...data.strengths]
                         newStrengths[index] = e.target.value
                         updateField('strengths', newStrengths)
                       }}
-                      placeholder="Beskriv en styrka i ert företag"
+                      placeholder={t('step4.strengthPlaceholder')}
                       className="mb-2"
                     />
                   ))}
                 </div>
 
                 <FormTextarea
-                  label="Varför säljer ni?"
+                  label={t('step4.whySellingLabel')}
                   value={data.whySelling}
                   onChange={(e) => updateField('whySelling', e.target.value)}
                   rows={3}
-                  placeholder="T.ex. pension, nya möjligheter, strategisk försäljning..."
+                  placeholder={t('step4.whySellingPlaceholder')}
                   required
                 />
 
@@ -577,10 +577,10 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="space-y-2">
                     <div className="flex items-start gap-2">
                       <FormFieldCurrency
-                        label="Lägsta acceptabla pris"
+                        label={t('step4.priceMinLabel')}
                         value={data.priceMin}
                         onChange={(value) => updateField('priceMin', value)}
-                        placeholder="5.000.000 kr"
+                        placeholder={t('step4.priceMinPlaceholder')}
                         required={!data.abstainPriceMin}
                         disabled={data.abstainPriceMin}
                         className="flex-1"
@@ -599,7 +599,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           className="w-5 h-5 border-2 border-gray-300 rounded text-primary-blue focus:ring-primary-blue focus:ring-2"
                         />
                         <label htmlFor="abstainPriceMin" className="text-sm text-gray-700 cursor-pointer">
-                          Avstår
+                          {t('step4.abstain')}
                         </label>
                       </div>
                     </div>
@@ -608,10 +608,10 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="space-y-2">
                     <div className="flex items-start gap-2">
                       <FormFieldCurrency
-                        label="Önskat pris"
+                        label={t('step4.priceMaxLabel')}
                         value={data.priceMax}
                         onChange={(value) => updateField('priceMax', value)}
-                        placeholder="8.000.000 kr"
+                        placeholder={t('step4.priceMaxPlaceholder')}
                         required={!data.abstainPriceMax}
                         disabled={data.abstainPriceMax}
                         className="flex-1"
@@ -630,7 +630,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           className="w-5 h-5 border-2 border-gray-300 rounded text-primary-blue focus:ring-primary-blue focus:ring-2"
                         />
                         <label htmlFor="abstainPriceMax" className="text-sm text-gray-700 cursor-pointer">
-                          Avstår
+                          {t('step4.abstain')}
                         </label>
                       </div>
                     </div>
@@ -646,16 +646,16 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
                     <ImageIcon className="w-8 h-8 text-navy" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Lägg till bilder (valfritt)</h3>
-                  <p className="text-gray-600">Bilder ökar intresset för din annons avsevärt</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">{t('step5.title')}</h3>
+                  <p className="text-gray-600">{t('step5.subtitle')}</p>
                 </div>
 
                 <div className="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center">
                   <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-2">Dra och släpp bilder här eller klicka för att välja</p>
-                  <p className="text-sm text-gray-500">Stödjer JPG, PNG upp till 10MB</p>
+                  <p className="text-gray-600 mb-2">{t('step5.dragDrop')}</p>
+                  <p className="text-sm text-gray-500">{t('step5.fileTypes')}</p>
                   <button className="mt-4 px-6 py-2 bg-accent-pink text-navy font-medium rounded-full hover:bg-opacity-90 transition-all">
-                    Välj bilder
+                    {t('step5.selectImages')}
                   </button>
                 </div>
 
@@ -663,11 +663,11 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="flex gap-3">
                     <Lightbulb className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                     <div className="text-sm text-blue-800">
-                      <p className="font-medium mb-1">Tips för bra bilder:</p>
+                      <p className="font-medium mb-1">{t('step5.imageTipsTitle')}</p>
                       <ul className="list-disc list-inside space-y-1">
-                        <li>Visa lokalerna, både interiört och exteriört</li>
-                        <li>Inkludera bilder på produkter eller tjänster</li>
-                        <li>Undvik bilder med igenkännbara personer</li>
+                        <li>{t('step5.imageTip1')}</li>
+                        <li>{t('step5.imageTip2')}</li>
+                        <li>{t('step5.imageTip3')}</li>
                       </ul>
                     </div>
                   </div>
@@ -682,8 +682,8 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-navy/10 rounded-2xl flex items-center justify-center mx-auto mb-4 transform -rotate-6">
                     <Eye className="w-8 h-8 text-navy" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Förhandsgranska din annons</h3>
-                  <p className="text-gray-600">Se hur din annons kommer att visas för potentiella köpare</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">{t('step6.title')}</h3>
+                  <p className="text-gray-600">{t('step6.subtitle')}</p>
                 </div>
 
                 {/* Annonsförhandsvisning - detaljerad som objektsidan */}
@@ -698,8 +698,8 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       </div>
                     </div>
                     <div className="absolute top-4 left-4 flex gap-2">
-                      <span className="px-3 py-1.5 bg-green-500 text-white text-xs font-bold rounded-full">NYTT</span>
-                      <span className="px-3 py-1.5 bg-blue-500 text-white text-xs font-bold rounded-full">PRO-ANNONS</span>
+                      <span className="px-3 py-1.5 bg-green-500 text-white text-xs font-bold rounded-full">{t('step6.newBadge')}</span>
+                      <span className="px-3 py-1.5 bg-blue-500 text-white text-xs font-bold rounded-full">{t('step6.proBadge')}</span>
                     </div>
                   </div>
 
@@ -710,43 +710,43 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <TrendingUp className="w-4 h-4" />
-                          <span className="text-xs sm:text-sm">Omsättning</span>
+                          <span className="text-xs sm:text-sm">{t('step6.revenue')}</span>
                         </div>
                         <p className="text-base sm:text-lg font-bold text-navy">
-                          {data.revenue ? `${parseInt(data.revenue).toLocaleString('sv-SE')} kr` : 'Ej angiven'}
+                          {data.revenue ? `${parseInt(data.revenue).toLocaleString('sv-SE')} kr` : t('step6.notSpecified')}
                         </p>
                       </div>
                       <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <Users className="w-4 h-4" />
-                          <span className="text-xs sm:text-sm">Anställda</span>
+                          <span className="text-xs sm:text-sm">{t('step6.employees')}</span>
                         </div>
-                        <p className="text-base sm:text-lg font-bold text-navy">{data.employees || 'Ej angiven'}</p>
+                        <p className="text-base sm:text-lg font-bold text-navy">{data.employees || t('step6.notSpecified')}</p>
                       </div>
                       <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <Target className="w-4 h-4" />
-                          <span className="text-xs sm:text-sm">Marginal</span>
+                          <span className="text-xs sm:text-sm">{t('step6.margin')}</span>
                         </div>
                         <p className="text-base sm:text-lg font-bold text-navy">
-                          {data.profitMargin ? `${data.profitMargin}%` : 'Ej angiven'}
+                          {data.profitMargin ? `${data.profitMargin}%` : t('step6.notSpecified')}
                         </p>
                       </div>
                       <div className="bg-gray-50 rounded-xl p-3 sm:p-4 hover:bg-gray-100 transition-colors duration-200 cursor-default">
                         <div className="flex items-center gap-2 text-gray-600 mb-1">
                           <Package className="w-4 h-4" />
-                          <span className="text-xs sm:text-sm">Prisintervall</span>
+                          <span className="text-xs sm:text-sm">{t('step6.priceRange')}</span>
                         </div>
                         <p className="text-base sm:text-lg font-bold text-accent-pink">
                           {data.abstainPriceMin && data.abstainPriceMax ? 
-                            'Pris ej angivet' :
+                            t('step6.priceNotSpecified') :
                           data.abstainPriceMin ? 
-                            `Från ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr` :
+                            t('step6.fromPrice', { price: parseInt(data.priceMax).toLocaleString('sv-SE') }) :
                           data.abstainPriceMax ?
-                            `Upp till ${parseInt(data.priceMin).toLocaleString('sv-SE')} kr` :
+                            t('step6.upToPrice', { price: parseInt(data.priceMin).toLocaleString('sv-SE') }) :
                           data.priceMin && data.priceMax ? 
-                            `${parseInt(data.priceMin).toLocaleString('sv-SE')} - ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr` 
-                            : 'Ej angiven'}
+                            t('step6.priceRangeFormat', { min: parseInt(data.priceMin).toLocaleString('sv-SE'), max: parseInt(data.priceMax).toLocaleString('sv-SE') }) 
+                            : t('step6.notSpecified')}
                         </p>
                       </div>
                     </div>
@@ -801,26 +801,26 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
 
                 {/* Paketval CTA */}
                 <div className="mt-8 space-y-6">
-                  <h3 className="text-xl font-bold text-navy text-center">Välj paket för din annons</h3>
+                  <h3 className="text-xl font-bold text-navy text-center">{t('step7.title')}</h3>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Basic Paket */}
                     <div className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-blue transition-all duration-200 cursor-pointer group">
-                      <h4 className="text-lg font-bold text-gray-900 mb-2">Basic</h4>
-                      <p className="text-3xl font-bold text-primary-blue mb-1">2 990 kr</p>
-                      <p className="text-sm text-gray-600 mb-4">Engångskostnad • 90 dagar</p>
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">{t('step7.basicName')}</h4>
+                      <p className="text-3xl font-bold text-primary-blue mb-1">{t('step7.basicPrice')}</p>
+                      <p className="text-sm text-gray-600 mb-4">{t('step7.basicPeriod')}</p>
                       <ul className="space-y-2 mb-6">
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Publicering i marknadsplats</span>
+                          <span>{t('step7.basicFeature1')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Automatisk matchning</span>
+                          <span>{t('step7.basicFeature2')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Grundläggande statistik</span>
+                          <span>{t('step7.basicFeature3')}</span>
                         </li>
                       </ul>
                       <button 
@@ -829,38 +829,38 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           setStep(7)
                         }}
                         className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg font-medium group-hover:bg-primary-blue group-hover:text-white transition-all duration-200">
-                        Välj Basic
+                        {t('step7.basicSelect')}
                       </button>
                     </div>
 
                     {/* Pro Paket */}
                     <div className="bg-white rounded-xl border-2 border-primary-blue p-6 hover:shadow-lg transition-all duration-200 cursor-pointer group relative">
                       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <span className="bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-full">POPULÄRAST</span>
+                        <span className="bg-primary-blue text-white text-xs font-bold px-3 py-1 rounded-full">{t('step7.proBadge')}</span>
                       </div>
-                      <h4 className="text-lg font-bold text-gray-900 mb-2">Pro</h4>
-                      <p className="text-3xl font-bold text-primary-blue mb-1">4 990 kr</p>
-                      <p className="text-sm text-gray-600 mb-4">Engångskostnad • 180 dagar</p>
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">{t('step7.proName')}</h4>
+                      <p className="text-3xl font-bold text-primary-blue mb-1">{t('step7.proPrice')}</p>
+                      <p className="text-sm text-gray-600 mb-4">{t('step7.proPeriod')}</p>
                       <ul className="space-y-2 mb-6">
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Allt i Basic</span>
+                          <span>{t('step7.proFeature1')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Topplacering i sökresultat</span>
+                          <span>{t('step7.proFeature2')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Framhävd i nyhetsbrev</span>
+                          <span>{t('step7.proFeature3')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Detaljerad analytics</span>
+                          <span>{t('step7.proFeature4')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Prioriterad support</span>
+                          <span>{t('step7.proFeature5')}</span>
                         </li>
                       </ul>
                       <button 
@@ -869,31 +869,31 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           setStep(7)
                         }}
                         className="w-full py-2 px-4 bg-primary-blue text-white rounded-lg font-medium hover:bg-primary-dark transition-all duration-200">
-                        Välj Pro
+                        {t('step7.proSelect')}
                       </button>
                     </div>
 
                     {/* Enterprise Paket */}
                     <div className="bg-white rounded-xl border-2 border-gray-200 p-6 hover:border-primary-blue transition-all duration-200 cursor-pointer group">
-                      <h4 className="text-lg font-bold text-gray-900 mb-2">Enterprise</h4>
-                      <p className="text-3xl font-bold text-primary-blue mb-1">9 990 kr</p>
-                      <p className="text-sm text-gray-600 mb-4">Engångskostnad • Obegränsat</p>
+                      <h4 className="text-lg font-bold text-gray-900 mb-2">{t('step7.premiumName')}</h4>
+                      <p className="text-3xl font-bold text-primary-blue mb-1">{t('step7.premiumPrice')}</p>
+                      <p className="text-sm text-gray-600 mb-4">{t('step7.premiumPeriod')}</p>
                       <ul className="space-y-2 mb-6">
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Allt i Pro</span>
+                          <span>{t('step7.premiumFeature1')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Featured på startsida</span>
+                          <span>{t('step7.premiumFeature2')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Dedikerad rådgivare</span>
+                          <span>{t('step7.premiumFeature3')}</span>
                         </li>
                         <li className="flex items-start gap-2 text-sm">
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>Obegränsade boosts</span>
+                          <span>{t('step7.premiumFeature4')}</span>
                         </li>
                       </ul>
                       <button 
@@ -902,13 +902,13 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                           setStep(7)
                         }}
                         className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg font-medium group-hover:bg-primary-blue group-hover:text-white transition-all duration-200">
-                        Välj Enterprise
+                        {t('step7.premiumSelect')}
                       </button>
                     </div>
                   </div>
                   
                   <p className="text-center text-sm text-gray-600">
-                    Alla paket inkluderar moms. Inga dolda avgifter eller bindningstid.
+                    {t('navigation.allPackagesIncludeVAT')}
                   </p>
                 </div>
               </div>
@@ -921,75 +921,75 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4 transform rotate-3">
                     <Sparkles className="w-8 h-8 text-green-600" />
                   </div>
-                  <h3 className="text-2xl font-bold text-navy mb-2">Redo att publicera!</h3>
-                  <p className="text-gray-600">Din annons är klar att visas för tusentals kvalificerade köpare</p>
+                  <h3 className="text-2xl font-bold text-navy mb-2">{t('navigation.readyToPublish')}</h3>
+                  <p className="text-gray-600">{t('navigation.readyToPublishDesc')}</p>
                 </div>
 
                 {/* Paketval */}
                 <div className="bg-gradient-to-br from-accent-pink/10 to-navy/10 rounded-2xl p-6">
-                  <h4 className="text-lg font-bold text-navy mb-4">Valt paket: {data.packageType === 'basic' ? 'Basic' : data.packageType === 'enterprise' ? 'Enterprise' : 'Pro'}</h4>
+                  <h4 className="text-lg font-bold text-navy mb-4">{t('navigation.selectedPackage')} {data.packageType === 'basic' ? t('step7.basicName') : data.packageType === 'enterprise' ? t('step7.premiumName') : t('step7.proName')}</h4>
                   <div className="grid md:grid-cols-2 gap-4 mb-4">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span className="text-gray-700">Topplacering i sökresultat</span>
+                      <span className="text-gray-700">{t('step7.proFeature2')}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span className="text-gray-700">Framhävd i nyhetsbrev</span>
+                      <span className="text-gray-700">{t('step7.proFeature3')}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span className="text-gray-700">Detaljerad statistik</span>
+                      <span className="text-gray-700">{t('step7.proFeature4')}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span className="text-gray-700">Prioriterad support</span>
+                      <span className="text-gray-700">{t('step7.proFeature5')}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-2xl font-bold text-navy">
-                        {data.packageType === 'basic' ? '2 990 kr' : data.packageType === 'enterprise' ? '9 990 kr' : '4 990 kr'}
+                        {data.packageType === 'basic' ? t('step7.basicPrice') : data.packageType === 'enterprise' ? t('step7.premiumPrice') : t('step7.proPrice')}
                       </p>
-                      <p className="text-sm text-gray-600">Engångskostnad, ingen bindningstid</p>
+                      <p className="text-sm text-gray-600">{t('navigation.oneTimeCost')}</p>
                     </div>
                     <button 
                       onClick={() => setStep(6)}
                       className="text-accent-pink hover:underline text-sm"
                     >
-                      Byt paket
+                      {t('navigation.changePackage')}
                     </button>
                   </div>
                   </div>
                   
                 {/* Sammanfattning */}
                 <div className="bg-gray-50 rounded-xl p-4">
-                  <h4 className="font-bold text-navy mb-3">Sammanfattning</h4>
+                  <h4 className="font-bold text-navy mb-3">{t('navigation.summary')}</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Företagsnamn:</span>
+                      <span className="text-gray-600">{t('navigation.companyNameLabel')}</span>
                       <span className="font-medium">{data.companyName}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Bransch:</span>
+                      <span className="text-gray-600">{t('navigation.industryLabel')}</span>
                       <span className="font-medium">{industries.find((i: any) => i.value === data.industry)?.label}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Plats:</span>
+                      <span className="text-gray-600">{t('navigation.locationLabel')}</span>
                       <span className="font-medium">{data.location}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Prisintervall:</span>
+                      <span className="text-gray-600">{t('navigation.priceRangeLabel')}</span>
                       <span className="font-medium">
                         {data.abstainPriceMin && data.abstainPriceMax ? 
-                          'Pris ej angivet' :
+                          t('step6.priceNotSpecified') :
                         data.abstainPriceMin ? 
-                          `Från ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr` :
+                          t('step6.fromPrice', { price: parseInt(data.priceMax).toLocaleString('sv-SE') }) :
                         data.abstainPriceMax ?
-                          `Upp till ${parseInt(data.priceMin).toLocaleString('sv-SE')} kr` :
+                          t('step6.upToPrice', { price: parseInt(data.priceMin).toLocaleString('sv-SE') }) :
                         data.priceMin && data.priceMax ?
-                          `${parseInt(data.priceMin).toLocaleString('sv-SE')} - ${parseInt(data.priceMax).toLocaleString('sv-SE')} kr`
-                          : 'Ej angiven'}
+                          t('step6.priceRangeFormat', { min: parseInt(data.priceMin).toLocaleString('sv-SE'), max: parseInt(data.priceMax).toLocaleString('sv-SE') })
+                          : t('step6.notSpecified')}
                       </span>
                     </div>
                     </div>
@@ -1000,13 +1000,13 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   <div className="flex gap-3">
                     <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                     <div className="text-sm">
-                      <p className="font-medium text-yellow-800 mb-1">Viktig information</p>
+                      <p className="font-medium text-yellow-800 mb-1">{t('navigation.importantInfo')}</p>
                       <p className="text-yellow-700">
-                        Genom att publicera godkänner du våra{' '}
+                        {t('navigation.importantInfoDesc').split('{termsLink}')[0]}
                         <Link href={`/${locale}/juridiskt/anvandarvillkor`} className="underline">
-                          användarvillkor
-                        </Link>{' '}
-                        och bekräftar att all information är korrekt. Annonsen granskas innan publicering.
+                          {t('navigation.termsLink')}
+                        </Link>
+                        {t('navigation.importantInfoDesc').split('{termsLink}')[1]}
                       </p>
                     </div>
                   </div>
@@ -1028,7 +1028,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                 }`}
               >
                 <ArrowLeft className="w-5 h-5" />
-                Tillbaka
+                {t('navigation.back')}
               </button>
 
               {step < totalSteps - 1 ? (
@@ -1041,7 +1041,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                       : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                   }`}
                 >
-                  {step === 6 ? 'Gå till publicering' : 'Nästa'}
+                  {step === 6 ? t('navigation.goToPublish') : t('navigation.nextButton')}
                   <ArrowRight className="w-5 h-5" />
                 </button>
               ) : step === totalSteps - 1 ? (
@@ -1049,7 +1049,7 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   onClick={handleNext}
                   className="flex items-center gap-2 px-8 py-3 bg-green-600 text-white font-medium rounded-full hover:shadow-lg transform hover:scale-105 transition-all"
                 >
-                  Gå till publicering
+                  {t('navigation.goToPublish')}
                   <ArrowRight className="w-5 h-5" />
                 </button>
               ) : (
@@ -1061,12 +1061,12 @@ export default function CreateListingWizard({ onClose }: WizardProps) {
                   {loading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Publicerar...
+                      {t('navigation.publishing')}
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5" />
-                      Publicera annons
+                      {t('navigation.create')}
                     </>
                   )}
                 </button>

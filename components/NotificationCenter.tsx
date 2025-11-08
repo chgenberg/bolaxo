@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Bell, X, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useTranslations } from 'next-intl'
 
 interface Notification {
   id: string
@@ -15,6 +16,7 @@ interface Notification {
 
 export default function NotificationCenter() {
   const { user } = useAuth()
+  const t = useTranslations('notifications')
   const [open, setOpen] = useState(false)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
@@ -75,12 +77,12 @@ export default function NotificationCenter() {
       {/* Bell Icon */}
       <button
         onClick={() => setOpen(!open)}
-        className="relative p-2 text-gray-600 hover:text-blue-900 transition-colors rounded-lg hover:bg-blue-50"
-        aria-label="Notifications"
+        className="relative p-2 text-gray-600 hover:text-primary-navy hover:bg-gray-50 transition-colors rounded-lg"
+        aria-label={t('ariaLabel')}
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 w-5 h-5 bg-blue-900 text-white text-xs font-bold rounded-full flex items-center justify-center">
+          <span className="absolute top-1 right-1 w-5 h-5 bg-primary-navy text-white text-xs font-bold rounded-full flex items-center justify-center">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -98,14 +100,14 @@ export default function NotificationCenter() {
           {/* Panel */}
           <div className="fixed top-20 right-4 z-50 w-96 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
             {/* Header */}
-            <div className="bg-blue-900 text-white px-6 py-4 flex items-center justify-between">
+            <div className="bg-primary-navy text-white px-6 py-4 flex items-center justify-between">
               <h3 className="font-semibold flex items-center gap-2">
                 <Bell className="w-5 h-5" />
-                Meddelanden
+                {t('title')}
               </h3>
               <button
                 onClick={() => setOpen(false)}
-                className="hover:bg-blue-800 p-1 rounded-lg transition-colors"
+                className="hover:bg-primary-navy/80 p-1 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -116,20 +118,20 @@ export default function NotificationCenter() {
               {notifications.length === 0 ? (
                 <div className="px-6 py-12 text-center text-gray-500">
                   <Bell className="w-8 h-8 mx-auto mb-3 opacity-50" />
-                  <p className="text-sm">Inga meddelanden än</p>
+                  <p className="text-sm">{t('noNotifications')}</p>
                 </div>
               ) : (
                 notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`px-6 py-4 border-b border-gray-100 hover:bg-blue-50 transition-colors cursor-pointer ${
-                      !notification.read ? 'bg-blue-50' : ''
+                    className={`px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
+                      !notification.read ? 'bg-gray-50' : ''
                     }`}
                     onClick={() => !notification.read && markAsRead([notification.id])}
                   >
                     <div className="flex items-start gap-3">
                       {!notification.read && (
-                        <div className="w-2 h-2 bg-blue-900 rounded-full mt-2 flex-shrink-0" />
+                        <div className="w-2 h-2 bg-primary-navy rounded-full mt-2 flex-shrink-0" />
                       )}
                       <div className="flex-1">
                         <h4 className="font-medium text-gray-900 text-sm">
@@ -139,11 +141,11 @@ export default function NotificationCenter() {
                           {notification.content}
                         </p>
                         <p className="text-xs text-gray-500 mt-2">
-                          {formatTime(notification.createdAt)}
+                          {formatTime(notification.createdAt, t)}
                         </p>
                       </div>
                       {!notification.read && (
-                        <CheckCircle2 className="w-4 h-4 text-blue-900 flex-shrink-0 mt-1" />
+                        <CheckCircle2 className="w-4 h-4 text-primary-navy flex-shrink-0 mt-1" />
                       )}
                     </div>
                   </div>
@@ -156,9 +158,9 @@ export default function NotificationCenter() {
               <div className="px-6 py-3 border-t border-gray-100 bg-gray-50">
                 <button
                   onClick={() => markAsRead(notifications.filter(n => !n.read).map(n => n.id))}
-                  className="text-sm text-blue-900 font-medium hover:underline flex items-center gap-1"
+                  className="text-sm text-primary-navy font-medium hover:underline flex items-center gap-1"
                 >
-                  Markera alla som lästa
+                  {t('markAllRead')}
                 </button>
               </div>
             )}
@@ -169,7 +171,7 @@ export default function NotificationCenter() {
   )
 }
 
-function formatTime(dateString: string): string {
+function formatTime(dateString: string, t: (key: string) => string): string {
   if (!dateString) return ''
   
   const date = new Date(dateString)
@@ -185,10 +187,10 @@ function formatTime(dateString: string): string {
   const diffHours = Math.floor(diffMins / 60)
   const diffDays = Math.floor(diffHours / 24)
 
-  if (diffMins < 1) return 'just nu'
-  if (diffMins < 60) return `${diffMins}m sedan`
-  if (diffHours < 24) return `${diffHours}h sedan`
-  if (diffDays < 7) return `${diffDays}d sedan`
+  if (diffMins < 1) return t('time.justNow')
+  if (diffMins < 60) return t('time.minutesAgo', { count: diffMins })
+  if (diffHours < 24) return t('time.hoursAgo', { count: diffHours })
+  if (diffDays < 7) return t('time.daysAgo', { count: diffDays })
   
   return date.toLocaleDateString('sv-SE')
 }
