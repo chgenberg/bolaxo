@@ -8,6 +8,7 @@ import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 // Force dynamic rendering to prevent build-time analysis
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+export const revalidate = 0
 
 const prisma = new PrismaClient()
 
@@ -44,11 +45,26 @@ async function saveValuationSafely(input: any, result: any) {
 }
 
 export async function POST(request: Request) {
+  // Defensive check - if request is not available (build-time), return early
+  if (!request || typeof request !== 'object') {
+    return NextResponse.json(
+      { error: 'Invalid request' },
+      { status: 400 }
+    )
+  }
+
   // Rate limit: 3 värderingar per timme per IP
   // Säker kontroll för build-tiden när request.headers kan vara undefined
-  const ip = (request.headers && typeof request.headers.get === 'function') 
-    ? request.headers.get('x-forwarded-for') || 'unknown'
-    : 'unknown'
+  let ip = 'unknown'
+  try {
+    if (request.headers && typeof request.headers.get === 'function') {
+      ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    }
+  } catch (error) {
+    // Ignore errors during build-time
+    ip = 'unknown'
+  }
+  
   const { success } = await checkRateLimit(ip, 'valuation')
   
   if (!success) {
