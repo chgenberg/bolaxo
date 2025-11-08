@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:mobile": "cd mobile && npm start",
     "build": "prisma generate && next build",
+    "build:mobile": "cd mobile && npm run build",
     "start": "prisma migrate deploy || true && next start",
     "postinstall": "prisma generate",
     "lint": "next lint",
