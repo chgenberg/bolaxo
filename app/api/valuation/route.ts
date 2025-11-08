@@ -41,7 +41,10 @@ async function saveValuationSafely(input: any, result: any) {
 
 export async function POST(request: Request) {
   // Rate limit: 3 värderingar per timme per IP
-  const ip = request.headers.get('x-forwarded-for') || 'unknown'
+  // Säker kontroll för build-tiden när request.headers kan vara undefined
+  const ip = (request.headers && typeof request.headers.get === 'function') 
+    ? request.headers.get('x-forwarded-for') || 'unknown'
+    : 'unknown'
   const { success } = await checkRateLimit(ip, 'valuation')
   
   if (!success) {
