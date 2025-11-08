@@ -29,7 +29,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   // Webpack configuration to handle Node.js environment
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     if (isServer) {
       // Polyfill for Node.js environment - exclude browser APIs
       config.resolve.fallback = {
@@ -39,9 +39,22 @@ const nextConfig = {
         tls: false,
       }
       
-      // Ignore File API in server-side code
-      config.resolve.alias = {
-        ...config.resolve.alias,
+      // Define File as undefined in server-side code to prevent "File is not defined" errors
+      config.plugins = config.plugins || []
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'File': 'undefined',
+          'global.File': 'undefined',
+          'typeof File': '"undefined"',
+        })
+      )
+      
+      // Exclude browser-specific modules from server bundle
+      config.externals = config.externals || []
+      if (Array.isArray(config.externals)) {
+        config.externals.push({
+          'File': 'commonjs File',
+        })
       }
     }
     return config
