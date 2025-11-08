@@ -49,13 +49,13 @@ const nextConfig = {
         })
       )
       
-      // Exclude browser-specific modules from server bundle
-      config.externals = config.externals || []
-      if (Array.isArray(config.externals)) {
-        config.externals.push({
-          'File': 'commonjs File',
-        })
-      }
+      // Replace any File references with undefined in server-side code
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^File$/,
+          require.resolve('./lib/webpack-file-polyfill.js')
+        )
+      )
     }
     return config
   },
