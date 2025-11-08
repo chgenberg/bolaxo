@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendNewNDARequestEmail } from '@/lib/email'
 
 // GET /api/nda-requests?listingId=&buyerId=&sellerId=&status=
 export async function GET(request: NextRequest) {
@@ -170,8 +171,32 @@ export async function POST(request: NextRequest) {
               email: true,
             },
           },
+          seller: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
         },
       })
+
+      // Send email notification to seller
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+        const listingTitle = created.listing.anonymousTitle || 'Objektet'
+        await sendNewNDARequestEmail(
+          created.seller.email,
+          created.seller.name || 'Säljare',
+          created.buyer.name || 'Köpare',
+          listingTitle,
+          created.id,
+          baseUrl
+        )
+      } catch (emailError) {
+        console.error('Error sending new NDA request email:', emailError)
+        // Don't fail the request if email fails
+      }
 
       return NextResponse.json({ request: created }, { status: 201 })
     } catch (dbError) {

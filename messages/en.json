@@ -2462,7 +2462,7 @@
       "publishFailed": "Could not publish listing. Please try again later.",
       "publishError": "An error occurred while publishing the listing."
     },
-      "navigation": {
+    "navigation": {
         "next": "Next step",
         "previous": "Previous step",
         "create": "Create listing",
@@ -2487,6 +2487,7 @@
         "publishing": "Publishing...",
         "publishedSuccess": "Listing has been published!"
       },
+    "industries": [
       { "value": "it-konsult-utveckling", "label": "IT consulting & development" },
       { "value": "ehandel-d2c", "label": "E-commerce/D2C" },
       { "value": "saas-licensmjukvara", "label": "SaaS & licensed software" },

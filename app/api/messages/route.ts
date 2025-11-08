@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { getClientIp, checkRateLimit, RATE_LIMIT_CONFIGS } from '@/app/lib/rate-limiter'
+import { sendNewMessageEmail } from '@/lib/email'
 
 const prisma = new PrismaClient()
 
@@ -229,9 +230,34 @@ export async function POST(request: NextRequest) {
             role: true,
             avatarUrl: true
           }
+        },
+        listing: {
+          select: {
+            id: true,
+            anonymousTitle: true,
+            companyName: true
+          }
         }
       }
     })
+
+    // Send email notification to recipient
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+      const listingTitle = created.listing?.anonymousTitle || created.listing?.companyName || 'Objektet'
+      await sendNewMessageEmail(
+        created.recipient.email,
+        created.recipient.name || 'Användare',
+        created.sender.name || 'Användare',
+        listingTitle,
+        created.content.substring(0, 200),
+        created.listingId || '',
+        baseUrl
+      )
+    } catch (emailError) {
+      console.error('Error sending new message email:', emailError)
+      // Don't fail the request if email fails
+    }
     
     return NextResponse.json({ message: created }, { status: 201 })
   } catch (error) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import { sendMatchNotificationEmail } from '@/lib/email'
 
 const prisma = new PrismaClient()
 
@@ -208,10 +209,19 @@ export async function POST(request: NextRequest) {
 // Helper: Matching algorithm - find buyers that match this listing
 async function triggerMatching(listingId: string, listing: any) {
   try {
+    // Get seller info for email notifications
+    const seller = await prisma.user.findUnique({
+      where: { id: listing.userId },
+      select: { id: true, name: true, email: true }
+    })
+
     // Hitta alla köparprofiler som matchar denna listing
     const buyerProfiles = await prisma.buyerProfile.findMany({
       include: { user: true }
     })
+    
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+    const listingTitle = listing.anonymousTitle || listing.companyName || 'Objektet'
     
     for (const profile of buyerProfiles) {
       // Beräkna matchningspoäng
@@ -219,8 +229,40 @@ async function triggerMatching(listingId: string, listing: any) {
       
       // Om matchningspoäng > 50, skapa en matchning och skicka notification
       if (matchScore > 50) {
-        // TODO: Spara matchning i databas
-        // TODO: Skicka notification via email/in-app
+        // Send email notification to buyer
+        try {
+          if (profile.user?.email) {
+            await sendMatchNotificationEmail(
+              profile.user.email,
+              profile.user.name || 'Köpare',
+              'buyer',
+              listingTitle,
+              matchScore,
+              listingId,
+              baseUrl
+            )
+          }
+        } catch (emailError) {
+          console.error('Error sending match notification email to buyer:', emailError)
+        }
+
+        // Send email notification to seller
+        try {
+          if (seller?.email) {
+            await sendMatchNotificationEmail(
+              seller.email,
+              seller.name || 'Säljare',
+              'seller',
+              listingTitle,
+              matchScore,
+              listingId,
+              baseUrl
+            )
+          }
+        } catch (emailError) {
+          console.error('Error sending match notification email to seller:', emailError)
+        }
+
         console.log(`Match found: Listing ${listingId} matches buyer ${profile.userId} with score ${matchScore}`)
       }
     }

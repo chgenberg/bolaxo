@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendNDAApprovalEmail, sendNDARejectionEmail } from '@/lib/email'
 
 /**
  * GET /api/nda-requests/[id] - Get specific NDA request
@@ -160,6 +161,38 @@ export async function PATCH(
       } catch (msgError) {
         console.error('Error creating initial message:', msgError)
         // Don't fail the request if message creation fails
+      }
+
+      // Send email notification to buyer
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+        const listingTitle = updated.listing.anonymousTitle || updated.listing.companyName || 'Objektet'
+        await sendNDAApprovalEmail(
+          updated.buyer.email,
+          updated.buyer.name || 'Köpare',
+          listingTitle,
+          ndaId,
+          baseUrl
+        )
+      } catch (emailError) {
+        console.error('Error sending NDA approval email:', emailError)
+        // Don't fail the request if email fails
+      }
+    } else if (status === 'rejected') {
+      // Send email notification to buyer
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+        const listingTitle = updated.listing.anonymousTitle || updated.listing.companyName || 'Objektet'
+        await sendNDARejectionEmail(
+          updated.buyer.email,
+          updated.buyer.name || 'Köpare',
+          listingTitle,
+          rejectionReason || null,
+          baseUrl
+        )
+      } catch (emailError) {
+        console.error('Error sending NDA rejection email:', emailError)
+        // Don't fail the request if email fails
       }
     }
 

@@ -188,9 +188,9 @@ function formatTime(dateString: string, t: (key: string) => string): string {
   const diffDays = Math.floor(diffHours / 24)
 
   if (diffMins < 1) return t('time.justNow')
-  if (diffMins < 60) return t('time.minutesAgo', { count: diffMins })
-  if (diffHours < 24) return t('time.hoursAgo', { count: diffHours })
-  if (diffDays < 7) return t('time.daysAgo', { count: diffDays })
+  if (diffMins < 60) return `${diffMins} ${t('time.minutesAgo')}`
+  if (diffHours < 24) return `${diffHours} ${t('time.hoursAgo')}`
+  if (diffDays < 7) return `${diffDays} ${t('time.daysAgo')}`
   
   return date.toLocaleDateString('sv-SE')
 }

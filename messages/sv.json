@@ -2462,7 +2462,7 @@
       "publishFailed": "Kunde inte publicera annonsen. Försök igen senare.",
       "publishError": "Ett fel uppstod vid publiceringen av annonsen."
     },
-      "navigation": {
+    "navigation": {
         "next": "Nästa steg",
         "previous": "Föregående steg",
         "create": "Skapa annons",
@@ -2487,6 +2487,7 @@
         "publishing": "Publicerar...",
         "publishedSuccess": "Annonsen har publicerats!"
       },
+    "industries": [
       { "value": "it-konsult-utveckling", "label": "IT-konsult & utveckling" },
       { "value": "ehandel-d2c", "label": "E-handel/D2C" },
       { "value": "saas-licensmjukvara", "label": "SaaS & licensmjukvara" },
