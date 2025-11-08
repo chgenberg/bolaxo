@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
+import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 
 const prisma = new PrismaClient()
 
@@ -150,7 +151,7 @@ Viktiga faktorer:
       messages: [{ role: 'user', content: prompt }],
       max_completion_tokens: 1500,
     }),
-    signal: AbortSignal.timeout(20000)
+    signal: createTimeoutSignal(20000)
   })
 
   if (!response.ok) throw new Error('AI matching failed')

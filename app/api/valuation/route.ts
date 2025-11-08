@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { checkRateLimit } from '@/lib/ratelimit'
 import { validateAndSanitize } from '@/lib/sanitize'
 import { validateValuationData, buildConditionalPrompts, getIndustrySpecificInstructions, validateDataCombinations } from '@/lib/valuation-rules'
+import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 
 const prisma = new PrismaClient()
 
@@ -101,9 +102,7 @@ export async function POST(request: Request) {
         max_completion_tokens: 16000
       }),
       // Öka timeout för GPT-5 enligt riktlinjer (5 min för premiumkvalitet)
-      signal: (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal)
-        ? AbortSignal.timeout(300000)
-        : undefined
+      signal: createTimeoutSignal(300000) // 5 minutes
     })
 
     if (!response.ok) {
