@@ -423,6 +423,21 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     }
   }
 
+  // Auto-fetch company data when org number is entered (like in SME kit)
+  useEffect(() => {
+    const orgNumber = data.orgNumber?.replace(/\D/g, '')
+    
+    // Only fetch if org number is complete (10 digits) and we haven't enriched yet
+    if (orgNumber && orgNumber.length === 10 && !isEnriching && !enrichmentStatus && !data.registrationDate) {
+      const timer = setTimeout(() => {
+        handleEnrichData()
+      }, 1000) // Debounce 1 second after typing stops
+      
+      return () => clearTimeout(timer)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.orgNumber, data.registrationDate])
+
   const handleBack = () => {
     if (step > 1) {
       setStep(step - 1)
