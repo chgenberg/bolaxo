@@ -5,6 +5,10 @@ import { validateAndSanitize } from '@/lib/sanitize'
 import { validateValuationData, buildConditionalPrompts, getIndustrySpecificInstructions, validateDataCombinations } from '@/lib/valuation-rules'
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 
+// Force dynamic rendering to prevent build-time analysis
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 const prisma = new PrismaClient()
 
 async function saveValuationSafely(input: any, result: any) {
