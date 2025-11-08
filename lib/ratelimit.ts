@@ -35,38 +35,48 @@ class MemoryRateLimiter {
 // Skapa rate limiters
 const memoryLimiter = new MemoryRateLimiter()
 
-// Försök använda Upstash om konfigurerat, annars fallback till memory
+// Lazy initialization för Upstash - skapas först när behövs
 let redis: Redis | null = null
 let ratelimiters: Record<string, Ratelimit> = {}
+let initialized = false
 
-if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-  redis = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN,
-  })
+function initializeRateLimiters() {
+  if (initialized) return
+  initialized = true
+  
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    try {
+      redis = new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      })
 
-  // API rate limiters (olika limits för olika endpoints)
-  ratelimiters = {
-    auth: new Ratelimit({
-      redis,
-      limiter: Ratelimit.slidingWindow(5, '15 m'), // 5 requests per 15 min
-      analytics: true,
-    }),
-    valuation: new Ratelimit({
-      redis,
-      limiter: Ratelimit.slidingWindow(3, '1 h'), // 3 värderingar per timme
-      analytics: true,
-    }),
-    api: new Ratelimit({
-      redis,
-      limiter: Ratelimit.slidingWindow(30, '1 m'), // 30 requests per minut
-      analytics: true,
-    }),
+      // API rate limiters (olika limits för olika endpoints)
+      ratelimiters = {
+        auth: new Ratelimit({
+          redis,
+          limiter: Ratelimit.slidingWindow(5, '15 m'), // 5 requests per 15 min
+          analytics: true,
+        }),
+        valuation: new Ratelimit({
+          redis,
+          limiter: Ratelimit.slidingWindow(3, '1 h'), // 3 värderingar per timme
+          analytics: true,
+        }),
+        api: new Ratelimit({
+          redis,
+          limiter: Ratelimit.slidingWindow(30, '1 m'), // 30 requests per minut
+          analytics: true,
+        }),
+      }
+
+      console.log('✓ Upstash rate limiting enabled')
+    } catch (error) {
+      console.log('⚠️ Upstash initialization failed, using in-memory rate limiting')
+    }
+  } else {
+    console.log('⚠️ Upstash not configured, using in-memory rate limiting (not suitable for production)')
   }
-
-  console.log('✓ Upstash rate limiting enabled')
-} else {
-  console.log('⚠️ Upstash not configured, using in-memory rate limiting (not suitable for production)')
 }
 
 // Helper functions
@@ -74,6 +84,9 @@ export async function checkRateLimit(
   identifier: string, 
   type: 'auth' | 'valuation' | 'api' = 'api'
 ): Promise<{ success: boolean; limit?: number; remaining?: number; reset?: number }> {
+  
+  // Initialize rate limiters on first use (lazy init)
+  initializeRateLimiters()
   
   if (redis && ratelimiters[type]) {
     // Använd Upstash
