@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio'
+import { createTimeoutSignal } from './abort-helper'
 
 interface TrustpilotData {
   companyName: string
@@ -73,7 +74,7 @@ export async function scrapeTrustpilot(
         'Accept-Language': 'en-US,en;q=0.9,sv;q=0.8',
         'Referer': 'https://www.trustpilot.com/',
       },
-      signal: AbortSignal.timeout(10000),
+      signal: createTimeoutSignal(10000),
     })
     
     if (!response.ok) {
@@ -281,7 +282,7 @@ async function parseSearchResults(
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         'Accept': 'text/html',
       },
-      signal: AbortSignal.timeout(8000),
+      signal: createTimeoutSignal(8000),
     })
     
     if (response.ok) {

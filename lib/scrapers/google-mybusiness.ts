@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio'
+import { createTimeoutSignal } from './abort-helper'
 
 interface GoogleMyBusinessData {
   companyName: string
@@ -68,7 +69,7 @@ export async function scrapeGoogleMyBusiness(
         'Accept-Language': 'sv-SE,sv;q=0.9,en;q=0.8',
         'Referer': 'https://www.google.com/',
       },
-      signal: AbortSignal.timeout(10000),
+      signal: createTimeoutSignal(10000),
     })
     
     if (!response.ok) {

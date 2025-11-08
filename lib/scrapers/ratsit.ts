@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio'
+import { createTimeoutSignal } from './abort-helper'
 
 interface RatsitData {
   companyName: string
@@ -62,7 +63,7 @@ export async function scrapeRatsit(orgNumber: string): Promise<RatsitData | null
             'Connection': 'keep-alive',
             'Upgrade-Insecure-Requests': '1',
           },
-          signal: AbortSignal.timeout(5000), // Reduced to 5 seconds
+          signal: createTimeoutSignal(5000), // Reduced to 5 seconds
         })
         
         if (response.ok) break
@@ -105,7 +106,7 @@ export async function scrapeRatsit(orgNumber: string): Promise<RatsitData | null
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           'Accept': 'text/html',
         },
-        signal: AbortSignal.timeout(10000),
+        signal: createTimeoutSignal(10000),
       })
       
       if (companyResponse.ok) {

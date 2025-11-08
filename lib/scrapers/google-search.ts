@@ -16,6 +16,8 @@
  * Paid: $5 per 1,000 queries
  */
 
+import { createTimeoutSignal } from './abort-helper'
+
 export interface GoogleSearchResult {
   title: string
   link: string
@@ -74,7 +76,7 @@ export async function searchGoogle(
     console.log(`[Google Search] Searching for: "${searchQuery}"`)
 
     const response = await fetch(url.toString(), {
-      signal: AbortSignal.timeout(8000), // 8s timeout
+      signal: createTimeoutSignal(8000), // 8s timeout
     })
 
     if (!response.ok) {

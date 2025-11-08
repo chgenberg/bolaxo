@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio'
+import { createTimeoutSignal } from './abort-helper'
 
 interface LinkedInData {
   companyName: string
@@ -46,7 +47,7 @@ export async function scrapeLinkedIn(companyName: string, website?: string): Pro
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9,sv;q=0.8',
       },
-      signal: AbortSignal.timeout(10000),
+      signal: createTimeoutSignal(10000),
     })
     
     if (!searchResponse.ok) {
@@ -87,7 +88,7 @@ async function tryDirectLinkedInPage(companyName: string, website?: string): Pro
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
             'Accept': 'text/html',
           },
-          signal: AbortSignal.timeout(8000),
+          signal: createTimeoutSignal(8000),
           redirect: 'follow',
         })
         

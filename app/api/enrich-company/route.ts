@@ -8,6 +8,7 @@ import { scrapeLinkedIn, estimateEmployeeGrowth } from '@/lib/scrapers/linkedin'
 import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/google-mybusiness'
 import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
 import { searchGoogle } from '@/lib/scrapers/google-search'
+import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 
 const prisma = new PrismaClient()
 
@@ -453,7 +454,7 @@ async function scrapeWebsite(url: string, companyName: string): Promise<string> 
                 'Accept-Language': 'sv-SE,sv;q=0.9,en;q=0.8',
                 'Connection': 'keep-alive',
               },
-              signal: AbortSignal.timeout(10000), // 10s timeout
+              signal: createTimeoutSignal(10000), // 10s timeout
             })
             break // Success, exit retry loop
           } catch (err) {
@@ -702,7 +703,7 @@ Returnera ENDAST giltig JSON, ingen annan text.`
         messages: [{ role: 'user', content: prompt }],
         max_completion_tokens: 800,
       }),
-      signal: AbortSignal.timeout(30000) // 30s timeout
+      signal: createTimeoutSignal(30000) // 30s timeout
     })
 
     if (!response.ok) {

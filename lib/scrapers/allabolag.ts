@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio'
+import { createTimeoutSignal } from './abort-helper'
 
 interface AllabolagData {
   companyName: string
@@ -53,7 +54,7 @@ export async function scrapeAllabolag(orgNumber: string): Promise<AllabolagData 
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'sv-SE,sv;q=0.9',
       },
-      signal: AbortSignal.timeout(10000),
+      signal: createTimeoutSignal(10000),
     })
 
     if (!response.ok) {
