@@ -5,6 +5,8 @@
  * Använder officiella API:er där möjligt, fallback till scraping
  */
 
+import { createTimeoutSignal } from './scrapers/abort-helper'
+
 interface BolagsverketCompanyData {
   name: string
   orgNumber: string
@@ -75,61 +77,106 @@ export async function fetchBolagsverketCompanyData(orgNumber: string): Promise<B
  */
 async function fetchFromOfficialAPI(orgNumber: string, apiKey: string): Promise<BolagsverketCompanyData | null> {
   try {
-    // Bolagsverkets API endpoint för företagsdata
-    // Notera: Exakt endpoint kan variera - kontrollera Bolagsverkets dokumentation
+    // Bolagsverkets API endpoint för värdefulla datamängder
+    // Dokumentation: https://vardefulla-datamangder.bolagsverket.se/
+    // API-nyckel skickas som query parameter eller header enligt Bolagsverkets specifikation
     const baseUrl = 'https://data.bolagsverket.se/v1'
     
+    // Format org number (XXXXXX-XXXX)
+    const formattedOrgNumber = orgNumber.length === 10 
+      ? `${orgNumber.slice(0, 6)}-${orgNumber.slice(6)}`
+      : orgNumber
+    
     // Hämta grundläggande företagsdata
-    const companyResponse = await fetch(`${baseUrl}/foretag/${orgNumber}`, {
+    // Notera: API-endpoint kan variera - kontrollera Bolagsverkets dokumentation
+    const companyResponse = await fetch(`${baseUrl}/foretag/${formattedOrgNumber}`, {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      signal: AbortSignal.timeout(10000)
+      signal: createTimeoutSignal(10000)
     })
 
     if (!companyResponse.ok) {
+      // Om Bearer auth inte fungerar, prova med API key som query parameter
+      if (companyResponse.status === 401 || companyResponse.status === 403) {
+        const altResponse = await fetch(`${baseUrl}/foretag/${formattedOrgNumber}?api_key=${encodeURIComponent(apiKey)}`, {
+          headers: {
+            'Accept': 'application/json'
+          },
+          signal: createTimeoutSignal(10000)
+        })
+        
+        if (altResponse.ok) {
+          const companyData = await altResponse.json()
+          return parseCompanyData(companyData, orgNumber, apiKey)
+        }
+      }
+      
+      console.log(`[Bolagsverket] API returned ${companyResponse.status}`)
       return null
     }
 
     const companyData = await companyResponse.json()
+    return parseCompanyData(companyData, orgNumber, apiKey)
+    
+  } catch (error) {
+    console.error('[Bolagsverket] Official API error:', error)
+    return null
+  }
+}
 
-    // Hämta årsredovisningar
-    const reportsResponse = await fetch(`${baseUrl}/foretag/${orgNumber}/arsredovisningar`, {
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'application/json'
-      },
-      signal: AbortSignal.timeout(10000)
-    })
-
+/**
+ * Parse company data from Bolagsverket API response
+ */
+async function parseCompanyData(companyData: any, orgNumber: string, apiKey: string): Promise<BolagsverketCompanyData | null> {
+  try {
+    // Hämta årsredovisningar om tillgängligt
+    const baseUrl = 'https://data.bolagsverket.se/v1'
+    const formattedOrgNumber = orgNumber.length === 10 
+      ? `${orgNumber.slice(0, 6)}-${orgNumber.slice(6)}`
+      : orgNumber
+    
     let annualReports: AnnualReport[] = []
-    if (reportsResponse.ok) {
-      const reportsData = await reportsResponse.json()
-      annualReports = (reportsData.reports || []).map((report: any) => ({
-        year: report.year,
-        filingDate: report.filingDate,
-        documentUrl: report.documentUrl,
-        revenue: report.revenue,
-        profit: report.profit,
-        equity: report.equity
-      }))
+    try {
+      const reportsResponse = await fetch(`${baseUrl}/foretag/${formattedOrgNumber}/arsredovisningar`, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Accept': 'application/json'
+        },
+        signal: createTimeoutSignal(10000)
+      })
+
+      if (reportsResponse.ok) {
+        const reportsData = await reportsResponse.json()
+        annualReports = (reportsData.reports || reportsData || []).map((report: any) => ({
+          year: report.year || report.arsredovisningsar || '',
+          filingDate: report.filingDate || report.inlamningsdatum || '',
+          documentUrl: report.documentUrl || report.dokumentUrl,
+          revenue: report.revenue || report.omsattning || report.nettoomsattning,
+          profit: report.profit || report.resultat || report.arsresultat,
+          equity: report.equity || report.egetKapital || report.egenkapital
+        }))
+      }
+    } catch (error) {
+      console.log('[Bolagsverket] Failed to fetch annual reports:', error)
     }
 
     return {
-      name: companyData.name || '',
+      name: companyData.name || companyData.foretagsnamn || companyData.namn || '',
       orgNumber: orgNumber,
-      registrationDate: companyData.registrationDate || '',
-      legalForm: companyData.legalForm || 'Aktiebolag',
-      status: companyData.status || 'Aktiv',
-      address: companyData.address,
-      employees: companyData.employees,
-      industryCode: companyData.industryCode,
+      registrationDate: companyData.registrationDate || companyData.registreringsdatum || companyData.registrerat || '',
+      legalForm: companyData.legalForm || companyData.juridiskForm || companyData.bolagsform || 'Aktiebolag',
+      status: companyData.status || companyData.status || 'Aktiv',
+      address: companyData.address || companyData.adress || companyData.postadress,
+      employees: companyData.employees || companyData.antalAnstallda || companyData.anstallda,
+      industryCode: companyData.industryCode || companyData.branschkod || companyData.sniKod,
       annualReports,
       source: 'bolagsverket-api'
     }
   } catch (error) {
-    console.error('[Bolagsverket] Official API error:', error)
+    console.error('[Bolagsverket] Error parsing company data:', error)
     return null
   }
 }
@@ -145,7 +192,7 @@ async function fetchFromAllabolag(orgNumber: string): Promise<BolagsverketCompan
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
       },
-      signal: AbortSignal.timeout(8000)
+      signal: createTimeoutSignal(8000)
     })
     
     if (!response.ok) {
@@ -229,7 +276,7 @@ export async function fetchAnnualReports(orgNumber: string): Promise<AnnualRepor
             'Authorization': `Bearer ${apiKey}`,
             'Accept': 'application/json'
           },
-          signal: AbortSignal.timeout(10000)
+          signal: createTimeoutSignal(10000)
         })
 
         if (response.ok) {
@@ -268,7 +315,7 @@ async function fetchReportsFromAllabolag(orgNumber: string): Promise<AnnualRepor
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
       },
-      signal: AbortSignal.timeout(8000)
+      signal: createTimeoutSignal(8000)
     })
 
     if (!response.ok) {

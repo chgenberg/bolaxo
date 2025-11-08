@@ -9,6 +9,7 @@ import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/g
 import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
 import { searchGoogle } from '@/lib/scrapers/google-search'
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
+import { fetchBolagsverketCompanyData } from '@/lib/bolagsverket-api'
 
 const prisma = new PrismaClient()
 
@@ -42,6 +43,7 @@ export async function POST(request: Request) {
       rawData: {
         websiteContent: '',
         allabolagData: null,
+        bolagsverketData: null,
         scbData: null,
         ratsitData: null,
         proffData: null,
@@ -52,10 +54,11 @@ export async function POST(request: Request) {
       },
     }
 
-    // 2. PARALLEL DATA FETCHING (10x källor samtidigt!)
+    // 2. PARALLEL DATA FETCHING (inkluderar nu Bolagsverket API!)
     const startTime = Date.now()
     
     const [
+      bolagsverketResult,
       allabolagResult,
       scrapingResult,
       scbResult,
@@ -66,6 +69,7 @@ export async function POST(request: Request) {
       trustpilotResult,
       googleSearchResult
     ] = await Promise.allSettled([
+      orgNumber ? fetchBolagsverketCompanyData(orgNumber) : Promise.resolve(null),
       orgNumber ? scrapeAllabolag(orgNumber) : Promise.resolve(null),
       website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
       fetchSCBIndustryData(industry),
@@ -79,7 +83,61 @@ export async function POST(request: Request) {
 
     console.log(`Parallel fetch completed in ${Date.now() - startTime}ms`)
 
-    // 3. PROCESS RESULTS - Allabolag är nu primär källa
+    // 3. PROCESS RESULTS - Bolagsverket API har högsta prioritet (officiell källa)
+    if (bolagsverketResult.status === 'fulfilled' && bolagsverketResult.value) {
+      const bolagsverketData = bolagsverketResult.value
+      enrichedData.rawData.bolagsverketData = bolagsverketData
+      
+      // Auto-fill från officiell källa (högsta prioritet)
+      if (bolagsverketData.registrationDate) {
+        enrichedData.autoFill.registrationDate = bolagsverketData.registrationDate
+        enrichedData.autoFill.companyAge = calculateCompanyAge(bolagsverketData.registrationDate)
+      }
+      if (bolagsverketData.name && !enrichedData.autoFill.companyName) {
+        enrichedData.autoFill.companyName = bolagsverketData.name
+      }
+      if (bolagsverketData.address && !enrichedData.autoFill.address) {
+        enrichedData.autoFill.address = bolagsverketData.address
+      }
+      if (bolagsverketData.employees) {
+        enrichedData.autoFill.employees = mapEmployeeCount(bolagsverketData.employees)
+      }
+      if (bolagsverketData.legalForm && !enrichedData.autoFill.legalForm) {
+        enrichedData.autoFill.legalForm = bolagsverketData.legalForm
+      }
+      
+      // Processera årsredovisningar från Bolagsverket
+      if (bolagsverketData.annualReports && bolagsverketData.annualReports.length > 0) {
+        const sortedReports = bolagsverketData.annualReports
+          .sort((a, b) => parseInt(b.year) - parseInt(a.year))
+        
+        if (sortedReports[0]?.revenue) {
+          enrichedData.autoFill.revenue2024 = sortedReports[0].revenue.toString()
+          enrichedData.autoFill.revenue = sortedReports[0].revenue.toString()
+        }
+        if (sortedReports[1]?.revenue) {
+          enrichedData.autoFill.revenue2023 = sortedReports[1].revenue.toString()
+        }
+        if (sortedReports[2]?.revenue) {
+          enrichedData.autoFill.revenue2022 = sortedReports[2].revenue.toString()
+        }
+        if (sortedReports[0]?.profit) {
+          enrichedData.autoFill.profit = sortedReports[0].profit.toString()
+        }
+        if (sortedReports[0]?.equity) {
+          enrichedData.autoFill.equity = sortedReports[0].equity.toString()
+        }
+      }
+      
+      console.log('✓ Bolagsverket API data:', {
+        name: bolagsverketData.name,
+        registrationDate: bolagsverketData.registrationDate,
+        reports: bolagsverketData.annualReports?.length || 0,
+        source: bolagsverketData.source
+      })
+    }
+
+    // 4. PROCESS RESULTS - Allabolag som sekundär källa
     if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
       const allabolagData = allabolagResult.value
       enrichedData.rawData.allabolagData = allabolagData

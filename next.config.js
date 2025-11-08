@@ -28,6 +28,24 @@ const nextConfig = {
   // Production optimizations
   compress: true,
   poweredByHeader: false,
+  // Webpack configuration to handle Node.js environment
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Polyfill for Node.js environment - exclude browser APIs
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      }
+      
+      // Ignore File API in server-side code
+      config.resolve.alias = {
+        ...config.resolve.alias,
+      }
+    }
+    return config
+  },
   // Ensure correct base URL for image optimization
   ...(process.env.NEXT_PUBLIC_BASE_URL && {
     assetPrefix: undefined, // Let Next.js handle it automatically
