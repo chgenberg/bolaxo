@@ -4,6 +4,58 @@ import { sendMatchNotificationEmail } from '@/lib/email'
 
 const prisma = new PrismaClient()
 
+// Helper: Calculate match score between listing and buyer profile
+function calculateMatchScore(listing: any, buyerProfile: any): number {
+  let score = 0
+
+  // Region match (30 poäng)
+  if (buyerProfile.preferredRegions && buyerProfile.preferredRegions.length > 0) {
+    if (
+      buyerProfile.preferredRegions.includes(listing.region) ||
+      buyerProfile.preferredRegions.includes('Hela Sverige')
+    ) {
+      score += 30
+    }
+  }
+
+  // Industry match (30 poäng)
+  if (buyerProfile.preferredIndustries && buyerProfile.preferredIndustries.length > 0) {
+    if (buyerProfile.preferredIndustries.includes(listing.industry)) {
+      score += 30
+    }
+  }
+
+  // Price range match (20 poäng)
+  const listingPrice = (listing.priceMin + listing.priceMax) / 2
+  if (buyerProfile.priceMin && buyerProfile.priceMax) {
+    if (listingPrice >= buyerProfile.priceMin && listingPrice <= buyerProfile.priceMax) {
+      score += 20
+    } else if (
+      listingPrice >= buyerProfile.priceMin * 0.9 &&
+      listingPrice <= buyerProfile.priceMax * 1.1
+    ) {
+      score += 10
+    }
+  }
+
+  // Revenue range match (20 poäng)
+  if (buyerProfile.revenueMin && buyerProfile.revenueMax) {
+    if (
+      listing.revenue >= buyerProfile.revenueMin &&
+      listing.revenue <= buyerProfile.revenueMax
+    ) {
+      score += 20
+    } else if (
+      listing.revenue >= buyerProfile.revenueMin * 0.8 &&
+      listing.revenue <= buyerProfile.revenueMax * 1.2
+    ) {
+      score += 10
+    }
+  }
+
+  return Math.min(score, 100) // Max 100 poäng
+}
+
 // Helper: Generera anonyma titlar baserat på typ och plats
 function generateAnonymousTitle(listing: any): string {
   if (listing.anonymousTitle) return listing.anonymousTitle
@@ -65,8 +117,26 @@ export async function GET(request: NextRequest) {
       }
     })
     
+    // Calculate match scores for buyer if currentUserId is provided
+    let listingsWithMatchScores = listings
+    if (currentUserId) {
+      const buyerProfile = await prisma.buyerProfile.findUnique({
+        where: { userId: currentUserId }
+      })
+      
+      if (buyerProfile) {
+        listingsWithMatchScores = listings.map(listing => {
+          const matchScore = calculateMatchScore(listing, buyerProfile)
+          return {
+            ...listing,
+            matchScore: matchScore > 50 ? matchScore : undefined // Only include if > 50%
+          }
+        })
+      }
+    }
+    
     // Anonymize listings om inte current user är ägaren
-    const anonymizedListings = listings.map(listing => {
+    const anonymizedListings = listingsWithMatchScores.map(listing => {
       const isOwner = listing.userId === currentUserId
       
       return {

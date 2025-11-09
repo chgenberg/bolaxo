@@ -53,10 +53,19 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
           setNdaRequests(data.requests || [])
         }
 
-        const matchRes = await fetch('/api/listings?status=active')
+        // Fetch matches based on buyer preferences
+        const matchRes = await fetch(`/api/matches?buyerId=${userId}`)
         if (matchRes.ok) {
           const data = await matchRes.json()
-          setMatchedListings(data.slice(0, 6))
+          // Extract listings from matches
+          const matchedListingsData = (data.matches || []).map((match: any) => ({
+            ...match.listing,
+            matchScore: match.matchScore,
+            matchReasons: match.matchReasons,
+            hasNDA: match.hasNDA,
+            ndaStatus: match.ndaStatus
+          }))
+          setMatchedListings(matchedListingsData.slice(0, 6))
         }
       }
     } catch (error) {
@@ -132,24 +141,46 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
-            {matchedListings.map((listing) => (
-              <Link
+            {matchedListings.map((listing: any) => (
+              <div
                 key={listing.id}
-                href={`/objekt/${listing.id}`}
                 className="border border-gray-200 rounded-lg p-4 hover:border-primary-blue hover:shadow-md transition-all"
               >
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="font-semibold text-sm text-text-dark">{listing.anonymousTitle}</h3>
-                  {listing.isNew && (
-                    <span className="text-xs bg-primary-blue text-white px-2 py-0.5 rounded-full">{t('new')}</span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {listing.isNew && (
+                      <span className="text-xs bg-primary-blue text-white px-2 py-0.5 rounded-full">{t('new')}</span>
+                    )}
+                    {listing.matchScore && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                        listing.matchScore >= 80 
+                          ? 'bg-green-100 text-green-700'
+                          : listing.matchScore >= 60
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-yellow-100 text-yellow-700'
+                      }`}>
+                        {listing.matchScore}% match
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center text-xs text-text-gray mb-2">
                   <MapPin className="w-3 h-3 mr-1" />
                   {listing.region}
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="text-text-gray">{t('revenue')} <span className="font-medium text-text-dark">{listing.revenueRange}</span></div>
+                {listing.matchReasons && listing.matchReasons.length > 0 && (
+                  <div className="mb-2">
+                    <p className="text-xs text-gray-600 mb-1">Matchar dina preferenser:</p>
+                    <ul className="text-xs text-gray-500 list-disc list-inside">
+                      {listing.matchReasons.slice(0, 2).map((reason: string, idx: number) => (
+                        <li key={idx}>{reason}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-2 text-xs mb-3">
+                  <div className="text-text-gray">{t('revenue')} <span className="font-medium text-text-dark">{(listing.revenue / 1000000).toFixed(1)}M SEK</span></div>
                   <div className="text-text-gray">{t('price')} <span className="font-medium text-primary-blue">
                     {listing.abstainPriceMin && listing.abstainPriceMax ? 
                       t('priceNotSpecified') :
@@ -162,7 +193,36 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                       : t('priceNotSpecified')}
                   </span></div>
                 </div>
-              </Link>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/objekt/${listing.id}`}
+                    className="flex-1 text-center text-xs bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Visa detaljer
+                  </Link>
+                  {listing.hasNDA ? (
+                    listing.ndaStatus === 'approved' || listing.ndaStatus === 'signed' ? (
+                      <Link
+                        href={`/objekt/${listing.id}`}
+                        className="flex-1 text-center text-xs bg-green-100 text-green-700 px-3 py-2 rounded-lg hover:bg-green-200 transition-colors"
+                      >
+                        NDA godkänd ✓
+                      </Link>
+                    ) : (
+                      <span className="flex-1 text-center text-xs bg-yellow-100 text-yellow-700 px-3 py-2 rounded-lg">
+                        NDA väntar
+                      </span>
+                    )
+                  ) : (
+                    <Link
+                      href={`/nda/${listing.id}`}
+                      className="flex-1 text-center text-xs bg-primary-blue text-white px-3 py-2 rounded-lg hover:bg-primary-blue/90 transition-colors font-semibold"
+                    >
+                      Signera NDA
+                    </Link>
+                  )}
+                </div>
+              </div>
             ))}
           </div>
         )}

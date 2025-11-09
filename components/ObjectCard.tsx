@@ -7,9 +7,10 @@ import { BusinessObject } from '@/data/mockObjects'
 
 interface ObjectCardProps {
   object: BusinessObject
+  matchScore?: number // Match score for buyers
 }
 
-export default function ObjectCard({ object }: ObjectCardProps) {
+export default function ObjectCard({ object, matchScore }: ObjectCardProps) {
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000) {
       return `${(amount / 1000000).toFixed(1)} MSEK`
@@ -94,10 +95,23 @@ export default function ObjectCard({ object }: ObjectCardProps) {
                 {object.category || object.type}
               </span>
             </div>
-            <div className="flex items-center text-white bg-black/50 backdrop-blur-sm px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm">
-              <Calendar className="w-3 sm:w-4 h-3 sm:h-4 mr-1" />
-              <span className="hidden sm:inline">{object.createdAt ? getDaysAgo(object.createdAt) : 'Nyligen'}</span>
-              <span className="sm:hidden">{object.createdAt ? getDaysAgo(object.createdAt).split(' ')[0] : 'Ny'}</span>
+            <div className="flex items-center gap-1 sm:gap-2">
+              {matchScore !== undefined && (
+                <span className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold shadow-lg backdrop-blur-sm ${
+                  matchScore >= 80 
+                    ? 'bg-green-500/90 text-white'
+                    : matchScore >= 60
+                    ? 'bg-blue-500/90 text-white'
+                    : 'bg-yellow-500/90 text-white'
+                }`}>
+                  {matchScore}% match
+                </span>
+              )}
+              <div className="flex items-center text-white bg-black/50 backdrop-blur-sm px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm">
+                <Calendar className="w-3 sm:w-4 h-3 sm:h-4 mr-1" />
+                <span className="hidden sm:inline">{object.createdAt ? getDaysAgo(object.createdAt) : 'Nyligen'}</span>
+                <span className="sm:hidden">{object.createdAt ? getDaysAgo(object.createdAt).split(' ')[0] : 'Ny'}</span>
+              </div>
             </div>
           </div>
         </div>

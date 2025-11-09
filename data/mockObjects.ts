@@ -41,6 +41,10 @@ export interface BusinessObject {
   // Anonymous display
   anonymousTitle: string
   createdAt: Date
+  
+  // Match score for buyers
+  matchScore?: number
+  matchReasons?: string[]
 }
 
 export const mockObjects: BusinessObject[] = [

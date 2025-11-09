@@ -79,7 +79,10 @@ export default function SearchPageContent() {
 
     const fetchListings = async () => {
       try {
-        const response = await fetch('/api/listings?status=active')
+        const url = user?.id 
+          ? `/api/listings?status=active&currentUserId=${user.id}`
+          : '/api/listings?status=active'
+        const response = await fetch(url)
         if (response.ok) {
           const listings = await response.json()
           
@@ -116,7 +119,8 @@ export default function SearchPageContent() {
             address: listing.address || '',
             detailedFinancials: {},
             customers: [],
-            ndaRequired: false
+            ndaRequired: false,
+            matchScore: listing.matchScore // Include match score if available
           }))
           
           setAllObjects(transformedListings)
@@ -642,7 +646,7 @@ export default function SearchPageContent() {
         {!loading && filteredObjects.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {filteredObjects.map((object) => (
-              <ObjectCard key={object.id} object={object} />
+              <ObjectCard key={object.id} object={object} matchScore={object.matchScore} />
             ))}
           </div>
         )}

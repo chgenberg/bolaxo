@@ -242,10 +242,36 @@ export default function ObjectDetailPage() {
                     Mäklare
                   </span>
                 )}
+                {object.matchScore !== undefined && (
+                  <span className={`text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full ${
+                    object.matchScore >= 80 
+                      ? 'bg-green-500 text-white'
+                      : object.matchScore >= 60
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-yellow-500 text-white'
+                  }`}>
+                    {object.matchScore}% match
+                  </span>
+                )}
                 <span className="bg-gray-100 text-text-dark text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
                   {object.category || object.type}
                 </span>
               </div>
+              
+              {/* Match Reasons */}
+              {object.matchReasons && object.matchReasons.length > 0 && (
+                <div className="mb-3 sm:mb-4 p-2 sm:p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <p className="text-xs sm:text-sm font-semibold text-blue-900 mb-1 sm:mb-2">Varför detta objekt matchar dina preferenser:</p>
+                  <ul className="text-xs sm:text-sm text-blue-800 space-y-0.5 sm:space-y-1">
+                    {object.matchReasons.map((reason: string, idx: number) => (
+                      <li key={idx} className="flex items-start">
+                        <span className="text-blue-500 mr-1.5 sm:mr-2">•</span>
+                        <span>{reason}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               
               {/* Title and Location */}
               <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-text-dark mb-2 sm:mb-3">
