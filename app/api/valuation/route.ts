@@ -9,6 +9,8 @@ import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 export const revalidate = 0
+export const fetchCache = 'force-no-store'
+export const dynamicParams = true
 
 const prisma = new PrismaClient()
 
@@ -45,26 +47,25 @@ async function saveValuationSafely(input: any, result: any) {
 }
 
 export async function POST(request: Request) {
-  // Defensive check - if request is not available (build-time), return early
-  if (!request || typeof request !== 'object') {
+  // Early return if running during build-time (Next.js static analysis)
+  // Check if we're in a build context by checking for missing request properties
+  if (typeof request === 'undefined' || !request || typeof request !== 'object') {
     return NextResponse.json(
-      { error: 'Invalid request' },
-      { status: 400 }
+      { error: 'Service unavailable during build' },
+      { status: 503 }
+    )
+  }
+
+  // Additional check: if headers is not a proper Headers object, we're likely in build context
+  if (!request.headers || typeof request.headers.get !== 'function') {
+    return NextResponse.json(
+      { error: 'Service unavailable during build' },
+      { status: 503 }
     )
   }
 
   // Rate limit: 3 värderingar per timme per IP
-  // Säker kontroll för build-tiden när request.headers kan vara undefined
-  let ip = 'unknown'
-  try {
-    if (request.headers && typeof request.headers.get === 'function') {
-      ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
-    }
-  } catch (error) {
-    // Ignore errors during build-time
-    ip = 'unknown'
-  }
-  
+  const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
   const { success } = await checkRateLimit(ip, 'valuation')
   
   if (!success) {
