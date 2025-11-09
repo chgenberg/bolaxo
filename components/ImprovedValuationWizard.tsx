@@ -252,7 +252,13 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   }
 
   const handleEnrichData = async () => {
-    if (isEnriching || (!data.orgNumber && !data.website)) return
+    const sanitizedOrgNumber = data.orgNumber?.replace(/\D/g, '')
+    const normalizedOrgNumber =
+      sanitizedOrgNumber && sanitizedOrgNumber.length === 12
+        ? sanitizedOrgNumber.slice(-10)
+        : sanitizedOrgNumber
+    
+    if (isEnriching || (!normalizedOrgNumber && !data.website)) return
     
     setIsEnriching(true)
     setEnrichmentStatus('Hämtar företagsdata...')
@@ -262,7 +268,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          orgNumber: data.orgNumber,
+          orgNumber: normalizedOrgNumber,
           website: data.website,
           companyName: data.companyName,
           industry: data.industry
@@ -446,8 +452,15 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
 
   useEffect(() => {
     const orgNumber = data.orgNumber?.replace(/\D/g, '')
+    const normalizedOrgNumber =
+      orgNumber && orgNumber.length === 12 ? orgNumber.slice(-10) : orgNumber
     
-    if (orgNumber && orgNumber.length === 10 && !isEnriching && !enrichmentStatus) {
+    if (
+      normalizedOrgNumber &&
+      normalizedOrgNumber.length === 10 &&
+      !isEnriching &&
+      !enrichmentStatus
+    ) {
       const timer = setTimeout(() => {
         handleEnrichData()
       }, 1000)
