@@ -522,7 +522,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.orgNumber}
                 onValueChange={(value) => updateData('orgNumber', value)}
                 placeholder="556123-4567"
-                helperText="Vi hämtar automatiskt offentlig data"
+                tooltip="Vi hämtar automatiskt offentlig data"
               />
               
               <FormField
@@ -575,7 +575,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 placeholder="15"
                 required
                 error={errors.profitMargin}
-                helperText="Vinst efter alla kostnader / omsättning"
+                helpText="Vinst efter alla kostnader / omsättning"
               />
               
               <FormFieldPercent
@@ -583,7 +583,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.grossMargin}
                 onChange={(value) => updateData('grossMargin', value)}
                 placeholder="40"
-                helperText="(Omsättning - direkta kostnader) / omsättning"
+                helpText="(Omsättning - direkta kostnader) / omsättning"
               />
             </div>
             
@@ -593,7 +593,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.ebitda}
                 onChange={(value) => updateData('ebitda', value)}
                 placeholder="2 000 000"
-                helperText="Resultat före räntor, skatt och avskrivningar"
+                helpText="Resultat före räntor, skatt och avskrivningar"
               />
               
               <FormFieldPercent
@@ -601,7 +601,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.revenueGrowthRate}
                 onChange={(value) => updateData('revenueGrowthRate', value)}
                 placeholder="10"
-                helperText="Genomsnittlig årlig tillväxt senaste 3 åren"
+                helpText="Genomsnittlig årlig tillväxt senaste 3 åren"
               />
             </div>
             
@@ -610,7 +610,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               value={data.recurringRevenuePercentage}
               onChange={(value) => updateData('recurringRevenuePercentage', value)}
               placeholder="60"
-              helperText="T.ex. prenumerationer, serviceavtal"
+              helpText="T.ex. prenumerationer, serviceavtal"
             />
           </div>
         )
@@ -634,7 +634,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               value={data.cogs}
               onChange={(value) => updateData('cogs', value)}
               placeholder="4 000 000"
-              helperText="Kostnader direkt kopplade till produktion/försäljning"
+              helpText="Kostnader direkt kopplade till produktion/försäljning"
             />
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -643,7 +643,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.salaries}
                 onChange={(value) => updateData('salaries', value)}
                 placeholder="3 000 000"
-                helperText="Löner, sociala avgifter, pensioner"
+                helpText="Löner, sociala avgifter, pensioner"
               />
               
               <FormFieldCurrency
@@ -651,7 +651,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.rentCosts}
                 onChange={(value) => updateData('rentCosts', value)}
                 placeholder="600 000"
-                helperText="Hyra, el, värme, städning"
+                helpText="Hyra, el, värme, städning"
               />
             </div>
             
@@ -661,7 +661,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.marketingCosts}
                 onChange={(value) => updateData('marketingCosts', value)}
                 placeholder="400 000"
-                helperText="Reklam, PR, events"
+                helpText="Reklam, PR, events"
               />
               
               <FormFieldCurrency
@@ -669,7 +669,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.otherOperatingCosts}
                 onChange={(value) => updateData('otherOperatingCosts', value)}
                 placeholder="500 000"
-                helperText="IT, försäkringar, konsulter, övrigt"
+                helpText="IT, försäkringar, konsulter, övrigt"
               />
             </div>
           </div>
@@ -751,7 +751,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.intangibleAssets}
                 onChange={(value) => updateData('intangibleAssets', value)}
                 placeholder="200 000"
-                helperText="Patent, varumärken, goodwill"
+                helpText="Patent, varumärken, goodwill"
               />
             </div>
             
@@ -762,7 +762,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.shortTermDebt}
                 onChange={(value) => updateData('shortTermDebt', value)}
                 placeholder="2 000 000"
-                helperText="Förfaller inom 1 år"
+                helpText="Förfaller inom 1 år"
               />
               
               <FormFieldCurrency
@@ -770,7 +770,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.longTermDebt}
                 onChange={(value) => updateData('longTermDebt', value)}
                 placeholder="3 000 000"
-                helperText="Förfaller efter 1 år"
+                helpText="Förfaller efter 1 år"
               />
             </div>
           </div>
@@ -807,7 +807,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.customerChurnRate}
                 onChange={(value) => updateData('customerChurnRate', value)}
                 placeholder="10"
-                helperText="Andel kunder som lämnar årligen"
+                helpText="Andel kunder som lämnar årligen"
               />
               
               <ModernSelect
@@ -868,7 +868,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 value={data.marketSize}
                 onChange={(value) => updateData('marketSize', value)}
                 placeholder="500 000 000"
-                helperText="Uppskattad total marknad i Sverige"
+                helpText="Uppskattad total marknad i Sverige"
               />
               
               <FormFieldPercent
@@ -947,7 +947,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               value={data.keyEmployeeDependency}
               onChange={(value) => updateData('keyEmployeeDependency', value)}
               placeholder="Välj beroende"
-              helperText="Hur beroende är företaget av specifika personer?"
+              helpText="Hur beroende är företaget av specifika personer?"
             />
             
             <ModernSelect
@@ -1015,7 +1015,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               value={data.investmentNeeds}
               onChange={(value) => updateData('investmentNeeds', value)}
               placeholder="2 000 000"
-              helperText="För planerad tillväxt och utveckling"
+              helpText="För planerad tillväxt och utveckling"
             />
             
             <ModernSelect
