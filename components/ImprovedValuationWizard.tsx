@@ -556,7 +556,6 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 onChange={(value) => updateData('revenue', value)}
                 placeholder="10 000 000"
                 required
-                error={errors.revenue}
               />
               
               <FormFieldCurrency
@@ -574,7 +573,6 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 onChange={(value) => updateData('profitMargin', value)}
                 placeholder="15"
                 required
-                error={errors.profitMargin}
                 helpText="Vinst efter alla kostnader / omsättning"
               />
               
