@@ -8,13 +8,14 @@ import {
   BarChart3, Shield, Zap, Package, Settings, CreditCard, ChartLine
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import FormField from './FormField'
 import FormTextarea from './FormTextarea'
 import ModernSelect from './ModernSelect'
 import FormFieldCurrency from './FormFieldCurrency'
 import FormFieldPercent from './FormFieldPercent'
-import { calculateQuickValuation, getValuationColor } from '@/utils/quickValuation'
+import { getValuationColor } from '@/utils/quickValuation'
 import { useTranslations, useLocale } from 'next-intl'
 
 interface ValuationData {
@@ -114,6 +115,21 @@ const steps = [
   { id: 7, title: 'Organisation', icon: Shield, description: 'Team & risker' },
   { id: 8, title: 'Framtid', icon: ChartLine, description: 'Tillväxtpotential' }
 ]
+
+const INDUSTRY_MULTIPLIERS: Record<string, { base: number; spread: number }> = {
+  restaurang: { base: 3, spread: 0.25 },
+  ehandel: { base: 4, spread: 0.25 },
+  webbtjanster: { base: 6, spread: 0.3 },
+  konsult: { base: 4.5, spread: 0.2 },
+  tillverkning: { base: 5, spread: 0.2 },
+  handel: { base: 3.5, spread: 0.25 },
+  bygg: { base: 4.2, spread: 0.25 },
+  transport: { base: 4, spread: 0.25 },
+  it: { base: 6.2, spread: 0.3 },
+  halsa: { base: 5.2, spread: 0.2 },
+  utbildning: { base: 4.1, spread: 0.2 },
+  other: { base: 4.5, spread: 0.25 },
+}
 
 export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const router = useRouter()
@@ -880,7 +896,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Konkurrensfördelar"
               value={data.competitiveAdvantages}
-              onChange={(value) => updateData('competitiveAdvantages', value)}
+              onChange={(event) => updateData('competitiveAdvantages', event.target.value)}
               placeholder="Beskriv vad som gör ert företag unikt (t.ex. patent, exklusiva avtal, starka varumärken)"
               rows={3}
             />
@@ -888,7 +904,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Huvudkonkurrenter"
               value={data.mainCompetitors}
-              onChange={(value) => updateData('mainCompetitors', value)}
+              onChange={(event) => updateData('mainCompetitors', event.target.value)}
               placeholder="Lista era 3-5 största konkurrenter"
               rows={2}
             />
@@ -945,7 +961,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               value={data.keyEmployeeDependency}
               onChange={(value) => updateData('keyEmployeeDependency', value)}
               placeholder="Välj beroende"
-              helpText="Hur beroende är företaget av specifika personer?"
+              helperText="Hur beroende är företaget av specifika personer?"
             />
             
             <ModernSelect
@@ -964,7 +980,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Större risker eller utmaningar"
               value={data.majorRisks}
-              onChange={(value) => updateData('majorRisks', value)}
+              onChange={(event) => updateData('majorRisks', event.target.value)}
               placeholder="Beskriv eventuella större risker (t.ex. beroendet av leverantörer, regeländringar, teknologiskiften)"
               rows={3}
             />
@@ -972,7 +988,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Tillstånd och licenser"
               value={data.regulatoryLicenses}
-              onChange={(value) => updateData('regulatoryLicenses', value)}
+              onChange={(event) => updateData('regulatoryLicenses', event.target.value)}
               placeholder="Lista viktiga tillstånd eller licenser som krävs för verksamheten"
               rows={2}
             />
@@ -1003,7 +1019,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Expansionsplaner"
               value={data.expansionPlans}
-              onChange={(value) => updateData('expansionPlans', value)}
+              onChange={(event) => updateData('expansionPlans', event.target.value)}
               placeholder="Beskriv planerade expansioner (nya marknader, produkter, kanaler)"
               rows={3}
             />
@@ -1072,13 +1088,89 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   // Quick valuation preview
   const quickValuation = useMemo(() => {
     const revenue = Number(data.revenue) || 0
-    const ebitda = Number(data.ebitda) || revenue * (Number(data.profitMargin) || 0) / 100
-    
-    if (revenue && ebitda) {
-      return calculateQuickValuation(revenue, ebitda, data.industry)
+    const profitMargin = Number(data.profitMargin) || 0
+    const ebitda = Number(data.ebitda) || (revenue * profitMargin) / 100
+
+    if (!revenue || !ebitda) {
+      return null
     }
-    return null
-  }, [data.revenue, data.ebitda, data.profitMargin, data.industry])
+
+    const { base, spread } = INDUSTRY_MULTIPLIERS[data.industry] || { base: 4, spread: 0.25 }
+    const margin = revenue > 0 ? ebitda / revenue : 0
+
+    let adjustedMultiple = base
+    if (margin >= 0.25) {
+      adjustedMultiple += 0.6
+    } else if (margin >= 0.15) {
+      adjustedMultiple += 0.3
+    } else if (margin <= 0.05) {
+      adjustedMultiple -= 0.4
+    } else if (margin <= 0.1) {
+      adjustedMultiple -= 0.2
+    }
+    adjustedMultiple = Math.max(1.8, adjustedMultiple)
+
+    const midpoint = ebitda * adjustedMultiple
+    const valuationPadding = midpoint * spread
+    const min = Math.max(midpoint - valuationPadding, ebitda * 1.2)
+    const max = midpoint + valuationPadding
+
+    const coverageFields = [
+      data.marketSize,
+      data.marketShare,
+      data.competitiveAdvantages,
+      data.mainCompetitors,
+      data.geographicReach,
+      data.growthPotential,
+      data.expansionPlans,
+      data.majorRisks,
+    ]
+    const totalCoverageFields = coverageFields.length || 1
+    const filledCoverage = coverageFields.filter(
+      (field) => typeof field === 'string' && field.trim().length > 0
+    ).length
+    const coverageScore = filledCoverage / totalCoverageFields
+
+    let confidence = 0.55 + coverageScore * 0.2
+
+    if (revenue >= 20000000) {
+      confidence += 0.05
+    } else if (revenue >= 5000000) {
+      confidence += 0.03
+    }
+
+    if (margin >= 0.2) {
+      confidence += 0.07
+    }
+    if (margin <= 0.08) {
+      confidence -= 0.05
+    }
+    if (margin <= 0.03) {
+      confidence -= 0.07
+    }
+
+    confidence = Math.max(0.35, Math.min(0.9, confidence))
+
+    return {
+      min,
+      max,
+      midpoint,
+      confidence,
+    }
+  }, [
+    data.revenue,
+    data.ebitda,
+    data.profitMargin,
+    data.industry,
+    data.marketSize,
+    data.marketShare,
+    data.competitiveAdvantages,
+    data.mainCompetitors,
+    data.geographicReach,
+    data.growthPotential,
+    data.expansionPlans,
+    data.majorRisks,
+  ])
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -1105,7 +1197,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
                 Steg {currentStep} av {steps.length}
               </span>
               {quickValuation && currentStep >= 2 && (
-                <span className="text-sm font-medium" style={{ color: getValuationColor(quickValuation.confidence) }}>
+                <span className={`text-sm font-medium ${getValuationColor(quickValuation.midpoint)}`}>
                   Preliminär värdering: {quickValuation.min.toLocaleString('sv-SE')} - {quickValuation.max.toLocaleString('sv-SE')} kr
                 </span>
               )}
