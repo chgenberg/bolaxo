@@ -333,11 +333,11 @@ export async function POST(request: Request) {
       // Kolla om vi har revenue growth från Bolagsverket årsredovisningar
       if (enrichedData.rawData.bolagsverketData?.annualReports && 
           enrichedData.rawData.bolagsverketData.annualReports.length >= 2) {
-        const reports = enrichedData.rawData.bolagsverketData.annualReports.sort((a, b) => 
+        const reports = [...enrichedData.rawData.bolagsverketData.annualReports].sort((a: any, b: any) => 
           parseInt(b.year) - parseInt(a.year)
         )
-        const latestRevenue = reports[0].revenue
-        const previousRevenue = reports[1].revenue
+        const latestRevenue = reports[0]?.revenue
+        const previousRevenue = reports[1]?.revenue
         if (latestRevenue && previousRevenue) {
           const growth = ((latestRevenue - previousRevenue) / previousRevenue) * 100
           if (growth > 20) {
