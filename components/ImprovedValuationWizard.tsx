@@ -513,6 +513,14 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             />
             
             <FormField
+              label="Organisationsnummer (valfritt)"
+              value={data.orgNumber}
+              onValueChange={(value) => updateData('orgNumber', value)}
+              placeholder="556123-4567"
+              tooltip="Vi hämtar automatiskt offentlig data"
+            />
+            
+            <FormField
               label="Företagsnamn"
               value={data.companyName}
               onValueChange={(value) => updateData('companyName', value)}
@@ -532,22 +540,12 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               error={errors.industry}
             />
             
-            <div className="grid md:grid-cols-2 gap-6">
-              <FormField
-                label="Organisationsnummer"
-                value={data.orgNumber}
-                onValueChange={(value) => updateData('orgNumber', value)}
-                placeholder="556123-4567"
-                tooltip="Vi hämtar automatiskt offentlig data"
-              />
-              
-              <FormField
-                label="Webbplats"
-                value={data.website}
-                onValueChange={(value) => updateData('website', value)}
-                placeholder="www.exempel.se"
-              />
-            </div>
+            <FormField
+              label="Webbplats"
+              value={data.website}
+              onValueChange={(value) => updateData('website', value)}
+              placeholder="www.exempel.se"
+            />
             
             {enrichmentStatus && (
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
