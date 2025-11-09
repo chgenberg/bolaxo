@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import WhatIfScenarios from '@/components/WhatIfScenarios'
+import ImprovedValuationResults from '@/components/ImprovedValuationResults'
 import dynamic from 'next/dynamic'
 
 // Dynamisk import av PDF-komponenten för att undvika SSR-problem
@@ -47,6 +48,7 @@ export default function ValuationResultPage() {
   const [error, setError] = useState<string | null>(null)
   const [valuationData, setValuationData] = useState<any>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [useImprovedResults, setUseImprovedResults] = useState(true) // Use improved results by default
 
   useEffect(() => {
     const fetchValuation = async () => {
@@ -98,6 +100,18 @@ export default function ValuationResultPage() {
 
     fetchValuation()
   }, [router])
+
+  // Use improved results component if enabled
+  if (useImprovedResults) {
+    return (
+      <ImprovedValuationResults 
+        result={result!}
+        valuationData={valuationData}
+        loading={loading}
+        error={error}
+      />
+    )
+  }
 
   if (loading) {
     return (

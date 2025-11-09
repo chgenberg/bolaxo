@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import { TrendingUp, Shield, Zap, CheckCircle, ArrowRight, BarChart3, FileText, Target } from 'lucide-react'
 import ValuationWizard from '@/components/ValuationWizard'
+import ImprovedValuationWizard from '@/components/ImprovedValuationWizard'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function ValuationPage() {
   const [showWizard, setShowWizard] = useState(false)
+  const [useImprovedWizard, setUseImprovedWizard] = useState(true) // Use improved wizard by default
 
   const features = [
     {
@@ -282,9 +284,11 @@ export default function ValuationPage() {
 
       {/* Valuation Form Modal */}
       {showWizard && (
-        <ValuationWizard 
-          onClose={() => setShowWizard(false)}
-        />
+        useImprovedWizard ? (
+          <ImprovedValuationWizard onClose={() => setShowWizard(false)} />
+        ) : (
+          <ValuationWizard onClose={() => setShowWizard(false)} />
+        )
       )}
     </>
   )
