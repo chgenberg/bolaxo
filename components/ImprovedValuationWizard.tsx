@@ -490,7 +490,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               label="Din e-postadress"
               type="email"
               value={data.email}
-              onChange={(value) => updateData('email', value)}
+              onValueChange={(value) => updateData('email', value)}
               placeholder="din@email.com"
               required
               error={errors.email}
@@ -499,7 +499,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             <FormField
               label="Företagsnamn"
               value={data.companyName}
-              onChange={(value) => updateData('companyName', value)}
+              onValueChange={(value) => updateData('companyName', value)}
               placeholder="AB Exempel"
               required
               error={errors.companyName}
@@ -520,7 +520,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               <FormField
                 label="Organisationsnummer"
                 value={data.orgNumber}
-                onChange={(value) => updateData('orgNumber', value)}
+                onValueChange={(value) => updateData('orgNumber', value)}
                 placeholder="556123-4567"
                 helperText="Vi hämtar automatiskt offentlig data"
               />
@@ -528,7 +528,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               <FormField
                 label="Webbplats"
                 value={data.website}
-                onChange={(value) => updateData('website', value)}
+                onValueChange={(value) => updateData('website', value)}
                 placeholder="www.exempel.se"
               />
             </div>
@@ -788,7 +788,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               <FormField
                 label="Antal kunder"
                 value={data.customerCount}
-                onChange={(value) => updateData('customerCount', value)}
+                onValueChange={(value) => updateData('customerCount', value)}
                 placeholder="150"
                 type="number"
               />
@@ -923,7 +923,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               <FormField
                 label="Antal anställda"
                 value={data.employees}
-                onChange={(value) => updateData('employees', value)}
+                onValueChange={(value) => updateData('employees', value)}
                 placeholder="25"
                 type="number"
               />
@@ -931,7 +931,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               <FormField
                 label="Företagets ålder (år)"
                 value={data.companyAge}
-                onChange={(value) => updateData('companyAge', value)}
+                onValueChange={(value) => updateData('companyAge', value)}
                 placeholder="15"
                 type="number"
               />
