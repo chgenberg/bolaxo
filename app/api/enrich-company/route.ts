@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import * as cheerio from 'cheerio'
 import { PrismaClient } from '@prisma/client'
-import { scrapeAllabolag } from '@/lib/scrapers/allabolag'
 import { scrapeRatsit } from '@/lib/scrapers/ratsit'
 import { scrapeProff } from '@/lib/scrapers/proff'
 import { scrapeLinkedIn, estimateEmployeeGrowth } from '@/lib/scrapers/linkedin'
@@ -42,7 +41,6 @@ export async function POST(request: Request) {
       autoFill: {},
       rawData: {
         websiteContent: '',
-        allabolagData: null,
         bolagsverketData: null,
         scbData: null,
         ratsitData: null,
@@ -54,12 +52,11 @@ export async function POST(request: Request) {
       },
     }
 
-    // 2. PARALLEL DATA FETCHING (inkluderar nu Bolagsverket API!)
+    // 2. PARALLEL DATA FETCHING - Använder endast Bolagsverkets officiella API
     const startTime = Date.now()
     
     const [
       bolagsverketResult,
-      allabolagResult,
       scrapingResult,
       scbResult,
       ratsitResult,
@@ -70,13 +67,12 @@ export async function POST(request: Request) {
       googleSearchResult
     ] = await Promise.allSettled([
       orgNumber ? fetchBolagsverketCompanyData(orgNumber) : Promise.resolve(null),
-      orgNumber ? scrapeAllabolag(orgNumber) : Promise.resolve(null),
       website ? scrapeWebsite(website, companyName) : Promise.resolve(''),
       fetchSCBIndustryData(industry),
       orgNumber ? scrapeRatsit(orgNumber) : Promise.resolve(null),
       orgNumber ? scrapeProff(orgNumber) : Promise.resolve(null),
       companyName ? scrapeLinkedIn(companyName, website) : Promise.resolve(null),
-      companyName ? scrapeGoogleMyBusiness(companyName, enrichedData.rawData.allabolagData?.address) : Promise.resolve(null),
+      companyName ? scrapeGoogleMyBusiness(companyName, enrichedData.rawData.bolagsverketData?.address) : Promise.resolve(null),
       companyName && website ? scrapeTrustpilot(companyName, website) : Promise.resolve(null),
       companyName ? searchGoogle(companyName, orgNumber) : Promise.resolve(null),
     ])
@@ -137,49 +133,7 @@ export async function POST(request: Request) {
       })
     }
 
-    // 4. PROCESS RESULTS - Allabolag som sekundär källa
-    if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
-      const allabolagData = allabolagResult.value
-      enrichedData.rawData.allabolagData = allabolagData
-      
-      // Auto-fill grundläggande data
-      if (allabolagData.registrationDate) {
-        enrichedData.autoFill.companyAge = calculateCompanyAge(allabolagData.registrationDate)
-        enrichedData.autoFill.registrationDate = allabolagData.registrationDate
-      }
-      if (allabolagData.financials?.employees) {
-        enrichedData.autoFill.employees = mapEmployeeCount(allabolagData.financials.employees)
-      }
-      
-      // Auto-fill finansiella data om tillgängligt
-      if (allabolagData.financials?.revenue) {
-        enrichedData.autoFill.revenue = allabolagData.financials.revenue.toString()
-        enrichedData.autoFill.revenue2024 = allabolagData.financials.revenue.toString()
-      }
-      if (allabolagData.financials?.profit) {
-        enrichedData.autoFill.profit = allabolagData.financials.profit.toString()
-      }
-      if (allabolagData.financials?.operatingProfit) {
-        enrichedData.autoFill.ebitda2024 = allabolagData.financials.operatingProfit.toString()
-      }
-      if (allabolagData.financials?.equity) {
-        enrichedData.autoFill.equity = allabolagData.financials.equity.toString()
-      }
-      
-      // Historisk data för flera år
-      if (allabolagData.history && allabolagData.history.length > 0) {
-        const sortedHistory = allabolagData.history.sort((a, b) => b.year - a.year)
-        if (sortedHistory[0]?.revenue) {
-          enrichedData.autoFill.revenue2024 = sortedHistory[0].revenue.toString()
-        }
-        if (sortedHistory[1]?.revenue) {
-          enrichedData.autoFill.revenue2023 = sortedHistory[1].revenue.toString()
-        }
-        if (sortedHistory[2]?.revenue) {
-          enrichedData.autoFill.revenue2022 = sortedHistory[2].revenue.toString()
-        }
-      }
-    }
+    // 4. PROCESS RESULTS - All data från Bolagsverket API (redan processad ovan)
 
     if (scrapingResult.status === 'fulfilled' && scrapingResult.value) {
       enrichedData.rawData.websiteContent = scrapingResult.value
@@ -204,73 +158,22 @@ export async function POST(request: Request) {
       enrichedData.rawData.scbData = scbResult.value
     }
 
-    // Ytterligare Allabolag-bearbetning för avancerade fält
-    if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
-      const allabolagData = allabolagResult.value
-      
-      // Auto-fill exakta finansiella siffror (kompletterar tidigare auto-fill)
-      if (allabolagData.financials.revenue && !enrichedData.autoFill.exactRevenue) {
-        enrichedData.autoFill.exactRevenue = allabolagData.financials.revenue.toString()
+    // Avancerade fält - bransch-baserade defaults
+    if (industry) {
+      // Payment Terms (bransch-baserat default)
+      if (!enrichedData.autoFill.paymentTerms) {
+        enrichedData.autoFill.paymentTerms = getDefaultPaymentTerms(industry)
       }
       
-      if (allabolagData.financials.revenue && allabolagData.financials.profit) {
-        const operatingCosts = allabolagData.financials.revenue - allabolagData.financials.profit
-        enrichedData.autoFill.operatingCosts = operatingCosts.toString()
+      // Regulatory Licenses (bransch-baserat)
+      if (!enrichedData.autoFill.regulatoryLicenses) {
+        enrichedData.autoFill.regulatoryLicenses = getDefaultRegulatoryStatus(industry)
       }
-      
-      // Trend-data
-      if (allabolagData.financials.revenueGrowth !== undefined) {
-        if (allabolagData.financials.revenueGrowth > 20) {
-          enrichedData.autoFill.revenue3Years = 'strong_growth'
-        } else if (allabolagData.financials.revenueGrowth > 10) {
-          enrichedData.autoFill.revenue3Years = 'growth'
-        } else if (allabolagData.financials.revenueGrowth > -10) {
-          enrichedData.autoFill.revenue3Years = 'stable'
-        } else {
-          enrichedData.autoFill.revenue3Years = 'decline'
-        }
-      }
-      
-      // SMARTA AUTO-FILL baserat på årsredovisning:
-      
-      // 1. Total Debt (från balansräkning)
-      if (allabolagData.financials.liabilities && allabolagData.financials.equity) {
-        enrichedData.autoFill.totalDebt = allabolagData.financials.liabilities.toString()
-      }
-      
-      // 2. COGS (från årsredovisning om tillgänglig)
-      if (allabolagData.financials.cogs) {
-        enrichedData.autoFill.cogs = allabolagData.financials.cogs.toString()
-      }
-      
-      // 3. Gross Margin (från årsredovisning om tillgänglig, annars uppskatta)
-      if (allabolagData.financials.grossMargin) {
-        enrichedData.autoFill.grossMargin = Math.round(allabolagData.financials.grossMargin).toString()
-      } else if (allabolagData.financials.profitMargin && industry) {
-        const grossMarginEstimate = estimateGrossMarginFromIndustry(
-          industry, 
-          allabolagData.financials.profitMargin
-        )
-        if (grossMarginEstimate) {
-          enrichedData.autoFill.grossMargin = grossMarginEstimate.toString()
-        }
-      }
-      
-      // 4. Payment Terms (bransch-baserat default)
-      enrichedData.autoFill.paymentTerms = getDefaultPaymentTerms(industry)
-      
-      // 5. Regulatory Licenses (bransch-baserat)
-      enrichedData.autoFill.regulatoryLicenses = getDefaultRegulatoryStatus(industry)
-      
-      // 6. Customer Concentration (conservative default)
+    }
+    
+    // Customer Concentration (conservative default)
+    if (!enrichedData.autoFill.customerConcentrationRisk) {
       enrichedData.autoFill.customerConcentrationRisk = 'low'
-      
-      console.log('✓ Allabolag advanced auto-fill:', {
-        revenue: enrichedData.autoFill.exactRevenue,
-        trend: enrichedData.autoFill.revenue3Years,
-        debt: enrichedData.autoFill.totalDebt ? 'Yes' : 'No',
-        grossMargin: enrichedData.autoFill.grossMargin,
-      })
     }
 
     // RATSIT DATA - Kreditbetyg och riskbedömning (SILENT BEST-EFFORT)
@@ -294,7 +197,7 @@ export async function POST(request: Request) {
       const proffData = proffResult.value
       enrichedData.rawData.proffData = proffData
       
-      // Use Proff data to fill gaps if Allabolag didn't get everything
+      // Use Proff data to fill gaps if Bolagsverket didn't provide everything
       if (proffData.financials.revenue && !enrichedData.autoFill.exactRevenue) {
         enrichedData.autoFill.exactRevenue = proffData.financials.revenue.toString()
       }
@@ -334,12 +237,12 @@ export async function POST(request: Request) {
           enrichedData.autoFill.employees = mapEmployeeCount(linkedinCount)
         }
         
-        // Calculate employee growth if we have historical data
-        const allabolagEmployees = enrichedData.rawData.allabolagData?.financials?.employees
-        if (allabolagEmployees && linkedinCount > allabolagEmployees) {
+        // Calculate employee growth if we have historical data from Bolagsverket
+        const bolagsverketEmployees = enrichedData.rawData.bolagsverketData?.employees
+        if (bolagsverketEmployees && linkedinCount > bolagsverketEmployees) {
           linkedinData.employeeGrowth = estimateEmployeeGrowth(
             linkedinCount,
-            allabolagEmployees,
+            bolagsverketEmployees,
             12 // Assume annual reports are ~12 months old
           )
         }
@@ -427,9 +330,20 @@ export async function POST(request: Request) {
         advantages.push('Växande organisation - rekryterar aktivt')
       }
       
-      if (enrichedData.rawData.allabolagData?.financials?.revenueGrowth && 
-          enrichedData.rawData.allabolagData.financials.revenueGrowth > 20) {
-        advantages.push('Stark historisk tillväxt (>20% årligen)')
+      // Kolla om vi har revenue growth från Bolagsverket årsredovisningar
+      if (enrichedData.rawData.bolagsverketData?.annualReports && 
+          enrichedData.rawData.bolagsverketData.annualReports.length >= 2) {
+        const reports = enrichedData.rawData.bolagsverketData.annualReports.sort((a, b) => 
+          parseInt(b.year) - parseInt(a.year)
+        )
+        const latestRevenue = reports[0].revenue
+        const previousRevenue = reports[1].revenue
+        if (latestRevenue && previousRevenue) {
+          const growth = ((latestRevenue - previousRevenue) / previousRevenue) * 100
+          if (growth > 20) {
+            advantages.push('Stark historisk tillväxt (>20% årligen)')
+          }
+        }
       }
       
       if (advantages.length > 0) {

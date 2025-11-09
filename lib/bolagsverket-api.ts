@@ -2,7 +2,7 @@
  * Bolagsverket API Integration
  * 
  * Hämtar företagsdata och årsredovisningar från Bolagsverket
- * Använder officiella API:er där möjligt, fallback till scraping
+ * Använder enbart officiella Bolagsverket API:er
  */
 
 import { createTimeoutSignal } from './scrapers/abort-helper'
@@ -17,13 +17,13 @@ interface BolagsverketCompanyData {
   employees?: number
   industryCode?: string
   annualReports?: AnnualReport[]
-  source: 'bolagsverket-api' | 'allabolag' | 'estimated'
+  source: 'bolagsverket-api'
   note?: string
 }
 
 interface AnnualReport {
   year: string
-  filingDate: string
+  filingDate?: string
   documentUrl?: string
   revenue?: number
   profit?: number
@@ -42,28 +42,25 @@ export async function fetchBolagsverketCompanyData(orgNumber: string): Promise<B
       return null
     }
 
-    // Försök först med Bolagsverkets officiella API (om tillgängligt)
-    // Notera: Detta kräver API-nyckel och registrering
+    // Hämta från Bolagsverkets officiella API
     const apiKey = process.env.BOLAGSVERKET_API_KEY
-    if (apiKey) {
-      try {
-        const officialData = await fetchFromOfficialAPI(cleanOrgNumber, apiKey)
-        if (officialData) {
-          return officialData
-        }
-      } catch (error) {
-        console.log('[Bolagsverket] Official API failed, trying fallback:', error)
+    if (!apiKey) {
+      console.log('[Bolagsverket] API key not configured - set BOLAGSVERKET_API_KEY environment variable')
+      return null
+    }
+
+    try {
+      const officialData = await fetchFromOfficialAPI(cleanOrgNumber, apiKey)
+      if (officialData) {
+        return officialData
       }
+      
+      console.log('[Bolagsverket] No data found for org number:', cleanOrgNumber)
+      return null
+    } catch (error) {
+      console.error('[Bolagsverket] Official API error:', error)
+      return null
     }
-
-    // Fallback 1: Allabolag.se scraping (public data)
-    const allabolagData = await fetchFromAllabolag(cleanOrgNumber)
-    if (allabolagData) {
-      return allabolagData
-    }
-
-    // Fallback 2: Generera uppskattning baserat på org.nr
-    return generateEstimatedData(cleanOrgNumber)
     
   } catch (error) {
     console.error('[Bolagsverket] Error fetching data:', error)
@@ -182,173 +179,47 @@ async function parseCompanyData(companyData: any, orgNumber: string, apiKey: str
 }
 
 /**
- * Hämtar data från Allabolag.se (public scraping)
- */
-async function fetchFromAllabolag(orgNumber: string): Promise<BolagsverketCompanyData | null> {
-  try {
-    const cheerio = await import('cheerio')
-    
-    const response = await fetch(`https://www.allabolag.se/what/${orgNumber}`, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-      },
-      signal: createTimeoutSignal(8000)
-    })
-    
-    if (!response.ok) {
-      return null
-    }
-
-    const html = await response.text()
-    const $ = cheerio.load(html)
-    
-    // Extrahera grundläggande info
-    const companyName = $('h1').first().text().trim() || 
-                       $('[data-testid="company-name"]').text().trim() ||
-                       $('.company-name').text().trim()
-    
-    // Försök hitta registreringsdatum
-    const registrationDateText = html.match(/Registrerat[:\s]+(\d{4}-\d{2}-\d{2})/i)?.[1] ||
-                                 html.match(/(\d{4}-\d{2}-\d{2})/)?.[1]
-    
-    // Försök hitta antal anställda
-    const employeesMatch = html.match(/Antal\s+anställda[:\s]+(\d+)/i) ||
-                          html.match(/(\d+)\s+anställda/i)
-    const employees = employeesMatch ? parseInt(employeesMatch[1]) : undefined
-    
-    // Försök hitta adress
-    const address = $('[data-testid="address"]').text().trim() ||
-                   $('.company-address').text().trim() ||
-                   undefined
-
-    if (!companyName || companyName === '') {
-      return null
-    }
-
-    return {
-      name: companyName,
-      orgNumber: orgNumber,
-      registrationDate: registrationDateText || '',
-      legalForm: 'Aktiebolag', // Allabolag visar ofta bara AB
-      status: 'Aktiv',
-      employees,
-      address,
-      source: 'allabolag'
-    }
-  } catch (error) {
-    console.log('[Bolagsverket] Allabolag fetch failed:', error)
-    return null
-  }
-}
-
-/**
- * Genererar uppskattad data baserat på organisationsnummer
- */
-function generateEstimatedData(orgNumber: string): BolagsverketCompanyData {
-  // Extrahera år från org.nr (första två siffrorna)
-  const century = orgNumber.substring(0, 2)
-  const year = parseInt(century) > 50 ? `19${century}` : `20${century}`
-  
-  return {
-    name: 'Företagsnamn (vänligen kontrollera)',
-    orgNumber: orgNumber,
-    registrationDate: `${year}-06-15`,
-    legalForm: 'Aktiebolag',
-    status: 'Aktiv (uppskattning)',
-    source: 'estimated',
-    note: 'Uppskattad data - kontrollera med Bolagsverket för exakt information'
-  }
-}
-
-/**
  * Hämtar årsredovisningar för ett företag
  */
 export async function fetchAnnualReports(orgNumber: string): Promise<AnnualReport[]> {
   try {
     const cleanOrgNumber = orgNumber.replace(/\D/g, '')
     
-    // Försök hämta från officiellt API om tillgängligt
+    // Hämta från officiellt API
     const apiKey = process.env.BOLAGSVERKET_API_KEY
-    if (apiKey) {
-      try {
-        const response = await fetch(`https://data.bolagsverket.se/v1/foretag/${cleanOrgNumber}/arsredovisningar`, {
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Accept': 'application/json'
-          },
-          signal: createTimeoutSignal(10000)
-        })
-
-        if (response.ok) {
-          const data = await response.json()
-          return (data.reports || []).map((report: any) => ({
-            year: report.year,
-            filingDate: report.filingDate,
-            documentUrl: report.documentUrl,
-            revenue: report.revenue,
-            profit: report.profit,
-            equity: report.equity
-          }))
-        }
-      } catch (error) {
-        console.log('[Bolagsverket] Failed to fetch reports from API:', error)
-      }
+    if (!apiKey) {
+      console.log('[Bolagsverket] API key not configured')
+      return []
     }
 
-    // Fallback: Försök hämta från Allabolag
-    return await fetchReportsFromAllabolag(cleanOrgNumber)
+    try {
+      const response = await fetch(`https://data.bolagsverket.se/v1/foretag/${cleanOrgNumber}/arsredovisningar`, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Accept': 'application/json'
+        },
+        signal: createTimeoutSignal(10000)
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        return (data.reports || []).map((report: any) => ({
+          year: report.year,
+          filingDate: report.filingDate,
+          documentUrl: report.documentUrl,
+          revenue: report.revenue,
+          profit: report.profit,
+          equity: report.equity
+        }))
+      }
+    } catch (error) {
+      console.log('[Bolagsverket] Failed to fetch reports from API:', error)
+    }
+
+    return []
     
   } catch (error) {
     console.error('[Bolagsverket] Error fetching annual reports:', error)
     return []
   }
 }
-
-/**
- * Hämtar årsredovisningar från Allabolag.se
- */
-async function fetchReportsFromAllabolag(orgNumber: string): Promise<AnnualReport[]> {
-  try {
-    const cheerio = await import('cheerio')
-    
-    const response = await fetch(`https://www.allabolag.se/what/${orgNumber}/arsredovisningar`, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-      },
-      signal: createTimeoutSignal(8000)
-    })
-
-    if (!response.ok) {
-      return []
-    }
-
-    const html = await response.text()
-    const $ = cheerio.load(html)
-    
-    const reports: AnnualReport[] = []
-    
-    // Försök extrahera årsredovisningar från tabell eller lista
-    $('.annual-report, .arsredovisning, [data-year]').each((_, element) => {
-      const year = $(element).attr('data-year') || 
-                   $(element).find('.year').text().trim() ||
-                   $(element).text().match(/(\d{4})/)?.[1]
-      
-      if (year) {
-        const filingDate = $(element).find('.date').text().trim() || ''
-        const documentUrl = $(element).find('a').attr('href') || undefined
-        
-        reports.push({
-          year,
-          filingDate,
-          documentUrl
-        })
-      }
-    })
-
-    return reports
-  } catch (error) {
-    console.log('[Bolagsverket] Failed to fetch reports from Allabolag:', error)
-    return []
-  }
-}
-
