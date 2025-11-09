@@ -85,8 +85,7 @@ export async function POST(request: Request) {
       )
     }
 
-    try {
-      const rawData = await request.json()
+    const rawData = await request.json()
     
     // Sanitize and validate input
     const { valid, errors, sanitized } = validateAndSanitize(rawData)
@@ -159,13 +158,6 @@ export async function POST(request: Request) {
 
     await saveValuationSafely(data, result)
     return NextResponse.json({ result })
-  } catch (error) {
-    console.error('Valuation API error:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate valuation' },
-      { status: 500 }
-    )
-  }
   } catch (buildError) {
     // Catch any build-time errors (e.g., when Next.js analyzes the route)
     console.error('Build-time error in valuation route:', buildError)
