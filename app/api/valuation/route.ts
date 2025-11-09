@@ -8,8 +8,16 @@ import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 // Force dynamic rendering to prevent build-time analysis
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+export const revalidate = 0
 
-const prisma = new PrismaClient()
+// Lazy initialization to prevent build-time issues
+let prisma: PrismaClient | null = null
+function getPrisma() {
+  if (!prisma) {
+    prisma = new PrismaClient()
+  }
+  return prisma
+}
 
 // GET handler to prevent build-time errors
 export async function GET() {
@@ -24,11 +32,34 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Skip during build/prerender phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ error: 'Building' }, { status: 503 })
+  }
+
   try {
-    // Get IP for rate limiting
-    const ip = request.headers?.get?.('x-forwarded-for') || 
-               request.headers?.get?.('x-real-ip') || 
-               'unknown'
+    // Guard: Check if we have a valid request object (build-time protection)
+    if (!request || typeof request !== 'object') {
+      return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
+    }
+    
+    // Guard: Check if headers exist and is callable
+    if (!request.headers || typeof request.headers !== 'object') {
+      return NextResponse.json({ error: 'Invalid request headers' }, { status: 400 })
+    }
+
+    // Get IP for rate limiting (with safe access)
+    let ip = 'unknown'
+    try {
+      if (typeof request.headers.get === 'function') {
+        ip = request.headers.get('x-forwarded-for') || 
+             request.headers.get('x-real-ip') || 
+             'unknown'
+      }
+    } catch (e) {
+      // Fallback if headers.get fails
+      ip = 'unknown'
+    }
 
     // Rate limit: 3 värderingar per timme per IP
     const { success } = await checkRateLimit(ip, 'valuation')
@@ -137,16 +168,17 @@ export async function POST(request: Request) {
 
 async function saveValuationSafely(input: any, result: any) {
   try {
+    const db = getPrisma()
     let userId: string | null = null
     
     if (input?.email) {
-      const user = await prisma.user.findUnique({
+      const user = await db.user.findUnique({
         where: { email: input.email }
       })
       userId = user?.id || null
     }
 
-    await prisma.valuation.create({
+    await db.valuation.create({
       data: {
         userId,
         email: input?.email ?? null,

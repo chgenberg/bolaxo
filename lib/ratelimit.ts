@@ -117,9 +117,19 @@ export function withRateLimit(
   type: 'auth' | 'valuation' | 'api' = 'api'
 ) {
   return async (req: Request, ...args: any[]) => {
-    // Använd IP + user-agent som identifier
-    const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
-    const ua = req.headers.get('user-agent') || ''
+    // Safe header access
+    let ip = 'unknown'
+    let ua = ''
+    
+    try {
+      if (req?.headers && typeof req.headers.get === 'function') {
+        ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
+        ua = req.headers.get('user-agent') || ''
+      }
+    } catch (e) {
+      // Fallback if headers access fails
+    }
+    
     const identifier = `${ip}-${ua.slice(0, 50)}`
 
     const { success, remaining } = await checkRateLimit(identifier, type)
