@@ -248,32 +248,177 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         body: JSON.stringify({
           orgNumber: data.orgNumber,
           website: data.website,
-          companyName: data.companyName
+          companyName: data.companyName,
+          industry: data.industry
         })
       })
       
       if (response.ok) {
         const enrichedData = await response.json()
         
-        // Auto-fill fields with enriched data
+        // Auto-fill fields with enriched data - smart mapping
         const autoFillFields = enrichedData.autoFill || {}
-        setData(prev => ({
-          ...prev,
-          ...Object.keys(autoFillFields).reduce((acc, key) => {
-            if (autoFillFields[key] && !prev[key]) {
-              acc[key] = autoFillFields[key].toString()
+        const newData: Partial<ValuationData> = {}
+        
+        // Basic info
+        if (autoFillFields.companyName && !data.companyName) {
+          newData.companyName = autoFillFields.companyName
+        }
+        if (autoFillFields.address && !data.address) {
+          newData.address = autoFillFields.address
+        }
+        if (autoFillFields.companyAge && !data.companyAge) {
+          newData.companyAge = autoFillFields.companyAge
+        }
+        if (autoFillFields.employees && !data.employees) {
+          newData.employees = autoFillFields.employees
+        }
+        
+        // Financial data - revenue
+        if (autoFillFields.revenue && !data.revenue) {
+          newData.revenue = autoFillFields.revenue.toString()
+        } else if (autoFillFields.exactRevenue && !data.revenue) {
+          newData.revenue = autoFillFields.exactRevenue.toString()
+        } else if (autoFillFields.revenue2024 && !data.revenue) {
+          newData.revenue = autoFillFields.revenue2024.toString()
+        }
+        
+        // Calculate average revenue from 3 years
+        if (autoFillFields.revenue2024 || autoFillFields.revenue2023 || autoFillFields.revenue2022) {
+          const revenues = [
+            Number(autoFillFields.revenue2024) || 0,
+            Number(autoFillFields.revenue2023) || 0,
+            Number(autoFillFields.revenue2022) || 0
+          ].filter(r => r > 0)
+          
+          if (revenues.length > 0 && !data.revenue3Years) {
+            const avgRevenue = revenues.reduce((a, b) => a + b, 0) / revenues.length
+            newData.revenue3Years = Math.round(avgRevenue).toString()
+          }
+          
+          // Calculate revenue growth rate
+          if (revenues.length >= 2 && !data.revenueGrowthRate) {
+            const latest = revenues[0]
+            const previous = revenues[1]
+            if (previous > 0) {
+              const growthRate = ((latest - previous) / previous) * 100
+              newData.revenueGrowthRate = growthRate.toFixed(1)
             }
-            return acc
-          }, {} as Partial<ValuationData>)
-        }))
+          }
+        }
+        
+        // Calculate profit margin from profit and revenue
+        if (autoFillFields.profit !== undefined && autoFillFields.revenue) {
+          const profit = Number(autoFillFields.profit)
+          const revenue = Number(autoFillFields.revenue)
+          if (revenue > 0 && !data.profitMargin) {
+            const profitMargin = (profit / revenue) * 100
+            newData.profitMargin = profitMargin.toFixed(1)
+          }
+        }
+        
+        // EBITDA - try to calculate or use provided value
+        if (autoFillFields.ebitda && !data.ebitda) {
+          newData.ebitda = autoFillFields.ebitda.toString()
+        } else if (autoFillFields.profit !== undefined && autoFillFields.revenue) {
+          // Estimate EBITDA as profit + estimated depreciation/amortization (typically 2-5% of revenue)
+          const profit = Number(autoFillFields.profit)
+          const revenue = Number(autoFillFields.revenue)
+          const estimatedEBITDA = profit + (revenue * 0.03) // Assume 3% depreciation
+          if (!data.ebitda && estimatedEBITDA > 0) {
+            newData.ebitda = Math.round(estimatedEBITDA).toString()
+          }
+        }
+        
+        // Balance sheet data
+        if (autoFillFields.totalAssets && !data.totalAssets) {
+          newData.totalAssets = autoFillFields.totalAssets.toString()
+        }
+        if (autoFillFields.totalLiabilities && !data.totalLiabilities) {
+          newData.totalLiabilities = autoFillFields.totalLiabilities.toString()
+        }
+        if (autoFillFields.cash && !data.cash) {
+          newData.cash = autoFillFields.cash.toString()
+        }
+        if (autoFillFields.accountsReceivable && !data.accountsReceivable) {
+          newData.accountsReceivable = autoFillFields.accountsReceivable.toString()
+        }
+        if (autoFillFields.inventory && !data.inventory) {
+          newData.inventory = autoFillFields.inventory.toString()
+        }
+        if (autoFillFields.accountsPayable && !data.accountsPayable) {
+          // Store accountsPayable for later use (not directly in wizard but useful for calculations)
+          // Could be used to estimate payment terms
+        }
+        if (autoFillFields.shortTermDebt && !data.shortTermDebt) {
+          newData.shortTermDebt = autoFillFields.shortTermDebt.toString()
+        }
+        if (autoFillFields.longTermDebt && !data.longTermDebt) {
+          newData.longTermDebt = autoFillFields.longTermDebt.toString()
+        }
+        
+        // Equity (useful for substance valuation)
+        if (autoFillFields.equity) {
+          // Store equity for valuation calculations even if not directly shown in wizard
+        }
+        
+        // Operating costs breakdown (if available)
+        if (autoFillFields.operatingCosts && !data.salaries && !data.rentCosts && !data.marketingCosts && !data.otherOperatingCosts) {
+          // Try to estimate breakdown if we have total operating costs
+          const totalOps = Number(autoFillFields.operatingCosts)
+          // Typical breakdown: salaries 60%, rent 15%, marketing 10%, other 15%
+          if (totalOps > 0) {
+            newData.salaries = Math.round(totalOps * 0.6).toString()
+            newData.rentCosts = Math.round(totalOps * 0.15).toString()
+            newData.marketingCosts = Math.round(totalOps * 0.1).toString()
+            newData.otherOperatingCosts = Math.round(totalOps * 0.15).toString()
+          }
+        }
+        
+        // Estimate gross margin if we have revenue and operating costs
+        if (autoFillFields.revenue && autoFillFields.operatingCosts && !data.grossMargin) {
+          const revenue = Number(autoFillFields.revenue)
+          const opsCosts = Number(autoFillFields.operatingCosts)
+          // Gross margin = (Revenue - COGS) / Revenue
+          // Estimate COGS as 40-60% of revenue depending on industry
+          const estimatedCOGS = revenue * 0.5 // Default 50%
+          const grossMargin = ((revenue - estimatedCOGS) / revenue) * 100
+          newData.grossMargin = grossMargin.toFixed(1)
+        }
+        
+        // Customer concentration risk (if provided)
+        if (autoFillFields.customerConcentrationRisk && !data.customerConcentrationRisk) {
+          newData.customerConcentrationRisk = autoFillFields.customerConcentrationRisk
+        }
+        
+        // Payment terms (if provided)
+        if (autoFillFields.paymentTerms && !data.paymentTerms) {
+          newData.paymentTerms = autoFillFields.paymentTerms
+        }
+        
+        // Regulatory licenses (if provided)
+        if (autoFillFields.regulatoryLicenses && !data.regulatoryLicenses) {
+          newData.regulatoryLicenses = autoFillFields.regulatoryLicenses
+        }
+        
+        // Competitive advantages (if extracted from website)
+        if (autoFillFields.competitiveAdvantage && !data.competitiveAdvantages) {
+          newData.competitiveAdvantages = autoFillFields.competitiveAdvantage
+        }
+        
+        // Update state with all new data
+        setData(prev => ({ ...prev, ...newData }))
         
         // Store enriched data for later use
         if (enrichedData.enrichedCompanyData) {
           localStorage.setItem('enrichedCompanyData', JSON.stringify(enrichedData.enrichedCompanyData))
         }
         
-        setEnrichmentStatus('Data hämtad!')
-        setTimeout(() => setEnrichmentStatus(''), 3000)
+        // Store raw enriched data for valuation API
+        localStorage.setItem('enrichedCompanyData', JSON.stringify(enrichedData))
+        
+        setEnrichmentStatus(`Data hämtad! ${Object.keys(newData).length} fält ifyllda automatiskt.`)
+        setTimeout(() => setEnrichmentStatus(''), 5000)
       }
     } catch (error) {
       console.error('Enrichment error:', error)
