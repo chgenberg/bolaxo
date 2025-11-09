@@ -107,9 +107,13 @@ export async function POST(request: Request) {
         const sortedReports = bolagsverketData.annualReports
           .sort((a, b) => parseInt(b.year) - parseInt(a.year))
         
-        if (sortedReports[0]?.revenue) {
-          enrichedData.autoFill.revenue2024 = sortedReports[0].revenue.toString()
-          enrichedData.autoFill.revenue = sortedReports[0].revenue.toString()
+        const latestReport = sortedReports[0]
+        
+        // Omsättning och resultat
+        if (latestReport?.revenue) {
+          enrichedData.autoFill.revenue2024 = latestReport.revenue.toString()
+          enrichedData.autoFill.exactRevenue = latestReport.revenue.toString()
+          enrichedData.autoFill.revenue = latestReport.revenue.toString()
         }
         if (sortedReports[1]?.revenue) {
           enrichedData.autoFill.revenue2023 = sortedReports[1].revenue.toString()
@@ -117,11 +121,50 @@ export async function POST(request: Request) {
         if (sortedReports[2]?.revenue) {
           enrichedData.autoFill.revenue2022 = sortedReports[2].revenue.toString()
         }
-        if (sortedReports[0]?.profit) {
-          enrichedData.autoFill.profit = sortedReports[0].profit.toString()
+        if (latestReport?.profit !== undefined) {
+          enrichedData.autoFill.profit = latestReport.profit.toString()
+          // Beräkna operating costs om vi har revenue och profit
+          if (latestReport.revenue && latestReport.profit !== undefined) {
+            const operatingCosts = latestReport.revenue - latestReport.profit
+            enrichedData.autoFill.operatingCosts = operatingCosts.toString()
+          }
         }
-        if (sortedReports[0]?.equity) {
-          enrichedData.autoFill.equity = sortedReports[0].equity.toString()
+        
+        // Balansräkningsdata (auto-fyll från senaste årsredovisningen)
+        if (latestReport?.equity) {
+          enrichedData.autoFill.equity = latestReport.equity.toString()
+        }
+        if (latestReport?.totalAssets) {
+          enrichedData.autoFill.totalAssets = latestReport.totalAssets.toString()
+        }
+        if (latestReport?.totalLiabilities) {
+          enrichedData.autoFill.totalLiabilities = latestReport.totalLiabilities.toString()
+        }
+        if (latestReport?.cash) {
+          enrichedData.autoFill.cash = latestReport.cash.toString()
+        }
+        if (latestReport?.accountsReceivable) {
+          enrichedData.autoFill.accountsReceivable = latestReport.accountsReceivable.toString()
+        }
+        if (latestReport?.inventory) {
+          enrichedData.autoFill.inventory = latestReport.inventory.toString()
+        }
+        if (latestReport?.accountsPayable) {
+          enrichedData.autoFill.accountsPayable = latestReport.accountsPayable.toString()
+        }
+        
+        // Beräkna total skuld från kort- och långfristiga skulder
+        const shortTermDebt = latestReport?.shortTermDebt || 0
+        const longTermDebt = latestReport?.longTermDebt || 0
+        if (shortTermDebt > 0 || longTermDebt > 0) {
+          const totalDebt = shortTermDebt + longTermDebt
+          enrichedData.autoFill.totalDebt = totalDebt.toString()
+          enrichedData.autoFill.shortTermDebt = shortTermDebt.toString()
+          enrichedData.autoFill.longTermDebt = longTermDebt.toString()
+        } else if (latestReport?.totalLiabilities) {
+          // Om vi bara har totala skulder, uppskatta räntebärande skulder (30% av totala skulder)
+          const estimatedDebt = latestReport.totalLiabilities * 0.3
+          enrichedData.autoFill.totalDebt = estimatedDebt.toString()
         }
       }
       

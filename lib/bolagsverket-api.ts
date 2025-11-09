@@ -28,6 +28,15 @@ interface AnnualReport {
   revenue?: number
   profit?: number
   equity?: number
+  // Balansräkningsdata (om tillgängligt från API)
+  totalAssets?: number
+  totalLiabilities?: number
+  cash?: number
+  accountsReceivable?: number
+  inventory?: number
+  accountsPayable?: number
+  shortTermDebt?: number
+  longTermDebt?: number
 }
 
 /**
@@ -153,7 +162,16 @@ async function parseCompanyData(companyData: any, orgNumber: string, apiKey: str
           documentUrl: report.documentUrl || report.dokumentUrl,
           revenue: report.revenue || report.omsattning || report.nettoomsattning,
           profit: report.profit || report.resultat || report.arsresultat,
-          equity: report.equity || report.egetKapital || report.egenkapital
+          equity: report.equity || report.egetKapital || report.egenkapital,
+          // Balansräkningsdata (om tillgängligt)
+          totalAssets: report.totalAssets || report.totalaTillgangar || report.tillgangar,
+          totalLiabilities: report.totalLiabilities || report.totalaSkulder || report.skulder,
+          cash: report.cash || report.kassa || report.kontanter || report.likvidaMedel,
+          accountsReceivable: report.accountsReceivable || report.kundfordringar || report.fordringar,
+          inventory: report.inventory || report.lager || report.varulager,
+          accountsPayable: report.accountsPayable || report.leverantorsskulder || report.skulderTillLeverantorer,
+          shortTermDebt: report.shortTermDebt || report.kortfristigaSkulder || report.kortfristigaLan,
+          longTermDebt: report.longTermDebt || report.langfristigaSkulder || report.langfristigaLan
         }))
       }
     } catch (error) {

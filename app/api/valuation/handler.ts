@@ -4,6 +4,14 @@ import { checkRateLimit } from '@/lib/ratelimit'
 import { validateAndSanitize } from '@/lib/sanitize'
 import { buildConditionalPrompts, getIndustrySpecificInstructions, validateDataCombinations } from '@/lib/valuation-rules'
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
+import {
+  analyzeHistoricalTrends,
+  calculateDebtAdjustments,
+  calculateWorkingCapital,
+  calculateWorkingCapitalRequirement,
+  extractBalanceSheetData,
+  calculateTotalDebt
+} from '@/lib/valuation-helpers'
 
 // Lazy initialization
 let prisma: PrismaClient | null = null
@@ -251,12 +259,39 @@ ${ebitda !== null ? `- EBITDA: ${ebitda.toLocaleString('sv-SE')} kr` : '- EBITDA
       
       if (bv.annualReports && bv.annualReports.length > 0) {
         prompt += `\n\n**ÅRSREDOVISNINGAR (Bolagsverket):**`
-        bv.annualReports.slice(0, 3).forEach((report: any) => {
+        bv.annualReports.slice(0, 5).forEach((report: any) => {
           prompt += `\n${report.year}:`
           if (report.revenue) prompt += ` Oms ${(report.revenue / 1000000).toFixed(1)} MSEK`
           if (report.profit !== undefined) prompt += `, Resultat ${(report.profit / 1000000).toFixed(1)} MSEK`
+          if (report.equity) prompt += `, Eget kapital ${(report.equity / 1000000).toFixed(1)} MSEK`
         })
         prompt += `\n⚠️ VIKTIGT: Dessa är officiella siffror från Bolagsverket - använd som huvudkälla!`
+        
+        // HISTORISK TRENDANALYS
+        if (bv.annualReports.length >= 2) {
+          const trends = analyzeHistoricalTrends(bv.annualReports)
+          
+          if (trends.revenueGrowth.length > 0) {
+            prompt += `\n\n**HISTORISK TRENDANALYS:**`
+            prompt += `\n- Genomsnittlig tillväxt: ${trends.averageGrowth.toFixed(1)}% per år`
+            prompt += `\n- Senaste årets tillväxt: ${trends.lastYearGrowth.toFixed(1)}%`
+            prompt += `\n- Volatilitet: ${trends.volatility.toFixed(1)}% (högre = mer risk)`
+            prompt += `\n- Senaste trend: ${trends.recentTrend === 'improving' ? 'FÖRBÄTTRAS ✓' : trends.recentTrend === 'declining' ? 'FÖRSÄMras ⚠' : 'STABIL →'}`
+            
+            if (trends.recentTrend === 'improving') {
+              prompt += `\n✓ Justera multipel uppåt med 10-15% för positiv trend`
+            } else if (trends.recentTrend === 'declining') {
+              prompt += `\n⚠ Justera multipel nedåt med 10-15% för negativ trend`
+            }
+            
+            if (trends.volatility > 20) {
+              prompt += `\n⚠ Hög volatilitet (${trends.volatility.toFixed(1)}%) - osäker framtid, sänk multipel`
+            }
+            
+            // Viktning: senaste året väger tyngre
+            prompt += `\n- Använd 60% vikt på senaste året, 40% på genomsnitt vid värdering`
+          }
+        }
       }
     }
     
@@ -287,6 +322,91 @@ ${ebitda !== null ? `- EBITDA: ${ebitda.toLocaleString('sv-SE')} kr` : '- EBITDA
     if (enrichedData.trustpilotData?.trustScore) {
       prompt += `\n- Trustpilot: ${enrichedData.trustpilotData.trustScore.score.toFixed(1)}/5.0`
     }
+    
+    // BALANSRÄKNINGSDATA - Working Capital och Debt
+    const balanceSheetData = extractBalanceSheetData(enrichedData)
+    const hasBalanceSheetData = Object.keys(balanceSheetData).length > 0
+    
+    if (hasBalanceSheetData || data.accountsReceivable || data.inventory || data.accountsPayable) {
+      const receivables = Number(data.accountsReceivable) || balanceSheetData.accountsReceivable || 0
+      const inventory = Number(data.inventory) || balanceSheetData.inventory || 0
+      const payables = Number(data.accountsPayable) || balanceSheetData.accountsPayable || 0
+      
+      if (receivables > 0 || inventory > 0 || payables > 0) {
+        const wc = calculateWorkingCapital(receivables, inventory, payables)
+        
+        prompt += `\n\n**WORKING CAPITAL (Rörelsekapital):**`
+        if (receivables > 0) {
+          prompt += `\n- Kundfordringar: ${(receivables / 1000000).toFixed(1)} MSEK`
+        }
+        if (inventory > 0) {
+          prompt += `\n- Lager: ${(inventory / 1000000).toFixed(1)} MSEK`
+        }
+        if (payables > 0) {
+          prompt += `\n- Leverantörsskulder: ${(payables / 1000000).toFixed(1)} MSEK`
+        }
+        prompt += `\n- Net Working Capital: ${(wc.netWorkingCapital / 1000000).toFixed(1)} MSEK`
+        
+        if (exactRevenue) {
+          const wcRequirement = calculateWorkingCapitalRequirement(exactRevenue, data.industry)
+          const wcPercent = (wc.netWorkingCapital / exactRevenue) * 100
+          prompt += `\n- WC som % av omsättning: ${wcPercent.toFixed(1)}%`
+          prompt += `\n- Branschtypiskt WC-behov: ${(wcRequirement / 1000000).toFixed(1)} MSEK (${((wcRequirement / exactRevenue) * 100).toFixed(1)}%)`
+          
+          if (wc.netWorkingCapital > wcRequirement * 1.5) {
+            prompt += `\n⚠ Högt working capital - binder mycket kapital, justera ned värdering`
+          } else if (wc.netWorkingCapital < wcRequirement * 0.5) {
+            prompt += `\n✓ Lågt working capital - effektiv kapitalanvändning, positivt för värdering`
+          }
+        }
+        
+        prompt += `\n⚠️ VIKTIGT: Justera Enterprise Value med working capital-behov vid försäljning`
+      }
+    }
+    
+    // DEBT ADJUSTMENTS
+    const totalDebt = Number(data.totalDebt) || 
+                     calculateTotalDebt(
+                       balanceSheetData.shortTermDebt,
+                       balanceSheetData.longTermDebt,
+                       balanceSheetData.totalLiabilities
+                     )
+    const cash = Number(data.cash) || balanceSheetData.cash || 0
+    
+    if (totalDebt > 0 || cash > 0) {
+      const debtAnalysis = calculateDebtAdjustments(
+        ebitda ? ebitda * 5 : 0, // Placeholder equity value (beräknas senare)
+        totalDebt,
+        cash,
+        ebitda
+      )
+      
+      prompt += `\n\n**SKULDER OCH KASSA:**`
+      if (totalDebt > 0) {
+        prompt += `\n- Totala skulder: ${(totalDebt / 1000000).toFixed(1)} MSEK`
+      }
+      if (cash > 0) {
+        prompt += `\n- Kassa: ${(cash / 1000000).toFixed(1)} MSEK`
+      }
+      prompt += `\n- Net Debt: ${(debtAnalysis.netDebt / 1000000).toFixed(1)} MSEK`
+      
+      if (debtAnalysis.debtToEBITDA && debtAnalysis.debtToEBITDA > 0) {
+        prompt += `\n- Skuld/EBITDA: ${debtAnalysis.debtToEBITDA.toFixed(1)}x`
+        
+        if (debtAnalysis.debtToEBITDA > 5) {
+          prompt += `\n⚠️ MYCKET HÖG skuldsättning (>5x EBITDA) - kraftigt negativt för värdering`
+        } else if (debtAnalysis.debtToEBITDA > 3) {
+          prompt += `\n⚠ Hög skuldsättning (>3x EBITDA) - sänk värdering`
+        } else if (debtAnalysis.debtToEBITDA < 1) {
+          prompt += `\n✓ Låg skuldsättning (<1x EBITDA) - positivt för värdering`
+        }
+      }
+      
+      prompt += `\n⚠️ VÄRDERING:`
+      prompt += `\n  - Enterprise Value (EV) = Företagsvärde + Net Debt`
+      prompt += `\n  - Equity Value = EV - Net Debt`
+      prompt += `\n  - Presentera BÅDA värdena i resultatet (EV och Equity Value)`
+    }
   }
   
   prompt += getIndustrySpecificInstructions(data)
@@ -309,7 +429,22 @@ JSON-format:
   "analysis": {"strengths": [...], "weaknesses": [...], "opportunities": [...], "risks": [...]},
   "recommendations": [{"title": "...", "description": "...", "impact": "high|medium|low"}],
   "marketComparison": "...",
-  "keyMetrics": [{"label": "...", "value": "..."}]
+  "keyMetrics": [{"label": "...", "value": "..."}],
+  "debtAnalysis": {
+    "enterpriseValue": X,
+    "equityValue": Y,
+    "netDebt": Z,
+    "debtToEBITDA": W
+  },
+  "workingCapital": {
+    "netWorkingCapital": X,
+    "wcAsPercentOfRevenue": Y
+  },
+  "historicalTrends": {
+    "averageGrowth": X,
+    "recentTrend": "improving|declining|stable",
+    "volatility": Y
+  }
 }`
 
   return prompt
@@ -338,6 +473,72 @@ function parseAIResponse(aiResponse: string, originalData: any): any {
       max = mostLikely * 1.75
     }
     
+    // Beräkna debt analysis om inte redan finns
+    let debtAnalysis = parsed.debtAnalysis
+    if (!debtAnalysis) {
+      const totalDebt = Number(originalData.totalDebt) || 0
+      const cash = Number(originalData.cash) || 0
+      const exactRevenue = Number(originalData.exactRevenue) || 0
+      const operatingCosts = Number(originalData.operatingCosts) || 0
+      const ebitda = exactRevenue && operatingCosts ? exactRevenue - operatingCosts : null
+      
+      if (totalDebt > 0 || cash > 0) {
+        debtAnalysis = calculateDebtAdjustments(mostLikely, totalDebt, cash, ebitda)
+      }
+    } else {
+      // Konvertera till SEK om de är i MSEK
+      if (debtAnalysis.enterpriseValue && debtAnalysis.enterpriseValue < 1000000) {
+        debtAnalysis.enterpriseValue *= 1000000
+      }
+      if (debtAnalysis.equityValue && debtAnalysis.equityValue < 1000000) {
+        debtAnalysis.equityValue *= 1000000
+      }
+      if (debtAnalysis.netDebt && debtAnalysis.netDebt < 1000000) {
+        debtAnalysis.netDebt *= 1000000
+      }
+    }
+    
+    // Beräkna working capital om inte redan finns
+    let workingCapital = parsed.workingCapital
+    if (!workingCapital) {
+      const receivables = Number(originalData.accountsReceivable) || 0
+      const inventory = Number(originalData.inventory) || 0
+      const payables = Number(originalData.accountsPayable) || 0
+      const exactRevenue = Number(originalData.exactRevenue) || 0
+      
+      if (receivables > 0 || inventory > 0 || payables > 0) {
+        const wc = calculateWorkingCapital(receivables, inventory, payables)
+        workingCapital = {
+          netWorkingCapital: wc.netWorkingCapital,
+          wcAsPercentOfRevenue: exactRevenue > 0 ? (wc.netWorkingCapital / exactRevenue) * 100 : 0
+        }
+      }
+    } else {
+      // Konvertera till SEK om de är i MSEK
+      if (workingCapital.netWorkingCapital && workingCapital.netWorkingCapital < 1000000) {
+        workingCapital.netWorkingCapital *= 1000000
+      }
+    }
+    
+    // Beräkna historical trends om inte redan finns
+    let historicalTrends = parsed.historicalTrends
+    if (!historicalTrends && originalData.enrichedCompanyData) {
+      try {
+        const enrichedData = JSON.parse(originalData.enrichedCompanyData)
+        if (enrichedData.rawData?.bolagsverketData?.annualReports?.length >= 2) {
+          const trends = analyzeHistoricalTrends(enrichedData.rawData.bolagsverketData.annualReports)
+          historicalTrends = {
+            averageGrowth: trends.averageGrowth,
+            recentTrend: trends.recentTrend,
+            volatility: trends.volatility,
+            lastYearGrowth: trends.lastYearGrowth
+          }
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+    
     return {
       valuationRange: {
         min: Math.round(min),
@@ -349,7 +550,10 @@ function parseAIResponse(aiResponse: string, originalData: any): any {
       analysis: parsed.analysis,
       recommendations: parsed.recommendations,
       marketComparison: parsed.marketComparison,
-      keyMetrics: parsed.keyMetrics || []
+      keyMetrics: parsed.keyMetrics || [],
+      debtAnalysis: debtAnalysis || null,
+      workingCapital: workingCapital || null,
+      historicalTrends: historicalTrends || null
     }
   } catch (error) {
     console.error('Failed to parse AI response:', error)
@@ -390,6 +594,27 @@ function generateFallbackValuation(data: any): any {
   const minValue = baseValue * 0.7
   const maxValue = baseValue * 1.4
   
+  // Beräkna debt analysis för fallback
+  const totalDebt = Number(data.totalDebt) || 0
+  const cash = Number(data.cash) || 0
+  let debtAnalysis = null
+  if (totalDebt > 0 || cash > 0) {
+    debtAnalysis = calculateDebtAdjustments(Math.round(baseValue * 1000000), totalDebt, cash, ebitda * 1000000)
+  }
+  
+  // Beräkna working capital för fallback
+  const receivables = Number(data.accountsReceivable) || 0
+  const inventory = Number(data.inventory) || 0
+  const payables = Number(data.accountsPayable) || 0
+  let workingCapital = null
+  if (receivables > 0 || inventory > 0 || payables > 0) {
+    const wc = calculateWorkingCapital(receivables, inventory, payables)
+    workingCapital = {
+      netWorkingCapital: wc.netWorkingCapital,
+      wcAsPercentOfRevenue: revenue > 0 ? (wc.netWorkingCapital / (revenue * 1000000)) * 100 : 0
+    }
+  }
+  
   return {
     valuationRange: {
       min: Math.round(minValue * 1000000),
@@ -424,7 +649,10 @@ function generateFallbackValuation(data: any): any {
     keyMetrics: [
       { label: 'EBITDA', value: `${ebitda.toFixed(2)} MSEK` },
       { label: 'EBITDA-multipel', value: `${ebitdaMultiple.toFixed(1)}x` }
-    ]
+    ],
+    debtAnalysis,
+    workingCapital,
+    historicalTrends: null
   }
 }
 

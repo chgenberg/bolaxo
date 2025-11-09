@@ -1,6 +1,13 @@
 import * as SecureStore from 'expo-secure-store';
 
-const API_BASE_URL = 'https://bolaxo-production.up.railway.app';
+// API URL - använd lokal för utveckling, produktion för release
+const API_BASE_URL = __DEV__
+  ? process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000'
+  : 'https://bolaxo-production.up.railway.app';
+
+// För fysisk enhet, ersätt localhost med din dators IP
+// Exempel: 'http://192.168.1.100:3000'
+// Hitta din IP: ifconfig | grep "inet " | grep -v 127.0.0.1
 
 async function getAuthToken(): Promise<string | null> {
   try {

@@ -16,14 +16,29 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bolaxo.app"
+      "bundleIdentifier": "com.bolaxo.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Vi använder din plats för att visa relevanta företag i närheten.",
+        "NSPhotoLibraryUsageDescription": "Vi behöver tillgång till dina foton för att ladda upp bilder till annonser.",
+        "NSCameraUsageDescription": "Vi behöver tillgång till kameran för att ta bilder till annonser.",
+        "NSUserTrackingUsageDescription": "Vi använder tracking för att förbättra din upplevelse och visa relevanta annonser."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1F3C58"
       },
-      "package": "com.bolaxo.app"
+      "package": "com.bolaxo.app",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -40,7 +55,12 @@
       "expo-location",
       "expo-image-picker"
     ],
-    "scheme": "bolaxo"
+    "scheme": "bolaxo",
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    }
   }
 }
 
