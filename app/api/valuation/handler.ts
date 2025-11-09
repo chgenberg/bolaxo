@@ -238,6 +238,57 @@ ${ebitda !== null ? `- EBITDA: ${ebitda.toLocaleString('sv-SE')} kr` : '- EBITDA
     prompt += `\n\n**DATA VALIDATION:**\n${dataValidation.join('\n')}`
   }
   
+  // Lägg till berikad data om tillgänglig
+  if (enrichedData) {
+    // BOLAGSVERKET - Officiell data (högsta prioritet)
+    if (enrichedData.bolagsverketData) {
+      const bv = enrichedData.bolagsverketData
+      prompt += `\n\n**BOLAGSVERKET (OFFICIELL DATA):**`
+      if (bv.name) prompt += `\n- Registrerat namn: ${bv.name}`
+      if (bv.registrationDate) prompt += `\n- Registrerat: ${bv.registrationDate}`
+      if (bv.legalForm) prompt += `\n- Bolagsform: ${bv.legalForm}`
+      if (bv.employees) prompt += `\n- Anställda (officiellt): ${bv.employees}`
+      
+      if (bv.annualReports && bv.annualReports.length > 0) {
+        prompt += `\n\n**ÅRSREDOVISNINGAR (Bolagsverket):**`
+        bv.annualReports.slice(0, 3).forEach((report: any) => {
+          prompt += `\n${report.year}:`
+          if (report.revenue) prompt += ` Oms ${(report.revenue / 1000000).toFixed(1)} MSEK`
+          if (report.profit !== undefined) prompt += `, Resultat ${(report.profit / 1000000).toFixed(1)} MSEK`
+        })
+        prompt += `\n⚠️ VIKTIGT: Dessa är officiella siffror från Bolagsverket - använd som huvudkälla!`
+      }
+    }
+    
+    // LINKEDIN - Aktuella anställningsdata
+    if (enrichedData.linkedinData?.employees) {
+      prompt += `\n\n**LINKEDIN (aktuellt):**`
+      prompt += `\n- Nuvarande anställda: ${enrichedData.linkedinData.employees.current}`
+      if (enrichedData.linkedinData.employeeGrowth) {
+        prompt += `\n- Tillväxttrend: ${enrichedData.linkedinData.employeeGrowth.trend}`
+      }
+    }
+    
+    // RATSIT - Kreditbetyg
+    if (enrichedData.ratsitData?.creditRating) {
+      prompt += `\n\n**RATSIT (kreditupplysning):**`
+      prompt += `\n- Kreditbetyg: ${enrichedData.ratsitData.creditRating.rating}`
+      prompt += `\n- Risknivå: ${enrichedData.ratsitData.creditRating.riskLevel}`
+      if (enrichedData.ratsitData.paymentRemarks?.hasActive) {
+        prompt += `\n⚠️ VARNING: Aktiva betalningsanmärkningar!`
+      }
+    }
+    
+    // GOOGLE/TRUSTPILOT - Varumärkesstyrka
+    if (enrichedData.googleMyBusinessData?.rating) {
+      prompt += `\n\n**KUNDRECENSIONER:**`
+      prompt += `\n- Google: ${enrichedData.googleMyBusinessData.rating.average.toFixed(1)}/5.0 (${enrichedData.googleMyBusinessData.rating.totalReviews} recensioner)`
+    }
+    if (enrichedData.trustpilotData?.trustScore) {
+      prompt += `\n- Trustpilot: ${enrichedData.trustpilotData.trustScore.score.toFixed(1)}/5.0`
+    }
+  }
+  
   prompt += getIndustrySpecificInstructions(data)
 
   prompt += `
