@@ -47,36 +47,46 @@ async function saveValuationSafely(input: any, result: any) {
 }
 
 export async function POST(request: Request) {
-  // Early return if running during build-time (Next.js static analysis)
-  // Check if we're in a build context by checking for missing request properties
-  if (typeof request === 'undefined' || !request || typeof request !== 'object') {
-    return NextResponse.json(
-      { error: 'Service unavailable during build' },
-      { status: 503 }
-    )
-  }
-
-  // Additional check: if headers is not a proper Headers object, we're likely in build context
-  if (!request.headers || typeof request.headers.get !== 'function') {
-    return NextResponse.json(
-      { error: 'Service unavailable during build' },
-      { status: 503 }
-    )
-  }
-
-  // Rate limit: 3 värderingar per timme per IP
-  const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
-  const { success } = await checkRateLimit(ip, 'valuation')
-  
-  if (!success) {
-    return NextResponse.json(
-      { error: 'För många värderingar. Max 3 per timme.' },
-      { status: 429 }
-    )
-  }
-
+  // Wrap entire function in try-catch to prevent build-time crashes
   try {
-    const rawData = await request.json()
+    // Early return if running during build-time (Next.js static analysis)
+    // Check if we're in a build context by checking for missing request properties
+    if (typeof request === 'undefined' || !request || typeof request !== 'object') {
+      return NextResponse.json(
+        { error: 'Service unavailable during build' },
+        { status: 503 }
+      )
+    }
+
+    // Additional check: if headers is not a proper Headers object, we're likely in build context
+    if (!request.headers || typeof request.headers.get !== 'function') {
+      return NextResponse.json(
+        { error: 'Service unavailable during build' },
+        { status: 503 }
+      )
+    }
+
+    // Safely get IP with try-catch to handle any edge cases
+    let ip = 'unknown'
+    try {
+      ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    } catch (e) {
+      // If headers.get fails, use default
+      ip = 'unknown'
+    }
+
+    // Rate limit: 3 värderingar per timme per IP
+    const { success } = await checkRateLimit(ip, 'valuation')
+    
+    if (!success) {
+      return NextResponse.json(
+        { error: 'För många värderingar. Max 3 per timme.' },
+        { status: 429 }
+      )
+    }
+
+    try {
+      const rawData = await request.json()
     
     // Sanitize and validate input
     const { valid, errors, sanitized } = validateAndSanitize(rawData)
@@ -154,6 +164,14 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: 'Failed to generate valuation' },
       { status: 500 }
+    )
+  }
+  } catch (buildError) {
+    // Catch any build-time errors (e.g., when Next.js analyzes the route)
+    console.error('Build-time error in valuation route:', buildError)
+    return NextResponse.json(
+      { error: 'Service unavailable during build' },
+      { status: 503 }
     )
   }
 }
