@@ -17,6 +17,7 @@ import FormFieldCurrency from './FormFieldCurrency'
 import FormFieldPercent from './FormFieldPercent'
 import { getValuationColor } from '@/utils/quickValuation'
 import { useTranslations, useLocale } from 'next-intl'
+import ValuationResultModal from './ValuationResultModal'
 
 interface ValuationData {
   // Step 1: Grunduppgifter
@@ -196,6 +197,8 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [draftValuationId, setDraftValuationId] = useState<string | null>(null)
   const lastEnrichedOrgNumber = useRef<string | null>(null)
+  const [showResult, setShowResult] = useState(false)
+  const [valuationResult, setValuationResult] = useState<any>(null)
   
   const progress = (currentStep / steps.length) * 100
 
@@ -710,37 +713,69 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     
-    // Auto-create account if needed
-    if (!user && data.email && acceptedPrivacy) {
-      try {
-        await login(data.email, 'seller', acceptedPrivacy)
-      } catch (error) {
-        console.error('Auto account creation failed:', error)
+    try {
+      // Auto-create account if needed
+      if (!user && data.email && acceptedPrivacy) {
+        try {
+          await login(data.email, 'seller', acceptedPrivacy)
+        } catch (error) {
+          console.error('Auto account creation failed:', error)
+        }
       }
+      
+      // Calculate total operating costs
+      const totalOperatingCosts = 
+        Number(data.salaries || 0) + 
+        Number(data.rentCosts || 0) + 
+        Number(data.marketingCosts || 0) + 
+        Number(data.otherOperatingCosts || 0)
+      
+      // Prepare submission data
+      const submitData = {
+        ...data,
+        operatingCosts: totalOperatingCosts.toString(),
+        // Ensure we have EBITDA or calculate it
+        ebitda: data.ebitda || (
+          Number(data.revenue || 0) * Number(data.profitMargin || 0) / 100
+        ).toString()
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('valuationData', JSON.stringify(submitData))
+      
+      // Get enriched company data from localStorage
+      const enrichedDataStr = localStorage.getItem('enrichedCompanyData')
+      const enrichedData = enrichedDataStr ? JSON.parse(enrichedDataStr) : null
+      
+      // Call valuation API
+      const response = await fetch('/api/valuation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...submitData,
+          enrichedCompanyData: enrichedData
+        })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate valuation')
+      }
+      
+      const { result } = await response.json()
+      
+      // Show result modal
+      setValuationResult(result)
+      setShowResult(true)
+      
+    } catch (error) {
+      console.error('Valuation error:', error)
+      // Fallback: navigate to results page
+      router.push(`/${locale}/vardering/resultat`)
+    } finally {
+      setIsSubmitting(false)
     }
-    
-    // Calculate total operating costs
-    const totalOperatingCosts = 
-      Number(data.salaries || 0) + 
-      Number(data.rentCosts || 0) + 
-      Number(data.marketingCosts || 0) + 
-      Number(data.otherOperatingCosts || 0)
-    
-    // Prepare submission data
-    const submitData = {
-      ...data,
-      operatingCosts: totalOperatingCosts.toString(),
-      // Ensure we have EBITDA or calculate it
-      ebitda: data.ebitda || (
-        Number(data.revenue || 0) * Number(data.profitMargin || 0) / 100
-      ).toString()
-    }
-    
-    // Save to localStorage
-    localStorage.setItem('valuationData', JSON.stringify(submitData))
-    
-    // Navigate to results
-    router.push(`/${locale}/vardering/resultat`)
   }
 
   const renderStepContent = () => {
@@ -1558,5 +1593,16 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         </div>
       </div>
     </div>
+    
+    {showResult && valuationResult && (
+      <ValuationResultModal
+        result={valuationResult}
+        inputData={data}
+        onClose={() => {
+          setShowResult(false)
+          onClose()
+        }}
+      />
+    )}
   )
 }

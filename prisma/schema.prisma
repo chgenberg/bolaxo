@@ -42,6 +42,7 @@ model User {
   
   // Relations
   valuations           Valuation[]
+  premiumValuations    PremiumValuation[]
   listings             Listing[]
   buyerProfile         BuyerProfile?
   savedListings        SavedListing[]
@@ -225,6 +226,29 @@ model CompanyCache {
   scrapedPages    Int      @default(0)
   createdAt       DateTime @default(now())
   expiresAt       DateTime
+}
+
+model PremiumValuation {
+  id             String   @id @default(cuid())
+  purchaseId     String   @unique
+  userEmail      String?
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id])
+  
+  formData       Json     // Alla 42 sektioner av DD-data
+  currentSection Int      @default(1)
+  status         String   @default("draft") // draft, completed, generating
+  
+  resultData     Json?    // GPT-5 genererat resultat
+  pdfUrl         String?  // URL till genererad PDF
+  
+  createdAt      DateTime @default(now())
+  lastUpdated    DateTime @updatedAt
+  completedAt    DateTime?
+  
+  @@index([userId])
+  @@index([purchaseId])
+  @@index([status])
 }
 
 model Transaction {

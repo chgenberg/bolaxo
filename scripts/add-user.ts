@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  const email = 'philipsonpar@gmail.com'
+  const email = 'ch.genberg@gmail.com'
   
   console.log(`👤 Creating/updating user: ${email}`)
   
@@ -28,7 +28,7 @@ async function main() {
     const newUser = await prisma.user.create({
       data: {
         email,
-        name: 'Philip Sonpar',
+        name: 'Christopher Genberg',
         role: 'seller,buyer', // Store both roles as comma-separated string
         verified: true,
         bankIdVerified: true,
