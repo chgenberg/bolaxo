@@ -89,14 +89,20 @@ export async function POST(request: Request) {
       console.log('[Enrich API] Bolagsverket data:', {
         name: bolagsverketData.name,
         hasName: !!bolagsverketData.name,
+        nameLength: bolagsverketData.name?.length || 0,
+        allKeys: Object.keys(bolagsverketData),
         currentAutoFillCompanyName: enrichedData.autoFill.companyName
       })
       
-      if (bolagsverketData.name) {
-        enrichedData.autoFill.companyName = bolagsverketData.name
+      // Always set company name if available (even if empty string, check for truthy)
+      if (bolagsverketData.name && bolagsverketData.name.trim().length > 0) {
+        enrichedData.autoFill.companyName = bolagsverketData.name.trim()
         console.log('[Enrich API] Set company name from Bolagsverket:', bolagsverketData.name)
       } else {
-        console.warn('[Enrich API] No company name in Bolagsverket data!')
+        console.warn('[Enrich API] No company name in Bolagsverket data!', {
+          name: bolagsverketData.name,
+          rawData: bolagsverketData
+        })
       }
       if (bolagsverketData.registrationDate) {
         enrichedData.autoFill.registrationDate = bolagsverketData.registrationDate

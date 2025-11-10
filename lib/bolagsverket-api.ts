@@ -138,6 +138,9 @@ async function fetchFromOfficialAPI(orgNumber: string, apiKey: string): Promise<
  */
 async function parseCompanyData(companyData: any, orgNumber: string, apiKey: string): Promise<BolagsverketCompanyData | null> {
   try {
+    // Log raw response to debug
+    console.log('[Bolagsverket] Raw API response:', JSON.stringify(companyData, null, 2))
+    
     // Hämta årsredovisningar om tillgängligt
     const baseUrl = 'https://data.bolagsverket.se/v1'
     const formattedOrgNumber = orgNumber.length === 10 
@@ -179,14 +182,14 @@ async function parseCompanyData(companyData: any, orgNumber: string, apiKey: str
     }
 
     return {
-      name: companyData.name || companyData.foretagsnamn || companyData.namn || '',
+      name: companyData.name || companyData.foretagsnamn || companyData.namn || companyData.companyName || companyData.företagsnamn || companyData.bolagsnamn || '',
       orgNumber: orgNumber,
       registrationDate: companyData.registrationDate || companyData.registreringsdatum || companyData.registrerat || '',
       legalForm: companyData.legalForm || companyData.juridiskForm || companyData.bolagsform || 'Aktiebolag',
       status: companyData.status || companyData.status || 'Aktiv',
-      address: companyData.address || companyData.adress || companyData.postadress,
+      address: companyData.address || companyData.adress || companyData.postadress || companyData.besoksadress,
       employees: companyData.employees || companyData.antalAnstallda || companyData.anstallda,
-      industryCode: companyData.industryCode || companyData.branschkod || companyData.sniKod,
+      industryCode: companyData.industryCode || companyData.branschkod || companyData.sniKod || companyData.sni,
       annualReports,
       source: 'bolagsverket-api'
     }
