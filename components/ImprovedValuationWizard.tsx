@@ -573,8 +573,23 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         const fieldsFilled = Object.keys(newData).filter(key => newData[key as keyof ValuationData] !== undefined && newData[key as keyof ValuationData] !== '')
         console.log('Fields to be filled:', fieldsFilled)
         console.log('New data values:', newData)
+        console.log('Company name specifically:', {
+          inAutoFill: autoFillFields.companyName,
+          inNewData: newData.companyName,
+          willBeSet: !!newData.companyName
+        })
         console.log('Total fields available from API:', Object.keys(autoFillFields).length)
-        setData(prev => ({ ...prev, ...newData }))
+        console.log('All autoFillFields:', autoFillFields)
+        
+        setData(prev => {
+          const updated = { ...prev, ...newData }
+          console.log('Data after update:', {
+            companyName: updated.companyName,
+            industry: updated.industry,
+            address: updated.address
+          })
+          return updated
+        })
         
         // Store enriched data for later use
         if (enrichedData.enrichedCompanyData) {
