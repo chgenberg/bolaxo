@@ -74,7 +74,7 @@ export async function GET(request: Request) {
     // Bestäm rätt destination baserat på roll - redirect till overview-sidan
     let redirectUrl = '/dashboard' // Default för broker
     if (user.role === 'seller') {
-      redirectUrl = '/dashboard/sales' // Mina försäljningar (overview)
+      redirectUrl = '/dashboard' // Översikt
     } else if (user.role === 'buyer') {
       redirectUrl = '/dashboard/deals' // Mina affärer (overview)
     }
