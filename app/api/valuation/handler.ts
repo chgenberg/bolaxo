@@ -84,7 +84,8 @@ export async function handleValuationRequest(request: Request) {
       return NextResponse.json({ result })
     }
 
-    // Call OpenAI
+    // Call OpenAI with gpt-5-mini
+    console.log('Calling OpenAI API with model: gpt-5-mini')
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -102,13 +103,16 @@ export async function handleValuationRequest(request: Request) {
     })
 
     if (!response.ok) {
-      console.log('OpenAI API request failed, using fallback')
+      const errorText = await response.text()
+      console.error('OpenAI API request failed:', response.status, errorText)
+      console.log('Falling back to default valuation')
       const result = generateFallbackValuation(data)
       await saveValuationSafely(data, result)
       return NextResponse.json({ result })
     }
 
     const aiResponse = await response.json()
+    console.log('OpenAI API response received successfully')
     const rawContent = aiResponse?.choices?.[0]?.message?.content ?? ''
 
     // Parse
