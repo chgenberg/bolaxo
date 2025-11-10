@@ -499,17 +499,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Organisationsnummer (valfritt)"
               value={data.orgNumber}
-              onChange={(value) => updateData('orgNumber', value)}
+              onValueChange={(value) => updateData('orgNumber', value)}
               placeholder="XXXXXX-XXXX"
-              helperText="Fyll i för att hämta företagsdata automatiskt"
-              icon={<Building className="h-4 w-4" />}
-              rightElement={
-                isEnriching ? (
-                  <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-                ) : enrichmentStatus ? (
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                ) : null
-              }
             />
             
             {enrichmentStatus && (
@@ -521,29 +512,26 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Företagsnamn"
               value={data.companyName}
-              onChange={(value) => updateData('companyName', value)}
+              onValueChange={(value) => updateData('companyName', value)}
               placeholder="AB Exempel"
               required
-              icon={<Building className="h-4 w-4" />}
             />
             
             <FormField
               label="E-postadress"
               type="email"
               value={data.email}
-              onChange={(value) => updateData('email', value)}
+              onValueChange={(value) => updateData('email', value)}
               placeholder="din@email.se"
               required
               disabled={!!user}
-              helperText={user ? 'Inloggad som ' + user.email : 'Vi skapar ett konto åt dig automatiskt'}
             />
             
             <FormField
               label="Webbplats"
               value={data.website}
-              onChange={(value) => updateData('website', value)}
+              onValueChange={(value) => updateData('website', value)}
               placeholder="https://exempel.se"
-              icon={<Globe className="h-4 w-4" />}
             />
             
             {!user && (
@@ -591,12 +579,10 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Företagets ålder"
               value={data.companyAge}
-              onChange={(value) => updateData('companyAge', value)}
+              onValueChange={(value) => updateData('companyAge', value)}
               placeholder="T.ex. 5"
               type="number"
-              helperText="År sedan grundande"
               required
-              icon={<Calendar className="h-4 w-4" />}
             />
             
             <ModernSelect
@@ -611,10 +597,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Adress"
               value={data.address}
-              onChange={(value) => updateData('address', value)}
+              onValueChange={(value) => updateData('address', value)}
               placeholder="Gatuadress, Postnummer Ort"
-              icon={<MapPin className="h-4 w-4" />}
-              helperText="Används för att visa ungefärlig plats"
             />
           </div>
         )
@@ -797,15 +781,14 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Tillstånd & Licenser"
               value={data.regulatoryLicenses}
-              onChange={(value) => updateData('regulatoryLicenses', value)}
+              onValueChange={(value) => updateData('regulatoryLicenses', value)}
               placeholder="T.ex. alkoholtillstånd, transporttillstånd"
-              helperText="Lista viktiga tillstånd som krävs för verksamheten"
             />
             
             <FormField
               label="Betalningsvillkor"
               value={data.paymentTerms}
-              onChange={(value) => updateData('paymentTerms', value)}
+              onValueChange={(value) => updateData('paymentTerms', value)}
               placeholder="T.ex. 30 dagar netto"
             />
             
@@ -850,9 +833,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Annonstitel (anonym)"
               value={data.anonymousTitle}
-              onChange={(value) => updateData('anonymousTitle', value)}
+              onValueChange={(value) => updateData('anonymousTitle', value)}
               placeholder="T.ex. Lönsam restaurang i Stockholm"
-              helperText="Detta visas publikt innan NDA signeras"
               required
             />
             
