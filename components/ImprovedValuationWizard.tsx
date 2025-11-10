@@ -282,29 +282,40 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         const autoFillFields = enrichedData.autoFill || {}
         const newData: Partial<ValuationData> = {}
         
-        // Basic info
-        if (autoFillFields.companyName && !data.companyName) {
+        console.log('Enrichment data received:', {
+          companyName: autoFillFields.companyName,
+          industry: autoFillFields.industry,
+          revenue: autoFillFields.revenue,
+          exactRevenue: autoFillFields.exactRevenue,
+          revenue2024: autoFillFields.revenue2024,
+          profit: autoFillFields.profit,
+          employees: autoFillFields.employees,
+          companyAge: autoFillFields.companyAge,
+        })
+        
+        // Basic info - always fill if available (overwrite existing values)
+        if (autoFillFields.companyName) {
           newData.companyName = autoFillFields.companyName
         }
-        if (autoFillFields.industry && !data.industry) {
+        if (autoFillFields.industry) {
           newData.industry = autoFillFields.industry
         }
-        if (autoFillFields.address && !data.address) {
+        if (autoFillFields.address) {
           newData.address = autoFillFields.address
         }
-        if (autoFillFields.companyAge && !data.companyAge) {
+        if (autoFillFields.companyAge) {
           newData.companyAge = autoFillFields.companyAge
         }
-        if (autoFillFields.employees && !data.employees) {
+        if (autoFillFields.employees) {
           newData.employees = autoFillFields.employees
         }
         
-        // Financial data - revenue
-        if (autoFillFields.revenue && !data.revenue) {
-          newData.revenue = autoFillFields.revenue.toString()
-        } else if (autoFillFields.exactRevenue && !data.revenue) {
+        // Financial data - revenue (prioritize exactRevenue > revenue > revenue2024)
+        if (autoFillFields.exactRevenue) {
           newData.revenue = autoFillFields.exactRevenue.toString()
-        } else if (autoFillFields.revenue2024 && !data.revenue) {
+        } else if (autoFillFields.revenue) {
+          newData.revenue = autoFillFields.revenue.toString()
+        } else if (autoFillFields.revenue2024) {
           newData.revenue = autoFillFields.revenue2024.toString()
         }
         
@@ -332,53 +343,55 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
           }
         }
         
-        // Calculate profit margin from profit and revenue
-        if (autoFillFields.profit !== undefined && autoFillFields.revenue) {
+        // Calculate profit margin from profit and revenue (always calculate if data available)
+        if (autoFillFields.profit !== undefined) {
           const profit = Number(autoFillFields.profit)
-          const revenue = Number(autoFillFields.revenue)
-          if (revenue > 0 && !data.profitMargin) {
+          const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
+          if (revenue > 0) {
             const profitMargin = (profit / revenue) * 100
             newData.profitMargin = profitMargin.toFixed(1)
           }
         }
         
-        // EBITDA - try to calculate or use provided value
-        if (autoFillFields.ebitda && !data.ebitda) {
+        // EBITDA - try to calculate or use provided value (always calculate if data available)
+        if (autoFillFields.ebitda) {
           newData.ebitda = autoFillFields.ebitda.toString()
-        } else if (autoFillFields.profit !== undefined && autoFillFields.revenue) {
+        } else if (autoFillFields.profit !== undefined) {
           // Estimate EBITDA as profit + estimated depreciation/amortization (typically 2-5% of revenue)
           const profit = Number(autoFillFields.profit)
-          const revenue = Number(autoFillFields.revenue)
-          const estimatedEBITDA = profit + (revenue * 0.03) // Assume 3% depreciation
-          if (!data.ebitda && estimatedEBITDA > 0) {
-            newData.ebitda = Math.round(estimatedEBITDA).toString()
+          const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
+          if (revenue > 0) {
+            const estimatedEBITDA = profit + (revenue * 0.03) // Assume 3% depreciation
+            if (estimatedEBITDA > 0) {
+              newData.ebitda = Math.round(estimatedEBITDA).toString()
+            }
           }
         }
         
-        // Balance sheet data
-        if (autoFillFields.totalAssets && !data.totalAssets) {
+        // Balance sheet data - always fill if available
+        if (autoFillFields.totalAssets) {
           newData.totalAssets = autoFillFields.totalAssets.toString()
         }
-        if (autoFillFields.totalLiabilities && !data.totalLiabilities) {
+        if (autoFillFields.totalLiabilities) {
           newData.totalLiabilities = autoFillFields.totalLiabilities.toString()
         }
-        if (autoFillFields.cash && !data.cash) {
+        if (autoFillFields.cash) {
           newData.cash = autoFillFields.cash.toString()
         }
-        if (autoFillFields.accountsReceivable && !data.accountsReceivable) {
+        if (autoFillFields.accountsReceivable) {
           newData.accountsReceivable = autoFillFields.accountsReceivable.toString()
         }
-        if (autoFillFields.inventory && !data.inventory) {
+        if (autoFillFields.inventory) {
           newData.inventory = autoFillFields.inventory.toString()
         }
         if (autoFillFields.accountsPayable && !data.accountsPayable) {
           // Store accountsPayable for later use (not directly in wizard but useful for calculations)
           // Could be used to estimate payment terms
         }
-        if (autoFillFields.shortTermDebt && !data.shortTermDebt) {
+        if (autoFillFields.shortTermDebt) {
           newData.shortTermDebt = autoFillFields.shortTermDebt.toString()
         }
-        if (autoFillFields.longTermDebt && !data.longTermDebt) {
+        if (autoFillFields.longTermDebt) {
           newData.longTermDebt = autoFillFields.longTermDebt.toString()
         }
         
@@ -387,8 +400,8 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
           // Store equity for valuation calculations even if not directly shown in wizard
         }
         
-        // Operating costs breakdown (if available)
-        if (autoFillFields.operatingCosts && !data.salaries && !data.rentCosts && !data.marketingCosts && !data.otherOperatingCosts) {
+        // Operating costs breakdown (always fill if available)
+        if (autoFillFields.operatingCosts) {
           // Try to estimate breakdown if we have total operating costs
           const totalOps = Number(autoFillFields.operatingCosts)
           // Typical breakdown: salaries 60%, rent 15%, marketing 10%, other 15%
@@ -400,38 +413,42 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
           }
         }
         
-        // Estimate gross margin if we have revenue and operating costs
-        if (autoFillFields.revenue && autoFillFields.operatingCosts && !data.grossMargin) {
-          const revenue = Number(autoFillFields.revenue)
+        // Estimate gross margin if we have revenue and operating costs (always calculate if data available)
+        if (autoFillFields.revenue && autoFillFields.operatingCosts) {
+          const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
           const opsCosts = Number(autoFillFields.operatingCosts)
-          // Gross margin = (Revenue - COGS) / Revenue
-          // Estimate COGS as 40-60% of revenue depending on industry
-          const estimatedCOGS = revenue * 0.5 // Default 50%
-          const grossMargin = ((revenue - estimatedCOGS) / revenue) * 100
-          newData.grossMargin = grossMargin.toFixed(1)
+          if (revenue > 0) {
+            // Gross margin = (Revenue - COGS) / Revenue
+            // Estimate COGS as 40-60% of revenue depending on industry
+            const estimatedCOGS = revenue * 0.5 // Default 50%
+            const grossMargin = ((revenue - estimatedCOGS) / revenue) * 100
+            newData.grossMargin = grossMargin.toFixed(1)
+          }
         }
         
-        // Customer concentration risk (if provided)
-        if (autoFillFields.customerConcentrationRisk && !data.customerConcentrationRisk) {
+        // Customer concentration risk (always fill if available)
+        if (autoFillFields.customerConcentrationRisk) {
           newData.customerConcentrationRisk = autoFillFields.customerConcentrationRisk
         }
         
-        // Payment terms (if provided)
-        if (autoFillFields.paymentTerms && !data.paymentTerms) {
+        // Payment terms (always fill if available)
+        if (autoFillFields.paymentTerms) {
           newData.paymentTerms = autoFillFields.paymentTerms
         }
         
-        // Regulatory licenses (if provided)
-        if (autoFillFields.regulatoryLicenses && !data.regulatoryLicenses) {
+        // Regulatory licenses (always fill if available)
+        if (autoFillFields.regulatoryLicenses) {
           newData.regulatoryLicenses = autoFillFields.regulatoryLicenses
         }
         
-        // Competitive advantages (if extracted from website)
-        if (autoFillFields.competitiveAdvantage && !data.competitiveAdvantages) {
+        // Competitive advantages (always fill if available)
+        if (autoFillFields.competitiveAdvantage) {
           newData.competitiveAdvantages = autoFillFields.competitiveAdvantage
         }
         
         // Update state with all new data
+        console.log('Fields to be filled:', Object.keys(newData))
+        console.log('New data values:', newData)
         setData(prev => ({ ...prev, ...newData }))
         
         // Store enriched data for later use
