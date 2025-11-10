@@ -161,8 +161,8 @@ export default function PurchasePremiumValuationModal({
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <p className="text-blue-100">Specialpris</p>
-                    <p className="text-4xl font-bold">9 995 kr</p>
-                    <p className="text-sm text-blue-100 line-through">Ordinarie pris 29 900 kr</p>
+                    <p className="text-4xl font-bold">4 995 kr</p>
+                    <p className="text-sm text-blue-100 line-through">Ordinarie pris 14 900 kr</p>
                   </div>
                   <div className="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
                     -67%
