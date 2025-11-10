@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log('🔄 [AUTH] No user found after delay, refreshing...')
         fetchUser()
       }
-    }, 1000) // Increased delay to catch cookies after redirect
+    }, 2000) // Increased delay to catch cookies after redirect
     return () => clearTimeout(timer)
   }, [])
   
@@ -127,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setTimeout(() => {
           fetchUser()
           sessionStorage.removeItem('from_magic_link')
-        }, 500)
+        }, 1000) // Increased delay
       }
     }
   }, [])
