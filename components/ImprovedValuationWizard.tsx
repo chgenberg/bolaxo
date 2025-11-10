@@ -353,10 +353,16 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
           revenue: autoFillFields.revenue,
           exactRevenue: autoFillFields.exactRevenue,
           revenue2024: autoFillFields.revenue2024,
+          revenue2023: autoFillFields.revenue2023,
+          revenue2022: autoFillFields.revenue2022,
           profit: autoFillFields.profit,
           employees: autoFillFields.employees,
           companyAge: autoFillFields.companyAge,
+          totalAssets: autoFillFields.totalAssets,
+          cash: autoFillFields.cash,
+          operatingCosts: autoFillFields.operatingCosts,
           allAutoFillFields: Object.keys(autoFillFields),
+          allAutoFillValues: autoFillFields,
         })
         
         // Basic info - always fill if available (overwrite existing values)
@@ -389,7 +395,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
           newData.revenue = autoFillFields.revenue2024.toString()
         }
         
-        // Calculate average revenue from 3 years
+        // Calculate average revenue from 3 years (always calculate if data available)
         if (autoFillFields.revenue2024 || autoFillFields.revenue2023 || autoFillFields.revenue2022) {
           const revenues = [
             Number(autoFillFields.revenue2024) || 0,
@@ -397,13 +403,13 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             Number(autoFillFields.revenue2022) || 0
           ].filter(r => r > 0)
           
-          if (revenues.length > 0 && !data.revenue3Years) {
+          if (revenues.length > 0) {
             const avgRevenue = revenues.reduce((a, b) => a + b, 0) / revenues.length
             newData.revenue3Years = Math.round(avgRevenue).toString()
           }
           
-          // Calculate revenue growth rate
-          if (revenues.length >= 2 && !data.revenueGrowthRate) {
+          // Calculate revenue growth rate (always calculate if data available)
+          if (revenues.length >= 2) {
             const latest = revenues[0]
             const previous = revenues[1]
             if (previous > 0) {
@@ -414,19 +420,24 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         }
         
         // Calculate profit margin from profit and revenue (always calculate if data available)
-        if (autoFillFields.profit !== undefined) {
+        if (autoFillFields.profit !== undefined && autoFillFields.profit !== null) {
           const profit = Number(autoFillFields.profit)
           const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
           if (revenue > 0) {
             const profitMargin = (profit / revenue) * 100
             newData.profitMargin = profitMargin.toFixed(1)
+            console.log('Calculated profit margin:', profitMargin, 'from profit:', profit, 'revenue:', revenue)
+          } else {
+            console.warn('Cannot calculate profit margin: revenue is 0 or missing', { revenue, profit })
           }
+        } else {
+          console.warn('No profit data available for profit margin calculation', { profit: autoFillFields.profit })
         }
         
         // EBITDA - try to calculate or use provided value (always calculate if data available)
         if (autoFillFields.ebitda) {
           newData.ebitda = autoFillFields.ebitda.toString()
-        } else if (autoFillFields.profit !== undefined) {
+        } else if (autoFillFields.profit !== undefined && autoFillFields.profit !== null) {
           // Estimate EBITDA as profit + estimated depreciation/amortization (typically 2-5% of revenue)
           const profit = Number(autoFillFields.profit)
           const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
@@ -434,6 +445,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
             const estimatedEBITDA = profit + (revenue * 0.03) // Assume 3% depreciation
             if (estimatedEBITDA > 0) {
               newData.ebitda = Math.round(estimatedEBITDA).toString()
+              console.log('Calculated EBITDA:', estimatedEBITDA, 'from profit:', profit, 'revenue:', revenue)
             }
           }
         }
