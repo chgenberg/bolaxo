@@ -1,0 +1,68 @@
+name: Database Backup
+
+on:
+  schedule:
+    # Kör varje dag kl 02:00 UTC (03:00 svensk tid)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Tillåt manuell körning
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      
+      - name: Create backup directory
+        run: mkdir -p backups
+      
+      - name: Create backup
+        env:
+          # Use DATABASE_PUBLIC_URL for external connections (GitHub Actions)
+          # Railway provides DATABASE_URL (internal) and DATABASE_PUBLIC_URL (external)
+          DATABASE_URL: ${{ secrets.DATABASE_PUBLIC_URL || secrets.DATABASE_URL }}
+          BACKUP_DIR: ./backups
+          RETENTION_DAYS: 30
+        run: npm run backup:database
+      
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-backup-${{ github.run_number }}
+          path: backups/*.sql.gz
+          retention-days: 30
+          if-no-files-found: error
+      
+      - name: Upload to S3 (optional)
+        if: env.AWS_S3_BACKUP_BUCKET != ''
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
+          AWS_S3_BACKUP_BUCKET: ${{ secrets.AWS_S3_BACKUP_BUCKET }}
+          AWS_S3_REGION: ${{ secrets.AWS_S3_REGION || 'eu-west-1' }}
+        run: |
+          if command -v aws &> /dev/null; then
+            aws s3 cp backups/ s3://$AWS_S3_BACKUP_BUCKET/backups/ --recursive --exclude "*" --include "*.sql.gz"
+          else
+            echo "AWS CLI not installed, skipping S3 upload"
+          fi
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Backup failed - check logs for details"

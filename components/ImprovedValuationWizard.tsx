@@ -194,8 +194,72 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const [enrichmentStatus, setEnrichmentStatus] = useState('')
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [draftValuationId, setDraftValuationId] = useState<string | null>(null)
   
   const progress = (currentStep / steps.length) * 100
+
+  // Save draft valuation data when privacy policy is accepted
+  useEffect(() => {
+    const saveDraftValuation = async () => {
+      // Only save if privacy is accepted and we have required fields
+      if (!acceptedPrivacy || !data.email || !data.companyName || !data.industry) {
+        return
+      }
+
+      try {
+        const totalOperatingCosts = 
+          Number(data.salaries || 0) + 
+          Number(data.rentCosts || 0) + 
+          Number(data.marketingCosts || 0) + 
+          Number(data.otherOperatingCosts || 0)
+        
+        const submitData = {
+          ...data,
+          operatingCosts: totalOperatingCosts.toString(),
+          ebitda: data.ebitda || (
+            Number(data.revenue || 0) * Number(data.profitMargin || 0) / 100
+          ).toString()
+        }
+
+        if (draftValuationId) {
+          // Update existing draft
+          await fetch('/api/valuation/draft', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              valuationId: draftValuationId,
+              inputData: submitData
+            })
+          })
+        } else {
+          // Create new draft
+          const response = await fetch('/api/valuation/draft', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: data.email,
+              companyName: data.companyName,
+              industry: data.industry,
+              inputData: submitData
+            })
+          })
+          
+          if (response.ok) {
+            const result = await response.json()
+            setDraftValuationId(result.valuationId)
+          }
+        }
+      } catch (error) {
+        console.error('Error saving draft valuation:', error)
+        // Don't show error to user, just log it
+      }
+    }
+
+    // Debounce save by 2 seconds to avoid too many API calls
+    const timer = setTimeout(saveDraftValuation, 2000)
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [acceptedPrivacy, data.email, data.companyName, data.industry, draftValuationId])
 
   const updateData = (field: string, value: string) => {
     setData(prev => ({ ...prev, [field]: value }))

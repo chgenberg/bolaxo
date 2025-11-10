@@ -40,3 +40,7 @@ next-env.d.ts
 # Uploaded files
 /public/uploads/listings/*
 !/public/uploads/listings/.gitkeep
+
+# Database backups
+/backups/*
+!/backups/.gitkeep

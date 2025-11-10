@@ -488,22 +488,7 @@ async function main() {
       salaries: salaryCost,
       rentCosts: rentCost,
       marketingCosts: marketingCost,
-      otherOperatingCosts: otherOperatingCost,
-      // Customer & Business Model
-      numberOfCustomers: toInt(mockObj.numberOfCustomers),
-      recurringRevenuePercentage: toFloat(mockObj.recurringRevenuePercentage),
-      customerAcquisitionCost: toInt(mockObj.customerAcquisitionCost),
-      averageOrderValue: toInt(mockObj.averageOrderValue),
-      // Market Position
-      marketSize: toInt(mockObj.marketSize),
-      marketShare: toFloat(mockObj.marketShare),
-      mainCompetitors: mockObj.mainCompetitors ?? null,
-      // Organization & Risks
-      keyEmployeeDependency: mockObj.keyEmployeeDependency ?? null,
-      mainRisks: mockObj.mainRisks ?? null,
-      // Future Outlook
-      growthPotential: mockObj.growthPotential ?? null,
-      expansionPlans: mockObj.expansionPlans ?? null
+      otherOperatingCosts: otherOperatingCost
     }
 
     await prisma.listing.upsert({

@@ -151,21 +151,50 @@ async function saveValuationSafely(input: any, result: any) {
       userId = user?.id || null
     }
 
-    await db.valuation.create({
-      data: {
-        userId,
-        email: input?.email ?? null,
-        companyName: input?.companyName ?? null,
-        industry: input?.industry ?? null,
-        inputJson: input,
-        resultJson: result,
-        mostLikely: result?.valuationRange?.mostLikely ?? 0,
-        minValue: result?.valuationRange?.min ?? 0,
-        maxValue: result?.valuationRange?.max ?? 0,
+    // Check if there's an existing draft valuation for this email/company
+    // Draft valuations have mostLikely = 0 (no result generated yet)
+    const existingDraft = await db.valuation.findFirst({
+      where: {
+        email: input?.email || undefined,
+        companyName: input?.companyName || undefined,
+        mostLikely: 0, // Draft valuations have 0 as mostLikely
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
-    
-    console.log(`Valuation saved${userId ? ' and linked to user' : ' (no user found)'}`)
+
+    if (existingDraft) {
+      // Update existing draft with result
+      await db.valuation.update({
+        where: { id: existingDraft.id },
+        data: {
+          userId: userId || existingDraft.userId,
+          inputJson: input,
+          resultJson: result,
+          mostLikely: result?.valuationRange?.mostLikely ?? 0,
+          minValue: result?.valuationRange?.min ?? 0,
+          maxValue: result?.valuationRange?.max ?? 0,
+        }
+      })
+      console.log(`Valuation updated from draft${userId ? ' and linked to user' : ''}`)
+    } else {
+      // Create new valuation
+      await db.valuation.create({
+        data: {
+          userId,
+          email: input?.email ?? null,
+          companyName: input?.companyName ?? null,
+          industry: input?.industry ?? null,
+          inputJson: input,
+          resultJson: result,
+          mostLikely: result?.valuationRange?.mostLikely ?? 0,
+          minValue: result?.valuationRange?.min ?? 0,
+          maxValue: result?.valuationRange?.max ?? 0,
+        }
+      })
+      console.log(`Valuation saved${userId ? ' and linked to user' : ' (no user found)'}`)
+    }
   } catch (err) {
     console.error('Prisma save error:', err)
   }
