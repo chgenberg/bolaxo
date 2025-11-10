@@ -81,6 +81,9 @@ export interface BusinessObject {
   // Match score for buyers
   matchScore?: number
   matchReasons?: string[]
+  
+  // Package
+  packageType?: 'basic' | 'pro' | 'enterprise'
 }
 
 export const mockObjects: BusinessObject[] = [
