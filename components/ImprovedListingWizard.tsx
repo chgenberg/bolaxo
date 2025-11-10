@@ -615,7 +615,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('revenue', value)}
               placeholder="0"
               required
-              helperText="Senaste räkenskapsårets omsättning"
+              helpText="Senaste räkenskapsårets omsättning"
             />
             
             <FormFieldCurrency
@@ -623,7 +623,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.revenue3Years}
               onChange={(value) => updateData('revenue3Years', value)}
               placeholder="0"
-              helperText="Hjälper visa stabilitet över tid"
+              helpText="Hjälper visa stabilitet över tid"
             />
             
             <FormFieldPercent
@@ -631,7 +631,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.revenueGrowthRate}
               onChange={(value) => updateData('revenueGrowthRate', value)}
               placeholder="0"
-              helperText="Årlig tillväxttakt"
+              helpText="Årlig tillväxttakt"
             />
             
             <FormFieldCurrency
@@ -639,7 +639,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.ebitda}
               onChange={(value) => updateData('ebitda', value)}
               placeholder="0"
-              helperText={
+              helpText={
                 <span className="flex items-center gap-1">
                   Resultat före räntor, skatt och avskrivningar
                   <Tooltip content="EBITDA = Rörelseresultat + Avskrivningar. Visar företagets operativa lönsamhet." />
@@ -652,7 +652,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.profitMargin}
               onChange={(value) => updateData('profitMargin', value)}
               placeholder="0"
-              helperText="Nettovinst / Omsättning"
+              helpText="Nettovinst / Omsättning"
             />
             
             <FormFieldPercent
@@ -660,7 +660,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.grossMargin}
               onChange={(value) => updateData('grossMargin', value)}
               placeholder="0"
-              helperText="(Omsättning - Direkta kostnader) / Omsättning"
+              helpText="(Omsättning - Direkta kostnader) / Omsättning"
             />
           </div>
         )
@@ -726,7 +726,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 value={data.salaries}
                 onChange={(value) => updateData('salaries', value)}
                 placeholder="0"
-                helperText="Inkl. sociala avgifter"
+                helpText="Inkl. sociala avgifter"
               />
               
               <FormFieldCurrency
@@ -835,9 +835,9 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('description', value)}
               placeholder="Beskriv verksamheten på ett säljande sätt..."
               rows={6}
-              helperText="Tips: Fokusera på möjligheter och styrkor"
               required
             />
+            <p className="text-sm text-gray-500">Tips: Fokusera på möjligheter och styrkor</p>
             
             <div className="grid md:grid-cols-2 gap-6">
               <FormFieldCurrency
@@ -845,7 +845,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 value={data.priceMin}
                 onChange={(value) => updateData('priceMin', value)}
                 placeholder="0"
-                helperText="Lägsta acceptabla pris"
+                helpText="Lägsta acceptabla pris"
               />
               
               <FormFieldCurrency
@@ -853,7 +853,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 value={data.priceMax}
                 onChange={(value) => updateData('priceMax', value)}
                 placeholder="0"
-                helperText="Önskat pris"
+                helpText="Önskat pris"
               />
             </div>
             
@@ -862,7 +862,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.askingPrice}
               onChange={(value) => updateData('askingPrice', value)}
               placeholder="0"
-              helperText="Pris som visas i annonsen"
+              helpText="Pris som visas i annonsen"
               required
             />
             
