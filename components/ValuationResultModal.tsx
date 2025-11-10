@@ -306,7 +306,7 @@ export default function ValuationResultModal({
 
       {showCheckout && (
         <MockStripeCheckout
-          amount={19900}
+          amount={9995}
           onSuccess={handlePaymentSuccess}
           onCancel={() => setShowCheckout(false)}
         />
