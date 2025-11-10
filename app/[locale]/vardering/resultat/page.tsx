@@ -3,10 +3,13 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
+import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight, Award, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import WhatIfScenarios from '@/components/WhatIfScenarios'
 import ImprovedValuationResults from '@/components/ImprovedValuationResults'
+import PurchasePremiumValuationModal from '@/components/PurchasePremiumValuationModal'
+import MockStripeCheckout from '@/components/MockStripeCheckout'
+import type { PaymentData } from '@/components/MockStripeCheckout'
 import dynamic from 'next/dynamic'
 
 // Dynamisk import av PDF-komponenten för att undvika SSR-problem
@@ -125,6 +128,8 @@ function ValuationResultContent() {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [useImprovedResults, setUseImprovedResults] = useState(false) // Use detailed results page by default
   const [isMockup, setIsMockup] = useState(false)
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false)
+  const [showCheckout, setShowCheckout] = useState(false)
 
   useEffect(() => {
     // Kolla om det är mockup-läge
@@ -242,6 +247,23 @@ function ValuationResultContent() {
     return `${value.toLocaleString('sv-SE')} kr`
   }
 
+  const handlePurchase = () => {
+    setShowPurchaseModal(false)
+    setShowCheckout(true)
+  }
+
+  const handlePaymentSuccess = async (paymentData: PaymentData) => {
+    // Spara betalningsinformation och navigera till djupgående analys
+    localStorage.setItem('premiumPurchase', JSON.stringify({
+      ...paymentData,
+      inputData: valuationData,
+      purchaseDate: new Date().toISOString()
+    }))
+
+    // Navigera till djupgående analysformulär
+    router.push(`/${locale}/vardering/premium`)
+  }
+
   const handleDownloadPDF = async () => {
     if (isGeneratingPDF) return
     
@@ -316,6 +338,15 @@ function ValuationResultContent() {
     }
   }
 
+  const handlePremiumPurchase = () => {
+    // Spara valuationData i localStorage så att det kan förifyllas i premium-versionen
+    if (valuationData) {
+      localStorage.setItem('valuationData', JSON.stringify(valuationData))
+    }
+    // Navigera till premium-sidan (som sedan visar betalningsflödet)
+    router.push(`/${locale}/vardering/premium`)
+  }
+
   return (
     <main className="min-h-screen bg-background-off-white py-12">
       <div className="max-w-6xl mx-auto px-3 sm:px-4">
@@ -330,6 +361,58 @@ function ValuationResultContent() {
             Baserad på AI-analys med professionella värderingsmetoder
           </p>
         </div>
+
+        {/* Premium CTA Banner */}
+        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 sm:p-8 border-2 border-orange-200 mb-8 shadow-lg">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-start gap-4 flex-1">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <FileText className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" />
+              </div>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                  Vill du ha en djupgående företagsvärdering?
+                </h3>
+                <p className="text-gray-700 mb-2">
+                  Få en professionell värdering med 42 områden för due diligence
+                </p>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                    Komplett DD-checklista för SME i Sverige
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                    Professionell PDF-rapport
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                    Mycket mer precist företagsvärde
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                    Användbar i förhandlingar med köpare
+                  </li>
+                </ul>
+                <div className="mt-3 flex items-baseline gap-2">
+                  <span className="text-2xl font-bold text-orange-600">9 995 kr</span>
+                  <span className="text-sm text-gray-500 line-through">29 900 kr</span>
+                  <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-semibold">-67%</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={handlePremiumPurchase}
+              className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-3 whitespace-nowrap"
+            >
+              <Sparkles className="w-6 h-6" />
+              Köp djupgående värdering
+              <ArrowRight className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        
 
         {/* Main Valuation */}
         <div className="bg-white p-8 md:p-12 rounded-2xl shadow-card mb-8 border-2" style={{ borderColor: '#1F3C58' }}>
@@ -612,6 +695,23 @@ function ValuationResultContent() {
           </p>
         </div>
       </div>
+
+      {/* Modals */}
+      {showPurchaseModal && (
+        <PurchasePremiumValuationModal
+          onClose={() => setShowPurchaseModal(false)}
+          onPurchase={handlePurchase}
+          companyName={valuationData?.companyName}
+        />
+      )}
+
+      {showCheckout && (
+        <MockStripeCheckout
+          amount={9995}
+          onSuccess={handlePaymentSuccess}
+          onCancel={() => setShowCheckout(false)}
+        />
+      )}
     </main>
   )
 }
