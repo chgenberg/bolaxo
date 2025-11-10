@@ -896,7 +896,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 Bilder
               </label>
               
-              {data.images && data.images.length > 0 && (
+              {data.images && data.images.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   {data.images.map((url, index) => (
                     <div key={index} className="relative group">
@@ -939,6 +939,12 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                       )}
                     </div>
                   ))}
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+                  <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600">Inga bilder ännu</p>
+                  <p className="text-xs text-gray-500 mt-1">Ladda upp bilder för att visa ditt företag</p>
                 </div>
               )}
               
