@@ -532,7 +532,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             />
             
             {enrichmentStatus && (
-              <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm">
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
                 {enrichmentStatus}
               </div>
             )}
@@ -563,21 +563,21 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             />
             
             {!user && (
-              <div className="bg-blue-50 rounded-lg p-4">
-                <label className="flex items-start space-x-3 cursor-pointer">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
+                <label className="flex items-start cursor-pointer">
                   <input
                     type="checkbox"
                     checked={acceptedPrivacy}
                     onChange={(e) => setAcceptedPrivacy(e.target.checked)}
                     className="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <span className="text-sm text-gray-700">
+                  <span className="ml-3 text-sm text-gray-700">
                     Jag godkänner{' '}
-                    <Link href="/juridiskt/villkor" className="text-blue-600 hover:underline" target="_blank">
+                    <Link href="/juridiskt/villkor" className="text-blue-600 hover:text-blue-700 underline" target="_blank">
                       användarvillkoren
                     </Link>
                     {' '}och{' '}
-                    <Link href="/juridiskt/integritetspolicy" className="text-blue-600 hover:underline" target="_blank">
+                    <Link href="/juridiskt/integritetspolicy" className="text-blue-600 hover:text-blue-700 underline" target="_blank">
                       integritetspolicyn
                     </Link>
                   </span>
@@ -1020,54 +1020,42 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
 
   if (showPreview) {
     return (
-      <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
-        <div className="min-h-screen">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] flex flex-col shadow-2xl">
           {/* Header */}
-          <div className="sticky top-0 bg-white border-b z-10">
-            <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="px-8 py-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">Förhandsgranska annons</h1>
+                <p className="text-gray-600 mt-1">Kontrollera att allt ser rätt ut innan du publicerar</p>
+              </div>
               <button
-                onClick={handlePrev}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+                onClick={() => setShowPreview(false)}
+                aria-label="Stäng förhandsgranskning"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <ArrowLeft className="h-5 w-5" />
-                Tillbaka till redigering
-              </button>
-              
-              <h1 className="text-xl font-semibold">Förhandsvisning av annons</h1>
-              
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting || (!user && !acceptedPrivacy)}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Publicerar...
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="h-4 w-4" />
-                    Publicera annons
-                  </>
-                )}
+                <X className="w-6 h-6 text-gray-500" />
               </button>
             </div>
           </div>
           
           {/* Content */}
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
-              <div className="flex items-start">
-                <AlertCircle className="h-5 w-5 text-yellow-600 mr-3 mt-0.5" />
-                <div>
-                  <h3 className="font-medium text-yellow-900">Så här kommer din annons att se ut</h3>
-                  <p className="text-sm text-yellow-800 mt-1">
-                    Detta är hur potentiella köpare kommer se din annons. Du kan gå tillbaka och redigera innan publicering.
-                  </p>
+          <div className="flex-1 overflow-y-auto bg-gray-50 p-8">
+            <div className="max-w-5xl mx-auto">
+              {/* Alert */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-8">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                    <Eye className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Så här kommer din annons att se ut</h3>
+                    <p className="text-gray-600">
+                      Detta är hur potentiella köpare kommer se din annons. Granska informationen noga innan publicering.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
             
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Main content */}
@@ -1300,76 +1288,114 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               </div>
             </div>
           </div>
+            </div>
+          </div>
+          
+          {/* Footer */}
+          <div className="px-8 py-6 border-t border-gray-200 bg-white rounded-b-2xl">
+            <div className="flex justify-between items-center">
+              <button
+                onClick={() => setShowPreview(false)}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                Tillbaka till redigering
+              </button>
+              
+              <div className="flex items-center gap-4">
+                <span className="text-gray-600">
+                  {PACKAGES.find(p => p.id === data.packageType)?.name} paket - 
+                  <span className="font-semibold">{formatCurrency(PACKAGES.find(p => p.id === data.packageType)?.price || 0)}</span>
+                </span>
+                
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting || (!user && !acceptedPrivacy)}
+                  className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Publicerar...
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-5 h-5" />
+                      Publicera annons
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 relative">
-          <button
-            onClick={onClose}
-            className="absolute right-4 top-4 text-white/80 hover:text-white transition-colors"
-          >
-            <X className="h-6 w-6" />
-          </button>
+        <div className="px-8 py-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-800">Skapa företagsannons</h1>
+            <button
+              onClick={onClose}
+              aria-label="Stäng"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <X className="w-6 h-6 text-gray-500" />
+            </button>
+          </div>
           
-          <h1 className="text-2xl font-bold mb-2">Skapa företagsannons</h1>
-          <p className="text-blue-100">Steg {currentStep} av {totalSteps - 1}</p>
-          
-          {/* Progress bar */}
-          <div className="mt-4 bg-blue-800/30 rounded-full h-2 overflow-hidden">
-            <div 
-              className="bg-white h-full transition-all duration-300 ease-out"
-              style={{ width: `${progress}%` }}
-            />
+          <div className="mt-6">
+            <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+              <span>Steg {currentStep} av {totalSteps - 1}</span>
+              <span>{Math.round(progress)}% slutfört</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
         </div>
         
         {/* Content */}
-        <div ref={formRef} className="flex-1 overflow-y-auto p-6">
+        <div ref={formRef} className="flex-1 overflow-y-auto p-8">
           {renderStepContent()}
         </div>
         
         {/* Footer */}
-        <div className="border-t p-6 flex justify-between items-center bg-gray-50">
-          <button
-            onClick={handlePrev}
-            disabled={currentStep === 1 && !showPreview}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Tillbaka
-          </button>
-          
-          <div className="flex items-center gap-2">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className={`h-2 w-2 rounded-full transition-colors ${
-                  i + 1 <= currentStep ? 'bg-blue-600' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+        <div className="px-8 py-6 border-t border-gray-200 flex justify-between items-center">
+          {currentStep > 1 || showPreview ? (
+            <button
+              onClick={handlePrev}
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Tillbaka
+            </button>
+          ) : (
+            <div />
+          )}
           
           <button
             onClick={handleNext}
             disabled={!data.companyName || !data.email || (!user && !acceptedPrivacy)}
-            className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
           >
             {currentStep === 6 ? (
               <>
-                Förhandsgranska
-                <Eye className="h-4 w-4" />
+                Förhandsgranska annons
+                <Eye className="w-5 h-5" />
               </>
             ) : (
               <>
-                Nästa
-                <ArrowRight className="h-4 w-4" />
+                Nästa steg
+                <ArrowRight className="w-5 h-5" />
               </>
             )}
           </button>
