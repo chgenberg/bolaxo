@@ -85,6 +85,7 @@ export async function handleValuationRequest(request: Request) {
     }
 
     // Call OpenAI with gpt-5-mini
+    // Note: gpt-5-mini uses max_completion_tokens (not max_tokens) and does NOT support temperature
     console.log('Calling OpenAI API with model: gpt-5-mini')
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -97,7 +98,8 @@ export async function handleValuationRequest(request: Request) {
         messages: [
           { role: 'user', content: combinedPrompt }
         ],
-        max_completion_tokens: 16000
+        max_completion_tokens: 16000 // Required for gpt-5-mini (replaces max_tokens)
+        // Note: temperature is NOT supported by gpt-5-mini
       }),
       signal: createTimeoutSignal(300000)
     })
