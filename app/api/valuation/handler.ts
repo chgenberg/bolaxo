@@ -23,6 +23,8 @@ function getPrisma() {
 }
 
 export async function handleValuationRequest(request: Request) {
+  let rawData: any = null
+  
   try {
     // Safe header access
     let ip = 'unknown'
@@ -46,7 +48,7 @@ export async function handleValuationRequest(request: Request) {
       )
     }
 
-    const rawData = await request.json()
+    rawData = await request.json()
     
     // Validate
     const { valid, errors, sanitized } = validateAndSanitize(rawData)
@@ -121,19 +123,27 @@ export async function handleValuationRequest(request: Request) {
     
   } catch (error) {
     console.error('Valuation API error:', error)
+    console.error('Error details:', error instanceof Error ? error.message : String(error))
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
     
-    try {
-      const body = await request.json().catch(() => null)
-      if (body) {
-        const result = generateFallbackValuation(body)
+    // Try fallback valuation if we have the data
+    if (rawData) {
+      try {
+        const result = generateFallbackValuation(rawData)
+        await saveValuationSafely(rawData, result).catch((e) => {
+          console.error('Failed to save fallback valuation:', e)
+        })
         return NextResponse.json({ result })
+      } catch (e) {
+        console.error('Failed to generate fallback valuation:', e)
       }
-    } catch (e) {
-      // Ignore
     }
     
     return NextResponse.json(
-      { error: 'Failed to generate valuation' },
+      { 
+        error: 'Failed to generate valuation',
+        details: error instanceof Error ? error.message : String(error)
+      },
       { status: 500 }
     )
   }
@@ -153,12 +163,19 @@ async function saveValuationSafely(input: any, result: any) {
 
     // Check if there's an existing draft valuation for this email/company
     // Draft valuations have mostLikely = 0 (no result generated yet)
+    const whereClause: any = {
+      mostLikely: 0, // Draft valuations have 0 as mostLikely
+    }
+    
+    if (input?.email) {
+      whereClause.email = input.email
+    }
+    if (input?.companyName) {
+      whereClause.companyName = input.companyName
+    }
+    
     const existingDraft = await db.valuation.findFirst({
-      where: {
-        email: input?.email || undefined,
-        companyName: input?.companyName || undefined,
-        mostLikely: 0, // Draft valuations have 0 as mostLikely
-      },
+      where: whereClause,
       orderBy: {
         createdAt: 'desc'
       }
@@ -197,6 +214,8 @@ async function saveValuationSafely(input: any, result: any) {
     }
   } catch (err) {
     console.error('Prisma save error:', err)
+    console.error('Error details:', err instanceof Error ? err.message : String(err))
+    // Don't throw - we don't want to fail the valuation if saving fails
   }
 }
 
