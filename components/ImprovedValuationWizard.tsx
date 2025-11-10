@@ -195,6 +195,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [draftValuationId, setDraftValuationId] = useState<string | null>(null)
+  const lastEnrichedOrgNumber = useRef<string | null>(null)
   
   const progress = (currentStep / steps.length) * 100
 
@@ -539,19 +540,29 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
     const normalizedOrgNumber =
       orgNumber && orgNumber.length === 12 ? orgNumber.slice(-10) : orgNumber
     
+    // Only trigger if we have a valid 10-digit org number and we're not already enriching
+    // and we haven't already enriched this org number
     if (
       normalizedOrgNumber &&
       normalizedOrgNumber.length === 10 &&
       !isEnriching &&
-      !enrichmentStatus
+      normalizedOrgNumber !== lastEnrichedOrgNumber.current
     ) {
+      console.log('Org number detected, will fetch data in 1 second:', normalizedOrgNumber)
+      
       const timer = setTimeout(() => {
+        lastEnrichedOrgNumber.current = normalizedOrgNumber
         handleEnrichData()
-      }, 1000)
+      }, 1000) // Debounce 1 second after typing stops
       
       return () => clearTimeout(timer)
     }
-  }, [data.orgNumber])
+    
+    // Reset last enriched org number if org number is cleared
+    if (!normalizedOrgNumber || normalizedOrgNumber.length < 10) {
+      lastEnrichedOrgNumber.current = null
+    }
+  }, [data.orgNumber, isEnriching])
 
   const handleSubmit = async () => {
     setIsSubmitting(true)

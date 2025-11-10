@@ -185,6 +185,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   const [showPreview, setShowPreview] = useState(false)
   const [uploadingImages, setUploadingImages] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const lastEnrichedOrgNumber = useRef<string | null>(null)
   
   const [data, setData] = useState<ListingData>({
     email: user?.email || '',
@@ -444,14 +445,29 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         ? sanitizedOrgNumber.slice(-10)
         : sanitizedOrgNumber
     
-    if (normalizedOrgNumber && (normalizedOrgNumber.length === 10 || normalizedOrgNumber.length === 12)) {
+    // Only trigger if we have a valid org number, we're not already enriching,
+    // and we haven't already enriched this org number
+    if (
+      normalizedOrgNumber &&
+      normalizedOrgNumber.length === 10 &&
+      !isEnriching &&
+      normalizedOrgNumber !== lastEnrichedOrgNumber.current
+    ) {
+      console.log('Org number detected, will fetch data in 0.5 seconds:', normalizedOrgNumber)
+      
       const timer = setTimeout(() => {
+        lastEnrichedOrgNumber.current = normalizedOrgNumber
         handleEnrichData()
-      }, 500)
+      }, 500) // Debounce 0.5 seconds after typing stops
       
       return () => clearTimeout(timer)
     }
-  }, [data.orgNumber])
+    
+    // Reset last enriched org number if org number is cleared
+    if (!normalizedOrgNumber || normalizedOrgNumber.length < 10) {
+      lastEnrichedOrgNumber.current = null
+    }
+  }, [data.orgNumber, isEnriching])
 
   // Generate title suggestion based on inputs
   useEffect(() => {
