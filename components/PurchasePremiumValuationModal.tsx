@@ -160,12 +160,12 @@ export default function PurchasePremiumValuationModal({
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 text-white">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <p className="text-blue-100">Specialpris</p>
+                    <p className="text-blue-100">Pris</p>
                     <p className="text-4xl font-bold">4 995 kr</p>
-                    <p className="text-sm text-blue-100 line-through">Ordinarie pris 14 900 kr</p>
+                    <p className="text-sm text-blue-100">Engångsbetalning</p>
                   </div>
-                  <div className="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                    -67%
+                  <div className="bg-green-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
+                    Bästa pris
                   </div>
                 </div>
 
