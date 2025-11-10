@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     // Call GPT-5 (not mini) for comprehensive analysis
     const completion = await openai.chat.completions.create({
-      model: "gpt-5-mini",
+      model: "gpt-5",
       max_completion_tokens: 8000, // Much larger limit for comprehensive analysis
       messages: [
         {
