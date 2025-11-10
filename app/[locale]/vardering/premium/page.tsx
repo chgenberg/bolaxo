@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import PremiumValuationWizard from '@/components/PremiumValuationWizard'
 import { CheckCircle, AlertCircle } from 'lucide-react'
 
-export default function PremiumValuationPage() {
+function PremiumValuationContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [purchaseData, setPurchaseData] = useState<any>(null)
@@ -100,5 +100,17 @@ export default function PremiumValuationPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function PremiumValuationPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-navy"></div>
+      </div>
+    }>
+      <PremiumValuationContent />
+    </Suspense>
   )
 }
