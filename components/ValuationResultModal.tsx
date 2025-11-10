@@ -61,11 +61,11 @@ export default function ValuationResultModal({
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-white">
+          <div className="bg-gradient-to-r from-primary-navy to-primary-navy/90 p-8 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold mb-2">Värderingsresultat</h1>
-                <p className="text-blue-100">
+                <p className="text-white/80">
                   {inputData?.companyName || 'Ditt företag'} - {new Date().toLocaleDateString('sv-SE')}
                 </p>
               </div>
@@ -79,13 +79,13 @@ export default function ValuationResultModal({
 
             {/* Valuation Range */}
             <div className="mt-8 bg-white/20 rounded-xl p-6 backdrop-blur-sm">
-              <p className="text-blue-100 mb-2">Uppskattat marknadsvärde</p>
+              <p className="text-white/80 mb-2">Uppskattat marknadsvärde</p>
               <div className="flex items-baseline gap-2">
                 <span className="text-4xl font-bold">
                   {(valuation.min || 0).toLocaleString('sv-SE')} - {(valuation.max || 0).toLocaleString('sv-SE')} kr
                 </span>
               </div>
-              <p className="text-blue-100 mt-2">
+              <p className="text-white/80 mt-2">
                 Mest sannolikt: <span className="font-semibold">{(valuation.mostLikely || 0).toLocaleString('sv-SE')} kr</span>
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function ValuationResultModal({
                     onClick={() => setActiveTab(tab.id)}
                     className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 transition-colors ${
                       activeTab === tab.id
-                        ? 'border-blue-500 text-blue-600'
+                        ? 'border-primary-navy text-primary-navy'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
                   >
@@ -143,9 +143,9 @@ export default function ValuationResultModal({
               <div className="space-y-6">
                 {/* Key Highlights */}
                 <div className="grid md:grid-cols-3 gap-4">
-                  <div className="bg-blue-50 rounded-lg p-4">
+                  <div className="bg-primary-navy/10 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
-                      <Building className="h-5 w-5 text-blue-600" />
+                      <Building className="h-5 w-5 text-primary-navy" />
                       <span className="font-medium text-gray-900">Bransch</span>
                     </div>
                     <p className="text-gray-600">{inputData?.industry || 'Ej angiven'}</p>
@@ -177,12 +177,12 @@ export default function ValuationResultModal({
                 </div>
 
                 {/* Confidence Score */}
-                <div className="bg-blue-50 rounded-lg p-6">
+                <div className="bg-primary-navy/10 rounded-lg p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Tillförlitlighet</h3>
                   <div className="flex items-center gap-4">
                     <div className="flex-1 bg-gray-200 rounded-full h-4">
                       <div 
-                        className="bg-blue-500 h-4 rounded-full"
+                        className="bg-primary-navy h-4 rounded-full"
                         style={{ width: `${(analysis?.confidenceScore || 65) * 100}%` }}
                       />
                     </div>
@@ -243,12 +243,12 @@ export default function ValuationResultModal({
 
             {activeTab === 'recommendations' && (
               <div className="space-y-6">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="bg-primary-navy/10 border border-primary-navy/20 rounded-lg p-4">
                   <div className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                    <AlertCircle className="h-5 w-5 text-primary-navy mt-0.5" />
                     <div>
-                      <p className="font-medium text-blue-900">Rekommendation</p>
-                      <p className="text-blue-700 mt-1">
+                      <p className="font-medium text-primary-navy">Rekommendation</p>
+                      <p className="text-primary-navy/80 mt-1">
                         För en mer exakt värdering rekommenderar vi en djupgående analys som inkluderar 
                         due diligence av alla affärskritiska områden.
                       </p>
@@ -287,7 +287,7 @@ export default function ValuationResultModal({
             </div>
             <button
               onClick={() => setShowPurchaseModal(true)}
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className="bg-primary-navy text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-navy/90 transition-colors flex items-center gap-2"
             >
               <FileText className="h-4 w-4" />
               Få djupgående analys
