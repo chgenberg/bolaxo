@@ -33,44 +33,44 @@ interface ListingData {
   
   // Step 3: Financials
   revenue: string
-  revenue3Years?: string
-  revenueGrowthRate?: string
-  ebitda?: string
-  profitMargin?: string
-  grossMargin?: string
-  customerConcentrationRisk?: string
+  revenue3Years: string
+  revenueGrowthRate: string
+  ebitda: string
+  profitMargin: string
+  grossMargin: string
+  customerConcentrationRisk: string
   
   // Step 4: Assets & Operations
-  cash?: string
-  accountsReceivable?: string
-  inventory?: string
-  totalAssets?: string
-  totalLiabilities?: string
-  shortTermDebt?: string
-  longTermDebt?: string
-  operatingCosts?: string
-  salaries?: string
-  rentCosts?: string
-  marketingCosts?: string
-  otherOperatingCosts?: string
+  cash: string
+  accountsReceivable: string
+  inventory: string
+  totalAssets: string
+  totalLiabilities: string
+  shortTermDebt: string
+  longTermDebt: string
+  operatingCosts: string
+  salaries: string
+  rentCosts: string
+  marketingCosts: string
+  otherOperatingCosts: string
   
   // Step 5: Business Details
-  competitiveAdvantages?: string
-  regulatoryLicenses?: string
-  paymentTerms?: string
-  whySelling?: string
-  idealBuyer?: string
+  competitiveAdvantages: string
+  regulatoryLicenses: string
+  paymentTerms: string
+  whySelling: string
+  idealBuyer: string
   
   // Step 6: Listing Details
-  anonymousTitle?: string
-  description?: string
-  askingPrice?: string
-  priceMin?: string
-  priceMax?: string
-  images?: string[]
+  anonymousTitle: string
+  description: string
+  askingPrice: string
+  priceMin: string
+  priceMax: string
+  images: string[]
   
   // Package selection
-  packageType?: 'basic' | 'pro' | 'enterprise'
+  packageType: 'basic' | 'pro' | 'enterprise'
 }
 
 interface WizardProps {
@@ -178,6 +178,34 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
     employees: '',
     address: '',
     revenue: '',
+    revenue3Years: '',
+    revenueGrowthRate: '',
+    ebitda: '',
+    profitMargin: '',
+    grossMargin: '',
+    customerConcentrationRisk: '',
+    cash: '',
+    accountsReceivable: '',
+    inventory: '',
+    totalAssets: '',
+    totalLiabilities: '',
+    shortTermDebt: '',
+    longTermDebt: '',
+    operatingCosts: '',
+    salaries: '',
+    rentCosts: '',
+    marketingCosts: '',
+    otherOperatingCosts: '',
+    competitiveAdvantages: '',
+    regulatoryLicenses: '',
+    paymentTerms: '',
+    whySelling: '',
+    idealBuyer: '',
+    anonymousTitle: '',
+    description: '',
+    askingPrice: '',
+    priceMin: '',
+    priceMax: '',
     packageType: 'pro',
     images: []
   })
