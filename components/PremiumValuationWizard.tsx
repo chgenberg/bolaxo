@@ -15,6 +15,7 @@ import ModernSelect from './ModernSelect'
 interface PremiumValuationWizardProps {
   initialData?: any
   purchaseId?: string
+  isDemo?: boolean
 }
 
 interface Section {
@@ -704,7 +705,8 @@ const sections: Section[] = [
 
 export default function PremiumValuationWizard({ 
   initialData,
-  purchaseId 
+  purchaseId,
+  isDemo = false
 }: PremiumValuationWizardProps) {
   const [currentSection, setCurrentSection] = useState(1)
   const [formData, setFormData] = useState<any>(initialData || {})
@@ -712,16 +714,31 @@ export default function PremiumValuationWizard({
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
 
-  // Auto-save every 30 seconds
+  // Auto-save every 30 seconds (endast om inte demo)
   useEffect(() => {
+    if (isDemo) return // Ingen auto-save i demo-läge
+    
     const interval = setInterval(() => {
       handleSave()
     }, 30000)
     
     return () => clearInterval(interval)
-  }, [formData])
+  }, [formData, isDemo])
 
   const handleSave = async () => {
+    if (isDemo) {
+      // I demo-läge spara bara lokalt
+      const demoId = purchaseId || 'demo-' + Date.now()
+      localStorage.setItem(`premium-valuation-${demoId}`, JSON.stringify({
+        formData,
+        currentSection,
+        lastSaved: new Date(),
+        isDemo: true
+      }))
+      setLastSaved(new Date())
+      return
+    }
+
     setIsSaving(true)
     
     try {
