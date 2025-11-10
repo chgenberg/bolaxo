@@ -78,8 +78,8 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      {isSeller(user?.role || '') && <SellerDashboard userId={user.id} />}
-      {isBuyer(user?.role || '') && <BuyerDashboard userId={user.id} />}
+      {isSeller(user?.role || '') && user && <SellerDashboard userId={user.id} />}
+      {isBuyer(user?.role || '') && user && <BuyerDashboard userId={user.id} />}
       {!isSeller(user?.role || '') && !isBuyer(user?.role || '') && (
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
