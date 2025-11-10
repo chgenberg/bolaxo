@@ -356,11 +356,16 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
           profit: autoFillFields.profit,
           employees: autoFillFields.employees,
           companyAge: autoFillFields.companyAge,
+          allAutoFillFields: Object.keys(autoFillFields),
         })
         
         // Basic info - always fill if available (overwrite existing values)
+        // IMPORTANT: Always fill company name from Bolagsverket if available
         if (autoFillFields.companyName) {
+          console.log('Filling company name:', autoFillFields.companyName)
           newData.companyName = autoFillFields.companyName
+        } else {
+          console.warn('No company name in autoFillFields!', { autoFillFields })
         }
         if (autoFillFields.industry) {
           newData.industry = autoFillFields.industry
