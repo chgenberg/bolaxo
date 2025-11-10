@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react'
 import ValuationResultModal from '@/components/ValuationResultModal'
+import { useRouter } from 'next/navigation'
 
 // Mockup data för att visa resultatsidan
 const mockResult = {
@@ -62,25 +63,35 @@ const mockInputData = {
 }
 
 function MockupContent() {
+  const router = useRouter()
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full">
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-          <p className="text-yellow-800 font-medium">
-            🎨 MOCKUP-LÄGE: Detta är en förhandsvisning av resultatsidan med exempeldata
-          </p>
+    <>
+      {/* Mockup banner */}
+      <div className="bg-yellow-50 border-b border-yellow-200 p-4">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-between">
+            <p className="text-yellow-800 font-medium">
+              🎨 MOCKUP-LÄGE: Detta är en förhandsvisning av resultatsidan med exempeldata
+            </p>
+            <button
+              onClick={() => router.push('/sv/vardering')}
+              className="text-yellow-800 hover:text-yellow-900 underline text-sm"
+            >
+              Tillbaka till värdering
+            </button>
+          </div>
         </div>
-        
-        <ValuationResultModal
-          result={mockResult}
-          inputData={mockInputData}
-          onClose={() => {
-            // I mockup-läge kan vi bara logga eller göra ingenting
-            console.log('Mockup modal closed')
-          }}
-        />
       </div>
-    </div>
+
+      <ValuationResultModal
+        result={mockResult}
+        inputData={mockInputData}
+        onClose={() => {
+          router.push('/sv/vardering')
+        }}
+      />
+    </>
   )
 }
 
