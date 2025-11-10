@@ -10,6 +10,7 @@ import { useBuyerStore } from '@/stores/buyerStore'
 import { useAuth } from '@/contexts/AuthContext'
 import InfoPopup from '@/components/InfoPopup'
 import { ListingStructuredData } from '@/components/ListingStructuredData'
+import { formatCurrency } from '@/utils/currency'
 
 export default function ObjectDetailPage() {
   const params = useParams()
@@ -288,15 +289,28 @@ export default function ObjectDetailPage() {
                 </span>
               </div>
 
-              {/* Key Metrics Grid */}
-              <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
+              {/* Key Metrics Grid - Enhanced */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6">
                 <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
                   <div className="flex items-center text-text-gray mb-1 sm:mb-2">
                     <TrendingUp className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
                     <span className="text-xs sm:text-sm">Omsättning</span>
                   </div>
-                  <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">{object.revenueRange}</div>
+                  <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">
+                    {object.revenue ? formatCurrency(object.revenue) : object.revenueRange}
+                  </div>
                 </div>
+                {object.ebitda && (
+                  <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                    <div className="flex items-center text-text-gray mb-1 sm:mb-2">
+                      <BarChart className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
+                      <span className="text-xs sm:text-sm">EBITDA</span>
+                    </div>
+                    <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">
+                      {formatCurrency(object.ebitda)}
+                    </div>
+                  </div>
+                )}
                 <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
                   <div className="flex items-center text-text-gray mb-1 sm:mb-2">
                     <Users className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
@@ -305,25 +319,20 @@ export default function ObjectDetailPage() {
                   <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">{object.employees}</div>
                 </div>
                 <div className="bg-primary-blue/10 rounded-lg sm:rounded-xl p-3 sm:p-4">
-                  <div className="text-text-gray text-xs sm:text-sm mb-1 sm:mb-2">Prisidé</div>
+                  <div className="text-text-gray text-xs sm:text-sm mb-1 sm:mb-2">Begärt pris</div>
                   <div className="text-base sm:text-lg md:text-xl font-bold text-primary-blue">
-                    {object.abstainPriceMin && object.abstainPriceMax ? 
+                    {object.askingPrice ? 
+                      formatCurrency(object.askingPrice) :
+                    object.abstainPriceMin && object.abstainPriceMax ? 
                       'Pris ej angivet' :
                     object.abstainPriceMin ? 
-                      `Från ${(object.priceMax / 1000000).toFixed(1)} MSEK` :
+                      `Från ${formatCurrency(object.priceMax)}` :
                     object.abstainPriceMax ?
-                      `Upp till ${(object.priceMin / 1000000).toFixed(1)} MSEK` :
+                      `Upp till ${formatCurrency(object.priceMin)}` :
                     object.priceMin && object.priceMax ?
-                      `${(object.priceMin / 1000000).toFixed(1)}-${(object.priceMax / 1000000).toFixed(1)} MSEK`
+                      `${formatCurrency(object.priceMin)}-${formatCurrency(object.priceMax)}`
                       : 'Ej angivet'}
                   </div>
-                </div>
-                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
-                  <div className="flex items-center text-text-gray mb-1 sm:mb-2">
-                    <Eye className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-1.5" />
-                    <span className="text-xs sm:text-sm">Visningar</span>
-                  </div>
-                  <div className="text-base sm:text-lg md:text-xl font-bold text-text-dark">{object.views}</div>
                 </div>
               </div>
               
@@ -390,33 +399,89 @@ export default function ObjectDetailPage() {
                     <div className="space-y-2 sm:space-y-3">
                       <div className="flex justify-between py-2 border-b border-gray-100">
                         <span className="text-sm sm:text-base text-text-gray">Bransch</span>
-                        <span className="text-sm sm:text-base text-text-dark font-medium">{object.category || object.type}</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium">{object.industry || object.category || object.type}</span>
                       </div>
                       <div className="flex justify-between py-2 border-b border-gray-100">
                         <span className="text-sm sm:text-base text-text-gray">Etablerat</span>
-                        <span className="text-sm sm:text-base text-text-dark font-medium">{2024 - Math.floor(Math.random() * 10 + 5)}</span>
+                        <span className="text-sm sm:text-base text-text-dark font-medium">
+                          {object.foundedYear || (object.companyAge ? new Date().getFullYear() - object.companyAge : 2024 - Math.floor(Math.random() * 10 + 5))}
+                        </span>
                       </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-sm sm:text-base text-text-gray">Antal kunder</span>
-                        <span className="text-sm sm:text-base text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)}+</span>
-                      </div>
+                      {object.profitMargin && (
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm sm:text-base text-text-gray">Vinstmarginal</span>
+                          <span className="text-sm sm:text-base text-text-dark font-medium">{object.profitMargin}%</span>
+                        </div>
+                      )}
+                      {object.customerConcentrationRisk && (
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm sm:text-base text-text-gray">Kundberoende</span>
+                          <span className="text-sm sm:text-base text-text-dark font-medium">
+                            {object.customerConcentrationRisk === 'low' ? 'Låg' : object.customerConcentrationRisk === 'medium' ? 'Medel' : 'Hög'}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <div className="space-y-2 sm:space-y-3">
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-sm sm:text-base text-text-gray">Tillväxt (YoY)</span>
-                        <span className="text-sm sm:text-base text-text-dark font-medium text-success">+{Math.floor(Math.random() * 20 + 5)}%</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-sm sm:text-base text-text-gray">Lokalyta</span>
-                        <span className="text-sm sm:text-base text-text-dark font-medium">{Math.floor(Math.random() * 500 + 100)} kvm</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b border-gray-100">
-                        <span className="text-sm sm:text-base text-text-gray">Hyresavtal</span>
-                        <span className="text-sm sm:text-base text-text-dark font-medium">{Math.floor(Math.random() * 5 + 2)} år kvar</span>
-                      </div>
+                      {object.revenueGrowthRate !== undefined && (
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm sm:text-base text-text-gray">Tillväxt</span>
+                          <span className="text-sm sm:text-base text-text-dark font-medium text-success">+{object.revenueGrowthRate}%</span>
+                        </div>
+                      )}
+                      {object.grossMargin && (
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm sm:text-base text-text-gray">Bruttomarginal</span>
+                          <span className="text-sm sm:text-base text-text-dark font-medium">{object.grossMargin}%</span>
+                        </div>
+                      )}
+                      {object.regulatoryLicenses && (
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm sm:text-base text-text-gray">Tillstånd</span>
+                          <span className="text-sm sm:text-base text-text-dark font-medium">{object.regulatoryLicenses}</span>
+                        </div>
+                      )}
+                      {object.paymentTerms && (
+                        <div className="flex justify-between py-2 border-b border-gray-100">
+                          <span className="text-sm sm:text-base text-text-gray">Betalningsvillkor</span>
+                          <span className="text-sm sm:text-base text-text-dark font-medium">{object.paymentTerms}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </section>
+                
+                {/* Competitive Advantages */}
+                {object.competitiveAdvantages && (
+                  <section>
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-text-dark mb-3 sm:mb-4">Konkurrensfördelar</h2>
+                    <div className="bg-blue-50 rounded-lg p-4">
+                      <p className="text-sm sm:text-base text-text-gray leading-relaxed whitespace-pre-wrap">
+                        {object.competitiveAdvantages}
+                      </p>
+                    </div>
+                  </section>
+                )}
+                
+                {/* Why Selling */}
+                {object.whySelling && (
+                  <section>
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-text-dark mb-3 sm:mb-4">Anledning till försäljning</h2>
+                    <p className="text-sm sm:text-base text-text-gray leading-relaxed">
+                      {object.whySelling}
+                    </p>
+                  </section>
+                )}
+                
+                {/* Ideal Buyer */}
+                {object.idealBuyer && (
+                  <section>
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-text-dark mb-3 sm:mb-4">Ideal köpare</h2>
+                    <p className="text-sm sm:text-base text-text-gray leading-relaxed">
+                      {object.idealBuyer}
+                    </p>
+                  </section>
+                )}
               </div>
             )}
 
@@ -468,35 +533,180 @@ export default function ObjectDetailPage() {
 
                 {hasNDA(objectId) && (
                   <>
+                    {/* Detailed Financials */}
                     <section>
-                      <h3 className="text-xl font-semibold text-text-dark mb-4">Resultaträkning (3 år)</h3>
-                      <div className="overflow-x-auto">
-                        <table className="w-full border-collapse">
-                          <thead>
-                            <tr className="border-b border-gray-200">
-                              <th className="text-left py-3 px-4 text-text-gray font-medium">Post</th>
-                              <th className="text-right py-3 px-4 text-text-gray font-medium">2023</th>
-                              <th className="text-right py-3 px-4 text-text-gray font-medium">2022</th>
-                              <th className="text-right py-3 px-4 text-text-gray font-medium">2021</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="border-b border-gray-100">
-                              <td className="py-3 px-4 text-text-dark">Omsättning</td>
-                              <td className="text-right py-3 px-4 font-medium">{object.revenue / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.95) / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.88) / 1000000} MSEK</td>
-                            </tr>
-                            <tr className="border-b border-gray-100">
-                              <td className="py-3 px-4 text-text-dark">EBITDA</td>
-                              <td className="text-right py-3 px-4 font-medium text-success">{(object.revenue * 0.15) / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.14) / 1000000} MSEK</td>
-                              <td className="text-right py-3 px-4">{(object.revenue * 0.13) / 1000000} MSEK</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                      <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-4">Detaljerad finansiell information</h3>
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {object.revenue && (
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <h4 className="text-text-gray text-xs sm:text-sm mb-1">Årlig omsättning</h4>
+                            <p className="text-lg font-bold text-text-dark">{formatCurrency(object.revenue)}</p>
+                          </div>
+                        )}
+                        {object.ebitda && (
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <h4 className="text-text-gray text-xs sm:text-sm mb-1">EBITDA</h4>
+                            <p className="text-lg font-bold text-text-dark">{formatCurrency(object.ebitda)}</p>
+                          </div>
+                        )}
+                        {object.profitMargin && (
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <h4 className="text-text-gray text-xs sm:text-sm mb-1">Vinstmarginal</h4>
+                            <p className="text-lg font-bold text-text-dark">{object.profitMargin}%</p>
+                          </div>
+                        )}
+                        {object.grossMargin && (
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <h4 className="text-text-gray text-xs sm:text-sm mb-1">Bruttomarginal</h4>
+                            <p className="text-lg font-bold text-text-dark">{object.grossMargin}%</p>
+                          </div>
+                        )}
                       </div>
                     </section>
+                    
+                    {/* Balance Sheet */}
+                    {(object.totalAssets || object.cash || object.inventory || object.accountsReceivable) && (
+                      <section>
+                        <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-4">Balansräkning</h3>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          <div>
+                            <h4 className="text-base font-medium text-text-dark mb-3">Tillgångar</h4>
+                            <div className="space-y-2">
+                              {object.cash && (
+                                <div className="flex justify-between py-2 border-b border-gray-100">
+                                  <span className="text-sm text-text-gray">Kassa & Bank</span>
+                                  <span className="text-sm font-medium text-text-dark">{formatCurrency(object.cash)}</span>
+                                </div>
+                              )}
+                              {object.accountsReceivable && (
+                                <div className="flex justify-between py-2 border-b border-gray-100">
+                                  <span className="text-sm text-text-gray">Kundfordringar</span>
+                                  <span className="text-sm font-medium text-text-dark">{formatCurrency(object.accountsReceivable)}</span>
+                                </div>
+                              )}
+                              {object.inventory && (
+                                <div className="flex justify-between py-2 border-b border-gray-100">
+                                  <span className="text-sm text-text-gray">Lager</span>
+                                  <span className="text-sm font-medium text-text-dark">{formatCurrency(object.inventory)}</span>
+                                </div>
+                              )}
+                              {object.totalAssets && (
+                                <div className="flex justify-between py-2 border-b-2 border-gray-200">
+                                  <span className="text-sm font-medium text-text-dark">Totala tillgångar</span>
+                                  <span className="text-sm font-bold text-text-dark">{formatCurrency(object.totalAssets)}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <h4 className="text-base font-medium text-text-dark mb-3">Skulder</h4>
+                            <div className="space-y-2">
+                              {object.shortTermDebt && (
+                                <div className="flex justify-between py-2 border-b border-gray-100">
+                                  <span className="text-sm text-text-gray">Kortfristiga skulder</span>
+                                  <span className="text-sm font-medium text-text-dark">{formatCurrency(object.shortTermDebt)}</span>
+                                </div>
+                              )}
+                              {object.longTermDebt && (
+                                <div className="flex justify-between py-2 border-b border-gray-100">
+                                  <span className="text-sm text-text-gray">Långfristiga skulder</span>
+                                  <span className="text-sm font-medium text-text-dark">{formatCurrency(object.longTermDebt)}</span>
+                                </div>
+                              )}
+                              {object.totalLiabilities && (
+                                <div className="flex justify-between py-2 border-b-2 border-gray-200">
+                                  <span className="text-sm font-medium text-text-dark">Totala skulder</span>
+                                  <span className="text-sm font-bold text-text-dark">{formatCurrency(object.totalLiabilities)}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    )}
+                    
+                    {/* Operating Costs */}
+                    {(object.salaries || object.rentCosts || object.marketingCosts) && (
+                      <section>
+                        <h3 className="text-lg sm:text-xl font-semibold text-text-dark mb-4">Driftskostnader</h3>
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                          {object.salaries && (
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <h4 className="text-text-gray text-xs sm:text-sm mb-1">Lönekostnader</h4>
+                              <p className="text-base font-bold text-text-dark">{formatCurrency(object.salaries)}</p>
+                              <p className="text-xs text-text-gray">Inkl. sociala avgifter</p>
+                            </div>
+                          )}
+                          {object.rentCosts && (
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <h4 className="text-text-gray text-xs sm:text-sm mb-1">Lokalhyra</h4>
+                              <p className="text-base font-bold text-text-dark">{formatCurrency(object.rentCosts)}</p>
+                              <p className="text-xs text-text-gray">Årlig kostnad</p>
+                            </div>
+                          )}
+                          {object.marketingCosts && (
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <h4 className="text-text-gray text-xs sm:text-sm mb-1">Marknadsföring</h4>
+                              <p className="text-base font-bold text-text-dark">{formatCurrency(object.marketingCosts)}</p>
+                              <p className="text-xs text-text-gray">Årlig budget</p>
+                            </div>
+                          )}
+                          {object.otherOperatingCosts && (
+                            <div className="bg-gray-50 rounded-lg p-4">
+                              <h4 className="text-text-gray text-xs sm:text-sm mb-1">Övriga driftskostnader</h4>
+                              <p className="text-base font-bold text-text-dark">{formatCurrency(object.otherOperatingCosts)}</p>
+                              <p className="text-xs text-text-gray">Årlig kostnad</p>
+                            </div>
+                          )}
+                        </div>
+                      </section>
+                    )}
+                    
+                    {/* Historical Revenue Table */}
+                    {(object.revenueYear1 || object.revenueYear2 || object.revenueYear3) && (
+                      <section>
+                        <h3 className="text-xl font-semibold text-text-dark mb-4">Historisk utveckling</h3>
+                        <div className="overflow-x-auto">
+                          <table className="w-full border-collapse">
+                            <thead>
+                              <tr className="border-b border-gray-200">
+                                <th className="text-left py-3 px-4 text-text-gray font-medium">År</th>
+                                <th className="text-right py-3 px-4 text-text-gray font-medium">Omsättning</th>
+                                <th className="text-right py-3 px-4 text-text-gray font-medium">Tillväxt</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {object.revenueYear3 && (
+                                <tr className="border-b border-gray-100">
+                                  <td className="py-3 px-4 text-text-dark">2023</td>
+                                  <td className="text-right py-3 px-4 font-medium">{formatCurrency(object.revenueYear3)}</td>
+                                  <td className="text-right py-3 px-4 font-medium text-success">
+                                    {object.revenueYear2 ? `+${((object.revenueYear3 - object.revenueYear2) / object.revenueYear2 * 100).toFixed(1)}%` : '-'}
+                                  </td>
+                                </tr>
+                              )}
+                              {object.revenueYear2 && (
+                                <tr className="border-b border-gray-100">
+                                  <td className="py-3 px-4 text-text-dark">2022</td>
+                                  <td className="text-right py-3 px-4">{formatCurrency(object.revenueYear2)}</td>
+                                  <td className="text-right py-3 px-4">
+                                    {object.revenueYear1 ? `+${((object.revenueYear2 - object.revenueYear1) / object.revenueYear1 * 100).toFixed(1)}%` : '-'}
+                                  </td>
+                                </tr>
+                              )}
+                              {object.revenueYear1 && (
+                                <tr className="border-b border-gray-100">
+                                  <td className="py-3 px-4 text-text-dark">2021</td>
+                                  <td className="text-right py-3 px-4">{formatCurrency(object.revenueYear1)}</td>
+                                  <td className="text-right py-3 px-4">-</td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    )}
                   </>
                 )}
               </div>

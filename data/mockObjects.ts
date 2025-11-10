@@ -3,12 +3,20 @@ export interface BusinessObject {
   type: string
   region: string
   revenueRange: string
-  revenue: number // Exact number (locked behind NDA)
-  ebitda: number // Locked behind NDA
+  revenue: number // Exact number
+  revenue3Years?: number // Average revenue over 3 years
+  revenueGrowthRate?: number // Revenue growth rate percentage
+  revenueYear1?: number
+  revenueYear2?: number
+  revenueYear3?: number
+  ebitda: number
+  profitMargin?: number
+  grossMargin?: number
   employees: string
   ownerRole: string
   priceMin: number
   priceMax: number
+  askingPrice?: number
   abstainPriceMin?: boolean // User opted out of providing min price
   abstainPriceMax?: boolean // User opted out of providing max price
   description: string
@@ -23,20 +31,48 @@ export interface BusinessObject {
   views: number
   featured?: boolean
   category?: string
+  industry?: string
   title?: string
   price?: number
   location?: string
   ndaRequired?: boolean
+  foundedYear?: number
+  companyAge?: number
+  
+  // Balance Sheet & Assets
+  cash?: number
+  accountsReceivable?: number
+  inventory?: number
+  totalAssets?: number
+  totalLiabilities?: number
+  shortTermDebt?: number
+  longTermDebt?: number
+  
+  // Operating Costs
+  operatingCosts?: number
+  salaries?: number
+  rentCosts?: number
+  marketingCosts?: number
+  otherOperatingCosts?: number
+  
+  // Qualitative fields
+  competitiveAdvantages?: string
+  regulatoryLicenses?: string
+  paymentTerms?: string
+  idealBuyer?: string
+  customerConcentrationRisk?: 'low' | 'medium' | 'high'
   
   // Image
   image?: string
+  images?: string[]
   
   // Locked data (only after NDA)
-  companyName: string // Locked
-  orgNumber: string // Locked
-  address: string // Locked
-  detailedFinancials: any // Locked
-  customers: string[] // Locked
+  companyName: string
+  orgNumber: string
+  address: string
+  website?: string
+  detailedFinancials: any
+  customers: string[]
   
   // Anonymous display
   anonymousTitle: string
@@ -51,14 +87,23 @@ export const mockObjects: BusinessObject[] = [
   {
     id: 'obj-001',
     type: 'Konsultbolag',
+    industry: 'consulting',
     region: 'Stockholm',
     revenueRange: '5-10M',
     revenue: 7500000,
+    revenue3Years: 7200000,
+    revenueGrowthRate: 8.5,
+    revenueYear1: 6500000,
+    revenueYear2: 7000000,
+    revenueYear3: 7500000,
     ebitda: 1800000,
+    profitMargin: 15.2,
+    grossMargin: 42.5,
     employees: '6-10',
     ownerRole: 'VD, operativ',
     priceMin: 12000000,
     priceMax: 15000000,
+    askingPrice: 13500000,
     description: 'Etablerat IT-konsultbolag med fokus på digitalisering och systemutveckling. Starka relationer med återkommande kunder i offentlig sektor.',
     strengths: [
       'Långa kundkontrakt med 95% retention',
@@ -74,9 +119,30 @@ export const mockObjects: BusinessObject[] = [
     broker: false,
     isNew: true,
     views: 145,
+    foundedYear: 2012,
+    companyAge: 12,
+    // Balance Sheet
+    cash: 2500000,
+    accountsReceivable: 1200000,
+    totalAssets: 4200000,
+    totalLiabilities: 1800000,
+    shortTermDebt: 800000,
+    longTermDebt: 1000000,
+    // Operating Costs
+    salaries: 4200000,
+    rentCosts: 480000,
+    marketingCosts: 250000,
+    otherOperatingCosts: 320000,
+    // Qualitative
+    competitiveAdvantages: 'Specialistkompetens inom offentlig sektor, ramavtal med flera myndigheter, ISO-certifierad verksamhet',
+    regulatoryLicenses: 'ISO 9001:2015, ISO 27001',
+    paymentTerms: '30 dagar netto',
+    idealBuyer: 'Större konsultbolag som vill expandera inom offentlig sektor eller entreprenör med branschbakgrund',
+    customerConcentrationRisk: 'medium',
     companyName: 'Digital Konsult AB',
     orgNumber: '556123-4567',
     address: 'Storgatan 1, 111 22 Stockholm',
+    website: 'www.digitalkonsult.se',
     detailedFinancials: {},
     customers: ['Stockholms kommun', 'Trafikverket', 'Försäkringskassan'],
     anonymousTitle: 'Etablerat IT-konsultbolag i Stockholm',
@@ -86,37 +152,68 @@ export const mockObjects: BusinessObject[] = [
   {
     id: 'obj-002',
     type: 'E-handel',
+    industry: 'webshop',
     region: 'Göteborg',
     revenueRange: '10-25M',
     revenue: 18000000,
+    revenue3Years: 15500000,
+    revenueGrowthRate: 22.3,
+    revenueYear1: 12000000,
+    revenueYear2: 15000000,
+    revenueYear3: 18000000,
     ebitda: 3200000,
+    profitMargin: 12.8,
+    grossMargin: 45.2,
     employees: '11-25',
     ownerRole: 'Passiv ägare',
     priceMin: 20000000,
     priceMax: 25000000,
+    askingPrice: 22500000,
     description: 'Lönsam e-handelsplattform inom heminredning med stark tillväxt. Duktigt team på plats som driver den dagliga verksamheten.',
     strengths: [
       'Stark tillväxt - dubblad omsättning på 3 år',
       'Automatiserad logistik och processer',
-      'Etablerad varumärke med 25k följare'
+      'Höga kundbetyg och låg returratio'
     ],
     risks: [
-      'Konkurrensutsatt marknad',
-      'Säsongsvariationer - men har stark kontantreserv'
+      'Konkurrens från stora aktörer',
+      'Säsongsvariation i försäljning'
     ],
-    whySelling: 'Ägaren vill fokusera på andra investeringar.',
+    whySelling: 'Ägaren vill realisera värde och fokusera på andra investeringar.',
     verified: true,
-    broker: true,
+    broker: false,
     isNew: false,
-    views: 289,
-    companyName: 'Nordic Home E-handel AB',
+    views: 312,
+    foundedYear: 2015,
+    companyAge: 9,
+    // Balance Sheet
+    cash: 3800000,
+    accountsReceivable: 900000,
+    inventory: 3500000,
+    totalAssets: 9200000,
+    totalLiabilities: 4100000,
+    shortTermDebt: 2800000,
+    longTermDebt: 1300000,
+    // Operating Costs
+    operatingCosts: 14800000,
+    salaries: 5400000,
+    rentCosts: 840000,
+    marketingCosts: 2200000,
+    otherOperatingCosts: 6360000,
+    // Qualitative
+    competitiveAdvantages: 'Starka leverantörsavtal, egen produktlinje med exklusiva design, avancerad e-handelsplattform',
+    paymentTerms: 'Direkt vid köp för konsumenter',
+    idealBuyer: 'E-handelsgrupp eller finansiell köpare med erfarenhet av skalning',
+    customerConcentrationRisk: 'low',
+    companyName: 'Nordic Living AB',
     orgNumber: '556234-5678',
-    address: 'Avenyn 45, 411 36 Göteborg',
+    address: 'Hamngatan 10, 411 14 Göteborg',
+    website: 'www.nordicliving.se',
     detailedFinancials: {},
-    customers: ['Direktförsäljning B2C'],
-    anonymousTitle: 'E-handelsplattform inom heminredning',
-    image: '/Annonsbilder/Heminredning.png',
-    createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000)
+    customers: ['B2C konsumenter', 'Återförsäljare'],
+    anonymousTitle: 'Ledande e-handel inom heminredning',
+    image: '/Annonsbilder/Ehandel.png',
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   },
   {
     id: 'obj-003',
@@ -124,11 +221,18 @@ export const mockObjects: BusinessObject[] = [
     region: 'Malmö',
     revenueRange: '1-5M',
     revenue: 3200000,
+    revenueYear1: 2800000,
+    revenueYear2: 3000000,
+    revenueYear3: 3200000,
+    revenueGrowthRate: 6.7,
     ebitda: 480000,
+    profitMargin: 8.5,
+    grossMargin: 65.0,
     employees: '1-5',
     ownerRole: 'VD, operativ',
     priceMin: 2500000,
     priceMax: 3500000,
+    askingPrice: 3000000,
     description: 'Välbesökt restaurang i centrala Malmö. Etablerad över 10 år med lojal kundbas. Möjlighet att utöka med catering och events.',
     strengths: [
       'Etablerad plats i populärt område',
@@ -144,9 +248,30 @@ export const mockObjects: BusinessObject[] = [
     broker: false,
     isNew: true,
     views: 67,
+    foundedYear: 2013,
+    companyAge: 11,
+    // Balance Sheet
+    cash: 280000,
+    inventory: 120000,
+    totalAssets: 850000,
+    totalLiabilities: 420000,
+    shortTermDebt: 320000,
+    longTermDebt: 100000,
+    // Operating Costs
+    salaries: 1200000,
+    rentCosts: 360000,
+    marketingCosts: 80000,
+    otherOperatingCosts: 680000,
+    // Qualitative
+    competitiveAdvantages: 'Unik menykonceptet, central läge, stark lokal förankring',
+    regulatoryLicenses: 'Alkoholtillstånd, Livsmedelshantering',
+    paymentTerms: 'Kontant och kort',
+    idealBuyer: 'Erfaren restauratör eller par som vill driva egen verksamhet',
+    customerConcentrationRisk: 'low',
     companyName: 'Malmö Bistro AB',
     orgNumber: '556345-6789',
     address: 'Stortorget 12, 211 22 Malmö',
+    website: 'www.malmobistro.se',
     detailedFinancials: {},
     customers: ['Walk-in kunder'],
     anonymousTitle: 'Etablerad restaurang i centrala Malmö',
@@ -156,562 +281,440 @@ export const mockObjects: BusinessObject[] = [
   {
     id: 'obj-004',
     type: 'SaaS-företag',
+    industry: 'saas',
     region: 'Stockholm',
-    revenueRange: '25-50M',
-    revenue: 38000000,
-    ebitda: 8500000,
-    employees: '26-50',
-    ownerRole: 'VD, delvis operativ',
-    priceMin: 80000000,
-    priceMax: 100000000,
-    description: 'Snabbväxande SaaS-plattform för projektledning. ARR på 35 MSEK med stark retention (>110% NRR). Nordiskt fokus med expansion till EU planerad.',
+    revenueRange: '5-10M',
+    revenue: 8900000,
+    revenue3Years: 6500000,
+    revenueGrowthRate: 45.8,
+    revenueYear1: 3200000,
+    revenueYear2: 5800000,
+    revenueYear3: 8900000,
+    ebitda: 2100000,
+    profitMargin: 18.5,
+    grossMargin: 82.0,
+    employees: '11-25',
+    ownerRole: 'VD, ej operativ',
+    priceMin: 35000000,
+    priceMax: 45000000,
+    askingPrice: 40000000,
+    description: 'Växande SaaS-bolag med återkommande intäkter. Fokus på B2B-marknaden med stark produktutveckling.',
     strengths: [
-      'Återkommande intäkter (SaaS-modell)',
-      'Stark produktmarknadpassning',
+      'Hög andel återkommande intäkter (ARR)',
+      'Låg churn rate (<5%)',
       'Skalbar affärsmodell'
     ],
     risks: [
-      'Konkurrens från större internationella aktörer',
-      'Nyckelpersonsberoende i produktutveckling'
+      'Teknisk skuld behöver adresseras',
+      'Konkurrens från internationella aktörer'
     ],
-    whySelling: 'Söker strategisk eller finansiell partner för att accelerera internationell tillväxt.',
+    whySelling: 'Grundarna vill sälja till strategisk köpare för att accelerera tillväxt.',
     verified: true,
     broker: true,
     isNew: false,
-    views: 512,
-    companyName: 'ProjectFlow Nordic AB',
-    orgNumber: '556456-7890',
-    address: 'Vasagatan 10, 111 20 Stockholm',
+    views: 423,
+    foundedYear: 2018,
+    companyAge: 6,
+    // Balance Sheet
+    cash: 4200000,
+    accountsReceivable: 1800000,
+    totalAssets: 7500000,
+    totalLiabilities: 2100000,
+    shortTermDebt: 1500000,
+    longTermDebt: 600000,
+    // Operating Costs
+    salaries: 5200000,
+    marketingCosts: 1500000,
+    otherOperatingCosts: 600000,
+    // Qualitative
+    competitiveAdvantages: 'Patenterad teknologi, starka kundrelationer, marknadsledande position i Norden',
+    paymentTerms: 'Månads- och årsabonnemang',
+    idealBuyer: 'Tech-bolag eller PE-firma med erfarenhet av SaaS',
+    customerConcentrationRisk: 'medium',
+    companyName: 'CloudTech Solutions AB',
+    orgNumber: '556789-0123',
+    address: 'Kungsgatan 50, 111 35 Stockholm',
+    website: 'www.cloudtechsolutions.se',
     detailedFinancials: {},
-    customers: ['450+ företagskunder i Norden'],
-    anonymousTitle: 'SaaS-plattform för projektledning',
+    customers: ['B2B företagskunder'],
+    anonymousTitle: 'Framgångsrikt SaaS-bolag med hög tillväxt',
     image: '/Annonsbilder/Tech.png',
-    createdAt: new Date(Date.now() - 22 * 24 * 60 * 60 * 1000)
+    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
   },
   {
     id: 'obj-005',
-    type: 'Bygg & Fastighet',
+    type: 'Byggföretag',
     region: 'Uppsala',
-    revenueRange: '10-25M',
-    revenue: 15000000,
-    ebitda: 2100000,
-    employees: '11-25',
-    ownerRole: 'VD, operativ',
-    priceMin: 15000000,
-    priceMax: 18000000,
-    description: 'Byggföretag specialiserat på ROT-arbeten och renoveringar. Stabilt orderläge och gott rykte i regionen.',
+    revenueRange: '25-50M',
+    revenue: 35000000,
+    revenue3Years: 32000000,
+    revenueGrowthRate: 9.4,
+    revenueYear1: 29000000,
+    revenueYear2: 32000000,
+    revenueYear3: 35000000,
+    ebitda: 4200000,
+    profitMargin: 8.6,
+    grossMargin: 22.5,
+    employees: '26-50',
+    ownerRole: 'Styrelseordförande',
+    priceMin: 28000000,
+    priceMax: 35000000,
+    askingPrice: 32000000,
+    description: 'Välrenommerat byggföretag specialiserat på ROT-renovering. Stark orderbok och goda relationer med beställare.',
     strengths: [
-      'Etablerat nätverk med underleverantörer',
-      'Långsiktiga ramavtal med fastighetsbolag',
-      'Erfarna hantverkare med F-skatt'
+      'Fullbokad orderstock 12 månader framåt',
+      'Certifierad för offentlig upphandling',
+      'Erfaren projektledning'
     ],
     risks: [
       'Konjunkturkänslig bransch',
-      'Materialprisrisk'
+      'Beroende av underleverantörer'
     ],
-    whySelling: 'Ägaren vill satsa på nytt projekt.',
-    verified: false,
+    whySelling: 'Generationsskifte - ägaren går i pension.',
+    verified: true,
     broker: false,
     isNew: false,
-    views: 98,
+    views: 189,
+    foundedYear: 1998,
+    companyAge: 26,
+    // Balance Sheet
+    cash: 5600000,
+    accountsReceivable: 8200000,
+    inventory: 2100000,
+    totalAssets: 18500000,
+    totalLiabilities: 11200000,
+    shortTermDebt: 7800000,
+    longTermDebt: 3400000,
+    // Operating Costs
+    salaries: 16800000,
+    marketingCosts: 500000,
+    otherOperatingCosts: 10200000,
+    // Qualitative
+    competitiveAdvantages: 'Långvariga kundrelationer, specialistkompetens inom kulturfastigheter, egen maskinpark',
+    regulatoryLicenses: 'Bygglov, Arbetsmiljöcertifiering, ISO 14001',
+    paymentTerms: '30 dagar, delbetalning vid större projekt',
+    idealBuyer: 'Byggkoncern eller entreprenör med branschvana',
+    customerConcentrationRisk: 'medium',
     companyName: 'Uppsala Bygg & Renovering AB',
-    orgNumber: '556567-8901',
-    address: 'Kungsgatan 5, 753 18 Uppsala',
+    orgNumber: '556456-7890',
+    address: 'Industrivägen 15, 753 23 Uppsala',
     detailedFinancials: {},
-    customers: ['Privatkunder + 3 större fastighetsbolag'],
-    anonymousTitle: 'Byggföretag i Uppsala med ROT-fokus',
-    image: '/Annonsbilder/bygg.png',
-    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-006',
-    type: 'Redovisningsbyrå',
-    region: 'Stockholm',
-    revenueRange: '5-10M',
-    revenue: 8200000,
-    ebitda: 2500000,
-    employees: '6-10',
-    ownerRole: 'Delägare, delvis operativ',
-    priceMin: 18000000,
-    priceMax: 22000000,
-    description: 'Etablerad redovisningsbyrå med 150+ företagskunder. Specialisering på småföretag och e-handel. Hög retention och återkommande intäkter.',
-    strengths: [
-      'Återkommande månadsintäkter (MRR-modell)',
-      'Digital plattform och moderna verktyg',
-      'Erfaret team med auktoriserade redovisningskonsulter'
-    ],
-    risks: [
-      'Konkurrensutsatt marknad',
-      'Beroende av nyckelpersoner i kundrelationer'
-    ],
-    whySelling: 'Delägare vill pensionera sig, söker efterträdare.',
-    verified: true,
-    broker: true,
-    isNew: false,
-    views: 234,
-    companyName: 'Stockholm Accounting Partners AB',
-    orgNumber: '556678-9012',
-    address: 'Sveavägen 24, 111 57 Stockholm',
-    detailedFinancials: {},
-    customers: ['150+ SME-företag'],
-    anonymousTitle: 'Redovisningsbyrå i Stockholm med 150+ kunder',
-    image: '/Annonsbilder/Redovisning.png',
-    createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-007',
-    type: 'Café & Bageri',
-    region: 'Göteborg',
-    revenueRange: '1-5M',
-    revenue: 4100000,
-    ebitda: 620000,
-    employees: '1-5',
-    ownerRole: 'VD, operativ',
-    priceMin: 3000000,
-    priceMax: 4000000,
-    description: 'Populärt café med egenbakat i centrala Göteborg. Stark kundbas och goda recensioner. Möjlighet att utöka med catering.',
-    strengths: [
-      'Etablerat läge med hög trafik',
-      'Starkt varumärke lokalt',
-      'Långa hyreskontrakt (8 år kvar)'
-    ],
-    risks: [
-      'Personalberoende',
-      'Begränsad kapacitet i nuvarande lokal'
-    ],
-    whySelling: 'Ägaren flyttar utomlands.',
-    verified: false,
-    broker: false,
-    isNew: true,
-    views: 89,
-    companyName: 'Söders Café & Bageri AB',
-    orgNumber: '556789-0123',
-    address: 'Linnégatan 12, 413 04 Göteborg',
-    detailedFinancials: {},
-    customers: ['Walk-in + företagskunder'],
-    anonymousTitle: 'Café & Bageri i centrala Göteborg',
-    image: '/Annonsbilder/Bageri-GBG.png',
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-008',
-    type: 'Marknadsföringsbyrå',
-    region: 'Stockholm',
-    revenueRange: '10-25M',
-    revenue: 16500000,
-    ebitda: 3800000,
-    employees: '11-25',
-    ownerRole: 'VD, delvis operativ',
-    priceMin: 28000000,
-    priceMax: 35000000,
-    description: 'Full-service marknadsföringsbyrå med fokus på digitala kanaler. Starka case inom B2B SaaS. Team av 18 specialister.',
-    strengths: [
-      'Starka kundcase och portfolio',
-      'Återkommande retainer-avtal (70% av intäkter)',
-      'Erfaret team med låg omsättning'
-    ],
-    risks: [
-      'Beroende av stora kunder (topp 3 = 40%)',
-      'Konkurrensutsatt marknad'
-    ],
-    whySelling: 'Grundaren vill fokusera på venture building.',
-    verified: true,
-    broker: true,
-    isNew: false,
-    views: 445,
-    companyName: 'Digital Growth Agency AB',
-    orgNumber: '556890-1234',
-    address: 'Birger Jarlsgatan 8, 114 34 Stockholm',
-    detailedFinancials: {},
-    customers: ['35 aktiva kunder, B2B tech-fokus'],
-    anonymousTitle: 'Marknadsföringsbyrå med B2B SaaS-fokus',
-    image: '/Annonsbilder/Marknadsforingsbyra.png',
-    createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-009',
-    type: 'E-learning plattform',
-    region: 'Stockholm',
-    revenueRange: '5-10M',
-    revenue: 6800000,
-    ebitda: 1900000,
-    employees: '1-5',
-    ownerRole: 'Grundare, operativ',
-    priceMin: 12000000,
-    priceMax: 15000000,
-    description: 'SaaS-plattform för företagsutbildning. 200+ B2B-kunder. Automatiserad plattform med minimal support-behov.',
-    strengths: [
-      'Skalbar SaaS-modell med hög marginal',
-      '95% retention bland kunder',
-      'Automatiserad onboarding och support'
-    ],
-    risks: [
-      'Enstaka grundare - överlämning krävs',
-      'Teknisk skuld i legacy-kod'
-    ],
-    whySelling: 'Grundaren vill starta nytt bolag.',
-    verified: true,
-    broker: false,
-    isNew: true,
-    views: 312,
-    companyName: 'LearnHub Sweden AB',
-    orgNumber: '556901-2345',
-    address: 'Drottninggatan 95, 113 60 Stockholm',
-    detailedFinancials: {},
-    customers: ['200+ B2B-kunder'],
-    anonymousTitle: 'E-learning SaaS-plattform med 200+ kunder',
-    image: '/Annonsbilder/SaaS.png',
+    customers: ['Fastighetsbolag', 'Kommuner', 'Privatpersoner'],
+    anonymousTitle: 'Etablerat byggföretag i Uppsala',
+    image: '/Annonsbilder/Bygg.png',
     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
   },
   {
-    id: 'obj-010',
+    id: 'obj-006',
+    type: 'Städföretag',
+    region: 'Linköping',
+    revenueRange: '1-5M',
+    revenue: 4200000,
+    revenue3Years: 3800000,
+    revenueGrowthRate: 10.5,
+    revenueYear1: 3400000,
+    revenueYear2: 3800000,
+    revenueYear3: 4200000,
+    ebitda: 580000,
+    profitMargin: 9.5,
+    grossMargin: 35.0,
+    employees: '11-25',
+    ownerRole: 'VD, operativ',
+    priceMin: 3500000,
+    priceMax: 4500000,
+    askingPrice: 4000000,
+    description: 'Lönsamt städföretag med långvariga avtal. Miljöcertifierad verksamhet med fokus på kontor och vårdlokaler.',
+    strengths: [
+      'Långvariga ramavtal med kommunen',
+      'Miljöcertifierad verksamhet',
+      'Låg personalomsättning'
+    ],
+    risks: [
+      'Prispress från konkurrenter',
+      'Svårt att rekrytera personal'
+    ],
+    whySelling: 'Ägaren vill gå vidare till andra projekt.',
+    verified: true,
+    broker: false,
+    isNew: true,
+    views: 98,
+    foundedYear: 2008,
+    companyAge: 16,
+    // Balance Sheet
+    cash: 680000,
+    accountsReceivable: 520000,
+    totalAssets: 1800000,
+    totalLiabilities: 950000,
+    shortTermDebt: 750000,
+    longTermDebt: 200000,
+    // Operating Costs
+    salaries: 2400000,
+    rentCosts: 180000,
+    marketingCosts: 60000,
+    otherOperatingCosts: 580000,
+    // Qualitative
+    competitiveAdvantages: 'Miljöcertifiering, nöjda kunder med långa avtal, effektiva arbetsprocesser',
+    regulatoryLicenses: 'Miljöcertifiering, Arbetsmiljöcertifiering',
+    paymentTerms: '30 dagar netto',
+    idealBuyer: 'Befintligt städföretag för expansion eller entreprenör',
+    customerConcentrationRisk: 'high',
+    companyName: 'Eko-Städ Östergötland AB',
+    orgNumber: '556567-8901',
+    address: 'Företagsvägen 8, 581 42 Linköping',
+    detailedFinancials: {},
+    customers: ['Linköpings kommun', 'Region Östergötland', 'Privata företag'],
+    anonymousTitle: 'Miljöcertifierat städföretag i Östergötland',
+    image: '/Annonsbilder/Stad.png',
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+  },
+  {
+    id: 'obj-007',
+    type: 'Transportföretag',
+    region: 'Jönköping',
+    revenueRange: '10-25M',
+    revenue: 16000000,
+    revenue3Years: 14500000,
+    revenueGrowthRate: 10.3,
+    revenueYear1: 13000000,
+    revenueYear2: 14500000,
+    revenueYear3: 16000000,
+    ebitda: 2400000,
+    profitMargin: 11.3,
+    grossMargin: 28.5,
+    employees: '11-25',
+    ownerRole: 'VD, delvis operativ',
+    priceMin: 18000000,
+    priceMax: 22000000,
+    askingPrice: 20000000,
+    description: 'Transportföretag med moderna fordon och fasta transportavtal. Specialiserat på tempererade transporter.',
+    strengths: [
+      'Modern fordonsflotta (snittålder 3 år)',
+      'Långvariga kundavtal',
+      'Egen verkstad minskar kostnaderna'
+    ],
+    risks: [
+      'Bränsleprisernas utveckling',
+      'Behov av chaufförer'
+    ],
+    whySelling: 'Ägaren vill fokusera på fastighetsportfölj.',
+    verified: true,
+    broker: true,
+    isNew: false,
+    views: 267,
+    foundedYear: 2005,
+    companyAge: 19,
+    // Balance Sheet
+    cash: 2100000,
+    accountsReceivable: 2800000,
+    totalAssets: 12500000,
+    totalLiabilities: 8900000,
+    shortTermDebt: 3200000,
+    longTermDebt: 5700000,
+    // Operating Costs
+    salaries: 6200000,
+    marketingCosts: 200000,
+    otherOperatingCosts: 5400000,
+    // Qualitative
+    competitiveAdvantages: 'Specialisering på tempererade transporter, egen verkstad, miljövänlig fordonsflotta',
+    regulatoryLicenses: 'Yrkestrafiktillstånd, ADR-tillstånd',
+    paymentTerms: '30-60 dagar',
+    idealBuyer: 'Transportkoncern eller investerare med branschkunskap',
+    customerConcentrationRisk: 'medium',
+    companyName: 'Smålands Transport & Logistik AB',
+    orgNumber: '556678-9012',
+    address: 'Logistikvägen 25, 553 05 Jönköping',
+    website: 'www.smalandstransport.se',
+    detailedFinancials: {},
+    customers: ['Livsmedelsgrossister', 'E-handelsföretag', 'Industrier'],
+    anonymousTitle: 'Specialiserat transportföretag i Småland',
+    image: '/Annonsbilder/Transport.png',
+    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+  },
+  {
+    id: 'obj-008',
     type: 'Frisörsalong',
-    region: 'Malmö',
+    region: 'Helsingborg',
     revenueRange: '1-5M',
     revenue: 2800000,
-    ebitda: 550000,
+    revenueYear1: 2400000,
+    revenueYear2: 2600000,
+    revenueYear3: 2800000,
+    revenueGrowthRate: 7.7,
+    ebitda: 420000,
+    profitMargin: 10.7,
+    grossMargin: 58.0,
     employees: '1-5',
     ownerRole: 'Ägare, operativ',
     priceMin: 2000000,
     priceMax: 2800000,
-    description: 'Väletablerad frisörsalong med lojal kundbas. 3 stolar, möjlighet att expandera med ytterligare en.',
+    askingPrice: 2400000,
+    description: 'Välrenommerad frisörsalong i centralt läge. Trogen kundkrets och duktigt team av frisörer.',
     strengths: [
-      'Centralt läge med god synlighet',
-      'Lojal kundbas (60% återkommande)',
-      'Moderna lokaler och utrustning'
+      'Centralt läge med bra kundflöde',
+      'Etablerat varumärke lokalt',
+      'Flexibla öppettider ger konkurrensfördelar'
     ],
     risks: [
-      'Personberoende verksamhet',
-      'Konkurrens i området'
+      'Lokalhyran kan komma att höjas',
+      'Konkurrens från lågpriskedjor'
     ],
-    whySelling: 'Ägaren vill flytta till annan stad.',
+    whySelling: 'Personliga skäl - flytt till annan ort.',
     verified: false,
     broker: false,
-    isNew: false,
-    views: 67,
-    companyName: 'Salong Elegans AB',
-    orgNumber: '557012-3456',
-    address: 'Södergatan 8, 211 34 Malmö',
+    isNew: true,
+    views: 56,
+    foundedYear: 2010,
+    companyAge: 14,
+    // Balance Sheet
+    cash: 320000,
+    totalAssets: 680000,
+    totalLiabilities: 280000,
+    shortTermDebt: 280000,
+    // Operating Costs
+    salaries: 1400000,
+    rentCosts: 360000,
+    marketingCosts: 80000,
+    otherOperatingCosts: 220000,
+    // Qualitative
+    competitiveAdvantages: 'Starkt lokalt varumärke, skickliga frisörer, bra läge',
+    paymentTerms: 'Kontant och kort',
+    idealBuyer: 'Frisör som vill bli egen eller befintlig kedja',
+    customerConcentrationRisk: 'low',
+    companyName: 'Salong Excellence',
+    orgNumber: '556789-0234',
+    address: 'Drottninggatan 45, 252 21 Helsingborg',
     detailedFinancials: {},
-    customers: ['Privatkunder'],
-    anonymousTitle: 'Frisörsalong i centrala Malmö',
+    customers: ['Privatpersoner'],
+    anonymousTitle: 'Centralt belägen frisörsalong i Helsingborg',
     image: '/Annonsbilder/Frisor.png',
-    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-011',
-    type: 'Träningscenter',
-    region: 'Stockholm',
-    revenueRange: '5-10M',
-    revenue: 7200000,
-    ebitda: 1400000,
-    employees: '6-10',
-    ownerRole: 'Ägare, delvis operativ',
-    priceMin: 10000000,
-    priceMax: 13000000,
-    description: 'Modernt gym i expansivt område. 850 medlemmar med hög retention. Potential för personlig träning och gruppträning.',
-    strengths: [
-      'Återkommande medlemsintäkter',
-      'Modern utrustning (investerat 2M senaste 2 åren)',
-      'Lojal medlemsbas med 82% årlig retention'
-    ],
-    risks: [
-      'Konkurrens från kedjor',
-      'Hyreskontrakt löper ut om 3 år'
-    ],
-    whySelling: 'Ägaren vill fokusera på annat projekt.',
-    verified: true,
-    broker: false,
-    isNew: false,
-    views: 198,
-    companyName: 'StrongFit Stockholm AB',
-    orgNumber: '557123-4567',
-    address: 'Kungsholmsgatan 21, 112 27 Stockholm',
-    detailedFinancials: {},
-    customers: ['850 aktiva medlemmar'],
-    anonymousTitle: 'Gym i Stockholm med 850 medlemmar',
-    image: '/Annonsbilder/Traningscenter.png',
-    createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-012',
-    type: 'HR-tech SaaS',
-    region: 'Göteborg',
-    revenueRange: '10-25M',
-    revenue: 14000000,
-    ebitda: 4200000,
-    employees: '6-10',
-    ownerRole: 'Grundare, operativ',
-    priceMin: 35000000,
-    priceMax: 45000000,
-    description: 'Rekryteringsplattform med AI-matchning. 180 B2B-kunder. ARR på 13M med 105% NRR. Stark product-market fit.',
-    strengths: [
-      'Hög NRR (105%) - expansion revenue',
-      'Automatiserad plattform med låga kostnader',
-      'Starka kundcase från varumärkesföretag'
-    ],
-    risks: [
-      'Konkurrens från större internationella aktörer',
-      'Grundarberoende på produkt & vision'
-    ],
-    whySelling: 'Söker strategisk partner för internationell expansion.',
-    verified: true,
-    broker: true,
-    isNew: true,
-    views: 567,
-    companyName: 'TalentMatch AI AB',
-    orgNumber: '557234-5678',
-    address: 'Kungsportsavenyn 12, 411 36 Göteborg',
-    detailedFinancials: {},
-    customers: ['180 B2B-kunder, huvudsakligen SME'],
-    anonymousTitle: 'HR-tech SaaS med AI-matchning',
-    image: '/Annonsbilder/HR-tech.png',
-    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-013',
-    type: 'Webbyrå',
-    region: 'Malmö',
-    revenueRange: '5-10M',
-    revenue: 6500000,
-    ebitda: 1800000,
-    employees: '6-10',
-    ownerRole: 'VD, operativ',
-    priceMin: 12000000,
-    priceMax: 15000000,
-    description: 'Full-service webbyrå med fokus på e-handel och WordPress. 40+ aktiva kunder. Återkommande underhållsavtal.',
-    strengths: [
-      'Diversifierad kundbas',
-      'Återkommande intäkter från underhållsavtal (35%)',
-      'Stark lokal närvaro i Skåne'
-    ],
-    risks: [
-      'Teknologiförändringar',
-      'Nyckelpersonsberoende i försäljning'
-    ],
-    whySelling: 'Grundaren vill starta nytt bolag.',
-    verified: false,
-    broker: false,
-    isNew: false,
-    views: 142,
-    companyName: 'Webfokus Syd AB',
-    orgNumber: '557345-6789',
-    address: 'Södra Promenaden 45, 211 38 Malmö',
-    detailedFinancials: {},
-    customers: ['40+ kunder inom e-handel och service'],
-    anonymousTitle: 'Webbyrå i Malmö med e-handelsfokus',
-    image: '/Annonsbilder/Webbyra.png',
-    createdAt: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-014',
-    type: 'Städbolag',
-    region: 'Uppsala',
-    revenueRange: '5-10M',
-    revenue: 8900000,
-    ebitda: 1300000,
-    employees: '11-25',
-    ownerRole: 'VD, delvis operativ',
-    priceMin: 10000000,
-    priceMax: 13000000,
-    description: 'Kontorsstädning med företagskunder. Långsiktiga avtal och stabil verksamhet. Certifierad enligt miljöstandard.',
-    strengths: [
-      'Långsiktiga avtal (3-5 år)',
-      'Miljöcertifiering ger konkurrensfördel',
-      'Erfaren personal med låg omsättning'
-    ],
-    risks: [
-      'Priskänslig marknad',
-      'Personalberoende'
-    ],
-    whySelling: 'Ägaren vill pensionera sig.',
-    verified: true,
-    broker: false,
-    isNew: false,
-    views: 187,
-    companyName: 'Uppsala Städservice AB',
-    orgNumber: '557456-7890',
-    address: 'Vaksalagatan 10, 753 31 Uppsala',
-    detailedFinancials: {},
-    customers: ['25 företagskunder'],
-    anonymousTitle: 'Städbolag i Uppsala med företagskunder',
-    image: '/Annonsbilder/stad.png',
-    createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-015',
-    type: 'Möbelaffär',
-    region: 'Göteborg',
-    revenueRange: '10-25M',
-    revenue: 19000000,
-    ebitda: 2800000,
-    employees: '6-10',
-    ownerRole: 'Ägare, operativ',
-    priceMin: 18000000,
-    priceMax: 23000000,
-    description: 'Skandinavisk design och hållbara möbler. Kombination av butik och e-handel. Starkt varumärke i regionen.',
-    strengths: [
-      'Unikt sortiment med höga marginaler',
-      'Växande e-handel (30% av intäkter)',
-      'Stark varumärkeskännedom lokalt'
-    ],
-    risks: [
-      'Konjunkturkänsligt',
-      'Konkurrens från stora kedjor'
-    ],
-    whySelling: 'Ägaren vill satsa på e-handel endast.',
-    verified: false,
-    broker: true,
-    isNew: false,
-    views: 234,
-    companyName: 'Nordic Living AB',
-    orgNumber: '557567-8901',
-    address: 'Magasinsgatan 18, 411 18 Göteborg',
-    detailedFinancials: {},
-    customers: ['B2C + 15 företagskunder'],
-    anonymousTitle: 'Möbelaffär i Göteborg med skandinavisk design',
-    image: '/Annonsbilder/E-learning.png',
-    createdAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-016',
-    type: 'Tech-support företag',
-    region: 'Stockholm',
-    revenueRange: '10-25M',
-    revenue: 22000000,
-    ebitda: 5500000,
-    employees: '26-50',
-    ownerRole: 'VD, delvis operativ',
-    priceMin: 40000000,
-    priceMax: 50000000,
-    description: 'IT-support och helpdesk för SME-företag. Managed services med återkommande intäkter. 120+ aktiva kunder.',
-    strengths: [
-      'Återkommande MRR-intäkter (85%)',
-      'Skalbar leveransmodell',
-      'Starka SLA:er och hög kundnöjdhet (NPS 72)'
-    ],
-    risks: [
-      'Teknikutveckling och automation',
-      'Konkurrens från större aktörer'
-    ],
-    whySelling: 'Grundarna vill fokusera på annat.',
-    verified: true,
-    broker: true,
-    isNew: false,
-    views: 389,
-    companyName: 'TechCare Solutions AB',
-    orgNumber: '557678-9012',
-    address: 'Hamngatan 15, 111 47 Stockholm',
-    detailedFinancials: {},
-    customers: ['120 SME-kunder'],
-    anonymousTitle: 'IT-support företag med 120+ kunder',
-    image: '/Annonsbilder/IT-konsult.png',
-    createdAt: new Date(Date.now() - 19 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-017',
-    type: 'Hundtrimning & djuraffär',
-    region: 'Uppsala',
-    revenueRange: '1-5M',
-    revenue: 3400000,
-    ebitda: 680000,
-    employees: '1-5',
-    ownerRole: 'Ägare, operativ',
-    priceMin: 3500000,
-    priceMax: 4500000,
-    description: 'Kombinerad djuraffär och hundsalong. Lojal kundbas och återkommande besök för trimning.',
-    strengths: [
-      'Återkommande intäkter från trimning',
-      'Etablerat läge med god synlighet',
-      'Lojal kundbas'
-    ],
-    risks: [
-      'Personberoende verksamhet',
-      'Begränsad tillväxtpotential i nuvarande lokal'
-    ],
-    whySelling: 'Hälsoskäl - ägaren vill trappa ner.',
-    verified: false,
-    broker: false,
-    isNew: true,
-    views: 78,
-    companyName: 'Valpens Värld AB',
-    orgNumber: '557789-0123',
-    address: 'Salavägen 18, 753 31 Uppsala',
-    detailedFinancials: {},
-    customers: ['Privatkunder'],
-    anonymousTitle: 'Hundtrimning & djuraffär i Uppsala',
-    image: '/Annonsbilder/Djuraffar.png',
-    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
-  },
-  {
-    id: 'obj-018',
-    type: 'CRM-system SaaS',
-    region: 'Stockholm',
-    revenueRange: '25-50M',
-    revenue: 42000000,
-    ebitda: 12000000,
-    employees: '11-25',
-    ownerRole: 'Grundare & VD',
-    priceMin: 120000000,
-    priceMax: 150000000,
-    description: 'CRM för B2B-säljare. 450+ företagskunder. ARR 40M med 98% retention. Bootstrapped och lönsamt.',
-    strengths: [
-      'Stark unit economics och lönsamhet',
-      'Mycket hög retention (98%)',
-      'Produktlett tillväxt - låga CAC'
-    ],
-    risks: [
-      'Konkurrens från Salesforce, HubSpot',
-      'Internationell expansion inte påbörjad'
-    ],
-    whySelling: 'Söker strategisk partner eller private equity för tillväxtkapital.',
-    verified: true,
-    broker: true,
-    isNew: true,
-    views: 892,
-    companyName: 'SalesBoost CRM AB',
-    orgNumber: '557890-1234',
-    address: 'Kungsgatan 33, 111 56 Stockholm',
-    detailedFinancials: {},
-    customers: ['450+ B2B-kunder i Norden'],
-    anonymousTitle: 'CRM SaaS med 450+ kunder och 40M ARR',
-    image: '/Annonsbilder/CRM-system SaaS.png',
     createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)
   },
   {
-    id: 'obj-019',
-    type: 'Bageri & konditori',
-    region: 'Malmö',
+    id: 'obj-009',
+    type: 'Redovisningsbyrå',
+    region: 'Växjö',
     revenueRange: '5-10M',
-    revenue: 6800000,
-    ebitda: 980000,
+    revenue: 6200000,
+    revenue3Years: 5800000,
+    revenueGrowthRate: 6.9,
+    revenueYear1: 5400000,
+    revenueYear2: 5800000,
+    revenueYear3: 6200000,
+    ebitda: 1400000,
+    profitMargin: 18.4,
+    grossMargin: 72.0,
     employees: '6-10',
-    ownerRole: 'Ägare, operativ',
-    priceMin: 7000000,
-    priceMax: 9000000,
-    description: 'Traditionellt bageri med kafé. Egna recept och lokala råvaror. Leveranser till restauranger och hotell.',
+    ownerRole: 'Delägare',
+    priceMin: 8000000,
+    priceMax: 10000000,
+    askingPrice: 9000000,
+    description: 'Etablerad redovisningsbyrå med bred kundbas. Auktoriserade redovisningskonsulter och modern digital hantering.',
     strengths: [
-      'Starka lokala kundrelationer',
-      'B2B-kontrakt med hotell och restauranger',
-      'Unikt sortiment med höga marginaler'
+      'Återkommande intäkter från befintliga kunder',
+      'Auktoriserad personal',
+      'Digitaliserade processer'
     ],
     risks: [
-      'Personalberoende produktion',
-      'Tidiga morgontimmar kräver dedikerad personal'
+      'Ökad konkurrens från automatiserade lösningar',
+      'Svårt att rekrytera kvalificerad personal'
     ],
-    whySelling: 'Ägaren vill pensionera sig.',
-    verified: false,
+    whySelling: 'Delägare vill gå i pension, övriga vill sälja.',
+    verified: true,
+    broker: true,
+    isNew: false,
+    views: 178,
+    foundedYear: 1995,
+    companyAge: 29,
+    // Balance Sheet
+    cash: 1800000,
+    accountsReceivable: 980000,
+    totalAssets: 3200000,
+    totalLiabilities: 1100000,
+    shortTermDebt: 1100000,
+    // Operating Costs
+    salaries: 3600000,
+    rentCosts: 240000,
+    marketingCosts: 120000,
+    otherOperatingCosts: 480000,
+    // Qualitative
+    competitiveAdvantages: 'Auktorisation, lång historik, moderna system, bred kompetens',
+    regulatoryLicenses: 'Auktoriserade redovisningskonsulter (FAR)',
+    paymentTerms: 'Månadsvis i förskott',
+    idealBuyer: 'Annan byrå eller ekonomikoncern',
+    customerConcentrationRisk: 'low',
+    companyName: 'Växjö Redovisning & Konsult AB',
+    orgNumber: '556890-1234',
+    address: 'Kungsgatan 12, 352 31 Växjö',
+    website: 'www.vaxjoredovisning.se',
+    detailedFinancials: {},
+    customers: ['SME företag', 'Enskilda firmor'],
+    anonymousTitle: 'Auktoriserad redovisningsbyrå i Småland',
+    image: '/Annonsbilder/Redovisning.png',
+    createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000)
+  },
+  {
+    id: 'obj-010',
+    type: 'Bilverkstad',
+    region: 'Örebro',
+    revenueRange: '10-25M',
+    revenue: 12000000,
+    revenue3Years: 11200000,
+    revenueGrowthRate: 7.1,
+    revenueYear1: 10500000,
+    revenueYear2: 11200000,
+    revenueYear3: 12000000,
+    ebitda: 1800000,
+    profitMargin: 11.7,
+    grossMargin: 42.0,
+    employees: '11-25',
+    ownerRole: 'VD, delvis operativ',
+    priceMin: 12000000,
+    priceMax: 15000000,
+    askingPrice: 13500000,
+    description: 'Fullservice bilverkstad med märkesauktorisation. Hög kundnöjdhet och moderna lokaler.',
+    strengths: [
+      'Auktoriserad för flera märken',
+      'Modern utrustning och lokaler',
+      'Erfarna mekaniker'
+    ],
+    risks: [
+      'Ökande konkurrens från märkesverkstäder',
+      'Investeringsbehov i ny teknik för elbilar'
+    ],
+    whySelling: 'Ägaren vill trappa ner och söker efterträdare.',
+    verified: true,
     broker: false,
     isNew: false,
-    views: 156,
-    companyName: 'Malmö Hantverksbageri AB',
-    orgNumber: '557901-2345',
-    address: 'Möllevångsgatan 8, 214 20 Malmö',
+    views: 201,
+    foundedYear: 2000,
+    companyAge: 24,
+    // Balance Sheet
+    cash: 1600000,
+    accountsReceivable: 1100000,
+    inventory: 800000,
+    totalAssets: 6200000,
+    totalLiabilities: 3800000,
+    shortTermDebt: 2200000,
+    longTermDebt: 1600000,
+    // Operating Costs
+    salaries: 5200000,
+    rentCosts: 600000,
+    marketingCosts: 180000,
+    otherOperatingCosts: 3420000,
+    // Qualitative
+    competitiveAdvantages: 'Märkesauktorisation, central lokalisering, modern verkstad',
+    regulatoryLicenses: 'Verkstadsauktorisation för VW, Audi, Skoda',
+    paymentTerms: 'Kontant vid hämtning',
+    idealBuyer: 'Mekaniker eller investerare med branschintresse',
+    customerConcentrationRisk: 'low',
+    companyName: 'Örebro Bilservice AB',
+    orgNumber: '556901-2345',
+    address: 'Verkstadsgatan 18, 702 23 Örebro',
     detailedFinancials: {},
-    customers: ['B2C + 12 B2B-kunder (hotell/restauranger)'],
-    anonymousTitle: 'Bageri & konditori i Malmö',
-    image: '/Annonsbilder/Bageri.png',
-    createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000)
+    customers: ['Privatpersoner', 'Företag med bilflottor'],
+    anonymousTitle: 'Auktoriserad bilverkstad i Örebro',
+    image: '/Annonsbilder/Bilverkstad.png',
+    createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000)
   },
   {
     id: 'obj-020',
@@ -719,11 +722,19 @@ export const mockObjects: BusinessObject[] = [
     region: 'Göteborg',
     revenueRange: '5-10M',
     revenue: 7600000,
+    revenue3Years: 7000000,
+    revenueGrowthRate: 8.6,
+    revenueYear1: 6400000,
+    revenueYear2: 7000000,
+    revenueYear3: 7600000,
     ebitda: 1100000,
+    profitMargin: 10.5,
+    grossMargin: 38.0,
     employees: '1-5',
     ownerRole: 'Ägare, operativ',
     priceMin: 8000000,
     priceMax: 10000000,
+    askingPrice: 9000000,
     description: 'Specialiserad cykelbutik med verkstad. Fokus på premiumcyklar och service. Växande e-handel.',
     strengths: [
       'Stark marginal på service och reservdelar',
@@ -739,9 +750,30 @@ export const mockObjects: BusinessObject[] = [
     broker: false,
     isNew: false,
     views: 167,
+    foundedYear: 2012,
+    companyAge: 12,
+    // Balance Sheet
+    cash: 920000,
+    inventory: 1800000,
+    accountsReceivable: 320000,
+    totalAssets: 3400000,
+    totalLiabilities: 1900000,
+    shortTermDebt: 1400000,
+    longTermDebt: 500000,
+    // Operating Costs
+    salaries: 2800000,
+    rentCosts: 480000,
+    marketingCosts: 240000,
+    otherOperatingCosts: 2680000,
+    // Qualitative
+    competitiveAdvantages: 'Specialistkunskap, brett sortiment av premiumcyklar, etablerad verkstad',
+    paymentTerms: 'Kontant och kort, avbetalning via partner',
+    idealBuyer: 'Cykelentusiast eller befintlig aktör inom cykelbranschen',
+    customerConcentrationRisk: 'low',
     companyName: 'Premium Bikes Göteborg AB',
     orgNumber: '558012-3456',
     address: 'Västra Hamngatan 12, 411 17 Göteborg',
+    website: 'www.premiumbikes.se',
     detailedFinancials: {},
     customers: ['B2C privatpersoner + företagskunder'],
     anonymousTitle: 'Cykelbutik i Göteborg med verkstad',
@@ -784,4 +816,3 @@ export function searchObjects(filters: {
 
   return results
 }
-
