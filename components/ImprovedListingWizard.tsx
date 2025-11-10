@@ -788,7 +788,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Konkurrensfördelar"
               value={data.competitiveAdvantages}
-              onChange={(value) => updateData('competitiveAdvantages', value)}
+              onChange={(e) => updateData('competitiveAdvantages', e.target.value)}
               placeholder="Beskriv vad som gör ert företag unikt (t.ex. patent, exklusiva avtal, starka varumärken)"
               rows={3}
             />
@@ -810,7 +810,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Anledning till försäljning"
               value={data.whySelling}
-              onChange={(value) => updateData('whySelling', value)}
+              onChange={(e) => updateData('whySelling', e.target.value)}
               placeholder="Beskriv varför företaget är till salu"
               rows={3}
               required
@@ -819,7 +819,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Ideal köpare"
               value={data.idealBuyer}
-              onChange={(value) => updateData('idealBuyer', value)}
+              onChange={(e) => updateData('idealBuyer', e.target.value)}
               placeholder="Beskriv vem som skulle vara en bra köpare för företaget"
               rows={3}
             />
@@ -856,7 +856,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormTextarea
               label="Beskrivning"
               value={data.description}
-              onChange={(value) => updateData('description', value)}
+              onChange={(e) => updateData('description', e.target.value)}
               placeholder="Beskriv verksamheten på ett säljande sätt..."
               rows={6}
               required
