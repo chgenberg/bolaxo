@@ -573,7 +573,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('industry', value)}
               options={INDUSTRIES}
               required
-              icon={<TrendingUp className="h-4 w-4" />}
             />
             
             <FormField
@@ -591,7 +590,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('employees', value)}
               options={EMPLOYEE_RANGES}
               required
-              icon={<Users className="h-4 w-4" />}
             />
             
             <FormField
@@ -617,7 +615,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('revenue', value)}
               placeholder="0"
               required
-              icon={<TrendingUp className="h-4 w-4" />}
               helperText="Senaste räkenskapsårets omsättning"
             />
             
@@ -626,7 +623,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.revenue3Years}
               onChange={(value) => updateData('revenue3Years', value)}
               placeholder="0"
-              icon={<TrendingUp className="h-4 w-4" />}
               helperText="Hjälper visa stabilitet över tid"
             />
             
@@ -635,7 +631,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.revenueGrowthRate}
               onChange={(value) => updateData('revenueGrowthRate', value)}
               placeholder="0"
-              icon={<TrendingUp className="h-4 w-4" />}
               helperText="Årlig tillväxttakt"
             />
             
@@ -644,7 +639,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.ebitda}
               onChange={(value) => updateData('ebitda', value)}
               placeholder="0"
-              icon={<DollarSign className="h-4 w-4" />}
               helperText={
                 <span className="flex items-center gap-1">
                   Resultat före räntor, skatt och avskrivningar
@@ -658,7 +652,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.profitMargin}
               onChange={(value) => updateData('profitMargin', value)}
               placeholder="0"
-              icon={<TrendingUp className="h-4 w-4" />}
               helperText="Nettovinst / Omsättning"
             />
             
@@ -667,7 +660,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.grossMargin}
               onChange={(value) => updateData('grossMargin', value)}
               placeholder="0"
-              icon={<TrendingUp className="h-4 w-4" />}
               helperText="(Omsättning - Direkta kostnader) / Omsättning"
             />
           </div>
@@ -687,7 +679,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 value={data.cash}
                 onChange={(value) => updateData('cash', value)}
                 placeholder="0"
-                icon={<DollarSign className="h-4 w-4" />}
               />
               
               <FormFieldCurrency
