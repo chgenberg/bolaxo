@@ -101,6 +101,9 @@ export async function POST(request: Request) {
       if (bolagsverketData.legalForm && !enrichedData.autoFill.legalForm) {
         enrichedData.autoFill.legalForm = bolagsverketData.legalForm
       }
+      if (bolagsverketData.industryCode && !enrichedData.autoFill.industry) {
+        enrichedData.autoFill.industry = mapSNICodeToIndustry(bolagsverketData.industryCode)
+      }
       
       // Processera årsredovisningar från Bolagsverket
       if (bolagsverketData.annualReports && bolagsverketData.annualReports.length > 0) {
@@ -682,6 +685,119 @@ function calculateCompanyAge(registrationDate: string): string {
   if (years <= 10) return '6-10'
   if (years <= 20) return '11-20'
   return '20+'
+}
+
+/**
+ * Mappar SNI-kod (Standard för svensk näringsgrensklassificering) till bransch
+ */
+function mapSNICodeToIndustry(sniCode: string): string {
+  if (!sniCode) return ''
+  
+  const code = sniCode.replace(/\D/g, '') // Ta bort alla icke-siffror
+  const firstTwo = code.slice(0, 2)
+  const firstThree = code.slice(0, 3)
+  
+  // Mappning baserad på SNI-koder
+  const industryMap: Record<string, string> = {
+    // 56 - Restaurang och barverksamhet
+    '56': 'restaurang',
+    // 47 - Detaljhandel
+    '47': 'handel',
+    // 62 - Dataprogrammering, konsultverksamhet
+    '62': 'webbtjanster',
+    // 63 - Informationsservice
+    '63': 'it',
+    // 70 - Verksamhet för fastighetsförvaltning
+    '70': 'other',
+    // 71 - Arkitektur- och ingenjörsverksamhet
+    '71': 'konsult',
+    // 72 - Forskning och utveckling
+    '72': 'it',
+    // 73 - Marknadsföring och opinionsundersökningar
+    '73': 'konsult',
+    // 74 - Företagstjänster
+    '74': 'konsult',
+    // 25 - Tillverkning av metallprodukter
+    '25': 'tillverkning',
+    // 26 - Tillverkning av datormaskiner, elektronik och optiska produkter
+    '26': 'tillverkning',
+    // 27 - Tillverkning av elektrisk utrustning
+    '27': 'tillverkning',
+    // 28 - Tillverkning av maskiner och utrustning
+    '28': 'tillverkning',
+    // 41 - Byggnadskonstruktion
+    '41': 'bygg',
+    // 42 - Anläggningsbyggnad
+    '42': 'bygg',
+    // 43 - Specialiserad byggverksamhet
+    '43': 'bygg',
+    // 49 - Landtransport
+    '49': 'transport',
+    // 50 - Sjötransport
+    '50': 'transport',
+    // 51 - Lufttransport
+    '51': 'transport',
+    // 52 - Lagring och stödtjänster till transport
+    '52': 'transport',
+    // 86 - Vård och omsorg
+    '86': 'halsa',
+    // 87 - Vård och omsorg med boende
+    '87': 'halsa',
+    // 88 - Social omsorg utan boende
+    '88': 'halsa',
+    // 85 - Utbildning
+    '85': 'utbildning',
+    // 46 - Partihandel
+    '46': 'handel',
+    // 45 - Handel med motorfordon
+    '45': 'handel',
+    // 77 - Uthyrning och leasing
+    '77': 'other',
+    // 78 - Verksamhet via bemanningsföretag
+    '78': 'konsult',
+    // 79 - Researrangemang och resebyråer
+    '79': 'other',
+    // 80 - Säkerhets- och bevakningsverksamhet
+    '80': 'other',
+    // 81 - Fastighetsservice
+    '81': 'other',
+    // 82 - Företagsadministration och stödtjänster
+    '82': 'konsult',
+    // 90 - Kreativ verksamhet, nöje och underhållning
+    '90': 'other',
+    // 91 - Bibliotek, arkiv, museer och annan kulturverksamhet
+    '91': 'other',
+    // 92 - Spelverksamhet och lotterier
+    '92': 'other',
+    // 93 - Idrottsverksamhet och nöjes- och tidsfördriv
+    '93': 'other',
+  }
+  
+  // Försök matcha på första två siffrorna först
+  if (industryMap[firstTwo]) {
+    return industryMap[firstTwo]
+  }
+  
+  // Försök matcha på första tre siffrorna
+  if (industryMap[firstThree]) {
+    return industryMap[firstThree]
+  }
+  
+  // Fallback: baserat på första siffran
+  const firstDigit = code[0]
+  const broadCategory: Record<string, string> = {
+    '1': 'tillverkning', // Jordbruk, skogsbruk och fiske
+    '2': 'tillverkning', // Tillverkning
+    '3': 'tillverkning', // Tillverkning
+    '4': 'bygg', // Byggverksamhet
+    '5': 'transport', // Transport och lagring
+    '6': 'it', // Informations- och kommunikationsteknik
+    '7': 'konsult', // Företagstjänster
+    '8': 'halsa', // Utbildning, vård och omsorg
+    '9': 'other', // Övriga tjänster
+  }
+  
+  return broadCategory[firstDigit] || 'other'
 }
 
 // AI-DRIVEN EXTRACTION

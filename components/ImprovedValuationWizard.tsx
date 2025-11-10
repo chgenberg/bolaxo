@@ -286,6 +286,9 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         if (autoFillFields.companyName && !data.companyName) {
           newData.companyName = autoFillFields.companyName
         }
+        if (autoFillFields.industry && !data.industry) {
+          newData.industry = autoFillFields.industry
+        }
         if (autoFillFields.address && !data.address) {
           newData.address = autoFillFields.address
         }
