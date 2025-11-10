@@ -603,7 +603,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               label="Din e-postadress"
               type="email"
               value={data.email}
-              onChange={(value) => updateData('email', value)}
+              onValueChange={(value) => updateData('email', value)}
               placeholder="din@email.com"
               required
               error={errors.email}
@@ -613,7 +613,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Organisationsnummer (valfritt)"
               value={data.orgNumber}
-              onChange={(value) => updateData('orgNumber', value)}
+              onValueChange={(value) => updateData('orgNumber', value)}
               placeholder="556123-4567"
               tooltip="Vi hämtar automatiskt offentlig data"
             />
@@ -627,7 +627,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Företagsnamn"
               value={data.companyName}
-              onChange={(value) => updateData('companyName', value)}
+              onValueChange={(value) => updateData('companyName', value)}
               placeholder="AB Exempel"
               required
               error={errors.companyName}
@@ -682,7 +682,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('revenue', value)}
               placeholder="0"
               required
-              error={errors.revenue}
               helpText="Senaste räkenskapsårets omsättning"
             />
             
@@ -717,7 +716,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('profitMargin', value)}
               placeholder="0"
               required
-              error={errors.profitMargin}
               helpText="Nettovinst / Omsättning"
             />
             
@@ -865,7 +863,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Antal kunder"
               value={data.numberOfCustomers}
-              onChange={(value) => updateData('numberOfCustomers', value)}
+              onValueChange={(value) => updateData('numberOfCustomers', value)}
               placeholder="T.ex. 150"
               type="number"
             />
@@ -979,7 +977,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Tillstånd & Licenser"
               value={data.regulatoryLicenses}
-              onChange={(value) => updateData('regulatoryLicenses', value)}
+              onValueChange={(value) => updateData('regulatoryLicenses', value)}
               placeholder="T.ex. F-skatt, serveringstillstånd, ISO-certifiering"
             />
             
@@ -994,14 +992,14 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Webbplats"
               value={data.website}
-              onChange={(value) => updateData('website', value)}
+              onValueChange={(value) => updateData('website', value)}
               placeholder="https://exempel.se"
             />
             
             <FormField
               label="Företagets adress"
               value={data.address}
-              onChange={(value) => updateData('address', value)}
+              onValueChange={(value) => updateData('address', value)}
               placeholder="Gatuadress, Postnummer Ort"
             />
           </div>
@@ -1053,7 +1051,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Företagets ålder (år)"
               value={data.companyAge}
-              onChange={(value) => updateData('companyAge', value)}
+              onValueChange={(value) => updateData('companyAge', value)}
               placeholder="T.ex. 10"
               type="number"
             />
@@ -1065,7 +1063,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Annonsrubrik"
               value={data.anonymousTitle}
-              onChange={(value) => updateData('anonymousTitle', value)}
+              onValueChange={(value) => updateData('anonymousTitle', value)}
               placeholder="T.ex. Lönsamt IT-konsultbolag med 8 MSEK i omsättning"
               required
               error={errors.anonymousTitle}
@@ -1088,14 +1086,13 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('askingPrice', value)}
               placeholder="0"
               required
-              error={errors.askingPrice}
               helpText="Det pris som visas i annonsen"
             />
             
             <FormField
               label="Betalningsvillkor"
               value={data.paymentTerms}
-              onChange={(value) => updateData('paymentTerms', value)}
+              onValueChange={(value) => updateData('paymentTerms', value)}
               placeholder="T.ex. 30 dagar netto"
             />
             
