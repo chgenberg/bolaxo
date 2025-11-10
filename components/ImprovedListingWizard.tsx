@@ -667,12 +667,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.ebitda}
               onChange={(value) => updateData('ebitda', value)}
               placeholder="0"
-              helpText={
-                <span className="flex items-center gap-1">
-                  Resultat före räntor, skatt och avskrivningar
-                  <Tooltip content="EBITDA = Rörelseresultat + Avskrivningar. Visar företagets operativa lönsamhet." />
-                </span>
-              }
+              helpText="Resultat före räntor, skatt och avskrivningar"
+              tooltip="EBITDA = Rörelseresultat + Avskrivningar. Visar företagets operativa lönsamhet."
             />
             
             <FormFieldPercent
