@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import Link from 'next/link'
 import { Building2, CheckCircle2, ArrowRight, User, FileText } from 'lucide-react'
+import { isSeller } from '@/lib/user-roles'
 
 export default function SellerOnboardingPageContent() {
   const router = useRouter()
   const { user } = useAuth()
   const [step, setStep] = useState(1)
 
-  if (!user || user.role !== 'seller') {
+  if (!user || !isSeller(user.role)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50">
         <div className="text-center">

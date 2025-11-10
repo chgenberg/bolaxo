@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTranslations, useLocale } from 'next-intl'
+import { isSeller, isBuyer } from '@/lib/user-roles'
 
 interface MenuItem {
   label: string
@@ -32,7 +33,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   
   // Role-specific menu items
   const getMenuItems = (): MenuItem[] => {
-    if (user?.role === 'seller') {
+    const userRole = user?.role || ''
+    if (isSeller(userRole)) {
       return [
         { label: t('menu.overview'), href: `/${locale}/dashboard`, icon: LayoutDashboard },
         { label: t('menu.myListings'), href: `/${locale}/dashboard/listings`, icon: Building, badge: 3 },
@@ -45,7 +47,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         { label: t('menu.calendar'), href: `/${locale}/dashboard/calendar`, icon: Calendar },
         { label: t('menu.settings'), href: `/${locale}/dashboard/settings`, icon: Settings },
       ]
-    } else if (user?.role === 'buyer') {
+    } else if (isBuyer(userRole)) {
       return [
         { label: t('menu.overview'), href: `/${locale}/dashboard`, icon: LayoutDashboard },
         { label: t('menu.searchProfile'), href: `/${locale}/dashboard/search-profile`, icon: Search },
@@ -127,7 +129,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   {user?.name || user?.email}
                 </div>
                 <div className="text-xs text-gray-600">
-                  {user?.role === 'seller' ? t('roles.seller') : user?.role === 'buyer' ? t('roles.buyer') : t('roles.broker')}
+                  {isSeller(user?.role || '') ? t('roles.seller') : isBuyer(user?.role || '') ? t('roles.buyer') : t('roles.broker')}
                 </div>
               </div>
             )}
@@ -201,13 +203,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Quick actions based on role */}
-              {user?.role === 'seller' && (
+              {isSeller(user?.role || '') && (
                 <Link href={`/${locale}/salja/start`} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
                   <Plus className="w-4 h-4" />
                   <span className="hidden sm:inline">{t('quickActions.newListing')}</span>
                 </Link>
               )}
-              {user?.role === 'buyer' && (
+              {isBuyer(user?.role || '') && (
                 <Link href={`/${locale}/sok`} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
                   <Search className="w-4 h-4" />
                   <span className="hidden sm:inline">{t('quickActions.searchCompanies')}</span>
