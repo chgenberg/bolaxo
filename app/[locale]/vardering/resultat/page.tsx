@@ -396,7 +396,7 @@ function ValuationResultContent() {
                 </ul>
                 <div className="mt-3 flex items-baseline gap-2">
                   <span className="text-2xl font-bold text-orange-600">4 995 kr</span>
-                  <span className="text-sm text-gray-500 line-through">29 900 kr</span>
+                  <span className="text-sm text-gray-500 line-through">14 900 kr</span>
                   <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-semibold">-67%</span>
                 </div>
               </div>
