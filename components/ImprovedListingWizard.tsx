@@ -397,28 +397,43 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
     setIsSubmitting(true)
     
     try {
-      // Auto-create account if needed
+      // Auto-create account if needed and send magic link
+      let finalUserId = user?.id
+      
       if (!user && data.email && acceptedPrivacy) {
-        const password = Math.random().toString(36).slice(-8)
-        const signupRes = await fetch('/api/auth/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: data.email,
-            password,
-            acceptedTerms: true,
-            acceptedPrivacy: true
-          })
-        })
-        
-        if (signupRes.ok) {
-          await login(data.email, password)
-          success('Konto skapat automatiskt')
+        // Use login function which handles account creation via magic link
+        const loginResult = await login(data.email, 'seller', acceptedPrivacy)
+        if (loginResult.success) {
+          // Fetch the user ID after account creation
+          try {
+            const userRes = await fetch('/api/auth/user-by-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: data.email })
+            })
+            
+            if (userRes.ok) {
+              const userData = await userRes.json()
+              finalUserId = userData.user?.id
+            }
+          } catch (error) {
+            console.error('Error fetching user ID:', error)
+          }
+          
+          success('Konto skapas! Kolla din email för inloggningslänk.')
+        } else {
+          showError(loginResult.message || 'Kunde inte skapa konto')
+          setIsSubmitting(false)
+          return
         }
       }
       
-      // Get current user or create userId
-      const currentUser = user || { id: data.email }
+      // Validate that we have a userId
+      if (!finalUserId) {
+        showError('Kunde inte hämta användar-ID. Vänligen logga in först.')
+        setIsSubmitting(false)
+        return
+      }
       
       // Create listing
       const response = await fetch('/api/listings', {
@@ -426,7 +441,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...data,
-          userId: currentUser.id,
+          userId: finalUserId,
           status: 'draft',
           createdAt: new Date().toISOString()
         })
