@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, ArrowRight, TrendingUp, ChevronDown, X, CheckCircle, Lightbulb, Zap, Lock, MessageCircle } from 'lucide-react'
-import ValuationWizard from '@/components/ValuationWizard'
+import ImprovedValuationWizard from '@/components/ImprovedValuationWizard'
 
 export default function HomePageContent() {
   const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)
@@ -411,7 +411,7 @@ export default function HomePageContent() {
 
       {/* Valuation Form Modal */}
       {isValuationModalOpen && (
-        <ValuationWizard 
+        <ImprovedValuationWizard 
           onClose={() => setIsValuationModalOpen(false)}
         />
       )}
