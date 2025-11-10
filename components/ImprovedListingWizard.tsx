@@ -1288,6 +1288,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               </div>
             </div>
           </div>
+          </div>
           
           {/* Footer */}
           <div className="px-8 py-6 border-t border-gray-200 bg-white rounded-b-2xl">
