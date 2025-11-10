@@ -86,8 +86,17 @@ export async function POST(request: Request) {
       
       // Auto-fill från officiell källa (högsta prioritet)
       // Always fill company name from Bolagsverket (official source)
+      console.log('[Enrich API] Bolagsverket data:', {
+        name: bolagsverketData.name,
+        hasName: !!bolagsverketData.name,
+        currentAutoFillCompanyName: enrichedData.autoFill.companyName
+      })
+      
       if (bolagsverketData.name) {
         enrichedData.autoFill.companyName = bolagsverketData.name
+        console.log('[Enrich API] Set company name from Bolagsverket:', bolagsverketData.name)
+      } else {
+        console.warn('[Enrich API] No company name in Bolagsverket data!')
       }
       if (bolagsverketData.registrationDate) {
         enrichedData.autoFill.registrationDate = bolagsverketData.registrationDate
@@ -176,7 +185,8 @@ export async function POST(request: Request) {
         name: bolagsverketData.name,
         registrationDate: bolagsverketData.registrationDate,
         reports: bolagsverketData.annualReports?.length || 0,
-        source: bolagsverketData.source
+        source: bolagsverketData.source,
+        autoFillCompanyName: enrichedData.autoFill.companyName
       })
     }
 
