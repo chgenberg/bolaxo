@@ -586,8 +586,8 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         
         // Create a more detailed status message showing which steps were filled
         const filledCount = fieldsFilled.length
-        const keyFields = []
-        const stepsFilled = []
+        const keyFields: string[] = []
+        const stepsFilled: number[] = []
         
         // Step 1 fields
         if (newData.companyName) {
