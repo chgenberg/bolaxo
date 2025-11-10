@@ -123,7 +123,7 @@ function ValuationResultContent() {
   const [error, setError] = useState<string | null>(null)
   const [valuationData, setValuationData] = useState<any>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
-  const [useImprovedResults, setUseImprovedResults] = useState(true) // Use improved results by default
+  const [useImprovedResults, setUseImprovedResults] = useState(false) // Use detailed results page by default
   const [isMockup, setIsMockup] = useState(false)
 
   useEffect(() => {
