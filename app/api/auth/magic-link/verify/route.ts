@@ -74,11 +74,16 @@ export async function GET(request: Request) {
 
     // Bestäm rätt destination baserat på roll - redirect till overview-sidan
     // Support for multiple roles (e.g., "seller,buyer")
-    let redirectUrl = '/dashboard' // Default för broker
+    // Try to detect locale from referer or default to 'sv'
+    const referer = request.headers.get('referer') || ''
+    const localeMatch = referer.match(/\/(sv|en|no|da)\//)
+    const locale = localeMatch ? localeMatch[1] : 'sv'
+    
+    let redirectUrl = `/${locale}/dashboard` // Default för broker
     if (isSeller(user.role)) {
-      redirectUrl = '/dashboard' // Översikt
+      redirectUrl = `/${locale}/dashboard` // Översikt
     } else if (isBuyer(user.role)) {
-      redirectUrl = '/dashboard/deals' // Mina affärer (overview)
+      redirectUrl = `/${locale}/dashboard/deals` // Mina affärer (overview)
     }
 
     // I production SKA secure vara true för HTTPS
