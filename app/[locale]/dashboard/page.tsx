@@ -7,6 +7,7 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import SellerDashboard from '@/components/dashboard/SellerDashboard'
 import BuyerDashboard from '@/components/dashboard/BuyerDashboard'
 import { useTranslations, useLocale } from 'next-intl'
+import { isSeller, isBuyer } from '@/lib/user-roles'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -27,7 +28,7 @@ export default function DashboardPage() {
     const checkUserProfile = async () => {
       try {
         // Buyers: check if they have profile
-        if (user.role === 'buyer') {
+        if (isBuyer(user.role)) {
           const response = await fetch(`/api/buyer-profile?userId=${user.id}`)
           if (!response.ok) {
             // No profile exists, redirect to registration
@@ -37,7 +38,7 @@ export default function DashboardPage() {
           }
         }
         // Sellers: check if they have listings - but don't redirect, show overview instead
-        else if (user.role === 'seller') {
+        if (isSeller(user.role)) {
           const response = await fetch(`/api/listings?userId=${user.id}`)
           if (!response.ok || response.status === 204) {
             // No listings exist, redirect to onboarding
@@ -77,9 +78,9 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
-      {user?.role === 'seller' && <SellerDashboard userId={user.id} />}
-      {user?.role === 'buyer' && <BuyerDashboard userId={user.id} />}
-      {user?.role !== 'seller' && user?.role !== 'buyer' && (
+      {isSeller(user?.role || '') && <SellerDashboard userId={user.id} />}
+      {isBuyer(user?.role || '') && <BuyerDashboard userId={user.id} />}
+      {!isSeller(user?.role || '') && !isBuyer(user?.role || '') && (
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <p className="text-gray-600">{t('loading')}</p>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { getClientIp, checkRateLimit, RATE_LIMIT_CONFIGS } from '@/app/lib/rate-limiter'
+import { isSeller } from '@/lib/user-roles'
 
 const prisma = new PrismaClient()
 
@@ -18,7 +19,7 @@ async function verifySellerAuth(request: NextRequest) {
       select: { id: true, role: true }
     })
     
-    if (!user || user.role !== 'seller') {
+    if (!user || !isSeller(user.role)) {
       return { isValid: false, error: 'Unauthorized - Not a seller', userId: null }
     }
     

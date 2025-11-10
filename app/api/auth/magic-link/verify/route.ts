@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { generateReferralCode } from '@/lib/referral'
+import { isSeller, isBuyer } from '@/lib/user-roles'
 
 const prisma = new PrismaClient()
 
@@ -72,10 +73,11 @@ export async function GET(request: Request) {
     })
 
     // Bestäm rätt destination baserat på roll - redirect till overview-sidan
+    // Support for multiple roles (e.g., "seller,buyer")
     let redirectUrl = '/dashboard' // Default för broker
-    if (user.role === 'seller') {
+    if (isSeller(user.role)) {
       redirectUrl = '/dashboard' // Översikt
-    } else if (user.role === 'buyer') {
+    } else if (isBuyer(user.role)) {
       redirectUrl = '/dashboard/deals' // Mina affärer (overview)
     }
 
