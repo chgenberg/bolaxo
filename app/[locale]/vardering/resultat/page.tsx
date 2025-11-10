@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { TrendingUp, Download, Mail, CheckCircle, AlertCircle, Lightbulb, BarChart3, FileText, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
@@ -35,25 +35,109 @@ interface ValuationResult {
     description: string
     impact: 'high' | 'medium' | 'low'
   }>
-  marketComparison: string
+  marketComparison?: string
   keyMetrics: {
     label: string
     value: string
   }[]
 }
 
-export default function ValuationResultPage() {
+// Mockup data för demo
+const mockResult: ValuationResult = {
+  valuationRange: {
+    min: 8500000,
+    max: 12500000,
+    mostLikely: 10500000
+  },
+  method: 'DCF & Multiples',
+  methodology: {
+    multipel: 'EBITDA-multipel baserad på branschgenomsnitt',
+    avkastningskrav: '12-15% baserat på riskprofil',
+    substans: 'Tillgångsvärde med justeringar'
+  },
+  analysis: {
+    strengths: [
+      'Stark marknadsposition med växande kundbas',
+      'Återkommande intäkter från långsiktiga kundavtal',
+      'Kompetent team med djup branschkunskap',
+      'Diversifierad produktportfölj som minskar risk'
+    ],
+    weaknesses: [
+      'Beroende av några stora kunder',
+      'Begränsad geografisk spridning',
+      'Behov av teknisk modernisering'
+    ],
+    opportunities: [
+      'Expansion till nya marknader',
+      'Digital transformation kan öka effektiviteten',
+      'Nya produktlinjer inom befintlig kompetens'
+    ],
+    risks: [
+      'Konkurrens från större aktörer',
+      'Regulatoriska förändringar i branschen',
+      'Nyckelpersoners avgång'
+    ]
+  },
+  recommendations: [
+    {
+      title: 'Förbättra kunddiversifiering',
+      description: 'Minska beroendet av stora kunder genom att aktivt söka nya kunder',
+      impact: 'high'
+    },
+    {
+      title: 'Investera i digitalisering',
+      description: 'Modernisera IT-infrastruktur för att öka effektivitet',
+      impact: 'medium'
+    },
+    {
+      title: 'Utveckla nyckelpersoner',
+      description: 'Säkerställa kunskapsöverföring och succession planning',
+      impact: 'high'
+    }
+  ],
+  keyMetrics: [
+    { label: 'Omsättning', value: '12.5 MSEK' },
+    { label: 'EBITDA', value: '2.1 MSEK' },
+    { label: 'Rörelsemarginal', value: '16.8%' },
+    { label: 'Tillväxt', value: '15.2%' },
+    { label: 'Kundretention', value: '92%' },
+    { label: 'Marknadsandel', value: '8.5%' }
+  ]
+}
+
+const mockValuationData = {
+  companyName: 'Tech Solutions AB',
+  industry: 'webbtjanster',
+  revenue: '12500000',
+  employees: '11-25',
+  email: 'demo@bolaxo.se'
+}
+
+function ValuationResultContent() {
   const router = useRouter()
   const locale = useLocale()
   const t = useTranslations('valuationResult')
+  const searchParams = useSearchParams()
   const [loading, setLoading] = useState(true)
   const [result, setResult] = useState<ValuationResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [valuationData, setValuationData] = useState<any>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [useImprovedResults, setUseImprovedResults] = useState(true) // Use improved results by default
+  const [isMockup, setIsMockup] = useState(false)
 
   useEffect(() => {
+    // Kolla om det är mockup-läge
+    const mockupMode = searchParams?.get('mockup') === 'true' || searchParams?.get('demo') === 'true'
+    
+    if (mockupMode) {
+      setIsMockup(true)
+      setResult(mockResult)
+      setValuationData(mockValuationData)
+      setLoading(false)
+      return
+    }
+
     const fetchValuation = async () => {
       try {
         // Hämta data från localStorage
@@ -102,17 +186,28 @@ export default function ValuationResultPage() {
     }
 
     fetchValuation()
-  }, [router])
+  }, [router, locale, searchParams])
 
   // Use improved results component if enabled
-  if (useImprovedResults) {
+  if (useImprovedResults && result) {
     return (
-      <ImprovedValuationResults 
-        result={result!}
-        valuationData={valuationData}
-        loading={loading}
-        error={error}
-      />
+      <>
+        {isMockup && (
+          <div className="bg-yellow-50 border-b border-yellow-200 p-4">
+            <div className="container mx-auto">
+              <p className="text-yellow-800 font-medium text-center">
+                🎨 MOCKUP-LÄGE: Detta är en förhandsvisning med exempeldata
+              </p>
+            </div>
+          </div>
+        )}
+        <ImprovedValuationResults 
+          result={result}
+          valuationData={valuationData}
+          loading={loading}
+          error={error}
+        />
+      </>
     )
   }
 
@@ -518,5 +613,17 @@ export default function ValuationResultPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function ValuationResultPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background-off-white flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-navy"></div>
+      </div>
+    }>
+      <ValuationResultContent />
+    </Suspense>
   )
 }
