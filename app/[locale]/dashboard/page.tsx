@@ -11,7 +11,7 @@ import { isSeller, isBuyer } from '@/lib/user-roles'
 
 export default function DashboardPage() {
   const router = useRouter()
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const t = useTranslations('dashboard')
   const locale = useLocale()
   const [loading, setLoading] = useState(true)
@@ -19,6 +19,11 @@ export default function DashboardPage() {
   const [redirectPath, setRedirectPath] = useState<string | null>(null)
 
   useEffect(() => {
+    // Wait for auth to finish loading before checking user
+    if (authLoading) {
+      return
+    }
+    
     if (!user) {
       router.push(`/${locale}/login`)
       return
@@ -55,7 +60,7 @@ export default function DashboardPage() {
     }
 
     checkUserProfile()
-  }, [user, router, locale])
+  }, [user, authLoading, router, locale])
 
   // Redirect if needed
   useEffect(() => {
@@ -64,7 +69,7 @@ export default function DashboardPage() {
     }
   }, [shouldRedirect, redirectPath, router])
 
-  if (loading || shouldRedirect) {
+  if (authLoading || loading || shouldRedirect) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-96">
