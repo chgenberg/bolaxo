@@ -3,6 +3,47 @@ import { mockObjects } from '../data/mockObjects'
 
 const prisma = new PrismaClient()
 
+const currentYear = new Date().getFullYear()
+
+const toInt = (value?: number | string | null): number | null => {
+  if (value === undefined || value === null) return null
+  const num = typeof value === 'string' ? parseFloat(value) : value
+  if (Number.isNaN(num)) return null
+  return Math.round(num)
+}
+
+const toFloat = (value?: number | string | null): number | null => {
+  if (value === undefined || value === null) return null
+  const num = typeof value === 'string' ? parseFloat(value) : value
+  if (Number.isNaN(num)) return null
+  return Math.round(num * 10) / 10
+}
+
+const parseEmployees = (value?: string): number => {
+  if (!value) return 0
+  const matches = value.match(/\d+/g)
+  if (!matches || matches.length === 0) return 0
+  const numbers = matches
+    .map((n) => parseInt(n, 10))
+    .filter((n) => !Number.isNaN(n))
+  if (numbers.length === 0) return 0
+  if (value.includes('+')) {
+    return Math.max(1, numbers[0])
+  }
+  const average = numbers.reduce((sum, n) => sum + n, 0) / numbers.length
+  return Math.max(1, Math.round(average))
+}
+
+const buildImages = (primary?: string | null, images?: string[]): string[] => {
+  if (images && images.length > 0) {
+    return images
+  }
+  if (primary) {
+    return [primary]
+  }
+  return []
+}
+
 async function main() {
   console.log('🌱 Seeding database...')
 
@@ -331,7 +372,6 @@ async function main() {
   console.log('\n🏢 Seeding 20 listings from mock objects...')
   
   for (const mockObj of mockObjects) {
-    // Skapa en unik säljare för varje objekt
     const seller = await prisma.user.upsert({
       where: { email: `seller-${mockObj.id}@bolaxo.se` },
       update: {},
@@ -344,68 +384,119 @@ async function main() {
         phone: '070-' + Math.floor(Math.random() * 9000000 + 1000000),
         companyName: mockObj.companyName,
         orgNumber: mockObj.orgNumber,
-        region: mockObj.region
+        region: mockObj.region || 'Sverige'
       }
     })
 
-    // Skapa listing från mock-objektet
+    const industryValue = mockObj.industry ?? mockObj.type ?? 'Övrigt'
+    const revenue = toInt(mockObj.revenue) ?? 0
+    const revenueYear1 = toInt(mockObj.revenueYear1)
+    const revenueYear2 = toInt(mockObj.revenueYear2)
+    const revenueYear3 = toInt(mockObj.revenueYear3)
+    const revenue3Years = toInt(mockObj.revenue3Years)
+    const revenueGrowthRate = toFloat(mockObj.revenueGrowthRate)
+    const ebitda = toInt(mockObj.ebitda)
+    const profitMargin = toFloat(mockObj.profitMargin)
+    const grossMargin = toFloat(mockObj.grossMargin)
+    const salaryCost = toInt(mockObj.salaries)
+    const rentCost = toInt(mockObj.rentCosts)
+    const marketingCost = toInt(mockObj.marketingCosts)
+    const otherOperatingCost = toInt(mockObj.otherOperatingCosts)
+    const explicitOperatingCosts = toInt(mockObj.operatingCosts)
+
+    let operatingCosts: number | null = null
+    if (explicitOperatingCosts !== null) {
+      operatingCosts = explicitOperatingCosts
+    } else if ([salaryCost, rentCost, marketingCost, otherOperatingCost].some((value) => value !== null)) {
+      operatingCosts = (salaryCost ?? 0) + (rentCost ?? 0) + (marketingCost ?? 0) + (otherOperatingCost ?? 0)
+    }
+
+    const companyAgeFromData = toInt(mockObj.companyAge)
+    const foundedYearFromData = toInt(mockObj.foundedYear)
+    const companyAgeValue =
+      companyAgeFromData ?? (foundedYearFromData !== null ? Math.max(0, currentYear - foundedYearFromData) : null)
+    const foundedYearValue =
+      foundedYearFromData ?? (companyAgeValue !== null ? currentYear - companyAgeValue : null)
+
+    const images = buildImages(mockObj.image, mockObj.images)
+    const image = mockObj.image ?? (images.length > 0 ? images[0] : null)
+    const employeeCount = parseEmployees(mockObj.employees)
+    const locationValue = mockObj.location || mockObj.region || 'Sverige'
+    const regionValue = mockObj.region || 'Sverige'
+    const publishedAt =
+      mockObj.createdAt instanceof Date
+        ? mockObj.createdAt
+        : mockObj.createdAt
+        ? new Date(mockObj.createdAt)
+        : new Date()
+
+    const listingData = {
+      userId: seller.id,
+      companyName: mockObj.companyName,
+      anonymousTitle: mockObj.anonymousTitle,
+      type: mockObj.type ?? 'Övrigt',
+      industry: industryValue,
+      orgNumber: mockObj.orgNumber ?? null,
+      website: mockObj.website ?? null,
+      revenue,
+      revenueRange: mockObj.revenueRange ?? 'Okänd',
+      revenueYear1,
+      revenueYear2,
+      revenueYear3,
+      revenue3Years,
+      revenueGrowthRate,
+      priceMin: toInt(mockObj.priceMin) ?? 0,
+      priceMax: toInt(mockObj.priceMax) ?? 0,
+      askingPrice: toInt(mockObj.askingPrice),
+      abstainPriceMin: mockObj.abstainPriceMin ?? false,
+      abstainPriceMax: mockObj.abstainPriceMax ?? false,
+      ebitda,
+      profitMargin,
+      grossMargin,
+      employees: employeeCount,
+      location: locationValue,
+      region: regionValue,
+      address: mockObj.address ?? null,
+      companyAge: companyAgeValue,
+      foundedYear: foundedYearValue,
+      description: mockObj.description,
+      strengths: mockObj.strengths ?? [],
+      risks: mockObj.risks ?? [],
+      whySelling: mockObj.whySelling ?? null,
+      competitiveAdvantages: mockObj.competitiveAdvantages ?? null,
+      regulatoryLicenses: mockObj.regulatoryLicenses ?? null,
+      paymentTerms: mockObj.paymentTerms ?? null,
+      idealBuyer: mockObj.idealBuyer ?? null,
+      customerConcentrationRisk: mockObj.customerConcentrationRisk ?? null,
+      image,
+      images,
+      verified: mockObj.verified ?? false,
+      broker: mockObj.broker ?? false,
+      isNew: mockObj.isNew ?? false,
+      status: 'active',
+      packageType: mockObj.packageType ?? 'pro',
+      publishedAt,
+      expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      cash: toInt(mockObj.cash),
+      accountsReceivable: toInt(mockObj.accountsReceivable),
+      inventory: toInt(mockObj.inventory),
+      totalAssets: toInt(mockObj.totalAssets),
+      totalLiabilities: toInt(mockObj.totalLiabilities),
+      shortTermDebt: toInt(mockObj.shortTermDebt),
+      longTermDebt: toInt(mockObj.longTermDebt),
+      operatingCosts,
+      salaries: salaryCost,
+      rentCosts: rentCost,
+      marketingCosts: marketingCost,
+      otherOperatingCosts: otherOperatingCost
+    }
+
     await prisma.listing.upsert({
       where: { id: mockObj.id },
-      update: {
-        // Uppdatera befintlig med nya värden
-        userId: seller.id,
-        companyName: mockObj.companyName,
-        anonymousTitle: mockObj.anonymousTitle,
-        type: mockObj.type,
-        industry: mockObj.type.toLowerCase().replace(/\s+/g, '-'),
-        revenue: mockObj.revenue,
-        revenueRange: mockObj.revenueRange,
-        employees: parseInt(mockObj.employees?.split('-')[0] || '1'),
-        location: mockObj.location || mockObj.region,
-        region: mockObj.region,
-        address: mockObj.address,
-        priceMin: mockObj.priceMin,
-        priceMax: mockObj.priceMax,
-        description: mockObj.description,
-        strengths: mockObj.strengths,
-        risks: mockObj.risks,
-        whySelling: mockObj.whySelling,
-        image: mockObj.image,
-        verified: mockObj.verified,
-        broker: mockObj.broker,
-        isNew: mockObj.isNew,
-        status: 'active',
-        packageType: 'pro',
-        publishedAt: new Date(mockObj.createdAt),
-        expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
-      },
+      update: listingData,
       create: {
         id: mockObj.id,
-        userId: seller.id,
-        companyName: mockObj.companyName,
-        anonymousTitle: mockObj.anonymousTitle,
-        type: mockObj.type,
-        industry: mockObj.type.toLowerCase().replace(/\s+/g, '-'),
-        revenue: mockObj.revenue,
-        revenueRange: mockObj.revenueRange,
-        employees: parseInt(mockObj.employees?.split('-')[0] || '1'),
-        location: mockObj.location || mockObj.region,
-        region: mockObj.region,
-        address: mockObj.address,
-        priceMin: mockObj.priceMin,
-        priceMax: mockObj.priceMax,
-        description: mockObj.description,
-        strengths: mockObj.strengths,
-        risks: mockObj.risks,
-        whySelling: mockObj.whySelling,
-        image: mockObj.image,
-        verified: mockObj.verified,
-        broker: mockObj.broker,
-        isNew: mockObj.isNew,
-        status: 'active',
-        packageType: 'pro',
-        publishedAt: new Date(mockObj.createdAt),
-        expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        ...listingData
       }
     })
   }
