@@ -449,10 +449,6 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         if (autoFillFields.inventory) {
           newData.inventory = autoFillFields.inventory.toString()
         }
-        if (autoFillFields.accountsPayable && !data.accountsPayable) {
-          // Store accountsPayable for later use (not directly in wizard but useful for calculations)
-          // Could be used to estimate payment terms
-        }
         if (autoFillFields.shortTermDebt) {
           newData.shortTermDebt = autoFillFields.shortTermDebt.toString()
         }
@@ -460,9 +456,30 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
           newData.longTermDebt = autoFillFields.longTermDebt.toString()
         }
         
-        // Equity (useful for substance valuation)
-        if (autoFillFields.equity) {
-          // Store equity for valuation calculations even if not directly shown in wizard
+        // Calculate total debt from short-term + long-term debt
+        const shortTerm = Number(autoFillFields.shortTermDebt || 0)
+        const longTerm = Number(autoFillFields.longTermDebt || 0)
+        if (shortTerm > 0 || longTerm > 0) {
+          const totalDebt = shortTerm + longTerm
+          // Note: totalDebt field might not exist in ValuationData, but we can calculate it
+          // This is useful for debt analysis in valuation
+        }
+        
+        // Calculate COGS if we have revenue and gross margin
+        // COGS = Revenue * (1 - Gross Margin / 100)
+        if (autoFillFields.revenue && autoFillFields.grossMargin) {
+          const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
+          const grossMarginPercent = Number(autoFillFields.grossMargin)
+          if (revenue > 0 && grossMarginPercent > 0) {
+            const cogs = revenue * (1 - grossMarginPercent / 100)
+            newData.cogs = Math.round(cogs).toString()
+          }
+        } else if (autoFillFields.revenue && !newData.cogs) {
+          // Estimate COGS as 50% of revenue if no gross margin available (industry average)
+          const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
+          if (revenue > 0) {
+            newData.cogs = Math.round(revenue * 0.5).toString()
+          }
         }
         
         // Operating costs breakdown (always fill if available)
