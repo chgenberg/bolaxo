@@ -185,13 +185,19 @@ export async function POST(request: NextRequest) {
       revenueYear1,
       revenueYear2,
       revenueYear3,
+      revenue3Years,
+      revenueGrowthRate,
       priceMin,
       priceMax,
       abstainPriceMin,
       abstainPriceMax,
+      askingPrice,
       ebitda,
+      profitMargin,
+      grossMargin,
       employees,
       foundedYear,
+      companyAge,
       description,
       image,
       images,
@@ -200,11 +206,34 @@ export async function POST(request: NextRequest) {
       strengths,
       risks,
       whySelling,
-      whatIncluded
+      whatIncluded,
+      // New fields from improved wizard
+      cash,
+      accountsReceivable,
+      inventory,
+      totalAssets,
+      totalLiabilities,
+      shortTermDebt,
+      longTermDebt,
+      operatingCosts,
+      salaries,
+      rentCosts,
+      marketingCosts,
+      otherOperatingCosts,
+      competitiveAdvantages,
+      regulatoryLicenses,
+      paymentTerms,
+      idealBuyer,
+      customerConcentrationRisk,
+      email,
+      status
     } = body
     
+    // Get userId from auth if not provided
+    const finalUserId = userId || body.user?.id
+    
     // Validate required fields
-    if (!userId || !anonymousTitle || !industry || !location || !description) {
+    if (!finalUserId || !companyName || !industry || !revenue) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -225,35 +254,72 @@ export async function POST(request: NextRequest) {
       }
     }
     
+    // Calculate foundedYear if companyAge is provided
+    const calculatedFoundedYear = companyAge 
+      ? new Date().getFullYear() - parseInt(companyAge) 
+      : (foundedYear ? parseInt(foundedYear) : null)
+    
+    // Generate anonymous title if not provided
+    const finalAnonymousTitle = anonymousTitle || generateAnonymousTitle({ 
+      type: industry, 
+      region: address || location || 'Sverige' 
+    })
+    
     const listing = await prisma.listing.create({
       data: {
-        userId,
+        userId: finalUserId,
         companyName,
-        anonymousTitle: anonymousTitle || generateAnonymousTitle({ type, region }),
-        type,
+        anonymousTitle: finalAnonymousTitle,
+        type: industry, // Use industry as type
         category,
         industry,
         orgNumber,
         website,
-        location,
-        region,
+        location: address || location || 'Sverige',
+        region: region || 'Sverige',
         address,
         revenue: parseInt(revenue) || 0,
-        revenueRange,
+        revenueRange: revenueRange || 'Okänd',
         revenueYear1: revenueYear1 ? parseInt(revenueYear1) : null,
         revenueYear2: revenueYear2 ? parseInt(revenueYear2) : null,
         revenueYear3: revenueYear3 ? parseInt(revenueYear3) : null,
-        priceMin: abstainPriceMin ? 0 : (parseInt(priceMin) || 0),
-        priceMax: abstainPriceMax ? 0 : (parseInt(priceMax) || 0),
+        revenue3Years: revenue3Years ? parseInt(revenue3Years) : null,
+        revenueGrowthRate: revenueGrowthRate ? parseFloat(revenueGrowthRate) : null,
+        priceMin: priceMin ? parseInt(priceMin) : 0,
+        priceMax: priceMax ? parseInt(priceMax) : 0,
+        askingPrice: askingPrice ? parseInt(askingPrice) : null,
         abstainPriceMin: abstainPriceMin || false,
         abstainPriceMax: abstainPriceMax || false,
         ebitda: ebitda ? parseInt(ebitda) : null,
-        employees: parseInt(employees) || 0,
-        foundedYear: foundedYear ? parseInt(foundedYear) : null,
-        description,
-        image,
+        profitMargin: profitMargin ? parseFloat(profitMargin) : null,
+        grossMargin: grossMargin ? parseFloat(grossMargin) : null,
+        employees: employees ? (typeof employees === 'string' && employees.includes('-') ? 0 : parseInt(employees)) : 0,
+        foundedYear: calculatedFoundedYear,
+        companyAge: companyAge ? parseInt(companyAge) : null,
+        // Balance sheet
+        cash: cash ? parseInt(cash) : null,
+        accountsReceivable: accountsReceivable ? parseInt(accountsReceivable) : null,
+        inventory: inventory ? parseInt(inventory) : null,
+        totalAssets: totalAssets ? parseInt(totalAssets) : null,
+        totalLiabilities: totalLiabilities ? parseInt(totalLiabilities) : null,
+        shortTermDebt: shortTermDebt ? parseInt(shortTermDebt) : null,
+        longTermDebt: longTermDebt ? parseInt(longTermDebt) : null,
+        // Operating costs
+        operatingCosts: operatingCosts ? parseInt(operatingCosts) : null,
+        salaries: salaries ? parseInt(salaries) : null,
+        rentCosts: rentCosts ? parseInt(rentCosts) : null,
+        marketingCosts: marketingCosts ? parseInt(marketingCosts) : null,
+        otherOperatingCosts: otherOperatingCosts ? parseInt(otherOperatingCosts) : null,
+        // Qualitative
+        description: description || '',
+        competitiveAdvantages,
+        regulatoryLicenses,
+        paymentTerms,
+        idealBuyer,
+        customerConcentrationRisk,
+        image: images && images.length > 0 ? images[0] : null,
         images: images || [],
-        status: autoPublish ? 'active' : 'draft',
+        status: status || (autoPublish ? 'active' : 'draft'),
         packageType: packageType || 'basic',
         publishedAt: autoPublish ? new Date() : null,
         expiresAt,

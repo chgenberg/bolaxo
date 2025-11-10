@@ -36,3 +36,7 @@ next-env.d.ts
 
 /app/generated/prisma
 .env.production
+
+# Uploaded files
+/public/uploads/listings/*
+!/public/uploads/listings/.gitkeep

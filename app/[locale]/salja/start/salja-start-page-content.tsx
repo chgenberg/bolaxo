@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import CreateListingWizard from '@/components/CreateListingWizard'
+import ImprovedListingWizard from '@/components/ImprovedListingWizard'
 import { ArrowLeft, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
@@ -51,6 +51,6 @@ export default function SaljaStartPageContent() {
     )
   }
 
-  return <CreateListingWizard onClose={handleClose} />
+  return <ImprovedListingWizard onClose={handleClose} />
 }
 

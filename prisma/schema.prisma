@@ -125,13 +125,35 @@ model Listing {
   revenueYear1    Int?     // Revenue 3 years ago (senaste året = revenueYear3)
   revenueYear2    Int?     // Revenue 2 years ago
   revenueYear3    Int?     // Revenue last year (current year)
+  revenue3Years   Int?     // Average revenue over 3 years
+  revenueGrowthRate Float? // Revenue growth rate percentage
   priceMin        Int      @default(0) // Min price in SEK
   priceMax        Int      @default(0) // Max price in SEK
+  askingPrice     Int?     // Publicly shown asking price
   abstainPriceMin Boolean  @default(false) // User opted out of providing min price
   abstainPriceMax Boolean  @default(false) // User opted out of providing max price
   ebitda          Int?     // EBITDA in SEK
+  profitMargin    Float?   // Profit margin percentage
+  grossMargin     Float?   // Gross margin percentage
   employees       Int      @default(0) // Number of employees
   foundedYear     Int?
+  companyAge      Int?     // Age of company in years
+  
+  // Balance Sheet & Assets
+  cash            Int?     // Cash and bank
+  accountsReceivable Int?  // Accounts receivable
+  inventory       Int?     // Inventory value
+  totalAssets     Int?     // Total assets
+  totalLiabilities Int?    // Total liabilities
+  shortTermDebt   Int?     // Short term debt
+  longTermDebt    Int?     // Long term debt
+  
+  // Operating Costs
+  operatingCosts  Int?     // Total operating costs
+  salaries        Int?     // Salaries including social costs
+  rentCosts       Int?     // Rent costs
+  marketingCosts  Int?     // Marketing costs
+  otherOperatingCosts Int? // Other operating costs
   
   // Description & Qualitative
   description     String   @default("") @db.Text
@@ -139,6 +161,11 @@ model Listing {
   risks           String[] // Array of 3 risks
   whySelling      String?  @db.Text // Why selling
   whatIncluded    String?  @db.Text // What's included in sale
+  competitiveAdvantages String? @db.Text // Competitive advantages
+  regulatoryLicenses String?  // Required licenses
+  paymentTerms    String?  // Payment terms
+  idealBuyer      String?  @db.Text // Description of ideal buyer
+  customerConcentrationRisk String? // low, medium, high
   
   // Media
   image           String?  // Path to main image
