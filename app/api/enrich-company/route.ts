@@ -85,23 +85,24 @@ export async function POST(request: Request) {
       enrichedData.rawData.bolagsverketData = bolagsverketData
       
       // Auto-fill från officiell källa (högsta prioritet)
+      // Always fill company name from Bolagsverket (official source)
+      if (bolagsverketData.name) {
+        enrichedData.autoFill.companyName = bolagsverketData.name
+      }
       if (bolagsverketData.registrationDate) {
         enrichedData.autoFill.registrationDate = bolagsverketData.registrationDate
         enrichedData.autoFill.companyAge = calculateCompanyAge(bolagsverketData.registrationDate)
       }
-      if (bolagsverketData.name && !enrichedData.autoFill.companyName) {
-        enrichedData.autoFill.companyName = bolagsverketData.name
-      }
-      if (bolagsverketData.address && !enrichedData.autoFill.address) {
+      if (bolagsverketData.address) {
         enrichedData.autoFill.address = bolagsverketData.address
       }
       if (bolagsverketData.employees) {
         enrichedData.autoFill.employees = mapEmployeeCount(bolagsverketData.employees)
       }
-      if (bolagsverketData.legalForm && !enrichedData.autoFill.legalForm) {
+      if (bolagsverketData.legalForm) {
         enrichedData.autoFill.legalForm = bolagsverketData.legalForm
       }
-      if (bolagsverketData.industryCode && !enrichedData.autoFill.industry) {
+      if (bolagsverketData.industryCode) {
         enrichedData.autoFill.industry = mapSNICodeToIndustry(bolagsverketData.industryCode)
       }
       

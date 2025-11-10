@@ -529,8 +529,10 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         }
         
         // Update state with all new data
-        console.log('Fields to be filled:', Object.keys(newData))
+        const fieldsFilled = Object.keys(newData).filter(key => newData[key as keyof ValuationData] !== undefined && newData[key as keyof ValuationData] !== '')
+        console.log('Fields to be filled:', fieldsFilled)
         console.log('New data values:', newData)
+        console.log('Total fields available from API:', Object.keys(autoFillFields).length)
         setData(prev => ({ ...prev, ...newData }))
         
         // Store enriched data for later use
@@ -541,7 +543,20 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         // Store raw enriched data for valuation API
         localStorage.setItem('enrichedCompanyData', JSON.stringify(enrichedData))
         
-        setEnrichmentStatus(`Data hämtad! ${Object.keys(newData).length} fält ifyllda automatiskt.`)
+        // Create a more detailed status message
+        const filledCount = fieldsFilled.length
+        const keyFields = []
+        if (newData.companyName) keyFields.push('företagsnamn')
+        if (newData.industry) keyFields.push('bransch')
+        if (newData.revenue) keyFields.push('omsättning')
+        if (newData.employees) keyFields.push('anställda')
+        if (newData.companyAge) keyFields.push('företagsålder')
+        
+        const statusMessage = filledCount > 0
+          ? `Data hämtad! ${filledCount} fält ifyllda automatiskt${keyFields.length > 0 ? ` (${keyFields.join(', ')})` : ''}.`
+          : 'Data hämtad men inga nya fält kunde fyllas i.'
+        
+        setEnrichmentStatus(statusMessage)
         setTimeout(() => setEnrichmentStatus(''), 5000)
       }
     } catch (error) {
