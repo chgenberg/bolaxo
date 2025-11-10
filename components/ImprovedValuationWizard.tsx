@@ -1457,152 +1457,154 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   ])
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
-        {/* Header */}
-        <div className="px-8 py-6 border-b border-gray-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-primary-navy">Företagsvärdering</h1>
-              <p className="text-gray-600 mt-1">Få en professionell värdering på 5 minuter</p>
+    <>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+          {/* Header */}
+          <div className="px-8 py-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-primary-navy">Företagsvärdering</h1>
+                <p className="text-gray-600 mt-1">Få en professionell värdering på 5 minuter</p>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6 text-gray-500" />
+              </button>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <X className="w-6 h-6 text-gray-500" />
-            </button>
-          </div>
-          
-          {/* Progress bar */}
-          <div className="mt-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">
-                Steg {currentStep} av {steps.length}
-              </span>
-              {quickValuation && currentStep >= 2 && (
-                <span className={`text-sm font-medium ${getValuationColor(quickValuation.midpoint)}`}>
-                  Preliminär värdering: {quickValuation.min.toLocaleString('sv-SE')} - {quickValuation.max.toLocaleString('sv-SE')} kr
-                </span>
-              )}
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-          
-          {/* Step indicators */}
-          <div className="flex items-center justify-between mt-6 overflow-x-auto pb-2">
-            {steps.map((step) => {
-              const Icon = step.icon
-              const isActive = currentStep === step.id
-              const isCompleted = currentStep > step.id
-              
-              return (
-                <button
-                  key={step.id}
-                  onClick={() => {
-                    if (step.id < currentStep || (step.id === currentStep - 1)) {
-                      setCurrentStep(step.id)
-                    }
-                  }}
-                  disabled={step.id > currentStep}
-                  className={`
-                    flex flex-col items-center min-w-[80px] p-2 rounded-lg transition-all
-                    ${isActive ? 'bg-primary-navy/10' : ''}
-                    ${isCompleted ? 'cursor-pointer hover:bg-gray-50' : ''}
-                    ${step.id > currentStep ? 'opacity-50 cursor-not-allowed' : ''}
-                  `}
-                >
-                  <div className={`
-                    w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-all
-                    ${isActive ? 'bg-primary-navy text-white' : ''}
-                    ${isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}
-                  `}>
-                    {isCompleted ? (
-                      <CheckCircle className="w-5 h-5" />
-                    ) : (
-                      <Icon className="w-5 h-5" />
-                    )}
-                  </div>
-                  <span className={`text-xs font-medium ${isActive ? 'text-primary-navy' : 'text-gray-600'}`}>
-                    {step.title}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-        
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto px-8 py-6" ref={scrollRef}>
-          {renderStepContent()}
-        </div>
-        
-        {/* Footer */}
-        <div className="px-8 py-6 border-t border-gray-200 bg-gray-50">
-          <div className="flex justify-between items-center">
-            <button
-              onClick={handleBack}
-              disabled={currentStep === 1}
-              className={`
-                flex items-center px-6 py-3 rounded-lg font-medium transition-all
-                ${currentStep === 1 
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                }
-              `}
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Tillbaka
-            </button>
             
-            <button
-              onClick={handleNext}
-              disabled={isSubmitting || (currentStep === 8 && !acceptedPrivacy)}
-              className={`
-                flex items-center px-8 py-3 rounded-lg font-medium transition-all
-                ${currentStep === steps.length 
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700' 
-                  : 'bg-primary-navy text-white hover:bg-primary-navy/90'
-                }
-                ${(isSubmitting || (currentStep === 8 && !acceptedPrivacy)) ? 'opacity-50 cursor-not-allowed' : ''}
-              `}
-            >
-              {isSubmitting ? (
-                <>
-                  <Sparkles className="w-5 h-5 mr-2 animate-spin" />
-                  Genererar värdering...
-                </>
-              ) : currentStep === steps.length ? (
-                <>
-                  Få värdering
-                  <Sparkles className="w-5 h-5 ml-2" />
-                </>
-              ) : (
-                <>
-                  Nästa
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </>
-              )}
-            </button>
+            {/* Progress bar */}
+            <div className="mt-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600">
+                  Steg {currentStep} av {steps.length}
+                </span>
+                {quickValuation && currentStep >= 2 && (
+                  <span className={`text-sm font-medium ${getValuationColor(quickValuation.midpoint)}`}>
+                    Preliminär värdering: {quickValuation.min.toLocaleString('sv-SE')} - {quickValuation.max.toLocaleString('sv-SE')} kr
+                  </span>
+                )}
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+            
+            {/* Step indicators */}
+            <div className="flex items-center justify-between mt-6 overflow-x-auto pb-2">
+              {steps.map((step) => {
+                const Icon = step.icon
+                const isActive = currentStep === step.id
+                const isCompleted = currentStep > step.id
+                
+                return (
+                  <button
+                    key={step.id}
+                    onClick={() => {
+                      if (step.id < currentStep || (step.id === currentStep - 1)) {
+                        setCurrentStep(step.id)
+                      }
+                    }}
+                    disabled={step.id > currentStep}
+                    className={`
+                      flex flex-col items-center min-w-[80px] p-2 rounded-lg transition-all
+                      ${isActive ? 'bg-primary-navy/10' : ''}
+                      ${isCompleted ? 'cursor-pointer hover:bg-gray-50' : ''}
+                      ${step.id > currentStep ? 'opacity-50 cursor-not-allowed' : ''}
+                    `}
+                  >
+                    <div className={`
+                      w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-all
+                      ${isActive ? 'bg-primary-navy text-white' : ''}
+                      ${isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500'}
+                    `}>
+                      {isCompleted ? (
+                        <CheckCircle className="w-5 h-5" />
+                      ) : (
+                        <Icon className="w-5 h-5" />
+                      )}
+                    </div>
+                    <span className={`text-xs font-medium ${isActive ? 'text-primary-navy' : 'text-gray-600'}`}>
+                      {step.title}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+          
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto px-8 py-6" ref={scrollRef}>
+            {renderStepContent()}
+          </div>
+          
+          {/* Footer */}
+          <div className="px-8 py-6 border-t border-gray-200 bg-gray-50">
+            <div className="flex justify-between items-center">
+              <button
+                onClick={handleBack}
+                disabled={currentStep === 1}
+                className={`
+                  flex items-center px-6 py-3 rounded-lg font-medium transition-all
+                  ${currentStep === 1 
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                    : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }
+                `}
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Tillbaka
+              </button>
+              
+              <button
+                onClick={handleNext}
+                disabled={isSubmitting || (currentStep === 8 && !acceptedPrivacy)}
+                className={`
+                  flex items-center px-8 py-3 rounded-lg font-medium transition-all
+                  ${currentStep === steps.length 
+                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700' 
+                    : 'bg-primary-navy text-white hover:bg-primary-navy/90'
+                  }
+                  ${(isSubmitting || (currentStep === 8 && !acceptedPrivacy)) ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2 animate-spin" />
+                    Genererar värdering...
+                  </>
+                ) : currentStep === steps.length ? (
+                  <>
+                    Få värdering
+                    <Sparkles className="w-5 h-5 ml-2" />
+                  </>
+                ) : (
+                  <>
+                    Nästa
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    {showResult && valuationResult && (
-      <ValuationResultModal
-        result={valuationResult}
-        inputData={data}
-        onClose={() => {
-          setShowResult(false)
-          onClose()
-        }}
-      />
-    )}
+      
+      {showResult && valuationResult && (
+        <ValuationResultModal
+          result={valuationResult}
+          inputData={data}
+          onClose={() => {
+            setShowResult(false)
+            onClose()
+          }}
+        />
+      )}
+    </>
   )
 }
