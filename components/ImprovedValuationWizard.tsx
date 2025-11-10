@@ -572,21 +572,76 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         // Store raw enriched data for valuation API
         localStorage.setItem('enrichedCompanyData', JSON.stringify(enrichedData))
         
-        // Create a more detailed status message
+        // Create a more detailed status message showing which steps were filled
         const filledCount = fieldsFilled.length
         const keyFields = []
-        if (newData.companyName) keyFields.push('företagsnamn')
-        if (newData.industry) keyFields.push('bransch')
-        if (newData.revenue) keyFields.push('omsättning')
-        if (newData.employees) keyFields.push('anställda')
-        if (newData.companyAge) keyFields.push('företagsålder')
+        const stepsFilled = []
+        
+        // Step 1 fields
+        if (newData.companyName) {
+          keyFields.push('företagsnamn')
+          if (!stepsFilled.includes(1)) stepsFilled.push(1)
+        }
+        if (newData.industry) {
+          keyFields.push('bransch')
+          if (!stepsFilled.includes(1)) stepsFilled.push(1)
+        }
+        if (newData.companyAge) {
+          keyFields.push('företagsålder')
+          if (!stepsFilled.includes(1)) stepsFilled.push(1)
+        }
+        if (newData.employees) {
+          keyFields.push('anställda')
+          if (!stepsFilled.includes(7)) stepsFilled.push(7)
+        }
+        
+        // Step 2 fields
+        if (newData.revenue) {
+          keyFields.push('omsättning')
+          if (!stepsFilled.includes(2)) stepsFilled.push(2)
+        }
+        if (newData.profitMargin) {
+          if (!stepsFilled.includes(2)) stepsFilled.push(2)
+        }
+        if (newData.ebitda) {
+          if (!stepsFilled.includes(2)) stepsFilled.push(2)
+        }
+        
+        // Step 3 fields
+        if (newData.salaries || newData.rentCosts || newData.marketingCosts) {
+          if (!stepsFilled.includes(3)) stepsFilled.push(3)
+        }
+        
+        // Step 4 fields
+        if (newData.totalAssets || newData.cash || newData.accountsReceivable) {
+          if (!stepsFilled.includes(4)) stepsFilled.push(4)
+        }
+        
+        // Step 5 fields
+        if (newData.customerConcentrationRisk || newData.paymentTerms) {
+          if (!stepsFilled.includes(5)) stepsFilled.push(5)
+        }
+        
+        // Step 6 fields
+        if (newData.competitiveAdvantages) {
+          if (!stepsFilled.includes(6)) stepsFilled.push(6)
+        }
+        
+        // Step 7 fields
+        if (newData.regulatoryLicenses) {
+          if (!stepsFilled.includes(7)) stepsFilled.push(7)
+        }
+        
+        const stepsText = stepsFilled.length > 0 
+          ? ` (Steg ${stepsFilled.sort((a, b) => a - b).join(', ')})`
+          : ''
         
         const statusMessage = filledCount > 0
-          ? `Data hämtad! ${filledCount} fält ifyllda automatiskt${keyFields.length > 0 ? ` (${keyFields.join(', ')})` : ''}.`
+          ? `Data hämtad! ${filledCount} fält ifyllda automatiskt${stepsText}${keyFields.length > 0 ? ` - ${keyFields.join(', ')}` : ''}.`
           : 'Data hämtad men inga nya fält kunde fyllas i.'
         
         setEnrichmentStatus(statusMessage)
-        setTimeout(() => setEnrichmentStatus(''), 5000)
+        setTimeout(() => setEnrichmentStatus(''), 8000) // Show longer since it has more info
       }
     } catch (error) {
       console.error('Enrichment error:', error)
