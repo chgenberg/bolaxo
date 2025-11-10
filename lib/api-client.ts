@@ -46,7 +46,8 @@ export async function createNDARequest(payload: { listingId: string; buyerId: st
 }
 
 export async function updateNDAStatus(payload: { id: string; status: 'pending' | 'approved' | 'rejected' }) {
-  return apiJSON<{ request: any }>(`/api/nda-requests`, 'PATCH', payload)
+  // Use the new endpoint that handles message creation and email notifications
+  return apiJSON<{ request: any }>(`/api/nda-requests/${payload.id}`, 'PATCH', { status: payload.status })
 }
 
 // Saved Listings

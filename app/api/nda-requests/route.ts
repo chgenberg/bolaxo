@@ -262,23 +262,9 @@ export async function PATCH(request: NextRequest) {
         data,
       })
 
-      // If approved, create initial message from seller to buyer (same as in /api/nda-requests/[id])
-      if (status === 'approved') {
-        try {
-          await prisma.message.create({
-            data: {
-              listingId: currentRequest.listingId,
-              senderId: currentRequest.sellerId,
-              recipientId: currentRequest.buyerId,
-              subject: 'Din NDA-förfrågan har godkänts',
-              content: `Hej! Din NDA-förfrågan har godkänts. Du kan nu se all information om företaget och vi kan börja diskutera möjligheterna. Tveka inte att kontakta mig om du har några frågor.`,
-            },
-          })
-        } catch (msgError) {
-          console.error('Error creating initial message:', msgError)
-          // Don't fail the request if message creation fails
-        }
-      }
+      // NOTE: Message creation and email notifications are handled by /api/nda-requests/[id]
+      // This legacy endpoint only updates the status to maintain backward compatibility
+      // If you need message creation, use the new endpoint: PATCH /api/nda-requests/[id]
 
       return NextResponse.json({ request: updated })
     } catch (dbError) {
