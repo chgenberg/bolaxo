@@ -62,6 +62,25 @@ export interface BusinessObject {
   idealBuyer?: string
   customerConcentrationRisk?: 'low' | 'medium' | 'high'
   
+  // Customer & Business Model (Step 5)
+  numberOfCustomers?: number
+  recurringRevenuePercentage?: number
+  customerAcquisitionCost?: number
+  averageOrderValue?: number
+  
+  // Market Position (Step 6)
+  marketSize?: number
+  marketShare?: number
+  mainCompetitors?: string
+  
+  // Organization & Risks (Step 7)
+  keyEmployeeDependency?: 'low' | 'medium' | 'high'
+  mainRisks?: string
+  
+  // Future Outlook (Step 8)
+  growthPotential?: 'high' | 'moderate' | 'low'
+  expansionPlans?: string
+  
   // Image
   image?: string
   images?: string[]
@@ -142,6 +161,21 @@ export const mockObjects: BusinessObject[] = [
     paymentTerms: '30 dagar netto',
     idealBuyer: 'Större konsultbolag som vill expandera inom offentlig sektor eller entreprenör med branschbakgrund',
     customerConcentrationRisk: 'medium',
+    // Customer & Business Model
+    numberOfCustomers: 35,
+    recurringRevenuePercentage: 85,
+    customerAcquisitionCost: 15000,
+    averageOrderValue: 180000,
+    // Market Position
+    marketSize: 250000000,
+    marketShare: 3.2,
+    mainCompetitors: 'Accenture, CapGemini, Knowit',
+    // Organization & Risks
+    keyEmployeeDependency: 'medium',
+    mainRisks: 'Beroende av nyckelpersoner, men överlämning av ledning planerad för nästa år',
+    // Future Outlook
+    growthPotential: 'moderate',
+    expansionPlans: 'Expansion till privat sektor, nya utvecklingskontor i Malmö 2025',
     companyName: 'Digital Konsult AB',
     orgNumber: '556123-4567',
     address: 'Storgatan 1, 111 22 Stockholm',
@@ -208,6 +242,21 @@ export const mockObjects: BusinessObject[] = [
     paymentTerms: 'Direkt vid köp för konsumenter',
     idealBuyer: 'E-handelsgrupp eller finansiell köpare med erfarenhet av skalning',
     customerConcentrationRisk: 'low',
+    // Customer & Business Model
+    numberOfCustomers: 12500,
+    recurringRevenuePercentage: 35,
+    customerAcquisitionCost: 250,
+    averageOrderValue: 1200,
+    // Market Position
+    marketSize: 5000000000,
+    marketShare: 0.36,
+    mainCompetitors: 'IKEA, Ellos, AkutusMöbler',
+    // Organization & Risks
+    keyEmployeeDependency: 'low',
+    mainRisks: 'Säsongsvariation, ny marknadsplats (Loom) hot, beroende av leverantörer i Asien',
+    // Future Outlook
+    growthPotential: 'high',
+    expansionPlans: 'Expansion till Nordics, lansering av nytt produktkategori Q3 2025, marknad inom möbler för smårum',
     companyName: 'Nordic Living AB',
     orgNumber: '556234-5678',
     address: 'Hamngatan 10, 411 14 Göteborg',
@@ -271,6 +320,21 @@ export const mockObjects: BusinessObject[] = [
     paymentTerms: 'Kontant och kort',
     idealBuyer: 'Erfaren restauratör eller par som vill driva egen verksamhet',
     customerConcentrationRisk: 'low',
+    // Customer & Business Model
+    numberOfCustomers: 450,
+    recurringRevenuePercentage: 45,
+    customerAcquisitionCost: 80,
+    averageOrderValue: 520,
+    // Market Position
+    marketSize: 800000000,
+    marketShare: 0.4,
+    mainCompetitors: 'Libra Restaurant, Baltzar, Gillestugan',
+    // Organization & Risks
+    keyEmployeeDependency: 'high',
+    mainRisks: 'Höga personalkostnader, lönsamhet beroende av high season-perioder, stort beroende av ägarens närvaro',
+    // Future Outlook
+    growthPotential: 'moderate',
+    expansionPlans: 'Planerad renovering av uteserveringen 2025, möjlighet att utöka med catering och events, matlagningskurser för företag',
     companyName: 'Malmö Bistro AB',
     orgNumber: '556345-6789',
     address: 'Stortorget 12, 211 22 Malmö',
@@ -334,6 +398,21 @@ export const mockObjects: BusinessObject[] = [
     paymentTerms: 'Månads- och årsabonnemang',
     idealBuyer: 'Tech-bolag eller PE-firma med erfarenhet av SaaS',
     customerConcentrationRisk: 'medium',
+    // Customer & Business Model
+    numberOfCustomers: 320,
+    recurringRevenuePercentage: 95,
+    customerAcquisitionCost: 8500,
+    averageOrderValue: 15000,
+    // Market Position
+    marketSize: 3000000000,
+    marketShare: 0.3,
+    mainCompetitors: 'Workday, SuccessFactors, Bamboo HR',
+    // Organization & Risks
+    keyEmployeeDependency: 'low',
+    mainRisks: 'Teknisk skuld behöver åtgärdas, konkurrens från stora globala aktörer, strikt säkerhetskrav',
+    // Future Outlook
+    growthPotential: 'high',
+    expansionPlans: 'Expansion till USA 2025, nya moduler för personlig utveckling, AI-integrering i produkten Q4 2025',
     companyName: 'CloudTech Solutions AB',
     orgNumber: '556789-0123',
     address: 'Kungsgatan 50, 111 35 Stockholm',
