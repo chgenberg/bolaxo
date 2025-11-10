@@ -17,30 +17,30 @@ import PreviewCard from './PreviewCard'
 import { formatCurrency } from '@/utils/currency'
 import Image from 'next/image'
 
-// Reuse the same data structure as ImprovedValuationWizard
+// Same data structure as ImprovedValuationWizard
 interface ListingData {
   // Step 1: Basic Info
   email: string
   companyName: string
   orgNumber: string
-  website: string
-  
-  // Step 2: Business Overview
   industry: string
-  companyAge: string
-  employees: string
-  address: string
   
-  // Step 3: Financials
+  // Step 2: Financials
   revenue: string
   revenue3Years: string
   revenueGrowthRate: string
   ebitda: string
   profitMargin: string
   grossMargin: string
-  customerConcentrationRisk: string
   
-  // Step 4: Assets & Operations
+  // Step 3: Cost Structure
+  salaries: string
+  rentCosts: string
+  marketingCosts: string
+  otherOperatingCosts: string
+  operatingCosts: string
+  
+  // Step 4: Assets & Liabilities
   cash: string
   accountsReceivable: string
   inventory: string
@@ -48,28 +48,43 @@ interface ListingData {
   totalLiabilities: string
   shortTermDebt: string
   longTermDebt: string
-  operatingCosts: string
-  salaries: string
-  rentCosts: string
-  marketingCosts: string
-  otherOperatingCosts: string
   
-  // Step 5: Business Details
+  // Step 5: Customer Base & Business Model
+  numberOfCustomers: string
+  customerConcentrationRisk: string
+  recurringRevenuePercentage: string
+  customerAcquisitionCost: string
+  averageOrderValue: string
+  
+  // Step 6: Market Position
   competitiveAdvantages: string
+  marketSize: string
+  marketShare: string
+  mainCompetitors: string
+  
+  // Step 7: Organization & Risks
+  employees: string
+  keyEmployeeDependency: string
   regulatoryLicenses: string
-  paymentTerms: string
+  mainRisks: string
+  website: string
+  address: string
+  
+  // Step 8: Future Outlook & Listing Details
+  growthPotential: string
+  expansionPlans: string
   whySelling: string
   idealBuyer: string
+  companyAge: string
+  askingPrice: string
   
-  // Step 6: Listing Details
+  // Additional listing-specific fields
   anonymousTitle: string
   description: string
-  askingPrice: string
   priceMin: string
   priceMax: string
   images: string[]
-  
-  // Package selection
+  paymentTerms: string
   packageType: 'basic' | 'pro' | 'enterprise'
 }
 
@@ -77,7 +92,7 @@ interface WizardProps {
   onClose?: () => void
 }
 
-const INDUSTRIES = [
+const industries = [
   { value: 'restaurant', label: 'Restaurang & Mat' },
   { value: 'retail', label: 'Detaljhandel' },
   { value: 'webshop', label: 'E-handel' },
@@ -108,44 +123,46 @@ const EMPLOYEE_RANGES = [
 
 const PACKAGES = [
   {
-    id: 'basic',
-    name: 'Bas',
-    price: 4900,
+    id: 'basic' as const,
+    name: 'Basic',
+    price: 0,
     features: [
-      'Publiceras i 30 dagar',
-      'Grundläggande exponering',
-      'Upp till 5 bilder',
-      'Email-support'
+      'Grundläggande annons',
+      'Synlig i 30 dagar',
+      '5 bilder',
+      'Anonymt kontaktformulär',
+      'Statistik över visningar'
     ],
     recommended: false
   },
   {
-    id: 'pro',
-    name: 'Professional',
-    price: 9900,
+    id: 'pro' as const,
+    name: 'Pro',
+    price: 4995,
     features: [
-      'Publiceras i 60 dagar',
-      'Prioriterad exponering',
-      'Upp till 20 bilder',
-      'Dedikerad säljcoach',
-      'Veckovis statistik',
-      'NDA-hantering'
+      'Framhävd annons',
+      'Synlig i 90 dagar',
+      '20 bilder + video',
+      'Direkt kontakt med köpare',
+      'Detaljerad statistik',
+      'NDA-hantering',
+      'Prioriterad support'
     ],
     recommended: true
   },
   {
-    id: 'enterprise',
+    id: 'enterprise' as const,
     name: 'Enterprise',
-    price: 19900,
+    price: 9995,
     features: [
-      'Publiceras i 90 dagar',
-      'Maximum exponering',
-      'Obegränsat med bilder',
-      'Personlig säljrådgivare',
-      'Daglig statistik',
-      'Due diligence-stöd',
-      'Förhandlingsstöd',
-      'Juridisk rådgivning (2h)'
+      'Premium placering',
+      'Synlig tills såld',
+      'Obegränsat med bilder/video',
+      'Personlig säljcoach',
+      'Due diligence stöd',
+      'Juridisk rådgivning (2h)',
+      'Marknadsföring på LinkedIn',
+      'Garanterad exponering'
     ],
     recommended: false
   }
@@ -159,7 +176,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   const locale = useLocale()
   const formRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  
+
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isEnriching, setIsEnriching] = useState(false)
@@ -167,23 +184,24 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   const [acceptedPrivacy, setAcceptedPrivacy] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [uploadingImages, setUploadingImages] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
   
   const [data, setData] = useState<ListingData>({
     email: user?.email || '',
     companyName: '',
     orgNumber: '',
-    website: '',
     industry: '',
-    companyAge: '',
-    employees: '',
-    address: '',
     revenue: '',
     revenue3Years: '',
     revenueGrowthRate: '',
     ebitda: '',
     profitMargin: '',
     grossMargin: '',
-    customerConcentrationRisk: '',
+    salaries: '',
+    rentCosts: '',
+    marketingCosts: '',
+    otherOperatingCosts: '',
+    operatingCosts: '',
     cash: '',
     accountsReceivable: '',
     inventory: '',
@@ -191,187 +209,262 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
     totalLiabilities: '',
     shortTermDebt: '',
     longTermDebt: '',
-    operatingCosts: '',
-    salaries: '',
-    rentCosts: '',
-    marketingCosts: '',
-    otherOperatingCosts: '',
+    numberOfCustomers: '',
+    customerConcentrationRisk: '',
+    recurringRevenuePercentage: '',
+    customerAcquisitionCost: '',
+    averageOrderValue: '',
     competitiveAdvantages: '',
+    marketSize: '',
+    marketShare: '',
+    mainCompetitors: '',
+    employees: '',
+    keyEmployeeDependency: '',
     regulatoryLicenses: '',
-    paymentTerms: '',
+    mainRisks: '',
+    website: '',
+    address: '',
+    growthPotential: '',
+    expansionPlans: '',
     whySelling: '',
     idealBuyer: '',
+    companyAge: '',
+    askingPrice: '',
     anonymousTitle: '',
     description: '',
-    askingPrice: '',
     priceMin: '',
     priceMax: '',
-    packageType: 'pro',
-    images: []
+    images: [],
+    paymentTerms: '',
+    packageType: 'pro'
   })
 
-  const totalSteps = 7 // 6 data steps + 1 preview
-  const progress = (currentStep / totalSteps) * 100
+  const steps = [
+    'Grundläggande information',
+    'Finansiell information',
+    'Kostnadsstruktur',
+    'Tillgångar & Skulder',
+    'Kundbas & Affärsmodell',
+    'Marknadsposition',
+    'Organisation & Risker',
+    'Framtidsutsikter'
+  ]
+  const totalSteps = steps.length + 1 // +1 for preview
+  const progress = showPreview ? 100 : (currentStep / steps.length) * 100
 
   const updateData = <K extends keyof ListingData>(field: K, value: ListingData[K]) => {
     setData(prev => ({ ...prev, [field]: value }))
+    if (errors[field]) {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        delete newErrors[field]
+        return newErrors
+      })
+    }
   }
 
-  // Format currency values for display
-  const formatValue = (value: string | number | undefined): string => {
-    if (!value) return ''
-    const num = typeof value === 'string' ? parseFloat(value) : value
-    if (isNaN(num)) return ''
-    return num.toLocaleString('sv-SE')
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {}
+
+    switch (step) {
+      case 1:
+        if (!data.email) newErrors.email = 'E-post krävs'
+        if (!data.companyName) newErrors.companyName = 'Företagsnamn krävs'
+        if (!data.industry) newErrors.industry = 'Bransch krävs'
+        break
+      case 2:
+        if (!data.revenue) newErrors.revenue = 'Omsättning krävs'
+        if (!data.profitMargin) newErrors.profitMargin = 'Vinstmarginal krävs'
+        break
+      case 3:
+        if (!data.salaries && !data.rentCosts && !data.marketingCosts && !data.otherOperatingCosts) {
+          newErrors.costs = 'Minst en kostnadskategori krävs'
+        }
+        break
+      case 8:
+        if (!data.askingPrice) newErrors.askingPrice = 'Begärt pris krävs'
+        if (!data.anonymousTitle) newErrors.anonymousTitle = 'Annonsen behöver en titel'
+        if (!data.description) newErrors.description = 'Annonsen behöver en beskrivning'
+        break
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
 
-  // Auto-enrich data when org number is entered
+  const handleNext = () => {
+    if (currentStep === steps.length) {
+      // Last step - show preview
+      if (validateStep(currentStep)) {
+        setShowPreview(true)
+      }
+    } else if (validateStep(currentStep)) {
+      setCurrentStep(currentStep + 1)
+      formRef.current?.scrollTo(0, 0)
+    }
+  }
+
+  const handlePrev = () => {
+    if (showPreview) {
+      setShowPreview(false)
+    } else if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+      formRef.current?.scrollTo(0, 0)
+    }
+  }
+
   const handleEnrichData = async () => {
-    if (!data.orgNumber || data.orgNumber.length < 10) return
+    const sanitizedOrgNumber = data.orgNumber?.replace(/\D/g, '')
+    const normalizedOrgNumber =
+      sanitizedOrgNumber && sanitizedOrgNumber.length === 12
+        ? sanitizedOrgNumber.slice(-10)
+        : sanitizedOrgNumber
+    
+    if (isEnriching || (!normalizedOrgNumber && !data.website)) return
     
     setIsEnriching(true)
     setEnrichmentStatus('Hämtar företagsdata...')
     
     try {
-      // Clean org number - remove non-digits and normalize
-      const cleanOrgNumber = data.orgNumber.replace(/\D/g, '')
-      const normalizedOrgNumber = cleanOrgNumber.length === 12 
-        ? cleanOrgNumber.slice(-10) 
-        : cleanOrgNumber
-      
       const response = await fetch('/api/enrich-company', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orgNumber: normalizedOrgNumber })
+        body: JSON.stringify({
+          orgNumber: normalizedOrgNumber,
+          website: data.website,
+          industry: data.industry
+        })
       })
       
       if (response.ok) {
         const enrichedData = await response.json()
+        console.log('Enrichment data received:', enrichedData)
         
-        // Auto-fill fields with enriched data
-        const autoFillFields = enrichedData.autoFill || {}
-        const newData: Partial<ListingData> = {}
+        // Always fill fields if data is available, overwriting existing values
+        const updates: Partial<ListingData> = {}
+        const fieldsToUpdate = []
         
-        console.log('Enrichment data received:', {
-          companyName: autoFillFields.companyName,
-          industry: autoFillFields.industry,
-          revenue: autoFillFields.revenue,
-          employees: autoFillFields.employees,
-        })
-        
-        // Fill all available fields
-        if (autoFillFields.companyName) {
-          newData.companyName = autoFillFields.companyName
-        }
-        if (autoFillFields.industry) {
-          newData.industry = autoFillFields.industry
-        }
-        if (autoFillFields.address) {
-          newData.address = autoFillFields.address
-        }
-        if (autoFillFields.companyAge) {
-          newData.companyAge = autoFillFields.companyAge
-        }
-        if (autoFillFields.employees) {
-          newData.employees = autoFillFields.employees
-        }
-        
-        // Revenue data
-        if (autoFillFields.exactRevenue) {
-          newData.revenue = autoFillFields.exactRevenue.toString()
-        } else if (autoFillFields.revenue) {
-          newData.revenue = autoFillFields.revenue.toString()
-        } else if (autoFillFields.revenue2024) {
-          newData.revenue = autoFillFields.revenue2024.toString()
-        }
-        
-        // Calculate metrics
-        if (autoFillFields.profit !== undefined) {
-          const profit = Number(autoFillFields.profit)
-          const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
-          if (revenue > 0) {
-            const profitMargin = (profit / revenue) * 100
-            newData.profitMargin = profitMargin.toFixed(1)
+        if (enrichedData.autoFill) {
+          if (enrichedData.autoFill.companyName) {
+            updates.companyName = enrichedData.autoFill.companyName
+            fieldsToUpdate.push('företagsnamn')
           }
-        }
-        
-        // EBITDA
-        if (autoFillFields.ebitda) {
-          newData.ebitda = autoFillFields.ebitda.toString()
-        } else if (autoFillFields.profit !== undefined) {
-          const profit = Number(autoFillFields.profit)
-          const revenue = Number(autoFillFields.revenue || autoFillFields.exactRevenue || autoFillFields.revenue2024 || 0)
-          if (revenue > 0) {
-            const estimatedEBITDA = profit + (revenue * 0.03)
-            if (estimatedEBITDA > 0) {
-              newData.ebitda = Math.round(estimatedEBITDA).toString()
+          if (enrichedData.autoFill.industry) {
+            updates.industry = enrichedData.autoFill.industry
+            fieldsToUpdate.push('bransch')
+          }
+          if (enrichedData.autoFill.address) {
+            updates.address = enrichedData.autoFill.address
+            fieldsToUpdate.push('adress')
+          }
+          
+          // Revenue - prioritize exactRevenue > revenue > revenue2024
+          const revenue = enrichedData.autoFill.exactRevenue || 
+                         enrichedData.autoFill.revenue || 
+                         enrichedData.autoFill.revenue2024
+          if (revenue) {
+            updates.revenue = revenue
+            fieldsToUpdate.push('omsättning')
+          }
+          
+          if (enrichedData.autoFill.employees) {
+            updates.employees = enrichedData.autoFill.employees
+            fieldsToUpdate.push('antal anställda')
+          }
+          if (enrichedData.autoFill.website) {
+            updates.website = enrichedData.autoFill.website
+            fieldsToUpdate.push('webbplats')
+          }
+          
+          // Calculate profit margin and EBITDA if revenue is available
+          if (revenue && enrichedData.autoFill.profit) {
+            const profitMargin = Math.round((parseFloat(enrichedData.autoFill.profit) / parseFloat(revenue)) * 100)
+            updates.profitMargin = profitMargin.toString()
+            fieldsToUpdate.push('vinstmarginal')
+            
+            // Estimate EBITDA as profit * 1.3 (rough approximation)
+            const estimatedEbitda = Math.round(parseFloat(enrichedData.autoFill.profit) * 1.3)
+            updates.ebitda = estimatedEbitda.toString()
+            fieldsToUpdate.push('EBITDA (estimerat)')
+          }
+          
+          // Balance sheet data
+          if (enrichedData.autoFill.totalAssets) {
+            updates.totalAssets = enrichedData.autoFill.totalAssets
+            fieldsToUpdate.push('totala tillgångar')
+          }
+          if (enrichedData.autoFill.equity) {
+            // Calculate total liabilities from assets - equity
+            if (enrichedData.autoFill.totalAssets) {
+              const liabilities = parseFloat(enrichedData.autoFill.totalAssets) - parseFloat(enrichedData.autoFill.equity)
+              updates.totalLiabilities = Math.max(0, liabilities).toString()
+              fieldsToUpdate.push('totala skulder')
             }
           }
+          
+          // Operating costs
+          if (enrichedData.autoFill.personnelCosts) {
+            updates.salaries = enrichedData.autoFill.personnelCosts
+            fieldsToUpdate.push('lönekostnader')
+          }
+          
+          console.log('Fields to be filled:', fieldsToUpdate)
+          console.log('New data values:', updates)
+          
+          // Apply all updates
+          Object.entries(updates).forEach(([field, value]) => {
+            updateData(field as keyof ListingData, value)
+          })
+          
+          if (fieldsToUpdate.length > 0) {
+            setEnrichmentStatus(`✓ Fyllde i: ${fieldsToUpdate.join(', ')}`)
+          } else {
+            setEnrichmentStatus('Ingen ytterligare data hittades')
+          }
+        } else {
+          setEnrichmentStatus('Ingen data hittades')
         }
-        
-        // Balance sheet data
-        if (autoFillFields.totalAssets) {
-          newData.totalAssets = autoFillFields.totalAssets.toString()
-        }
-        if (autoFillFields.totalLiabilities) {
-          newData.totalLiabilities = autoFillFields.totalLiabilities.toString()
-        }
-        if (autoFillFields.cash) {
-          newData.cash = autoFillFields.cash.toString()
-        }
-        
-        // Update state with all new data
-        console.log('Fields to be filled:', Object.keys(newData))
-        setData(prev => ({ ...prev, ...newData }))
-        
-        // Store enriched data for later use
-        localStorage.setItem('enrichedCompanyData', JSON.stringify(enrichedData))
-        
-        setEnrichmentStatus(`Data hämtad! ${Object.keys(newData).length} fält ifyllda automatiskt.`)
-        setTimeout(() => setEnrichmentStatus(''), 5000)
+      } else {
+        setEnrichmentStatus('Kunde inte hämta data')
       }
     } catch (error) {
       console.error('Enrichment error:', error)
-      setEnrichmentStatus('Kunde inte hämta data')
+      setEnrichmentStatus('Ett fel uppstod')
     } finally {
       setIsEnriching(false)
+      setTimeout(() => setEnrichmentStatus(''), 5000)
     }
   }
 
-  // Auto-enrich when org number is entered
+  // Auto-enrich when org number changes
   useEffect(() => {
-    const orgNumber = data.orgNumber?.replace(/\D/g, '')
+    const sanitizedOrgNumber = data.orgNumber?.replace(/\D/g, '')
     const normalizedOrgNumber =
-      orgNumber && orgNumber.length === 12 ? orgNumber.slice(-10) : orgNumber
+      sanitizedOrgNumber && sanitizedOrgNumber.length === 12
+        ? sanitizedOrgNumber.slice(-10)
+        : sanitizedOrgNumber
     
-    if (
-      normalizedOrgNumber &&
-      normalizedOrgNumber.length === 10 &&
-      !isEnriching &&
-      !enrichmentStatus
-    ) {
+    if (normalizedOrgNumber && (normalizedOrgNumber.length === 10 || normalizedOrgNumber.length === 12)) {
       const timer = setTimeout(() => {
         handleEnrichData()
-      }, 1000)
+      }, 500)
       
       return () => clearTimeout(timer)
     }
   }, [data.orgNumber])
 
-  // Generate anonymous title
+  // Generate title suggestion based on inputs
   useEffect(() => {
     if (data.industry && data.revenue) {
-      const industryName = INDUSTRIES.find(i => i.value === data.industry)?.label || 'Företag'
-      const revenueNum = parseFloat(data.revenue) || 0
-      const revenueText = revenueNum >= 1000000 ? `${(revenueNum / 1000000).toFixed(1)}M SEK` : `${(revenueNum / 1000).toFixed(0)}k SEK`
-      setData(prev => ({ 
-        ...prev, 
-        anonymousTitle: `${industryName} med ${revenueText} i omsättning` 
-      }))
+      const industryLabel = industries.find(i => i.value === data.industry)?.label || data.industry
+      const revenueMSEK = Math.round(Number(data.revenue) / 1000000)
+      
+      if (revenueMSEK > 0 && !data.anonymousTitle) {
+        updateData('anonymousTitle', `${industryLabel} med ${revenueMSEK} MSEK i omsättning`)
+      }
     }
   }, [data.industry, data.revenue])
 
-  // Image upload handling
   const handleImageUpload = async (files: FileList) => {
     setUploadingImages(true)
     
@@ -456,12 +549,12 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         }
       }
       
-      // Validate that we have a userId
-      if (!finalUserId) {
-        showError('Kunde inte hämta användar-ID. Vänligen logga in först.')
-        setIsSubmitting(false)
-        return
-      }
+      // Calculate total operating costs
+      const totalOperatingCosts = 
+        Number(data.salaries || 0) + 
+        Number(data.rentCosts || 0) + 
+        Number(data.marketingCosts || 0) + 
+        Number(data.otherOperatingCosts || 0)
       
       // Create listing
       const response = await fetch('/api/listings', {
@@ -469,47 +562,30 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...data,
+          operatingCosts: totalOperatingCosts.toString(),
           userId: finalUserId,
-          status: 'draft',
-          createdAt: new Date().toISOString()
+          status: 'active',
+          views: 0
         })
       })
       
       if (response.ok) {
-        const listing = await response.json()
-        success('Annons skapad!')
+        success('Annons skapad! Du dirigeras nu till din annons.')
+        const { listing } = await response.json()
         
-        // Redirect to checkout if not free
-        if (data.packageType !== 'basic') {
-          router.push(`/${locale}/checkout?listingId=${listing.id}&package=${data.packageType}`)
-        } else {
-          router.push(`/${locale}/dashboard/listings`)
-        }
+        // Redirect to the created listing
+        setTimeout(() => {
+          router.push(`/${locale}/objekt/${listing.id}`)
+        }, 2000)
       } else {
-        showError('Kunde inte skapa annons')
+        const error = await response.json()
+        showError(error.message || 'Kunde inte skapa annons')
+        setIsSubmitting(false)
       }
     } catch (error) {
       console.error('Submit error:', error)
       showError('Ett fel uppstod')
-    } finally {
       setIsSubmitting(false)
-    }
-  }
-
-  const handleNext = () => {
-    if (currentStep === 6) {
-      // Show preview instead of going to step 7
-      setShowPreview(true)
-    } else if (currentStep < 6) {
-      setCurrentStep(currentStep + 1)
-    }
-  }
-
-  const handlePrev = () => {
-    if (showPreview) {
-      setShowPreview(false)
-    } else if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
     }
   }
 
@@ -519,16 +595,27 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2">Grundläggande information</h2>
-              <p className="text-gray-600">Låt oss börja med grunderna om ditt företag</p>
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Grundläggande information</h2>
+              <p className="text-gray-600">Låt oss börja med det mest grundläggande om ditt företag</p>
             </div>
             
-            {/* Organization number first for auto-fill */}
+            <FormField
+              label="Din e-postadress"
+              type="email"
+              value={data.email}
+              onChange={(value) => updateData('email', value)}
+              placeholder="din@email.com"
+              required
+              error={errors.email}
+              disabled={!!user}
+            />
+            
             <FormField
               label="Organisationsnummer (valfritt)"
               value={data.orgNumber}
-              onValueChange={(value) => updateData('orgNumber', value)}
-              placeholder="XXXXXX-XXXX"
+              onChange={(value) => updateData('orgNumber', value)}
+              placeholder="556123-4567"
+              tooltip="Vi hämtar automatiskt offentlig data"
             />
             
             {enrichmentStatus && (
@@ -540,36 +627,30 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             <FormField
               label="Företagsnamn"
               value={data.companyName}
-              onValueChange={(value) => updateData('companyName', value)}
+              onChange={(value) => updateData('companyName', value)}
               placeholder="AB Exempel"
               required
+              error={errors.companyName}
             />
             
-            <FormField
-              label="E-postadress"
-              type="email"
-              value={data.email}
-              onValueChange={(value) => updateData('email', value)}
-              placeholder="din@email.se"
+            <ModernSelect
+              label="Bransch"
+              options={industries}
+              value={data.industry}
+              onChange={(value) => updateData('industry', value)}
               required
-              disabled={!!user}
-            />
-            
-            <FormField
-              label="Webbplats"
-              value={data.website}
-              onValueChange={(value) => updateData('website', value)}
-              placeholder="https://exempel.se"
+              error={errors.industry}
+              helperText="Välj den bransch som bäst beskriver er verksamhet"
             />
             
             {!user && (
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200 mt-6">
                 <label className="flex items-start cursor-pointer">
                   <input
                     type="checkbox"
                     checked={acceptedPrivacy}
                     onChange={(e) => setAcceptedPrivacy(e.target.checked)}
-                    className="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="ml-3 text-sm text-gray-700">
                     Jag godkänner{' '}
@@ -591,58 +672,17 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2">Företagsöversikt</h2>
-              <p className="text-gray-600">Berätta mer om din verksamhet</p>
-            </div>
-            
-            <ModernSelect
-              label="Bransch"
-              value={data.industry}
-              onChange={(value) => updateData('industry', value)}
-              options={INDUSTRIES}
-              required
-            />
-            
-            <FormField
-              label="Företagets ålder"
-              value={data.companyAge}
-              onValueChange={(value) => updateData('companyAge', value)}
-              placeholder="T.ex. 5"
-              type="number"
-              required
-            />
-            
-            <ModernSelect
-              label="Antal anställda"
-              value={data.employees}
-              onChange={(value) => updateData('employees', value)}
-              options={EMPLOYEE_RANGES}
-              required
-            />
-            
-            <FormField
-              label="Adress"
-              value={data.address}
-              onValueChange={(value) => updateData('address', value)}
-              placeholder="Gatuadress, Postnummer Ort"
-            />
-          </div>
-        )
-
-      case 3:
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2">Finansiell information</h2>
-              <p className="text-gray-600">Hjälper köpare förstå företagets ekonomiska status</p>
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Finansiell information</h2>
+              <p className="text-gray-600">Hjälp oss förstå företagets ekonomiska ställning</p>
             </div>
             
             <FormFieldCurrency
-              label="Årlig omsättning"
+              label="Årsomsättning"
               value={data.revenue}
               onChange={(value) => updateData('revenue', value)}
               placeholder="0"
               required
+              error={errors.revenue}
               helpText="Senaste räkenskapsårets omsättning"
             />
             
@@ -651,15 +691,15 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.revenue3Years}
               onChange={(value) => updateData('revenue3Years', value)}
               placeholder="0"
-              helpText="Hjälper visa stabilitet över tid"
+              helpText="Visar stabilitet över tid"
             />
             
             <FormFieldPercent
-              label="Omsättningstillväxt"
+              label="Årlig omsättningstillväxt"
               value={data.revenueGrowthRate}
               onChange={(value) => updateData('revenueGrowthRate', value)}
               placeholder="0"
-              helpText="Årlig tillväxttakt"
+              helpText="Genomsnittlig tillväxt per år"
             />
             
             <FormFieldCurrency
@@ -667,8 +707,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.ebitda}
               onChange={(value) => updateData('ebitda', value)}
               placeholder="0"
-              helpText="Resultat före räntor, skatt och avskrivningar"
-              tooltip="EBITDA = Rörelseresultat + Avskrivningar. Visar företagets operativa lönsamhet."
+              helpText="Resultat före räntor, skatt, nedskrivningar och avskrivningar"
+              tooltip="EBITDA = Rörelseresultat + Avskrivningar. Visar företagets operativa lönsamhet utan påverkan av finansiering och redovisningsval."
             />
             
             <FormFieldPercent
@@ -676,6 +716,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               value={data.profitMargin}
               onChange={(value) => updateData('profitMargin', value)}
               placeholder="0"
+              required
+              error={errors.profitMargin}
               helpText="Nettovinst / Omsättning"
             />
             
@@ -689,15 +731,70 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
           </div>
         )
 
+      case 3:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Kostnadsstruktur</h2>
+              <p className="text-gray-600">Hur ser företagets kostnader ut?</p>
+            </div>
+            
+            {errors.costs && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800">
+                {errors.costs}
+              </div>
+            )}
+            
+            <FormFieldCurrency
+              label="Lönekostnader (inkl. sociala avgifter)"
+              value={data.salaries}
+              onChange={(value) => updateData('salaries', value)}
+              placeholder="0"
+              helpText="Totala personalkostnader per år"
+            />
+            
+            <FormFieldCurrency
+              label="Lokalhyra"
+              value={data.rentCosts}
+              onChange={(value) => updateData('rentCosts', value)}
+              placeholder="0"
+              helpText="Årlig hyreskostnad för lokaler"
+            />
+            
+            <FormFieldCurrency
+              label="Marknadsföringskostnader"
+              value={data.marketingCosts}
+              onChange={(value) => updateData('marketingCosts', value)}
+              placeholder="0"
+              helpText="Årliga kostnader för marknadsföring och försäljning"
+            />
+            
+            <FormFieldCurrency
+              label="Övriga driftskostnader"
+              value={data.otherOperatingCosts}
+              onChange={(value) => updateData('otherOperatingCosts', value)}
+              placeholder="0"
+              helpText="Alla andra löpande kostnader"
+            />
+            
+            <div className="bg-blue-50 p-4 rounded-lg mb-6">
+              <p className="text-sm text-blue-800">
+                💡 Tips: Detaljerade kostnadssiffror hjälper köpare att förstå lönsamhetspotentialen
+              </p>
+            </div>
+          </div>
+        )
+
       case 4:
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2">Tillgångar & Drift</h2>
-              <p className="text-gray-600">Detaljerad information om balansräkning och kostnader</p>
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Tillgångar & Skulder</h2>
+              <p className="text-gray-600">Företagets balansräkning</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
+            <h3 className="font-semibold text-lg mb-4">Tillgångar</h3>
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
               <FormFieldCurrency
                 label="Kassa & Bank"
                 value={data.cash}
@@ -724,13 +821,18 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 value={data.totalAssets}
                 onChange={(value) => updateData('totalAssets', value)}
                 placeholder="0"
+                helpText="Summa av alla tillgångar"
               />
-              
+            </div>
+            
+            <h3 className="font-semibold text-lg mb-4">Skulder</h3>
+            <div className="grid md:grid-cols-2 gap-4">
               <FormFieldCurrency
                 label="Kortfristiga skulder"
                 value={data.shortTermDebt}
                 onChange={(value) => updateData('shortTermDebt', value)}
                 placeholder="0"
+                helpText="Skulder som förfaller inom 1 år"
               />
               
               <FormFieldCurrency
@@ -738,40 +840,15 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 value={data.longTermDebt}
                 onChange={(value) => updateData('longTermDebt', value)}
                 placeholder="0"
-              />
-            </div>
-            
-            <hr className="my-8" />
-            
-            <h3 className="font-semibold mb-4">Driftskostnader</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <FormFieldCurrency
-                label="Lönekostnader"
-                value={data.salaries}
-                onChange={(value) => updateData('salaries', value)}
-                placeholder="0"
-                helpText="Inkl. sociala avgifter"
+                helpText="Skulder som förfaller efter 1 år"
               />
               
               <FormFieldCurrency
-                label="Lokalhyra"
-                value={data.rentCosts}
-                onChange={(value) => updateData('rentCosts', value)}
+                label="Totala skulder"
+                value={data.totalLiabilities}
+                onChange={(value) => updateData('totalLiabilities', value)}
                 placeholder="0"
-              />
-              
-              <FormFieldCurrency
-                label="Marknadsföring"
-                value={data.marketingCosts}
-                onChange={(value) => updateData('marketingCosts', value)}
-                placeholder="0"
-              />
-              
-              <FormFieldCurrency
-                label="Övriga driftskostnader"
-                value={data.otherOperatingCosts}
-                onChange={(value) => updateData('otherOperatingCosts', value)}
-                placeholder="0"
+                helpText="Summa av alla skulder"
               />
             </div>
           </div>
@@ -781,8 +858,61 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2">Affärsdetaljer</h2>
-              <p className="text-gray-600">Vad gör ditt företag unikt?</p>
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Kundbas & Affärsmodell</h2>
+              <p className="text-gray-600">Information om era kunder och intäktsmodell</p>
+            </div>
+            
+            <FormField
+              label="Antal kunder"
+              value={data.numberOfCustomers}
+              onChange={(value) => updateData('numberOfCustomers', value)}
+              placeholder="T.ex. 150"
+              type="number"
+            />
+            
+            <ModernSelect
+              label="Kundkoncentrationsrisk"
+              options={[
+                { value: 'low', label: 'Låg - Ingen kund > 10% av omsättning' },
+                { value: 'medium', label: 'Medel - Största kund 10-25% av omsättning' },
+                { value: 'high', label: 'Hög - Största kund > 25% av omsättning' }
+              ]}
+              value={data.customerConcentrationRisk}
+              onChange={(value) => updateData('customerConcentrationRisk', value)}
+              helperText="Hur beroende är ni av era största kunder?"
+            />
+            
+            <FormFieldPercent
+              label="Andel återkommande intäkter"
+              value={data.recurringRevenuePercentage}
+              onChange={(value) => updateData('recurringRevenuePercentage', value)}
+              placeholder="0"
+              helpText="T.ex. prenumerationer, serviceavtal"
+            />
+            
+            <FormFieldCurrency
+              label="Kundanskaffningskostnad (CAC)"
+              value={data.customerAcquisitionCost}
+              onChange={(value) => updateData('customerAcquisitionCost', value)}
+              placeholder="0"
+              helpText="Genomsnittlig kostnad för att få en ny kund"
+            />
+            
+            <FormFieldCurrency
+              label="Genomsnittligt ordervärde"
+              value={data.averageOrderValue}
+              onChange={(value) => updateData('averageOrderValue', value)}
+              placeholder="0"
+            />
+          </div>
+        )
+
+      case 6:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Marknadsposition</h2>
+              <p className="text-gray-600">Er position på marknaden och konkurrenslandskap</p>
             </div>
             
             <FormTextarea
@@ -793,101 +923,180 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               rows={3}
             />
             
-            <FormField
-              label="Tillstånd & Licenser"
-              value={data.regulatoryLicenses}
-              onValueChange={(value) => updateData('regulatoryLicenses', value)}
-              placeholder="T.ex. alkoholtillstånd, transporttillstånd"
+            <FormFieldCurrency
+              label="Marknadsstorlek"
+              value={data.marketSize}
+              onChange={(value) => updateData('marketSize', value)}
+              placeholder="0"
+              helpText="Uppskattad total marknad i SEK"
+            />
+            
+            <FormFieldPercent
+              label="Marknadsandel"
+              value={data.marketShare}
+              onChange={(value) => updateData('marketShare', value)}
+              placeholder="0"
+              helpText="Er andel av totalmarknaden"
+            />
+            
+            <FormTextarea
+              label="Huvudkonkurrenter"
+              value={data.mainCompetitors}
+              onChange={(e) => updateData('mainCompetitors', e.target.value)}
+              placeholder="Lista era huvudsakliga konkurrenter"
+              rows={2}
+            />
+          </div>
+        )
+
+      case 7:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Organisation & Risker</h2>
+              <p className="text-gray-600">Information om företagets struktur och potentiella risker</p>
+            </div>
+            
+            <ModernSelect
+              label="Antal anställda"
+              options={EMPLOYEE_RANGES}
+              value={data.employees}
+              onChange={(value) => updateData('employees', value)}
+              required
+            />
+            
+            <ModernSelect
+              label="Nyckelpersonsberoende"
+              options={[
+                { value: 'low', label: 'Lågt - Verksamheten klarar sig utan enskilda personer' },
+                { value: 'medium', label: 'Medel - Vissa nyckelpersoner är viktiga men ersättbara' },
+                { value: 'high', label: 'Högt - Verksamheten är beroende av ägaren/nyckelpersoner' }
+              ]}
+              value={data.keyEmployeeDependency}
+              onChange={(value) => updateData('keyEmployeeDependency', value)}
             />
             
             <FormField
-              label="Betalningsvillkor"
-              value={data.paymentTerms}
-              onValueChange={(value) => updateData('paymentTerms', value)}
-              placeholder="T.ex. 30 dagar netto"
+              label="Tillstånd & Licenser"
+              value={data.regulatoryLicenses}
+              onChange={(value) => updateData('regulatoryLicenses', value)}
+              placeholder="T.ex. F-skatt, serveringstillstånd, ISO-certifiering"
+            />
+            
+            <FormTextarea
+              label="Huvudsakliga risker"
+              value={data.mainRisks}
+              onChange={(e) => updateData('mainRisks', e.target.value)}
+              placeholder="Beskriv potentiella risker och hur de hanteras"
+              rows={3}
+            />
+            
+            <FormField
+              label="Webbplats"
+              value={data.website}
+              onChange={(value) => updateData('website', value)}
+              placeholder="https://exempel.se"
+            />
+            
+            <FormField
+              label="Företagets adress"
+              value={data.address}
+              onChange={(value) => updateData('address', value)}
+              placeholder="Gatuadress, Postnummer Ort"
+            />
+          </div>
+        )
+
+      case 8:
+        return (
+          <div className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-primary-navy mb-2">Framtidsutsikter & Annonsdetaljer</h2>
+              <p className="text-gray-600">Potential, planer och hur din annons ska se ut</p>
+            </div>
+            
+            <ModernSelect
+              label="Tillväxtpotential"
+              options={[
+                { value: 'high', label: 'Hög - Stark tillväxt förväntas' },
+                { value: 'moderate', label: 'Måttlig - Stabil tillväxt möjlig' },
+                { value: 'low', label: 'Låg - Mogen verksamhet med begränsad tillväxt' }
+              ]}
+              value={data.growthPotential}
+              onChange={(value) => updateData('growthPotential', value)}
+            />
+            
+            <FormTextarea
+              label="Expansionsplaner"
+              value={data.expansionPlans}
+              onChange={(e) => updateData('expansionPlans', e.target.value)}
+              placeholder="Beskriv möjliga tillväxtområden och expansionsplaner"
+              rows={2}
             />
             
             <FormTextarea
               label="Anledning till försäljning"
               value={data.whySelling}
               onChange={(e) => updateData('whySelling', e.target.value)}
-              placeholder="Beskriv varför företaget är till salu"
-              rows={3}
-              required
+              placeholder="Förklara varför företaget är till salu"
+              rows={2}
             />
             
             <FormTextarea
               label="Ideal köpare"
               value={data.idealBuyer}
               onChange={(e) => updateData('idealBuyer', e.target.value)}
-              placeholder="Beskriv vem som skulle vara en bra köpare för företaget"
-              rows={3}
+              placeholder="Beskriv vem som skulle vara en bra köpare"
+              rows={2}
             />
-            
-            <ModernSelect
-              label="Kundberoende"
-              value={data.customerConcentrationRisk}
-              onChange={(value) => updateData('customerConcentrationRisk', value)}
-              options={[
-                { value: 'low', label: 'Låg - Ingen kund står för mer än 10%' },
-                { value: 'medium', label: 'Medel - Största kunden 10-25%' },
-                { value: 'high', label: 'Hög - Största kunden över 25%' }
-              ]}
-            />
-          </div>
-        )
-
-      case 6:
-        return (
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold mb-2">Annonsdetaljer</h2>
-              <p className="text-gray-600">Hur ska din annons presenteras?</p>
-            </div>
             
             <FormField
-              label="Annonstitel (anonym)"
+              label="Företagets ålder (år)"
+              value={data.companyAge}
+              onChange={(value) => updateData('companyAge', value)}
+              placeholder="T.ex. 10"
+              type="number"
+            />
+            
+            <hr className="my-8" />
+            
+            <h3 className="text-lg font-semibold mb-4">Annonsdetaljer</h3>
+            
+            <FormField
+              label="Annonsrubrik"
               value={data.anonymousTitle}
-              onValueChange={(value) => updateData('anonymousTitle', value)}
-              placeholder="T.ex. Lönsam restaurang i Stockholm"
+              onChange={(value) => updateData('anonymousTitle', value)}
+              placeholder="T.ex. Lönsamt IT-konsultbolag med 8 MSEK i omsättning"
               required
+              error={errors.anonymousTitle}
+              tooltip="Detta är rubriken som syns i sökresultaten"
             />
             
             <FormTextarea
-              label="Beskrivning"
+              label="Företagsbeskrivning"
               value={data.description}
               onChange={(e) => updateData('description', e.target.value)}
-              placeholder="Beskriv verksamheten på ett säljande sätt..."
-              rows={6}
+              placeholder="Beskriv företaget, dess verksamhet, position på marknaden och vad som gör det attraktivt för köpare"
+              rows={5}
               required
+              error={errors.description}
             />
-            <p className="text-sm text-gray-500">Tips: Fokusera på möjligheter och styrkor</p>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              <FormFieldCurrency
-                label="Begärt pris (min)"
-                value={data.priceMin}
-                onChange={(value) => updateData('priceMin', value)}
-                placeholder="0"
-                helpText="Lägsta acceptabla pris"
-              />
-              
-              <FormFieldCurrency
-                label="Begärt pris (max)"
-                value={data.priceMax}
-                onChange={(value) => updateData('priceMax', value)}
-                placeholder="0"
-                helpText="Önskat pris"
-              />
-            </div>
             
             <FormFieldCurrency
-              label="Öppningspris"
+              label="Begärt pris"
               value={data.askingPrice}
               onChange={(value) => updateData('askingPrice', value)}
               placeholder="0"
-              helpText="Pris som visas i annonsen"
               required
+              error={errors.askingPrice}
+              helpText="Det pris som visas i annonsen"
+            />
+            
+            <FormField
+              label="Betalningsvillkor"
+              value={data.paymentTerms}
+              onChange={(value) => updateData('paymentTerms', value)}
+              placeholder="T.ex. 30 dagar netto"
             />
             
             {/* Image upload */}
@@ -989,26 +1198,24 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                         ? 'border-blue-600 bg-blue-50'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
-                    onClick={() => updateData('packageType', pkg.id as any)}
+                    onClick={() => updateData('packageType', pkg.id)}
                   >
                     {pkg.recommended && (
-                      <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-3 py-1 rounded-full">
-                        Rekommenderas
+                      <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-3 py-1 text-xs rounded-full">
+                        Rekommenderad
                       </span>
                     )}
                     
-                    <div className="text-center mb-4">
-                      <h3 className="font-semibold text-lg">{pkg.name}</h3>
-                      <p className="text-2xl font-bold mt-2">
-                        {formatCurrency(pkg.price)}
-                      </p>
-                    </div>
+                    <h4 className="font-semibold text-lg mb-2">{pkg.name}</h4>
+                    <p className="text-2xl font-bold mb-4">
+                      {pkg.price === 0 ? 'Gratis' : `${pkg.price.toLocaleString('sv-SE')} kr`}
+                    </p>
                     
-                    <ul className="space-y-2 text-sm">
-                      {pkg.features.map((feature, i) => (
-                        <li key={i} className="flex items-start">
+                    <ul className="space-y-2">
+                      {pkg.features.map((feature, index) => (
+                        <li key={index} className="flex items-start text-sm">
                           <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{feature}</span>
+                          <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -1018,7 +1225,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
             </div>
           </div>
         )
-
+        
       default:
         return null
     }
@@ -1196,24 +1403,92 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                       </dl>
                     </div>
                   </div>
+                  
+                  {/* Operating costs */}
+                  {(data.salaries || data.rentCosts || data.marketingCosts || data.otherOperatingCosts) && (
+                    <div className="mt-6 pt-6 border-t">
+                      <h3 className="font-medium text-gray-700 mb-3">Driftskostnader</h3>
+                      <dl className="space-y-2">
+                        {data.salaries && (
+                          <div className="flex justify-between">
+                            <dt className="text-gray-600">Lönekostnader:</dt>
+                            <dd className="font-medium">{formatCurrency(data.salaries)}</dd>
+                          </div>
+                        )}
+                        {data.rentCosts && (
+                          <div className="flex justify-between">
+                            <dt className="text-gray-600">Lokalhyra:</dt>
+                            <dd className="font-medium">{formatCurrency(data.rentCosts)}</dd>
+                          </div>
+                        )}
+                        {data.marketingCosts && (
+                          <div className="flex justify-between">
+                            <dt className="text-gray-600">Marknadsföring:</dt>
+                            <dd className="font-medium">{formatCurrency(data.marketingCosts)}</dd>
+                          </div>
+                        )}
+                      </dl>
+                    </div>
+                  )}
                 </div>
                 
                 {/* Business details */}
-                {(data.competitiveAdvantages || data.whySelling) && (
+                <div className="bg-white rounded-lg shadow-lg p-8">
+                  <h2 className="text-xl font-semibold mb-6">Affärsdetaljer</h2>
+                  
+                  {data.competitiveAdvantages && (
+                    <div className="mb-6">
+                      <h3 className="font-medium text-gray-700 mb-2">Konkurrensfördelar</h3>
+                      <p className="text-gray-600 whitespace-pre-wrap">{data.competitiveAdvantages}</p>
+                    </div>
+                  )}
+                  
+                  {data.whySelling && (
+                    <div className="mb-6">
+                      <h3 className="font-medium text-gray-700 mb-2">Anledning till försäljning</h3>
+                      <p className="text-gray-600 whitespace-pre-wrap">{data.whySelling}</p>
+                    </div>
+                  )}
+                  
+                  {data.idealBuyer && (
+                    <div className="mb-6">
+                      <h3 className="font-medium text-gray-700 mb-2">Ideal köpare</h3>
+                      <p className="text-gray-600 whitespace-pre-wrap">{data.idealBuyer}</p>
+                    </div>
+                  )}
+                  
+                  {data.customerConcentrationRisk && (
+                    <div>
+                      <h3 className="font-medium text-gray-700 mb-2">Kundkoncentration</h3>
+                      <p className="text-gray-600">
+                        {data.customerConcentrationRisk === 'low' && 'Låg risk - välspridd kundbas'}
+                        {data.customerConcentrationRisk === 'medium' && 'Medel risk - viss koncentration'}
+                        {data.customerConcentrationRisk === 'high' && 'Hög risk - beroende av få kunder'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Growth and future */}
+                {(data.growthPotential || data.expansionPlans) && (
                   <div className="bg-white rounded-lg shadow-lg p-8">
-                    <h2 className="text-xl font-semibold mb-6">Affärsdetaljer</h2>
+                    <h2 className="text-xl font-semibold mb-6">Framtidsutsikter</h2>
                     
-                    {data.competitiveAdvantages && (
+                    {data.growthPotential && (
                       <div className="mb-6">
-                        <h3 className="font-medium text-gray-700 mb-2">Konkurrensfördelar</h3>
-                        <p className="text-gray-600 whitespace-pre-wrap">{data.competitiveAdvantages}</p>
+                        <h3 className="font-medium text-gray-700 mb-2">Tillväxtpotential</h3>
+                        <p className="text-gray-600">
+                          {data.growthPotential === 'high' && 'Hög - Stark tillväxt förväntas'}
+                          {data.growthPotential === 'moderate' && 'Måttlig - Stabil tillväxt möjlig'}
+                          {data.growthPotential === 'low' && 'Låg - Mogen verksamhet med begränsad tillväxt'}
+                        </p>
                       </div>
                     )}
                     
-                    {data.whySelling && (
+                    {data.expansionPlans && (
                       <div>
-                        <h3 className="font-medium text-gray-700 mb-2">Anledning till försäljning</h3>
-                        <p className="text-gray-600 whitespace-pre-wrap">{data.whySelling}</p>
+                        <h3 className="font-medium text-gray-700 mb-2">Expansionsplaner</h3>
+                        <p className="text-gray-600 whitespace-pre-wrap">{data.expansionPlans}</p>
                       </div>
                     )}
                   </div>
@@ -1239,12 +1514,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                     </div>
                   )}
                   
-                  {(data.priceMin || data.priceMax) && (
-                    <div className="text-sm text-gray-600 text-center mb-4">
-                      Prisintervall: {formatCurrency(data.priceMin || '0')} - {formatCurrency(data.priceMax || '0')}
-                    </div>
-                  )}
-                  
                   <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
                     Visa fullständig information
                   </button>
@@ -1261,7 +1530,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                     <div>
                       <dt className="text-gray-600">Bransch:</dt>
                       <dd className="font-medium">
-                        {INDUSTRIES.find(i => i.value === data.industry)?.label}
+                        {industries.find(i => i.value === data.industry)?.label}
                       </dd>
                     </div>
                     <div>
@@ -1272,6 +1541,12 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                       <dt className="text-gray-600">Företagets ålder:</dt>
                       <dd className="font-medium">{data.companyAge} år</dd>
                     </div>
+                    {data.employees && (
+                      <div>
+                        <dt className="text-gray-600">Anställda:</dt>
+                        <dd className="font-medium">{data.employees}</dd>
+                      </div>
+                    )}
                     {data.regulatoryLicenses && (
                       <div>
                         <dt className="text-gray-600">Tillstånd:</dt>
@@ -1280,6 +1555,31 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                     )}
                   </dl>
                 </div>
+                
+                {/* Risk summary */}
+                {(data.keyEmployeeDependency || data.mainRisks) && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                    <h3 className="font-semibold mb-4 text-yellow-900">Risker</h3>
+                    <dl className="space-y-3 text-sm">
+                      {data.keyEmployeeDependency && (
+                        <div>
+                          <dt className="text-yellow-800">Nyckelpersonsberoende:</dt>
+                          <dd className="font-medium text-yellow-900">
+                            {data.keyEmployeeDependency === 'low' && 'Lågt'}
+                            {data.keyEmployeeDependency === 'medium' && 'Medel'}
+                            {data.keyEmployeeDependency === 'high' && 'Högt'}
+                          </dd>
+                        </div>
+                      )}
+                      {data.mainRisks && (
+                        <div>
+                          <dt className="text-yellow-800">Huvudsakliga risker:</dt>
+                          <dd className="text-yellow-900 text-xs mt-1">{data.mainRisks}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </div>
+                )}
                 
                 {/* Package info */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
@@ -1356,7 +1656,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
           
           <div className="mt-6">
             <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-              <span>Steg {currentStep} av {totalSteps - 1}</span>
+              <span>Steg {currentStep} av {steps.length}</span>
               <span>{Math.round(progress)}% slutfört</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1389,10 +1689,10 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
           
           <button
             onClick={handleNext}
-            disabled={!data.companyName || !data.email || (!user && !acceptedPrivacy)}
+            disabled={!validateStep(currentStep) && currentStep !== steps.length}
             className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
           >
-            {currentStep === 6 ? (
+            {currentStep === steps.length ? (
               <>
                 Förhandsgranska annons
                 <Eye className="w-5 h-5" />
