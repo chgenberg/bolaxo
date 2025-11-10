@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     // Call GPT-5 (not mini) for comprehensive analysis
     const completion = await openai.chat.completions.create({
       model: "gpt-5",
-      max_completion_tokens: 32000, // Maximum quality - ensures complete analysis of all 42 DD sections
+      max_completion_tokens: 60000, // Absolute maximum quality - comprehensive 42-section DD analysis with extensive detail
       messages: [
         {
           role: "system",
