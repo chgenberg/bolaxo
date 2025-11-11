@@ -603,30 +603,35 @@ Ingen etablerad go-to-market strategi för internationell expansion trots att l�
         cagr: 18,
         analysis: `**Omsättningsutveckling och tillväxtdrivare**
 
-Omsättningen har vuxit från **42 MSEK (2021)** till **52 MSEK (2022)** och vidare till **68 MSEK (2023)**, vilket motsvarar en sammansatt årlig tillväxttakt (CAGR) på **18%**. Detta är exceptionellt starkt jämfört med branschgenomsnittet på 8-10% och placerar bolaget i top decilen av tillväxtbolag inom sektorn.
+Omsättningen har vuxit från **42 MSEK (2021)** till **52 MSEK (2022)** och vidare till **68 MSEK (2023)**, vilket motsvarar en sammansatt årlig tillväxttakt (**CAGR**) på **18%**. Detta är exceptionellt starkt jämfört med branschgenomsnittet på **8-10%** och placerar bolaget i **top decilen** av tillväxtbolag inom sektorn.
 
 **Tillväxtfaktorer:**
 
-Tillväxten är driven av flera faktorer: 
+Tillväxten är driven av flera faktorer:
 
-1) **Organisk tillväxt** från befintliga kunder genom expansion och upselling (+12% årligen)
-2) **Nykundsförsäljning** som bidragit med +9% årligen  
-3) **Prisökningar** på 6% årligen som implementerats utan nämnvärd churn
-4) **Lansering av ny produktlinje** under Q2 2023 som redan genererar 10,2 MSEK årligen (15% av total omsättning)
+1) **Organisk tillväxt** från befintliga kunder genom expansion och upselling (**+12% årligen**)
+
+2) **Nykundsförsäljning** som bidragit med **+9% årligen**
+
+3) **Prisökningar** på **6% årligen** som implementerats utan nämnvärd churn
+
+4) **Lansering av ny produktlinje** under Q2 2023 som redan genererar **10,2 MSEK årligen** (**15%** av total omsättning)
 
 **Kvartalsanalys:**
 
-Kvartalsvis analys visar accelererande tillväxt: Q1 2023 +14% YoY, Q2 2023 +17% YoY, Q3 2023 +21% YoY, Q4 2023 +23% YoY. Detta tyder på att tillväxtmotorn stärks snarare än avtar. Den nya produktlinjen har en högre genomsnittlig deal size (385k vs 275k för huvudprodukten) och kortare säljcykel (2,1 månader vs 3,2 månader), vilket bör fortsätta driva acceleration.
+Kvartalsvis analys visar accelererande tillväxt: **Q1 2023 +14% YoY**, **Q2 2023 +17% YoY**, **Q3 2023 +21% YoY**, **Q4 2023 +23% YoY**. 
+
+Detta tyder på att tillväxtmotorn **stärks** snarare än avtar. Den nya produktlinjen har en högre genomsnittlig deal size (**385k** vs **275k** för huvudprodukten) och kortare säljcykel (**2,1 månader** vs **3,2 månader**), vilket bör fortsätta driva acceleration.
 
 **Operationell hävstång:**
 
-Omsättningen per anställd har ökat från **1,31 MSEK (2021)** till **2,13 MSEK (2023)**, vilket visar på stark operationell hävstång och effektivitet. Detta är 40% över branschsnittet och indikerar att bolaget kan växa snabbare än kostnadsbasen ökar.
+Omsättningen per anställd har ökat från **1,31 MSEK (2021)** till **2,13 MSEK (2023)**, vilket visar på stark operationell hävstång och effektivitet. Detta är **40% över branschsnittet** och indikerar att bolaget kan växa snabbare än kostnadsbasen ökar.
 
 **Geografisk och branschfördelning:**
 
-Geografisk fördelning: Stockholm 45%, Göteborg 22%, Malmö 15%, övriga Sverige 18%. 
+Geografisk fördelning: **Stockholm 45%**, **Göteborg 22%**, **Malmö 15%**, **övriga Sverige 18%**.
 
-Kundfördelningen per bransch: Tech/IT 35%, Professional Services 28%, Manufacturing 20%, Retail 12%, Övriga 5%. 
+Kundfördelningen per bransch: **Tech/IT 35%**, **Professional Services 28%**, **Manufacturing 20%**, **Retail 12%**, **Övriga 5%**.
 
 Denna diversifiering minskar konjunkturkänslighet och branschspecifika risker.`
       },
