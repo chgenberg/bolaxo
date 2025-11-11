@@ -1038,17 +1038,44 @@ Säkerhetsincidenter kan leda till GDPR-böter upp till **4% av omsättning (2,7
       },
       {
         category: "Marknad",
-        description: "Internationella tech-jättar börjar fokusera på denna nisch med betydligt större resurser för produktutveckling och marknadsföring. Disruptiv teknologi (AI/ML) kan göra nuvarande lösningsansats obsolet inom 3-5 år. Konsolidering bland konkurrenter skapar större och starkare konkurrenter med bredare erbjudande.",
+        description: "**Marknadskonkurrens - Strategisk risk**
+
+Internationella tech-jättar börjar fokusera på denna nisch med betydligt större resurser för produktutveckling och marknadsföring. 
+
+**Hotbild:**
+
+- Disruptiv teknologi (AI/ML) kan göra nuvarande lösningsansats obsolet inom 3-5 år
+- Konsolidering bland konkurrenter skapar större och starkare konkurrenter med bredare erbjudande
+- Prispress från internationella aktörer",
         probability: "medium",
         impact: "high",
-        mitigation: "Accelerera produktutveckling med fokus på AI/ML-funktionalitet, stärk kundlojalitet genom exceptional customer success, bygg integrations-ekosystem för att öka switching costs, överväg strategiska partnerskap eller förvärv för att stärka position."
+        mitigation: "**Strategisk respons:**
+
+1) **Accelerera produktutveckling** med fokus på AI/ML-funktionalitet
+2) **Stärk kundlojalitet** genom exceptional customer success
+3) **Bygg integrations-ekosystem** för att öka switching costs
+4) **Överväg strategiska partnerskap** eller förvärv för att stärka position"
       },
       {
         category: "Finansiell",
-        description: "Kundkoncentration med top 10 kunder som står för 45% av omsättning och största kund 12% utgör en finansiell risk. Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Konjunkturnedgång kan påverka B2B-investeringsvilja och leda till längre säljcykler.",
+        description: "**Kundkoncentration - Finansiell risk**
+
+Kundkoncentration med top 10 kunder som står för **45% av omsättning** och största kund **12%** utgör en finansiell risk. 
+
+**Konsekvenser:**
+
+Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Konjunkturnedgång kan påverka B2B-investeringsvilja och leda till längre säljcykler.",
         probability: "low",
         impact: "high",
-        mitigation: "Diversifiera kundbasen genom att fokusera på mindre kunder (mål: max 8% per kund), förhandla om längre avtal med största kunden, utveckla dedikerad account management, skapa expansion opportunities, överväg kreditförsäkring. Tidsram: 6-12 månader."
+        mitigation: "**Diversifieringsstrategi:**
+
+1) Fokusera på mindre kunder (mål: max 8% per kund)
+2) Förhandla om längre avtal med största kunden
+3) Utveckla dedikerad account management
+4) Skapa expansion opportunities
+5) Överväg kreditförsäkring
+
+**Tidsram:** 6-12 månader"
       },
       {
         category: "Regulatorisk",
