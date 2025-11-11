@@ -2102,7 +2102,10 @@ function PremiumResultMockupContent() {
                     <LabelList 
                       dataKey="value" 
                       position="top" 
-                      formatter={(value: number) => value > 0 ? `+${(value / 1000000).toFixed(1)}` : `${(value / 1000000).toFixed(1)}`}
+                      formatter={(value) => {
+                        const numValue = Number(value);
+                        return numValue > 0 ? `+${(numValue / 1000000).toFixed(1)}` : `${(numValue / 1000000).toFixed(1)}`;
+                      }}
                       style={{ fill: '#333', fontSize: 12, fontWeight: 'bold' }}
                     />
                   </Bar>
