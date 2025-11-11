@@ -19,7 +19,32 @@ const mockResult = {
     methodology: {
       primary: "Diskonterat kassaflöde (DCF)",
       secondary: "Multipelvärdering baserat på jämförbara bolag",
-      explanation: "DCF-metoden valdes som primär värderingsmetod då bolaget har stabila och förutsägbara kassaflöden med 78% återkommande intäkter och låg churn (<5%). DCF-metoden värderar bolaget baserat på nuvarande värde av framtida kassaflöden, vilket är mest relevant för bolag med stabila och förutsägbara kassaflöden.\n\nDCF-beräkningen baserades på:\n- Fritt kassaflöde (FCF) för de kommande 5 åren baserat på finansiella projektioner\n- Terminalvärde beräknat med perpetuity growth-modell (g=2,5%) eller exit multiple (8x EBITDA)\n- WACC (Weighted Average Cost of Capital) på 9,5% baserat på: riskfri ränta (3,5%), equity risk premium (5,5%), beta (1,1), och cost of debt (4,5%)\n- Discount rate anpassad för bolagets specifika riskprofil\n\nVärderingen kompletterades med en multipelvärdering baserat på 12 jämförbara bolag inom samma bransch för att validera DCF-resultatet. Jämförbara bolag identifierades baserat på: (1) Liknande affärsmodell (SaaS/B2B software), (2) Liknande storlek (omsättning 30-100 MSEK), (3) Liknande tillväxt (10-25% CAGR), (4) Liknande lönsamhet (EBITDA-margin 15-25%), (5) Liknande geografi (Nordic/European).\n\nMultiplar använda:\n- EV/Revenue: 3,5-5,5x (median 4,2x)\n- EV/EBITDA: 8-12x (median 9,5x)\n- EV/FCF: 12-18x (median 14x)\n\nDCF-värderingen resulterade i ett värde på 34,2 MSEK (midpoint) medan multipelvärderingen resulterade i 36,8 MSEK (midpoint). Genomsnittet av dessa två metoder ger 35,5 MSEK, vilket är i linje med den slutliga värderingen på 35,6 MSEK.\n\nVärderingen tar hänsyn till:\n- Stark tillväxt (18% CAGR) som motiverar premium\n- Hög lönsamhet (22% EBITDA) som motiverar högre multiplar\n- Stark kassaflödeskonvertering (85%) som minskar risk\n- Marknadsledande position (32% marknadsandel) som ger konkurrensfördelar\n- Identifierade risker (nyckelpersoner, teknisk skuld) som justerar värderingen nedåt\n- Värdeskapande möjligheter (internationell expansion, cross-selling) som justerar värderingen uppåt\n\nKonfidensgraden på 82% reflekterar att värderingen är väl underbyggd med flera valideringsmetoder och stabila finansiella siffror, men att det finns viss osäkerhet kring framtida tillväxt och marknadsutveckling."
+      explanation: `**DCF-metoden valdes som primär värderingsmetod** då bolaget har stabila och förutsägbara kassaflöden med 78% återkommande intäkter och låg churn (<5%). DCF-metoden värderar bolaget baserat på nuvarande värde av framtida kassaflöden, vilket är mest relevant för bolag med stabila och förutsägbara kassaflöden.
+
+**DCF-beräkningen baserades på:**
+- Fritt kassaflöde (FCF) för de kommande 5 åren baserat på finansiella projektioner
+- Terminalvärde beräknat med perpetuity growth-modell (g=2,5%) eller exit multiple (8x EBITDA)
+- WACC (Weighted Average Cost of Capital) på 9,5% baserat på: riskfri ränta (3,5%), equity risk premium (5,5%), beta (1,1), och cost of debt (4,5%)
+- Discount rate anpassad för bolagets specifika riskprofil
+
+**Värderingen kompletterades med en multipelvärdering** baserat på 12 jämförbara bolag inom samma bransch för att validera DCF-resultatet. Jämförbara bolag identifierades baserat på: (1) Liknande affärsmodell (SaaS/B2B software), (2) Liknande storlek (omsättning 30-100 MSEK), (3) Liknande tillväxt (10-25% CAGR), (4) Liknande lönsamhet (EBITDA-margin 15-25%), (5) Liknande geografi (Nordic/European).
+
+**Multiplar använda:**
+- EV/Revenue: 3,5-5,5x (median 4,2x)
+- EV/EBITDA: 8-12x (median 9,5x)
+- EV/FCF: 12-18x (median 14x)
+
+**DCF-värderingen resulterade** i ett värde på 34,2 MSEK (midpoint) medan multipelvärderingen resulterade i 36,8 MSEK (midpoint). Genomsnittet av dessa två metoder ger 35,5 MSEK, vilket är i linje med den slutliga värderingen på 35,6 MSEK.
+
+**Värderingen tar hänsyn till:**
+- Stark tillväxt (18% CAGR) som motiverar premium
+- Hög lönsamhet (22% EBITDA) som motiverar högre multiplar
+- Stark kassaflödeskonvertering (85%) som minskar risk
+- Marknadsledande position (32% marknadsandel) som ger konkurrensfördelar
+- Identifierade risker (nyckelpersoner, teknisk skuld) som justerar värderingen nedåt
+- Värdeskapande möjligheter (internationell expansion, cross-selling) som justerar värderingen uppåt
+
+**Konfidensgraden på 82%** reflekterar att värderingen är väl underbyggd med flera valideringsmetoder och stabila finansiella siffror, men att det finns viss osäkerhet kring framtida tillväxt och marknadsutveckling.`
     },
     adjustments: [
       {

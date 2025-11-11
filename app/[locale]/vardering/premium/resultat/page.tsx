@@ -400,7 +400,7 @@ export default function PremiumValuationResultPage() {
                 </div>
               </div>
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                <p className="text-gray-700">{result.valuation.methodology.explanation}</p>
+                <div className="text-gray-700 leading-relaxed">{renderMarkdownText(result.valuation.methodology.explanation)}</div>
               </div>
             </div>
 
