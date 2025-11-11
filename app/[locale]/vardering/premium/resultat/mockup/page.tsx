@@ -253,25 +253,169 @@ Med rätt förberedelser och timing kan värdet maximeras ytterligare genom impl
       {
         severity: "high",
         area: "Organisation",
-        description: "VD och säljchef står tillsammans för 65% av kundrelationerna och 55% av nyförsäljningen utan dokumenterad överlämningsplan eller ersättare. VD har grundat bolaget 2015 och har djupa personliga relationer med många av de största kunderna, särskilt inom Enterprise-segmentet. Säljchefen ansvarar för 40% av nyförsäljningen och har unika branschrelationer som har byggts upp över 10 år. Ingen av dessa roller har dokumenterade processer, kundöverlämningar eller successionsplaner. Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på försäljning, kundrelationer och bolagets värdering. Riskbedömning: Sannolikhet hög (VD är 58 år, säljchef 52 år, båda har uttryckt intresse för exit), Påverkan mycket hög (uppskattad värdeförlust 15-25% vid abrupt bortfall).",
-        mitigation: "Implementera omgående: (1) Rekrytera vice VD med säljansvar inom 3-4 månader (budget 150-200k SEK), (2) Dokumentera alla kundrelationer i CRM med kontaktpersoner, historik och relationer, (3) Skapa successionsplaner för båda roller med tydliga kriterier och tidsplaner, (4) Implementera stay-on bonusar för båda (2-3 MSEK vardera) för att säkerställa kontinuitet under försäljningsprocessen, (5) Etablera regelbundna kundöverlämningar där vice VD introduceras till top 20 kunder, (6) Skapa dokumenterade processer för alla kritiska aktiviteter som nu är personberoende."
+        description: "**Nyckelpersonsberoende - Kritisk organisatorisk risk**
+
+VD och säljchef står tillsammans för **65% av kundrelationerna** och **55% av nyförsäljningen** utan dokumenterad överlämningsplan eller ersättare. 
+
+**Bakgrund:**
+
+VD har grundat bolaget 2015 och har djupa personliga relationer med många av de största kunderna, särskilt inom Enterprise-segmentet. Säljchefen ansvarar för 40% av nyförsäljningen och har unika branschrelationer som har byggts upp över 10 år. 
+
+**Konsekvenser:**
+
+Ingen av dessa roller har dokumenterade processer, kundöverlämningar eller successionsplaner. Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på försäljning, kundrelationer och bolagets värdering. 
+
+**Riskbedömning:**
+
+- **Sannolikhet:** Hög (VD är 58 år, säljchef 52 år, båda har uttryckt intresse för exit)
+- **Påverkan:** Mycket hög (uppskattad värdeförlust 15-25% vid abrupt bortfall)",
+        mitigation: "**Åtgärdsplan för att minska nyckelpersonsrisken:**
+
+**Implementera omgående:**
+
+1) **Rekrytera vice VD** med säljansvar inom 3-4 månader
+   - Budget: 150-200k SEK för rekrytering
+   - Lönepaket: 1,2-1,5 MSEK/år
+
+2) **Dokumentera alla kundrelationer** i CRM
+   - Kontaktpersoner, historik och relationer
+   - Mapping av kundrelationer till säljare
+
+3) **Skapa successionsplaner** för båda roller
+   - Tydliga kriterier och tidsplaner
+   - Dokumenterade processer
+
+4) **Implementera stay-on bonusar**
+   - VD: 2-3 MSEK för att säkerställa kontinuitet
+   - Säljchef: 1,5-2 MSEK
+
+5) **Etablera regelbundna kundöverlämningar**
+   - Vice VD introduceras till top 20 kunder
+   - Gradvis överföring av ansvar
+
+6) **Dokumentera alla kritiska aktiviteter**
+   - Processer som nu är personberoende
+   - Knowledge transfer-dokumentation"
       },
       {
         severity: "high",
         area: "Teknologi",
-        description: "Core-system byggt 2018 på PHP 7.2 med MySQL-databas tappar officiell support under 2024 vilket innebär säkerhetsrisker, begränsad tillgång till säkerhetsuppdateringar, och teknisk skuld som växer exponentiellt. Systemet hanterar för närvarande 247 kunder utan prestandaproblem men har identifierade flaskhalsar vid 350+ kunder. Modernisering till modern tech stack (Node.js/Python backend, React frontend, PostgreSQL) är nödvändig inom 12-18 månader för att undvika säkerhetsincidenter och möjliggöra skalning. Estimerad kostnad är 3-5 MSEK och tar 6-9 månader. Riskbedömning: Sannolikhet mycket hög (support upphör 2024), Påverkan hög (säkerhetsincidenter kan skada varumärke och leda till GDPR-böter upp till 4% av omsättning, dvs 2,7 MSEK).",
-        mitigation: "Påbörja modernisering omgående: (1) Fasa 1: Migration av kritiska komponenter (3 månader, 1,5 MSEK), (2) Fasa 2: Fullständig migration (6 månader, 2-3 MSEK), (3) Engagera säkerhetskonsult för riskbedömning och recommendations (100k SEK), (4) Implementera säkerhetsmonitoring och incident response plan, (5) Dokumentera teknisk skuld och skapa roadmap för modernisering, (6) Budgetera och reservera 5 MSEK för hela projektet. Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med 5-10%."
+        description: "**Teknisk skuld - IT-moderniseringsbehov**
+
+Core-system byggt 2018 på **PHP 7.2** med **MySQL-databas** tappar officiell support under 2024.
+
+**Konsekvenser:**
+
+- Säkerhetsrisker och begränsad tillgång till säkerhetsuppdateringar
+- Teknisk skuld som växer exponentiellt
+- Systemet hanterar 247 kunder men har flaskhalsar vid 350+ kunder
+- Begränsad skalbarhet för internationell expansion
+
+**Moderniseringsbehov:**
+
+Modernisering till modern tech stack (Node.js/Python backend, React frontend, PostgreSQL) är nödvändig inom 12-18 månader.
+
+- **Estimerad kostnad:** 3-5 MSEK
+- **Tidsram:** 6-9 månader
+- **Approach:** Två faser för att minimera disruption
+
+**Riskbedömning:**
+
+- **Sannolikhet:** Mycket hög (support upphör 2024)
+- **Påverkan:** Hög (säkerhetsincidenter kan skada varumärke och leda till GDPR-böter upp till 4% av omsättning, dvs 2,7 MSEK)",
+        mitigation: "**Moderniseringsplan:**
+
+**Påbörja modernisering omgående:**
+
+**Fasa 1 (3 månader, 1,5 MSEK):**
+- Migration av kritiska komponenter (autentisering, betalningar, databas)
+- Säkerhetsförbättringar och compliance
+- Performance-optimering
+- Dokumentation och testning
+
+**Fasa 2 (6 månader, 2-3 MSEK):**
+- Fullständig migration till Node.js/Python backend
+- React frontend-uppgradering
+- PostgreSQL-databasmigration
+- API-modernisering
+- DevOps och CI/CD-pipeline
+
+**Stödåtgärder:**
+
+3) Engagera säkerhetskonsult för riskbedömning (100k SEK)
+4) Implementera säkerhetsmonitoring och incident response plan
+5) Dokumentera teknisk skuld och skapa roadmap
+6) Budgetera och reservera 5 MSEK för hela projektet
+
+**Värdeeffekt:**
+
+Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med **5-10%**."
       },
       {
         severity: "medium",
         area: "Kunder",
-        description: "Top 10 kunder står för 45% av omsättning vilket är över rekommenderad gräns på 30-35%. Den största kunden står för 12% av omsättning (8,2 MSEK/år) vilket är över rekommenderad gräns på 8-10%. Om denna kund skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Riskbedömning: Sannolikhet medel (kunden har varit kund i 8 år men har nya ägare som kan ändra strategi), Påverkan hög (12% omsättningsförlust = 8,2 MSEK, plus negativ signal till andra kunder).",
-        mitigation: "Diversifieringsstrategi: (1) Fokusera på att växa med mindre kunder - mål: max 8% per kund inom 12 månader, (2) Förhandla om längre avtal med största kunden (förläng från 3 till 5 år), (3) Utveckla dedikerad account management för top 10 kunder med regelbundna business reviews, (4) Skapa expansion opportunities inom största kunden genom upselling och cross-selling, (5) Etablera kundsuccession plan för att minska beroendet av enskilda kontakter, (6) Överväg kreditförsäkring för största kunden för att minska finansiell risk."
+        description: "**Kundkoncentration - Finansiell risk**
+
+Top 10 kunder står för **45% av omsättning** vilket är över rekommenderad gräns på 30-35%. Den största kunden står för **12% av omsättning (8,2 MSEK/år)** vilket är över rekommenderad gräns på 8-10%. 
+
+**Konsekvenser:**
+
+Om denna kund skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet.
+
+**Riskbedömning:**
+
+- **Sannolikhet:** Medel (kunden har varit kund i 8 år men har nya ägare som kan ändra strategi)
+- **Påverkan:** Hög (12% omsättningsförlust = 8,2 MSEK, plus negativ signal till andra kunder)",
+        mitigation: "**Diversifieringsstrategi:**
+
+**Åtgärder:**
+
+1) **Fokusera på mindre kunder**
+   - Mål: max 8% per kund inom 12 månader
+   - Utveckla dedikerade säljprocesser för SMB-segment
+
+2) **Förhandla om längre avtal** med största kunden
+   - Förläng från 3 till 5 år
+   - Stärk relationen genom account management
+
+3) **Utveckla dedikerad account management** för top 10 kunder
+   - Regelbundna business reviews
+   - Proaktiv support och expansion opportunities
+
+4) **Skapa expansion opportunities** inom största kunden
+   - Upselling och cross-selling
+   - Öka wallet share
+
+5) **Etablera kundsuccession plan**
+   - Minska beroendet av enskilda kontakter
+   - Bygg relationer på flera nivåer
+
+6) **Överväg kreditförsäkring** för största kunden
+   - Minska finansiell risk
+   - Skydd mot betalningssvårigheter"
       },
       {
         severity: "medium",
         area: "Finansiell",
-        description: "Ingen dokumenterad budget- eller prognosprocess vilket gör det svårt att förutsäga framtida resultat och identifiera avvikelser i tid. Månadsrapportering sker men saknar KPI-dashboards, rolling forecasts och tydliga benchmarks. Detta gör det svårt för potentiella köpare att bedöma förutsägbarhet och risk. Riskbedömning: Sannolikhet hög (processer saknas), Påverkan medel (kan påverka värderingen negativt och göra due diligence mer komplicerad).",
+        description: "**Budget- och prognosprocess - Finansiell styrning**
+
+Ingen dokumenterad budget- eller prognosprocess vilket gör det svårt att förutsäga framtida resultat och identifiera avvikelser i tid. 
+
+**Nuläge:**
+
+Månadsrapportering sker men saknar:
+- KPI-dashboards för real-time insyn
+- Rolling forecasts för framåtblickande planering
+- Tydliga benchmarks mot bransch och historik
+
+**Konsekvenser:**
+
+Detta gör det svårt för potentiella köpare att bedöma förutsägbarhet och risk.
+
+**Riskbedömning:**
+
+- **Sannolikhet:** Hög (processer saknas)
+- **Påverkan:** Medel (kan påverka värderingen negativt och göra due diligence mer komplicerad)",
         mitigation: "Implementera omgående: (1) Månadsrapportering med KPI-dashboards (Power BI eller Tableau, budget 50k SEK + 20k/månad), (2) Rolling 12-månaders forecast uppdateras månadsvis, (3) Budgetprocess med tydliga antaganden och scenarier, (4) Benchmarking mot branschnyckeltal, (5) Automatiserad rapportering från ERP-system, (6) Regelbundna business reviews med ledningsteamet. Tidsram: 1 månad för implementation."
       },
       {
