@@ -1079,24 +1079,68 @@ Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan
       },
       {
         category: "Regulatorisk",
-        description: "GDPR-brister kan ge böter upp till 4% av omsättning (2,7 MSEK) vid en incident eller revision. Regulatoriska förändringar inom dataskydd kan kräva betydande investeringar i compliance och säkerhet. Branschspecifik lagstiftning kan påverka verksamheten.",
+        description: "**GDPR och regulatoriska krav - Compliance-risk**
+
+GDPR-brister kan ge böter upp till **4% av omsättning (2,7 MSEK)** vid en incident eller revision. 
+
+**Hotbild:**
+
+- Regulatoriska förändringar inom dataskydd kan kräva betydande investeringar i compliance och säkerhet
+- Branschspecifik lagstiftning kan påverka verksamheten
+- Ökad granskning från tillsynsmyndigheter",
         probability: "medium",
         impact: "low",
-        mitigation: "Genomför GDPR-revision med extern konsult (budget 200-300k SEK), uppdatera alla biträdesavtal, dokumentera databehandling, implementera DPIA-processer, skapa incident response plan, utbilda personal. Tidsram: 2-3 månader."
+        mitigation: "**GDPR-compliance program:**
+
+1) Genomför GDPR-revision med extern konsult (200-300k SEK)
+2) Uppdatera alla biträdesavtal
+3) Dokumentera databehandling
+4) Implementera DPIA-processer
+5) Skapa incident response plan
+6) Utbilda personal
+
+**Tidsram:** 2-3 månader"
       },
       {
         category: "Konkurrens",
-        description: "Prispress från lågkostnadsalternativ, särskilt från Östeuropa och Indien, kan underminera premiumpositionering. Open source-alternativ kan erbjuda liknande funktionalitet gratis. Förändrade köpbeteenden där kunder föredrar all-in-one plattformar framför best-of-breed lösningar.",
+        description: "**Konkurrenstryck - Marknadsrisk**
+
+Prispress från lågkostnadsalternativ, särskilt från Östeuropa och Indien, kan underminera premiumpositionering. 
+
+**Hotbild:**
+
+- Open source-alternativ kan erbjuda liknande funktionalitet gratis
+- Förändrade köpbeteenden där kunder föredrar all-in-one plattformar framför best-of-breed lösningar
+- Prispress kan tvinga ned marginaler",
         probability: "medium",
         impact: "medium",
-        mitigation: "Fokusera på värdebaserad prissättning istället för kostnadsbaserad, differentiera genom superior customer success och integrations-ekosystem, bygg varumärke och thought leadership, överväg freemium-modell för att konkurrera med open source."
+        mitigation: "**Differentieringsstrategi:**
+
+1) Fokusera på värdebaserad prissättning istället för kostnadsbaserad
+2) Differentiera genom superior customer success och integrations-ekosystem
+3) Bygg varumärke och thought leadership
+4) Överväg freemium-modell för att konkurrera med open source"
       },
       {
         category: "Organisation",
-        description: "Talangbrist inom tech driver upp lönekostnader och gör rekrytering utmanande. Svag employer branding gör det svårt att attrahera senior talanger. Personalomsättning kan öka vid försäljning vilket påverkar kontinuitet.",
+        description: "**Talangbrist - Rekryteringsrisk**
+
+Talangbrist inom tech driver upp lönekostnader och gör rekrytering utmanande. 
+
+**Utmaningar:**
+
+- Svag employer branding gör det svårt att attrahera senior talanger
+- Personalomsättning kan öka vid försäljning vilket påverkar kontinuitet
+- Konkurrens om talanger från större tech-bolag",
         probability: "medium",
         impact: "medium",
-        mitigation: "Förbättra employer branding genom thought leadership och awards, skapa attraktiva incitamentsprogram, utveckla karriärvägar och utbildningsprogram, implementera retention strategies, överväg remote work för att öka talent pool."
+        mitigation: "**Talent attraction strategy:**
+
+1) Förbättra employer branding genom thought leadership och awards
+2) Skapa attraktiva incitamentsprogram
+3) Utveckla karriärvägar och utbildningsprogram
+4) Implementera retention strategies
+5) Överväg remote work för att öka talent pool"
       }
     ]
   },
