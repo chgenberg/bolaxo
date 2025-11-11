@@ -1145,7 +1145,39 @@ Talangbrist inom tech driver upp lönekostnader och gör rekrytering utmanande.
     ]
   },
   transactionGuidance: {
-    optimalTiming: "Optimal tidpunkt för försäljning bedöms vara om 6-9 månader efter implementering av kritiska förbättringsåtgärder. Detta ger tid att visa förbättrad lönsamhet (+2-3% EBITDA-marginal), minskad riskprofil genom rekrytering av vice VD och påbörjad IT-modernisering, och påbörjad tillväxtresa genom quick wins. Dessa förbättringar kan höja värderingen med 15-20% (5-7 MSEK) jämfört med att sälja idag.\n\nSpecifika faktorer som motiverar denna timing:\n\n1. Finansiell förbättring: Implementering av prisoptimering och automatisering kan öka EBITDA-marginalen från 22% till 24-25% inom 3-4 månader. Detta visar köpare att bolaget har ytterligare värdeskapande potential och motiverar högre värdering.\n\n2. Riskreducering: Rekrytering av vice VD och dokumentation av kundrelationer minskar den kritiska nyckelpersonsrisken från 'hög' till 'medel', vilket är en viktig faktor för köpare. Påbörjad IT-modernisering visar framåtblickande ledning och minskar teknisk skuld.\n\n3. Marknadsmomentum: Q4 2024 och Q1 2025 är traditionellt starka perioder för M&A-transaktioner. Att komma ut på marknaden under denna period kan öka intresset och konkurrensen mellan köpare.\n\n4. Förberedelse: 6-9 månader ger tid att förbereda datarum, genomföra intern due diligence, adressera röda flaggor, och optimera finansiella siffror. Detta gör due diligence-processen smidigare och minskar risk för prisavdrag.\n\n5. Strategiska alternativ: Med förbättrad finansiell prestation och minskad risk kan bolaget attrahera både strategiska köpare (som betalar premium) och PE-fonder (som värderar på multiplar), vilket ökar konkurrensen och kan driva upp priset.\n\nRekommendation: Påbörja förberedelserna omgående med fokus på quick wins (prisoptimering, automatisering) som kan implementeras snabbt, parallellt med rekrytering av vice VD och påbörjad IT-modernisering. Mål: Vara redo för försäljning Q2-Q3 2024.",
+    optimalTiming: "**Optimal tidpunkt för försäljning**
+
+Optimal tidpunkt för försäljning bedöms vara om **6-9 månader** efter implementering av kritiska förbättringsåtgärder. Detta ger tid att visa förbättrad lönsamhet (+2-3% EBITDA-marginal), minskad riskprofil genom rekrytering av vice VD och påbörjad IT-modernisering, och påbörjad tillväxtresa genom quick wins. 
+
+**Värdeeffekt:** Dessa förbättringar kan höja värderingen med **15-20% (5-7 MSEK)** jämfört med att sälja idag.
+
+**Specifika faktorer som motiverar denna timing:**
+
+**1. Finansiell förbättring:**
+
+Implementering av prisoptimering och automatisering kan öka EBITDA-marginalen från 22% till 24-25% inom 3-4 månader. Detta visar köpare att bolaget har ytterligare värdeskapande potential och motiverar högre värdering.
+
+**2. Riskreducering:**
+
+Rekrytering av vice VD och dokumentation av kundrelationer minskar den kritiska nyckelpersonsrisken från 'hög' till 'medel', vilket är en viktig faktor för köpare. Påbörjad IT-modernisering visar framåtblickande ledning och minskar teknisk skuld.
+
+**3. Marknadsmomentum:**
+
+Q4 2024 och Q1 2025 är traditionellt starka perioder för M&A-transaktioner. Att komma ut på marknaden under denna period kan öka intresset och konkurrensen mellan köpare.
+
+**4. Förberedelse:**
+
+6-9 månader ger tid att förbereda datarum, genomföra intern due diligence, adressera röda flaggor, och optimera finansiella siffror. Detta gör due diligence-processen smidigare och minskar risk för prisavdrag.
+
+**5. Strategiska alternativ:**
+
+Med förbättrad finansiell prestation och minskad risk kan bolaget attrahera både strategiska köpare (som betalar premium) och PE-fonder (som värderar på multiplar), vilket ökar konkurrensen och kan driva upp priset.
+
+**Rekommendation:**
+
+Påbörja förberedelserna omgående med fokus på quick wins (prisoptimering, automatisering) som kan implementeras snabbt, parallellt med rekrytering av vice VD och påbörjad IT-modernisering. 
+
+**Mål:** Vara redo för försäljning Q2-Q3 2024.",
     buyerProfile: [
       "Private Equity-fonder med branschfokus (t.ex. Nordic Capital, EQT, FSN Capital) - har kapital för IT-investering och internationell expansion, värderar på EBITDA-multiplar 8-12x, söker platformbolag för add-on förvärv, typisk hålltid 3-5 år",
       "Strategiska köpare inom närliggande vertikal som söker marknadskonsolidering (t.ex. större systemintegratörer, konsultbolag) - kan betala premium (15-25% över PE) för synergier, värderar strategiskt värde och kundbas, söker komplementära produkter eller geografisk expansion",
