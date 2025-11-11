@@ -19,28 +19,43 @@ const mockResult = {
     methodology: {
       primary: "Diskonterat kassaflöde (DCF)",
       secondary: "Multipelvärdering baserat på jämförbara bolag",
-      explanation: "DCF-metoden valdes som primär värderingsmetod då bolaget har stabila och förutsägbara kassaflöden. Värderingen kompletterades med en multipelvärdering baserat på 12 jämförbara bolag inom samma bransch för att validera DCF-resultatet. WACC sattes till 9,5% baserat på branschstandard och bolagets riskprofil."
+      explanation: "DCF-metoden valdes som primär värderingsmetod då bolaget har stabila och förutsägbara kassaflöden med 78% återkommande intäkter och låg churn (<5%). DCF-metoden värderar bolaget baserat på nuvarande värde av framtida kassaflöden, vilket är mest relevant för bolag med stabila och förutsägbara kassaflöden.\n\nDCF-beräkningen baserades på:\n- Fritt kassaflöde (FCF) för de kommande 5 åren baserat på finansiella projektioner\n- Terminalvärde beräknat med perpetuity growth-modell (g=2,5%) eller exit multiple (8x EBITDA)\n- WACC (Weighted Average Cost of Capital) på 9,5% baserat på: riskfri ränta (3,5%), equity risk premium (5,5%), beta (1,1), och cost of debt (4,5%)\n- Discount rate anpassad för bolagets specifika riskprofil\n\nVärderingen kompletterades med en multipelvärdering baserat på 12 jämförbara bolag inom samma bransch för att validera DCF-resultatet. Jämförbara bolag identifierades baserat på: (1) Liknande affärsmodell (SaaS/B2B software), (2) Liknande storlek (omsättning 30-100 MSEK), (3) Liknande tillväxt (10-25% CAGR), (4) Liknande lönsamhet (EBITDA-margin 15-25%), (5) Liknande geografi (Nordic/European).\n\nMultiplar använda:\n- EV/Revenue: 3,5-5,5x (median 4,2x)\n- EV/EBITDA: 8-12x (median 9,5x)\n- EV/FCF: 12-18x (median 14x)\n\nDCF-värderingen resulterade i ett värde på 34,2 MSEK (midpoint) medan multipelvärderingen resulterade i 36,8 MSEK (midpoint). Genomsnittet av dessa två metoder ger 35,5 MSEK, vilket är i linje med den slutliga värderingen på 35,6 MSEK.\n\nVärderingen tar hänsyn till:\n- Stark tillväxt (18% CAGR) som motiverar premium\n- Hög lönsamhet (22% EBITDA) som motiverar högre multiplar\n- Stark kassaflödeskonvertering (85%) som minskar risk\n- Marknadsledande position (32% marknadsandel) som ger konkurrensfördelar\n- Identifierade risker (nyckelpersoner, teknisk skuld) som justerar värderingen nedåt\n- Värdeskapande möjligheter (internationell expansion, cross-selling) som justerar värderingen uppåt\n\nKonfidensgraden på 82% reflekterar att värderingen är väl underbyggd med flera valideringsmetoder och stabila finansiella siffror, men att det finns viss osäkerhet kring framtida tillväxt och marknadsutveckling."
     },
     adjustments: [
       {
         type: "Stark marknadsposition",
         impact: 3200000,
-        reason: "Bolaget har en ledande position inom sin nisch med 32% marknadsandel"
+        reason: "Bolaget har en ledande position inom sin nisch med 32% marknadsandel, vilket är 2,5x större än närmaste konkurrent. Denna marknadsposition ger flera värdeskapande faktorer: (1) Starkt varumärke med 87% aided awareness, (2) Nätverkseffekter där värdet ökar med fler användare, (3) Högre prissättningskraft tack vare marknadsposition, (4) Bättre tillgång till partnerskap och distribution, (5) Möjlighet att attrahera bättre talanger. Marknadspositionen är hållbar tack vare patenterad teknologi, starka kundrelationer, och hög switching costs. Denna justering motsvarar en premium på ~9% över basvärderingen och är väl motiverad av jämförbara transaktioner där marknadsledare värderas 5-15% högre."
       },
       {
         type: "Teknisk skuld",
         impact: -1800000,
-        reason: "IT-systemen kräver modernisering inom 12-18 månader"
+        reason: "IT-systemen byggda 2018 på PHP 7.2 tappar support 2024 vilket kräver modernisering inom 12-18 månader. Estimerad kostnad är 3-5 MSEK och tar 6-9 månader. Denna teknisk skuld påverkar värderingen negativt eftersom: (1) Det kräver betydande investeringar som köparen måste göra, (2) Det skapar säkerhetsrisker tills moderniseringen är klar, (3) Det begränsar skalbarhet och internationell expansion, (4) Det kan påverka produktutvecklingshastighet. Justeringen på -1,8 MSEK motsvarar ~40% av moderniseringskostnaden och reflekterar att moderniseringen är nödvändig men att påbörjad modernisering kan minska risken. Om moderniseringen påbörjas före försäljning kan justeringen minskas till -0,9 MSEK."
       },
       {
         type: "Återkommande intäkter",
         impact: 2400000,
-        reason: "78% av intäkterna är återkommande med låg churn (< 5%)"
+        reason: "78% av intäkterna är återkommande med exceptionellt låg churn (<5% årligen vs branschsnitt 12-15%). Detta ger flera värdeskapande faktorer: (1) Hög förutsägbarhet i kassaflödet vilket minskar risk och motiverar högre värdering, (2) Låg kundanskaffningskostnad per kund eftersom churn är låg, (3) Möjlighet till expansion revenue från befintliga kunder (+7% årligen), (4) Hög kundlivstid (genomsnitt 6,5 år) vilket ökar Customer Lifetime Value. Återkommande intäkter värderas typiskt 20-30% högre än engångsintäkter i jämförbara transaktioner. Justeringen på +2,4 MSEK motsvarar en premium på ~7% och är väl motiverad av branschstandarder där SaaS-bolag med >70% ARR värderas betydligt högre."
       },
       {
         type: "Nyckelpersonsberoende",
         impact: -900000,
-        reason: "Hög beroende av VD och säljchef utan dokumenterade processer"
+        reason: "Hög beroende av VD och säljchef utan dokumenterade processer eller ersättare. VD och säljchef står tillsammans för 65% av kundrelationerna och 55% av nyförsäljningen. Om någon av dessa skulle lämna skulle det ha betydande negativ påverkan på verksamheten. Uppskattad värdeförlust vid abrupt bortfall: 15-25%. Justeringen på -0,9 MSEK reflekterar denna risk men tar också hänsyn till att risken kan minskas genom rekrytering av vice VD och dokumentation. Om vice VD rekryteras före försäljning kan justeringen minskas till -0,4 MSEK. Denna justering är konservativ jämfört med potentiell värdeförlust men reflekterar att risken är hanterbar med rätt åtgärder."
+      },
+      {
+        type: "Kundkoncentration",
+        impact: -600000,
+        reason: "Top 10 kunder står för 45% av omsättning vilket är över rekommenderad gräns på 30-35%. Den största kunden står för 12% av omsättning vilket är över rekommenderad gräns på 8-10%. Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Justeringen på -0,6 MSEK reflekterar denna risk men tar också hänsyn till att kundrelationerna är väletablerade med långa avtal (genomsnitt 4 år) och låg churn-risk. Om diversifieringsstrategi implementeras och max 8% per kund nås kan justeringen minskas till -0,3 MSEK."
+      },
+      {
+        type: "Stark kassaflödeskonvertering",
+        impact: 1500000,
+        reason: "Kassaflödeskonvertering på 85% av EBITDA är exceptionellt stark och betydligt över branschgenomsnittet på 60-65%. Detta ger flera värdeskapande faktorer: (1) Hög kvalitet i resultatet vilket minskar risk, (2) Möjlighet att finansiera tillväxt utan extern finansiering, (3) Flexibilitet för investeringar och utdelningar, (4) Stark finansiell stabilitet med kassareserv på 18,5 MSEK. Stark kassaflödeskonvertering värderas typiskt 10-15% högre i jämförbara transaktioner. Justeringen på +1,5 MSEK motsvarar en premium på ~4% och är väl motiverad."
+      },
+      {
+        type: "Patenterad teknologi",
+        impact: 1800000,
+        reason: "Patenterad teknologi som ger verifierbar 40% effektivitetsvinst jämfört med konkurrenters lösningar är en unik konkurrensfördel. Patentet ger: (1) Exklusivitet och skydd mot konkurrenter, (2) Möjlighet till licensintäkter i framtiden, (3) Högre värdering i jämförbara transaktioner (IP-intensive bolag värderas 15-25% högre), (4) Strategiskt värde för köpare som söker teknologisk kompetens. Justeringen på +1,8 MSEK motsvarar en premium på ~5% och reflekterar patentets värde men är konservativ jämfört med potentiellt strategiskt värde för rätt köpare."
       }
     ]
   },
@@ -329,7 +344,8 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
     ],
     marketShare: {
       current: 32,
-      potential: 45
+      potential: 45,
+      details: "Nuvarande marknadsandel på 32% gör bolaget till marknadsledare inom sin nisch. Den totala adresserbara marknaden (TAM) i Sverige uppskattas till 2,1 miljarder kronor årligen, vilket innebär att bolagets nuvarande omsättning på 68 MSEK representerar 3,2% av TAM. Detta visar på betydande tillväxtpotential även inom befintlig marknad.\n\nMarknadsandelen har vuxit från 24% (2021) till 32% (2023), vilket motsvarar en årlig tillväxt på 4 procentenheter. Denna tillväxt har drivits av: (1) Organisk tillväxt från befintliga kunder, (2) Nykundsförsäljning som överträffat marknadstillväxten, (3) Konkurrenter som har tappat marknadsandelar, (4) Ny produktlinje som har attraherat nya kundsegment.\n\nPotentiell marknadsandel på 45% är realistisk inom 3-5 år baserat på: (1) Fortsatt organisk tillväxt (+8-10% årligen), (2) Strategiska förvärv av mindre konkurrenter, (3) Internationell expansion till Norge och Danmark, (4) Ny produktlinje som växer till 25% av omsättning. Detta skulle öka omsättningen till ~95 MSEK inom 3 år.\n\nKonkurrenssituationen är relativt stabil med inga större disruptiva förändringar. De två största konkurrenterna har marknadsandelar på 18% och 15% respektive, och ingen av dem har vuxit snabbare än bolaget de senaste tre åren. Detta ger bolaget möjlighet att fortsätta ta marknadsandelar."
     },
     customerAnalysis: {
       concentration: "Måttlig - top 10 kunder står för 45% av omsättning, största kund 12%",
@@ -464,13 +480,16 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
       recommended: "70% kontant vid tillträde (24,9 MSEK), 20% deponerat för garantier i 18 månader (7,1 MSEK), 10% earn-out baserat på EBITDA-mål år 1-2 (3,6 MSEK). Säljaren behåller 5-10% (1,8-3,6 MSEK) för att visa continued faith och alignment of interests. Denna struktur balanserar säljarens önskan om säker exit med köparens behov av riskreducering.\n\nDetaljerad struktur:\n\n1. Kontant vid tillträde (70% = 24,9 MSEK): Betalas vid completion date, vanligtvis 2-4 veckor efter signing. Används för att betala av skulder, ge utdelning till ägare, och finansiera skatter. Detta ger säljaren omedelbar likviditet och minskar risk för köparens betalningsförmåga.\n\n2. Deponerat för garantier (20% = 7,1 MSEK): Hålls på depositionskonto i 18 månader för att täcka potentiella warranty claims och indemnities. Standard är 10-25% av köpeskillingen, så 20% är balanserat. Vid inga claims betalas detta ut efter 18 månader plus ränta.\n\n3. Earn-out (10% = 3,6 MSEK): Baserat på EBITDA-mål år 1-2. 50% betalas efter år 1 om EBITDA överstiger 16 MSEK, 50% efter år 2 om EBITDA överstiger 18 MSEK. Tydliga definitioner av EBITDA med carve-outs för extraordinära poster. Anti-sandbagging clauses för att skydda mot manipulation.\n\n4. Säljarens kvarhållande (5-10% = 1,8-3,6 MSEK): Säljaren behåller en mindre andel för att visa continued faith och alignment of interests. Detta kan öka köparens förtroende och möjliggöra högre värdering. Alternativt kan detta struktureras som management equity i köparens struktur.\n\nFördelar med denna struktur:\n- Balanserar risk mellan säljare och köpare\n- Ger säljaren omedelbar likviditet (70%)\n- Minskar köparens risk genom earn-out och deponerat\n- Alignerar intressen genom säljarens kvarhållande\n- Standard struktur som är välkänd och accepterad\n\nAlternativa strukturer att överväga:\n- 75% kontant + 15% deponerat + 10% earn-out (högre upfront)\n- 65% kontant + 25% deponerat + 10% earn-out (högre säkerhet)\n- 100% kontant (lägst risk för säljare men kan kräva lägre värdering)",
       earnOut: {
         recommended: true,
-        structure: "10% av köpeskillingen baserat på att EBITDA överstiger 16 MSEK år 1 och 18 MSEK år 2. 50/50 split mellan åren. Tydliga definitioner av EBITDA och anti-sandbagging clauses."
+        structure: "10% av köpeskillingen (3,6 MSEK) baserat på att EBITDA överstiger 16 MSEK år 1 och 18 MSEK år 2. 50/50 split mellan åren (1,8 MSEK vardera). Tydliga definitioner av EBITDA med carve-outs för extraordinära poster, one-time costs, och synergier. Anti-sandbagging clauses för att skydda mot manipulation där köparen sänker resultatet för att undvika earn-out. Measurement date är 90 dagar efter respektive års slut för att ge tid för årsredovisning.\n\nDetaljerad earn-out struktur:\n\nÅr 1: 1,8 MSEK betalas om EBITDA överstiger 16 MSEK. Om EBITDA är mellan 14-16 MSEK betalas proportionellt (t.ex. 15 MSEK = 50% av 1,8 MSEK = 0,9 MSEK). Om EBITDA är under 14 MSEK betalas inget.\n\nÅr 2: 1,8 MSEK betalas om EBITDA överstiger 18 MSEK. Om EBITDA är mellan 16-18 MSEK betalas proportionellt. Om EBITDA är under 16 MSEK betalas inget.\n\nEBITDA-definition: Operativt resultat före räntor, skatter, avskrivningar och amorteringar. Exkluderar: (1) Extraordinära poster och one-time costs, (2) Synergier från köparens integration, (3) Förändringar i accounting policies, (4) Förändringar i kapitalstruktur, (5) Försäljning av tillgångar.\n\nSkydd för säljare:\n- Anti-sandbagging: Köparen får inte sänka resultatet för att undvika earn-out\n- Normal business operations: Köparen måste driva verksamheten normalt\n- Measurement protection: EBITDA mäts enligt nuvarande accounting policies\n- Dispute resolution: Snabb process för att lösa tvister (30 dagar)\n\nSkydd för köpare:\n- Material adverse change: Om marknaden förändras drastiskt kan earn-out justeras\n- Management performance: Earn-out är beroende av att management presterar\n- Integration costs: Köparen kan exkludera integration costs från EBITDA"
       },
       warranties: [
-        "Standard warranties & indemnities med 18 månaders limitation period",
-        "Specifik indemnity för pågående skatteärende (max 2 MSEK)",
-        "IP warranties förstärkta givet patentens värde",
-        "Key person warranties med carve-out för redan kommunicerade risker"
+        "Standard warranties & indemnities med 18 månaders limitation period - täcker standard warranties för title, authority, capitalization, financial statements, taxes, compliance, litigation, environmental, employees, intellectual property, contracts, och material adverse change. Limitation period på 18 månader är standard för denna typ av transaktion och balanserar säljarens och köparens intressen.",
+        "Specifik indemnity för pågående skatteärende (max 2 MSEK) - täcker potentiella skatter som kan uppstå från pågående skatteärende med Skatteverket rörande avdrag för R&D-kostnader. Cap på 2 MSEK är baserat på sannolik bedömning av potentiellt utfall. Säljaren står för detta specifikt utanför standard warranties.",
+        "IP warranties förstärkta givet patentens värde - eftersom bolaget har patenterad teknologi som är central för värderingen, är IP-warranties förstärkta. Täcker att alla IP-rättigheter är ägda av bolaget, att det inte finns pågående intrång, att alla anställda har signerat IP-assignments, och att open source-användning är compliant. Limitation period kan vara längre (24-36 månader) för IP-warranties.",
+        "Key person warranties med carve-out för redan kommunicerade risker - säljaren garanterar att nyckelpersoner (VD, säljchef) stannar enligt avtal, men med carve-out för redan kommunicerade risker (t.ex. om VD lämnar på grund av hälsoskäl). Detta balanserar köparens behov av kontinuitet med säljarens behov av rimliga carve-outs.",
+        "Financial warranties - säljaren garanterar att finansiella statements är korrekta och kompletta, att det inte finns dolda skulder eller förpliktelser, att rörelsekapital är normaliserat, och att det inte finns extraordinära poster som inte är dokumenterade. Limitation period 18 månader.",
+        "Operational warranties - säljaren garanterar att verksamheten har drivits normalt, att det inte finns material adverse changes, att alla viktiga kontrakt är i kraft, att det inte finns pågående tvister som kan påverka verksamheten, och att compliance är i ordning. Limitation period 18 månader.",
+        "Environmental warranties - säljaren garanterar att det inte finns miljöproblem eller skulder, att alla tillstånd är i kraft, och att det inte finns pågående miljötvister. Viktigt för fastighetsrelaterade aspekter. Limitation period kan vara längre för environmental (24 månader)."
       ]
     }
   },
@@ -480,13 +499,15 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
         action: "Rekrytera vice VD med säljansvar och M&A-erfarenhet",
         priority: "high",
         timeframe: "3-4 månader (påbörja omgående)",
-        responsibleParty: "VD med stöd av executive search-firma, budget 150-200k SEK"
+        responsibleParty: "VD med stöd av executive search-firma, budget 150-200k SEK",
+        details: "Rekrytering av vice VD är den mest kritiska åtgärden för att minska nyckelpersonsrisken. Kandidaten bör ha: (1) Minst 10 års erfarenhet inom B2B-sälj, (2) Erfarenhet av M&A-processer och försäljning av bolag, (3) Förmåga att bygga och leda säljorganisationer, (4) Djup branschkunskap och nätverk, (5) Kompatibel personlighet och kulturfit. Processen bör inkludera: (1) Engagera executive search-firma med branschspecialisering, (2) Definiera tydlig rollbeskrivning och successionsplan, (3) Genomföra omfattande intervjuer med både VD och styrelse, (4) Reference checks med tidigare arbetsgivare och kollegor, (5) Kulturfit-assessment och team-intervjuer. Budget: 150-200k SEK för rekrytering + lönepaket på 1,2-1,5 MSEK/år. Tidsram: 3-4 månader från start till onboarding. Success metrics: Vice VD introducerad till top 20 kunder inom 2 månader, ansvarig för 30% av nyförsäljning inom 6 månader."
       },
       {
         action: "Påbörja IT-modernisering fas 1 (migration till modern tech stack)",
         priority: "high",
         timeframe: "Starta inom 1 månad, fas 1 klar inom 6 månader",
-        responsibleParty: "CTO med extern leverantör, budget 2-3 MSEK för fas 1"
+        responsibleParty: "CTO med extern leverantör, budget 2-3 MSEK för fas 1",
+        details: "IT-modernisering är kritisk eftersom PHP 7.2 tappar support 2024. Moderniseringen bör ske i två faser för att minska risk och möjliggöra kontinuerlig drift. Fasa 1 (3 månader, 1,5 MSEK): (1) Migration av kritiska komponenter (autentisering, betalningar, databas), (2) Säkerhetsförbättringar och compliance, (3) Performance-optimering, (4) Dokumentation och testning. Fasa 2 (6 månader, 2-3 MSEK): (1) Fullständig migration till Node.js/Python backend, (2) React frontend-uppgradering, (3) PostgreSQL-databasmigration, (4) API-modernisering, (5) DevOps och CI/CD-pipeline. Processen bör inkludera: (1) Val av teknisk leverantör med referenser, (2) Detaljerad teknisk roadmap och architecture design, (3) Parallell drift under migration för att minimera disruption, (4) Omfattande testning och QA, (5) Rollback-planer för varje fas. Success metrics: Fasa 1 klar inom 3 månader utan större disruption, inga säkerhetsincidenter, förbättrad systemprestanda med 20-30%."
       },
       {
         action: "Dokumentera alla kundrelationer, kontaktpersoner och historik i CRM",
@@ -574,18 +595,23 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
       }
     ],
     duringNegotiation: [
-      "Förbered datarum med proaktiv adressering av röda flaggor",
-      "Engagera W&I insurance provider tidigt",
-      "Behåll normal business operations - undvik churn",
-      "Veckovisa uppdateringar till management team",
-      "Förhandla parallellt med 2-3 parter för konkurrens"
+      "Förbered omfattande datarum med proaktiv adressering av alla identifierade röda flaggor - skapa dokument som förklarar varje röd flagga, vad som har gjorts för att adressera den, och vad som planeras. Detta visar framåtblickande ledning och minskar risk för att köparen använder röda flaggor som förhandlingskort. Inkludera: (1) Dokumentation av alla kundrelationer, (2) Successionsplaner för nyckelpersoner, (3) IT-moderniseringsroadmap, (4) GDPR-compliance dokumentation, (5) Finansiella rapporter och prognoser.",
+      "Engagera W&I (Warranty & Indemnity) insurance provider tidigt i processen - detta kan minska köparens risk och därmed motivera högre värdering och lägre krav på warranties. W&I insurance täcker köparen för warranty claims och kan kosta 1-2% av köpeskillingen. Processen tar 4-6 veckor så bör påbörjas tidigt.",
+      "Behåll normal business operations och undvik churn - det är kritiskt att verksamheten fortsätter att prestera normalt under förhandlingarna. Churn eller försämrade resultat kan ge köparen anledning att sänka priset eller dra sig ur. Implementera retention strategies för top kunder, behåll fokus på försäljning, och undvik större förändringar som kan påverka resultatet negativt.",
+      "Veckovisa uppdateringar till management team om förhandlingsstatus - håll teamet informerat utan att avslöja konfidentiella detaljer. Detta minskar osäkerhet och rykten som kan påverka moralen. Fokusera på positiva framsteg och nästa steg i processen.",
+      "Förhandla parallellt med 2-3 parter för att skapa konkurrens - detta är kritiskt för att maximera värderingen. Konkurrens mellan köpare kan driva upp priset med 10-20%. Var transparent om att det finns flera intressenter men respektera konfidentialitet. Använd LOI (Letter of Intent) från flera parter för att skapa momentum.",
+      "Förbered för due diligence med omfattande dokumentation - köparen kommer att genomföra omfattande due diligence. Förbered all dokumentation i förväg: finansiella statements, kontrakt, IP-dokumentation, HR-dokumentation, compliance-dokumentation, etc. Detta gör processen smidigare och minskar risk för avbrott eller förseningar.",
+      "Hantera förhandlingsdynamik professionellt - var förberedd på hårda förhandlingar där köparen kan försöka driva ned priset eller kräva mer warranties. Håll fast vid din värdering och använd data för att motivera den. Var beredd på kompromisser men vet dina gränser. Använd M&A-rådgivare för att hantera förhandlingarna professionellt.",
+      "Skydda konfidentialitet och undvik leakage - information om försäljningen kan påverka kunder, leverantörer, och anställda negativt. Implementera strikta konfidentialitetsprotokoll och informera endast när nödvändigt. Var förberedd på kommunikationsplan om information läcker ut."
     ],
     postSale: [
-      "Smooth handover enligt transition services agreement",
-      "Kommunikationsplan till kunder och leverantörer",
-      "Retention program för nyckelpersoner",
-      "Knowledge transfer sessions dokumenterade",
-      "Månadsvis uppföljning av earn-out KPIs"
+      "Smooth handover enligt transition services agreement (TSA) - köparen kommer att behöva stöd under övergångsperioden. TSA definierar vilka tjänster säljaren ska tillhandahålla (t.ex. IT-support, HR-support, kundservice) och under vilken period (vanligtvis 3-12 månader). Detaljera TSA tidigt i processen för att undvika förhandlingar i sista minuten. Kostnader för TSA ska täcka säljarens kostnader plus margin.",
+      "Omfattande kommunikationsplan till kunder och leverantörer - informera kunder och leverantörer professionellt om försäljningen. Fokusera på kontinuitet och att inget ändras för dem. Detta minskar risk för churn eller oro. Kommunikationen bör ske samtidigt eller strax efter public announcement. Förbered Q&A-dokument för vanliga frågor.",
+      "Retention program för nyckelpersoner - köparen kommer att vilja behålla nyckelpersoner. Implementera retention bonusar och tydliga karriärvägar för att säkerställa att viktiga medarbetare stannar. Detta är kritiskt för kontinuitet och för att maximera earn-out potential. Retention program kan inkludera: (1) Stay-on bonusar, (2) Karriärutveckling, (3) Equity participation, (4) Tydliga roller och ansvar.",
+      "Knowledge transfer sessions dokumenterade - säkerställ att all kunskap överförs från säljare till köpare. Detta inkluderar: (1) Kundrelationer och historik, (2) Teknisk kunskap och system, (3) Processer och rutiner, (4) Branschinsikter och relationer. Dokumentera allt för att säkerställa att inget går förlorat. Knowledge transfer bör ske över 3-6 månader med regelbundna sessions.",
+      "Månadsvis uppföljning av earn-out KPIs - om earn-out ingår är det kritiskt att följa upp prestationen regelbundet. Implementera månadsvisa business reviews där EBITDA och andra KPI:er diskuteras. Detta säkerställer att earn-out-målen nås och ger tid att korrigera om prestationen avviker. Använd samma accounting policies som under due diligence.",
+      "Integration planning och execution - köparen kommer att vilja integrera bolaget i sin organisation. Var delaktig i integrationsplaneringen för att säkerställa smooth transition. Detta kan inkludera: (1) Systemintegration, (2) Processharmonisering, (3) Organisationsförändringar, (4) Kulturintegration. Var proaktiv men respektera köparens beslut.",
+      "Post-closing support och relationship management - bygg en positiv relation med köparen även efter försäljningen. Detta kan vara värdefullt för framtida samarbeten, referenser, eller potentiella framtida transaktioner. Var tillgänglig för frågor och support under övergångsperioden men respektera att köparen nu äger bolaget."
     ]
   }
 }
