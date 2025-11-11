@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, Suspense } from 'react'
+import dynamic from 'next/dynamic'
 import { 
   TrendingUp, Download, CheckCircle, AlertCircle, Award, 
   BarChart3, FileText, Shield, Target, Briefcase, 
@@ -1849,63 +1850,6 @@ function PremiumResultMockupContent() {
               </div>
             </div>
 
-            {/* Executive Summary */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200">
-              <h3 className="text-2xl font-bold text-primary-navy mb-6">Sammanfattning</h3>
-              <div className="prose prose-lg max-w-none leading-relaxed">
-                <div className="text-gray-700">
-                  {renderMarkdownText(result.executiveSummary)}
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
-              <div className="bg-green-50 p-6 rounded-xl border border-green-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                  <span className="font-semibold text-gray-900">Styrkor</span>
-                </div>
-                <div className="text-3xl font-bold text-green-700">
-                  {result.ddFindings.strengths.length}
-                </div>
-                <p className="text-sm text-green-600 mt-1">Identifierade</p>
-              </div>
-
-              <div className="bg-red-50 p-6 rounded-xl border border-red-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <AlertTriangle className="w-6 h-6 text-red-600" />
-                  <span className="font-semibold text-gray-900">Röda flaggor</span>
-                </div>
-                <div className="text-3xl font-bold text-red-700">
-                  {result.ddFindings.redFlags.length}
-                </div>
-                <p className="text-sm text-red-600 mt-1">Att åtgärda</p>
-              </div>
-
-              <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <Zap className="w-6 h-6 text-blue-600" />
-                  <span className="font-semibold text-gray-900">Quick Wins</span>
-                </div>
-                <div className="text-3xl font-bold text-blue-700">
-                  {result.ddFindings.quickWins.length}
-                </div>
-                <p className="text-sm text-blue-600 mt-1">Möjligheter</p>
-              </div>
-
-              <div className="bg-purple-50 p-6 rounded-xl border border-purple-200">
-                <div className="flex items-center gap-3 mb-2">
-                  <Target className="w-6 h-6 text-purple-600" />
-                  <span className="font-semibold text-gray-900">Åtgärder</span>
-                </div>
-                <div className="text-3xl font-bold text-purple-700">
-                  {result.actionPlan.preSale.length}
-                </div>
-                <p className="text-sm text-purple-600 mt-1">Före försäljning</p>
-              </div>
-            </div>
-
             {/* Key Charts */}
             <div className="space-y-8">
               {/* Financial Development Chart */}
@@ -2022,6 +1966,63 @@ function PremiumResultMockupContent() {
                     <Tooltip />
                   </RadarChart>
                 </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Executive Summary */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200">
+              <h3 className="text-2xl font-bold text-primary-navy mb-6">Sammanfattning</h3>
+              <div className="prose prose-lg max-w-none leading-relaxed">
+                <div className="text-gray-700">
+                  {renderMarkdownText(result.executiveSummary)}
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
+              <div className="bg-green-50 p-6 rounded-xl border border-green-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                  <span className="font-semibold text-gray-900">Styrkor</span>
+                </div>
+                <div className="text-3xl font-bold text-green-700">
+                  {result.ddFindings.strengths.length}
+                </div>
+                <p className="text-sm text-green-600 mt-1">Identifierade</p>
+              </div>
+
+              <div className="bg-red-50 p-6 rounded-xl border border-red-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <AlertTriangle className="w-6 h-6 text-red-600" />
+                  <span className="font-semibold text-gray-900">Röda flaggor</span>
+                </div>
+                <div className="text-3xl font-bold text-red-700">
+                  {result.ddFindings.redFlags.length}
+                </div>
+                <p className="text-sm text-red-600 mt-1">Att åtgärda</p>
+              </div>
+
+              <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <Zap className="w-6 h-6 text-blue-600" />
+                  <span className="font-semibold text-gray-900">Quick Wins</span>
+                </div>
+                <div className="text-3xl font-bold text-blue-700">
+                  {result.ddFindings.quickWins.length}
+                </div>
+                <p className="text-sm text-blue-600 mt-1">Möjligheter</p>
+              </div>
+
+              <div className="bg-purple-50 p-6 rounded-xl border border-purple-200">
+                <div className="flex items-center gap-3 mb-2">
+                  <Target className="w-6 h-6 text-purple-600" />
+                  <span className="font-semibold text-gray-900">Åtgärder</span>
+                </div>
+                <div className="text-3xl font-bold text-purple-700">
+                  {result.actionPlan.preSale.length}
+                </div>
+                <p className="text-sm text-purple-600 mt-1">Före försäljning</p>
               </div>
             </div>
           </div>
