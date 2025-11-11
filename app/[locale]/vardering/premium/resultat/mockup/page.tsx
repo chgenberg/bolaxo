@@ -44,50 +44,134 @@ const mockResult = {
       }
     ]
   },
-  executiveSummary: `Baserat på en omfattande due diligence-analys värderas bolaget till 35,6 MSEK med ett konfidensintervall på 28,5-42,8 MSEK.
+  executiveSummary: `SAMMANFATTNING AV FÖRETAGSVÄRDERING OCH DUE DILIGENCE
 
-Bolaget uppvisar flera starka fundamenta som motiverar värderingen: en marknadsledande position inom sin nisch, höga återkommande intäkter (78%), stark lönsamhet med EBITDA-marginal på 22%, och en skalbar affärsmodell. Den finansiella historiken visar konsekvent tillväxt med en CAGR på 18% över de senaste tre åren.
+Baserat på en omfattande due diligence-analys som täcker 42 kritiska affärsområden, värderas bolaget till 35,6 MSEK med ett konfidensintervall på 28,5-42,8 MSEK. Värderingen baseras på en kombination av diskonterat kassaflöde (DCF) som primär metod och multipelvärdering som valideringsmetod, vilket ger en konfidensgrad på 82%.
 
-Huvudsakliga värdeskapande faktorer inkluderar bolagets starka varumärke, effektiva säljprocesser, och väletablerade kundrelationer med över 90% kundnöjdhet. Teknologiplattformen, om än i behov av modernisering, ger konkurrensfördelar genom automatisering och skalbarhet.
+FINANSIELL STYRKA OCH HISTORISK UTVECKLING
 
-Identifierade risker som påverkar värderingen negativt inkluderar beroendet av nyckelpersoner (särskilt VD och säljchef), teknisk skuld som kräver investeringar, och viss marknadskoncentration med top 10 kunder som står för 45% av omsättningen.
+Bolaget har uppvisat exceptionell finansiell utveckling under de senaste tre åren. Omsättningen har vuxit från 42 MSEK (2021) till 68 MSEK (2023), vilket motsvarar en sammansatt årlig tillväxttakt (CAGR) på 18%. Detta är betydligt över branschsnittet på 8-10% och indikerar stark marknadsposition och effektiv verksamhet.
 
-För att maximera värdet inför en försäljning rekommenderas åtgärder inom tre huvudområden: 1) Dokumentera och systematisera nyckelpersoners kunskap, 2) Påbörja IT-modernisering för att minska teknisk skuld, 3) Diversifiera kundbasen för att minska koncentrationsrisken.
+Lönsamheten är imponerande med en EBITDA-marginal på 22%, vilket är 7 procentenheter över branschgenomsnittet på 15%. Bruttomarginal ligger på exceptionella 72%, jämfört med branschsnitt på 55%, vilket tyder på stark prissättningskraft och effektiv kostnadskontroll. Nettomarginal på 14% är också betydligt över branschsnitt och visar på hållbar lönsamhet även efter finansiella kostnader och skatter.
 
-Optimal försäljningstidpunkt bedöms vara om 6-9 månader efter implementering av rekommenderade åtgärder, vilket estimeras kunna höja värderingen med 15-20%.`,
+Kassaflödeskonverteringen är mycket stark på 85% av EBITDA, vilket indikerar hög kvalitet i resultatet och minimal rörelsekapitalbindning. Detta möjliggörs delvis av att 40% av kunderna betalar förskott, vilket ger en naturlig finansiering av verksamheten. Det fria kassaflödet har varit konsekvent positivt och vuxit i takt med resultatet, vilket ger ägarna flexibilitet för både investeringar och utdelningar.
+
+AFFÄRSMODELL OCH INTÄKTSSTRUKTUR
+
+En av bolagets största styrkor är den höga andelen återkommande intäkter. 78% av omsättningen kommer från prenumerationer och serviceavtal med genomsnittlig löptid på 3 år. Detta ger hög förutsägbarhet i kassaflödet och minskar beroendet av kontinuerlig nyförsäljning. Churn-raten är exceptionellt låg på under 5% årligen, vilket är betydligt bättre än branschsnittet på 12-15%.
+
+Kundbasen består av 247 aktiva kunder, varav majoriteten är medelstora till stora företag med god betalningsförmåga. Genomsnittlig kundlivstid är 6,5 år, vilket tyder på högt kundvärde och stark kundlojalitet. Customer Lifetime Value (LTV) beräknas till 890 000 kr medan Customer Acquisition Cost (CAC) ligger på 67 000 kr, vilket ger ett utmärkt LTV/CAC-ratio på 13,3x.
+
+MARKNADSPOSITION OCH KONKURRENSSITUATION
+
+Bolaget har etablerat sig som marknadsledare inom sin nisch med en marknadsandel på 32%. Detta är resultatet av 8 års fokuserat arbete med produktutveckling och kundservice. Den totala adresserbara marknaden (TAM) i Sverige uppskattas till 2,1 miljarder kronor årligen, vilket innebär att bolaget har betydande tillväxtpotential även inom befintlig marknad.
+
+Konkurrenslandskapet består av tre huvudkategorier: 1) Två större internationella aktörer med bred produktportfölj men mindre fokus på den svenska marknaden, 2) Fem medelstora svenska konkurrenter med liknande erbjudande men svagare varumärke och teknologi, 3) Ett tiotal mindre nischaktörer som fokuserar på specifika kundsegment eller geografiska områden.
+
+Bolagets konkurrensfördelar är väldokumenterade och hållbara. Den patenterade teknologin ger 40% effektivitetsvinst jämfört med konkurrenternas lösningar, vilket är verifierat genom oberoende tester. Varumärket är starkt etablerat med 87% aided awareness bland målgruppen. Kundnöjdheten mätt som Net Promoter Score (NPS) ligger på 72, vilket är exceptionellt högt jämfört med branschgenomsnittet på 45.
+
+OPERATIONELL EXCELLENS OCH ORGANISATION
+
+Säljorganisationen är välfungerande med tydliga processer och hög produktivitet. Genomsnittlig säljcykel är 3,2 månader, vilket är i linje med branschstandard för denna typ av lösningar. Konverteringsgraden från kvalificerad lead till kund ligger på 28%, vilket är över branschsnitt. Säljproduktiviteten mätt som intäkt per säljare är 4,2 MSEK årligen, vilket är konkurrenskraftigt.
+
+Teknologiplattformen är byggd 2018 och har skalat väl med verksamheten. Systemet hanterar för närvarande 247 kunder utan prestandaproblem och har kapacitet för ytterligare 400-500 kunder innan större investeringar krävs. Dock bygger plattformen på PHP 7.2 som tappar officiellt support under 2024, vilket innebär att en modernisering är nödvändig inom 12-18 månader.
+
+Organisationen består av 32 medarbetare fördelade på säljare (8), kundservice (6), produktutveckling (9), administration (4), och ledning (5). Personalomsättningen är låg på 8% årligen, vilket är betydligt under branschsnittet på 15-18%. Detta tyder på god arbetsmiljö och stark företagskultur.
+
+IDENTIFIERADE RISKER OCH UTMANINGAR
+
+Den mest kritiska risken är beroendet av nyckelpersoner, specifikt VD och säljchef. VD har grundat bolaget och har djupa relationer med många av de största kunderna. Säljchefen ansvarar för 40% av nyförsäljningen och har unika relationer inom branschen. Ingen av dessa roller har dokumenterade ersättare eller överlämningsplaner. Vid en försäljning är det kritiskt att säkerställa att dessa personer stannar kvar under en övergångsperiod, vilket bör regleras i transaktionsavtalet.
+
+Den tekniska skulden utgör en betydande risk och kostnad. Moderniseringen av IT-plattformen estimeras kosta 3-5 MSEK och ta 6-9 månader att genomföra. Detta bör påbörjas före en försäljning för att undvika att köparen använder detta som förhandlingskort för prisavdrag. En påbörjad modernisering visar också på framåtblickande ledning och minskar upplevd risk.
+
+Kundkoncentrationen med top 10 kunder som står för 45% av omsättningen utgör en finansiell risk. Den största kunden står för 12% av omsättningen, vilket är över den rekommenderade gränsen på 8-10%. Om denna kund skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. En diversifieringsstrategi bör implementeras för att minska denna risk.
+
+VÄRDESKAPANDE MÖJLIGHETER
+
+Internationell expansion till de nordiska grannländerna representerar den största tillväxtmöjligheten. Den totala adresserbara marknaden i Norden är tre gånger större än i Sverige, och bolagets lösning är fullt tillämpbar på dessa marknader. En försiktig expansion till Norge och Danmark skulle kunna öka den adresserbara marknaden med 150% inom 2-3 år.
+
+Cross-selling till befintlig kundbas är en betydande outnyttjad möjlighet. För närvarande köper endast 35% av kunderna mer än en produkt, trots att produktportföljen innehåller flera kompletterande lösningar. En strukturerad cross-selling-strategi med incitament för säljare skulle kunna öka genomsnittlig intäkt per kund med 40-60%.
+
+Produktutveckling mot en SaaS-modell skulle kunna öka både marginalerna och värderingen. För närvarande är lösningen delvis on-premise, vilket kräver installation och support. En ren SaaS-lösning skulle minska dessa kostnader och möjliggöra snabbare skalning. SaaS-bolag värderas typiskt 30-50% högre än traditionella mjukvarubolag på grund av högre förutsägbarhet och lägre kundanskaffningskostnader.
+
+REKOMMENDERAD TRANSAKTIONSSTRATEGI
+
+Optimal tidpunkt för försäljning bedöms vara om 6-9 månader efter implementering av kritiska förbättringsåtgärder. Detta ger tid att visa förbättrad lönsamhet, minskad risk, och påbörjad tillväxtresa, vilket kan höja värderingen med 15-20% (5-7 MSEK).
+
+Rekommenderad köparprofil är antingen en Private Equity-fond med branschfokus som har kapital och kompetens för internationell expansion, eller en strategisk köpare inom närliggande vertikal som söker marknadskonsolidering. Internationella aktörer som vill etablera sig på den svenska marknaden är också potentiella köpare.
+
+Affärsstrukturen bör vara 70% kontant vid tillträde, 20% deponerat för garantier i 18 månader, och 10% earn-out baserat på EBITDA-mål. Detta balanserar säljarens önskan om säker exit med köparens behov av riskreducering. Nyckelpersoner bör ha stay-on bonusar och VD bör förbinda sig att stanna 12 månader med möjlighet till konsultavtal därefter.
+
+SLUTSATS
+
+Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell historik, ledande marknadsposition, och betydande tillväxtpotential. Värderingen på 35,6 MSEK är väl underbyggd och tar hänsyn till både styrkor och identifierade risker. Med rätt förberedelser och timing kan värdet maximeras ytterligare, vilket gör detta till en mycket attraktiv försäljningskandidat inom de närmaste 12 månaderna.`,
   ddFindings: {
     strengths: [
-      "Marknadsledande position med 32% marknadsandel inom sin nisch",
-      "78% återkommande intäkter med låg churn-rate (<5%)",
-      "EBITDA-marginal på 22% vilket är 7 procentenheter över branschsnitt",
-      "Skalbar teknologiplattform som möjliggör tillväxt utan proportionell kostnadsökning",
-      "Stark kundnöjdhet (NPS 72) och långa kundrelationer (snitt 6,5 år)",
-      "Välfungerande säljorganisation med dokumenterade processer",
-      "Diversifierad produktportfölj som minskar beroendet av enskilda produkter",
-      "Stark kassaflödeskonvertering (85% av EBITDA)"
+      "Marknadsledande position med 32% marknadsandel inom sin nisch, vilket är 2,5x större än närmaste konkurrent",
+      "78% återkommande intäkter med exceptionellt låg churn-rate (<5% årligen vs branschsnitt 12-15%)",
+      "EBITDA-marginal på 22% vilket är 7 procentenheter över branschsnitt på 15%, trendande uppåt",
+      "Skalbar teknologiplattform som möjliggör tillväxt utan proportionell kostnadsökning - nuvarande kapacitet 3x större än användning",
+      "Stark kundnöjdhet (NPS 72 vs branschsnitt 45) och exceptionellt långa kundrelationer (genomsnitt 6,5 år)",
+      "Välfungerande säljorganisation med dokumenterade processer och hög produktivitet (4,2 MSEK/säljare)",
+      "Diversifierad produktportfölj med 5 huvudprodukter som minskar beroendet av enskilda produkter",
+      "Stark kassaflödeskonvertering (85% av EBITDA) med minimal rörelsekapitalbindning",
+      "Patenterad teknologi som ger verifierbar 40% effektivitetsvinst jämfört med konkurrenters lösningar",
+      "Starkt varumärke med 87% aided awareness bland målgruppen i Sverige",
+      "Låg personalomsättning (8% vs branschsnitt 15-18%) som indikerar stark företagskultur",
+      "Hög konverteringsgrad från lead till kund (28% vs branschsnitt 18-22%)",
+      "Utmärkt LTV/CAC-ratio på 13,3x vilket är betydligt över hållbarhetsgränsen på 3x",
+      "Förskottsbetalningar från 40% av kunderna ger naturlig finansiering av verksamheten",
+      "Genomsnittlig avtalslängd på 3 år ger hög förutsägbarhet i intäktsflödet",
+      "Certifieringar inom ISO 27001 och ISO 9001 som är krav för många större kunder",
+      "Etablerade partnerskap med 3 större systemintegratörer som driver 15% av nyförsäljningen",
+      "Dokumenterad och skalbar onboarding-process som minskar time-to-value för nya kunder",
+      "Proaktiv kundservice med 95% first-call resolution och genomsnittlig svarstid under 2 timmar"
     ],
     weaknesses: [
-      "Hög beroende av VD och säljchef utan tydlig successionsplanering",
-      "IT-system byggt 2018 behöver modernisering (teknisk skuld)",
-      "Begränsad internationell närvaro (95% av försäljning i Sverige)",
-      "Svag digital marknadsföring jämfört med konkurrenter",
-      "Manuella processer inom ekonomi och rapportering",
-      "Låg investeringsnivå i R&D (3% av omsättning vs 8% branschsnitt)"
+      "Kritiskt beroende av VD och säljchef som tillsammans står för 65% av kundrelationerna utan dokumenterad överlämningsplan eller vice VD",
+      "IT-system byggt 2018 på PHP 7.2 som tappar support 2024 - kräver modernisering inom 12-18 månader (estimerad kostnad 3-5 MSEK)",
+      "Begränsad internationell närvaro med 95% av försäljning i Sverige - ingen etablerad go-to-market strategi för internationell expansion",
+      "Svag digital marknadsföring med endast 8% av leads från digitala kanaler jämfört med branschsnitt på 35%",
+      "Manuella processer inom ekonomi och rapportering - saknar automatiserad månadsrapportering och KPI-dashboards",
+      "Låg investeringsnivå i R&D (3% av omsättning vs 8% branschsnitt) vilket kan påverka långsiktig konkurrenskraft",
+      "Ingen dedikerad produktchef - produktutveckling styrs ad-hoc av VD och utvecklingsteam",
+      "Begränsad dokumentation av teknisk arkitektur och systemdesign - knowledge silos hos enskilda utvecklare",
+      "Saknar formell säljträning och onboarding-program för nya säljare",
+      "Ingen strukturerad cross-selling strategi trots att endast 35% av kunder köper flera produkter",
+      "Begränsad användning av data och analytics för affärsbeslut - saknar BI-verktyg",
+      "Ingen dokumenterad disaster recovery plan eller business continuity plan",
+      "Svag employer branding gör rekrytering av senior talanger utmanande",
+      "Ingen strukturerad kundlojalitetsprogram eller community-building initiativ"
     ],
     opportunities: [
-      "Internationell expansion till nordiska grannländer (TAM +150%)",
-      "Digitalisering av säljprocessen kan öka konvertering med 20-30%",
-      "Cross-selling till befintlig kundbas (endast 35% köper flera produkter)",
-      "Strategiska förvärv av mindre konkurrenter för marknadskonsolidering",
-      "Utveckling av SaaS-version av huvudprodukten",
-      "Partnerskapsavtal med större systemintegratörer"
+      "Internationell expansion till Norge och Danmark som första steg - TAM ökar med 150% och kulturell närhet underlättar",
+      "Digitalisering av säljprocessen med marketing automation och lead nurturing kan öka konvertering med 20-30% och minska CAC med 25%",
+      "Strukturerad cross-selling strategi till befintlig kundbas - endast 35% köper flera produkter trots hög komplementaritet",
+      "Strategiska förvärv av 2-3 mindre konkurrenter för snabb marknadskonsolidering och geografisk expansion",
+      "Utveckling av ren SaaS-version av huvudprodukten kan öka marginaler med 5-8 procentenheter och attrahera mindre kunder",
+      "Utöka partnerskap med större systemintegratörer - nuvarande 3 partners driver endast 15% av försäljning",
+      "Lansera freemium-modell för att accelerera marknadsadoption och skapa viral tillväxt",
+      "Utveckla branschspecifika vertikaler som kan prissättas premium (estimerat 20-30% högre ASP)",
+      "Implementera AI/ML för prediktiv analytics vilket kan differentierade erbjudandet och motivera prisökningar",
+      "Skapa marketplace för tredjepartstillägg vilket kan generera nya intäktsströmmar och öka switching costs",
+      "Etablera customer success-funktion för att driva expansion revenue och minska churn ytterligare",
+      "Utveckla white-label lösning för partners vilket kan öppna nya distributionskanaler",
+      "Lansera professionella tjänster (konsulting, implementation) som komplement till produkten",
+      "Skapa API-ekosystem för integrationer vilket ökar produktens värde och lock-in effekt"
     ],
     threats: [
-      "Ny konkurrerande teknologi från internationella aktörer",
-      "Prispress från lågkostnadsalternativ",
-      "Regulatoriska förändringar inom GDPR/dataskydd",
-      "Konjunkturnedgång kan påverka B2B-försäljningen",
-      "Cybersäkerhetsrisker och potentiella dataläckor"
+      "Internationella tech-jättar som börjar fokusera på denna nisch med betydligt större resurser för produktutveckling och marknadsföring",
+      "Prispress från lågkostnadsalternativ, särskilt från Östeuropa och Indien, som kan underminera premiumpositionering",
+      "Regulatoriska förändringar inom GDPR/dataskydd som kan kräva betydande investeringar i compliance och säkerhet",
+      "Konjunkturnedgång kan påverka B2B-investeringsvilja och leda till längre säljcykler och lägre deal sizes",
+      "Cybersäkerhetsrisker och potentiella dataläckor som kan skada varumärke och leda till kundbortfall",
+      "Disruptiv teknologi (AI/ML) som kan göra nuvarande lösningsansats obsolet inom 3-5 år",
+      "Konsolidering bland konkurrenter som skapar större och starkare konkurrenter med bredare erbjudande",
+      "Kundernas ökande krav på integrationer och ekosystem som kan vara kostsamt att uppfylla",
+      "Talangbrist inom tech som driver upp lönekostnader och gör rekrytering utmanande",
+      "Open source-alternativ som kan erbjuda liknande funktionalitet gratis",
+      "Förändrade köpbeteenden där kunder föredrar all-in-one plattformar framför best-of-breed lösningar",
+      "Geopolitisk instabilitet som kan påverka internationell expansion och leverantörskedjor"
     ],
     redFlags: [
       {
@@ -123,28 +207,52 @@ Optimal försäljningstidpunkt bedöms vara om 6-9 månader efter implementering
     ],
     quickWins: [
       {
-        action: "Implementera prisoptimering",
-        impact: "+8-12% på EBITDA",
+        action: "Implementera prisoptimering och value-based pricing",
+        impact: "+8-12% på EBITDA genom 5-8% prisökning på befintliga kunder och 10-15% på nya kunder",
         timeframe: "2-3 månader",
-        cost: "250-500k SEK"
+        cost: "250-500k SEK (priskonsult + kommunikationsmaterial)"
       },
       {
-        action: "Automatisera fakturering och inkasso",
-        impact: "Frigör 2 FTE, förbättrad kassaflöde",
+        action: "Automatisera fakturering, påminnelser och inkasso",
+        impact: "Frigör 2 FTE (1,6 MSEK årligen), förbättrad kassaflöde med 15 dagar, minskat DSO från 58 till 45 dagar",
         timeframe: "1-2 månader",
-        cost: "100-200k SEK"
+        cost: "100-200k SEK (mjukvara + implementation)"
       },
       {
-        action: "Lansera referensprogram",
-        impact: "+15-20% nya kunder",
+        action: "Lansera strukturerat referensprogram med incitament",
+        impact: "+15-20% nya kunder från referenser, -40% CAC för refererade kunder, högre konvertering",
         timeframe: "1 månad",
-        cost: "50-100k SEK"
+        cost: "50-100k SEK (plattform + marknadsföringsmaterial)"
       },
       {
-        action: "Optimera Google Ads och SEO",
-        impact: "-30% CAC, +25% leads",
+        action: "Optimera Google Ads, SEO och content marketing",
+        impact: "-30% CAC, +25% kvalificerade leads, förbättrad brand awareness",
         timeframe: "3 månader",
-        cost: "300k SEK"
+        cost: "300k SEK (byrå + verktyg)"
+      },
+      {
+        action: "Implementera upsell/cross-sell playbook för befintliga kunder",
+        impact: "+20-25% expansion revenue, ökat ARPU med 15-20%",
+        timeframe: "1-2 månader",
+        cost: "50k SEK (utveckling av playbook och säljmaterial)"
+      },
+      {
+        action: "Lansera customer success-program för top 50 kunder",
+        impact: "Minskat churn med 2 procentenheter (värde: 1,4 MSEK årligen), ökad NPS",
+        timeframe: "2 månader",
+        cost: "Intern tid + 100k SEK (verktyg)"
+      },
+      {
+        action: "Optimera onboarding-process med automatisering",
+        impact: "Minskat time-to-value från 45 till 30 dagar, frigör 1 FTE, högre kundnöjdhet",
+        timeframe: "2-3 månader",
+        cost: "200k SEK (utveckling + verktyg)"
+      },
+      {
+        action: "Implementera lead scoring och marketing automation",
+        impact: "+35% säljproduktivitet, kortare säljcykel med 20%, bättre lead-kvalitet",
+        timeframe: "2 månader",
+        cost: "150k SEK (plattform + setup)"
       }
     ]
   },
@@ -322,40 +430,100 @@ Optimal försäljningstidpunkt bedöms vara om 6-9 månader efter implementering
   actionPlan: {
     preSale: [
       {
-        action: "Rekrytera vice VD med säljansvar",
+        action: "Rekrytera vice VD med säljansvar och M&A-erfarenhet",
         priority: "high",
-        timeframe: "3-4 månader",
-        responsibleParty: "VD med stöd av rekryteringsfirma"
+        timeframe: "3-4 månader (påbörja omgående)",
+        responsibleParty: "VD med stöd av executive search-firma, budget 150-200k SEK"
       },
       {
-        action: "Påbörja IT-modernisering fas 1",
+        action: "Påbörja IT-modernisering fas 1 (migration till modern tech stack)",
         priority: "high",
-        timeframe: "Starta inom 1 månad",
-        responsibleParty: "CTO med extern leverantör"
+        timeframe: "Starta inom 1 månad, fas 1 klar inom 6 månader",
+        responsibleParty: "CTO med extern leverantör, budget 2-3 MSEK för fas 1"
       },
       {
-        action: "Dokumentera alla kundrelationer i CRM",
+        action: "Dokumentera alla kundrelationer, kontaktpersoner och historik i CRM",
         priority: "high",
         timeframe: "2 månader",
-        responsibleParty: "Säljchef"
+        responsibleParty: "Säljchef med stöd av alla säljare, 20% av deras tid"
       },
       {
-        action: "Implementera månadsrapportering och KPIs",
-        priority: "medium",
+        action: "Implementera månadsrapportering, KPI-dashboards och rolling forecast",
+        priority: "high",
         timeframe: "1 månad",
-        responsibleParty: "CFO"
+        responsibleParty: "CFO med stöd av controller, verktyg: Power BI eller Tableau"
       },
       {
-        action: "Genomför GDPR-revision",
-        priority: "medium",
+        action: "Genomför omfattande GDPR-revision och uppdatera alla avtal",
+        priority: "high",
         timeframe: "2-3 månader",
-        responsibleParty: "Legal counsel"
+        responsibleParty: "Legal counsel (extern), budget 200-300k SEK"
       },
       {
-        action: "Optimera prissättning",
+        action: "Implementera value-based pricing och kommunicera till kundbasen",
+        priority: "high",
+        timeframe: "2 månader",
+        responsibleParty: "VD och säljchef med priskonsult, budget 250k SEK"
+      },
+      {
+        action: "Skapa detaljerad dokumentation av teknisk arkitektur och systemdesign",
+        priority: "high",
+        timeframe: "2 månader",
+        responsibleParty: "CTO och utvecklingsteam, 15% av deras tid"
+      },
+      {
+        action: "Implementera disaster recovery plan och testa den",
+        priority: "high",
+        timeframe: "1 månad",
+        responsibleParty: "CTO, budget 100k SEK för backup-lösning"
+      },
+      {
+        action: "Diversifiera kundbasen - fokusera på att växa med mindre kunder",
+        priority: "medium",
+        timeframe: "6 månader (kontinuerligt)",
+        responsibleParty: "Säljchef, mål: max 8% per kund"
+      },
+      {
+        action: "Lansera customer success-program för top 50 kunder",
         priority: "medium",
         timeframe: "2 månader",
-        responsibleParty: "VD och säljchef"
+        responsibleParty: "Ny customer success manager (rekrytera), budget 100k SEK för verktyg"
+      },
+      {
+        action: "Förbättra employer branding och rekryteringsprocess",
+        priority: "medium",
+        timeframe: "3 månader",
+        responsibleParty: "HR-ansvarig, budget 150k SEK för byrå"
+      },
+      {
+        action: "Skapa säljträningsprogram och playbooks för alla säljare",
+        priority: "medium",
+        timeframe: "2 månader",
+        responsibleParty: "Säljchef med extern säljcoach, budget 100k SEK"
+      },
+      {
+        action: "Implementera BI-verktyg för datadriven beslutsfattning",
+        priority: "medium",
+        timeframe: "2 månader",
+        responsibleParty: "CFO och CTO, budget 50k SEK + 20k/månad"
+      },
+      {
+        action: "Förbered datarum med all dokumentation för due diligence",
+        priority: "medium",
+        timeframe: "1 månad (görs 2 månader före försäljning)",
+        responsibleParty: "CFO med stöd av M&A-rådgivare"
+      },
+      {
+        action: "Rekrytera produktchef för att professionalisera produktutveckling",
+        priority: "low",
+        timeframe: "3-4 månader",
+        responsibleParty: "VD, budget 150k SEK rekrytering"
+      },
+      {
+        action: "Utveckla go-to-market strategi för internationell expansion",
+        priority: "low",
+        timeframe: "2 månader",
+        responsibleParty: "VD med extern konsult, budget 200k SEK"
       }
     ],
     duringNegotiation: [
