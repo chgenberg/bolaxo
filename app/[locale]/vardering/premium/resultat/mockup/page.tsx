@@ -1190,27 +1190,93 @@ Påbörja förberedelserna omgående med fokus på quick wins (prisoptimering, a
     negotiationPoints: [
       {
         topic: "Earn-out struktur",
-        yourPosition: "Max 20% av köpeskillingen, 2 års period, baserat på EBITDA-mål år 1-2. Tydliga definitioner av EBITDA med carve-outs för extraordinära poster. 50/50 split mellan åren. Anti-sandbagging clauses för att skydda mot manipulation.",
-        expectedCounterpart: "30-40% earn-out över 3-4 år med mer komplex struktur. Kan inkludera revenue-mål i addition till EBITDA. Kan kräva längre bindningstid för management.",
-        strategy: "Visa på stabila historiska siffror och låg volatilitet i resultatet. Erbjud warranty & indemnity insurance för att minska köparens risk och därmed motivera lägre earn-out. Framhäv att 2 års period är standard för branschen. Erbjud högre upfront betalning (75% vs 70%) som kompromiss."
+        yourPosition: "**Din position:**
+
+Max 20% av köpeskillingen, 2 års period, baserat på EBITDA-mål år 1-2. 
+
+- Tydliga definitioner av EBITDA med carve-outs för extraordinära poster
+- 50/50 split mellan åren
+- Anti-sandbagging clauses för att skydda mot manipulation",
+        
+        expectedCounterpart: "**Förväntad motpart:**
+
+30-40% earn-out över 3-4 år med mer komplex struktur. 
+
+- Kan inkludera revenue-mål i addition till EBITDA
+- Kan kräva längre bindningstid för management",
+        
+        strategy: "**Förhandlingsstrategi:**
+
+1) Visa på stabila historiska siffror och låg volatilitet i resultatet
+2) Erbjud warranty & indemnity insurance för att minska köparens risk
+3) Framhäv att 2 års period är standard för branschen
+4) Erbjud högre upfront betalning (75% vs 70%) som kompromiss"
       },
       {
         topic: "Nyckelpersoner och stay-on",
-        yourPosition: "VD stannar 12 månader med tydlig roll och ansvar. Stay-on bonus på 2 MSEK vid fullgörande. Efter 12 månader möjlighet till konsultavtal på 50% tid i 12 månader till. Säljchef stannar 18 månader med stay-on bonus 1,5 MSEK.",
-        expectedCounterpart: "VD och säljchef 24-36 månader med högre stay-on bonusar. Kan kräva fulltid under hela perioden utan konsultmöjlighet. Kan kräva att båda förbinder sig till icke-konkurrensavtal på 3-5 år.",
-        strategy: "Föreslå konsultavtal efter 12 månader som kompromiss - ger köparen kontinuitet men ger VD flexibilitet. Rekrytera vice VD innan försäljning för att minska beroendet. Framhäv att längre bindningstid kan påverka motivation negativt. Erbjud högre stay-on bonusar som kompromiss för kortare tid."
+        yourPosition: "**Din position:**
+
+VD stannar 12 månader med tydlig roll och ansvar:
+- Stay-on bonus på 2 MSEK vid fullgörande
+- Efter 12 månader möjlighet till konsultavtal på 50% tid i 12 månader till
+
+Säljchef stannar 18 månader:
+- Stay-on bonus 1,5 MSEK",
+        
+        expectedCounterpart: "**Förväntad motpart:**
+
+VD och säljchef 24-36 månader med högre stay-on bonusar:
+- Kan kräva fulltid under hela perioden utan konsultmöjlighet
+- Kan kräva icke-konkurrensavtal på 3-5 år",
+        
+        strategy: "**Förhandlingsstrategi:**
+
+1) Föreslå konsultavtal efter 12 månader som kompromiss
+2) Rekrytera vice VD innan försäljning för att minska beroendet
+3) Framhäv att längre bindningstid kan påverka motivation negativt
+4) Erbjud högre stay-on bonusar som kompromiss för kortare tid"
       },
       {
         topic: "Due diligence fynd och teknisk skuld",
-        yourPosition: "Teknisk skuld är känd och prissatt i värderingen. Påbörjad modernisering visar framåtblickande ledning och minskar risk. Ingen prisavdrag motiverad.",
-        expectedCounterpart: "Kräver prisreduktion för IT-investering (3-5 MSEK) eller att säljaren finansierar moderniseringen. Kan använda teknisk skuld som förhandlingskort för att driva ned priset.",
-        strategy: "Visa påbörjad modernisering (fasa 1 klar eller påbörjad) före försäljning. Ge comfort letter från IT-konsult som bekräftar att moderniseringen är välplanerad och kostnadsberäknad. Framhäv att teknisk skuld är normal för bolag i denna storlek och ålder. Erbjud att dela kostnaden 50/50 som kompromiss."
+        yourPosition: "**Din position:**
+
+- Teknisk skuld är känd och prissatt i värderingen
+- Påbörjad modernisering visar framåtblickande ledning
+- Ingen prisavdrag motiverad",
+        
+        expectedCounterpart: "**Förväntad motpart:**
+
+- Kräver prisreduktion för IT-investering (3-5 MSEK)
+- Eller att säljaren finansierar moderniseringen
+- Kan använda teknisk skuld som förhandlingskort",
+        
+        strategy: "**Förhandlingsstrategi:**
+
+1) Visa påbörjad modernisering (fasa 1 klar eller påbörjad) före försäljning
+2) Ge comfort letter från IT-konsult som bekräftar välplanerad modernisering
+3) Framhäv att teknisk skuld är normal för bolag i denna storlek
+4) Erbjud att dela kostnaden 50/50 som kompromiss"
       },
       {
         topic: "Rörelsekapital och locked box",
-        yourPosition: "Normalized WC enligt 12-månaders snitt (8,5 MSEK) med tydlig definition. Locked box-mechanism med completion date 3 månader före signing. Ingen justering för normala säsongsvariationer.",
-        expectedCounterpart: "Cherry-picking bästa månaden för WC-beräkning. Kräver completion date vid signing eller efter. Kan kräva justering för säsongsvariationer.",
-        strategy: "Föreslå locked box med tydlig WC-mekanism baserat på 12-månaders snitt. Visa på stabila WC-trender över tid. Framhäv att locked box är standard för denna typ av transaktion. Erbjud att acceptera completion date vid signing om köparen accepterar normalized WC."
+        yourPosition: "**Din position:**
+
+- Normalized WC enligt 12-månaders snitt (8,5 MSEK) med tydlig definition
+- Locked box-mechanism med completion date 3 månader före signing
+- Ingen justering för normala säsongsvariationer",
+        
+        expectedCounterpart: "**Förväntad motpart:**
+
+- Cherry-picking bästa månaden för WC-beräkning
+- Kräver completion date vid signing eller efter
+- Kan kräva justering för säsongsvariationer",
+        
+        strategy: "**Förhandlingsstrategi:**
+
+1) Föreslå locked box med tydlig WC-mekanism baserat på 12-månaders snitt
+2) Visa på stabila WC-trender över tid
+3) Framhäv att locked box är standard för denna typ av transaktion
+4) Erbjud att acceptera completion date vid signing om köparen accepterar normalized WC"
       },
       {
         topic: "Garantier och warranties",
