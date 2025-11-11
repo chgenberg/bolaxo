@@ -1179,10 +1179,13 @@ Påbörja förberedelserna omgående med fokus på quick wins (prisoptimering, a
 
 **Mål:** Vara redo för försäljning Q2-Q3 2024.",
     buyerProfile: [
-      "Private Equity-fonder med branschfokus (t.ex. Nordic Capital, EQT, FSN Capital) - har kapital för IT-investering och internationell expansion, värderar på EBITDA-multiplar 8-12x, söker platformbolag för add-on förvärv, typisk hålltid 3-5 år",
-      "Strategiska köpare inom närliggande vertikal som söker marknadskonsolidering (t.ex. större systemintegratörer, konsultbolag) - kan betala premium (15-25% över PE) för synergier, värderar strategiskt värde och kundbas, söker komplementära produkter eller geografisk expansion",
-      "Internationella aktörer som vill etablera sig på svenska marknaden (t.ex. amerikanska eller tyska tech-bolag) - kan betala högsta premium (20-30% över PE) för marknadsentré, värderar etablerad kundbas och lokalt varumärke, söker snabb skalning",
-      "Management buyout med PE-stöd givet starka kassaflöden - kan vara attraktivt om nuvarande ledning vill fortsätta, värderar kontinuitet och kundrelationer, möjliggör delägarskap för management team"
+      "**Private Equity-fonder** med branschfokus (t.ex. Nordic Capital, EQT, FSN Capital)\n- Har kapital för IT-investering och internationell expansion\n- Värderar på EBITDA-multiplar 8-12x\n- Söker platformbolag för add-on förvärv\n- Typisk hålltid 3-5 år",
+      
+      "**Strategiska köpare** inom närliggande vertikal (t.ex. större systemintegratörer, konsultbolag)\n- Kan betala premium (15-25% över PE) för synergier\n- Värderar strategiskt värde och kundbas\n- Söker komplementära produkter eller geografisk expansion",
+      
+      "**Internationella aktörer** som vill etablera sig på svenska marknaden (t.ex. amerikanska eller tyska tech-bolag)\n- Kan betala högsta premium (20-30% över PE) för marknadsentré\n- Värderar etablerad kundbas och lokalt varumärke\n- Söker snabb skalning",
+      
+      "**Management buyout** med PE-stöd givet starka kassaflöden\n- Kan vara attraktivt om nuvarande ledning vill fortsätta\n- Värderar kontinuitet och kundrelationer\n- Möjliggör delägarskap för management team"
     ],
     negotiationPoints: [
       {
