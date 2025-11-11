@@ -1799,8 +1799,8 @@ function PremiumResultMockupContent() {
                   <p className="text-gray-700">{result.valuation.methodology.secondary}</p>
                 </div>
               </div>
-              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                <p className="text-gray-700">{result.valuation.methodology.explanation}</p>
+              <div className="mt-4 p-6 bg-gray-50 rounded-lg">
+                <div className="text-gray-700 leading-relaxed">{renderMarkdownText(result.valuation.methodology.explanation)}</div>
               </div>
             </div>
 
@@ -1809,12 +1809,12 @@ function PremiumResultMockupContent() {
               <h3 className="text-xl font-bold text-primary-navy mb-4">Värderingsjusteringar</h3>
               <div className="space-y-4">
                 {result.valuation.adjustments.map((adj, index) => (
-                  <div key={index} className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
-                    <div>
+                  <div key={index} className="flex items-start justify-between gap-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
                       <h4 className="font-semibold text-gray-900">{adj.type}</h4>
-                      <p className="text-gray-600 text-sm mt-1">{adj.reason}</p>
+                      <div className="text-gray-600 text-sm mt-1 leading-relaxed">{renderMarkdownText(adj.reason)}</div>
                     </div>
-                    <div className={`font-bold text-lg ${adj.impact > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`font-bold text-lg whitespace-nowrap ${adj.impact > 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {adj.impact > 0 ? '+' : ''}{formatCurrency(adj.impact)}
                     </div>
                   </div>
@@ -1875,7 +1875,7 @@ function PremiumResultMockupContent() {
                   {result.ddFindings.strengths.map((strength, index) => (
                     <li key={index} className="flex items-start">
                       <ChevronRight className="w-4 h-4 text-green-600 mt-0.5 mr-2 flex-shrink-0" />
-                      <span className="text-green-800">{strength}</span>
+                      <span className="text-green-800">{renderMarkdownText(strength)}</span>
                     </li>
                   ))}
                 </ul>
@@ -1890,7 +1890,7 @@ function PremiumResultMockupContent() {
                   {result.ddFindings.weaknesses.map((weakness, index) => (
                     <li key={index} className="flex items-start">
                       <ChevronRight className="w-4 h-4 text-red-600 mt-0.5 mr-2 flex-shrink-0" />
-                      <span className="text-red-800">{weakness}</span>
+                      <span className="text-red-800">{renderMarkdownText(weakness)}</span>
                     </li>
                   ))}
                 </ul>
@@ -1905,7 +1905,7 @@ function PremiumResultMockupContent() {
                   {result.ddFindings.opportunities.map((opportunity, index) => (
                     <li key={index} className="flex items-start">
                       <ChevronRight className="w-4 h-4 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
-                      <span className="text-blue-800">{opportunity}</span>
+                      <span className="text-blue-800">{renderMarkdownText(opportunity)}</span>
                     </li>
                   ))}
                 </ul>
@@ -1920,7 +1920,7 @@ function PremiumResultMockupContent() {
                   {result.ddFindings.threats.map((threat, index) => (
                     <li key={index} className="flex items-start">
                       <ChevronRight className="w-4 h-4 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" />
-                      <span className="text-yellow-800">{threat}</span>
+                      <span className="text-yellow-800">{renderMarkdownText(threat)}</span>
                     </li>
                   ))}
                 </ul>
@@ -2345,7 +2345,7 @@ function PremiumResultMockupContent() {
                 {result.actionPlan.duringNegotiation.map((action, index) => (
                   <li key={index} className="flex items-start">
                     <Briefcase className="w-5 h-5 text-primary-navy mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">{action}</span>
+                    <div className="text-gray-700 leading-relaxed">{renderMarkdownText(action)}</div>
                   </li>
                 ))}
               </ul>
@@ -2358,7 +2358,7 @@ function PremiumResultMockupContent() {
                 {result.actionPlan.postSale.map((action, index) => (
                   <li key={index} className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">{action}</span>
+                    <div className="text-gray-700 leading-relaxed">{renderMarkdownText(action)}</div>
                   </li>
                 ))}
               </ul>
