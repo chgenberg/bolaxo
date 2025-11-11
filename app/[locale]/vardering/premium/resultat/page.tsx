@@ -250,10 +250,10 @@ export default function PremiumValuationResultPage() {
                     <Award className="w-8 h-8" />
                     <h3 className="text-2xl font-bold">Professionell företagsvärdering</h3>
                   </div>
-                  <div className="text-5xl font-bold mb-4">
+                  <div className="text-5xl font-bold mb-4 whitespace-nowrap">
                     {formatCurrency(result.valuation.range.mostLikely)}
                   </div>
-                  <div className="text-xl opacity-90 mb-2">
+                  <div className="text-xl opacity-90 mb-2 whitespace-nowrap">
                     Intervall: {formatCurrency(result.valuation.range.min)} - {formatCurrency(result.valuation.range.max)}
                   </div>
                   <div className="flex items-center gap-4 mt-4">
@@ -279,7 +279,7 @@ export default function PremiumValuationResultPage() {
             {/* Executive Summary */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-2xl font-bold text-primary-navy mb-6">Sammanfattning</h3>
-              <div className="prose max-w-none">
+              <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                   {result.executiveSummary}
                 </p>
@@ -287,7 +287,7 @@ export default function PremiumValuationResultPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
               <div className="bg-green-50 p-6 rounded-xl border border-green-200">
                 <div className="flex items-center gap-3 mb-2">
                   <CheckCircle className="w-6 h-6 text-green-600" />
@@ -361,12 +361,12 @@ export default function PremiumValuationResultPage() {
               <h3 className="text-xl font-bold text-primary-navy mb-4">Värderingsjusteringar</h3>
               <div className="space-y-4">
                 {result.valuation.adjustments.map((adj, index) => (
-                  <div key={index} className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
-                    <div>
+                  <div key={index} className="flex items-start justify-between gap-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
                       <h4 className="font-semibold text-gray-900">{adj.type}</h4>
                       <p className="text-gray-600 text-sm mt-1">{adj.reason}</p>
                     </div>
-                    <div className={`font-bold text-lg ${adj.impact > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    <div className={`font-bold text-lg whitespace-nowrap ${adj.impact > 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {adj.impact > 0 ? '+' : ''}{formatCurrency(adj.impact)}
                     </div>
                   </div>
@@ -417,7 +417,7 @@ export default function PremiumValuationResultPage() {
         return (
           <div className="space-y-6">
             {/* SWOT Analysis */}
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="bg-green-50 p-6 rounded-xl border border-green-200">
                 <h4 className="font-bold text-green-900 mb-4 flex items-center">
                   <CheckCircle className="w-5 h-5 mr-2" />
@@ -511,7 +511,7 @@ export default function PremiumValuationResultPage() {
                 <Zap className="w-6 h-6 mr-2 text-blue-600" />
                 Quick Wins
               </h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {result.ddFindings.quickWins.map((win, index) => (
                   <div key={index} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <h4 className="font-semibold text-gray-900 mb-2">{win.action}</h4>
@@ -606,15 +606,15 @@ export default function PremiumValuationResultPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center">
                   <p className="text-sm text-gray-600 mb-2">Nuvarande</p>
-                  <p className="text-2xl font-bold text-gray-900">{formatCurrency(result.financialAnalysis.workingCapital.current)}</p>
+                  <p className="text-2xl font-bold text-gray-900 whitespace-nowrap">{formatCurrency(result.financialAnalysis.workingCapital.current)}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-sm text-gray-600 mb-2">Optimalt</p>
-                  <p className="text-2xl font-bold text-green-600">{formatCurrency(result.financialAnalysis.workingCapital.optimal)}</p>
+                  <p className="text-2xl font-bold text-green-600 whitespace-nowrap">{formatCurrency(result.financialAnalysis.workingCapital.optimal)}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-sm text-gray-600 mb-2">Förbättringspotential</p>
-                  <p className="text-2xl font-bold text-blue-600">
+                  <p className="text-2xl font-bold text-blue-600 whitespace-nowrap">
                     {formatCurrency(result.financialAnalysis.workingCapital.current - result.financialAnalysis.workingCapital.optimal)}
                   </p>
                 </div>
@@ -632,7 +632,7 @@ export default function PremiumValuationResultPage() {
             {/* Competitive Advantages */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-xl font-bold text-primary-navy mb-6">Konkurrensfördelar</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-3 gap-4">
                 {result.marketPosition.competitiveAdvantages.map((advantage, index) => (
                   <div key={index} className="flex items-start p-4 bg-green-50 rounded-lg">
                     <Award className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
@@ -781,7 +781,7 @@ export default function PremiumValuationResultPage() {
             {/* Buyer Profile */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-xl font-bold text-primary-navy mb-6">Köparprofiler</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-3 gap-4">
                 {result.transactionGuidance.buyerProfile.map((profile, index) => (
                   <div key={index} className="flex items-start p-4 bg-primary-navy/5 rounded-lg">
                     <Users className="w-5 h-5 text-primary-navy mr-3 mt-0.5 flex-shrink-0" />
@@ -796,22 +796,22 @@ export default function PremiumValuationResultPage() {
               <h3 className="text-xl font-bold text-primary-navy mb-6">Förhandlingspunkter</h3>
               <div className="space-y-4">
                 {result.transactionGuidance.negotiationPoints.map((point, index) => (
-                  <div key={index} className="border-l-4 border-primary-navy pl-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">{point.topic}</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="bg-green-50 p-3 rounded">
-                          <p className="font-medium text-green-900 mb-1">Din position</p>
-                          <p className="text-green-800 whitespace-pre-wrap">{point.yourPosition}</p>
+                  <div key={index} className="border-l-4 border-primary-navy pl-6 py-2">
+                    <h4 className="font-semibold text-gray-900 text-lg mb-3">{point.topic}</h4>
+                    <div className="space-y-3">
+                      <div className="grid lg:grid-cols-2 gap-4">
+                        <div className="bg-green-50 p-4 rounded-lg">
+                          <p className="font-semibold text-green-900 mb-2">Din position</p>
+                          <p className="text-green-800 whitespace-pre-wrap leading-relaxed">{point.yourPosition}</p>
                         </div>
-                        <div className="bg-red-50 p-3 rounded">
-                          <p className="font-medium text-red-900 mb-1">Förväntad motpart</p>
-                          <p className="text-red-800 whitespace-pre-wrap">{point.expectedCounterpart}</p>
+                        <div className="bg-red-50 p-4 rounded-lg">
+                          <p className="font-semibold text-red-900 mb-2">Förväntad motpart</p>
+                          <p className="text-red-800 whitespace-pre-wrap leading-relaxed">{point.expectedCounterpart}</p>
                         </div>
                       </div>
-                      <div className="bg-blue-50 p-3 rounded">
-                        <p className="font-medium text-blue-900 mb-1">Strategi</p>
-                        <p className="text-blue-800 whitespace-pre-wrap">{point.strategy}</p>
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <p className="font-semibold text-blue-900 mb-2">Strategi</p>
+                        <p className="text-blue-800 whitespace-pre-wrap leading-relaxed">{point.strategy}</p>
                       </div>
                     </div>
                   </div>
@@ -972,7 +972,7 @@ export default function PremiumValuationResultPage() {
                     42 områden analyserade
                   </div>
                 </div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
                   Professionell företagsvärdering
                 </h1>
               </div>
@@ -1015,7 +1015,7 @@ export default function PremiumValuationResultPage() {
       
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderTabContent()}
+        <div className="max-w-6xl mx-auto">{renderTabContent()}</div>
       </div>
     </div>
   )
