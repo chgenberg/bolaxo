@@ -7,6 +7,13 @@ import {
   Clock, Users, AlertTriangle, Lightbulb, DollarSign,
   ChevronRight, TrendingDown, Zap, Package, Globe
 } from 'lucide-react'
+import { 
+  LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, 
+  AreaChart, Area, RadarChart, PolarGrid, PolarAngleAxis, 
+  PolarRadiusAxis, Radar, ComposedChart,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  ScatterChart, Scatter, LabelList
+} from 'recharts'
 
 const mockResult = {
   valuation: {
@@ -1627,6 +1634,85 @@ Operativt resultat före räntor, skatter, avskrivningar och amorteringar.
   }
 }
 
+// Chart data for visualizations
+const historicalFinancialData = [
+  { year: '2021', revenue: 42, ebitda: 7.1, fcf: 6.8 },
+  { year: '2022', revenue: 54, ebitda: 10.8, fcf: 9.7 },
+  { year: '2023', revenue: 68, ebitda: 15.0, fcf: 12.7 }
+]
+
+const valuationAdjustmentsData = [
+  { name: 'Basvärdering', value: 32100000, type: 'base' },
+  { name: 'Marknadsposition', value: 3200000, type: 'positive' },
+  { name: 'Återkommande intäkter', value: 2400000, type: 'positive' },
+  { name: 'Patenterad teknologi', value: 1800000, type: 'positive' },
+  { name: 'Kassaflöde', value: 1500000, type: 'positive' },
+  { name: 'Teknisk skuld', value: -1800000, type: 'negative' },
+  { name: 'Nyckelpersoner', value: -900000, type: 'negative' },
+  { name: 'Kundkoncentration', value: -600000, type: 'negative' },
+  { name: 'Slutvärdering', value: 35600000, type: 'final' }
+]
+
+const revenueDistributionData = [
+  { name: 'Återkommande', value: 78, fill: '#3b82f6' },
+  { name: 'Engångs', value: 22, fill: '#93c5fd' }
+]
+
+const customerSegmentData = [
+  { name: 'Enterprise', value: 15, revenue: 37, fill: '#1e40af' },
+  { name: 'Mid-market', value: 45, revenue: 111, fill: '#3b82f6' },
+  { name: 'SMB', value: 40, revenue: 99, fill: '#60a5fa' }
+]
+
+const marketShareData = [
+  { name: mockResult.ddFindings.competitiveAdvantages[0].split(' ')[0], value: 32, fill: '#3b82f6' },
+  { name: 'Konkurrent A', value: 18, fill: '#60a5fa' },
+  { name: 'Konkurrent B', value: 15, fill: '#93c5fd' },
+  { name: 'Övriga', value: 35, fill: '#dbeafe' }
+]
+
+const riskMatrixData = [
+  { name: 'Nyckelpersoner', x: 85, y: 85, severity: 'high', size: 60 },
+  { name: 'Teknisk skuld', x: 90, y: 70, severity: 'high', size: 50 },
+  { name: 'Kundkoncentration', x: 50, y: 60, severity: 'medium', size: 40 },
+  { name: 'GDPR-compliance', x: 30, y: 40, severity: 'low', size: 30 },
+  { name: 'Internationell närvaro', x: 50, y: 50, severity: 'medium', size: 35 }
+]
+
+const businessMetricsRadarData = [
+  { metric: 'Tillväxt', company: 85, industry: 45, fullMark: 100 },
+  { metric: 'Lönsamhet', company: 88, industry: 60, fullMark: 100 },
+  { metric: 'Kundnöjdhet', company: 92, industry: 65, fullMark: 100 },
+  { metric: 'Marknadsandel', company: 75, industry: 30, fullMark: 100 },
+  { metric: 'Digital mognad', company: 40, industry: 70, fullMark: 100 },
+  { metric: 'Skalbarhet', company: 85, industry: 55, fullMark: 100 }
+]
+
+const projectionData = [
+  { year: '2024', revenue: 78, ebitda: 17.9, scenario: 'base' },
+  { year: '2025', revenue: 89, ebitda: 21.4, scenario: 'base' },
+  { year: '2026', revenue: 102, ebitda: 25.5, scenario: 'base' },
+  { year: '2027', revenue: 117, ebitda: 30.4, scenario: 'base' },
+  { year: '2028', revenue: 134, ebitda: 36.2, scenario: 'base' }
+]
+
+const customerMetricsData = [
+  { name: 'NPS', value: 72, benchmark: 45, max: 100 },
+  { name: 'Churn', value: 5, benchmark: 15, max: 20 },
+  { name: 'LTV/CAC', value: 13.3, benchmark: 3, max: 15 }
+]
+
+// Colors for charts
+const COLORS = {
+  primary: '#3b82f6',
+  secondary: '#60a5fa',
+  tertiary: '#93c5fd',
+  quaternary: '#dbeafe',
+  positive: '#10b981',
+  negative: '#ef4444',
+  neutral: '#6b7280'
+}
+
 const tabs = [
   { id: 'overview', label: 'Översikt', icon: BarChart3 },
   { id: 'valuation', label: 'Värdering', icon: TrendingUp },
@@ -1819,6 +1905,125 @@ function PremiumResultMockupContent() {
                 <p className="text-sm text-purple-600 mt-1">Före försäljning</p>
               </div>
             </div>
+
+            {/* Key Charts */}
+            <div className="space-y-8">
+              {/* Financial Development Chart */}
+              <div className="bg-white rounded-xl p-8 border border-gray-200">
+                <h3 className="text-xl font-bold text-primary-navy mb-6">Historisk finansiell utveckling</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={historicalFinancialData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis dataKey="year" stroke="#666" />
+                    <YAxis stroke="#666" label={{ value: 'MSEK', angle: -90, position: 'insideLeft' }} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                      formatter={(value: number) => `${value} MSEK`}
+                    />
+                    <Legend />
+                    <Line type="monotone" dataKey="revenue" name="Omsättning" stroke={COLORS.primary} strokeWidth={3} dot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="ebitda" name="EBITDA" stroke={COLORS.secondary} strokeWidth={3} dot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="fcf" name="Fritt kassaflöde" stroke={COLORS.positive} strokeWidth={3} dot={{ r: 6 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+                <div className="flex justify-center gap-8 mt-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS.primary }}></div>
+                    <span>CAGR: 18%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS.secondary }}></div>
+                    <span>EBITDA-marginal: 22%</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS.positive }}></div>
+                    <span>FCF-konvertering: 85%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* Revenue Distribution */}
+                <div className="bg-white rounded-xl p-8 border border-gray-200">
+                  <h3 className="text-xl font-bold text-primary-navy mb-6">Intäktsfördelning</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={revenueDistributionData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={(entry) => `${entry.name}: ${entry.value}%`}
+                        outerRadius={100}
+                        fill="#8884d8"
+                        dataKey="value"
+                      >
+                        {revenueDistributionData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="mt-4 space-y-2">
+                    <p className="text-sm text-gray-600">
+                      <strong>Återkommande intäkter:</strong> Ger hög förutsägbarhet och låg risk
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <strong>Churn-rate:</strong> &lt;5% årligen (branschsnitt: 12-15%)
+                    </p>
+                  </div>
+                </div>
+
+                {/* Market Share */}
+                <div className="bg-white rounded-xl p-8 border border-gray-200">
+                  <h3 className="text-xl font-bold text-primary-navy mb-6">Marknadsandel</h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart>
+                      <Pie
+                        data={marketShareData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={100}
+                        fill="#8884d8"
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {marketShareData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value: number) => `${value}%`} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="flex flex-wrap justify-center gap-4 mt-4">
+                    {marketShareData.map((entry, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.fill }}></div>
+                        <span className="text-sm">{entry.name}: {entry.value}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Business Metrics Radar */}
+              <div className="bg-white rounded-xl p-8 border border-gray-200">
+                <h3 className="text-xl font-bold text-primary-navy mb-6">Jämförelse med branschsnitt</h3>
+                <ResponsiveContainer width="100%" height={400}>
+                  <RadarChart data={businessMetricsRadarData}>
+                    <PolarGrid stroke="#e5e7eb" />
+                    <PolarAngleAxis dataKey="metric" stroke="#666" />
+                    <PolarRadiusAxis angle={90} domain={[0, 100]} stroke="#666" />
+                    <Radar name="Bolaget" dataKey="company" stroke={COLORS.primary} fill={COLORS.primary} fillOpacity={0.6} strokeWidth={2} />
+                    <Radar name="Branschsnitt" dataKey="industry" stroke={COLORS.neutral} fill={COLORS.neutral} fillOpacity={0.3} strokeWidth={2} />
+                    <Legend />
+                    <Tooltip />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
         )
 
@@ -1858,6 +2063,53 @@ function PremiumResultMockupContent() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Waterfall Chart for Adjustments */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200">
+              <h3 className="text-xl font-bold text-primary-navy mb-6">Värderingsjusteringar - Visuell översikt</h3>
+              <ResponsiveContainer width="100%" height={400}>
+                <ComposedChart data={valuationAdjustmentsData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis 
+                    dataKey="name" 
+                    angle={-45} 
+                    textAnchor="end" 
+                    height={100}
+                    interval={0}
+                    tick={{ fontSize: 12 }}
+                  />
+                  <YAxis 
+                    tickFormatter={(value) => `${(value / 1000000).toFixed(0)} MSEK`}
+                    domain={[0, 40000000]}
+                  />
+                  <Tooltip 
+                    formatter={(value: number) => formatCurrency(Math.abs(value))}
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                  />
+                  <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                    {valuationAdjustmentsData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={
+                          entry.type === 'base' || entry.type === 'final' ? COLORS.primary :
+                          entry.type === 'positive' ? COLORS.positive :
+                          COLORS.negative
+                        }
+                      />
+                    ))}
+                    <LabelList 
+                      dataKey="value" 
+                      position="top" 
+                      formatter={(value: number) => value > 0 ? `+${(value / 1000000).toFixed(1)}` : `${(value / 1000000).toFixed(1)}`}
+                      style={{ fill: '#333', fontSize: 12, fontWeight: 'bold' }}
+                    />
+                  </Bar>
+                </ComposedChart>
+              </ResponsiveContainer>
+              <div className="mt-4 text-center text-sm text-gray-600">
+                Total justering: <span className="font-bold text-primary-navy">{formatCurrency(3500000)}</span> (10,9% av basvärdering)
               </div>
             </div>
 
@@ -2110,6 +2362,49 @@ function PremiumResultMockupContent() {
                 <div className="text-blue-800">{renderMarkdownText(result.financialAnalysis.workingCapital.improvement)}</div>
               </div>
             </div>
+
+            {/* Future Projections Chart */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200">
+              <h3 className="text-xl font-bold text-primary-navy mb-6">5-årsprojektioner</h3>
+              <ResponsiveContainer width="100%" height={350}>
+                <AreaChart data={projectionData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor={COLORS.primary} stopOpacity={0.1}/>
+                    </linearGradient>
+                    <linearGradient id="colorEbitda" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={COLORS.secondary} stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor={COLORS.secondary} stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="year" stroke="#666" />
+                  <YAxis stroke="#666" label={{ value: 'MSEK', angle: -90, position: 'insideLeft' }} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                    formatter={(value: number) => `${value} MSEK`}
+                  />
+                  <Legend />
+                  <Area type="monotone" dataKey="revenue" name="Omsättning" stroke={COLORS.primary} fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={2} />
+                  <Area type="monotone" dataKey="ebitda" name="EBITDA" stroke={COLORS.secondary} fillOpacity={1} fill="url(#colorEbitda)" strokeWidth={2} />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="mt-4 grid grid-cols-3 gap-4">
+                <div className="text-center p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Förväntad CAGR</p>
+                  <p className="text-xl font-bold text-gray-900">18%</p>
+                </div>
+                <div className="text-center p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">EBITDA-marginal 2028</p>
+                  <p className="text-xl font-bold text-gray-900">27%</p>
+                </div>
+                <div className="text-center p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Värdering 2028</p>
+                  <p className="text-xl font-bold text-gray-900">55-65 MSEK</p>
+                </div>
+              </div>
+            </div>
           </div>
         )
 
@@ -2221,9 +2516,88 @@ function PremiumResultMockupContent() {
               </div>
             </div>
 
-            {/* Risk Matrix */}
+            {/* Risk Matrix Visualization */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200 mb-6">
+              <h3 className="text-xl font-bold text-primary-navy mb-6">Riskmatris - Visuell översikt</h3>
+              <div className="relative">
+                <ResponsiveContainer width="100%" height={400}>
+                  <ScatterChart margin={{ top: 20, right: 20, bottom: 60, left: 60 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis 
+                      type="number" 
+                      dataKey="x" 
+                      name="Sannolikhet" 
+                      domain={[0, 100]}
+                      ticks={[0, 25, 50, 75, 100]}
+                      label={{ value: 'Sannolikhet →', position: 'insideBottom', offset: -10 }}
+                    />
+                    <YAxis 
+                      type="number" 
+                      dataKey="y" 
+                      name="Påverkan" 
+                      domain={[0, 100]}
+                      ticks={[0, 25, 50, 75, 100]}
+                      label={{ value: 'Påverkan →', angle: -90, position: 'insideLeft' }}
+                    />
+                    <Tooltip 
+                      cursor={{ strokeDasharray: '3 3' }}
+                      content={({ active, payload }) => {
+                        if (active && payload && payload[0]) {
+                          const data = payload[0].payload;
+                          return (
+                            <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
+                              <p className="font-semibold">{data.name}</p>
+                              <p className="text-sm text-gray-600">Sannolikhet: {data.x}%</p>
+                              <p className="text-sm text-gray-600">Påverkan: {data.y}%</p>
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
+                    />
+                    <Scatter name="Risker" data={riskMatrixData} fill="#8884d8">
+                      {riskMatrixData.map((entry, index) => (
+                        <Cell 
+                          key={`cell-${index}`} 
+                          fill={
+                            entry.severity === 'high' ? COLORS.negative : 
+                            entry.severity === 'medium' ? '#f59e0b' : 
+                            COLORS.positive
+                          } 
+                        />
+                      ))}
+                    </Scatter>
+                  </ScatterChart>
+                </ResponsiveContainer>
+                
+                {/* Risk zones */}
+                <div className="absolute top-8 right-8 space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-red-500 rounded"></div>
+                    <span>Hög risk</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-yellow-500 rounded"></div>
+                    <span>Medel risk</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-green-500 rounded"></div>
+                    <span>Låg risk</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-700">
+                  <strong>Tolkning:</strong> Risker i övre högra hörnet (hög sannolikhet + hög påverkan) kräver omedelbar åtgärd. 
+                  De flesta kritiska risker kan minskas genom de föreslagna åtgärderna.
+                </p>
+              </div>
+            </div>
+
+            {/* Risk Details */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
-              <h3 className="text-xl font-bold text-primary-navy mb-6">Riskmatris</h3>
+              <h3 className="text-xl font-bold text-primary-navy mb-6">Detaljerad riskanalys</h3>
               <div className="space-y-4">
                 {result.riskAssessment.keyRisks.map((risk, index) => (
                   <div key={index} className="border rounded-lg p-4">
