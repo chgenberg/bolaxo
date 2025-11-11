@@ -494,9 +494,9 @@ export default function PremiumValuationResultPage() {
                         {flag.severity === 'high' ? 'Hög' : flag.severity === 'medium' ? 'Medel' : 'Låg'} risk
                       </span>
                     </div>
-                    <p className="text-gray-700 mb-2">{flag.description}</p>
+                    <p className="text-gray-700 mb-2 whitespace-pre-wrap">{flag.description}</p>
                     <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 whitespace-pre-wrap">
                         <span className="font-medium">Åtgärd:</span> {flag.mitigation}
                       </p>
                     </div>
@@ -561,7 +561,7 @@ export default function PremiumValuationResultPage() {
                       <p className="font-semibold">Hög</p>
                     </div>
                   </div>
-                  <p className="mt-3 text-gray-700">
+                  <p className="mt-3 text-gray-700 whitespace-pre-wrap">
                     {result.financialAnalysis.historicalPerformance.revenue.analysis}
                   </p>
                 </div>
@@ -572,7 +572,7 @@ export default function PremiumValuationResultPage() {
                     <DollarSign className="w-5 h-5 mr-2 text-blue-600" />
                     Lönsamhetsanalys
                   </h4>
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 whitespace-pre-wrap">
                     {result.financialAnalysis.historicalPerformance.profitability.analysis}
                   </p>
                 </div>
@@ -593,7 +593,7 @@ export default function PremiumValuationResultPage() {
                       <p className="font-semibold text-lg">{result.financialAnalysis.historicalPerformance.cashFlow.conversion}%</p>
                     </div>
                   </div>
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 whitespace-pre-wrap">
                     {result.financialAnalysis.historicalPerformance.cashFlow.analysis}
                   </p>
                 </div>
@@ -620,7 +620,7 @@ export default function PremiumValuationResultPage() {
                 </div>
               </div>
               <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                <p className="text-blue-800">{result.financialAnalysis.workingCapital.improvement}</p>
+                <p className="text-blue-800 whitespace-pre-wrap">{result.financialAnalysis.workingCapital.improvement}</p>
               </div>
             </div>
           </div>
@@ -743,7 +743,7 @@ export default function PremiumValuationResultPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <h4 className="font-semibold text-gray-900">{risk.category}</h4>
-                        <p className="text-gray-700 mt-1">{risk.description}</p>
+                        <p className="text-gray-700 mt-1 whitespace-pre-wrap">{risk.description}</p>
                       </div>
                       <div className="flex gap-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getSeverityColor(risk.probability)}`}>
@@ -755,7 +755,7 @@ export default function PremiumValuationResultPage() {
                       </div>
                     </div>
                     <div className="bg-gray-50 p-3 rounded">
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 whitespace-pre-wrap">
                         <span className="font-medium">Åtgärd:</span> {risk.mitigation}
                       </p>
                     </div>
@@ -775,7 +775,7 @@ export default function PremiumValuationResultPage() {
                 <Clock className="w-6 h-6 mr-2 text-blue-600" />
                 Optimal tidpunkt för försäljning
               </h3>
-              <p className="text-gray-700">{result.transactionGuidance.optimalTiming}</p>
+              <p className="text-gray-700 whitespace-pre-wrap">{result.transactionGuidance.optimalTiming}</p>
             </div>
 
             {/* Buyer Profile */}
@@ -785,7 +785,7 @@ export default function PremiumValuationResultPage() {
                 {result.transactionGuidance.buyerProfile.map((profile, index) => (
                   <div key={index} className="flex items-start p-4 bg-primary-navy/5 rounded-lg">
                     <Users className="w-5 h-5 text-primary-navy mr-3 mt-0.5 flex-shrink-0" />
-                    <p className="text-gray-800">{profile}</p>
+                    <p className="text-gray-800 whitespace-pre-wrap">{profile}</p>
                   </div>
                 ))}
               </div>
@@ -802,16 +802,16 @@ export default function PremiumValuationResultPage() {
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="bg-green-50 p-3 rounded">
                           <p className="font-medium text-green-900 mb-1">Din position</p>
-                          <p className="text-green-800">{point.yourPosition}</p>
+                          <p className="text-green-800 whitespace-pre-wrap">{point.yourPosition}</p>
                         </div>
                         <div className="bg-red-50 p-3 rounded">
                           <p className="font-medium text-red-900 mb-1">Förväntad motpart</p>
-                          <p className="text-red-800">{point.expectedCounterpart}</p>
+                          <p className="text-red-800 whitespace-pre-wrap">{point.expectedCounterpart}</p>
                         </div>
                       </div>
                       <div className="bg-blue-50 p-3 rounded">
                         <p className="font-medium text-blue-900 mb-1">Strategi</p>
-                        <p className="text-blue-800">{point.strategy}</p>
+                        <p className="text-blue-800 whitespace-pre-wrap">{point.strategy}</p>
                       </div>
                     </div>
                   </div>
@@ -825,7 +825,7 @@ export default function PremiumValuationResultPage() {
               <div className="space-y-4">
                 <div className="p-4 bg-gray-50 rounded-lg">
                   <h4 className="font-semibold text-gray-900 mb-2">Struktur</h4>
-                  <p className="text-gray-700">{result.transactionGuidance.dealStructure.recommended}</p>
+                  <p className="text-gray-700 whitespace-pre-wrap">{result.transactionGuidance.dealStructure.recommended}</p>
                 </div>
                 
                 {result.transactionGuidance.dealStructure.earnOut.recommended && (
@@ -834,7 +834,7 @@ export default function PremiumValuationResultPage() {
                       <DollarSign className="w-5 h-5 mr-2 text-yellow-600" />
                       Earn-out
                     </h4>
-                    <p className="text-gray-700">{result.transactionGuidance.dealStructure.earnOut.structure}</p>
+                    <p className="text-gray-700 whitespace-pre-wrap">{result.transactionGuidance.dealStructure.earnOut.structure}</p>
                   </div>
                 )}
 
@@ -844,7 +844,7 @@ export default function PremiumValuationResultPage() {
                     {result.transactionGuidance.dealStructure.warranties.map((warranty, index) => (
                       <li key={index} className="flex items-start">
                         <CheckCircle className="w-4 h-4 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{warranty}</span>
+                        <span className="text-gray-700 whitespace-pre-wrap">{warranty}</span>
                       </li>
                     ))}
                   </ul>
