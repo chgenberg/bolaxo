@@ -467,7 +467,42 @@ Bolaget har byggt upp en **kassareserv på 18,5 MSEK** (27% av omsättning), vil
     workingCapital: {
       current: 8500000,
       optimal: 6200000,
-      improvement: "Potential att frigöra 2,3 MSEK genom optimering av kundfordringar (minska från 58 till 45 dagar genom förbättrad fakturering och påminnelser), optimering av leverantörsskulder (öka från 32 till 45 dagar genom förhandling av bättre villkor), och minskning av övriga omsättningstillgångar. Detta skulle förbättra kassaflödet betydligt och kan finansiera IT-moderniseringen utan extern finansiering. Genomförandet kräver: (1) Automatiserad faktureringsprocess, (2) Proaktiv kreditkontroll, (3) Förhandling av leverantörsavtal, (4) Optimering av faktureringsfrekvens. Tidsram: 3-4 månader. Kostnad: 200-300k SEK för system och processförbättringar."
+      improvement: "**Rörelsekapitaloptimering**
+
+Potential att frigöra **2,3 MSEK** genom optimering av rörelsekapital:
+
+**Kundfordringar:**
+- Nuvarande DSO: 58 dagar
+- Target DSO: 45 dagar  
+- Potential: **1,2 MSEK** frigörs
+
+Åtgärder:
+1) Automatiserad faktureringsprocess
+2) Proaktiv kreditkontroll och påminnelser
+3) Förbättrade betalningsvillkor
+4) Kundportal för enkel betalning
+
+**Leverantörsskulder:**
+- Nuvarande DPO: 32 dagar
+- Target DPO: 45 dagar
+- Potential: **0,8 MSEK** frigörs
+
+Åtgärder:
+1) Förhandling av bättre betalningsvillkor
+2) Optimering av leverantörsavtal
+3) Strategisk timing av betalningar
+
+**Övriga omsättningstillgångar:**
+- Minskning av övriga tillgångar
+- Potential: **0,3 MSEK** frigörs
+
+**Implementation:**
+
+- **Tidsram:** 3-4 månader
+- **Kostnad:** 200-300k SEK för system och processförbättringar
+- **ROI:** 2,3 MSEK frigörs som kan finansiera IT-moderniseringen utan extern finansiering
+
+Detta skulle förbättra kassaflödet betydligt och visa på professionell finansiell hantering."
     }
   },
   marketPosition: {
@@ -641,7 +676,48 @@ Rekrytera **vice VD** med säljansvar inom 3-4 månader. Detta minskar risken oc
     processes: {
       maturity: "Ojämn - säljprocesser mogna, back-office outvecklat",
       improvementAreas: ["Ekonomiprocesser", "HR/rekrytering", "Produktutveckling", "Kundservice-automation"],
-      details: "Säljprocesserna är välfungerande med dokumenterade playbooks, tydliga steg från lead till kund, och regelbunden uppföljning. CRM-systemet används konsekvent och ger god insyn i pipeline. Säljträning genomförs regelbundet men saknar strukturerat program.\n\nEkonomiprocesserna är delvis manuella med begränsad automatisering. Månadsrapportering sker men saknar KPI-dashboards och rolling forecasts. Fakturering och inkasso är manuellt vilket tar tid och kan förbättras.\n\nHR-processerna är grundläggande med begränsad employer branding och rekryteringsstrategi. Onboarding av nya medarbetare är informell och saknar struktur.\n\nProduktutveckling saknar dedikerad produktchef och styrs ad-hoc av VD och utvecklingsteam. Roadmap-planering är begränsad och prioriteringar görs reaktivt.\n\nKundservice är proaktiv men saknar automation för vanliga frågor. Detta kan frigöra tid för mer värdeskapande aktiviteter."
+      details: "**Processmognad per område**
+
+**Säljprocesser (Mogna):**
+
+Säljprocesserna är välfungerande med:
+- Dokumenterade playbooks för olika scenarier
+- Tydliga steg från lead till kund
+- Regelbunden uppföljning och pipeline management
+- CRM-systemet används konsekvent och ger god insyn
+
+Dock saknas strukturerat säljträningsprogram för nya säljare.
+
+**Ekonomiprocesser (Outvecklade):**
+
+Ekonomiprocesserna är delvis manuella med begränsad automatisering:
+- Månadsrapportering sker men saknar KPI-dashboards
+- Ingen rolling forecast implementation
+- Fakturering och inkasso är manuellt vilket tar tid
+- Begränsad användning av BI-verktyg för analys
+
+**HR-processer (Grundläggande):**
+
+HR-processerna behöver förbättras:
+- Begränsad employer branding och rekryteringsstrategi
+- Onboarding av nya medarbetare är informell och saknar struktur
+- Ingen dokumenterad karriärutvecklingsplan
+- Begränsad performance management
+
+**Produktutveckling (Ad-hoc):**
+
+Produktutveckling saknar struktur:
+- Ingen dedikerad produktchef
+- Styrs ad-hoc av VD och utvecklingsteam
+- Roadmap-planering är begränsad
+- Prioriteringar görs reaktivt istället för strategiskt
+
+**Kundservice (Proaktiv men manuell):**
+
+Kundservice är proaktiv men saknar automation:
+- Hög kvalitet men tidskrävande
+- Automation för vanliga frågor kan frigöra tid
+- Saknar customer success-funktion för proaktiv support"
     }
   },
   riskAssessment: {
