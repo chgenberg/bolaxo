@@ -348,7 +348,34 @@ Med rätt förberedelser och timing kan värdet maximeras ytterligare genom impl
       revenue: {
         trend: "Stark positiv trend med konsekvent tillväxt och accelererande momentum",
         cagr: 18,
-        analysis: "Omsättningen har vuxit från 42 MSEK (2021) till 52 MSEK (2022) och vidare till 68 MSEK (2023), vilket motsvarar en sammansatt årlig tillväxttakt (CAGR) på 18%. Detta är exceptionellt starkt jämfört med branschgenomsnittet på 8-10% och placerar bolaget i top decilen av tillväxtbolag inom sektorn.\n\nTillväxten är driven av flera faktorer: (1) Organisk tillväxt från befintliga kunder genom expansion och upselling (+12% årligen), (2) Nykundsförsäljning som bidragit med +9% årligen, (3) Prisökningar på 6% årligen som implementerats utan nämnvärd churn, och (4) Lansering av ny produktlinje under Q2 2023 som redan genererar 10,2 MSEK årligen (15% av total omsättning).\n\nKvartalsvis analys visar accelererande tillväxt: Q1 2023 +14% YoY, Q2 2023 +17% YoY, Q3 2023 +21% YoY, Q4 2023 +23% YoY. Detta tyder på att tillväxtmotorn stärks snarare än avtar. Den nya produktlinjen har en högre genomsnittlig deal size (385k vs 275k för huvudprodukten) och kortare säljcykel (2,1 månader vs 3,2 månader), vilket bör fortsätta driva acceleration.\n\nOmsättningen per anställd har ökat från 1,31 MSEK (2021) till 2,13 MSEK (2023), vilket visar på stark operationell hävstång och effektivitet. Detta är 40% över branschsnittet och indikerar att bolaget kan växa snabbare än kostnadsbasen ökar.\n\nGeografisk fördelning: Stockholm 45%, Göteborg 22%, Malmö 15%, övriga Sverige 18%. Kundfördelningen per bransch: Tech/IT 35%, Professional Services 28%, Manufacturing 20%, Retail 12%, Övriga 5%. Denna diversifiering minskar konjunkturkänslighet och branschspecifika risker."
+        analysis: "**Omsättningsutveckling och tillväxtdrivare**
+
+Omsättningen har vuxit från **42 MSEK (2021)** till **52 MSEK (2022)** och vidare till **68 MSEK (2023)**, vilket motsvarar en sammansatt årlig tillväxttakt (CAGR) på **18%**. Detta är exceptionellt starkt jämfört med branschgenomsnittet på 8-10% och placerar bolaget i top decilen av tillväxtbolag inom sektorn.
+
+**Tillväxtfaktorer:**
+
+Tillväxten är driven av flera faktorer: 
+
+1) **Organisk tillväxt** från befintliga kunder genom expansion och upselling (+12% årligen)
+2) **Nykundsförsäljning** som bidragit med +9% årligen  
+3) **Prisökningar** på 6% årligen som implementerats utan nämnvärd churn
+4) **Lansering av ny produktlinje** under Q2 2023 som redan genererar 10,2 MSEK årligen (15% av total omsättning)
+
+**Kvartalsanalys:**
+
+Kvartalsvis analys visar accelererande tillväxt: Q1 2023 +14% YoY, Q2 2023 +17% YoY, Q3 2023 +21% YoY, Q4 2023 +23% YoY. Detta tyder på att tillväxtmotorn stärks snarare än avtar. Den nya produktlinjen har en högre genomsnittlig deal size (385k vs 275k för huvudprodukten) och kortare säljcykel (2,1 månader vs 3,2 månader), vilket bör fortsätta driva acceleration.
+
+**Operationell hävstång:**
+
+Omsättningen per anställd har ökat från **1,31 MSEK (2021)** till **2,13 MSEK (2023)**, vilket visar på stark operationell hävstång och effektivitet. Detta är 40% över branschsnittet och indikerar att bolaget kan växa snabbare än kostnadsbasen ökar.
+
+**Geografisk och branschfördelning:**
+
+Geografisk fördelning: Stockholm 45%, Göteborg 22%, Malmö 15%, övriga Sverige 18%. 
+
+Kundfördelningen per bransch: Tech/IT 35%, Professional Services 28%, Manufacturing 20%, Retail 12%, Övriga 5%. 
+
+Denna diversifiering minskar konjunkturkänslighet och branschspecifika risker."
       },
       profitability: {
         margins: {
@@ -358,12 +385,66 @@ Med rätt förberedelser och timing kan värdet maximeras ytterligare genom impl
           operating: "19%"
         },
         trend: "Förbättring med 3 procentenheter sedan 2021",
-        analysis: "Lönsamheten har stärkts konsekvent över de senaste tre åren. Bruttomarginalen har förbättrats från 68% (2021) till 72% (2023), driven av (1) Förbättrad prissättning med value-based pricing-modell, (2) Skalfördelar i produktutveckling och support, (3) Ökad andel återkommande intäkter som har högre marginaler, och (4) Effektivisering av leveransprocesser.\n\nEBITDA-marginalen har förbättrats från 19% (2021) till 22% (2023), vilket är 7 procentenheter över branschgenomsnittet på 15%. Denna förbättring har skett trots betydande investeringar i säljorganisation (+3 FTE) och produktutveckling (+2 FTE). Detta visar på stark operationell hävstång där tillväxten driver lönsamhet snarare än minskar den.\n\nKostnadsstrukturen är välbalanserad: Personalkostnader 48% av omsättning (branschsnitt 55%), IT och hosting 8% (branschsnitt 12%), Marknadsföring 6% (branschsnitt 10%), Övriga OPEX 16% (branschsnitt 18%). Den lägre kostnadsbasen motiverar premiumvärderingen.\n\nNettomarginalen på 14% är exceptionell för branschen och visar på hållbar lönsamhet även efter finansiella kostnader och skatter. Bolaget har ingen nettoskuld vilket minskar finansiella kostnader och ger flexibilitet för framtida investeringar.\n\nTrendanalys visar att lönsamheten accelererar: EBITDA-marginalen ökade med 1,2 procentenheter 2021-2022 och 1,8 procentenheter 2022-2023. Detta tyder på att förbättringsåtgärderna ger ökande effekt över tid."
+        analysis: "**Marginutveckling och lönsamhetsdrivare**
+
+Lönsamheten har stärkts konsekvent över de senaste tre åren. Bruttomarginalen har förbättrats från **68% (2021)** till **72% (2023)**, driven av:
+
+1) **Förbättrad prissättning** med value-based pricing-modell
+2) **Skalfördelar** i produktutveckling och support  
+3) **Ökad andel återkommande intäkter** som har högre marginaler
+4) **Effektivisering** av leveransprocesser
+
+**EBITDA-utveckling:**
+
+EBITDA-marginalen har förbättrats från **19% (2021)** till **22% (2023)**, vilket är **7 procentenheter över branschgenomsnittet** på 15%. Denna förbättring har skett trots betydande investeringar i säljorganisation (+3 FTE) och produktutveckling (+2 FTE). Detta visar på stark operationell hävstång där tillväxten driver lönsamhet snarare än minskar den.
+
+**Kostnadsstruktur:**
+
+Kostnadsstrukturen är välbalanserad och betydligt bättre än branschsnitt:
+
+- Personalkostnader: **48%** av omsättning (branschsnitt 55%)
+- IT och hosting: **8%** (branschsnitt 12%)  
+- Marknadsföring: **6%** (branschsnitt 10%)
+- Övriga OPEX: **16%** (branschsnitt 18%)
+
+Den lägre kostnadsbasen motiverar premiumvärderingen och ger utrymme för fortsatta investeringar utan att marginalen försämras.
+
+**Nettomarginal:**
+
+Nettomarginalen på **14%** är exceptionell för branschen och visar på hållbar lönsamhet även efter finansiella kostnader och skatter. Bolaget har ingen nettoskuld vilket minskar finansiella kostnader och ger flexibilitet för framtida investeringar.
+
+**Trendanalys:**
+
+Trendanalys visar att lönsamheten accelererar: EBITDA-marginalen ökade med **1,2 procentenheter 2021-2022** och **1,8 procentenheter 2022-2023**. Detta tyder på att förbättringsåtgärderna ger ökande effekt över tid och att bolaget närmar sig optimal effektivitet."
       },
       cashFlow: {
         quality: "Mycket hög",
         conversion: 85,
-        analysis: "Kassaflödeskonverteringen på 85% av EBITDA är exceptionellt stark och indikerar hög kvalitet i resultatet. Detta är betydligt över branschgenomsnittet på 60-65% och placerar bolaget i top 10% av branschen.\n\nFaktorer som driver den starka kassaflödeskonverteringen:\n\n1. Förskottsbetalningar: 40% av kunderna betalar förskott (genomsnitt 3 månader), vilket ger en naturlig finansiering av verksamheten och minskar rörelsekapitalbehovet. Detta genererar cirka 9 MSEK i förskottsbetalningar som kan användas för drift.\n\n2. Låg rörelsekapitalbindning: Kundfordringar omsätter snabbt (DSO 58 dagar vs branschsnitt 75 dagar) tack vare tydliga betalningsvillkor och proaktiv fakturering. Lager är minimalt (endast merchandise för events, värde <100k SEK). Leverantörsskulder hanteras effektivt med genomsnittlig betalningstid på 32 dagar.\n\n3. Låg kapitalintensitet: Bolaget är tjänstebaserat med minimala anläggningstillgångar (endast IT-utrustning och mjukvara, totalt 2,3 MSEK). Capex är lågt (3-4% av omsättning, 2-2,7 MSEK årligen) och består främst av IT-utrustning och mjukvara. Detta ger starkt fritt kassaflöde.\n\n4. Kvalitet i intäktsflödet: 78% återkommande intäkter ger hög förutsägbarhet och minskar säsongsvariationer. Churn är låg (<5%) vilket säkerställer kontinuerligt kassaflöde. Genomsnittlig avtalslängd på 3 år ger långsiktig stabilitet.\n\nDet fria kassaflödet har varit konsekvent positivt och vuxit från 6,8 MSEK (2021) till 12,7 MSEK (2023), vilket motsvarar en CAGR på 37%. Detta ger ägarna betydande flexibilitet för både investeringar, utdelningar och framtida förvärv.\n\nKassaflödesanalys per kvartal visar stabila och förutsägbara mönster utan större säsongsvariationer. Q4 tenderar att vara starkast (+15% vs Q1-Q3) på grund av kundernas budgetcykler, men variationen är hanterbar och förutsägbar.\n\nBolaget har byggt upp en kassareserv på 18,5 MSEK (27% av omsättning), vilket ger stark finansiell stabilitet och möjliggör strategiska investeringar utan extern finansiering. Detta är betydligt över branschsnittet på 10-15% och visar på konservativ finansiell hantering."
+        analysis: "**Kassaflödeskvalitet och konvertering**
+
+Kassaflödeskonverteringen på **85% av EBITDA** är exceptionellt stark och indikerar hög kvalitet i resultatet. Detta är betydligt över branschgenomsnittet på 60-65% och placerar bolaget i **top 10%** av branschen.
+
+**Faktorer som driver den starka kassaflödeskonverteringen:**
+
+**1. Förskottsbetalningar:** 40% av kunderna betalar förskott (genomsnitt 3 månader), vilket ger en naturlig finansiering av verksamheten och minskar rörelsekapitalbehovet. Detta genererar cirka **9 MSEK** i förskottsbetalningar som kan användas för drift.
+
+**2. Låg rörelsekapitalbindning:** Kundfordringar omsätter snabbt (DSO 58 dagar vs branschsnitt 75 dagar) tack vare tydliga betalningsvillkor och proaktiv fakturering. Lager är minimalt (endast merchandise för events, värde <100k SEK). Leverantörsskulder hanteras effektivt med genomsnittlig betalningstid på 32 dagar.
+
+**3. Låg kapitalintensitet:** Bolaget är tjänstebaserat med minimala anläggningstillgångar (endast IT-utrustning och mjukvara, totalt **2,3 MSEK**). Capex är lågt (3-4% av omsättning, 2-2,7 MSEK årligen) och består främst av IT-utrustning och mjukvara. Detta ger starkt fritt kassaflöde.
+
+**4. Kvalitet i intäktsflödet:** 78% återkommande intäkter ger hög förutsägbarhet och minskar säsongsvariationer. Churn är låg (<5%) vilket säkerställer kontinuerligt kassaflöde. Genomsnittlig avtalslängd på 3 år ger långsiktig stabilitet.
+
+**Fritt kassaflöde:**
+
+Det fria kassaflödet har varit konsekvent positivt och vuxit från **6,8 MSEK (2021)** till **12,7 MSEK (2023)**, vilket motsvarar en CAGR på **37%**. Detta ger ägarna betydande flexibilitet för både investeringar, utdelningar och framtida förvärv.
+
+**Kvartalsmönster:**
+
+Kassaflödesanalys per kvartal visar stabila och förutsägbara mönster utan större säsongsvariationer. Q4 tenderar att vara starkast (+15% vs Q1-Q3) på grund av kundernas budgetcykler, men variationen är hanterbar och förutsägbar.
+
+**Kassareserv:**
+
+Bolaget har byggt upp en **kassareserv på 18,5 MSEK** (27% av omsättning), vilket ger stark finansiell stabilitet och möjliggör strategiska investeringar utan extern finansiering. Detta är betydligt över branschsnittet på 10-15% och visar på konservativ finansiell hantering."
       }
     },
     projections: {
@@ -411,30 +492,151 @@ Med rätt förberedelser och timing kan värdet maximeras ytterligare genom impl
     marketShare: {
       current: 32,
       potential: 45,
-      details: "Nuvarande marknadsandel på 32% gör bolaget till marknadsledare inom sin nisch. Den totala adresserbara marknaden (TAM) i Sverige uppskattas till 2,1 miljarder kronor årligen, vilket innebär att bolagets nuvarande omsättning på 68 MSEK representerar 3,2% av TAM. Detta visar på betydande tillväxtpotential även inom befintlig marknad.\n\nMarknadsandelen har vuxit från 24% (2021) till 32% (2023), vilket motsvarar en årlig tillväxt på 4 procentenheter. Denna tillväxt har drivits av: (1) Organisk tillväxt från befintliga kunder, (2) Nykundsförsäljning som överträffat marknadstillväxten, (3) Konkurrenter som har tappat marknadsandelar, (4) Ny produktlinje som har attraherat nya kundsegment.\n\nPotentiell marknadsandel på 45% är realistisk inom 3-5 år baserat på: (1) Fortsatt organisk tillväxt (+8-10% årligen), (2) Strategiska förvärv av mindre konkurrenter, (3) Internationell expansion till Norge och Danmark, (4) Ny produktlinje som växer till 25% av omsättning. Detta skulle öka omsättningen till ~95 MSEK inom 3 år.\n\nKonkurrenssituationen är relativt stabil med inga större disruptiva förändringar. De två största konkurrenterna har marknadsandelar på 18% och 15% respektive, och ingen av dem har vuxit snabbare än bolaget de senaste tre åren. Detta ger bolaget möjlighet att fortsätta ta marknadsandelar."
+      details: "**Marknadsandel och tillväxt**
+
+Nuvarande marknadsandel på **32%** gör bolaget till marknadsledare inom sin nisch. Den totala adresserbara marknaden (TAM) i Sverige uppskattas till **2,1 miljarder kronor årligen**, vilket innebär att bolagets nuvarande omsättning på 68 MSEK representerar endast **3,2% av TAM**. Detta visar på betydande tillväxtpotential även inom befintlig marknad.
+
+Marknadsandelen har vuxit från **24% (2021)** till **32% (2023)**, vilket motsvarar en årlig tillväxt på **4 procentenheter**. Denna tillväxt har drivits av: 
+
+1) Organisk tillväxt från befintliga kunder
+2) Nykundsförsäljning som överträffat marknadstillväxten  
+3) Konkurrenter som har tappat marknadsandelar
+4) Ny produktlinje som har attraherat nya kundsegment
+
+**Tillväxtpotential:**
+
+Potentiell marknadsandel på **45%** är realistisk inom 3-5 år baserat på: 
+
+1) Fortsatt organisk tillväxt (+8-10% årligen)
+2) Strategiska förvärv av mindre konkurrenter  
+3) Internationell expansion till Norge och Danmark
+4) Ny produktlinje som växer till 25% av omsättning
+
+Detta skulle öka omsättningen till **~95 MSEK** inom 3 år.
+
+**Konkurrenssituation:**
+
+Konkurrenssituationen är relativt stabil med inga större disruptiva förändringar. De två största konkurrenterna har marknadsandelar på **18%** och **15%** respektive, och ingen av dem har vuxit snabbare än bolaget de senaste tre åren. Detta ger bolaget möjlighet att fortsätta ta marknadsandelar."
     },
     customerAnalysis: {
       concentration: "Måttlig - top 10 kunder står för 45% av omsättning, största kund 12%",
       quality: "Mycket hög - blue chip-företag, låg kreditrisk, genomsnittlig kundstorlek 275k SEK/år",
       retention: 94,
       satisfaction: "NPS 72, CSAT 4.6/5",
-      details: "Kundbasen består av 247 aktiva kunder fördelade på: Enterprise (>500k SEK/år) 15% (37 kunder, genomsnitt 750k SEK/år), Mid-market (200-500k) 45% (111 kunder, genomsnitt 320k SEK/år), SMB (<200k) 40% (99 kunder, genomsnitt 140k SEK/år). Genomsnittlig kundlivstid är 6,5 år med 94% retention rate. Churn är låg (<5% årligen) och primärt driven av företagsnedläggningar eller förvärv där köparen använder annan lösning. Expansion revenue från befintliga kunder är +7% årligen genom upselling och cross-selling.\n\nCustomer Lifetime Value (LTV) är 890k SEK medan Customer Acquisition Cost (CAC) är 67k SEK, vilket ger ett utmärkt LTV/CAC-ratio på 13,3x. Detta är betydligt över hållbarhetsgränsen på 3x och indikerar mycket effektiv kundanskaffning. Payback period är 8 månader vilket är exceptionellt bra och ger snabb ROI på marknadsföringsinvesteringar.\n\nTop 10 kunder står för 45% av omsättning vilket är över rekommenderad gräns på 30-35%, men dessa är väletablerade relationer med långa avtal (genomsnitt 4 år) och låg churn-risk. Den största kunden står för 12% av omsättning (8,2 MSEK/år) vilket är över rekommenderad gräns på 8-10%, men relationen är mycket stabil med 8 års historia och auto-renewal avtal.\n\nGenomsnittlig deal size är 275k SEK för huvudprodukten och 385k SEK för ny produktlinje. Säljcykel är 3,2 månader för huvudprodukten och 2,1 månader för ny produktlinje. Konverteringsgrad från kvalificerad lead till kund är 28% vilket är över branschsnittet på 18-22%.\n\nKundnöjdhet är exceptionellt hög med NPS på 72 (branschsnitt 45) och CSAT på 4,6/5. 87% av kunderna skulle rekommendera bolaget till andra, vilket driver organisk tillväxt genom referenser. Genomsnittlig antal referenser per kund är 1,2 vilket är högt för B2B-branschen."
+      details: "**Kundsegmentering och fördelning**
+
+Kundbasen består av **247 aktiva kunder** fördelade på:
+
+- **Enterprise** (>500k SEK/år): 15% (37 kunder, genomsnitt 750k SEK/år)
+- **Mid-market** (200-500k): 45% (111 kunder, genomsnitt 320k SEK/år)  
+- **SMB** (<200k): 40% (99 kunder, genomsnitt 140k SEK/år)
+
+Genomsnittlig kundlivstid är **6,5 år** med **94% retention rate**. Churn är låg (<5% årligen) och primärt driven av företagsnedläggningar eller förvärv där köparen använder annan lösning. Expansion revenue från befintliga kunder är **+7% årligen** genom upselling och cross-selling.
+
+**LTV/CAC-analys:**
+
+Customer Lifetime Value (LTV) är **890k SEK** medan Customer Acquisition Cost (CAC) är **67k SEK**, vilket ger ett utmärkt **LTV/CAC-ratio på 13,3x**. Detta är betydligt över hållbarhetsgränsen på 3x och indikerar mycket effektiv kundanskaffning. Payback period är **8 månader** vilket är exceptionellt bra och ger snabb ROI på marknadsföringsinvesteringar.
+
+**Kundkoncentration:**
+
+Top 10 kunder står för **45% av omsättning** vilket är över rekommenderad gräns på 30-35%, men dessa är väletablerade relationer med långa avtal (genomsnitt 4 år) och låg churn-risk. Den största kunden står för **12% av omsättning (8,2 MSEK/år)** vilket är över rekommenderad gräns på 8-10%, men relationen är mycket stabil med 8 års historia och auto-renewal avtal.
+
+**Säljmetrics:**
+
+- Genomsnittlig deal size: **275k SEK** för huvudprodukten, **385k SEK** för ny produktlinje
+- Säljcykel: **3,2 månader** för huvudprodukten, **2,1 månader** för ny produktlinje  
+- Konverteringsgrad från kvalificerad lead till kund: **28%** (branschsnitt 18-22%)
+
+**Kundnöjdhet:**
+
+Kundnöjdhet är exceptionellt hög med **NPS på 72** (branschsnitt 45) och **CSAT på 4,6/5**. 87% av kunderna skulle rekommendera bolaget till andra, vilket driver organisk tillväxt genom referenser. Genomsnittlig antal referenser per kund är **1,2** vilket är högt för B2B-branschen."
     }
   },
   operationalExcellence: {
     efficiency: {
       score: 7.5,
-      benchmarkComparison: "Top 25% i branschen, särskilt stark inom säljeffektivitet och kundservice. Omsättning per anställd (2,13 MSEK) är 40% över branschsnitt. Säljproduktivitet (4,2 MSEK/säljare) är i top 10%. Kundserviceeffektivitet (kunder per supportmedarbetare) är 41 kunder vilket är 30% bättre än branschsnitt. Utvecklingseffektivitet (features per utvecklare) är också över snittet tack vare välfungerande processer och teknisk skuld som är hanterbar."
+      benchmarkComparison: "**Effektivitet och benchmarking**
+
+Bolaget placerar sig i **top 25%** av branschen, särskilt stark inom säljeffektivitet och kundservice. 
+
+**Nyckeltal jämfört med branschsnitt:**
+
+- Omsättning per anställd: **2,13 MSEK** (40% över branschsnitt)
+- Säljproduktivitet: **4,2 MSEK/säljare** (top 10% av branschen)
+- Kundserviceeffektivitet: **41 kunder** per supportmedarbetare (30% bättre än branschsnitt)
+- Utvecklingseffektivitet: Features per utvecklare är över snittet tack vare välfungerande processer och teknisk skuld som är hanterbar
+
+Denna effektivitet ger bolaget konkurrensfördelar och möjliggör fortsatt tillväxt utan proportionell kostnadsökning."
     },
     technology: {
       maturity: "Mogen men åldrande - behöver modernisering",
       investmentNeeded: 5000000,
-      details: "Teknologiplattformen är byggd 2018 på PHP 7.2 med MySQL-databas och React frontend. Systemet har skalat väl och hanterar för närvarande 247 kunder utan prestandaproblem. Kapaciteten är beräknad till 400-500 kunder innan större investeringar krävs. Dock tappar PHP 7.2 officiell support under 2024 vilket innebär säkerhetsrisker och begränsad tillgång till nya features. Modernisering till modern tech stack (Node.js/Python backend, React frontend, PostgreSQL) är nödvändig inom 12-18 månader. Estimerad kostnad är 3-5 MSEK och tar 6-9 månader. Moderniseringen kommer att förbättra: (1) Utvecklingshastighet med 30-40%, (2) Systemprestanda med 20-30%, (3) Säkerhet och compliance, (4) Skalbarhet för internationell expansion, (5) Developer experience och rekryteringsbarhet. Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen."
+      details: "**Teknologiplattform och arkitektur**
+
+Teknologiplattformen är byggd 2018 på **PHP 7.2** med **MySQL-databas** och **React frontend**. Systemet har skalat väl och hanterar för närvarande 247 kunder utan prestandaproblem. Kapaciteten är beräknad till **400-500 kunder** innan större investeringar krävs.
+
+**Teknisk skuld och moderniseringsbehov:**
+
+PHP 7.2 tappar officiell support under 2024 vilket innebär:
+- Säkerhetsrisker och begränsad tillgång till säkerhetsuppdateringar
+- Teknisk skuld som växer exponentiellt
+- Begränsad tillgång till nya features och libraries
+- Svårighet att rekrytera utvecklare med PHP-kompetens
+
+**Moderniseringsplan:**
+
+Modernisering till modern tech stack är nödvändig inom 12-18 månader:
+
+- **Target stack:** Node.js/Python backend, React frontend, PostgreSQL databas
+- **Estimerad kostnad:** 3-5 MSEK
+- **Tidsram:** 6-9 månader
+- **Approach:** Två faser för att minimera disruption
+
+**Förväntade förbättringar:**
+
+1) Utvecklingshastighet: **+30-40%**
+2) Systemprestanda: **+20-30%**  
+3) Säkerhet och compliance: Betydligt förbättrad
+4) Skalbarhet: Möjliggör internationell expansion
+5) Developer experience: Förbättrad rekryteringsbarhet
+
+**Strategisk rekommendation:**
+
+Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med **5-10%**. Detta visar framåtblickande ledning och minskar köparens osäkerhet kring teknisk skuld."
     },
     organization: {
       keyPersonRisk: "Hög - VD och säljchef kritiska utan backup",
       cultureFit: "Stark kultur men personberoende",
-      details: "Organisationen består av 32 medarbetare fördelade på: Ledning (5), Sälj (8), Kundservice (6), Produktutveckling (9), Administration (4). Personalomsättningen är låg på 8% årligen vilket är betydligt under branschsnittet på 15-18%. Detta tyder på stark företagskultur och god arbetsmiljö. Employee Net Promoter Score (eNPS) är 58 vilket är över branschsnittet på 35-40.\n\nKritisk risk: VD och säljchef står tillsammans för 65% av kundrelationerna och 55% av nyförsäljningen. Ingen av dessa roller har dokumenterade ersättare eller överlämningsplaner. VD har grundat bolaget och har djupa personliga relationer med många av de största kunderna. Säljchefen ansvarar för 40% av nyförsäljningen och har unika branschrelationer. Om någon av dessa skulle lämna skulle det ha betydande negativ påverkan på verksamheten.\n\nRekommendation: Rekrytera vice VD med säljansvar inom 3-4 månader. Detta minskar risken och visar framåtblickande ledning. Budget: 150-200k SEK för rekrytering."
+      details: "**Organisationsstruktur och kultur**
+
+Organisationen består av **32 medarbetare** fördelade på:
+
+- **Ledning:** 5 personer (VD, CFO, CTO, Säljchef, HR-ansvarig)
+- **Sälj:** 8 personer (6 account executives, 2 SDRs)
+- **Kundservice:** 6 personer (4 support, 2 onboarding specialists)
+- **Produktutveckling:** 9 personer (6 developers, 2 QA, 1 DevOps)
+- **Administration:** 4 personer (ekonomi, HR, operations)
+
+**Personalomsättning och kultur:**
+
+Personalomsättningen är låg på **8% årligen** vilket är betydligt under branschsnittet på 15-18%. Detta tyder på stark företagskultur och god arbetsmiljö. Employee Net Promoter Score (eNPS) är **58** vilket är över branschsnittet på 35-40%.
+
+**Kritisk nyckelpersonsrisk:**
+
+VD och säljchef står tillsammans för **65% av kundrelationerna** och **55% av nyförsäljningen**. Ingen av dessa roller har dokumenterade ersättare eller överlämningsplaner. 
+
+- **VD** har grundat bolaget och har djupa personliga relationer med många av de största kunderna
+- **Säljchef** ansvarar för 40% av nyförsäljningen och har unika branschrelationer
+
+Om någon av dessa skulle lämna skulle det ha betydande negativ påverkan på verksamheten. Uppskattad värdeförlust vid abrupt bortfall: **15-25%**.
+
+**Rekommendation:**
+
+Rekrytera **vice VD** med säljansvar inom 3-4 månader. Detta minskar risken och visar framåtblickande ledning. 
+
+- **Budget:** 150-200k SEK för rekrytering
+- **Lönepaket:** 1,2-1,5 MSEK/år
+- **Success metrics:** Introducerad till top 20 kunder inom 2 månader, ansvarig för 30% av nyförsäljning inom 6 månader"
     },
     processes: {
       maturity: "Ojämn - säljprocesser mogna, back-office outvecklat",
