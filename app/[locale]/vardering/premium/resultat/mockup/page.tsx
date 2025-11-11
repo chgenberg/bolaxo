@@ -1190,120 +1190,120 @@ Påbörja förberedelserna omgående med fokus på quick wins (prisoptimering, a
     negotiationPoints: [
       {
         topic: "Earn-out struktur",
-        yourPosition: "**Din position:**
+        yourPosition: `**Din position:**
 
 Max 20% av köpeskillingen, 2 års period, baserat på EBITDA-mål år 1-2. 
 
 - Tydliga definitioner av EBITDA med carve-outs för extraordinära poster
 - 50/50 split mellan åren
-- Anti-sandbagging clauses för att skydda mot manipulation",
+- Anti-sandbagging clauses för att skydda mot manipulation`,
         
-        expectedCounterpart: "**Förväntad motpart:**
+        expectedCounterpart: `**Förväntad motpart:**
 
 30-40% earn-out över 3-4 år med mer komplex struktur. 
 
 - Kan inkludera revenue-mål i addition till EBITDA
-- Kan kräva längre bindningstid för management",
+- Kan kräva längre bindningstid för management`,
         
-        strategy: "**Förhandlingsstrategi:**
+        strategy: `**Förhandlingsstrategi:**
 
 1) Visa på stabila historiska siffror och låg volatilitet i resultatet
 2) Erbjud warranty & indemnity insurance för att minska köparens risk
 3) Framhäv att 2 års period är standard för branschen
-4) Erbjud högre upfront betalning (75% vs 70%) som kompromiss"
+4) Erbjud högre upfront betalning (75% vs 70%) som kompromiss`
       },
       {
         topic: "Nyckelpersoner och stay-on",
-        yourPosition: "**Din position:**
+        yourPosition: `**Din position:**
 
 VD stannar 12 månader med tydlig roll och ansvar:
 - Stay-on bonus på 2 MSEK vid fullgörande
 - Efter 12 månader möjlighet till konsultavtal på 50% tid i 12 månader till
 
 Säljchef stannar 18 månader:
-- Stay-on bonus 1,5 MSEK",
+- Stay-on bonus 1,5 MSEK`,
         
-        expectedCounterpart: "**Förväntad motpart:**
+        expectedCounterpart: `**Förväntad motpart:**
 
 VD och säljchef 24-36 månader med högre stay-on bonusar:
 - Kan kräva fulltid under hela perioden utan konsultmöjlighet
-- Kan kräva icke-konkurrensavtal på 3-5 år",
+- Kan kräva icke-konkurrensavtal på 3-5 år`,
         
-        strategy: "**Förhandlingsstrategi:**
+        strategy: `**Förhandlingsstrategi:**
 
 1) Föreslå konsultavtal efter 12 månader som kompromiss
 2) Rekrytera vice VD innan försäljning för att minska beroendet
 3) Framhäv att längre bindningstid kan påverka motivation negativt
-4) Erbjud högre stay-on bonusar som kompromiss för kortare tid"
+4) Erbjud högre stay-on bonusar som kompromiss för kortare tid`
       },
       {
         topic: "Due diligence fynd och teknisk skuld",
-        yourPosition: "**Din position:**
+        yourPosition: `**Din position:**
 
 - Teknisk skuld är känd och prissatt i värderingen
 - Påbörjad modernisering visar framåtblickande ledning
-- Ingen prisavdrag motiverad",
+- Ingen prisavdrag motiverad`,
         
-        expectedCounterpart: "**Förväntad motpart:**
+        expectedCounterpart: `**Förväntad motpart:**
 
 - Kräver prisreduktion för IT-investering (3-5 MSEK)
 - Eller att säljaren finansierar moderniseringen
-- Kan använda teknisk skuld som förhandlingskort",
+- Kan använda teknisk skuld som förhandlingskort`,
         
-        strategy: "**Förhandlingsstrategi:**
+        strategy: `**Förhandlingsstrategi:**
 
 1) Visa påbörjad modernisering (fasa 1 klar eller påbörjad) före försäljning
 2) Ge comfort letter från IT-konsult som bekräftar välplanerad modernisering
 3) Framhäv att teknisk skuld är normal för bolag i denna storlek
-4) Erbjud att dela kostnaden 50/50 som kompromiss"
+4) Erbjud att dela kostnaden 50/50 som kompromiss`
       },
       {
         topic: "Rörelsekapital och locked box",
-        yourPosition: "**Din position:**
+        yourPosition: `**Din position:**
 
 - Normalized WC enligt 12-månaders snitt (8,5 MSEK) med tydlig definition
 - Locked box-mechanism med completion date 3 månader före signing
-- Ingen justering för normala säsongsvariationer",
+- Ingen justering för normala säsongsvariationer`,
         
-        expectedCounterpart: "**Förväntad motpart:**
+        expectedCounterpart: `**Förväntad motpart:**
 
 - Cherry-picking bästa månaden för WC-beräkning
 - Kräver completion date vid signing eller efter
-- Kan kräva justering för säsongsvariationer",
+- Kan kräva justering för säsongsvariationer`,
         
-        strategy: "**Förhandlingsstrategi:**
+        strategy: `**Förhandlingsstrategi:**
 
 1) Föreslå locked box med tydlig WC-mekanism baserat på 12-månaders snitt
 2) Visa på stabila WC-trender över tid
 3) Framhäv att locked box är standard för denna typ av transaktion
-4) Erbjud att acceptera completion date vid signing om köparen accepterar normalized WC"
+4) Erbjud att acceptera completion date vid signing om köparen accepterar normalized WC`
       },
       {
         topic: "Garantier och warranties",
-        yourPosition: "**Din position:**
+        yourPosition: `**Din position:**
 
 - Standard warranties & indemnities med 18 månaders limitation period
 - Specifik indemnity för pågående skatteärende (max 2 MSEK)
 - IP warranties förstärkta givet patentens värde
-- Key person warranties med carve-out för redan kommunicerade risker",
+- Key person warranties med carve-out för redan kommunicerade risker`,
         
-        expectedCounterpart: "**Förväntad motpart:**
+        expectedCounterpart: `**Förväntad motpart:**
 
 - 24-36 månaders limitation period
 - Bredare warranties utan carve-outs
 - Kan kräva högre caps på indemnities
-- Kan kräva att säljaren står för alla kända risker utan begränsning",
+- Kan kräva att säljaren står för alla kända risker utan begränsning`,
         
-        strategy: "**Förhandlingsstrategi:**
+        strategy: `**Förhandlingsstrategi:**
 
 1) Erbjud W&I insurance för att täcka köparens risk
 2) Framhäv att 18 månader är standard
 3) Använd carve-outs för redan kommunicerade risker som förhandlingskort
-4) Erbjud högre cap på specifik indemnity som kompromiss"
+4) Erbjud högre cap på specifik indemnity som kompromiss`
       },
       {
         topic: "Pris och värdering",
-        yourPosition: "**Din position:**
+        yourPosition: `**Din position:**
 
 Värdering på **35,6 MSEK (midpoint)** baserat på DCF och multipelvärdering. 
 
@@ -1311,26 +1311,26 @@ Värdering på **35,6 MSEK (midpoint)** baserat på DCF och multipelvärdering.
 - Stark tillväxt (18% CAGR)
 - Hög lönsamhet (22% EBITDA)
 - Stark kassaflödeskonvertering (85%)
-- Marknadsledande position (32% marknadsandel)",
+- Marknadsledande position (32% marknadsandel)`,
         
-        expectedCounterpart: "**Förväntad motpart:**
+        expectedCounterpart: `**Förväntad motpart:**
 
 Kan argumentera för lägre värdering baserat på:
 - Risker (nyckelpersoner, teknisk skuld, kundkoncentration)
 - Lägre multiplar eller mer konservativa DCF-antaganden
-- Prisavdrag för identifierade risker",
+- Prisavdrag för identifierade risker`,
         
-        strategy: "**Förhandlingsstrategi:**
+        strategy: `**Förhandlingsstrategi:**
 
 1) Visa på förbättringar som implementerats (quick wins, rekrytering, modernisering)
 2) Framhäv unika styrkor (patent, marknadsposition, kundlojalitet)
 3) Använd multipelvärdering för att validera DCF-resultatet
 4) Erbjud earn-out som kompromiss för att balansera risk
-5) Behåll normal business operations för att visa fortsatt tillväxt"
+5) Behåll normal business operations för att visa fortsatt tillväxt`
       }
     ],
     dealStructure: {
-      recommended: "**Rekommenderad affärsstruktur**
+      recommended: `**Rekommenderad affärsstruktur**
 
 **Översikt:**
 - 70% kontant vid tillträde (24,9 MSEK)
@@ -1373,10 +1373,10 @@ Denna struktur balanserar säljarens önskan om säker exit med köparens behov 
 **Alternativa strukturer:**
 - 75% kontant + 15% deponerat + 10% earn-out (högre upfront)
 - 65% kontant + 25% deponerat + 10% earn-out (högre säkerhet)
-- 100% kontant (lägst risk för säljare men kan kräva lägre värdering)",
+- 100% kontant (lägst risk för säljare men kan kräva lägre värdering)`,
       earnOut: {
         recommended: true,
-        structure: "**Earn-out struktur i detalj**
+        structure: `**Earn-out struktur i detalj**
 
 **Översikt:**
 10% av köpeskillingen (3,6 MSEK) baserat på EBITDA-mål år 1-2. 50/50 split mellan åren (1,8 MSEK vardera).
@@ -1414,7 +1414,7 @@ Operativt resultat före räntor, skatter, avskrivningar och amorteringar.
 - Management performance: Earn-out är beroende av att management presterar
 - Integration costs: Köparen kan exkludera integration costs från EBITDA
 
-**Measurement date:** 90 dagar efter respektive års slut för att ge tid för årsredovisning"
+**Measurement date:** 90 dagar efter respektive års slut för att ge tid för årsredovisning`
       },
       warranties: [
         "**Standard warranties & indemnities** med 18 månaders limitation period\n\nTäcker standard warranties för title, authority, capitalization, financial statements, taxes, compliance, litigation, environmental, employees, intellectual property, contracts, och material adverse change. Limitation period på 18 månader är standard för denna typ av transaktion och balanserar säljarens och köparens intressen.",
