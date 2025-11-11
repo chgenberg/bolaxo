@@ -177,32 +177,38 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
       {
         severity: "high",
         area: "Organisation",
-        description: "VD och säljchef står för 65% av kundrelationerna utan dokumenterad överlämningsplan",
-        mitigation: "Implementera CRM-system, dokumentera alla kundrelationer, rekrytera vice VD"
+        description: "VD och säljchef står tillsammans för 65% av kundrelationerna och 55% av nyförsäljningen utan dokumenterad överlämningsplan eller ersättare. VD har grundat bolaget 2015 och har djupa personliga relationer med många av de största kunderna, särskilt inom Enterprise-segmentet. Säljchefen ansvarar för 40% av nyförsäljningen och har unika branschrelationer som har byggts upp över 10 år. Ingen av dessa roller har dokumenterade processer, kundöverlämningar eller successionsplaner. Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på försäljning, kundrelationer och bolagets värdering. Riskbedömning: Sannolikhet hög (VD är 58 år, säljchef 52 år, båda har uttryckt intresse för exit), Påverkan mycket hög (uppskattad värdeförlust 15-25% vid abrupt bortfall).",
+        mitigation: "Implementera omgående: (1) Rekrytera vice VD med säljansvar inom 3-4 månader (budget 150-200k SEK), (2) Dokumentera alla kundrelationer i CRM med kontaktpersoner, historik och relationer, (3) Skapa successionsplaner för båda roller med tydliga kriterier och tidsplaner, (4) Implementera stay-on bonusar för båda (2-3 MSEK vardera) för att säkerställa kontinuitet under försäljningsprocessen, (5) Etablera regelbundna kundöverlämningar där vice VD introduceras till top 20 kunder, (6) Skapa dokumenterade processer för alla kritiska aktiviteter som nu är personberoende."
       },
       {
         severity: "high",
         area: "Teknologi",
-        description: "Core-system byggd på utdaterad teknologi (PHP 7.2) som tappar support 2024",
-        mitigation: "Påbörja migration till modern tech-stack (est. 6-9 månader, 3-5 MSEK)"
+        description: "Core-system byggt 2018 på PHP 7.2 med MySQL-databas tappar officiell support under 2024 vilket innebär säkerhetsrisker, begränsad tillgång till säkerhetsuppdateringar, och teknisk skuld som växer exponentiellt. Systemet hanterar för närvarande 247 kunder utan prestandaproblem men har identifierade flaskhalsar vid 350+ kunder. Modernisering till modern tech stack (Node.js/Python backend, React frontend, PostgreSQL) är nödvändig inom 12-18 månader för att undvika säkerhetsincidenter och möjliggöra skalning. Estimerad kostnad är 3-5 MSEK och tar 6-9 månader. Riskbedömning: Sannolikhet mycket hög (support upphör 2024), Påverkan hög (säkerhetsincidenter kan skada varumärke och leda till GDPR-böter upp till 4% av omsättning, dvs 2,7 MSEK).",
+        mitigation: "Påbörja modernisering omgående: (1) Fasa 1: Migration av kritiska komponenter (3 månader, 1,5 MSEK), (2) Fasa 2: Fullständig migration (6 månader, 2-3 MSEK), (3) Engagera säkerhetskonsult för riskbedömning och recommendations (100k SEK), (4) Implementera säkerhetsmonitoring och incident response plan, (5) Dokumentera teknisk skuld och skapa roadmap för modernisering, (6) Budgetera och reservera 5 MSEK för hela projektet. Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med 5-10%."
       },
       {
         severity: "medium",
         area: "Kunder",
-        description: "Top 10 kunder står för 45% av omsättningen, störst kund 12%",
-        mitigation: "Fokusera på att växa med mindre kunder, max 8% per kund som mål"
+        description: "Top 10 kunder står för 45% av omsättning vilket är över rekommenderad gräns på 30-35%. Den största kunden står för 12% av omsättning (8,2 MSEK/år) vilket är över rekommenderad gräns på 8-10%. Om denna kund skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Riskbedömning: Sannolikhet medel (kunden har varit kund i 8 år men har nya ägare som kan ändra strategi), Påverkan hög (12% omsättningsförlust = 8,2 MSEK, plus negativ signal till andra kunder).",
+        mitigation: "Diversifieringsstrategi: (1) Fokusera på att växa med mindre kunder - mål: max 8% per kund inom 12 månader, (2) Förhandla om längre avtal med största kunden (förläng från 3 till 5 år), (3) Utveckla dedikerad account management för top 10 kunder med regelbundna business reviews, (4) Skapa expansion opportunities inom största kunden genom upselling och cross-selling, (5) Etablera kundsuccession plan för att minska beroendet av enskilda kontakter, (6) Överväg kreditförsäkring för största kunden för att minska finansiell risk."
       },
       {
         severity: "medium",
         area: "Finansiell",
-        description: "Ingen dokumenterad budget- eller prognosprocess",
-        mitigation: "Implementera månatlig forecast och rullande 12-månaders budget"
+        description: "Ingen dokumenterad budget- eller prognosprocess vilket gör det svårt att förutsäga framtida resultat och identifiera avvikelser i tid. Månadsrapportering sker men saknar KPI-dashboards, rolling forecasts och tydliga benchmarks. Detta gör det svårt för potentiella köpare att bedöma förutsägbarhet och risk. Riskbedömning: Sannolikhet hög (processer saknas), Påverkan medel (kan påverka värderingen negativt och göra due diligence mer komplicerad).",
+        mitigation: "Implementera omgående: (1) Månadsrapportering med KPI-dashboards (Power BI eller Tableau, budget 50k SEK + 20k/månad), (2) Rolling 12-månaders forecast uppdateras månadsvis, (3) Budgetprocess med tydliga antaganden och scenarier, (4) Benchmarking mot branschnyckeltal, (5) Automatiserad rapportering från ERP-system, (6) Regelbundna business reviews med ledningsteamet. Tidsram: 1 månad för implementation."
       },
       {
         severity: "low",
         area: "Legal",
-        description: "GDPR-dokumentation ofullständig, saknar vissa biträdesavtal",
-        mitigation: "Genomför GDPR-revision och uppdatera alla avtal (2-3 månader)"
+        description: "GDPR-dokumentation är ofullständig med saknade biträdesavtal (DPA) för vissa leverantörer och begränsad dokumentation av databehandling. Detta kan leda till böter upp till 4% av omsättning (2,7 MSEK) vid en incident eller revision. Riskbedömning: Sannolikhet låg (inga incidenter hittills), Påverkan medel (böter kan vara betydande men sannolikhet låg).",
+        mitigation: "Genomför GDPR-revision: (1) Engagera GDPR-konsult för fullständig revision (budget 200-300k SEK), (2) Uppdatera alla biträdesavtal (DPA) med leverantörer, (3) Dokumentera all databehandling enligt GDPR-krav, (4) Implementera data protection impact assessments (DPIA) för nya processer, (5) Skapa incident response plan för dataläckor, (6) Utbilda personal i GDPR. Tidsram: 2-3 månader."
+      },
+      {
+        severity: "medium",
+        area: "Marknad",
+        description: "Begränsad internationell närvaro med 95% av försäljning i Sverige gör bolaget sårbart för svensk konjunktur och begränsar tillväxtpotential. Ingen etablerad go-to-market strategi för internationell expansion trots att lösningen är fullt tillämpbar på nordiska marknader. Riskbedömning: Sannolikhet medel (konjunkturnedgång kan påverka), Påverkan medel (begränsad tillväxtpotential kan påverka värderingen).",
+        mitigation: "Utveckla internationell strategi: (1) Marknadsanalys för Norge och Danmark (budget 200k SEK), (2) Pilotprojekt med 2-3 kunder i Norge inom 6 månader, (3) Rekrytera lokal säljare eller partner i Norge, (4) Anpassa produkt och marknadsföring för nordiska marknader, (5) Budgetera 1-2 MSEK för internationell expansion år 1."
       }
     ],
     quickWins: [
@@ -359,77 +365,103 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
     keyRisks: [
       {
         category: "Operationell",
-        description: "Beroendet av två nyckelpersoner utan successionsplan",
+        description: "Beroendet av två nyckelpersoner (VD och säljchef) utan successionsplan utgör den mest kritiska risken. VD har grundat bolaget och har djupa personliga relationer med många av de största kunderna. Säljchefen ansvarar för 40% av nyförsäljningen och har unika branschrelationer. Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på försäljning, kundrelationer och bolagets värdering. Uppskattad värdeförlust vid abrupt bortfall: 15-25%.",
         probability: "high",
         impact: "high",
-        mitigation: "Rekrytera vice VD, dokumentera processer, införa stay-on bonus"
+        mitigation: "Rekrytera vice VD inom 3-4 månader, dokumentera alla kundrelationer, skapa successionsplaner, implementera stay-on bonusar, etablera regelbundna kundöverlämningar. Budget: 150-200k SEK för rekrytering + 2-3 MSEK för stay-on bonusar."
       },
       {
         category: "Teknologi",
-        description: "Legacy-system som tappar support och hindrar skalning",
+        description: "Legacy-system byggt på PHP 7.2 tappar support 2024 vilket innebär säkerhetsrisker och begränsad skalbarhet. Modernisering är nödvändig inom 12-18 månader för att undvika säkerhetsincidenter och möjliggöra internationell expansion. Estimerad kostnad: 3-5 MSEK. Säkerhetsincidenter kan leda till GDPR-böter upp till 4% av omsättning (2,7 MSEK) och skada varumärke.",
         probability: "high",
         impact: "medium",
-        mitigation: "Påbörja modernisering Q1 2024, budgetera 5 MSEK"
+        mitigation: "Påbörja modernisering omgående i två faser: (1) Kritiska komponenter (3 månader, 1,5 MSEK), (2) Fullständig migration (6 månader, 2-3 MSEK). Engagera säkerhetskonsult, implementera monitoring, dokumentera roadmap. Total budget: 5 MSEK."
       },
       {
         category: "Marknad",
-        description: "Internationella aktörer kan ta marknadsandelar",
+        description: "Internationella tech-jättar börjar fokusera på denna nisch med betydligt större resurser för produktutveckling och marknadsföring. Disruptiv teknologi (AI/ML) kan göra nuvarande lösningsansats obsolet inom 3-5 år. Konsolidering bland konkurrenter skapar större och starkare konkurrenter med bredare erbjudande.",
         probability: "medium",
         impact: "high",
-        mitigation: "Accelerera produktutveckling, stärk kundlojalitet"
+        mitigation: "Accelerera produktutveckling med fokus på AI/ML-funktionalitet, stärk kundlojalitet genom exceptional customer success, bygg integrations-ekosystem för att öka switching costs, överväg strategiska partnerskap eller förvärv för att stärka position."
       },
       {
         category: "Finansiell",
-        description: "Kundkoncentration med kreditrisk",
+        description: "Kundkoncentration med top 10 kunder som står för 45% av omsättning och största kund 12% utgör en finansiell risk. Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Konjunkturnedgång kan påverka B2B-investeringsvilja och leda till längre säljcykler.",
         probability: "low",
         impact: "high",
-        mitigation: "Kreditförsäkring på största kunder, diversifiering"
+        mitigation: "Diversifiera kundbasen genom att fokusera på mindre kunder (mål: max 8% per kund), förhandla om längre avtal med största kunden, utveckla dedikerad account management, skapa expansion opportunities, överväg kreditförsäkring. Tidsram: 6-12 månader."
       },
       {
         category: "Regulatorisk",
-        description: "GDPR-brister kan ge böter",
+        description: "GDPR-brister kan ge böter upp till 4% av omsättning (2,7 MSEK) vid en incident eller revision. Regulatoriska förändringar inom dataskydd kan kräva betydande investeringar i compliance och säkerhet. Branschspecifik lagstiftning kan påverka verksamheten.",
         probability: "medium",
         impact: "low",
-        mitigation: "Genomför compliance-revision, uppdatera policies"
+        mitigation: "Genomför GDPR-revision med extern konsult (budget 200-300k SEK), uppdatera alla biträdesavtal, dokumentera databehandling, implementera DPIA-processer, skapa incident response plan, utbilda personal. Tidsram: 2-3 månader."
+      },
+      {
+        category: "Konkurrens",
+        description: "Prispress från lågkostnadsalternativ, särskilt från Östeuropa och Indien, kan underminera premiumpositionering. Open source-alternativ kan erbjuda liknande funktionalitet gratis. Förändrade köpbeteenden där kunder föredrar all-in-one plattformar framför best-of-breed lösningar.",
+        probability: "medium",
+        impact: "medium",
+        mitigation: "Fokusera på värdebaserad prissättning istället för kostnadsbaserad, differentiera genom superior customer success och integrations-ekosystem, bygg varumärke och thought leadership, överväg freemium-modell för att konkurrera med open source."
+      },
+      {
+        category: "Organisation",
+        description: "Talangbrist inom tech driver upp lönekostnader och gör rekrytering utmanande. Svag employer branding gör det svårt att attrahera senior talanger. Personalomsättning kan öka vid försäljning vilket påverkar kontinuitet.",
+        probability: "medium",
+        impact: "medium",
+        mitigation: "Förbättra employer branding genom thought leadership och awards, skapa attraktiva incitamentsprogram, utveckla karriärvägar och utbildningsprogram, implementera retention strategies, överväg remote work för att öka talent pool."
       }
     ]
   },
   transactionGuidance: {
-    optimalTiming: "Om 6-9 månader efter implementering av quick wins och påbörjad IT-modernisering. Detta ger tid att visa förbättrad lönsamhet (+2-3% EBITDA) och minskad riskprofil, vilket kan höja värderingen med 15-20%.",
+    optimalTiming: "Optimal tidpunkt för försäljning bedöms vara om 6-9 månader efter implementering av kritiska förbättringsåtgärder. Detta ger tid att visa förbättrad lönsamhet (+2-3% EBITDA-marginal), minskad riskprofil genom rekrytering av vice VD och påbörjad IT-modernisering, och påbörjad tillväxtresa genom quick wins. Dessa förbättringar kan höja värderingen med 15-20% (5-7 MSEK) jämfört med att sälja idag.\n\nSpecifika faktorer som motiverar denna timing:\n\n1. Finansiell förbättring: Implementering av prisoptimering och automatisering kan öka EBITDA-marginalen från 22% till 24-25% inom 3-4 månader. Detta visar köpare att bolaget har ytterligare värdeskapande potential och motiverar högre värdering.\n\n2. Riskreducering: Rekrytering av vice VD och dokumentation av kundrelationer minskar den kritiska nyckelpersonsrisken från 'hög' till 'medel', vilket är en viktig faktor för köpare. Påbörjad IT-modernisering visar framåtblickande ledning och minskar teknisk skuld.\n\n3. Marknadsmomentum: Q4 2024 och Q1 2025 är traditionellt starka perioder för M&A-transaktioner. Att komma ut på marknaden under denna period kan öka intresset och konkurrensen mellan köpare.\n\n4. Förberedelse: 6-9 månader ger tid att förbereda datarum, genomföra intern due diligence, adressera röda flaggor, och optimera finansiella siffror. Detta gör due diligence-processen smidigare och minskar risk för prisavdrag.\n\n5. Strategiska alternativ: Med förbättrad finansiell prestation och minskad risk kan bolaget attrahera både strategiska köpare (som betalar premium) och PE-fonder (som värderar på multiplar), vilket ökar konkurrensen och kan driva upp priset.\n\nRekommendation: Påbörja förberedelserna omgående med fokus på quick wins (prisoptimering, automatisering) som kan implementeras snabbt, parallellt med rekrytering av vice VD och påbörjad IT-modernisering. Mål: Vara redo för försäljning Q2-Q3 2024.",
     buyerProfile: [
-      "Private Equity med branschfokus - har kapital för IT-investering och expansion",
-      "Strategisk köpare inom närliggande vertikal som söker marknadskonsolidering",
-      "Internationell aktör som vill etablera sig på svenska marknaden",
-      "Management buyout med PE-stöd givet starka kassaflöden"
+      "Private Equity-fonder med branschfokus (t.ex. Nordic Capital, EQT, FSN Capital) - har kapital för IT-investering och internationell expansion, värderar på EBITDA-multiplar 8-12x, söker platformbolag för add-on förvärv, typisk hålltid 3-5 år",
+      "Strategiska köpare inom närliggande vertikal som söker marknadskonsolidering (t.ex. större systemintegratörer, konsultbolag) - kan betala premium (15-25% över PE) för synergier, värderar strategiskt värde och kundbas, söker komplementära produkter eller geografisk expansion",
+      "Internationella aktörer som vill etablera sig på svenska marknaden (t.ex. amerikanska eller tyska tech-bolag) - kan betala högsta premium (20-30% över PE) för marknadsentré, värderar etablerad kundbas och lokalt varumärke, söker snabb skalning",
+      "Management buyout med PE-stöd givet starka kassaflöden - kan vara attraktivt om nuvarande ledning vill fortsätta, värderar kontinuitet och kundrelationer, möjliggör delägarskap för management team"
     ],
     negotiationPoints: [
       {
         topic: "Earn-out struktur",
-        yourPosition: "Max 20% av köpeskillingen, 2 års period",
-        expectedCounterpart: "30-40% earn-out över 3-4 år",
-        strategy: "Visa stabila historiska siffror, erbjud warranty & indemnity insurance"
+        yourPosition: "Max 20% av köpeskillingen, 2 års period, baserat på EBITDA-mål år 1-2. Tydliga definitioner av EBITDA med carve-outs för extraordinära poster. 50/50 split mellan åren. Anti-sandbagging clauses för att skydda mot manipulation.",
+        expectedCounterpart: "30-40% earn-out över 3-4 år med mer komplex struktur. Kan inkludera revenue-mål i addition till EBITDA. Kan kräva längre bindningstid för management.",
+        strategy: "Visa på stabila historiska siffror och låg volatilitet i resultatet. Erbjud warranty & indemnity insurance för att minska köparens risk och därmed motivera lägre earn-out. Framhäv att 2 års period är standard för branschen. Erbjud högre upfront betalning (75% vs 70%) som kompromiss."
       },
       {
-        topic: "Nyckelpersoner",
-        yourPosition: "VD stannar 12 månader",
-        expectedCounterpart: "VD och säljchef 24-36 månader",
-        strategy: "Föreslå konsultavtal efter 12 månader, rekrytera vice VD innan försäljning"
+        topic: "Nyckelpersoner och stay-on",
+        yourPosition: "VD stannar 12 månader med tydlig roll och ansvar. Stay-on bonus på 2 MSEK vid fullgörande. Efter 12 månader möjlighet till konsultavtal på 50% tid i 12 månader till. Säljchef stannar 18 månader med stay-on bonus 1,5 MSEK.",
+        expectedCounterpart: "VD och säljchef 24-36 månader med högre stay-on bonusar. Kan kräva fulltid under hela perioden utan konsultmöjlighet. Kan kräva att båda förbinder sig till icke-konkurrensavtal på 3-5 år.",
+        strategy: "Föreslå konsultavtal efter 12 månader som kompromiss - ger köparen kontinuitet men ger VD flexibilitet. Rekrytera vice VD innan försäljning för att minska beroendet. Framhäv att längre bindningstid kan påverka motivation negativt. Erbjud högre stay-on bonusar som kompromiss för kortare tid."
       },
       {
-        topic: "Due diligence fynd",
-        yourPosition: "Teknisk skuld är känd och prissatt",
-        expectedCounterpart: "Kräver prisreduktion för IT-investering",
-        strategy: "Visa påbörjad modernisering, ge comfort letter från IT-konsult"
+        topic: "Due diligence fynd och teknisk skuld",
+        yourPosition: "Teknisk skuld är känd och prissatt i värderingen. Påbörjad modernisering visar framåtblickande ledning och minskar risk. Ingen prisavdrag motiverad.",
+        expectedCounterpart: "Kräver prisreduktion för IT-investering (3-5 MSEK) eller att säljaren finansierar moderniseringen. Kan använda teknisk skuld som förhandlingskort för att driva ned priset.",
+        strategy: "Visa påbörjad modernisering (fasa 1 klar eller påbörjad) före försäljning. Ge comfort letter från IT-konsult som bekräftar att moderniseringen är välplanerad och kostnadsberäknad. Framhäv att teknisk skuld är normal för bolag i denna storlek och ålder. Erbjud att dela kostnaden 50/50 som kompromiss."
       },
       {
-        topic: "Rörelsekapital",
-        yourPosition: "Normalized WC enligt 12m snitt",
-        expectedCounterpart: "Cherry-picking bästa månaden",
-        strategy: "Föreslå locked box med tydlig WC-mekanism"
+        topic: "Rörelsekapital och locked box",
+        yourPosition: "Normalized WC enligt 12-månaders snitt (8,5 MSEK) med tydlig definition. Locked box-mechanism med completion date 3 månader före signing. Ingen justering för normala säsongsvariationer.",
+        expectedCounterpart: "Cherry-picking bästa månaden för WC-beräkning. Kräver completion date vid signing eller efter. Kan kräva justering för säsongsvariationer.",
+        strategy: "Föreslå locked box med tydlig WC-mekanism baserat på 12-månaders snitt. Visa på stabila WC-trender över tid. Framhäv att locked box är standard för denna typ av transaktion. Erbjud att acceptera completion date vid signing om köparen accepterar normalized WC."
+      },
+      {
+        topic: "Garantier och warranties",
+        yourPosition: "Standard warranties & indemnities med 18 månaders limitation period. Specifik indemnity för pågående skatteärende (max 2 MSEK). IP warranties förstärkta givet patentens värde. Key person warranties med carve-out för redan kommunicerade risker.",
+        expectedCounterpart: "24-36 månaders limitation period. Bredare warranties utan carve-outs. Kan kräva högre caps på indemnities. Kan kräva att säljaren står för alla kända risker utan begränsning.",
+        strategy: "Erbjud W&I insurance för att täcka köparens risk och därmed minska krav på warranties. Framhäv att 18 månader är standard. Använd carve-outs för redan kommunicerade risker som förhandlingskort. Erbjud högre cap på specifik indemnity som kompromiss."
+      },
+      {
+        topic: "Pris och värdering",
+        yourPosition: "Värdering på 35,6 MSEK (midpoint) baserat på DCF och multipelvärdering. Motiverat av stark tillväxt (18% CAGR), hög lönsamhet (22% EBITDA), stark kassaflödeskonvertering (85%), och marknadsledande position (32% marknadsandel).",
+        expectedCounterpart: "Kan argumentera för lägre värdering baserat på risker (nyckelpersoner, teknisk skuld, kundkoncentration). Kan använda lägre multiplar eller mer konservativa DCF-antaganden. Kan kräva prisavdrag för identifierade risker.",
+        strategy: "Visa på förbättringar som implementerats (quick wins, rekrytering, modernisering). Framhäv unika styrkor (patent, marknadsposition, kundlojalitet). Använd multipelvärdering för att validera DCF-resultatet. Erbjud earn-out som kompromiss för att balansera risk. Behåll normal business operations för att visa fortsatt tillväxt."
       }
     ],
     dealStructure: {
-      recommended: "70% kontant vid tillträde, 20% deponerat för garantier (18 mån), 10% earn-out baserat på EBITDA-mål år 1-2. Säljaren behåller 5-10% för att visa continued faith.",
+      recommended: "70% kontant vid tillträde (24,9 MSEK), 20% deponerat för garantier i 18 månader (7,1 MSEK), 10% earn-out baserat på EBITDA-mål år 1-2 (3,6 MSEK). Säljaren behåller 5-10% (1,8-3,6 MSEK) för att visa continued faith och alignment of interests. Denna struktur balanserar säljarens önskan om säker exit med köparens behov av riskreducering.\n\nDetaljerad struktur:\n\n1. Kontant vid tillträde (70% = 24,9 MSEK): Betalas vid completion date, vanligtvis 2-4 veckor efter signing. Används för att betala av skulder, ge utdelning till ägare, och finansiera skatter. Detta ger säljaren omedelbar likviditet och minskar risk för köparens betalningsförmåga.\n\n2. Deponerat för garantier (20% = 7,1 MSEK): Hålls på depositionskonto i 18 månader för att täcka potentiella warranty claims och indemnities. Standard är 10-25% av köpeskillingen, så 20% är balanserat. Vid inga claims betalas detta ut efter 18 månader plus ränta.\n\n3. Earn-out (10% = 3,6 MSEK): Baserat på EBITDA-mål år 1-2. 50% betalas efter år 1 om EBITDA överstiger 16 MSEK, 50% efter år 2 om EBITDA överstiger 18 MSEK. Tydliga definitioner av EBITDA med carve-outs för extraordinära poster. Anti-sandbagging clauses för att skydda mot manipulation.\n\n4. Säljarens kvarhållande (5-10% = 1,8-3,6 MSEK): Säljaren behåller en mindre andel för att visa continued faith och alignment of interests. Detta kan öka köparens förtroende och möjliggöra högre värdering. Alternativt kan detta struktureras som management equity i köparens struktur.\n\nFördelar med denna struktur:\n- Balanserar risk mellan säljare och köpare\n- Ger säljaren omedelbar likviditet (70%)\n- Minskar köparens risk genom earn-out och deponerat\n- Alignerar intressen genom säljarens kvarhållande\n- Standard struktur som är välkänd och accepterad\n\nAlternativa strukturer att överväga:\n- 75% kontant + 15% deponerat + 10% earn-out (högre upfront)\n- 65% kontant + 25% deponerat + 10% earn-out (högre säkerhet)\n- 100% kontant (lägst risk för säljare men kan kräva lägre värdering)",
       earnOut: {
         recommended: true,
         structure: "10% av köpeskillingen baserat på att EBITDA överstiger 16 MSEK år 1 och 18 MSEK år 2. 50/50 split mellan åren. Tydliga definitioner av EBITDA och anti-sandbagging clauses."
