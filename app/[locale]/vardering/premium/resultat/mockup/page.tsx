@@ -1698,11 +1698,11 @@ function PremiumResultMockupContent() {
                     <Award className="w-8 h-8" />
                     <h3 className="text-2xl font-bold">Professionell företagsvärdering</h3>
                   </div>
-                  <div className="text-5xl font-bold mb-4">
+                  <div className="text-5xl font-bold mb-4 whitespace-nowrap">
                     {formatCurrency(result.valuation.range.mostLikely)}
                   </div>
                   <div className="text-xl opacity-90 mb-2">
-                    Intervall: {formatCurrency(result.valuation.range.min)} - {formatCurrency(result.valuation.range.max)}
+                    Intervall: <span className="whitespace-nowrap">{formatCurrency(result.valuation.range.min)}</span> - <span className="whitespace-nowrap">{formatCurrency(result.valuation.range.max)}</span>
                   </div>
                   <div className="flex items-center gap-4 mt-4">
                     <div className="flex items-center gap-2">
@@ -1727,15 +1727,15 @@ function PremiumResultMockupContent() {
             {/* Executive Summary */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-2xl font-bold text-primary-navy mb-6">Sammanfattning</h3>
-              <div className="prose prose-lg max-w-none">
-                <div className="text-gray-700 leading-relaxed">
+              <div className="prose prose-lg max-w-none leading-relaxed">
+                <div className="text-gray-700">
                   {renderMarkdownText(result.executiveSummary)}
                 </div>
               </div>
             </div>
 
             {/* Quick Stats */}
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
               <div className="bg-green-50 p-6 rounded-xl border border-green-200">
                 <div className="flex items-center gap-3 mb-2">
                   <CheckCircle className="w-6 h-6 text-green-600" />
@@ -1838,21 +1838,21 @@ function PremiumResultMockupContent() {
                   <tbody>
                     <tr className="border-b border-gray-100">
                       <td className="py-3 px-4 font-medium">Bästa fall</td>
-                      <td className="text-right py-3 px-4">{formatCurrency(result.financialAnalysis.projections.bestCase.year1)}</td>
-                      <td className="text-right py-3 px-4">{formatCurrency(result.financialAnalysis.projections.bestCase.year2)}</td>
-                      <td className="text-right py-3 px-4">{formatCurrency(result.financialAnalysis.projections.bestCase.year3)}</td>
+                      <td className="text-right py-3 px-4 whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.bestCase.year1)}</td>
+                      <td className="text-right py-3 px-4 whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.bestCase.year2)}</td>
+                      <td className="text-right py-3 px-4 whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.bestCase.year3)}</td>
                     </tr>
                     <tr className="border-b border-gray-100 bg-primary-navy/5">
                       <td className="py-3 px-4 font-medium">Basfall</td>
-                      <td className="text-right py-3 px-4 font-bold">{formatCurrency(result.financialAnalysis.projections.baseCase.year1)}</td>
-                      <td className="text-right py-3 px-4 font-bold">{formatCurrency(result.financialAnalysis.projections.baseCase.year2)}</td>
-                      <td className="text-right py-3 px-4 font-bold">{formatCurrency(result.financialAnalysis.projections.baseCase.year3)}</td>
+                      <td className="text-right py-3 px-4 font-bold whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.baseCase.year1)}</td>
+                      <td className="text-right py-3 px-4 font-bold whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.baseCase.year2)}</td>
+                      <td className="text-right py-3 px-4 font-bold whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.baseCase.year3)}</td>
                     </tr>
                     <tr>
                       <td className="py-3 px-4 font-medium">Sämsta fall</td>
-                      <td className="text-right py-3 px-4">{formatCurrency(result.financialAnalysis.projections.worstCase.year1)}</td>
-                      <td className="text-right py-3 px-4">{formatCurrency(result.financialAnalysis.projections.worstCase.year2)}</td>
-                      <td className="text-right py-3 px-4">{formatCurrency(result.financialAnalysis.projections.worstCase.year3)}</td>
+                      <td className="text-right py-3 px-4 whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.worstCase.year1)}</td>
+                      <td className="text-right py-3 px-4 whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.worstCase.year2)}</td>
+                      <td className="text-right py-3 px-4 whitespace-nowrap">{formatCurrency(result.financialAnalysis.projections.worstCase.year3)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1865,7 +1865,7 @@ function PremiumResultMockupContent() {
         return (
           <div className="space-y-6">
             {/* SWOT Analysis */}
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="bg-green-50 p-6 rounded-xl border border-green-200">
                 <h4 className="font-bold text-green-900 mb-4 flex items-center">
                   <CheckCircle className="w-5 h-5 mr-2" />
@@ -1959,7 +1959,7 @@ function PremiumResultMockupContent() {
                 <Zap className="w-6 h-6 mr-2 text-blue-600" />
                 Quick Wins
               </h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {result.ddFindings.quickWins.map((win, index) => (
                   <div key={index} className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <h4 className="font-semibold text-gray-900 mb-2">{win.action}</h4>
@@ -2054,15 +2054,15 @@ function PremiumResultMockupContent() {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center">
                   <p className="text-sm text-gray-600 mb-2">Nuvarande</p>
-                  <p className="text-2xl font-bold text-gray-900">{formatCurrency(result.financialAnalysis.workingCapital.current)}</p>
+                  <p className="text-2xl font-bold text-gray-900 whitespace-nowrap">{formatCurrency(result.financialAnalysis.workingCapital.current)}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-sm text-gray-600 mb-2">Optimalt</p>
-                  <p className="text-2xl font-bold text-green-600">{formatCurrency(result.financialAnalysis.workingCapital.optimal)}</p>
+                  <p className="text-2xl font-bold text-green-600 whitespace-nowrap">{formatCurrency(result.financialAnalysis.workingCapital.optimal)}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-sm text-gray-600 mb-2">Förbättringspotential</p>
-                  <p className="text-2xl font-bold text-blue-600">
+                  <p className="text-2xl font-bold text-blue-600 whitespace-nowrap">
                     {formatCurrency(result.financialAnalysis.workingCapital.current - result.financialAnalysis.workingCapital.optimal)}
                   </p>
                 </div>
@@ -2080,7 +2080,7 @@ function PremiumResultMockupContent() {
             {/* Competitive Advantages */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-xl font-bold text-primary-navy mb-6">Konkurrensfördelar</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-3 gap-4">
                 {result.marketPosition.competitiveAdvantages.map((advantage, index) => (
                   <div key={index} className="flex items-start p-4 bg-green-50 rounded-lg">
                     <Award className="w-5 h-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
@@ -2229,7 +2229,7 @@ function PremiumResultMockupContent() {
             {/* Buyer Profile */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-xl font-bold text-primary-navy mb-6">Köparprofiler</h3>
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-3 gap-4">
                 {result.transactionGuidance.buyerProfile.map((profile, index) => (
                   <div key={index} className="flex items-start p-4 bg-primary-navy/5 rounded-lg">
                     <Users className="w-5 h-5 text-primary-navy mr-3 mt-0.5 flex-shrink-0" />
@@ -2380,7 +2380,7 @@ function PremiumResultMockupContent() {
 
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">
             <div className="flex items-center justify-between">
               <div>
@@ -2394,7 +2394,7 @@ function PremiumResultMockupContent() {
                     42 områden analyserade
                   </div>
                 </div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
                   Professionell företagsvärdering
                 </h1>
               </div>
@@ -2436,7 +2436,7 @@ function PremiumResultMockupContent() {
       </div>
       
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {renderTabContent()}
       </div>
     </div>
