@@ -1280,15 +1280,53 @@ VD och säljchef 24-36 månader med högre stay-on bonusar:
       },
       {
         topic: "Garantier och warranties",
-        yourPosition: "Standard warranties & indemnities med 18 månaders limitation period. Specifik indemnity för pågående skatteärende (max 2 MSEK). IP warranties förstärkta givet patentens värde. Key person warranties med carve-out för redan kommunicerade risker.",
-        expectedCounterpart: "24-36 månaders limitation period. Bredare warranties utan carve-outs. Kan kräva högre caps på indemnities. Kan kräva att säljaren står för alla kända risker utan begränsning.",
-        strategy: "Erbjud W&I insurance för att täcka köparens risk och därmed minska krav på warranties. Framhäv att 18 månader är standard. Använd carve-outs för redan kommunicerade risker som förhandlingskort. Erbjud högre cap på specifik indemnity som kompromiss."
+        yourPosition: "**Din position:**
+
+- Standard warranties & indemnities med 18 månaders limitation period
+- Specifik indemnity för pågående skatteärende (max 2 MSEK)
+- IP warranties förstärkta givet patentens värde
+- Key person warranties med carve-out för redan kommunicerade risker",
+        
+        expectedCounterpart: "**Förväntad motpart:**
+
+- 24-36 månaders limitation period
+- Bredare warranties utan carve-outs
+- Kan kräva högre caps på indemnities
+- Kan kräva att säljaren står för alla kända risker utan begränsning",
+        
+        strategy: "**Förhandlingsstrategi:**
+
+1) Erbjud W&I insurance för att täcka köparens risk
+2) Framhäv att 18 månader är standard
+3) Använd carve-outs för redan kommunicerade risker som förhandlingskort
+4) Erbjud högre cap på specifik indemnity som kompromiss"
       },
       {
         topic: "Pris och värdering",
-        yourPosition: "Värdering på 35,6 MSEK (midpoint) baserat på DCF och multipelvärdering. Motiverat av stark tillväxt (18% CAGR), hög lönsamhet (22% EBITDA), stark kassaflödeskonvertering (85%), och marknadsledande position (32% marknadsandel).",
-        expectedCounterpart: "Kan argumentera för lägre värdering baserat på risker (nyckelpersoner, teknisk skuld, kundkoncentration). Kan använda lägre multiplar eller mer konservativa DCF-antaganden. Kan kräva prisavdrag för identifierade risker.",
-        strategy: "Visa på förbättringar som implementerats (quick wins, rekrytering, modernisering). Framhäv unika styrkor (patent, marknadsposition, kundlojalitet). Använd multipelvärdering för att validera DCF-resultatet. Erbjud earn-out som kompromiss för att balansera risk. Behåll normal business operations för att visa fortsatt tillväxt."
+        yourPosition: "**Din position:**
+
+Värdering på **35,6 MSEK (midpoint)** baserat på DCF och multipelvärdering. 
+
+**Motivering:**
+- Stark tillväxt (18% CAGR)
+- Hög lönsamhet (22% EBITDA)
+- Stark kassaflödeskonvertering (85%)
+- Marknadsledande position (32% marknadsandel)",
+        
+        expectedCounterpart: "**Förväntad motpart:**
+
+Kan argumentera för lägre värdering baserat på:
+- Risker (nyckelpersoner, teknisk skuld, kundkoncentration)
+- Lägre multiplar eller mer konservativa DCF-antaganden
+- Prisavdrag för identifierade risker",
+        
+        strategy: "**Förhandlingsstrategi:**
+
+1) Visa på förbättringar som implementerats (quick wins, rekrytering, modernisering)
+2) Framhäv unika styrkor (patent, marknadsposition, kundlojalitet)
+3) Använd multipelvärdering för att validera DCF-resultatet
+4) Erbjud earn-out som kompromiss för att balansera risk
+5) Behåll normal business operations för att visa fortsatt tillväxt"
       }
     ],
     dealStructure: {
