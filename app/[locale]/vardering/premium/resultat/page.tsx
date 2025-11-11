@@ -235,6 +235,54 @@ export default function PremiumValuationResultPage() {
     }
   }
 
+  // Convert markdown **text** to JSX with bold styling and proper paragraph breaks
+  const renderMarkdownText = (text: string) => {
+    if (!text) return null
+    
+    // Split by double newlines to create paragraphs
+    const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0)
+    
+    return (
+      <>
+        {paragraphs.map((paragraph, idx) => {
+          // Convert **text** to <strong>text</strong>
+          const parts: (string | JSX.Element)[] = []
+          let currentIndex = 0
+          const boldRegex = /\*\*(.+?)\*\*/g
+          let match
+          let hasBold = false
+          
+          while ((match = boldRegex.exec(paragraph)) !== null) {
+            hasBold = true
+            // Add text before the match
+            if (match.index > currentIndex) {
+              parts.push(paragraph.substring(currentIndex, match.index))
+            }
+            // Add the bold text
+            parts.push(<strong key={`bold-${idx}-${match.index}`}>{match[1]}</strong>)
+            currentIndex = match.index + match[0].length
+          }
+          
+          // Add remaining text after last match
+          if (currentIndex < paragraph.length) {
+            parts.push(paragraph.substring(currentIndex))
+          }
+          
+          // If no bold markers found, use original text
+          if (!hasBold) {
+            parts.push(paragraph)
+          }
+          
+          return (
+            <p key={`para-${idx}`} className={idx > 0 ? 'mt-4' : ''}>
+              {parts}
+            </p>
+          )
+        })}
+      </>
+    )
+  }
+
   const renderTabContent = () => {
     if (!result) return null
 
@@ -280,9 +328,9 @@ export default function PremiumValuationResultPage() {
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-2xl font-bold text-primary-navy mb-6">Sammanfattning</h3>
               <div className="prose prose-lg max-w-none">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                  {result.executiveSummary}
-                </p>
+                <div className="text-gray-700 leading-relaxed">
+                  {renderMarkdownText(result.executiveSummary)}
+                </div>
               </div>
             </div>
 
@@ -494,10 +542,10 @@ export default function PremiumValuationResultPage() {
                         {flag.severity === 'high' ? 'Hög' : flag.severity === 'medium' ? 'Medel' : 'Låg'} risk
                       </span>
                     </div>
-                    <p className="text-gray-700 mb-2 whitespace-pre-wrap">{flag.description}</p>
+                    <p className="text-gray-700 mb-2">{renderMarkdownText(flag.description)}</p>
                     <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-sm text-gray-600 whitespace-pre-wrap">
-                        <span className="font-medium">Åtgärd:</span> {flag.mitigation}
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">Åtgärd:</span> {renderMarkdownText(flag.mitigation)}
                       </p>
                     </div>
                   </div>
@@ -561,8 +609,8 @@ export default function PremiumValuationResultPage() {
                       <p className="font-semibold">Hög</p>
                     </div>
                   </div>
-                  <p className="mt-3 text-gray-700 whitespace-pre-wrap">
-                    {result.financialAnalysis.historicalPerformance.revenue.analysis}
+                  <p className="mt-3 text-gray-700">
+                    {renderMarkdownText(result.financialAnalysis.historicalPerformance.revenue.analysis)}
                   </p>
                 </div>
 
@@ -572,8 +620,8 @@ export default function PremiumValuationResultPage() {
                     <DollarSign className="w-5 h-5 mr-2 text-blue-600" />
                     Lönsamhetsanalys
                   </h4>
-                  <p className="text-gray-700 whitespace-pre-wrap">
-                    {result.financialAnalysis.historicalPerformance.profitability.analysis}
+                  <p className="text-gray-700">
+                    {renderMarkdownText(result.financialAnalysis.historicalPerformance.profitability.analysis)}
                   </p>
                 </div>
 
@@ -593,8 +641,8 @@ export default function PremiumValuationResultPage() {
                       <p className="font-semibold text-lg">{result.financialAnalysis.historicalPerformance.cashFlow.conversion}%</p>
                     </div>
                   </div>
-                  <p className="text-gray-700 whitespace-pre-wrap">
-                    {result.financialAnalysis.historicalPerformance.cashFlow.analysis}
+                  <p className="text-gray-700">
+                    {renderMarkdownText(result.financialAnalysis.historicalPerformance.cashFlow.analysis)}
                   </p>
                 </div>
               </div>
@@ -620,7 +668,7 @@ export default function PremiumValuationResultPage() {
                 </div>
               </div>
               <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                <p className="text-blue-800 whitespace-pre-wrap">{result.financialAnalysis.workingCapital.improvement}</p>
+                <div className="text-blue-800">{renderMarkdownText(result.financialAnalysis.workingCapital.improvement)}</div>
               </div>
             </div>
           </div>
@@ -743,7 +791,7 @@ export default function PremiumValuationResultPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div>
                         <h4 className="font-semibold text-gray-900">{risk.category}</h4>
-                        <p className="text-gray-700 mt-1 whitespace-pre-wrap">{risk.description}</p>
+                        <p className="text-gray-700 mt-1">{renderMarkdownText(risk.description)}</p>
                       </div>
                       <div className="flex gap-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getSeverityColor(risk.probability)}`}>
@@ -755,8 +803,8 @@ export default function PremiumValuationResultPage() {
                       </div>
                     </div>
                     <div className="bg-gray-50 p-3 rounded">
-                      <p className="text-sm text-gray-600 whitespace-pre-wrap">
-                        <span className="font-medium">Åtgärd:</span> {risk.mitigation}
+                      <p className="text-sm text-gray-600">
+                        <span className="font-medium">Åtgärd:</span> {renderMarkdownText(risk.mitigation)}
                       </p>
                     </div>
                   </div>
@@ -775,7 +823,7 @@ export default function PremiumValuationResultPage() {
                 <Clock className="w-6 h-6 mr-2 text-blue-600" />
                 Optimal tidpunkt för försäljning
               </h3>
-              <p className="text-gray-700 whitespace-pre-wrap">{result.transactionGuidance.optimalTiming}</p>
+              <div className="text-gray-700">{renderMarkdownText(result.transactionGuidance.optimalTiming)}</div>
             </div>
 
             {/* Buyer Profile */}
@@ -785,7 +833,7 @@ export default function PremiumValuationResultPage() {
                 {result.transactionGuidance.buyerProfile.map((profile, index) => (
                   <div key={index} className="flex items-start p-4 bg-primary-navy/5 rounded-lg">
                     <Users className="w-5 h-5 text-primary-navy mr-3 mt-0.5 flex-shrink-0" />
-                    <p className="text-gray-800 whitespace-pre-wrap">{profile}</p>
+                    <div className="text-gray-800">{renderMarkdownText(profile)}</div>
                   </div>
                 ))}
               </div>
@@ -802,16 +850,16 @@ export default function PremiumValuationResultPage() {
                       <div className="grid lg:grid-cols-2 gap-4">
                         <div className="bg-green-50 p-4 rounded-lg">
                           <p className="font-semibold text-green-900 mb-2">Din position</p>
-                          <p className="text-green-800 whitespace-pre-wrap leading-relaxed">{point.yourPosition}</p>
+                          <div className="text-green-800 leading-relaxed">{renderMarkdownText(point.yourPosition)}</div>
                         </div>
                         <div className="bg-red-50 p-4 rounded-lg">
                           <p className="font-semibold text-red-900 mb-2">Förväntad motpart</p>
-                          <p className="text-red-800 whitespace-pre-wrap leading-relaxed">{point.expectedCounterpart}</p>
+                          <div className="text-red-800 leading-relaxed">{renderMarkdownText(point.expectedCounterpart)}</div>
                         </div>
                       </div>
                       <div className="bg-blue-50 p-4 rounded-lg">
                         <p className="font-semibold text-blue-900 mb-2">Strategi</p>
-                        <p className="text-blue-800 whitespace-pre-wrap leading-relaxed">{point.strategy}</p>
+                        <div className="text-blue-800 leading-relaxed">{renderMarkdownText(point.strategy)}</div>
                       </div>
                     </div>
                   </div>
@@ -825,7 +873,7 @@ export default function PremiumValuationResultPage() {
               <div className="space-y-4">
                 <div className="p-4 bg-gray-50 rounded-lg">
                   <h4 className="font-semibold text-gray-900 mb-2">Struktur</h4>
-                  <p className="text-gray-700 whitespace-pre-wrap">{result.transactionGuidance.dealStructure.recommended}</p>
+                  <div className="text-gray-700">{renderMarkdownText(result.transactionGuidance.dealStructure.recommended)}</div>
                 </div>
                 
                 {result.transactionGuidance.dealStructure.earnOut.recommended && (
@@ -834,7 +882,7 @@ export default function PremiumValuationResultPage() {
                       <DollarSign className="w-5 h-5 mr-2 text-yellow-600" />
                       Earn-out
                     </h4>
-                    <p className="text-gray-700 whitespace-pre-wrap">{result.transactionGuidance.dealStructure.earnOut.structure}</p>
+                    <div className="text-gray-700">{renderMarkdownText(result.transactionGuidance.dealStructure.earnOut.structure)}</div>
                   </div>
                 )}
 
@@ -844,7 +892,7 @@ export default function PremiumValuationResultPage() {
                     {result.transactionGuidance.dealStructure.warranties.map((warranty, index) => (
                       <li key={index} className="flex items-start">
                         <CheckCircle className="w-4 h-4 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700 whitespace-pre-wrap">{warranty}</span>
+                        <span className="text-gray-700">{renderMarkdownText(warranty)}</span>
                       </li>
                     ))}
                   </ul>
