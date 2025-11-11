@@ -253,7 +253,7 @@ Med rätt förberedelser och timing kan värdet maximeras ytterligare genom impl
       {
         severity: "high",
         area: "Organisation",
-        description: "**Nyckelpersonsberoende - Kritisk organisatorisk risk**
+        description: `**Nyckelpersonsberoende - Kritisk organisatorisk risk**
 
 VD och säljchef står tillsammans för **65% av kundrelationerna** och **55% av nyförsäljningen** utan dokumenterad överlämningsplan eller ersättare. 
 
@@ -268,8 +268,8 @@ Ingen av dessa roller har dokumenterade processer, kundöverlämningar eller suc
 **Riskbedömning:**
 
 - **Sannolikhet:** Hög (VD är 58 år, säljchef 52 år, båda har uttryckt intresse för exit)
-- **Påverkan:** Mycket hög (uppskattad värdeförlust 15-25% vid abrupt bortfall)",
-        mitigation: "**Åtgärdsplan för att minska nyckelpersonsrisken:**
+- **Påverkan:** Mycket hög (uppskattad värdeförlust 15-25% vid abrupt bortfall)`,
+        mitigation: `**Åtgärdsplan för att minska nyckelpersonsrisken:**
 
 **Implementera omgående:**
 
@@ -295,12 +295,12 @@ Ingen av dessa roller har dokumenterade processer, kundöverlämningar eller suc
 
 6) **Dokumentera alla kritiska aktiviteter**
    - Processer som nu är personberoende
-   - Knowledge transfer-dokumentation"
+   - Knowledge transfer-dokumentation`
       },
       {
         severity: "high",
         area: "Teknologi",
-        description: "**Teknisk skuld - IT-moderniseringsbehov**
+        description: `**Teknisk skuld - IT-moderniseringsbehov**
 
 Core-system byggt 2018 på **PHP 7.2** med **MySQL-databas** tappar officiell support under 2024.
 
@@ -322,8 +322,8 @@ Modernisering till modern tech stack (Node.js/Python backend, React frontend, Po
 **Riskbedömning:**
 
 - **Sannolikhet:** Mycket hög (support upphör 2024)
-- **Påverkan:** Hög (säkerhetsincidenter kan skada varumärke och leda till GDPR-böter upp till 4% av omsättning, dvs 2,7 MSEK)",
-        mitigation: "**Moderniseringsplan:**
+- **Påverkan:** Hög (säkerhetsincidenter kan skada varumärke och leda till GDPR-böter upp till 4% av omsättning, dvs 2,7 MSEK)`,
+        mitigation: `**Moderniseringsplan:**
 
 **Påbörja modernisering omgående:**
 
@@ -349,12 +349,12 @@ Modernisering till modern tech stack (Node.js/Python backend, React frontend, Po
 
 **Värdeeffekt:**
 
-Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med **5-10%**."
+Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med **5-10%**.`
       },
       {
         severity: "medium",
         area: "Kunder",
-        description: "**Kundkoncentration - Finansiell risk**
+        description: `**Kundkoncentration - Finansiell risk**
 
 Top 10 kunder står för **45% av omsättning** vilket är över rekommenderad gräns på 30-35%. Den största kunden står för **12% av omsättning (8,2 MSEK/år)** vilket är över rekommenderad gräns på 8-10%. 
 
@@ -365,8 +365,8 @@ Om denna kund skulle säga upp sitt avtal skulle det ha betydande påverkan på 
 **Riskbedömning:**
 
 - **Sannolikhet:** Medel (kunden har varit kund i 8 år men har nya ägare som kan ändra strategi)
-- **Påverkan:** Hög (12% omsättningsförlust = 8,2 MSEK, plus negativ signal till andra kunder)",
-        mitigation: "**Diversifieringsstrategi:**
+- **Påverkan:** Hög (12% omsättningsförlust = 8,2 MSEK, plus negativ signal till andra kunder)`,
+        mitigation: `**Diversifieringsstrategi:**
 
 **Åtgärder:**
 
@@ -392,12 +392,12 @@ Om denna kund skulle säga upp sitt avtal skulle det ha betydande påverkan på 
 
 6) **Överväg kreditförsäkring** för största kunden
    - Minska finansiell risk
-   - Skydd mot betalningssvårigheter"
+   - Skydd mot betalningssvårigheter`
       },
       {
         severity: "medium",
         area: "Finansiell",
-        description: "**Budget- och prognosprocess - Finansiell styrning**
+        description: `**Budget- och prognosprocess - Finansiell styrning**
 
 Ingen dokumenterad budget- eller prognosprocess vilket gör det svårt att förutsäga framtida resultat och identifiera avvikelser i tid. 
 
@@ -415,8 +415,8 @@ Detta gör det svårt för potentiella köpare att bedöma förutsägbarhet och 
 **Riskbedömning:**
 
 - **Sannolikhet:** Hög (processer saknas)
-- **Påverkan:** Medel (kan påverka värderingen negativt och göra due diligence mer komplicerad)",
-        mitigation: "**Implementation av finansiell styrning:**
+- **Påverkan:** Medel (kan påverka värderingen negativt och göra due diligence mer komplicerad)`,
+        mitigation: `**Implementation av finansiell styrning:**
 
 **Åtgärder:**
 
@@ -444,12 +444,12 @@ Detta gör det svårt för potentiella köpare att bedöma förutsägbarhet och 
    - Månadsvis genomgång av KPI:er
    - Snabb identifiering av avvikelser
 
-**Tidsram:** 1 månad för implementation"
+**Tidsram:** 1 månad för implementation`
       },
       {
         severity: "low",
         area: "Legal",
-        description: "**GDPR-compliance - Regulatorisk risk**
+        description: `**GDPR-compliance - Regulatorisk risk**
 
 GDPR-dokumentation är ofullständig med saknade biträdesavtal (DPA) för vissa leverantörer och begränsad dokumentation av databehandling. 
 
@@ -460,8 +460,8 @@ Detta kan leda till böter upp till **4% av omsättning (2,7 MSEK)** vid en inci
 **Riskbedömning:**
 
 - **Sannolikhet:** Låg (inga incidenter hittills)
-- **Påverkan:** Medel (böter kan vara betydande men sannolikhet låg)",
-        mitigation: "**Genomför GDPR-revision:**
+- **Påverkan:** Medel (böter kan vara betydande men sannolikhet låg)`,
+        mitigation: `**Genomför GDPR-revision:**
 
 **Åtgärder:**
 
@@ -489,12 +489,12 @@ Detta kan leda till böter upp till **4% av omsättning (2,7 MSEK)** vid en inci
    - Awareness training
    - Regelbundna uppdateringar
 
-**Tidsram:** 2-3 månader"
+**Tidsram:** 2-3 månader`
       },
       {
         severity: "medium",
         area: "Marknad",
-        description: "**Internationell närvaro - Geografisk koncentration**
+        description: `**Internationell närvaro - Geografisk koncentration**
 
 Begränsad internationell närvaro med **95% av försäljning i Sverige** gör bolaget sårbart för svensk konjunktur och begränsar tillväxtpotential. 
 
@@ -511,8 +511,8 @@ Ingen etablerad go-to-market strategi för internationell expansion trots att l�
 **Riskbedömning:**
 
 - **Sannolikhet:** Medel (konjunkturnedgång kan påverka)
-- **Påverkan:** Medel (begränsad tillväxtpotential kan påverka värderingen)",
-        mitigation: "**Utveckla internationell strategi:**
+- **Påverkan:** Medel (begränsad tillväxtpotential kan påverka värderingen)`,
+        mitigation: `**Utveckla internationell strategi:**
 
 **Åtgärder:**
 
@@ -534,7 +534,7 @@ Ingen etablerad go-to-market strategi för internationell expansion trots att l�
 
 5) **Budgetera 1-2 MSEK** för internationell expansion år 1
    - Marketing och säljresurser
-   - Produktanpassning"
+   - Produktanpassning`
       }
     ],
     quickWins: [
@@ -978,7 +978,7 @@ Kundservice är proaktiv men saknar automation:
     keyRisks: [
       {
         category: "Operationell",
-        description: "**Nyckelpersonsberoende - Operationell risk**
+        description: `**Nyckelpersonsberoende - Operationell risk**
 
 Beroendet av två nyckelpersoner (VD och säljchef) utan successionsplan utgör den mest kritiska risken. 
 
@@ -990,10 +990,10 @@ VD har grundat bolaget och har djupa personliga relationer med många av de stö
 
 Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på försäljning, kundrelationer och bolagets värdering. 
 
-**Uppskattad värdeförlust vid abrupt bortfall: 15-25%**",
+**Uppskattad värdeförlust vid abrupt bortfall: 15-25%**`,
         probability: "high",
         impact: "high",
-        mitigation: "**Åtgärdsplan:**
+        mitigation: `**Åtgärdsplan:**
 
 1) **Rekrytera vice VD** inom 3-4 månader
 2) **Dokumentera alla kundrelationer** i CRM
@@ -1001,11 +1001,11 @@ Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på f
 4) **Implementera stay-on bonusar** (2-3 MSEK vardera)
 5) **Etablera regelbundna kundöverlämningar**
 
-**Budget:** 150-200k SEK för rekrytering + 2-3 MSEK för stay-on bonusar"
+**Budget:** 150-200k SEK för rekrytering + 2-3 MSEK för stay-on bonusar`
       },
       {
         category: "Teknologi",
-        description: "**Legacy-system - Teknologisk risk**
+        description: `**Legacy-system - Teknologisk risk**
 
 Legacy-system byggt på PHP 7.2 tappar support 2024 vilket innebär säkerhetsrisker och begränsad skalbarhet. 
 
@@ -1018,10 +1018,10 @@ Modernisering är nödvändig inom 12-18 månader för att undvika säkerhetsinc
 
 **Konsekvenser:**
 
-Säkerhetsincidenter kan leda till GDPR-böter upp till **4% av omsättning (2,7 MSEK)** och skada varumärke.",
+Säkerhetsincidenter kan leda till GDPR-böter upp till **4% av omsättning (2,7 MSEK)** och skada varumärke.`,
         probability: "high",
         impact: "medium",
-        mitigation: "**Moderniseringsplan i två faser:**
+        mitigation: `**Moderniseringsplan i två faser:**
 
 **Fasa 1 (3 månader, 1,5 MSEK):**
 - Kritiska komponenter
@@ -1034,11 +1034,11 @@ Säkerhetsincidenter kan leda till GDPR-böter upp till **4% av omsättning (2,7
 - Implementera monitoring
 - Dokumentera roadmap
 
-**Total budget:** 5 MSEK"
+**Total budget:** 5 MSEK`
       },
       {
         category: "Marknad",
-        description: "**Marknadskonkurrens - Strategisk risk**
+        description: `**Marknadskonkurrens - Strategisk risk**
 
 Internationella tech-jättar börjar fokusera på denna nisch med betydligt större resurser för produktutveckling och marknadsföring. 
 
@@ -1046,28 +1046,28 @@ Internationella tech-jättar börjar fokusera på denna nisch med betydligt stö
 
 - Disruptiv teknologi (AI/ML) kan göra nuvarande lösningsansats obsolet inom 3-5 år
 - Konsolidering bland konkurrenter skapar större och starkare konkurrenter med bredare erbjudande
-- Prispress från internationella aktörer",
+- Prispress från internationella aktörer`,
         probability: "medium",
         impact: "high",
-        mitigation: "**Strategisk respons:**
+        mitigation: `**Strategisk respons:**
 
 1) **Accelerera produktutveckling** med fokus på AI/ML-funktionalitet
 2) **Stärk kundlojalitet** genom exceptional customer success
 3) **Bygg integrations-ekosystem** för att öka switching costs
-4) **Överväg strategiska partnerskap** eller förvärv för att stärka position"
+4) **Överväg strategiska partnerskap** eller förvärv för att stärka position`
       },
       {
         category: "Finansiell",
-        description: "**Kundkoncentration - Finansiell risk**
+        description: `**Kundkoncentration - Finansiell risk**
 
 Kundkoncentration med top 10 kunder som står för **45% av omsättning** och största kund **12%** utgör en finansiell risk. 
 
 **Konsekvenser:**
 
-Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Konjunkturnedgång kan påverka B2B-investeringsvilja och leda till längre säljcykler.",
+Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Konjunkturnedgång kan påverka B2B-investeringsvilja och leda till längre säljcykler.`,
         probability: "low",
         impact: "high",
-        mitigation: "**Diversifieringsstrategi:**
+        mitigation: `**Diversifieringsstrategi:**
 
 1) Fokusera på mindre kunder (mål: max 8% per kund)
 2) Förhandla om längre avtal med största kunden
@@ -1075,11 +1075,11 @@ Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan
 4) Skapa expansion opportunities
 5) Överväg kreditförsäkring
 
-**Tidsram:** 6-12 månader"
+**Tidsram:** 6-12 månader`
       },
       {
         category: "Regulatorisk",
-        description: "**GDPR och regulatoriska krav - Compliance-risk**
+        description: `**GDPR och regulatoriska krav - Compliance-risk**
 
 GDPR-brister kan ge böter upp till **4% av omsättning (2,7 MSEK)** vid en incident eller revision. 
 
@@ -1087,10 +1087,10 @@ GDPR-brister kan ge böter upp till **4% av omsättning (2,7 MSEK)** vid en inci
 
 - Regulatoriska förändringar inom dataskydd kan kräva betydande investeringar i compliance och säkerhet
 - Branschspecifik lagstiftning kan påverka verksamheten
-- Ökad granskning från tillsynsmyndigheter",
+- Ökad granskning från tillsynsmyndigheter`,
         probability: "medium",
         impact: "low",
-        mitigation: "**GDPR-compliance program:**
+        mitigation: `**GDPR-compliance program:**
 
 1) Genomför GDPR-revision med extern konsult (200-300k SEK)
 2) Uppdatera alla biträdesavtal
@@ -1099,11 +1099,11 @@ GDPR-brister kan ge böter upp till **4% av omsättning (2,7 MSEK)** vid en inci
 5) Skapa incident response plan
 6) Utbilda personal
 
-**Tidsram:** 2-3 månader"
+**Tidsram:** 2-3 månader`
       },
       {
         category: "Konkurrens",
-        description: "**Konkurrenstryck - Marknadsrisk**
+        description: `**Konkurrenstryck - Marknadsrisk**
 
 Prispress från lågkostnadsalternativ, särskilt från Östeuropa och Indien, kan underminera premiumpositionering. 
 
@@ -1111,19 +1111,19 @@ Prispress från lågkostnadsalternativ, särskilt från Östeuropa och Indien, k
 
 - Open source-alternativ kan erbjuda liknande funktionalitet gratis
 - Förändrade köpbeteenden där kunder föredrar all-in-one plattformar framför best-of-breed lösningar
-- Prispress kan tvinga ned marginaler",
+- Prispress kan tvinga ned marginaler`,
         probability: "medium",
         impact: "medium",
-        mitigation: "**Differentieringsstrategi:**
+        mitigation: `**Differentieringsstrategi:**
 
 1) Fokusera på värdebaserad prissättning istället för kostnadsbaserad
 2) Differentiera genom superior customer success och integrations-ekosystem
 3) Bygg varumärke och thought leadership
-4) Överväg freemium-modell för att konkurrera med open source"
+4) Överväg freemium-modell för att konkurrera med open source`
       },
       {
         category: "Organisation",
-        description: "**Talangbrist - Rekryteringsrisk**
+        description: `**Talangbrist - Rekryteringsrisk**
 
 Talangbrist inom tech driver upp lönekostnader och gör rekrytering utmanande. 
 
@@ -1131,16 +1131,16 @@ Talangbrist inom tech driver upp lönekostnader och gör rekrytering utmanande.
 
 - Svag employer branding gör det svårt att attrahera senior talanger
 - Personalomsättning kan öka vid försäljning vilket påverkar kontinuitet
-- Konkurrens om talanger från större tech-bolag",
+- Konkurrens om talanger från större tech-bolag`,
         probability: "medium",
         impact: "medium",
-        mitigation: "**Talent attraction strategy:**
+        mitigation: `**Talent attraction strategy:**
 
 1) Förbättra employer branding genom thought leadership och awards
 2) Skapa attraktiva incitamentsprogram
 3) Utveckla karriärvägar och utbildningsprogram
 4) Implementera retention strategies
-5) Överväg remote work för att öka talent pool"
+5) Överväg remote work för att öka talent pool`
       }
     ]
   },
