@@ -231,13 +231,15 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
         action: "Implementera prisoptimering och value-based pricing",
         impact: "+8-12% på EBITDA genom 5-8% prisökning på befintliga kunder och 10-15% på nya kunder",
         timeframe: "2-3 månader",
-        cost: "250-500k SEK (priskonsult + kommunikationsmaterial)"
+        cost: "250-500k SEK (priskonsult + kommunikationsmaterial)",
+        details: "Prisoptimering är en av de snabbaste sätten att öka lönsamheten utan större investeringar. Processen bör inkludera: (1) Analys av nuvarande prissättning och jämförelse med konkurrenter, (2) Kundvärdeanalys för att förstå willingness to pay per segment, (3) Utveckling av value-based pricing-modell baserad på kundvärde istället för kostnad, (4) Skapande av prispaket och tiering-strategi (Basic, Professional, Enterprise), (5) Kommunikationsplan för att kommunicera prisändringar till kunder med fokus på värde, (6) Träning av säljare i value-selling tekniker, (7) Implementation för nya kunder omedelbart, (8) Graduell implementation för befintliga kunder vid avtalsförnyelse. Priskonsult bör ha erfarenhet av B2B-software och value-based pricing. ROI: 250-500k SEK investering kan generera 5-8 MSEK i ökad EBITDA årligen. Success metrics: 5-8% prisökning på befintliga kunder, 10-15% högre priser på nya kunder, <3% churn från prisändringar."
       },
       {
         action: "Automatisera fakturering, påminnelser och inkasso",
         impact: "Frigör 2 FTE (1,6 MSEK årligen), förbättrad kassaflöde med 15 dagar, minskat DSO från 58 till 45 dagar",
         timeframe: "1-2 månader",
-        cost: "100-200k SEK (mjukvara + implementation)"
+        cost: "100-200k SEK (mjukvara + implementation)",
+        details: "Automatisering av faktureringsprocessen kan frigöra betydande resurser och förbättra kassaflödet. Implementationen bör inkludera: (1) Val av faktureringssystem med automation capabilities (t.ex. Fortnox, Visma, eller Stripe Billing), (2) Automatisk fakturering baserat på avtal och användning, (3) Automatiska påminnelser för förfallna fakturor (7, 14, 21 dagar), (4) Automatiserad inkassoprocess för långvariga kundfordringar, (5) Integration med ERP-system för automatisk bokföring, (6) Kundportal för fakturering och betalning, (7) Automatiserad rapportering av kundfordringar och DSO. Detta kan frigöra 2 FTE från manuellt arbete vilket motsvarar 1,6 MSEK årligen i kostnadsbesparing. Dessutom förbättras kassaflödet genom snabbare betalningar. ROI: 100-200k SEK investering ger 1,6 MSEK årligen i besparingar + förbättrat kassaflöde. Success metrics: DSO minskat från 58 till 45 dagar, 2 FTE frigjorda, automatisering fungerar för 90% av fakturor."
       },
       {
         action: "Lansera strukturerat referensprogram med incitament",
@@ -513,85 +515,99 @@ Bolaget representerar en attraktiv investeringsmöjlighet med stark finansiell h
         action: "Dokumentera alla kundrelationer, kontaktpersoner och historik i CRM",
         priority: "high",
         timeframe: "2 månader",
-        responsibleParty: "Säljchef med stöd av alla säljare, 20% av deras tid"
+        responsibleParty: "Säljchef med stöd av alla säljare, 20% av deras tid",
+        details: "Dokumentation av kundrelationer är kritisk för att minska nyckelpersonsrisken och göra due diligence smidigare. Processen bör inkludera: (1) Inventering av alla kunder med kontaktpersoner, roller, och beslutsfattare, (2) Dokumentation av kundhistorik inklusive första kontakt, säljprocess, avtal, och relationer, (3) Mapping av kundrelationer till säljare och nyckelpersoner, (4) Dokumentation av kundens affärsbehov, pain points, och värde proposition, (5) Registrering av alla kommunikationer och möten, (6) Uppdatering av CRM-systemet med komplett information. Detta kräver att alla säljare ägnar 20% av sin tid under 2 månader. Success metrics: 100% av kunder dokumenterade i CRM, alla kontaktpersoner registrerade, kundhistorik tillgänglig för alla."
       },
       {
         action: "Implementera månadsrapportering, KPI-dashboards och rolling forecast",
         priority: "high",
         timeframe: "1 månad",
-        responsibleParty: "CFO med stöd av controller, verktyg: Power BI eller Tableau"
+        responsibleParty: "CFO med stöd av controller, verktyg: Power BI eller Tableau",
+        details: "Professionell rapportering är kritisk för att visa förutsägbarhet och minska risk. Implementationen bör inkludera: (1) Månadsrapportering med standardiserade templates och KPI:er, (2) KPI-dashboards med real-time data från ERP-systemet, (3) Rolling 12-månaders forecast som uppdateras månadsvis, (4) Benchmarking mot branschnyckeltal och historiska trender, (5) Automatiserad rapportering för att minska manuellt arbete, (6) Visualiseringar och grafer för enkel förståelse. Verktyg: Power BI eller Tableau för dashboards, Excel för rapportering, ERP-system för datakälla. Budget: 50k SEK för verktyg + 20k/månad för licenser. Success metrics: Månadsrapportering klar inom 5 arbetsdagar efter månadsslut, dashboard uppdateras automatiskt dagligen, forecast-accuracy >85%."
       },
       {
         action: "Genomför omfattande GDPR-revision och uppdatera alla avtal",
         priority: "high",
         timeframe: "2-3 månader",
-        responsibleParty: "Legal counsel (extern), budget 200-300k SEK"
+        responsibleParty: "Legal counsel (extern), budget 200-300k SEK",
+        details: "GDPR-compliance är kritisk för att undvika böter och göra due diligence smidigare. Revisionen bör inkludera: (1) Fullständig datakartläggning av alla personuppgifter som behandlas, (2) Granskning av alla biträdesavtal (DPA) med leverantörer och uppdatering där nödvändigt, (3) Dokumentation av rättslig grund för databehandling (samtycke, avtal, intresseavvägning), (4) Genomgång av datalagringsprinciper och retention policies, (5) Granskning av säkerhetsåtgärder och incident response plans, (6) Uppdatering av privacy policies och terms of service, (7) Utbildning av personal i GDPR-krav. Processen bör ledas av extern GDPR-konsult med specialisering på B2B-software. Budget: 200-300k SEK för konsult + eventuella systemförbättringar. Success metrics: Alla DPA uppdaterade, datakartläggning dokumenterad, inga identifierade brister, personal utbildad."
       },
       {
         action: "Implementera value-based pricing och kommunicera till kundbasen",
         priority: "high",
         timeframe: "2 månader",
-        responsibleParty: "VD och säljchef med priskonsult, budget 250k SEK"
+        responsibleParty: "VD och säljchef med priskonsult, budget 250k SEK",
+        details: "Value-based pricing kan öka EBITDA-marginalen med 8-12% genom bättre prissättning. Processen bör inkludera: (1) Analys av kundvärde och willingness to pay per segment, (2) Benchmarking mot konkurrenter och branschstandarder, (3) Utveckling av ny prissättningsmodell baserad på värde istället för kostnad, (4) Skapande av prispaket och tiering-strategi, (5) Kommunikationsplan för att kommunicera prisändringar till kunder, (6) Träning av säljare i value-selling tekniker, (7) Implementation av ny prissättning för nya kunder omedelbart, (8) Graduell implementation för befintliga kunder vid förnyelse. Priskonsult bör ha erfarenhet av B2B-software och value-based pricing. Budget: 250k SEK för konsult + eventuella systemändringar. Success metrics: 5-8% prisökning på befintliga kunder vid förnyelse, 10-15% högre priser på nya kunder, <3% churn från prisändringar."
       },
       {
         action: "Skapa detaljerad dokumentation av teknisk arkitektur och systemdesign",
         priority: "high",
         timeframe: "2 månader",
-        responsibleParty: "CTO och utvecklingsteam, 15% av deras tid"
+        responsibleParty: "CTO och utvecklingsteam, 15% av deras tid",
+        details: "Teknisk dokumentation är kritisk för att minska knowledge silos och göra due diligence smidigare. Dokumentationen bör inkludera: (1) Systemarkitektur-diagram med alla komponenter och integrationer, (2) Databas-schema och datamodell, (3) API-dokumentation med endpoints och exempel, (4) Deployment-processer och infrastructure setup, (5) Security architecture och säkerhetsåtgärder, (6) Performance considerations och optimeringar, (7) Known issues och teknisk skuld, (8) Roadmap för framtida utveckling. Detta kräver att utvecklingsteamet ägnar 15% av sin tid under 2 månader. Dokumentationen bör vara lättläst och uppdaterad regelbundet. Success metrics: Alla systemkomponenter dokumenterade, API-dokumentation komplett, arkitektur-diagram uppdaterade, inga knowledge silos."
       },
       {
         action: "Implementera disaster recovery plan och testa den",
         priority: "high",
         timeframe: "1 månad",
-        responsibleParty: "CTO, budget 100k SEK för backup-lösning"
+        responsibleParty: "CTO, budget 100k SEK för backup-lösning",
+        details: "Disaster recovery plan är kritisk för att säkerställa business continuity och minska risk. Planen bör inkludera: (1) Backup-strategi med dagliga backups av databas och filer, (2) Off-site backup-lagring för redundans, (3) Recovery time objectives (RTO) och recovery point objectives (RPO), (4) Testade recovery-procedurer för olika scenarier, (5) Dokumentation av recovery-processer, (6) Regelbundna recovery-tester (kvartalsvis), (7) Monitoring och alerting för att upptäcka problem tidigt. Backup-lösning bör vara automatiserad och testad regelbundet. Budget: 100k SEK för backup-lösning + eventuella infrastrukturförbättringar. Success metrics: Dagliga backups verifierade, recovery-tester genomförda kvartalsvis, RTO <4 timmar, RPO <1 timme."
       },
       {
         action: "Diversifiera kundbasen - fokusera på att växa med mindre kunder",
         priority: "medium",
         timeframe: "6 månader (kontinuerligt)",
-        responsibleParty: "Säljchef, mål: max 8% per kund"
+        responsibleParty: "Säljchef, mål: max 8% per kund",
+        details: "Diversifiering av kundbasen minskar koncentrationsrisk och kan höja värderingen. Strategin bör inkludera: (1) Fokusera säljinsatser på mindre kunder (SMB-segment) för att öka antalet kunder, (2) Begränsa tillväxt med största kunden till max 8% av omsättning, (3) Utveckla dedikerade säljprocesser och produkter för SMB-segmentet, (4) Implementera account management för top 10 kunder för att säkerställa retention, (5) Skapa expansion opportunities inom största kunden genom upselling, (6) Överväg kreditförsäkring för största kunden. Detta är en kontinuerlig process som kräver fokus över 6 månader. Success metrics: Max 8% per kund inom 12 månader, top 10 kunder <40% av omsättning, +20% antal kunder i SMB-segmentet."
       },
       {
         action: "Lansera customer success-program för top 50 kunder",
         priority: "medium",
         timeframe: "2 månader",
-        responsibleParty: "Ny customer success manager (rekrytera), budget 100k SEK för verktyg"
+        responsibleParty: "Ny customer success manager (rekrytera), budget 100k SEK för verktyg",
+        details: "Customer success-program kan minska churn och öka expansion revenue. Programmet bör inkludera: (1) Rekrytering av customer success manager med erfarenhet av B2B-software, (2) Identifikation av top 50 kunder baserat på värde och risk, (3) Regelbundna business reviews (kvartalsvis) för att förstå kundens behov och mål, (4) Proaktiv support och onboarding för att maximera value realization, (5) Expansion opportunities identification genom usage analytics, (6) Churn prevention strategies för risk-kunder, (7) Customer health scoring och monitoring. Verktyg: Customer success platform (t.ex. Gainsight, Totango) för tracking och automation. Budget: 100k SEK för verktyg + lön för customer success manager (800k-1M SEK/år). Success metrics: Churn minskat med 2 procentenheter, expansion revenue +20%, NPS ökad med 5 poäng."
       },
       {
         action: "Förbättra employer branding och rekryteringsprocess",
         priority: "medium",
         timeframe: "3 månader",
-        responsibleParty: "HR-ansvarig, budget 150k SEK för byrå"
+        responsibleParty: "HR-ansvarig, budget 150k SEK för byrå",
+        details: "Stark employer branding är kritisk för att attrahera talanger och minska rekryteringskostnader. Förbättringarna bör inkludera: (1) Engagera employer branding-byrå för att utveckla varumärke och messaging, (2) Skapa attraktiv careers-sida med employee stories och kultur, (3) Aktivt deltagande i branschevents och konferenser, (4) Thought leadership och content marketing för att bygga varumärke, (5) Förbättra rekryteringsprocess med tydliga steg och feedback, (6) Implementera employee referral program med incitament, (7) Bygga partnerships med universitet och tech-skolor. Byrå bör ha erfarenhet av tech-rekrytering och employer branding. Budget: 150k SEK för byrå + eventuella marknadsföringskostnader. Success metrics: Time-to-hire minskat med 30%, cost-per-hire minskat med 20%, employee satisfaction ökad."
       },
       {
         action: "Skapa säljträningsprogram och playbooks för alla säljare",
         priority: "medium",
         timeframe: "2 månader",
-        responsibleParty: "Säljchef med extern säljcoach, budget 100k SEK"
+        responsibleParty: "Säljchef med extern säljcoach, budget 100k SEK",
+        details: "Strukturerat säljträningsprogram kan öka produktivitet och konsistens. Programmet bör inkludera: (1) Engagera extern säljcoach med erfarenhet av B2B-software, (2) Utveckla säljplaybooks för olika scenarier (cold outreach, demo, closing, etc.), (3) Value-selling träning för att fokusera på värde istället för funktioner, (4) Objection handling techniques och scripts, (5) CRM-best practices och pipeline management, (6) Onboarding-program för nya säljare (2 veckor), (7) Kontinuerlig träning med månadsvisa sessions, (8) Certifiering och performance tracking. Säljcoach bör ha track record av att förbättra säljprestanda. Budget: 100k SEK för coach + eventuella material. Success metrics: Säljproduktivitet +15%, time-to-productivity för nya säljare -30%, konsistens i säljprocessen."
       },
       {
         action: "Implementera BI-verktyg för datadriven beslutsfattning",
         priority: "medium",
         timeframe: "2 månader",
-        responsibleParty: "CFO och CTO, budget 50k SEK + 20k/månad"
+        responsibleParty: "CFO och CTO, budget 50k SEK + 20k/månad",
+        details: "BI-verktyg möjliggör datadriven beslutsfattning och kan förbättra prestation. Implementationen bör inkludera: (1) Val av BI-plattform (Power BI, Tableau, eller Looker) baserat på behov, (2) Integration med ERP-system och andra datakällor, (3) Skapande av KPI-dashboards för ledning, sälj, och operationer, (4) Automatiserad datainhämtning och uppdatering, (5) Self-service analytics för användare, (6) Träning av användare i verktyget, (7) Regelbundna reviews av dashboards och KPI:er. Verktyg bör vara användarvänligt och skalbart. Budget: 50k SEK för initial setup + 20k/månad för licenser. Success metrics: 80% av användare använder verktyget regelbundet, beslutsfattning baserad på data, förbättrad KPI-tracking."
       },
       {
         action: "Förbered datarum med all dokumentation för due diligence",
         priority: "medium",
         timeframe: "1 månad (görs 2 månader före försäljning)",
-        responsibleParty: "CFO med stöd av M&A-rådgivare"
+        responsibleParty: "CFO med stöd av M&A-rådgivare",
+        details: "Välförberedd datarum gör due diligence smidigare och minskar risk för förseningar eller prisavdrag. Datarum bör inkludera: (1) Finansiella statements och rapporter för senaste 3-5 åren, (2) Alla kund- och leverantörsavtal med sammanfattningar, (3) IP-dokumentation inklusive patents, trademarks, och assignments, (4) HR-dokumentation inklusive anställningsavtal, policies, och compliance, (5) Teknisk dokumentation och systemöversikter, (6) Compliance-dokumentation inklusive GDPR, ISO-certifikat, etc., (7) Legal documentation inklusive bolagsdokument, avtal, och tvister, (8) Marknadsanalys och konkurrentanalys, (9) Finansiella prognoser och budgetar, (10) Organisationsdiagram och roller. M&A-rådgivare bör hjälpa till att strukturera datarum enligt branschstandarder. Success metrics: Alla dokument kategoriserade och tillgängliga, inga saknade dokument, due diligence klar inom planerad tid."
       },
       {
         action: "Rekrytera produktchef för att professionalisera produktutveckling",
         priority: "low",
         timeframe: "3-4 månader",
-        responsibleParty: "VD, budget 150k SEK rekrytering"
+        responsibleParty: "VD, budget 150k SEK rekrytering",
+        details: "Produktchef kan professionalisera produktutveckling och förbättra roadmap-planering. Kandidaten bör ha: (1) Minst 5 års erfarenhet som produktchef inom B2B-software, (2) Erfarenhet av agile development och roadmap-planering, (3) Förmåga att balansera kundbehov med tekniska möjligheter, (4) Erfarenhet av att arbeta med utvecklingsteam och stakeholders, (5) Data-driven approach till produktbeslut. Rollen bör inkludera: (1) Roadmap-planering och prioritering, (2) Kundresearch och feedback-samling, (3) Produktstrategi och positioning, (4) Samarbete med utvecklingsteam, (5) Produktmetrics och success tracking. Budget: 150k SEK för rekrytering + lönepaket (1-1,2 MSEK/år). Success metrics: Roadmap dokumenterad och uppdaterad kvartalsvis, produktbeslut baserade på data, förbättrad produktutvecklingshastighet."
       },
       {
         action: "Utveckla go-to-market strategi för internationell expansion",
         priority: "low",
         timeframe: "2 månader",
-        responsibleParty: "VD med extern konsult, budget 200k SEK"
+        responsibleParty: "VD med extern konsult, budget 200k SEK",
+        details: "Internationell expansion kan öka tillväxtpotentialen betydligt. Strategin bör inkludera: (1) Marknadsanalys för Norge och Danmark med fokus på TAM, konkurrenter, och kundbehov, (2) Identifiering av entry-strategi (direktförsäljning, partners, eller förvärv), (3) Anpassning av produkt och marknadsföring för nordiska marknader, (4) Prissättningsstrategi för internationella marknader, (5) Rekryteringsstrategi för lokal säljare eller partner, (6) Budget och resursallokering för expansion, (7) Timeline och milestones för expansion. Konsult bör ha erfarenhet av internationell expansion för B2B-software. Budget: 200k SEK för konsult + eventuella marknadsundersökningar. Success metrics: Go-to-market strategi dokumenterad, pilotprojekt planerat, budget allokerad för expansion."
       }
     ],
     duringNegotiation: [
