@@ -1665,7 +1665,7 @@ const customerSegmentData = [
 ]
 
 const marketShareData = [
-  { name: mockResult.ddFindings.competitiveAdvantages[0].split(' ')[0], value: 32, fill: '#3b82f6' },
+  { name: 'Ditt bolag', value: 32, fill: '#3b82f6' },
   { name: 'Konkurrent A', value: 18, fill: '#60a5fa' },
   { name: 'Konkurrent B', value: 15, fill: '#93c5fd' },
   { name: 'Övriga', value: 35, fill: '#dbeafe' }
