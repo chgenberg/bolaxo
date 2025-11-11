@@ -601,7 +601,7 @@ Ingen etablerad go-to-market strategi för internationell expansion trots att l�
       revenue: {
         trend: "Stark positiv trend med konsekvent tillväxt och accelererande momentum",
         cagr: 18,
-        analysis: "**Omsättningsutveckling och tillväxtdrivare**
+        analysis: `**Omsättningsutveckling och tillväxtdrivare**
 
 Omsättningen har vuxit från **42 MSEK (2021)** till **52 MSEK (2022)** och vidare till **68 MSEK (2023)**, vilket motsvarar en sammansatt årlig tillväxttakt (CAGR) på **18%**. Detta är exceptionellt starkt jämfört med branschgenomsnittet på 8-10% och placerar bolaget i top decilen av tillväxtbolag inom sektorn.
 
@@ -628,7 +628,7 @@ Geografisk fördelning: Stockholm 45%, Göteborg 22%, Malmö 15%, övriga Sverig
 
 Kundfördelningen per bransch: Tech/IT 35%, Professional Services 28%, Manufacturing 20%, Retail 12%, Övriga 5%. 
 
-Denna diversifiering minskar konjunkturkänslighet och branschspecifika risker."
+Denna diversifiering minskar konjunkturkänslighet och branschspecifika risker.`
       },
       profitability: {
         margins: {
@@ -638,7 +638,7 @@ Denna diversifiering minskar konjunkturkänslighet och branschspecifika risker."
           operating: "19%"
         },
         trend: "Förbättring med 3 procentenheter sedan 2021",
-        analysis: "**Marginutveckling och lönsamhetsdrivare**
+        analysis: `**Marginutveckling och lönsamhetsdrivare**
 
 Lönsamheten har stärkts konsekvent över de senaste tre åren. Bruttomarginalen har förbättrats från **68% (2021)** till **72% (2023)**, driven av:
 
@@ -668,12 +668,12 @@ Nettomarginalen på **14%** är exceptionell för branschen och visar på hållb
 
 **Trendanalys:**
 
-Trendanalys visar att lönsamheten accelererar: EBITDA-marginalen ökade med **1,2 procentenheter 2021-2022** och **1,8 procentenheter 2022-2023**. Detta tyder på att förbättringsåtgärderna ger ökande effekt över tid och att bolaget närmar sig optimal effektivitet."
+Trendanalys visar att lönsamheten accelererar: EBITDA-marginalen ökade med **1,2 procentenheter 2021-2022** och **1,8 procentenheter 2022-2023**. Detta tyder på att förbättringsåtgärderna ger ökande effekt över tid och att bolaget närmar sig optimal effektivitet.`
       },
       cashFlow: {
         quality: "Mycket hög",
         conversion: 85,
-        analysis: "**Kassaflödeskvalitet och konvertering**
+        analysis: `**Kassaflödeskvalitet och konvertering**
 
 Kassaflödeskonverteringen på **85% av EBITDA** är exceptionellt stark och indikerar hög kvalitet i resultatet. Detta är betydligt över branschgenomsnittet på 60-65% och placerar bolaget i **top 10%** av branschen.
 
@@ -697,7 +697,7 @@ Kassaflödesanalys per kvartal visar stabila och förutsägbara mönster utan st
 
 **Kassareserv:**
 
-Bolaget har byggt upp en **kassareserv på 18,5 MSEK** (27% av omsättning), vilket ger stark finansiell stabilitet och möjliggör strategiska investeringar utan extern finansiering. Detta är betydligt över branschsnittet på 10-15% och visar på konservativ finansiell hantering."
+Bolaget har byggt upp en **kassareserv på 18,5 MSEK** (27% av omsättning), vilket ger stark finansiell stabilitet och möjliggör strategiska investeringar utan extern finansiering. Detta är betydligt över branschsnittet på 10-15% och visar på konservativ finansiell hantering.`
       }
     },
     projections: {
@@ -720,7 +720,7 @@ Bolaget har byggt upp en **kassareserv på 18,5 MSEK** (27% av omsättning), vil
     workingCapital: {
       current: 8500000,
       optimal: 6200000,
-      improvement: "**Rörelsekapitaloptimering**
+      improvement: `**Rörelsekapitaloptimering**
 
 Potential att frigöra **2,3 MSEK** genom optimering av rörelsekapital:
 
@@ -755,7 +755,7 @@ Potential att frigöra **2,3 MSEK** genom optimering av rörelsekapital:
 - **Kostnad:** 200-300k SEK för system och processförbättringar
 - **ROI:** 2,3 MSEK frigörs som kan finansiera IT-moderniseringen utan extern finansiering
 
-Detta skulle förbättra kassaflödet betydligt och visa på professionell finansiell hantering."
+Detta skulle förbättra kassaflödet betydligt och visa på professionell finansiell hantering.`
     }
   },
   marketPosition: {
@@ -780,7 +780,7 @@ Detta skulle förbättra kassaflödet betydligt och visa på professionell finan
     marketShare: {
       current: 32,
       potential: 45,
-      details: "**Marknadsandel och tillväxt**
+      details: `**Marknadsandel och tillväxt**
 
 Nuvarande marknadsandel på **32%** gör bolaget till marknadsledare inom sin nisch. Den totala adresserbara marknaden (TAM) i Sverige uppskattas till **2,1 miljarder kronor årligen**, vilket innebär att bolagets nuvarande omsättning på 68 MSEK representerar endast **3,2% av TAM**. Detta visar på betydande tillväxtpotential även inom befintlig marknad.
 
@@ -804,14 +804,14 @@ Detta skulle öka omsättningen till **~95 MSEK** inom 3 år.
 
 **Konkurrenssituation:**
 
-Konkurrenssituationen är relativt stabil med inga större disruptiva förändringar. De två största konkurrenterna har marknadsandelar på **18%** och **15%** respektive, och ingen av dem har vuxit snabbare än bolaget de senaste tre åren. Detta ger bolaget möjlighet att fortsätta ta marknadsandelar."
+Konkurrenssituationen är relativt stabil med inga större disruptiva förändringar. De två största konkurrenterna har marknadsandelar på **18%** och **15%** respektive, och ingen av dem har vuxit snabbare än bolaget de senaste tre åren. Detta ger bolaget möjlighet att fortsätta ta marknadsandelar.`
     },
     customerAnalysis: {
       concentration: "Måttlig - top 10 kunder står för 45% av omsättning, största kund 12%",
       quality: "Mycket hög - blue chip-företag, låg kreditrisk, genomsnittlig kundstorlek 275k SEK/år",
       retention: 94,
       satisfaction: "NPS 72, CSAT 4.6/5",
-      details: "**Kundsegmentering och fördelning**
+      details: `**Kundsegmentering och fördelning**
 
 Kundbasen består av **247 aktiva kunder** fördelade på:
 
@@ -837,13 +837,13 @@ Top 10 kunder står för **45% av omsättning** vilket är över rekommenderad g
 
 **Kundnöjdhet:**
 
-Kundnöjdhet är exceptionellt hög med **NPS på 72** (branschsnitt 45) och **CSAT på 4,6/5**. 87% av kunderna skulle rekommendera bolaget till andra, vilket driver organisk tillväxt genom referenser. Genomsnittlig antal referenser per kund är **1,2** vilket är högt för B2B-branschen."
+Kundnöjdhet är exceptionellt hög med **NPS på 72** (branschsnitt 45) och **CSAT på 4,6/5**. 87% av kunderna skulle rekommendera bolaget till andra, vilket driver organisk tillväxt genom referenser. Genomsnittlig antal referenser per kund är **1,2** vilket är högt för B2B-branschen.`
     }
   },
   operationalExcellence: {
     efficiency: {
       score: 7.5,
-      benchmarkComparison: "**Effektivitet och benchmarking**
+      benchmarkComparison: `**Effektivitet och benchmarking**
 
 Bolaget placerar sig i **top 25%** av branschen, särskilt stark inom säljeffektivitet och kundservice. 
 
@@ -854,12 +854,12 @@ Bolaget placerar sig i **top 25%** av branschen, särskilt stark inom säljeffek
 - Kundserviceeffektivitet: **41 kunder** per supportmedarbetare (30% bättre än branschsnitt)
 - Utvecklingseffektivitet: Features per utvecklare är över snittet tack vare välfungerande processer och teknisk skuld som är hanterbar
 
-Denna effektivitet ger bolaget konkurrensfördelar och möjliggör fortsatt tillväxt utan proportionell kostnadsökning."
+Denna effektivitet ger bolaget konkurrensfördelar och möjliggör fortsatt tillväxt utan proportionell kostnadsökning.`
     },
     technology: {
       maturity: "Mogen men åldrande - behöver modernisering",
       investmentNeeded: 5000000,
-      details: "**Teknologiplattform och arkitektur**
+      details: `**Teknologiplattform och arkitektur**
 
 Teknologiplattformen är byggd 2018 på **PHP 7.2** med **MySQL-databas** och **React frontend**. Systemet har skalat väl och hanterar för närvarande 247 kunder utan prestandaproblem. Kapaciteten är beräknad till **400-500 kunder** innan större investeringar krävs.
 
@@ -890,12 +890,12 @@ Modernisering till modern tech stack är nödvändig inom 12-18 månader:
 
 **Strategisk rekommendation:**
 
-Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med **5-10%**. Detta visar framåtblickande ledning och minskar köparens osäkerhet kring teknisk skuld."
+Påbörjad modernisering före försäljning minskar upplevd risk och kan höja värderingen med **5-10%**. Detta visar framåtblickande ledning och minskar köparens osäkerhet kring teknisk skuld.`
     },
     organization: {
       keyPersonRisk: "Hög - VD och säljchef kritiska utan backup",
       cultureFit: "Stark kultur men personberoende",
-      details: "**Organisationsstruktur och kultur**
+      details: `**Organisationsstruktur och kultur**
 
 Organisationen består av **32 medarbetare** fördelade på:
 
@@ -924,12 +924,12 @@ Rekrytera **vice VD** med säljansvar inom 3-4 månader. Detta minskar risken oc
 
 - **Budget:** 150-200k SEK för rekrytering
 - **Lönepaket:** 1,2-1,5 MSEK/år
-- **Success metrics:** Introducerad till top 20 kunder inom 2 månader, ansvarig för 30% av nyförsäljning inom 6 månader"
+- **Success metrics:** Introducerad till top 20 kunder inom 2 månader, ansvarig för 30% av nyförsäljning inom 6 månader`
     },
     processes: {
       maturity: "Ojämn - säljprocesser mogna, back-office outvecklat",
       improvementAreas: ["Ekonomiprocesser", "HR/rekrytering", "Produktutveckling", "Kundservice-automation"],
-      details: "**Processmognad per område**
+      details: `**Processmognad per område**
 
 **Säljprocesser (Mogna):**
 
@@ -970,7 +970,7 @@ Produktutveckling saknar struktur:
 Kundservice är proaktiv men saknar automation:
 - Hög kvalitet men tidskrävande
 - Automation för vanliga frågor kan frigöra tid
-- Saknar customer success-funktion för proaktiv support"
+- Saknar customer success-funktion för proaktiv support`
     }
   },
   riskAssessment: {
