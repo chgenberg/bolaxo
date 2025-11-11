@@ -1145,7 +1145,7 @@ Talangbrist inom tech driver upp lönekostnader och gör rekrytering utmanande.
     ]
   },
   transactionGuidance: {
-    optimalTiming: "**Optimal tidpunkt för försäljning**
+    optimalTiming: `**Optimal tidpunkt för försäljning**
 
 Optimal tidpunkt för försäljning bedöms vara om **6-9 månader** efter implementering av kritiska förbättringsåtgärder. Detta ger tid att visa förbättrad lönsamhet (+2-3% EBITDA-marginal), minskad riskprofil genom rekrytering av vice VD och påbörjad IT-modernisering, och påbörjad tillväxtresa genom quick wins. 
 
@@ -1177,7 +1177,7 @@ Med förbättrad finansiell prestation och minskad risk kan bolaget attrahera b�
 
 Påbörja förberedelserna omgående med fokus på quick wins (prisoptimering, automatisering) som kan implementeras snabbt, parallellt med rekrytering av vice VD och påbörjad IT-modernisering. 
 
-**Mål:** Vara redo för försäljning Q2-Q3 2024.",
+**Mål:** Vara redo för försäljning Q2-Q3 2024.`,
     buyerProfile: [
       "**Private Equity-fonder** med branschfokus (t.ex. Nordic Capital, EQT, FSN Capital)\n- Har kapital för IT-investering och internationell expansion\n- Värderar på EBITDA-multiplar 8-12x\n- Söker platformbolag för add-on förvärv\n- Typisk hålltid 3-5 år",
       
