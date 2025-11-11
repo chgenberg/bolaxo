@@ -1330,10 +1330,91 @@ Kan argumentera för lägre värdering baserat på:
       }
     ],
     dealStructure: {
-      recommended: "70% kontant vid tillträde (24,9 MSEK), 20% deponerat för garantier i 18 månader (7,1 MSEK), 10% earn-out baserat på EBITDA-mål år 1-2 (3,6 MSEK). Säljaren behåller 5-10% (1,8-3,6 MSEK) för att visa continued faith och alignment of interests. Denna struktur balanserar säljarens önskan om säker exit med köparens behov av riskreducering.\n\nDetaljerad struktur:\n\n1. Kontant vid tillträde (70% = 24,9 MSEK): Betalas vid completion date, vanligtvis 2-4 veckor efter signing. Används för att betala av skulder, ge utdelning till ägare, och finansiera skatter. Detta ger säljaren omedelbar likviditet och minskar risk för köparens betalningsförmåga.\n\n2. Deponerat för garantier (20% = 7,1 MSEK): Hålls på depositionskonto i 18 månader för att täcka potentiella warranty claims och indemnities. Standard är 10-25% av köpeskillingen, så 20% är balanserat. Vid inga claims betalas detta ut efter 18 månader plus ränta.\n\n3. Earn-out (10% = 3,6 MSEK): Baserat på EBITDA-mål år 1-2. 50% betalas efter år 1 om EBITDA överstiger 16 MSEK, 50% efter år 2 om EBITDA överstiger 18 MSEK. Tydliga definitioner av EBITDA med carve-outs för extraordinära poster. Anti-sandbagging clauses för att skydda mot manipulation.\n\n4. Säljarens kvarhållande (5-10% = 1,8-3,6 MSEK): Säljaren behåller en mindre andel för att visa continued faith och alignment of interests. Detta kan öka köparens förtroende och möjliggöra högre värdering. Alternativt kan detta struktureras som management equity i köparens struktur.\n\nFördelar med denna struktur:\n- Balanserar risk mellan säljare och köpare\n- Ger säljaren omedelbar likviditet (70%)\n- Minskar köparens risk genom earn-out och deponerat\n- Alignerar intressen genom säljarens kvarhållande\n- Standard struktur som är välkänd och accepterad\n\nAlternativa strukturer att överväga:\n- 75% kontant + 15% deponerat + 10% earn-out (högre upfront)\n- 65% kontant + 25% deponerat + 10% earn-out (högre säkerhet)\n- 100% kontant (lägst risk för säljare men kan kräva lägre värdering)",
+      recommended: "**Rekommenderad affärsstruktur**
+
+**Översikt:**
+- 70% kontant vid tillträde (24,9 MSEK)
+- 20% deponerat för garantier i 18 månader (7,1 MSEK)
+- 10% earn-out baserat på EBITDA-mål år 1-2 (3,6 MSEK)
+- Säljaren behåller 5-10% (1,8-3,6 MSEK) för continued faith
+
+Denna struktur balanserar säljarens önskan om säker exit med köparens behov av riskreducering.
+
+**Detaljerad struktur:**
+
+**1. Kontant vid tillträde (70% = 24,9 MSEK):**
+- Betalas vid completion date, vanligtvis 2-4 veckor efter signing
+- Används för att betala av skulder, ge utdelning till ägare, och finansiera skatter
+- Ger säljaren omedelbar likviditet och minskar risk för köparens betalningsförmåga
+
+**2. Deponerat för garantier (20% = 7,1 MSEK):**
+- Hålls på depositionskonto i 18 månader för att täcka potentiella warranty claims
+- Standard är 10-25% av köpeskillingen, så 20% är balanserat
+- Vid inga claims betalas detta ut efter 18 månader plus ränta
+
+**3. Earn-out (10% = 3,6 MSEK):**
+- Baserat på EBITDA-mål år 1-2
+- 50% betalas efter år 1 om EBITDA överstiger 16 MSEK
+- 50% efter år 2 om EBITDA överstiger 18 MSEK
+- Tydliga definitioner med anti-sandbagging clauses
+
+**4. Säljarens kvarhållande (5-10% = 1,8-3,6 MSEK):**
+- Visar continued faith och alignment of interests
+- Kan öka köparens förtroende och möjliggöra högre värdering
+- Alternativt struktureras som management equity
+
+**Fördelar med denna struktur:**
+- Balanserar risk mellan säljare och köpare
+- Ger säljaren omedelbar likviditet (70%)
+- Minskar köparens risk genom earn-out och deponerat
+- Alignerar intressen genom säljarens kvarhållande
+- Standard struktur som är välkänd och accepterad
+
+**Alternativa strukturer:**
+- 75% kontant + 15% deponerat + 10% earn-out (högre upfront)
+- 65% kontant + 25% deponerat + 10% earn-out (högre säkerhet)
+- 100% kontant (lägst risk för säljare men kan kräva lägre värdering)",
       earnOut: {
         recommended: true,
-        structure: "10% av köpeskillingen (3,6 MSEK) baserat på att EBITDA överstiger 16 MSEK år 1 och 18 MSEK år 2. 50/50 split mellan åren (1,8 MSEK vardera). Tydliga definitioner av EBITDA med carve-outs för extraordinära poster, one-time costs, och synergier. Anti-sandbagging clauses för att skydda mot manipulation där köparen sänker resultatet för att undvika earn-out. Measurement date är 90 dagar efter respektive års slut för att ge tid för årsredovisning.\n\nDetaljerad earn-out struktur:\n\nÅr 1: 1,8 MSEK betalas om EBITDA överstiger 16 MSEK. Om EBITDA är mellan 14-16 MSEK betalas proportionellt (t.ex. 15 MSEK = 50% av 1,8 MSEK = 0,9 MSEK). Om EBITDA är under 14 MSEK betalas inget.\n\nÅr 2: 1,8 MSEK betalas om EBITDA överstiger 18 MSEK. Om EBITDA är mellan 16-18 MSEK betalas proportionellt. Om EBITDA är under 16 MSEK betalas inget.\n\nEBITDA-definition: Operativt resultat före räntor, skatter, avskrivningar och amorteringar. Exkluderar: (1) Extraordinära poster och one-time costs, (2) Synergier från köparens integration, (3) Förändringar i accounting policies, (4) Förändringar i kapitalstruktur, (5) Försäljning av tillgångar.\n\nSkydd för säljare:\n- Anti-sandbagging: Köparen får inte sänka resultatet för att undvika earn-out\n- Normal business operations: Köparen måste driva verksamheten normalt\n- Measurement protection: EBITDA mäts enligt nuvarande accounting policies\n- Dispute resolution: Snabb process för att lösa tvister (30 dagar)\n\nSkydd för köpare:\n- Material adverse change: Om marknaden förändras drastiskt kan earn-out justeras\n- Management performance: Earn-out är beroende av att management presterar\n- Integration costs: Köparen kan exkludera integration costs från EBITDA"
+        structure: "**Earn-out struktur i detalj**
+
+**Översikt:**
+10% av köpeskillingen (3,6 MSEK) baserat på EBITDA-mål år 1-2. 50/50 split mellan åren (1,8 MSEK vardera).
+
+**Betalningsvillkor:**
+
+**År 1:** 1,8 MSEK betalas om EBITDA överstiger 16 MSEK
+- Om EBITDA är mellan 14-16 MSEK betalas proportionellt
+- Exempel: 15 MSEK = 50% av 1,8 MSEK = 0,9 MSEK
+- Om EBITDA är under 14 MSEK betalas inget
+
+**År 2:** 1,8 MSEK betalas om EBITDA överstiger 18 MSEK
+- Om EBITDA är mellan 16-18 MSEK betalas proportionellt
+- Om EBITDA är under 16 MSEK betalas inget
+
+**EBITDA-definition:**
+
+Operativt resultat före räntor, skatter, avskrivningar och amorteringar. 
+
+**Exkluderar:**
+1) Extraordinära poster och one-time costs
+2) Synergier från köparens integration
+3) Förändringar i accounting policies
+4) Förändringar i kapitalstruktur
+5) Försäljning av tillgångar
+
+**Skydd för säljare:**
+- Anti-sandbagging: Köparen får inte sänka resultatet för att undvika earn-out
+- Normal business operations: Köparen måste driva verksamheten normalt
+- Measurement protection: EBITDA mäts enligt nuvarande accounting policies
+- Dispute resolution: Snabb process för att lösa tvister (30 dagar)
+
+**Skydd för köpare:**
+- Material adverse change: Om marknaden förändras drastiskt kan earn-out justeras
+- Management performance: Earn-out är beroende av att management presterar
+- Integration costs: Köparen kan exkludera integration costs från EBITDA
+
+**Measurement date:** 90 dagar efter respektive års slut för att ge tid för årsredovisning"
       },
       warranties: [
         "Standard warranties & indemnities med 18 månaders limitation period - täcker standard warranties för title, authority, capitalization, financial statements, taxes, compliance, litigation, environmental, employees, intellectual property, contracts, och material adverse change. Limitation period på 18 månader är standard för denna typ av transaktion och balanserar säljarens och köparens intressen.",
