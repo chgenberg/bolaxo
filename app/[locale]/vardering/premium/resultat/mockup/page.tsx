@@ -416,19 +416,125 @@ Detta gör det svårt för potentiella köpare att bedöma förutsägbarhet och 
 
 - **Sannolikhet:** Hög (processer saknas)
 - **Påverkan:** Medel (kan påverka värderingen negativt och göra due diligence mer komplicerad)",
-        mitigation: "Implementera omgående: (1) Månadsrapportering med KPI-dashboards (Power BI eller Tableau, budget 50k SEK + 20k/månad), (2) Rolling 12-månaders forecast uppdateras månadsvis, (3) Budgetprocess med tydliga antaganden och scenarier, (4) Benchmarking mot branschnyckeltal, (5) Automatiserad rapportering från ERP-system, (6) Regelbundna business reviews med ledningsteamet. Tidsram: 1 månad för implementation."
+        mitigation: "**Implementation av finansiell styrning:**
+
+**Åtgärder:**
+
+1) **Månadsrapportering med KPI-dashboards**
+   - Verktyg: Power BI eller Tableau
+   - Budget: 50k SEK + 20k/månad för licenser
+
+2) **Rolling 12-månaders forecast**
+   - Uppdateras månadsvis
+   - Inkluderar olika scenarier
+
+3) **Budgetprocess med tydliga antaganden**
+   - Årlig budget med kvartalsvis uppföljning
+   - Scenarier för olika marknadsförhållanden
+
+4) **Benchmarking mot branschnyckeltal**
+   - Kontinuerlig uppföljning
+   - Identifiering av förbättringsområden
+
+5) **Automatiserad rapportering från ERP-system**
+   - Minskar manuellt arbete
+   - Förbättrar datakvalitet
+
+6) **Regelbundna business reviews** med ledningsteamet
+   - Månadsvis genomgång av KPI:er
+   - Snabb identifiering av avvikelser
+
+**Tidsram:** 1 månad för implementation"
       },
       {
         severity: "low",
         area: "Legal",
-        description: "GDPR-dokumentation är ofullständig med saknade biträdesavtal (DPA) för vissa leverantörer och begränsad dokumentation av databehandling. Detta kan leda till böter upp till 4% av omsättning (2,7 MSEK) vid en incident eller revision. Riskbedömning: Sannolikhet låg (inga incidenter hittills), Påverkan medel (böter kan vara betydande men sannolikhet låg).",
-        mitigation: "Genomför GDPR-revision: (1) Engagera GDPR-konsult för fullständig revision (budget 200-300k SEK), (2) Uppdatera alla biträdesavtal (DPA) med leverantörer, (3) Dokumentera all databehandling enligt GDPR-krav, (4) Implementera data protection impact assessments (DPIA) för nya processer, (5) Skapa incident response plan för dataläckor, (6) Utbilda personal i GDPR. Tidsram: 2-3 månader."
+        description: "**GDPR-compliance - Regulatorisk risk**
+
+GDPR-dokumentation är ofullständig med saknade biträdesavtal (DPA) för vissa leverantörer och begränsad dokumentation av databehandling. 
+
+**Konsekvenser:**
+
+Detta kan leda till böter upp till **4% av omsättning (2,7 MSEK)** vid en incident eller revision.
+
+**Riskbedömning:**
+
+- **Sannolikhet:** Låg (inga incidenter hittills)
+- **Påverkan:** Medel (böter kan vara betydande men sannolikhet låg)",
+        mitigation: "**Genomför GDPR-revision:**
+
+**Åtgärder:**
+
+1) **Engagera GDPR-konsult** för fullständig revision
+   - Budget: 200-300k SEK
+   - Specialisering på B2B-software
+
+2) **Uppdatera alla biträdesavtal (DPA)** med leverantörer
+   - Säkerställ compliance
+   - Dokumentera dataflöden
+
+3) **Dokumentera all databehandling** enligt GDPR-krav
+   - Datakartläggning
+   - Rättslig grund för behandling
+
+4) **Implementera DPIA-processer** för nya processer
+   - Data protection impact assessments
+   - Riskbedömning för nya features
+
+5) **Skapa incident response plan** för dataläckor
+   - Tydliga processer
+   - Ansvarsfördelning
+
+6) **Utbilda personal i GDPR**
+   - Awareness training
+   - Regelbundna uppdateringar
+
+**Tidsram:** 2-3 månader"
       },
       {
         severity: "medium",
         area: "Marknad",
-        description: "Begränsad internationell närvaro med 95% av försäljning i Sverige gör bolaget sårbart för svensk konjunktur och begränsar tillväxtpotential. Ingen etablerad go-to-market strategi för internationell expansion trots att lösningen är fullt tillämpbar på nordiska marknader. Riskbedömning: Sannolikhet medel (konjunkturnedgång kan påverka), Påverkan medel (begränsad tillväxtpotential kan påverka värderingen).",
-        mitigation: "Utveckla internationell strategi: (1) Marknadsanalys för Norge och Danmark (budget 200k SEK), (2) Pilotprojekt med 2-3 kunder i Norge inom 6 månader, (3) Rekrytera lokal säljare eller partner i Norge, (4) Anpassa produkt och marknadsföring för nordiska marknader, (5) Budgetera 1-2 MSEK för internationell expansion år 1."
+        description: "**Internationell närvaro - Geografisk koncentration**
+
+Begränsad internationell närvaro med **95% av försäljning i Sverige** gör bolaget sårbart för svensk konjunktur och begränsar tillväxtpotential. 
+
+**Nuläge:**
+
+Ingen etablerad go-to-market strategi för internationell expansion trots att lösningen är fullt tillämpbar på nordiska marknader.
+
+**Konsekvenser:**
+
+- Sårbarhet för svensk konjunktur
+- Begränsad tillväxtpotential
+- Lägre värdering än internationella konkurrenter
+
+**Riskbedömning:**
+
+- **Sannolikhet:** Medel (konjunkturnedgång kan påverka)
+- **Påverkan:** Medel (begränsad tillväxtpotential kan påverka värderingen)",
+        mitigation: "**Utveckla internationell strategi:**
+
+**Åtgärder:**
+
+1) **Marknadsanalys för Norge och Danmark**
+   - Budget: 200k SEK
+   - Fokus på TAM, konkurrenter, kundbehov
+
+2) **Pilotprojekt** med 2-3 kunder i Norge
+   - Inom 6 månader
+   - Validera product-market fit
+
+3) **Rekrytera lokal säljare** eller partner i Norge
+   - Etablera lokal närvaro
+   - Bygg kundrelationer
+
+4) **Anpassa produkt och marknadsföring** för nordiska marknader
+   - Lokalisering
+   - Kulturell anpassning
+
+5) **Budgetera 1-2 MSEK** för internationell expansion år 1
+   - Marketing och säljresurser
+   - Produktanpassning"
       }
     ],
     quickWins: [
@@ -872,17 +978,63 @@ Kundservice är proaktiv men saknar automation:
     keyRisks: [
       {
         category: "Operationell",
-        description: "Beroendet av två nyckelpersoner (VD och säljchef) utan successionsplan utgör den mest kritiska risken. VD har grundat bolaget och har djupa personliga relationer med många av de största kunderna. Säljchefen ansvarar för 40% av nyförsäljningen och har unika branschrelationer. Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på försäljning, kundrelationer och bolagets värdering. Uppskattad värdeförlust vid abrupt bortfall: 15-25%.",
+        description: "**Nyckelpersonsberoende - Operationell risk**
+
+Beroendet av två nyckelpersoner (VD och säljchef) utan successionsplan utgör den mest kritiska risken. 
+
+**Bakgrund:**
+
+VD har grundat bolaget och har djupa personliga relationer med många av de största kunderna. Säljchefen ansvarar för 40% av nyförsäljningen och har unika branschrelationer. 
+
+**Konsekvenser:**
+
+Om någon av dessa skulle lämna skulle det ha omedelbar negativ påverkan på försäljning, kundrelationer och bolagets värdering. 
+
+**Uppskattad värdeförlust vid abrupt bortfall: 15-25%**",
         probability: "high",
         impact: "high",
-        mitigation: "Rekrytera vice VD inom 3-4 månader, dokumentera alla kundrelationer, skapa successionsplaner, implementera stay-on bonusar, etablera regelbundna kundöverlämningar. Budget: 150-200k SEK för rekrytering + 2-3 MSEK för stay-on bonusar."
+        mitigation: "**Åtgärdsplan:**
+
+1) **Rekrytera vice VD** inom 3-4 månader
+2) **Dokumentera alla kundrelationer** i CRM
+3) **Skapa successionsplaner** för båda roller
+4) **Implementera stay-on bonusar** (2-3 MSEK vardera)
+5) **Etablera regelbundna kundöverlämningar**
+
+**Budget:** 150-200k SEK för rekrytering + 2-3 MSEK för stay-on bonusar"
       },
       {
         category: "Teknologi",
-        description: "Legacy-system byggt på PHP 7.2 tappar support 2024 vilket innebär säkerhetsrisker och begränsad skalbarhet. Modernisering är nödvändig inom 12-18 månader för att undvika säkerhetsincidenter och möjliggöra internationell expansion. Estimerad kostnad: 3-5 MSEK. Säkerhetsincidenter kan leda till GDPR-böter upp till 4% av omsättning (2,7 MSEK) och skada varumärke.",
+        description: "**Legacy-system - Teknologisk risk**
+
+Legacy-system byggt på PHP 7.2 tappar support 2024 vilket innebär säkerhetsrisker och begränsad skalbarhet. 
+
+**Moderniseringsbehov:**
+
+Modernisering är nödvändig inom 12-18 månader för att undvika säkerhetsincidenter och möjliggöra internationell expansion. 
+
+- **Estimerad kostnad:** 3-5 MSEK
+- **Tidsram:** 6-9 månader
+
+**Konsekvenser:**
+
+Säkerhetsincidenter kan leda till GDPR-böter upp till **4% av omsättning (2,7 MSEK)** och skada varumärke.",
         probability: "high",
         impact: "medium",
-        mitigation: "Påbörja modernisering omgående i två faser: (1) Kritiska komponenter (3 månader, 1,5 MSEK), (2) Fullständig migration (6 månader, 2-3 MSEK). Engagera säkerhetskonsult, implementera monitoring, dokumentera roadmap. Total budget: 5 MSEK."
+        mitigation: "**Moderniseringsplan i två faser:**
+
+**Fasa 1 (3 månader, 1,5 MSEK):**
+- Kritiska komponenter
+
+**Fasa 2 (6 månader, 2-3 MSEK):**
+- Fullständig migration
+
+**Stödåtgärder:**
+- Engagera säkerhetskonsult
+- Implementera monitoring
+- Dokumentera roadmap
+
+**Total budget:** 5 MSEK"
       },
       {
         category: "Marknad",
