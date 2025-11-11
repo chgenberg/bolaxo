@@ -2031,42 +2031,6 @@ function PremiumResultMockupContent() {
       case 'valuation':
         return (
           <div className="space-y-6">
-            {/* Methodology */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200">
-              <h3 className="text-xl font-bold text-primary-navy mb-4">Värderingsmetodik</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Primär metod</h4>
-                  <p className="text-gray-700">{result.valuation.methodology.primary}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Sekundär metod</h4>
-                  <p className="text-gray-700">{result.valuation.methodology.secondary}</p>
-                </div>
-              </div>
-              <div className="mt-4 p-6 bg-gray-50 rounded-lg">
-                <div className="text-gray-700 leading-relaxed">{renderMarkdownText(result.valuation.methodology.explanation)}</div>
-              </div>
-            </div>
-
-            {/* Adjustments */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200">
-              <h3 className="text-xl font-bold text-primary-navy mb-4">Värderingsjusteringar</h3>
-              <div className="space-y-4">
-                {result.valuation.adjustments.map((adj, index) => (
-                  <div key={index} className="flex items-start justify-between gap-4 p-4 bg-gray-50 rounded-lg">
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900">{adj.type}</h4>
-                      <div className="text-gray-600 text-sm mt-1 leading-relaxed">{renderMarkdownText(adj.reason)}</div>
-                    </div>
-                    <div className={`font-bold text-lg whitespace-nowrap ${adj.impact > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {adj.impact > 0 ? '+' : ''}{formatCurrency(adj.impact)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
             {/* Waterfall Chart for Adjustments */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-xl font-bold text-primary-navy mb-6">Värderingsjusteringar - Visuell översikt</h3>
@@ -2114,6 +2078,42 @@ function PremiumResultMockupContent() {
               </ResponsiveContainer>
               <div className="mt-4 text-center text-sm text-gray-600">
                 Total justering: <span className="font-bold text-primary-navy">{formatCurrency(3500000)}</span> (10,9% av basvärdering)
+              </div>
+            </div>
+
+            {/* Methodology */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200">
+              <h3 className="text-xl font-bold text-primary-navy mb-4">Värderingsmetodik</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Primär metod</h4>
+                  <p className="text-gray-700">{result.valuation.methodology.primary}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Sekundär metod</h4>
+                  <p className="text-gray-700">{result.valuation.methodology.secondary}</p>
+                </div>
+              </div>
+              <div className="mt-4 p-6 bg-gray-50 rounded-lg">
+                <div className="text-gray-700 leading-relaxed">{renderMarkdownText(result.valuation.methodology.explanation)}</div>
+              </div>
+            </div>
+
+            {/* Adjustments */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200">
+              <h3 className="text-xl font-bold text-primary-navy mb-4">Värderingsjusteringar</h3>
+              <div className="space-y-4">
+                {result.valuation.adjustments.map((adj, index) => (
+                  <div key={index} className="flex items-start justify-between gap-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900">{adj.type}</h4>
+                      <div className="text-gray-600 text-sm mt-1 leading-relaxed">{renderMarkdownText(adj.reason)}</div>
+                    </div>
+                    <div className={`font-bold text-lg whitespace-nowrap ${adj.impact > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                      {adj.impact > 0 ? '+' : ''}{formatCurrency(adj.impact)}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -2279,6 +2279,49 @@ function PremiumResultMockupContent() {
       case 'financials':
         return (
           <div className="space-y-6">
+            {/* Future Projections Chart */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200">
+              <h3 className="text-xl font-bold text-primary-navy mb-6">5-årsprojektioner</h3>
+              <ResponsiveContainer width="100%" height={350}>
+                <AreaChart data={projectionData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor={COLORS.primary} stopOpacity={0.1}/>
+                    </linearGradient>
+                    <linearGradient id="colorEbitda" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={COLORS.secondary} stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor={COLORS.secondary} stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="year" stroke="#666" />
+                  <YAxis stroke="#666" label={{ value: 'MSEK', angle: -90, position: 'insideLeft' }} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                    formatter={(value: number) => `${value} MSEK`}
+                  />
+                  <Legend />
+                  <Area type="monotone" dataKey="revenue" name="Omsättning" stroke={COLORS.primary} fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={2} />
+                  <Area type="monotone" dataKey="ebitda" name="EBITDA" stroke={COLORS.secondary} fillOpacity={1} fill="url(#colorEbitda)" strokeWidth={2} />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="mt-4 grid grid-cols-3 gap-4">
+                <div className="text-center p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Förväntad CAGR</p>
+                  <p className="text-xl font-bold text-gray-900">18%</p>
+                </div>
+                <div className="text-center p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">EBITDA-marginal 2028</p>
+                  <p className="text-xl font-bold text-gray-900">27%</p>
+                </div>
+                <div className="text-center p-3 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600">Värdering 2028</p>
+                  <p className="text-xl font-bold text-gray-900">55-65 MSEK</p>
+                </div>
+              </div>
+            </div>
+
             {/* Historical Performance */}
             <div className="bg-white rounded-xl p-8 border border-gray-200">
               <h3 className="text-xl font-bold text-primary-navy mb-6">Historisk prestation</h3>
@@ -2366,49 +2409,6 @@ function PremiumResultMockupContent() {
                 <div className="text-blue-800">{renderMarkdownText(result.financialAnalysis.workingCapital.improvement)}</div>
               </div>
             </div>
-
-            {/* Future Projections Chart */}
-            <div className="bg-white rounded-xl p-8 border border-gray-200">
-              <h3 className="text-xl font-bold text-primary-navy mb-6">5-årsprojektioner</h3>
-              <ResponsiveContainer width="100%" height={350}>
-                <AreaChart data={projectionData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={COLORS.primary} stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor={COLORS.primary} stopOpacity={0.1}/>
-                    </linearGradient>
-                    <linearGradient id="colorEbitda" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor={COLORS.secondary} stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor={COLORS.secondary} stopOpacity={0.1}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="year" stroke="#666" />
-                  <YAxis stroke="#666" label={{ value: 'MSEK', angle: -90, position: 'insideLeft' }} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-                    formatter={(value: number) => `${value} MSEK`}
-                  />
-                  <Legend />
-                  <Area type="monotone" dataKey="revenue" name="Omsättning" stroke={COLORS.primary} fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="ebitda" name="EBITDA" stroke={COLORS.secondary} fillOpacity={1} fill="url(#colorEbitda)" strokeWidth={2} />
-                </AreaChart>
-              </ResponsiveContainer>
-              <div className="mt-4 grid grid-cols-3 gap-4">
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-600">Förväntad CAGR</p>
-                  <p className="text-xl font-bold text-gray-900">18%</p>
-                </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-600">EBITDA-marginal 2028</p>
-                  <p className="text-xl font-bold text-gray-900">27%</p>
-                </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-600">Värdering 2028</p>
-                  <p className="text-xl font-bold text-gray-900">55-65 MSEK</p>
-                </div>
-              </div>
-            </div>
           </div>
         )
 
@@ -2493,33 +2493,6 @@ function PremiumResultMockupContent() {
       case 'risks':
         return (
           <div className="space-y-6">
-            {/* Overall Risk Level */}
-            <div className={`p-6 rounded-xl border-2 ${
-              result.riskAssessment.overallRiskLevel === 'high' ? 'bg-red-50 border-red-300' :
-              result.riskAssessment.overallRiskLevel === 'medium' ? 'bg-yellow-50 border-yellow-300' :
-              'bg-green-50 border-green-300'
-            }`}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Övergripande risknivå</h3>
-                  <p className="text-gray-700">
-                    Baserat på due diligence-analysen bedöms den övergripande risknivån som {' '}
-                    <span className="font-semibold">
-                      {result.riskAssessment.overallRiskLevel === 'high' ? 'hög' :
-                       result.riskAssessment.overallRiskLevel === 'medium' ? 'medel' : 'låg'}
-                    </span>
-                  </p>
-                </div>
-                <div className={`text-5xl ${
-                  result.riskAssessment.overallRiskLevel === 'high' ? 'text-red-600' :
-                  result.riskAssessment.overallRiskLevel === 'medium' ? 'text-yellow-600' :
-                  'text-green-600'
-                }`}>
-                  <AlertTriangle />
-                </div>
-              </div>
-            </div>
-
             {/* Risk Matrix Visualization */}
             <div className="bg-white rounded-xl p-8 border border-gray-200 mb-6">
               <h3 className="text-xl font-bold text-primary-navy mb-6">Riskmatris - Visuell översikt</h3>
@@ -2596,6 +2569,33 @@ function PremiumResultMockupContent() {
                   <strong>Tolkning:</strong> Risker i övre högra hörnet (hög sannolikhet + hög påverkan) kräver omedelbar åtgärd. 
                   De flesta kritiska risker kan minskas genom de föreslagna åtgärderna.
                 </p>
+              </div>
+            </div>
+
+            {/* Overall Risk Level */}
+            <div className={`p-6 rounded-xl border-2 ${
+              result.riskAssessment.overallRiskLevel === 'high' ? 'bg-red-50 border-red-300' :
+              result.riskAssessment.overallRiskLevel === 'medium' ? 'bg-yellow-50 border-yellow-300' :
+              'bg-green-50 border-green-300'
+            }`}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Övergripande risknivå</h3>
+                  <p className="text-gray-700">
+                    Baserat på due diligence-analysen bedöms den övergripande risknivån som {' '}
+                    <span className="font-semibold">
+                      {result.riskAssessment.overallRiskLevel === 'high' ? 'hög' :
+                       result.riskAssessment.overallRiskLevel === 'medium' ? 'medel' : 'låg'}
+                    </span>
+                  </p>
+                </div>
+                <div className={`text-5xl ${
+                  result.riskAssessment.overallRiskLevel === 'high' ? 'text-red-600' :
+                  result.riskAssessment.overallRiskLevel === 'medium' ? 'text-yellow-600' :
+                  'text-green-600'
+                }`}>
+                  <AlertTriangle />
+                </div>
               </div>
             </div>
 
