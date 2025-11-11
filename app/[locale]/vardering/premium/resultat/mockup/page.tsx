@@ -1417,13 +1417,19 @@ Operativt resultat före räntor, skatter, avskrivningar och amorteringar.
 **Measurement date:** 90 dagar efter respektive års slut för att ge tid för årsredovisning"
       },
       warranties: [
-        "Standard warranties & indemnities med 18 månaders limitation period - täcker standard warranties för title, authority, capitalization, financial statements, taxes, compliance, litigation, environmental, employees, intellectual property, contracts, och material adverse change. Limitation period på 18 månader är standard för denna typ av transaktion och balanserar säljarens och köparens intressen.",
-        "Specifik indemnity för pågående skatteärende (max 2 MSEK) - täcker potentiella skatter som kan uppstå från pågående skatteärende med Skatteverket rörande avdrag för R&D-kostnader. Cap på 2 MSEK är baserat på sannolik bedömning av potentiellt utfall. Säljaren står för detta specifikt utanför standard warranties.",
-        "IP warranties förstärkta givet patentens värde - eftersom bolaget har patenterad teknologi som är central för värderingen, är IP-warranties förstärkta. Täcker att alla IP-rättigheter är ägda av bolaget, att det inte finns pågående intrång, att alla anställda har signerat IP-assignments, och att open source-användning är compliant. Limitation period kan vara längre (24-36 månader) för IP-warranties.",
-        "Key person warranties med carve-out för redan kommunicerade risker - säljaren garanterar att nyckelpersoner (VD, säljchef) stannar enligt avtal, men med carve-out för redan kommunicerade risker (t.ex. om VD lämnar på grund av hälsoskäl). Detta balanserar köparens behov av kontinuitet med säljarens behov av rimliga carve-outs.",
-        "Financial warranties - säljaren garanterar att finansiella statements är korrekta och kompletta, att det inte finns dolda skulder eller förpliktelser, att rörelsekapital är normaliserat, och att det inte finns extraordinära poster som inte är dokumenterade. Limitation period 18 månader.",
-        "Operational warranties - säljaren garanterar att verksamheten har drivits normalt, att det inte finns material adverse changes, att alla viktiga kontrakt är i kraft, att det inte finns pågående tvister som kan påverka verksamheten, och att compliance är i ordning. Limitation period 18 månader.",
-        "Environmental warranties - säljaren garanterar att det inte finns miljöproblem eller skulder, att alla tillstånd är i kraft, och att det inte finns pågående miljötvister. Viktigt för fastighetsrelaterade aspekter. Limitation period kan vara längre för environmental (24 månader)."
+        "**Standard warranties & indemnities** med 18 månaders limitation period\n\nTäcker standard warranties för title, authority, capitalization, financial statements, taxes, compliance, litigation, environmental, employees, intellectual property, contracts, och material adverse change. Limitation period på 18 månader är standard för denna typ av transaktion och balanserar säljarens och köparens intressen.",
+        
+        "**Specifik indemnity för pågående skatteärende** (max 2 MSEK)\n\nTäcker potentiella skatter som kan uppstå från pågående skatteärende med Skatteverket rörande avdrag för R&D-kostnader. Cap på 2 MSEK är baserat på sannolik bedömning av potentiellt utfall. Säljaren står för detta specifikt utanför standard warranties.",
+        
+        "**IP warranties förstärkta** givet patentens värde\n\nEftersom bolaget har patenterad teknologi som är central för värderingen, är IP-warranties förstärkta. Täcker att alla IP-rättigheter är ägda av bolaget, att det inte finns pågående intrång, att alla anställda har signerat IP-assignments, och att open source-användning är compliant. Limitation period kan vara längre (24-36 månader) för IP-warranties.",
+        
+        "**Key person warranties** med carve-out för redan kommunicerade risker\n\nSäljaren garanterar att nyckelpersoner (VD, säljchef) stannar enligt avtal, men med carve-out för redan kommunicerade risker (t.ex. om VD lämnar på grund av hälsoskäl). Detta balanserar köparens behov av kontinuitet med säljarens behov av rimliga carve-outs.",
+        
+        "**Financial warranties**\n\nSäljaren garanterar att finansiella statements är korrekta och kompletta, att det inte finns dolda skulder eller förpliktelser, att rörelsekapital är normaliserat, och att det inte finns extraordinära poster som inte är dokumenterade. Limitation period 18 månader.",
+        
+        "**Operational warranties**\n\nSäljaren garanterar att verksamheten har drivits normalt, att det inte finns material adverse changes, att alla viktiga kontrakt är i kraft, att det inte finns pågående tvister som kan påverka verksamheten, och att compliance är i ordning. Limitation period 18 månader.",
+        
+        "**Environmental warranties**\n\nSäljaren garanterar att det inte finns miljöproblem eller skulder, att alla tillstånd är i kraft, och att det inte finns pågående miljötvister. Viktigt för fastighetsrelaterade aspekter. Limitation period kan vara längre för environmental (24 månader)."
       ]
     }
   },
