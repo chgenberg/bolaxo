@@ -327,19 +327,22 @@ Med rätt förberedelser och timing kan värdet maximeras ytterligare genom impl
         action: "Lansera customer success-program för top 50 kunder",
         impact: "Minskat churn med 2 procentenheter (värde: 1,4 MSEK årligen), ökad NPS",
         timeframe: "2 månader",
-        cost: "Intern tid + 100k SEK (verktyg)"
+        cost: "100k SEK (verktyg) + rekrytering av customer success manager",
+        details: "Customer success-program kan minska churn och öka expansion revenue betydligt. Programmet bör inkludera: (1) Rekrytering av customer success manager med B2B-erfarenhet (lönepaket 800k-1M SEK/år), (2) Identifikation av top 50 kunder baserat på värde och risk, (3) Regelbundna business reviews (kvartalsvis) för att förstå kundens behov och mål, (4) Proaktiv support och onboarding för att maximera value realization, (5) Customer health scoring baserat på usage analytics, (6) Expansion opportunities identification genom data analysis, (7) Churn prevention strategies för risk-kunder, (8) Customer success platform för tracking (t.ex. Gainsight, Totango). Minskning av churn med 2 procentenheter (från 5% till 3%) sparar 1,4 MSEK årligen i förlorad omsättning. ROI: 100k SEK för verktyg + 1M SEK för CSM ger 1,4 MSEK i sparad omsättning + expansion revenue. Success metrics: Churn minskat från 5% till 3%, expansion revenue +20%, NPS ökad med 5 poäng, customer health score >80% för top 50 kunder."
       },
       {
         action: "Optimera onboarding-process med automatisering",
         impact: "Minskat time-to-value från 45 till 30 dagar, frigör 1 FTE, högre kundnöjdhet",
         timeframe: "2-3 månader",
-        cost: "200k SEK (utveckling + verktyg)"
+        cost: "200k SEK (utveckling + verktyg)",
+        details: "Onboarding-processen är för närvarande manuell och tar 45 dagar, vilket är över branschsnitt på 30-40 dagar. Automatisering bör inkludera: (1) Utveckling av självbetjäningsportal för onboarding, (2) Automatiserade email-sekvenser med instruktioner och tips, (3) Video-tutorials och dokumentation, (4) Automatisk provisionering av konton och access, (5) Progress tracking och milestones för kunder, (6) Proaktiva påminnelser och support, (7) Gamification för att öka engagement. Detta kan minska time-to-value från 45 till 30 dagar vilket ökar kundnöjdhet och minskar churn. Dessutom frigörs 1 FTE (800k SEK årligen) från manuellt onboarding-arbete. ROI: 200k SEK investering ger 800k SEK i besparingar + förbättrad kundnöjdhet. Success metrics: Time-to-value minskat till 30 dagar, 1 FTE frigjord, onboarding satisfaction score >4,5/5."
       },
       {
         action: "Implementera lead scoring och marketing automation",
         impact: "+35% säljproduktivitet, kortare säljcykel med 20%, bättre lead-kvalitet",
         timeframe: "2 månader",
-        cost: "150k SEK (plattform + setup)"
+        cost: "150k SEK (plattform + setup)",
+        details: "Lead scoring och marketing automation kan dramatiskt förbättra säljeffektiviteten. Implementationen bör inkludera: (1) Val av marketing automation platform (t.ex. HubSpot, Marketo, eller Pardot), (2) Utveckling av lead scoring-modell baserat på demografisk och beteendedata, (3) Automatiserade email-kampanjer för lead nurturing, (4) Segmentering av leads baserat på score och beteende, (5) Integration med CRM för seamless handoff till säljare, (6) A/B-testning av email-kampanjer och landing pages, (7) Rapportering och analytics för att optimera kampanjer. Detta kan öka säljproduktiviteten med 35% genom att säljare fokuserar på kvalificerade leads, korta säljcykeln med 20% genom bättre lead nurturing, och förbättra lead-kvaliteten vilket ökar konverteringsgraden. ROI: 150k SEK investering ger 35% högre säljproduktivitet vilket motsvarar 2-3 extra deals per säljare årligen (5-8 MSEK i ökad omsättning). Success metrics: Lead score accuracy >75%, säljproduktivitet +35%, säljcykel -20%, konverteringsgrad +25%."
       }
     ]
   },
