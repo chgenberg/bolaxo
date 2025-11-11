@@ -50,37 +50,51 @@ const mockResult = {
       {
         type: "Stark marknadsposition",
         impact: 3200000,
-        reason: "Bolaget har en ledande position inom sin nisch med 32% marknadsandel, vilket är 2,5x större än närmaste konkurrent. Denna marknadsposition ger flera värdeskapande faktorer: (1) Starkt varumärke med 87% aided awareness, (2) Nätverkseffekter där värdet ökar med fler användare, (3) Högre prissättningskraft tack vare marknadsposition, (4) Bättre tillgång till partnerskap och distribution, (5) Möjlighet att attrahera bättre talanger. Marknadspositionen är hållbar tack vare patenterad teknologi, starka kundrelationer, och hög switching costs. Denna justering motsvarar en premium på ~9% över basvärderingen och är väl motiverad av jämförbara transaktioner där marknadsledare värderas 5-15% högre."
+        reason: `Bolaget har en ledande position inom sin nisch med 32% marknadsandel, vilket är 2,5x större än närmaste konkurrent. Denna marknadsposition ger flera värdeskapande faktorer: (1) Starkt varumärke med 87% aided awareness, (2) Nätverkseffekter där värdet ökar med fler användare, (3) Högre prissättningskraft tack vare marknadsposition, (4) Bättre tillgång till partnerskap och distribution, (5) Möjlighet att attrahera bättre talanger.
+
+Marknadspositionen är hållbar tack vare patenterad teknologi, starka kundrelationer, och hög switching costs. Denna justering motsvarar en premium på ~9% över basvärderingen och är väl motiverad av jämförbara transaktioner där marknadsledare värderas 5-15% högre.`
       },
       {
         type: "Teknisk skuld",
         impact: -1800000,
-        reason: "IT-systemen byggda 2018 på PHP 7.2 tappar support 2024 vilket kräver modernisering inom 12-18 månader. Estimerad kostnad är 3-5 MSEK och tar 6-9 månader. Denna teknisk skuld påverkar värderingen negativt eftersom: (1) Det kräver betydande investeringar som köparen måste göra, (2) Det skapar säkerhetsrisker tills moderniseringen är klar, (3) Det begränsar skalbarhet och internationell expansion, (4) Det kan påverka produktutvecklingshastighet. Justeringen på -1,8 MSEK motsvarar ~40% av moderniseringskostnaden och reflekterar att moderniseringen är nödvändig men att påbörjad modernisering kan minska risken. Om moderniseringen påbörjas före försäljning kan justeringen minskas till -0,9 MSEK."
+        reason: `IT-systemen byggda 2018 på PHP 7.2 tappar support 2024 vilket kräver modernisering inom 12-18 månader. Estimerad kostnad är 3-5 MSEK och tar 6-9 månader. Denna teknisk skuld påverkar värderingen negativt eftersom: (1) Det kräver betydande investeringar som köparen måste göra, (2) Det skapar säkerhetsrisker tills moderniseringen är klar, (3) Det begränsar skalbarhet och internationell expansion, (4) Det kan påverka produktutvecklingshastighet.
+
+Justeringen på -1,8 MSEK motsvarar ~40% av moderniseringskostnaden och reflekterar att moderniseringen är nödvändig men att påbörjad modernisering kan minska risken. Om moderniseringen påbörjas före försäljning kan justeringen minskas till -0,9 MSEK.`
       },
       {
         type: "Återkommande intäkter",
         impact: 2400000,
-        reason: "78% av intäkterna är återkommande med exceptionellt låg churn (<5% årligen vs branschsnitt 12-15%). Detta ger flera värdeskapande faktorer: (1) Hög förutsägbarhet i kassaflödet vilket minskar risk och motiverar högre värdering, (2) Låg kundanskaffningskostnad per kund eftersom churn är låg, (3) Möjlighet till expansion revenue från befintliga kunder (+7% årligen), (4) Hög kundlivstid (genomsnitt 6,5 år) vilket ökar Customer Lifetime Value. Återkommande intäkter värderas typiskt 20-30% högre än engångsintäkter i jämförbara transaktioner. Justeringen på +2,4 MSEK motsvarar en premium på ~7% och är väl motiverad av branschstandarder där SaaS-bolag med >70% ARR värderas betydligt högre."
+        reason: `78% av intäkterna är återkommande med exceptionellt låg churn (<5% årligen vs branschsnitt 12-15%). Detta ger flera värdeskapande faktorer: (1) Hög förutsägbarhet i kassaflödet vilket minskar risk och motiverar högre värdering, (2) Låg kundanskaffningskostnad per kund eftersom churn är låg, (3) Möjlighet till expansion revenue från befintliga kunder (+7% årligen), (4) Hög kundlivstid (genomsnitt 6,5 år) vilket ökar Customer Lifetime Value.
+
+Återkommande intäkter värderas typiskt 20-30% högre än engångsintäkter i jämförbara transaktioner. Justeringen på +2,4 MSEK motsvarar en premium på ~7% och är väl motiverad av branschstandarder där SaaS-bolag med >70% ARR värderas betydligt högre.`
       },
       {
         type: "Nyckelpersonsberoende",
         impact: -900000,
-        reason: "Hög beroende av VD och säljchef utan dokumenterade processer eller ersättare. VD och säljchef står tillsammans för 65% av kundrelationerna och 55% av nyförsäljningen. Om någon av dessa skulle lämna skulle det ha betydande negativ påverkan på verksamheten. Uppskattad värdeförlust vid abrupt bortfall: 15-25%. Justeringen på -0,9 MSEK reflekterar denna risk men tar också hänsyn till att risken kan minskas genom rekrytering av vice VD och dokumentation. Om vice VD rekryteras före försäljning kan justeringen minskas till -0,4 MSEK. Denna justering är konservativ jämfört med potentiell värdeförlust men reflekterar att risken är hanterbar med rätt åtgärder."
+        reason: `Hög beroende av VD och säljchef utan dokumenterade processer eller ersättare. VD och säljchef står tillsammans för 65% av kundrelationerna och 55% av nyförsäljningen. Om någon av dessa skulle lämna skulle det ha betydande negativ påverkan på verksamheten. Uppskattad värdeförlust vid abrupt bortfall: 15-25%.
+
+Justeringen på -0,9 MSEK reflekterar denna risk men tar också hänsyn till att risken kan minskas genom rekrytering av vice VD och dokumentation. Om vice VD rekryteras före försäljning kan justeringen minskas till -0,4 MSEK. Denna justering är konservativ jämfört med potentiell värdeförlust men reflekterar att risken är hanterbar med rätt åtgärder.`
       },
       {
         type: "Kundkoncentration",
         impact: -600000,
-        reason: "Top 10 kunder står för 45% av omsättning vilket är över rekommenderad gräns på 30-35%. Den största kunden står för 12% av omsättning vilket är över rekommenderad gräns på 8-10%. Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet. Justeringen på -0,6 MSEK reflekterar denna risk men tar också hänsyn till att kundrelationerna är väletablerade med långa avtal (genomsnitt 4 år) och låg churn-risk. Om diversifieringsstrategi implementeras och max 8% per kund nås kan justeringen minskas till -0,3 MSEK."
+        reason: `Top 10 kunder står för 45% av omsättning vilket är över rekommenderad gräns på 30-35%. Den största kunden står för 12% av omsättning vilket är över rekommenderad gräns på 8-10%. Om största kunden skulle säga upp sitt avtal skulle det ha betydande påverkan på både omsättning och lönsamhet.
+
+Justeringen på -0,6 MSEK reflekterar denna risk men tar också hänsyn till att kundrelationerna är väletablerade med långa avtal (genomsnitt 4 år) och låg churn-risk. Om diversifieringsstrategi implementeras och max 8% per kund nås kan justeringen minskas till -0,3 MSEK.`
       },
       {
         type: "Stark kassaflödeskonvertering",
         impact: 1500000,
-        reason: "Kassaflödeskonvertering på 85% av EBITDA är exceptionellt stark och betydligt över branschgenomsnittet på 60-65%. Detta ger flera värdeskapande faktorer: (1) Hög kvalitet i resultatet vilket minskar risk, (2) Möjlighet att finansiera tillväxt utan extern finansiering, (3) Flexibilitet för investeringar och utdelningar, (4) Stark finansiell stabilitet med kassareserv på 18,5 MSEK. Stark kassaflödeskonvertering värderas typiskt 10-15% högre i jämförbara transaktioner. Justeringen på +1,5 MSEK motsvarar en premium på ~4% och är väl motiverad."
+        reason: `Kassaflödeskonvertering på 85% av EBITDA är exceptionellt stark och betydligt över branschgenomsnittet på 60-65%. Detta ger flera värdeskapande faktorer: (1) Hög kvalitet i resultatet vilket minskar risk, (2) Möjlighet att finansiera tillväxt utan extern finansiering, (3) Flexibilitet för investeringar och utdelningar, (4) Stark finansiell stabilitet med kassareserv på 18,5 MSEK.
+
+Stark kassaflödeskonvertering värderas typiskt 10-15% högre i jämförbara transaktioner. Justeringen på +1,5 MSEK motsvarar en premium på ~4% och är väl motiverad.`
       },
       {
         type: "Patenterad teknologi",
         impact: 1800000,
-        reason: "Patenterad teknologi som ger verifierbar 40% effektivitetsvinst jämfört med konkurrenters lösningar är en unik konkurrensfördel. Patentet ger: (1) Exklusivitet och skydd mot konkurrenter, (2) Möjlighet till licensintäkter i framtiden, (3) Högre värdering i jämförbara transaktioner (IP-intensive bolag värderas 15-25% högre), (4) Strategiskt värde för köpare som söker teknologisk kompetens. Justeringen på +1,8 MSEK motsvarar en premium på ~5% och reflekterar patentets värde men är konservativ jämfört med potentiellt strategiskt värde för rätt köpare."
+        reason: `Patenterad teknologi som ger verifierbar 40% effektivitetsvinst jämfört med konkurrenters lösningar är en unik konkurrensfördel. Patentet ger: (1) Exklusivitet och skydd mot konkurrenter, (2) Möjlighet till licensintäkter i framtiden, (3) Högre värdering i jämförbara transaktioner (IP-intensive bolag värderas 15-25% högre), (4) Strategiskt värde för köpare som söker teknologisk kompetens.
+
+Justeringen på +1,8 MSEK motsvarar en premium på ~5% och reflekterar patentets värde men är konservativ jämfört med potentiellt strategiskt värde för rätt köpare.`
       }
     ]
   },
