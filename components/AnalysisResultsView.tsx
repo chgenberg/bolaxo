@@ -249,7 +249,9 @@ export default function AnalysisResultsView() {
   type IndustryTrendPoint = TrendPoint & { market: number }
   type CompanyTrendMappedPoint = CompanyTrendPoint & { company: number }
 
-  const rawIndustryTrend = (results.industryTrend ?? []).map<IndustryTrendPoint | null>(
+  const rawIndustryTrend: Array<TrendPoint | null> = results.industryTrend ?? []
+
+  const mappedIndustryTrend = rawIndustryTrend.map<IndustryTrendPoint | null>(
     (item, index) => {
       if (!item) return null
       const value = parseNumericValue(item.value)
@@ -260,7 +262,7 @@ export default function AnalysisResultsView() {
       return {
         label,
         year: item.year,
-        market: value,
+        value,
         unit: item.unit || 'MSEK',
         sourceUrl: item.sourceUrl,
         domain: item.domain,
@@ -270,11 +272,13 @@ export default function AnalysisResultsView() {
     }
   )
 
-  const industryTrendPoints: IndustryTrendPoint[] = rawIndustryTrend.filter(
-    (point): point is IndustryTrendPoint => point !== null && typeof point.label === 'string'
-  )
+  const industryTrendPoints: IndustryTrendPoint[] = mappedIndustryTrend
+    .filter((point): point is IndustryTrendPoint => point !== null && typeof point.label === 'string')
+    .map((point) => ({ ...point, market: point.value }))
 
-  const rawCompanyTrend = (results.companyTrend ?? []).map<CompanyTrendMappedPoint | null>(
+  const rawCompanyTrend: Array<CompanyTrendPoint | null> = results.companyTrend ?? []
+
+  const mappedCompanyTrend = rawCompanyTrend.map<CompanyTrendMappedPoint | null>(
     (item, index) => {
       if (!item) return null
       const value = parseNumericValue(item.value)
@@ -285,7 +289,7 @@ export default function AnalysisResultsView() {
       return {
         label,
         year: item.year,
-        company: value,
+        value,
         unit: item.unit || 'MSEK',
         sourceUrl: item.sourceUrl,
         domain: item.domain,
@@ -295,10 +299,12 @@ export default function AnalysisResultsView() {
     }
   )
 
-  const companyTrendPoints: CompanyTrendMappedPoint[] = rawCompanyTrend.filter(
-    (point): point is CompanyTrendMappedPoint =>
-      point !== null && typeof point.label === 'string'
-  )
+  const companyTrendPoints: CompanyTrendMappedPoint[] = mappedCompanyTrend
+    .filter(
+      (point): point is CompanyTrendMappedPoint =>
+        point !== null && typeof point.label === 'string'
+    )
+    .map((point) => ({ ...point, company: point.value }))
 
   const trendLabelSet = new Set<string>()
   const trendChartData: Array<{
