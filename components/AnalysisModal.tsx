@@ -216,7 +216,7 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
             {/* Loading State */}
             <div className="p-8 text-center">
               <div className="mb-8">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
+                <div className="w-20 h-20 mx-auto bg-primary-navy rounded-full flex items-center justify-center animate-pulse">
                   <Loader2 className="w-10 h-10 text-white animate-spin" />
                 </div>
               </div>
@@ -232,7 +232,7 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
               {/* Progress Bar */}
               <div className="w-full bg-gray-200 rounded-full h-4 mb-4 overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transition-all duration-1000 ease-out"
+                  className="h-full bg-primary-navy rounded-full transition-all duration-1000 ease-out"
                   style={{ width: `${progress}%` }}
                 />
               </div>
