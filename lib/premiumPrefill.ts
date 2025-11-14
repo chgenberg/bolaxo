@@ -7,7 +7,7 @@ const numericClean = (value: any) => {
 }
 
 const appendText = (existing: string | undefined, addition: string) => {
-  if (!addition) return existing
+  if (!addition) return existing || ''
   return existing ? `${existing}\n${addition}` : addition
 }
 
