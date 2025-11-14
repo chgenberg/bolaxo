@@ -57,6 +57,7 @@ export default function AnalysisResultsView() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showValuationInfo, setShowValuationInfo] = useState(false)
+  const [showValuationDetails, setShowValuationDetails] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -204,16 +205,34 @@ export default function AnalysisResultsView() {
                 }).format(results.valuation.maxValue)}
               </span>
             </div>
-            <p className="text-white/80 text-sm max-w-2xl mx-auto">
-              {results.valuation.methodology}
-            </p>
-            <button
-              onClick={() => setShowValuationInfo(true)}
-              className="mt-4 text-white/70 hover:text-white transition-colors"
-              aria-label="Mer information om värderingen"
-            >
-              <HelpCircle className="w-6 h-6" />
-            </button>
+            {showValuationDetails && (
+              <p className="text-white/80 text-sm max-w-2xl mx-auto">
+                {results.valuation.methodology}
+              </p>
+            )}
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <button
+                onClick={() => setShowValuationDetails((prev) => !prev)}
+                className="inline-flex items-center gap-2 text-white/80 text-sm underline decoration-white/40 decoration-dotted hover:text-white"
+                aria-expanded={showValuationDetails}
+              >
+                <span
+                  className={`inline-block transform transition-transform ${
+                    showValuationDetails ? 'rotate-90' : 'rotate-0'
+                  }`}
+                >
+                  &gt;
+                </span>
+                Så har vi räknat
+              </button>
+              <button
+                onClick={() => setShowValuationInfo(true)}
+                className="text-white/70 hover:text-white transition-colors text-sm"
+                aria-label="Mer information om värderingen"
+              >
+                Mer om processen
+              </button>
+            </div>
           </div>
         )}
 
