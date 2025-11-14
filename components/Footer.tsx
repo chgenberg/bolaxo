@@ -62,6 +62,14 @@ export default function Footer() {
               <li><Link href={`/${locale}/saljare`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('sellInYourCity')}</Link></li>
               <li><Link href={`/${locale}/priser`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('pricing')}</Link></li>
               <li><Link href={`/${locale}/faq`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('faq')}</Link></li>
+              <li>
+                <Link
+                  href="/analysera"
+                  className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors"
+                >
+                  AI-analys & web search
+                </Link>
+              </li>
             </ul>
           </div>
 
