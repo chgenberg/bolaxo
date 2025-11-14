@@ -264,6 +264,18 @@ model InstantAnalysis {
   @@index([createdAt])
 }
 
+model PrefillMetric {
+  id           String   @id @default(cuid())
+  source       String
+  fieldsFilled Int
+  totalFields  Int?
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@index([source])
+  @@index([createdAt])
+}
+
 model Transaction {
   id              String    @id @default(cuid())
   createdAt       DateTime  @default(now())

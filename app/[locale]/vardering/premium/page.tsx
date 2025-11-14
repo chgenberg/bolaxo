@@ -16,6 +16,24 @@ function PremiumValuationContent() {
   const [prefillStatus, setPrefillStatus] = useState<'idle' | 'loading' | 'error' | 'done'>('idle')
   const hasFetchedPrefill = useRef(false)
 
+  const sendPrefillMetric = async (source: string, fields: Record<string, string>) => {
+    const filled = Object.keys(fields || {}).length
+    if (!filled) return
+    try {
+      await fetch('/api/metrics/prefill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source,
+          fieldsFilled: filled,
+          metadata: { keys: Object.keys(fields || {}) },
+        }),
+      })
+    } catch (error) {
+      console.warn('prefill metric failed', error)
+    }
+  }
+
   useEffect(() => {
     // Kolla om det är demo-läge via query parameter
     const demoMode = searchParams?.get('demo') === 'true' || searchParams?.get('preview') === 'true'
@@ -81,7 +99,9 @@ function PremiumValuationContent() {
 
         const data = await response.json()
         if (!cancelled && data?.insights) {
-          setWebPrefill(mapWebInsightsToPremium(data.insights))
+          const mapped = mapWebInsightsToPremium(data.insights)
+          setWebPrefill(mapped)
+          sendPrefillMetric('web_search', mapped)
           setPrefillStatus('done')
         }
       } catch (error) {

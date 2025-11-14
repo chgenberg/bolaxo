@@ -38,6 +38,24 @@ export default function ValuationResultModal({
     setShowCheckout(true)
   }
 
+  const sendPrefillMetric = async (source: string, fields: Record<string, any>) => {
+    const filled = Object.keys(fields || {}).length
+    if (!filled) return
+    try {
+      await fetch('/api/metrics/prefill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source,
+          fieldsFilled: filled,
+          metadata: { keys: Object.keys(fields || {}) },
+        }),
+      })
+    } catch (err) {
+      console.warn('prefill metric failed', err)
+    }
+  }
+
   const handlePaymentSuccess = async (paymentData: PaymentData) => {
     const prefilledData = mapFreeValuationToPremium(inputData)
 
@@ -48,6 +66,8 @@ export default function ValuationResultModal({
       originalInput: inputData,
       purchaseDate: new Date().toISOString()
     }))
+
+    sendPrefillMetric('free_valuation', prefilledData)
 
     // Navigera till djupgående analysformulär
     router.push('/sv/vardering/premium')
