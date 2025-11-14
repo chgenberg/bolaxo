@@ -50,6 +50,12 @@ Bransch (intern kod): ${industry || 'okänd'}
 `
 
   const { schema, focusInstructions } = getSchemaForFocus(focus)
+  const maxOutputTokens =
+    focus === 'analysis'
+      ? 1400
+      : focus === 'buyer-match'
+        ? 600
+        : 900
 
   const instructions = `${baseInstructions}
 
@@ -63,7 +69,8 @@ ${schema}`
     instructions,
     input: inputBlock,
     tools: [{ type: 'web_search' }],
-    max_output_tokens: focus === 'buyer-match' ? 600 : 900
+    max_output_tokens: maxOutputTokens,
+    response_format: { type: 'json_object' }
   }
 
   let lastError: unknown = null

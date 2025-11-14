@@ -95,16 +95,6 @@ Svara alltid på svenska och strukturera resultatet enligt nedan. Ange minst tre
 - Skriv ut vilket antagande du använde (t.ex. omsättning x multipel, EBITDA x multipel eller jämförande affärer).
 - Beskriv kort hur makro/marknadsläge påverkar värdet (t.ex. ränta, efterfrågan).
 
-10. BRANSCHTREND
-- Bygg en tidsserie (minst 4 datapunkter) för branschens storlek/tillväxt 2019–2024 eller senaste tillgängliga år.
-- Ange värde, år/period, enhet och källa (med domain + sourceType). Markera i growthNote om siffror baseras på extrapolering/CAGR.
-- Lägg även till en separat serie för bolagets uppskattade omsättning/volym om data finns (companyTrend).
-
-11. VÄRDEDRIVARE OCH RISKER (kvantifierade)
-- Skapa upp till 5 positiva drivkrafter (valueDrivers) och 5 risker (riskDrivers).
-- Ange ett intervall i MSEK (impactMin/impactMax) baserat på din värderingslogik. Använd mittpunkten i värderingsintervallet när du härleder procentuella effekter.
-- Förklara kort i rationale och inkludera källa (domain + sourceType).
-
 Returnera som JSON enligt detta format:
 {
   "summary": "sammanfattning",
@@ -124,57 +114,7 @@ Returnera som JSON enligt detta format:
     "minValue": nummer i SEK,
     "maxValue": nummer i SEK,
     "methodology": "kort förklaring av beräkningsmetod"
-  },
-  "industryTrend": [
-    {
-      "label": "År eller period",
-      "year": 2020,
-      "value": 120.5,
-      "unit": "MSEK",
-      "growthNote": "kort kommentar",
-      "domain": "exempel.se",
-      "sourceType": "news | report | official",
-      "sourceUrl": "https://..."
-    }
-  ],
-  "companyTrend": [
-    {
-      "label": "År eller period",
-      "year": 2020,
-      "value": 12.4,
-      "unit": "MSEK",
-      "note": "kort kommentar",
-      "domain": "exempel.se",
-      "sourceType": "official | report | news",
-      "sourceUrl": "https://..."
-    }
-  ],
-  "valueDrivers": [
-    {
-      "label": "Driver",
-      "direction": "positive",
-      "impactMin": 3,
-      "impactMax": 5,
-      "impactUnit": "MSEK",
-      "rationale": "kort förklaring",
-      "domain": "exempel.se",
-      "sourceType": "news | report | official",
-      "sourceUrl": "https://..."
-    }
-  ],
-  "riskDrivers": [
-    {
-      "label": "Risk",
-      "direction": "negative",
-      "impactMin": -2,
-      "impactMax": -1,
-      "impactUnit": "MSEK",
-      "rationale": "kort förklaring",
-      "domain": "exempel.se",
-      "sourceType": "news | report | official",
-      "sourceUrl": "https://..."
-    }
-  ]
+  }
 }`
 
       try {
