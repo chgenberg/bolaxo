@@ -211,7 +211,8 @@ Fokusera på hårda fakta som omsättning, anställda, USP:er, kontaktinfo.`,
     case 'analysis':
       return {
         focusInstructions: `Syfte: samla bred webbinformation inför en AI-analys av bolaget.
-Fokusera på fakta om affärsmodell, kunder, tillväxt, risker, nyckeltal och nyheter.`,
+Fokusera på fakta om affärsmodell, kunder, tillväxt, risker, nyckeltal och nyheter.
+Bygg även en enkel tidsserie över branschens utveckling och uppskatta en värdepåverkansprofil för drivkrafter/risker.`,
         schema: `{
   "companyProfile": {
     "description": "Kort beskrivning av verksamheten",
@@ -227,6 +228,56 @@ Fokusera på fakta om affärsmodell, kunder, tillväxt, risker, nyckeltal och ny
   "notableActivities": ["projekt, expansioner, affärer"],
   "sources": [
     { "title": "Källa", "url": "https://...", "domain": "exempel.se", "sourceType": "news | review | blog | forum | social | official", "snippet": "kort citat" }
+  ],
+  "industryTrend": [
+    {
+      "label": "År eller period",
+      "year": 2020,
+      "value": 130.5,
+      "unit": "MSEK",
+      "growthNote": "kort kommentar",
+      "domain": "exempel.se",
+      "sourceType": "news | report | official",
+      "sourceUrl": "https://..."
+    }
+  ],
+  "companyTrend": [
+    {
+      "label": "År eller period",
+      "year": 2020,
+      "value": 12.4,
+      "unit": "MSEK",
+      "note": "kort kommentar",
+      "domain": "exempel.se",
+      "sourceType": "official | report | news",
+      "sourceUrl": "https://..."
+    }
+  ],
+  "valueDrivers": [
+    {
+      "label": "Driver",
+      "direction": "positive",
+      "impactMin": 3,
+      "impactMax": 5,
+      "impactUnit": "MSEK",
+      "rationale": "kort förklaring",
+      "domain": "exempel.se",
+      "sourceType": "news | report | official",
+      "sourceUrl": "https://..."
+    }
+  ],
+  "riskDrivers": [
+    {
+      "label": "Risk",
+      "direction": "negative",
+      "impactMin": -2,
+      "impactMax": -1,
+      "impactUnit": "MSEK",
+      "rationale": "kort förklaring",
+      "domain": "exempel.se",
+      "sourceType": "news | report | official",
+      "sourceUrl": "https://..."
+    }
   ]
 }`
       }
