@@ -155,6 +155,17 @@ export default function AnalysisResultsView() {
 
   const tabs = [
     { id: 'overview', label: 'Översikt', icon: FileText },
+  const formatSekValue = (value?: string | number | null) => {
+    if (value === undefined || value === null || value === '') return null
+    if (typeof value === 'number') {
+      return new Intl.NumberFormat('sv-SE').format(value)
+    }
+    const numeric = Number(value.toString().replace(/[^\d]/g, ''))
+    if (Number.isNaN(numeric) || numeric === 0) {
+      return value
+    }
+    return new Intl.NumberFormat('sv-SE').format(numeric)
+  }
     { id: 'strengths', label: 'Styrkor', icon: Shield },
     { id: 'opportunities', label: 'Möjligheter', icon: TrendingUp },
     { id: 'risks', label: 'Risker', icon: AlertCircle },
@@ -274,34 +285,52 @@ export default function AnalysisResultsView() {
         )}
 
         {/* Key Metrics Bar */}
-        {results.keyMetrics && (
+        {(results.keyMetrics || results.revenue || results.grossProfit) && (
           <div className="bg-white rounded-xl p-6 mb-8 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-4 border border-blue-100">
-            {results.keyMetrics.industry && (
+            {results.keyMetrics?.industry && (
               <div className="text-center">
                 <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Bransch</p>
                 <p className="font-semibold">{results.keyMetrics.industry}</p>
               </div>
             )}
-            {results.keyMetrics.estimatedEmployees && (
+            {results.keyMetrics?.estimatedEmployees && (
               <div className="text-center">
                 <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Anställda</p>
                 <p className="font-semibold">{results.keyMetrics.estimatedEmployees}</p>
               </div>
             )}
-            {results.keyMetrics.location && (
+            {results.keyMetrics?.location && (
               <div className="text-center">
                 <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Plats</p>
                 <p className="font-semibold">{results.keyMetrics.location}</p>
               </div>
             )}
-            {results.keyMetrics.foundedYear && (
+            {results.keyMetrics?.foundedYear && (
               <div className="text-center">
                 <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Grundat</p>
                 <p className="font-semibold">{results.keyMetrics.foundedYear}</p>
+              </div>
+            )}
+            {results.revenue && formatSekValue(results.revenue) && (
+              <div className="text-center">
+                <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
+                <p className="text-sm text-gray-600">Omsättning (senaste år)</p>
+                <p className="font-semibold">
+                  {formatSekValue(results.revenue)} kr
+                </p>
+              </div>
+            )}
+            {results.grossProfit && formatSekValue(results.grossProfit) && (
+              <div className="text-center">
+                <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
+                <p className="text-sm text-gray-600">Bruttoresultat (senaste år)</p>
+                <p className="font-semibold">
+                  {formatSekValue(results.grossProfit)} kr
+                </p>
               </div>
             )}
           </div>
