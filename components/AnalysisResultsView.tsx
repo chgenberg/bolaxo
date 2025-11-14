@@ -58,6 +58,7 @@ export default function AnalysisResultsView() {
   const [error, setError] = useState<string | null>(null)
   const [showValuationInfo, setShowValuationInfo] = useState(false)
   const [showValuationDetails, setShowValuationDetails] = useState(false)
+  const [showCompetitors, setShowCompetitors] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -386,19 +387,37 @@ export default function AnalysisResultsView() {
 
                 {results.competitors && results.competitors.length > 0 && (
                   <div>
-                    <h3 className="text-xl font-semibold text-primary-navy mb-3">
-                      Identifierade konkurrenter
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {results.competitors.map((competitor, index) => (
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-xl font-semibold text-primary-navy">
+                        Identifierade konkurrenter
+                      </h3>
+                      <button
+                        onClick={() => setShowCompetitors((prev) => !prev)}
+                        className="text-sm text-blue-700 underline decoration-dotted flex items-center gap-1"
+                        aria-expanded={showCompetitors}
+                      >
                         <span
-                          key={index}
-                          className="px-4 py-2 bg-blue-100 rounded-full text-sm text-blue-800"
+                          className={`inline-block transform transition-transform ${
+                            showCompetitors ? 'rotate-90' : 'rotate-0'
+                          }`}
                         >
-                          {competitor}
+                          &gt;
                         </span>
-                      ))}
+                        {showCompetitors ? 'Dölj' : 'Visa'}
+                      </button>
                     </div>
+                    {showCompetitors && (
+                      <div className="flex flex-wrap gap-2">
+                        {results.competitors.map((competitor, index) => (
+                          <span
+                            key={index}
+                            className="px-4 py-2 bg-blue-100 rounded-full text-sm text-blue-800"
+                          >
+                            {competitor}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
