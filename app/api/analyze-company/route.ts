@@ -139,7 +139,7 @@ Returnera som JSON enligt detta format:
           ],
           response_format: { type: 'json_object' },
           temperature: 0.7,
-          max_tokens: 4000
+          max_tokens: 6000
         })
       })
 
