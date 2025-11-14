@@ -201,9 +201,8 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
 
               <button
                 onClick={handleAnalyze}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                className="w-full bg-primary-navy text-white py-4 rounded-lg font-semibold hover:bg-primary-navy/90 transition-all transform hover:scale-[1.02]"
               >
-                <Sparkles className="w-5 h-5" />
                 {text.button}
               </button>
 
