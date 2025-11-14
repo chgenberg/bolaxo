@@ -1818,30 +1818,30 @@ function PremiumResultMockupContent() {
           <div className="space-y-8">
             {/* Main valuation box */}
             <div className="bg-gradient-to-br from-primary-navy to-primary-navy/90 p-8 rounded-2xl text-white">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <Award className="w-8 h-8" />
-                    <h3 className="text-2xl font-bold">Professionell företagsvärdering</h3>
-                  </div>
-                  <div className="text-5xl font-bold mb-4 whitespace-nowrap">
+              <div className="flex flex-col items-center text-center gap-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Award className="w-8 h-8" />
+                  <h3 className="text-2xl font-bold text-white">Professionell företagsvärdering</h3>
+                </div>
+                <div className="text-5xl font-bold whitespace-nowrap">
                     {formatCurrency(result.valuation.range.mostLikely)}
-                  </div>
-                  <div className="text-xl opacity-90 mb-2">
-                    Intervall: <span className="whitespace-nowrap">{formatCurrency(result.valuation.range.min)}</span> - <span className="whitespace-nowrap">{formatCurrency(result.valuation.range.max)}</span>
-                  </div>
-                  <div className="flex items-center gap-4 mt-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-32 bg-white/20 rounded-full h-2">
-                        <div 
-                          className="bg-white h-2 rounded-full"
-                          style={{ width: `${result.valuation.range.confidence * 100}%` }}
-                        />
-                      </div>
-                      <span className="text-sm">
-                        {(result.valuation.range.confidence * 100).toFixed(0)}% säkerhet
-                      </span>
+                </div>
+                <div className="text-xl opacity-90">
+                  Intervall:{' '}
+                  <span className="whitespace-nowrap">{formatCurrency(result.valuation.range.min)}</span>{' '}
+                  - <span className="whitespace-nowrap">{formatCurrency(result.valuation.range.max)}</span>
+                </div>
+                <div className="flex items-center gap-4 mt-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-32 bg-white/20 rounded-full h-2">
+                      <div
+                        className="bg-white h-2 rounded-full"
+                        style={{ width: `${result.valuation.range.confidence * 100}%` }}
+                      />
                     </div>
+                    <span className="text-sm">
+                      {(result.valuation.range.confidence * 100).toFixed(0)}% säkerhet
+                    </span>
                   </div>
                 </div>
                 <div className="text-6xl opacity-20">
