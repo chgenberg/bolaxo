@@ -36,7 +36,7 @@ import {
 interface TrendPoint {
   label: string
   year?: number
-  value: number
+  value?: number
   unit?: string
   growthNote?: string
   domain?: string
@@ -47,7 +47,7 @@ interface TrendPoint {
 interface CompanyTrendPoint {
   label: string
   year?: number
-  value: number
+  value?: number
   unit?: string
   note?: string
   domain?: string
@@ -261,6 +261,7 @@ export default function AnalysisResultsView() {
     acc.push({
       label,
       year: item.year,
+      value,
       market: value,
       unit: item.unit || 'MSEK',
       sourceUrl: item.sourceUrl,
@@ -283,6 +284,7 @@ export default function AnalysisResultsView() {
     acc.push({
       label,
       year: item.year,
+      value,
       company: value,
       unit: item.unit || 'MSEK',
       sourceUrl: item.sourceUrl,
