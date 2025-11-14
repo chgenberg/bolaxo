@@ -1,5 +1,9 @@
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 
+const WEB_INSIGHTS_TIMEOUT_MS = 60000
+const WEB_INSIGHTS_MAX_ATTEMPTS = 2
+const WEB_INSIGHTS_SNIPPET_LENGTH = 800
+
 export type WebInsightFocus =
   | 'enrichment'
   | 'valuation-result'
@@ -62,37 +66,61 @@ ${schema}`
     max_output_tokens: focus === 'buyer-match' ? 600 : 900
   }
 
-  try {
-    const response = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify(payload),
-      signal: createTimeoutSignal(30000)
-    })
+  let lastError: unknown = null
 
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => '')
-      console.error('OpenAI web_search error:', response.status, errorText)
-      return null
+  for (let attempt = 1; attempt <= WEB_INSIGHTS_MAX_ATTEMPTS; attempt++) {
+    try {
+      const response = await fetch('https://api.openai.com/v1/responses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify(payload),
+        signal: createTimeoutSignal(WEB_INSIGHTS_TIMEOUT_MS)
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => '')
+        console.error(
+          `OpenAI web_search error (attempt ${attempt}/${WEB_INSIGHTS_MAX_ATTEMPTS}):`,
+          response.status,
+          errorText
+        )
+        lastError = new Error(errorText || `HTTP ${response.status}`)
+        continue
+      }
+
+      const json = await response.json()
+      const text = extractTextFromResponses(json)
+      if (!text) {
+        console.warn(`OpenAI web_search: tomt textblock (försök ${attempt})`)
+        continue
+      }
+
+      const parsed = tryParseWebInsightsJson(text)
+      if (parsed) {
+        return parsed
+      }
+
+      console.warn(
+        `OpenAI web_search: kunde inte tolka JSON (försök ${attempt}).`,
+        text.slice(0, WEB_INSIGHTS_SNIPPET_LENGTH)
+      )
+    } catch (error) {
+      lastError = error
+      console.error(
+        `fetchWebInsights error (attempt ${attempt}/${WEB_INSIGHTS_MAX_ATTEMPTS}):`,
+        error
+      )
     }
-
-    const json = await response.json()
-    const text = extractTextFromResponses(json)
-    if (!text) return null
-
-    const cleaned = text
-      .replace(/```json/gi, '')
-      .replace(/```/g, '')
-      .trim()
-
-    return JSON.parse(cleaned)
-  } catch (error) {
-    console.error('fetchWebInsights error:', error)
-    return null
   }
+
+  if (lastError) {
+    console.error('fetchWebInsights gav upp efter flera försök:', lastError)
+  }
+
+  return null
 }
 
 function extractTextFromResponses(responseJson: any): string | null {
@@ -116,6 +144,33 @@ function extractTextFromResponses(responseJson: any): string | null {
     }
   } catch (error) {
     console.error('extractTextFromResponses error:', error)
+  }
+
+  return null
+}
+
+function tryParseWebInsightsJson(raw: string) {
+  const cleaned = raw
+    .replace(/```json/gi, '')
+    .replace(/```/g, '')
+    .trim()
+
+  const candidates: string[] = []
+  if (cleaned) {
+    candidates.push(cleaned)
+    const firstBrace = cleaned.indexOf('{')
+    const lastBrace = cleaned.lastIndexOf('}')
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      candidates.push(cleaned.slice(firstBrace, lastBrace + 1))
+    }
+  }
+
+  for (const candidate of candidates) {
+    try {
+      return JSON.parse(candidate)
+    } catch (error) {
+      // continue to next candidate
+    }
   }
 
   return null
