@@ -154,8 +154,6 @@ export default function AnalysisResultsView() {
     )
   }
 
-  const tabs = [
-    { id: 'overview', label: 'Översikt', icon: FileText },
   const formatSekValue = (value?: string | number | null) => {
     if (value === undefined || value === null || value === '') return null
     if (typeof value === 'number') {
@@ -167,6 +165,9 @@ export default function AnalysisResultsView() {
     }
     return new Intl.NumberFormat('sv-SE').format(numeric)
   }
+
+  const tabs = [
+    { id: 'overview', label: 'Översikt', icon: FileText },
     { id: 'strengths', label: 'Styrkor', icon: Shield },
     { id: 'opportunities', label: 'Möjligheter', icon: TrendingUp },
     { id: 'risks', label: 'Risker', icon: AlertCircle },
