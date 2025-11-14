@@ -250,8 +250,7 @@ export default function AnalysisResultsView() {
   type CompanyTrendMappedPoint = CompanyTrendPoint & { company: number }
 
   const industryTrendPoints: IndustryTrendPoint[] =
-    results.industryTrend
-      ?.map((item, index) => {
+    (results.industryTrend?.map((item, index) => {
         if (!item) return null
         const value = parseNumericValue(item.value)
         if (value === null) return null
@@ -268,14 +267,12 @@ export default function AnalysisResultsView() {
           sourceType: item.sourceType,
           growthNote: item.growthNote
         }
-      })
-      .filter(
-        (point): point is IndustryTrendPoint => point !== null && typeof point.label === 'string'
-      ) ?? []
+      }) ?? []).filter(
+      (point): point is IndustryTrendPoint => point !== null && typeof point.label === 'string'
+    )
 
   const companyTrendPoints: CompanyTrendMappedPoint[] =
-    results.companyTrend
-      ?.map((item, index) => {
+    (results.companyTrend?.map((item, index) => {
         if (!item) return null
         const value = parseNumericValue(item.value)
         if (value === null) return null
@@ -292,11 +289,10 @@ export default function AnalysisResultsView() {
           sourceType: item.sourceType,
           note: item.note
         }
-      })
-      .filter(
-        (point): point is CompanyTrendMappedPoint =>
-          point !== null && typeof point.label === 'string'
-      ) ?? []
+      }) ?? []).filter(
+      (point): point is CompanyTrendMappedPoint =>
+        point !== null && typeof point.label === 'string'
+    )
 
   const trendLabelSet = new Set<string>()
   const trendChartData: Array<{
