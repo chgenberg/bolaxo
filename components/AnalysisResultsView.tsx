@@ -291,7 +291,7 @@ export default function AnalysisResultsView() {
         {/* Tabs */}
         <div className="bg-white rounded-xl shadow-sm mb-8 border border-blue-100">
           <div className="border-b">
-            <div className="flex overflow-x-auto">
+            <div className="flex overflow-x-auto justify-center">
               {tabs.map((tab) => {
                 const Icon = tab.icon
                 return (
