@@ -6,7 +6,7 @@ const ANALYSIS_TTL_MS = 1000 * 60 * 60 * 24 // 24 hours
 
 export async function POST(request: Request) {
   try {
-    const { companyName, domain, locale } = await request.json()
+    const { companyName, domain, locale, revenue, grossProfit } = await request.json()
 
     if (!companyName) {
       return NextResponse.json(
@@ -40,6 +40,9 @@ ${domain ? `Domän: ${domain}` : ''}
 Webdata:
 ${JSON.stringify(webSearchData, null, 2)}
 
+${revenue ? `Omsättning förra året: ${revenue} kr` : ''}
+${grossProfit ? `Bruttoresultat förra året: ${grossProfit} kr` : ''}
+
 Skapa en strukturerad analys med följande sektioner:
 
 1. SAMMANFATTNING (2-3 meningar som beskriver företaget och dess position)
@@ -58,6 +61,13 @@ Skapa en strukturerad analys med följande sektioner:
 
 8. NYCKELDATA (om tillgängligt: bransch, antal anställda, plats, grundat år)
 
+9. VÄRDERINGSESTIMAT - MYCKET VIKTIGT!
+Baserat på branschdata, omsättningssiffror (om angivna), konkurrenssituation och övrig information:
+- Gör en uppskattning av företagets värde
+- Använd multiplar för branschen om möjligt (t.ex. omsättning x branschmultipel)
+- Om omsättning saknas, gör en kvalificerad gissning baserat på företagsstorlek och bransch
+- Ange ett värdeintervall (min-max) i SEK
+
 Returnera som JSON enligt detta format:
 {
   "summary": "sammanfattning",
@@ -72,6 +82,11 @@ Returnera som JSON enligt detta format:
     "estimatedEmployees": "antal eller intervall om känt",
     "location": "huvudkontor om känt",
     "foundedYear": "år om känt"
+  },
+  "valuation": {
+    "minValue": nummer i SEK,
+    "maxValue": nummer i SEK,
+    "methodology": "kort förklaring av beräkningsmetod"
   }
 }`
 
@@ -124,7 +139,7 @@ Returnera som JSON enligt detta format:
           ],
           response_format: { type: 'json_object' },
           temperature: 0.7,
-          max_tokens: 2000
+          max_tokens: 4000
         })
       })
 
@@ -140,6 +155,8 @@ Returnera som JSON enligt detta format:
     const resultPayload = {
       companyName,
       domain,
+      revenue,
+      grossProfit,
       ...finalAnalysis,
       sources: sources.slice(0, 5)
     }
@@ -148,6 +165,8 @@ Returnera som JSON enligt detta format:
       data: {
         companyName: companyName.trim(),
         domain: domain?.trim(),
+        revenue: revenue?.trim(),
+        grossProfit: grossProfit?.trim(),
         locale,
         result: resultPayload,
         expiresAt: new Date(Date.now() + ANALYSIS_TTL_MS)

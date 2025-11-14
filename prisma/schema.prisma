@@ -256,6 +256,8 @@ model InstantAnalysis {
   companyName String
   domain      String?
   orgNumber   String?
+  revenue     String?
+  grossProfit String?
   locale      String?
   result      Json
   createdAt   DateTime @default(now())

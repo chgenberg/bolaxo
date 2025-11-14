@@ -83,6 +83,8 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
   }, [locale])
   const [companyName, setCompanyName] = useState('')
   const [domain, setDomain] = useState('')
+  const [revenue, setRevenue] = useState('')
+  const [grossProfit, setGrossProfit] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
@@ -116,6 +118,8 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
         body: JSON.stringify({
           companyName: companyName.trim(),
           domain: domain.trim(),
+          revenue: revenue.trim(),
+          grossProfit: grossProfit.trim(),
           locale
         })
       })
@@ -189,6 +193,32 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
                   value={domain}
                   onChange={(e) => setDomain(e.target.value)}
                   placeholder={text.placeholders.domain}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Omsättning förra året (kr)
+                </label>
+                <input
+                  type="text"
+                  value={revenue}
+                  onChange={(e) => setRevenue(e.target.value)}
+                  placeholder="10 000 000"
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Bruttoresultat förra året (kr)
+                </label>
+                <input
+                  type="text"
+                  value={grossProfit}
+                  onChange={(e) => setGrossProfit(e.target.value)}
+                  placeholder="3 000 000"
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>

@@ -21,6 +21,8 @@ import {
 interface AnalysisResults {
   companyName: string
   domain?: string
+  revenue?: string
+  grossProfit?: string
   summary: string
   strengths: string[]
   opportunities: string[]
@@ -34,6 +36,11 @@ interface AnalysisResults {
     location?: string
     industry?: string
     foundedYear?: string
+  }
+  valuation?: {
+    minValue: number
+    maxValue: number
+    methodology: string
   }
 }
 
@@ -173,6 +180,33 @@ export default function AnalysisResultsView() {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Valuation Box - Show at top if available */}
+        {results.valuation && (
+          <div className="bg-primary-navy rounded-2xl p-8 mb-8 shadow-lg text-center">
+            <h2 className="text-2xl font-bold text-white mb-2">Uppskattad företagsvärdering</h2>
+            <div className="flex items-center justify-center gap-4 text-white mb-4">
+              <span className="text-4xl font-bold">
+                {new Intl.NumberFormat('sv-SE', { 
+                  style: 'currency', 
+                  currency: 'SEK',
+                  maximumFractionDigits: 0
+                }).format(results.valuation.minValue)}
+              </span>
+              <span className="text-2xl">-</span>
+              <span className="text-4xl font-bold">
+                {new Intl.NumberFormat('sv-SE', { 
+                  style: 'currency', 
+                  currency: 'SEK',
+                  maximumFractionDigits: 0
+                }).format(results.valuation.maxValue)}
+              </span>
+            </div>
+            <p className="text-white/80 text-sm max-w-2xl mx-auto">
+              {results.valuation.methodology}
+            </p>
+          </div>
+        )}
+
         {/* Key Metrics Bar */}
         {results.keyMetrics && (
           <div className="bg-white rounded-xl p-6 mb-8 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-4 border border-blue-100">
