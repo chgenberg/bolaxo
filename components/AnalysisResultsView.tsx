@@ -15,7 +15,9 @@ import {
   Sparkles,
   FileText,
   Users,
-  Globe
+  Globe,
+  HelpCircle,
+  X
 } from 'lucide-react'
 
 interface AnalysisResults {
@@ -54,6 +56,7 @@ export default function AnalysisResultsView() {
   const [results, setResults] = useState<AnalysisResults | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showValuationInfo, setShowValuationInfo] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -204,6 +207,50 @@ export default function AnalysisResultsView() {
             <p className="text-white/80 text-sm max-w-2xl mx-auto">
               {results.valuation.methodology}
             </p>
+            <button
+              onClick={() => setShowValuationInfo(true)}
+              className="mt-4 text-white/70 hover:text-white transition-colors"
+              aria-label="Mer information om värderingen"
+            >
+              <HelpCircle className="w-6 h-6" />
+            </button>
+          </div>
+        )}
+
+        {/* Valuation Info Modal */}
+        {showValuationInfo && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl transform transition-all">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-bold text-primary-navy">Om värderingen</h3>
+                  <button
+                    onClick={() => setShowValuationInfo(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <p className="text-gray-600 mb-6">
+                  Detta är en generell uppskattning baserat på offentlig information och branschdata. 
+                  För en mer noggrann och detaljerad företagsvärdering rekommenderar vi vår kompletta 
+                  värderingstjänst som inkluderar:
+                </p>
+                <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+                  <li>Djupgående finansiell analys</li>
+                  <li>Branschspecifika multiplar</li>
+                  <li>Kassaflödesanalys</li>
+                  <li>Riskbedömning</li>
+                  <li>Professionell värderingsrapport</li>
+                </ul>
+                <Link
+                  href={`/${locale}/vardering`}
+                  className="block w-full bg-primary-navy text-white py-3 rounded-lg font-semibold text-center hover:bg-primary-navy/90 transition-all"
+                >
+                  Få en komplett värdering
+                </Link>
+              </div>
+            </div>
           </div>
         )}
 
