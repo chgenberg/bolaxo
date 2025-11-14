@@ -148,14 +148,14 @@ export default function AnalyzeLandingPage() {
           {text.features.map((feature) => (
             <div
               key={feature.title}
-              className="relative p-8 rounded-2xl bg-primary-navy text-white transition-all duration-500 hover:bg-primary-navy/90"
+              className="relative p-8 rounded-2xl bg-white text-primary-navy shadow-xl transition-all duration-500 hover:shadow-2xl"
             >
-              <div className="absolute inset-0 rounded-2xl border border-white/10 pointer-events-none" />
+              <div className="absolute inset-0 rounded-2xl border border-primary-navy/10 pointer-events-none" />
               <div className="relative z-10 space-y-3">
                 <h3 className="text-xl font-bold">
                   {feature.title}
                 </h3>
-                <p className="text-white/90">
+                <p className="text-gray-600">
                   {feature.description}
                 </p>
               </div>

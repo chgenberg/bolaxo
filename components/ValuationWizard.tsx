@@ -621,7 +621,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
             <div className="mb-6">
               <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-primary-navy to-accent-pink h-full rounded-full transition-all duration-300 ease-out"
+                  className="bg-primary-navy h-full rounded-full transition-all duration-300 ease-out"
                   style={{ width: `${loadingProgress}%` }}
                 />
               </div>
@@ -666,7 +666,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
                 className="h-full transition-all duration-300 ease-out rounded-full"
                 style={{ 
                   width: `${progress}%`,
-                  backgroundColor: '#FF69B4'
+                  backgroundColor: '#1F3C58'
                 }}
               />
             </div>
