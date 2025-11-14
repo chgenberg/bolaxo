@@ -1563,20 +1563,35 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               
               <button
                 onClick={handleNext}
-                disabled={isSubmitting || (currentStep === 8 && !acceptedPrivacy)}
+                disabled={
+                  isSubmitting ||
+                  (currentStep === 8 && !acceptedPrivacy) ||
+                  (currentStep === 1 && isEnriching)
+                }
                 className={`
                   flex items-center px-8 py-3 rounded-lg font-medium transition-all
                   ${currentStep === steps.length 
                     ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700' 
                     : 'bg-primary-navy text-white hover:bg-primary-navy/90'
                   }
-                  ${(isSubmitting || (currentStep === 8 && !acceptedPrivacy)) ? 'opacity-50 cursor-not-allowed' : ''}
+                  ${
+                    isSubmitting ||
+                    (currentStep === 8 && !acceptedPrivacy) ||
+                    (currentStep === 1 && isEnriching)
+                      ? 'opacity-50 cursor-not-allowed'
+                      : ''
+                  }
                 `}
               >
                 {isSubmitting ? (
                   <>
                     <Sparkles className="w-5 h-5 mr-2 animate-spin" />
                     Genererar värdering...
+                  </>
+                ) : currentStep === 1 && isEnriching ? (
+                  <>
+                    <Sparkles className="w-5 h-5 mr-2 animate-spin" />
+                    Hämtar företagsdata...
                   </>
                 ) : currentStep === steps.length ? (
                   <>
