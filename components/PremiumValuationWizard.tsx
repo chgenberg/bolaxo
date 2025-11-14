@@ -714,6 +714,26 @@ export default function PremiumValuationWizard({
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
 
+  useEffect(() => {
+    if (!initialData) return
+    setFormData((prev: any) => {
+      let changed = false
+      const updated = { ...prev }
+      Object.entries(initialData).forEach(([key, value]) => {
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== '' &&
+          (updated[key] === undefined || updated[key] === null || updated[key] === '')
+        ) {
+          updated[key] = value
+          changed = true
+        }
+      })
+      return changed ? updated : prev
+    })
+  }, [initialData])
+
   // Auto-save every 30 seconds (endast om inte demo)
   useEffect(() => {
     if (isDemo) return // Ingen auto-save i demo-läge

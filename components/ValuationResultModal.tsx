@@ -10,6 +10,7 @@ import {
 import PurchasePremiumValuationModal from './PurchasePremiumValuationModal'
 import MockStripeCheckout from './MockStripeCheckout'
 import type { PaymentData } from './MockStripeCheckout'
+import { mapFreeValuationToPremium } from '@/lib/premiumPrefill'
 
 interface ValuationResultModalProps {
   result: any
@@ -38,10 +39,13 @@ export default function ValuationResultModal({
   }
 
   const handlePaymentSuccess = async (paymentData: PaymentData) => {
+    const prefilledData = mapFreeValuationToPremium(inputData)
+
     // Spara betalningsinformation och navigera till djupgående analys
     localStorage.setItem('premiumPurchase', JSON.stringify({
       ...paymentData,
-      inputData,
+      inputData: prefilledData,
+      originalInput: inputData,
       purchaseDate: new Date().toISOString()
     }))
 

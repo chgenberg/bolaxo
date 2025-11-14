@@ -11,6 +11,7 @@ import PurchasePremiumValuationModal from '@/components/PurchasePremiumValuation
 import MockStripeCheckout from '@/components/MockStripeCheckout'
 import type { PaymentData } from '@/components/MockStripeCheckout'
 import dynamic from 'next/dynamic'
+import { mapFreeValuationToPremium } from '@/lib/premiumPrefill'
 
 // Dynamisk import av PDF-komponenten för att undvika SSR-problem
 const ValuationPDF = dynamic(() => import('@/components/ValuationPDF'), { ssr: false })
@@ -303,10 +304,13 @@ function ValuationResultContent() {
   }
 
   const handlePaymentSuccess = async (paymentData: PaymentData) => {
+    const prefilledData = mapFreeValuationToPremium(valuationData)
+
     // Spara betalningsinformation och navigera till djupgående analys
     localStorage.setItem('premiumPurchase', JSON.stringify({
       ...paymentData,
-      inputData: valuationData,
+      inputData: prefilledData,
+      originalInput: valuationData,
       purchaseDate: new Date().toISOString()
     }))
 
