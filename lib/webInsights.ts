@@ -26,13 +26,15 @@ export async function fetchWebInsights({
     return null
   }
 
-  const baseInstructions = `Du är en svensk företagsanalytiker.
+const baseInstructions = `Du är en svensk företagsanalytiker.
 Du använder OpenAI web_search-verktyget för att hämta kontrollerbar information om ett svenskt bolag.
 Var alltid källkritisk, ange endast fakta som går att verifiera.
 Om du inte hittar något, lämna fält som null.
 
 Regler:
-- Prioritera bolagets officiella webbplats, nyhetsartiklar, affärsdatabaser.
+- Prioritera externa och oberoende källor (nyhetsmedier, branschportaler, databaser, forum, recensioner). Använd företagets egna kanaler endast om du saknar oberoende källor.
+- Varje källa i utdata måste innehålla fälten "domain" (exempel: di.se) och "sourceType" (t.ex. news, review, blog, forum, social, official).
+- Ange aldrig samma domän mer än en gång i utdata – välj alltid nästa relevanta källa om du redan använt en domän.
 - Ange inga spekulationer.
 - Returnera ENBART JSON enligt efterfrågat schema. Inga kommentarer.`
 
@@ -132,6 +134,8 @@ Fokusera på marknadssignaler, konkurrenter och relevanta nyheter från senaste 
     {
       "headline": "Rubrik",
       "source": "Källa",
+      "domain": "exempel.se",
+      "sourceType": "news | blog | review | forum | social | official",
       "url": "https://...",
       "tone": "positive | neutral | negative"
     }
@@ -155,7 +159,7 @@ Fokusera på kundnytta, USP och vilka typer av köpare som kan vara intresserade
   "proofPoints": ["Exempel eller social proof"],
   "riskNotes": ["Eventuella varningar eller tom array"],
   "sourceLinks": [
-    { "label": "Kort källa", "url": "https://..." }
+    { "label": "Kort källa", "url": "https://...", "domain": "exempel.se", "sourceType": "news | review | blog | forum | social | official" }
   ]
 }`
       }
@@ -169,7 +173,7 @@ Inkludera viktiga positiva signaler och eventuella varningsflaggor.`,
   "riskFlag": "Kort riskbeskrivning eller null",
   "suggestedQuestion": "En kvalificerad fråga att ställa säljaren",
   "sourceLinks": [
-    { "label": "Källa", "url": "https://..." }
+    { "label": "Källa", "url": "https://...", "domain": "exempel.se", "sourceType": "news | review | blog | forum | social | official" }
   ]
 }`
       }
@@ -198,7 +202,7 @@ Fokusera på hårda fakta som omsättning, anställda, USP:er, kontaktinfo.`,
   "rawWebData": {
     "mainWebsite": "använd URL om hämtad",
     "notableSources": [
-      { "label": "källa", "url": "https://..." }
+      { "label": "källa", "url": "https://...", "domain": "exempel.se", "sourceType": "news | review | blog | forum | social | official" }
     ],
     "notes": "kort teknisk kommentar"
   }
@@ -222,7 +226,7 @@ Fokusera på fakta om affärsmodell, kunder, tillväxt, risker, nyckeltal och ny
   "riskNotes": ["risk 1"],
   "notableActivities": ["projekt, expansioner, affärer"],
   "sources": [
-    { "title": "Källa", "url": "https://...", "snippet": "kort citat" }
+    { "title": "Källa", "url": "https://...", "domain": "exempel.se", "sourceType": "news | review | blog | forum | social | official", "snippet": "kort citat" }
   ]
 }`
       }
