@@ -258,6 +258,174 @@ const qualitativeQuestions = [
   { key: 'whySelling', label: 'Går du i säljtankar? Varför?', type: 'textarea' as const },
 ]
 
+const defaultQualitativeAnswers: Record<string, string> = {
+  customerBase: 'Stabila B2B-kunder med långa kontrakt och låg churn.',
+  competitiveAdvantage: 'Egen teknikplattform, starkt varumärke och dokumenterade processer.',
+  futureGrowth: 'Planerar expansion till Norden, stärker partnerförsäljning och utvecklar nya premiumtjänster.',
+  challenges: 'Behov av fler säljare, minska nyckelperson-risk och uppdatera äldre system.',
+  whySelling: 'Ägarna vill ta in strategisk partner för att accelerera expansionen.',
+}
+
+type DemoCompany = {
+  label: string
+  data: Partial<ValuationData>
+  industryAnswers?: Record<string, string>
+  qualitative?: Record<string, string>
+}
+
+const demoCompanies: DemoCompany[] = [
+  {
+    label: 'Nimbus Analytics (SaaS)',
+    data: {
+      email: 'demo+saas@bolaxo.se',
+      companyName: 'Nimbus Analytics AB',
+      website: 'https://nimbusanalytics.se',
+      orgNumber: '5591234567',
+      industry: 'tech',
+      companyAge: '8',
+      revenue: '42000000',
+      revenue3Years: '36000000',
+      profitMargin: '18',
+      employees: '32',
+      grossMargin: '72',
+      customerConcentrationRisk: '28',
+      regulatoryLicenses: 'yes',
+      totalDebt: '2500000',
+      paymentTerms: '31-45',
+      exactRevenue: '42000000',
+      operatingCosts: '28000000',
+      cogs: '11800000',
+      salaries: '15000000',
+      marketingCosts: '3200000',
+      rentCosts: '900000',
+      otherOperatingCosts: '2500000'
+    },
+    industryAnswers: {
+      businessModel: 'saas',
+      recurringRevenue: '88',
+      monthlyRecurringRevenue: '3500000',
+      customerChurn: '4',
+      netRevenueRetention: '118',
+      customerAcquisitionCost: '85000',
+      lifetimeValue: '640000',
+      cacPaybackMonths: '7-12',
+      techStack: 'React, Node.js, AWS serverless',
+      scalability: 'high',
+      ipRights: 'yes'
+    },
+    qualitative: {
+      customerBase: '120 enterprise-kunder inom logistik och detaljhandel med 3-åriga avtal.',
+      competitiveAdvantage: 'Prediktiva AI-modeller, ISO 27001 och 98% kundförnyelse.',
+      futureGrowth: 'Lanserar modul för DACH-marknaden och stärker partnernätverk.',
+      challenges: 'Behöver rekrytera två seniora säljare och minska beroende av CTO.',
+      whySelling: 'Grundarna söker kapital för internationell expansion inom 18 månader.'
+    }
+  },
+  {
+    label: 'Nordic Retail Group',
+    data: {
+      email: 'demo+retail@bolaxo.se',
+      companyName: 'Nordic Retail Group AB',
+      website: 'https://nordicretailgroup.se',
+      orgNumber: '5569876543',
+      industry: 'retail',
+      companyAge: '12',
+      revenue: '28000000',
+      revenue3Years: '24000000',
+      profitMargin: '12',
+      employees: '24',
+      grossMargin: '46',
+      customerConcentrationRisk: '15',
+      regulatoryLicenses: 'partial',
+      totalDebt: '1200000',
+      paymentTerms: '16-30',
+      exactRevenue: '28000000',
+      operatingCosts: '21000000',
+      cogs: '15120000',
+      salaries: '7800000',
+      marketingCosts: '1200000',
+      rentCosts: '1500000',
+      otherOperatingCosts: '1800000'
+    },
+    industryAnswers: {
+      storeLocation: 'good',
+      leaseLength: '4-5',
+      monthlyRent: '125000',
+      footTraffic: '201-500',
+      avgTransactionSize: '780',
+      inventoryTurnover: '5-6',
+      inventoryValue: '4500000',
+      sameStoreSalesGrowth: '9',
+      onlinePresence: 'yes-integrated',
+      brandStrength: 'medium'
+    },
+    qualitative: {
+      customerBase: 'Butikskedja i tre storstäder med hög andel återkommande kunder.',
+      competitiveAdvantage: 'Egen produktdesign, stark community och hög servicegrad.',
+      futureGrowth: 'Öppnar pop-up stores, skalbar e-handel och B2B-samarbeten.',
+      challenges: 'Ökade hyror och behov av bättre lagerplanering över säsong.',
+      whySelling: 'Ägarna vill ta in kapital för fler etableringar samt internationell närvaro.'
+    }
+  },
+  {
+    label: 'CityCare Kliniken',
+    data: {
+      email: 'demo+care@bolaxo.se',
+      companyName: 'CityCare Kliniken AB',
+      website: 'https://citycarekliniken.se',
+      orgNumber: '5561122334',
+      industry: 'healthcare',
+      companyAge: '9',
+      revenue: '18000000',
+      revenue3Years: '15000000',
+      profitMargin: '22',
+      employees: '18',
+      grossMargin: '58',
+      customerConcentrationRisk: '12',
+      regulatoryLicenses: 'yes',
+      totalDebt: '600000',
+      paymentTerms: '0-15',
+      exactRevenue: '18000000',
+      operatingCosts: '12500000',
+      cogs: '7560000',
+      salaries: '6800000',
+      marketingCosts: '800000',
+      rentCosts: '1100000',
+      otherOperatingCosts: '900000'
+    },
+    industryAnswers: {
+      patientBase: '6200',
+      avgRevenuePerPatient: '2900',
+      appointmentCapacity: '320',
+      insuranceRevenue: '55',
+      privatePayShare: '45',
+      staffingModel: 'mixed',
+      equipmentInvestment: '2400000',
+      regulatoryCompliance: 'IVO-tillstånd, ISO 13485 samt regionavtal'
+    },
+    qualitative: {
+      customerBase: 'Primärt privatanställda patienter med abonnemang och företagsavtal.',
+      competitiveAdvantage: 'Multidisciplinärt team, kort väntetid och helhetskoncept.',
+      futureGrowth: 'Öppnar satellitklinik i Malmö och digital vårdplattform.',
+      challenges: 'Behöver säkra fler specialister och automatisera patientflöden.',
+      whySelling: 'Vill ta in investerare för att accelerera expansion och stärka varumärket.'
+    }
+  }
+]
+
+function getDefaultValueForQuestion(question: { type: 'text' | 'select' | 'textarea'; options?: { value: string; label: string }[]; fieldType?: 'currency' | 'percent' }) {
+  if (question.type === 'select') {
+    return question.options?.[0]?.value || ''
+  }
+  if (question.fieldType === 'percent') {
+    return '50'
+  }
+  if (question.fieldType === 'currency') {
+    return '500000'
+  }
+  return 'Ej angivet'
+}
+
 // Formateringsfunktioner
 const formatCurrency = (value: string): string => {
   // Ta bort allt utom siffror
@@ -315,6 +483,7 @@ export default function ValuationWizard({ onClose }: WizardProps) {
   const [loadingText, setLoadingText] = useState(t('loading.analyzing'))
   const [showOrgNumberTooltip, setShowOrgNumberTooltip] = useState(false)
   const cogsManuallySetRef = useRef(false)
+  const [autoFillMessage, setAutoFillMessage] = useState<string | null>(null)
 
   const totalSteps = 6
   const progress = (step / totalSteps) * 100
@@ -409,6 +578,40 @@ export default function ValuationWizard({ onClose }: WizardProps) {
     }
   }
 
+  const handleFillDemoData = () => {
+    const demo = demoCompanies[Math.floor(Math.random() * demoCompanies.length)]
+    if (!demo) return
+    const industryValue = demo.data.industry || data.industry || 'tech'
+    const filledData: ValuationData = {
+      ...data,
+      ...demo.data,
+      industry: industryValue
+    }
+
+    const questions = industryQuestions[industryValue] || []
+    questions.forEach((question) => {
+      const demoValue = demo.industryAnswers?.[question.key]
+      if (demoValue !== undefined) {
+        filledData[question.key] = demoValue
+      } else if (!filledData[question.key]) {
+        filledData[question.key] = getDefaultValueForQuestion(question)
+      }
+    })
+
+    qualitativeQuestions.forEach((question) => {
+      const key = question.key
+      const demoValue = demo.qualitative?.[key]
+      if (!filledData[key]) {
+        filledData[key] = demoValue ?? defaultQualitativeAnswers[key] ?? 'Ej angivet'
+      }
+    })
+
+    setData(filledData)
+    setAcceptedPrivacy(true)
+    setAutoFillMessage(`Fyllde i ${demo.label}`)
+    setEnrichmentStatus('')
+  }
+
   const handleNext = () => {
     // Om steg 1 och vi har URL/org.nr, berika data först
     if (step === 1 && (data.website || data.orgNumber) && !isEnriching && !enrichmentStatus) {
@@ -422,6 +625,12 @@ export default function ValuationWizard({ onClose }: WizardProps) {
       handleSubmit()
     }
   }
+
+  useEffect(() => {
+    if (!autoFillMessage) return
+    const timer = setTimeout(() => setAutoFillMessage(null), 5000)
+    return () => clearTimeout(timer)
+  }, [autoFillMessage])
 
   // Auto-fetch company data when org number is entered (like in SME kit)
   useEffect(() => {
@@ -638,22 +847,38 @@ export default function ValuationWizard({ onClose }: WizardProps) {
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-3xl h-[95vh] sm:h-[90vh] md:h-[85vh] flex flex-col">
         {/* Header - Fixed */}
         <div className="px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-3 sm:pb-4 border-b border-gray-100 flex-shrink-0">
-          <div className="flex items-start justify-between">
-          <div className="flex-1 mr-2">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 mr-2">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold" style={{ color: '#1F3C58' }}>
                 {t('title')}
               </h2>
               <p className="text-xs sm:text-sm md:text-base mt-1" style={{ color: '#666666' }}>
                 {t('subtitle')}
               </p>
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              {autoFillMessage && (
+                <span className="text-xs text-green-700">{autoFillMessage}</span>
+              )}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleFillDemoData}
+                  disabled={isSubmitting}
+                  className="px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors disabled:opacity-50"
+                  style={{ borderColor: '#1F3C58', color: '#1F3C58' }}
+                >
+                  Fyll med demo-data
+                </button>
+                <button
+                  onClick={onClose}
+                  className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="w-4 sm:w-5 h-4 sm:h-5 text-gray-400 hover:text-gray-600" />
+                </button>
+              </div>
+            </div>
           </div>
-          <button
-            onClick={onClose}
-              className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-              <X className="w-4 sm:w-5 h-4 sm:h-5 text-gray-400 hover:text-gray-600" />
-          </button>
-        </div>
 
         {/* Progress Bar */}
           <div className="mt-3 sm:mt-4">
