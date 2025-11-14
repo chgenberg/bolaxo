@@ -31,16 +31,16 @@ const copy = {
     howItWorksTitle: 'Så fungerar det',
     steps: [
       {
-        title: 'Ange företagsuppgifter',
-        description: 'Fyll bara i företagsnamn och eventuell webbadress - inget mer krävs.'
+        title: 'Lämna grunduppgifter',
+        description: 'Skriv in företagsnamn, domän och gärna omsättning samt bruttoresultat från senaste året – det gör värderingen mer träffsäker.'
       },
       {
-        title: 'AI-driven webbanalys',
-        description: 'Vår avancerade AI söker igenom sökmotorer, branschsidor, recensioner och mer för att samla in relevant information.'
+        title: 'AI + web search arbetar',
+        description: 'GPT-5 kombinerar web search, öppna källor och dina siffror för att förstå marknadsposition, styrkor, risker och konkurrenter.'
       },
       {
-        title: 'Få din rapport',
-        description: 'Inom några minuter får du en omfattande analys med insikter och rekommendationer för ditt företag.'
+        title: 'Få värdering och insikter',
+        description: 'På några minuter får du ett värderingsintervall, rekommendationer och en handlingsplan baserad på allt som hittats.'
       }
     ],
     finalTitle: 'Redo att upptäcka ditt företags potential?',
@@ -71,16 +71,16 @@ const copy = {
     howItWorksTitle: 'How it works',
     steps: [
       {
-        title: 'Provide company details',
-        description: 'Just enter your company name and optional website – nothing else is required.'
+        title: 'Share core details',
+        description: 'Enter your company name, domain and—if available—last year’s revenue and gross profit to sharpen the valuation.'
       },
       {
-        title: 'AI-powered web analysis',
-        description: 'Our advanced AI scans search engines, industry sites, reviews and more to collect relevant information.'
+        title: 'AI + web search in action',
+        description: 'GPT-5 blends web search, public sources and your figures to map strengths, risks, competitors and market signals.'
       },
       {
-        title: 'Get your report',
-        description: 'Within minutes you’ll receive a comprehensive analysis with insights and recommendations for your business.'
+        title: 'Receive valuation & insights',
+        description: 'Within minutes you get a valuation range plus tailored recommendations and an action plan based on the findings.'
       }
     ],
     finalTitle: 'Ready to discover your company’s potential?',
