@@ -149,31 +149,17 @@ export default function AnalyzeLandingPage() {
           {[TrendingUp, Shield, Target].map((Icon, index) => (
             <div
               key={text.features[index].title}
-              className={`group relative p-8 rounded-2xl transition-all duration-500 cursor-pointer ${
-                index === 0
-                  ? 'bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200'
-                  : index === 1
-                  ? 'bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200'
-                  : 'bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-200'
-              }`}
+              className="group relative p-8 rounded-2xl bg-primary-navy text-white transition-all duration-500 cursor-pointer hover:bg-primary-navy/90"
             >
-              <div
-                className={`absolute inset-0 rounded-2xl animate-pulse-bg ${
-                  index === 0 ? 'bg-blue-500/10' : index === 1 ? 'bg-purple-500/10' : 'bg-pink-500/10'
-                }`}
-              />
+              <div className="absolute inset-0 rounded-2xl border border-white/10 pointer-events-none" />
               <div className="relative z-10">
-                <div
-                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${
-                    index === 0 ? 'bg-blue-500' : index === 1 ? 'bg-purple-500' : 'bg-pink-500'
-                  }`}
-                >
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-white/20 group-hover:scale-110 transition-transform">
                   <Icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-primary-navy mb-3">
+                <h3 className="text-xl font-bold mb-3">
                   {text.features[index].title}
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-white/90">
                   {text.features[index].description}
                 </p>
               </div>
