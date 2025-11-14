@@ -197,6 +197,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [draftValuationId, setDraftValuationId] = useState<string | null>(null)
   const lastEnrichedOrgNumber = useRef<string | null>(null)
+  const lastEnrichedCompanyName = useRef<string | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [valuationResult, setValuationResult] = useState<any>(null)
   
@@ -325,8 +326,17 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
       sanitizedOrgNumber && sanitizedOrgNumber.length === 12
         ? sanitizedOrgNumber.slice(-10)
         : sanitizedOrgNumber
-    
-    if (isEnriching || (!normalizedOrgNumber && !data.website)) return
+
+    // Vi tillåter enrichment om vi har antingen:
+    // - ett giltigt orgnr (10 siffror)
+    // - en webbplats
+    // - eller ett företagsnamn (minst 3 tecken)
+    const hasIdentifier =
+      (normalizedOrgNumber && normalizedOrgNumber.length === 10) ||
+      !!data.website ||
+      !!(data.companyName && data.companyName.trim().length >= 3)
+
+    if (isEnriching || !hasIdentifier) return
     
     setIsEnriching(true)
     setEnrichmentStatus('Hämtar företagsdata...')
@@ -682,12 +692,13 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   }
 
   useEffect(() => {
-    const orgNumber = data.orgNumber?.replace(/\D/g, '')
+    const orgNumberRaw = data.orgNumber?.replace(/\D/g, '')
     const normalizedOrgNumber =
-      orgNumber && orgNumber.length === 12 ? orgNumber.slice(-10) : orgNumber
-    
-    // Only trigger if we have a valid 10-digit org number and we're not already enriching
-    // and we haven't already enriched this org number
+      orgNumberRaw && orgNumberRaw.length === 12 ? orgNumberRaw.slice(-10) : orgNumberRaw
+
+    const companyNameTrimmed = data.companyName?.trim() || ''
+
+    // 1) Auto-trigger på giltigt orgnr (10 siffror)
     if (
       normalizedOrgNumber &&
       normalizedOrgNumber.length === 10 &&
@@ -695,20 +706,42 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
       normalizedOrgNumber !== lastEnrichedOrgNumber.current
     ) {
       console.log('Org number detected, will fetch data in 1 second:', normalizedOrgNumber)
-      
+
       const timer = setTimeout(() => {
         lastEnrichedOrgNumber.current = normalizedOrgNumber
+        lastEnrichedCompanyName.current = companyNameTrimmed || null
         handleEnrichData()
       }, 1000) // Debounce 1 second after typing stops
-      
+
       return () => clearTimeout(timer)
     }
-    
-    // Reset last enriched org number if org number is cleared
+
+    // 2) Om inget orgnr: auto-trigger baserat på företagsnamn (minst 3 tecken)
+    if (
+      (!normalizedOrgNumber || normalizedOrgNumber.length < 10) &&
+      companyNameTrimmed.length >= 3 &&
+      !isEnriching &&
+      companyNameTrimmed !== lastEnrichedCompanyName.current
+    ) {
+      console.log('Company name detected, will fetch data in 1 second:', companyNameTrimmed)
+
+      const timer = setTimeout(() => {
+        lastEnrichedOrgNumber.current = null
+        lastEnrichedCompanyName.current = companyNameTrimmed
+        handleEnrichData()
+      }, 1000)
+
+      return () => clearTimeout(timer)
+    }
+
+    // Reset refs när fälten rensas
     if (!normalizedOrgNumber || normalizedOrgNumber.length < 10) {
       lastEnrichedOrgNumber.current = null
     }
-  }, [data.orgNumber, isEnriching])
+    if (!companyNameTrimmed) {
+      lastEnrichedCompanyName.current = null
+    }
+  }, [data.orgNumber, data.companyName, isEnriching])
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
