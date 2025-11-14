@@ -33,6 +33,28 @@ import {
   Cell
 } from 'recharts'
 
+interface TrendPoint {
+  label: string
+  year?: number
+  value: number
+  unit?: string
+  growthNote?: string
+  domain?: string
+  sourceType?: string
+  sourceUrl?: string
+}
+
+interface CompanyTrendPoint {
+  label: string
+  year?: number
+  value: number
+  unit?: string
+  note?: string
+  domain?: string
+  sourceType?: string
+  sourceUrl?: string
+}
+
 interface AnalysisResults {
   companyName: string
   domain?: string
@@ -57,26 +79,8 @@ interface AnalysisResults {
     maxValue: number
     methodology: string
   }
-  industryTrend?: Array<{
-    label?: string
-    year?: number
-    value: number
-    unit?: string
-    growthNote?: string
-    domain?: string
-    sourceType?: string
-    sourceUrl?: string
-  }>
-  companyTrend?: Array<{
-    label?: string
-    year?: number
-    value: number
-    unit?: string
-    note?: string
-    domain?: string
-    sourceType?: string
-    sourceUrl?: string
-  }>
+  industryTrend?: Array<TrendPoint | null>
+  companyTrend?: Array<CompanyTrendPoint | null>
   valueDrivers?: Array<{
     label: string
     direction?: 'positive' | 'negative'
@@ -242,9 +246,13 @@ export default function AnalysisResultsView() {
     { id: 'recommendations', label: 'Rekommendationer', icon: Target }
   ]
 
-  const industryTrendPoints =
+  type IndustryTrendPoint = TrendPoint & { market: number }
+  type CompanyTrendMappedPoint = CompanyTrendPoint & { company: number }
+
+  const industryTrendPoints: IndustryTrendPoint[] =
     results.industryTrend
       ?.map((item, index) => {
+        if (!item) return null
         const value = parseNumericValue(item.value)
         if (value === null) return null
         const label =
@@ -261,11 +269,14 @@ export default function AnalysisResultsView() {
           growthNote: item.growthNote
         }
       })
-      .filter(Boolean) ?? []
+      .filter(
+        (point): point is IndustryTrendPoint => point !== null && typeof point.label === 'string'
+      ) ?? []
 
-  const companyTrendPoints =
+  const companyTrendPoints: CompanyTrendMappedPoint[] =
     results.companyTrend
       ?.map((item, index) => {
+        if (!item) return null
         const value = parseNumericValue(item.value)
         if (value === null) return null
         const label =
@@ -282,7 +293,10 @@ export default function AnalysisResultsView() {
           note: item.note
         }
       })
-      .filter(Boolean) ?? []
+      .filter(
+        (point): point is CompanyTrendMappedPoint =>
+          point !== null && typeof point.label === 'string'
+      ) ?? []
 
   const trendLabelSet = new Set<string>()
   const trendChartData: Array<{
