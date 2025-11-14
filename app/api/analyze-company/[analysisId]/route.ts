@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: Request,
-  { params }: { params: { analysisId: string } }
+  context: { params: Promise<{ analysisId: string }> }
 ) {
-  const { analysisId } = params
+  const { analysisId } = await context.params
 
   if (!analysisId) {
     return NextResponse.json({ error: 'Saknar analys-id' }, { status: 400 })
