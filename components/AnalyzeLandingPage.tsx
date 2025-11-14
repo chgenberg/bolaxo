@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
-import { TrendingUp, Shield, Target, Zap } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import AnalysisModal from '@/components/AnalysisModal'
 
@@ -146,21 +145,18 @@ export default function AnalyzeLandingPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {[TrendingUp, Shield, Target].map((Icon, index) => (
+          {text.features.map((feature) => (
             <div
-              key={text.features[index].title}
-              className="group relative p-8 rounded-2xl bg-primary-navy text-white transition-all duration-500 cursor-pointer hover:bg-primary-navy/90"
+              key={feature.title}
+              className="relative p-8 rounded-2xl bg-primary-navy text-white transition-all duration-500 hover:bg-primary-navy/90"
             >
               <div className="absolute inset-0 rounded-2xl border border-white/10 pointer-events-none" />
-              <div className="relative z-10">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-white/20 group-hover:scale-110 transition-transform">
-                  <Icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">
-                  {text.features[index].title}
+              <div className="relative z-10 space-y-3">
+                <h3 className="text-xl font-bold">
+                  {feature.title}
                 </h3>
                 <p className="text-white/90">
-                  {text.features[index].description}
+                  {feature.description}
                 </p>
               </div>
             </div>
@@ -206,8 +202,8 @@ export default function AnalyzeLandingPage() {
           className="group relative bg-white text-primary-navy px-10 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105"
         >
           <div className="absolute inset-0 bg-white rounded-full animate-pulse-shadow-white" />
-          <span className="relative z-10 flex items-center gap-2">
-            {text.finalCta} <Zap className="w-5 h-5" />
+          <span className="relative z-10">
+            {text.finalCta}
           </span>
         </button>
       </section>

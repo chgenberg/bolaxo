@@ -89,6 +89,14 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
 
+  const formatSekInput = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, '')
+    if (!digitsOnly) return ''
+    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
+
+  const sanitizeSek = (value: string) => value.replace(/\D/g, '')
+
   const handleAnalyze = async () => {
     if (!companyName.trim()) {
       setError(text.errors.missingName)
@@ -118,8 +126,8 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
         body: JSON.stringify({
           companyName: companyName.trim(),
           domain: domain.trim(),
-          revenue: revenue.trim(),
-          grossProfit: grossProfit.trim(),
+          revenue: sanitizeSek(revenue),
+          grossProfit: sanitizeSek(grossProfit),
           locale
         })
       })
@@ -204,8 +212,8 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
                 <input
                   type="text"
                   value={revenue}
-                  onChange={(e) => setRevenue(e.target.value)}
-                  placeholder="10 000 000"
+                  onChange={(e) => setRevenue(formatSekInput(e.target.value))}
+                  placeholder="10.000.000"
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
@@ -217,8 +225,8 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
                 <input
                   type="text"
                   value={grossProfit}
-                  onChange={(e) => setGrossProfit(e.target.value)}
-                  placeholder="3 000 000"
+                  onChange={(e) => setGrossProfit(formatSekInput(e.target.value))}
+                  placeholder="3.000.000"
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
