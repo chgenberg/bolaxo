@@ -249,50 +249,56 @@ export default function AnalysisResultsView() {
   type IndustryTrendPoint = TrendPoint & { market: number }
   type CompanyTrendMappedPoint = CompanyTrendPoint & { company: number }
 
-  const industryTrendPoints: IndustryTrendPoint[] =
-    (results.industryTrend?.map((item, index) => {
-        if (!item) return null
-        const value = parseNumericValue(item.value)
-        if (value === null) return null
-        const label =
-          item.label ||
-          (typeof item.year === 'number' ? item.year.toString() : `Period ${index + 1}`)
-        return {
-          label,
-          year: item.year,
-          market: value,
-          unit: item.unit || 'MSEK',
-          sourceUrl: item.sourceUrl,
-          domain: item.domain,
-          sourceType: item.sourceType,
-          growthNote: item.growthNote
-        }
-      }) ?? []).filter(
-      (point): point is IndustryTrendPoint => point !== null && typeof point.label === 'string'
-    )
+  const rawIndustryTrend = (results.industryTrend ?? []).map<IndustryTrendPoint | null>(
+    (item, index) => {
+      if (!item) return null
+      const value = parseNumericValue(item.value)
+      if (value === null) return null
+      const label =
+        item.label ||
+        (typeof item.year === 'number' ? item.year.toString() : `Period ${index + 1}`)
+      return {
+        label,
+        year: item.year,
+        market: value,
+        unit: item.unit || 'MSEK',
+        sourceUrl: item.sourceUrl,
+        domain: item.domain,
+        sourceType: item.sourceType,
+        growthNote: item.growthNote
+      }
+    }
+  )
 
-  const companyTrendPoints: CompanyTrendMappedPoint[] =
-    (results.companyTrend?.map((item, index) => {
-        if (!item) return null
-        const value = parseNumericValue(item.value)
-        if (value === null) return null
-        const label =
-          item.label ||
-          (typeof item.year === 'number' ? item.year.toString() : `Period ${index + 1}`)
-        return {
-          label,
-          year: item.year,
-          company: value,
-          unit: item.unit || 'MSEK',
-          sourceUrl: item.sourceUrl,
-          domain: item.domain,
-          sourceType: item.sourceType,
-          note: item.note
-        }
-      }) ?? []).filter(
-      (point): point is CompanyTrendMappedPoint =>
-        point !== null && typeof point.label === 'string'
-    )
+  const industryTrendPoints: IndustryTrendPoint[] = rawIndustryTrend.filter(
+    (point): point is IndustryTrendPoint => point !== null && typeof point.label === 'string'
+  )
+
+  const rawCompanyTrend = (results.companyTrend ?? []).map<CompanyTrendMappedPoint | null>(
+    (item, index) => {
+      if (!item) return null
+      const value = parseNumericValue(item.value)
+      if (value === null) return null
+      const label =
+        item.label ||
+        (typeof item.year === 'number' ? item.year.toString() : `Period ${index + 1}`)
+      return {
+        label,
+        year: item.year,
+        company: value,
+        unit: item.unit || 'MSEK',
+        sourceUrl: item.sourceUrl,
+        domain: item.domain,
+        sourceType: item.sourceType,
+        note: item.note
+      }
+    }
+  )
+
+  const companyTrendPoints: CompanyTrendMappedPoint[] = rawCompanyTrend.filter(
+    (point): point is CompanyTrendMappedPoint =>
+      point !== null && typeof point.label === 'string'
+  )
 
   const trendLabelSet = new Set<string>()
   const trendChartData: Array<{
