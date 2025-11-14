@@ -151,19 +151,19 @@ export default function AnalysisResultsView() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-blue-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b sticky top-0 z-40">
+      <div className="bg-primary-navy shadow-sm border-b sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
             href={`/${locale}/analysera`}
-            className="flex items-center gap-2 text-gray-600 hover:text-primary-navy transition-colors"
+            className="flex items-center gap-2 text-white hover:text-blue-200 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Tillbaka
           </Link>
 
-          <h1 className="text-xl font-bold text-primary-navy">
+          <h1 className="text-xl font-bold text-white">
             Analys av {results.companyName}
           </h1>
 
@@ -175,31 +175,31 @@ export default function AnalysisResultsView() {
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Key Metrics Bar */}
         {results.keyMetrics && (
-          <div className="bg-white rounded-xl p-6 mb-8 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-xl p-6 mb-8 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-4 border border-blue-100">
             {results.keyMetrics.industry && (
               <div className="text-center">
-                <Globe className="w-8 h-8 mx-auto mb-2 text-blue-600" />
+                <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Bransch</p>
                 <p className="font-semibold">{results.keyMetrics.industry}</p>
               </div>
             )}
             {results.keyMetrics.estimatedEmployees && (
               <div className="text-center">
-                <Users className="w-8 h-8 mx-auto mb-2 text-purple-600" />
+                <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Anställda</p>
                 <p className="font-semibold">{results.keyMetrics.estimatedEmployees}</p>
               </div>
             )}
             {results.keyMetrics.location && (
               <div className="text-center">
-                <Globe className="w-8 h-8 mx-auto mb-2 text-green-600" />
+                <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Plats</p>
                 <p className="font-semibold">{results.keyMetrics.location}</p>
               </div>
             )}
             {results.keyMetrics.foundedYear && (
               <div className="text-center">
-                <CheckCircle className="w-8 h-8 mx-auto mb-2 text-pink-600" />
+                <div className="w-8 h-8 mx-auto mb-2 bg-blue-100 rounded-full" />
                 <p className="text-sm text-gray-600">Grundat</p>
                 <p className="font-semibold">{results.keyMetrics.foundedYear}</p>
               </div>
@@ -208,7 +208,7 @@ export default function AnalysisResultsView() {
         )}
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-sm mb-8">
+        <div className="bg-white rounded-xl shadow-sm mb-8 border border-blue-100">
           <div className="border-b">
             <div className="flex overflow-x-auto">
               {tabs.map((tab) => {
@@ -220,12 +220,11 @@ export default function AnalysisResultsView() {
                     className={`
                       flex items-center gap-2 px-6 py-4 font-medium transition-all whitespace-nowrap
                       ${activeTab === tab.id 
-                        ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50' 
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'text-blue-700 border-b-2 border-blue-700 bg-blue-100' 
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-blue-50'
                       }
                     `}
                   >
-                    <Icon className="w-5 h-5" />
                     {tab.label}
                   </button>
                 )
@@ -265,7 +264,7 @@ export default function AnalysisResultsView() {
                       {results.competitors.map((competitor, index) => (
                         <span
                           key={index}
-                          className="px-4 py-2 bg-gray-100 rounded-full text-sm"
+                          className="px-4 py-2 bg-blue-100 rounded-full text-sm text-blue-800"
                         >
                           {competitor}
                         </span>
@@ -283,8 +282,7 @@ export default function AnalysisResultsView() {
                 </h2>
                 <div className="space-y-4">
                   {results.strengths.map((strength, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-green-50 rounded-lg">
-                      <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-100">
                       <p className="text-gray-700">{strength}</p>
                     </div>
                   ))}
@@ -299,8 +297,7 @@ export default function AnalysisResultsView() {
                 </h2>
                 <div className="space-y-4">
                   {results.opportunities.map((opportunity, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
-                      <TrendingUp className="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-100">
                       <p className="text-gray-700">{opportunity}</p>
                     </div>
                   ))}
@@ -315,8 +312,7 @@ export default function AnalysisResultsView() {
                 </h2>
                 <div className="space-y-4">
                   {results.risks.map((risk, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-amber-50 rounded-lg">
-                      <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-100">
                       <p className="text-gray-700">{risk}</p>
                     </div>
                   ))}
@@ -331,30 +327,28 @@ export default function AnalysisResultsView() {
                 </h2>
                 <div className="space-y-4 mb-8">
                   {results.recommendations.map((recommendation, index) => (
-                    <div key={index} className="flex items-start gap-3 p-4 bg-purple-50 rounded-lg">
-                      <Target className="w-6 h-6 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-100">
                       <p className="text-gray-700">{recommendation}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-12 p-8 bg-gradient-to-br from-blue-900 to-purple-900 rounded-2xl text-white text-center">
-                  <h3 className="text-2xl font-bold mb-4">
+                <div className="mt-12 p-8 bg-primary-navy rounded-2xl text-center">
+                  <h3 className="text-2xl font-bold mb-4 text-white">
                     Vill du få en komplett företagsvärdering?
                   </h3>
-                  <p className="text-lg mb-6 opacity-90">
+                  <p className="text-lg mb-6 text-white opacity-90">
                     Få en professionell värdering baserad på finansiella nyckeltal,
                     branschanalys och AI-driven marknadsdata.
                   </p>
                   <div className="mb-6">
-                    <span className="text-4xl font-bold">5 000 kr</span>
-                    <span className="text-lg opacity-75 ml-2">engångskostnad</span>
+                    <span className="text-4xl font-bold text-white">5 000 kr</span>
+                    <span className="text-lg text-white opacity-75 ml-2">engångskostnad</span>
                   </div>
                   <Link
                     href={`/${locale}/vardering`}
                     className="inline-flex items-center gap-2 bg-white text-primary-navy px-8 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform"
                   >
-                    <Sparkles className="w-5 h-5" />
                     Beställ komplett värdering
                   </Link>
                 </div>
@@ -365,7 +359,7 @@ export default function AnalysisResultsView() {
 
         {/* Sources */}
         {results.sources && results.sources.length > 0 && (
-          <div className="bg-white rounded-xl p-6 shadow-sm">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-blue-100">
             <h3 className="font-semibold text-gray-700 mb-4">Källor</h3>
             <div className="space-y-2">
               {results.sources.map((source, index) => (
