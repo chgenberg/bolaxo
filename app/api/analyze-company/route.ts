@@ -41,8 +41,13 @@ ${domain ? `Domän: ${domain}` : ''}
 Webdata:
 ${JSON.stringify(webSearchData, null, 2)}
 
-${revenue ? `Omsättning förra året: ${revenue} kr` : ''}
-${grossProfit ? `Bruttoresultat förra året: ${grossProfit} kr` : ''}
+${revenue ? `Omsättning förra året: ${revenue} kr` : 'Omsättning förra året: okänd'}
+${grossProfit ? `Bruttoresultat förra året: ${grossProfit} kr` : 'Bruttoresultat förra året: okänt'}
+
+Viktigt: Omsättning och bruttoresultat är två olika siffror. Använd dem aldrig som samma tal.
+- Om endast bruttoresultat finns ska du vara tydlig med att omsättningen saknas.
+- Om endast omsättning finns ska du markera att bruttoresultat saknas.
+- När du använder siffrorna i värderingen måste du ange vilket tal du baserar beräkningen på.
 
 Svara alltid på svenska och strukturera resultatet enligt nedan. Ange minst tre konkreta datapunkter per sektion.
 
