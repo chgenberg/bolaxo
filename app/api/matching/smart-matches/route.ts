@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
+import { fetchWebInsights } from '@/lib/webInsights'
 
 const prisma = new PrismaClient()
 
@@ -92,13 +93,15 @@ export async function GET(request: Request) {
     if (process.env.OPENAI_API_KEY) {
       try {
         const aiMatches = await generateAIMatches(user, matches)
-        return NextResponse.json({ matches: aiMatches })
+        const enrichedMatches = await attachWebInsights(aiMatches)
+        return NextResponse.json({ matches: enrichedMatches })
       } catch (error) {
         console.log('AI matching failed, using rule-based')
       }
     }
 
-    return NextResponse.json({ matches })
+    const fallbackMatches = await attachWebInsights(matches)
+    return NextResponse.json({ matches: fallbackMatches })
 
   } catch (error) {
     console.error('Smart matching error:', error)
@@ -171,5 +174,44 @@ Viktiga faktorer:
       aiRecommendation: aiMatch?.recommendedAction
     }
   }).sort((a, b) => b.matchScore - a.matchScore)
+}
+
+async function attachWebInsights(matches: any[]) {
+  if (!process.env.OPENAI_API_KEY) {
+    return matches
+  }
+
+  const enhancedMatches = [...matches]
+  const limited = matches.slice(0, 3)
+
+  await Promise.all(
+    limited.map(async (match) => {
+      const targetName = match.companyName || match.anonymousTitle
+      if (!targetName) return
+
+      try {
+        const insights = await fetchWebInsights({
+          companyName: targetName,
+          industry: match.industry,
+          orgNumber: match.orgNumber,
+          focus: 'buyer-match'
+        })
+
+        if (insights) {
+          const idx = matches.indexOf(match)
+          if (idx !== -1) {
+            enhancedMatches[idx] = {
+              ...enhancedMatches[idx],
+              webInsights: insights
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Web insights for match failed:', error)
+      }
+    })
+  )
+
+  return enhancedMatches
 }
 

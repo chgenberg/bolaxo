@@ -130,6 +130,8 @@ function ValuationResultContent() {
   const [isMockup, setIsMockup] = useState(false)
   const [showPurchaseModal, setShowPurchaseModal] = useState(false)
   const [showCheckout, setShowCheckout] = useState(false)
+  const [webInsights, setWebInsights] = useState<any>(null)
+  const [webInsightsStatus, setWebInsightsStatus] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle')
 
   useEffect(() => {
     // Kolla om det är mockup-läge
@@ -192,6 +194,54 @@ function ValuationResultContent() {
 
     fetchValuation()
   }, [router, locale, searchParams])
+
+  useEffect(() => {
+    const companyName = valuationData?.companyName?.trim()
+    if (!companyName || companyName.length < 2) {
+      return
+    }
+
+    let cancelled = false
+
+    const fetchInsights = async () => {
+      setWebInsightsStatus('loading')
+      try {
+        const response = await fetch('/api/web-insights', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            companyName,
+            orgNumber: valuationData?.orgNumber,
+            industry: valuationData?.industry,
+            purpose: 'valuation-result'
+          })
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch web insights')
+        }
+
+        const data = await response.json()
+        if (!cancelled) {
+          setWebInsights(data.insights || null)
+          setWebInsightsStatus('loaded')
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error('Web insights error:', error)
+          setWebInsightsStatus('error')
+        }
+      }
+    }
+
+    fetchInsights()
+
+    return () => {
+      cancelled = true
+    }
+  }, [valuationData?.companyName, valuationData?.orgNumber, valuationData?.industry])
 
   // Use improved results component if enabled
   if (useImprovedResults && result) {
@@ -509,6 +559,118 @@ function ValuationResultContent() {
             </div>
           )}
         </div>
+
+        {webInsightsStatus !== 'idle' && (
+          <div className="bg-white p-8 rounded-2xl shadow-card mb-8 border border-blue-100">
+            <div className="flex items-start mb-6">
+              <Lightbulb className="w-6 h-6 text-blue-500 mr-3 flex-shrink-0 mt-1" />
+              <div>
+                <h2 className="heading-3 mb-2 text-primary-navy">Extern marknadsinsikt</h2>
+                <p className="text-gray-600">Automatisk webbsökning (OpenAI web_search)</p>
+              </div>
+            </div>
+
+            {webInsightsStatus === 'loading' && (
+              <div className="flex items-center text-gray-600">
+                <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mr-3" />
+                Hämtar senaste nyheter och signaler...
+              </div>
+            )}
+
+            {webInsightsStatus === 'error' && (
+              <p className="text-red-600 text-sm">
+                Kunde inte hämta webbinsikter just nu. Försök gärna igen senare.
+              </p>
+            )}
+
+            {webInsightsStatus === 'loaded' && webInsights && (
+              <div className="space-y-6">
+                {webInsights.summary && (
+                  <p className="text-primary-navy">{webInsights.summary}</p>
+                )}
+
+                {webInsights.marketSignals && webInsights.marketSignals.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-primary-navy mb-2">Marknadssignaler</h3>
+                    <ul className="list-disc list-inside text-sm text-primary-navy space-y-1">
+                      {webInsights.marketSignals.map((signal: string, index: number) => (
+                        <li key={index}>{signal}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {webInsights.newsHighlights && webInsights.newsHighlights.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-primary-navy mb-2">Nyheter</h3>
+                    <div className="space-y-3">
+                      {webInsights.newsHighlights.map((item: any, index: number) => (
+                        <div
+                          key={index}
+                          className="p-3 rounded-lg border border-gray-100"
+                        >
+                          <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
+                            <span className="font-medium text-primary-navy">{item.headline}</span>
+                            {item.tone && (
+                              <span
+                                className={`text-xs px-2 py-0.5 rounded-full ${
+                                  item.tone === 'positive'
+                                    ? 'bg-green-100 text-green-800'
+                                    : item.tone === 'negative'
+                                    ? 'bg-red-100 text-red-800'
+                                    : 'bg-gray-100 text-gray-700'
+                                }`}
+                              >
+                                {item.tone === 'positive'
+                                  ? 'Positiv'
+                                  : item.tone === 'negative'
+                                  ? 'Negativ'
+                                  : 'Neutral'}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-xs text-gray-500 mb-1">
+                            {item.source}
+                          </div>
+                          {item.url && (
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-blue-600 text-sm hover:underline"
+                            >
+                              Läs mer
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {webInsights.competitorSnapshot && webInsights.competitorSnapshot.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-primary-navy mb-2">Konkurrenter</h3>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {webInsights.competitorSnapshot.map((comp: any, index: number) => (
+                        <div key={index} className="p-3 bg-gray-50 rounded-lg text-sm">
+                          <p className="font-semibold text-primary-navy">{comp.name}</p>
+                          <p className="text-gray-700">{comp.insight}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {webInsights.actionCue && (
+                  <div className="p-4 bg-yellow-50 border border-yellow-100 rounded-lg text-sm text-yellow-900">
+                    {webInsights.actionCue}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* SWOT Analysis */}
         <div className="bg-white p-8 rounded-2xl shadow-card mb-8">

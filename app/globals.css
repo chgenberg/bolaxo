@@ -2,6 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Pulsating shadow animation for CTA buttons */
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(30, 58, 138, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(30, 58, 138, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(30, 58, 138, 0);
+  }
+}
+
+@keyframes pulse-shadow-white {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* Pulsating background animation */
+@keyframes pulse-bg {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-pulse-shadow {
+  animation: pulse-shadow 2s infinite;
+}
+
+.animate-pulse-shadow-white {
+  animation: pulse-shadow-white 2s infinite;
+}
+
+.animate-pulse-bg {
+  animation: pulse-bg 3s ease-in-out infinite;
+}
+
 @layer base {
   * {
     @apply antialiased;

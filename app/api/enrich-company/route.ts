@@ -8,6 +8,7 @@ import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/g
 import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
 import { searchGoogle } from '@/lib/scrapers/google-search'
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
+import { fetchWebInsights } from '@/lib/webInsights'
 import { fetchBolagsverketCompanyData } from '@/lib/bolagsverket-api'
 
 const prisma = new PrismaClient()
@@ -415,31 +416,30 @@ export async function POST(request: Request) {
     }
 
     // 11. WEBB-SÖKNING VIA OPENAI RESPONSES API (web_search-tool)
-    // Hämtar ytterligare info om bolaget direkt från webben baserat på företagsnamn
-    if (process.env.OPENAI_API_KEY && companyName) {
+    if (companyName) {
       try {
-        const webSearchEnrichment = await enrichWithOpenAIWebSearch({
+        const webSearchEnrichment = await fetchWebInsights({
           companyName,
           orgNumber,
           website,
           industry,
+          focus: 'enrichment'
         })
 
         if (webSearchEnrichment) {
-          // Spara rå webbsöksdata separat
           if (!enrichedData.rawData.webSearchData && webSearchEnrichment.rawWebData) {
             enrichedData.rawData.webSearchData = webSearchEnrichment.rawWebData
           }
 
-          const webAutoFill = webSearchEnrichment.autoFill || webSearchEnrichment
-
-          // Fyll bara fält som inte redan är satta av mer pålitliga källor (Bolagsverket m.fl.)
+          const webAutoFill = webSearchEnrichment.autoFill || {}
           Object.entries(webAutoFill).forEach(([key, value]) => {
             if (
               value !== undefined &&
               value !== null &&
               value !== '' &&
-              (enrichedData.autoFill[key] === undefined || enrichedData.autoFill[key] === null || enrichedData.autoFill[key] === '')
+              (enrichedData.autoFill[key] === undefined ||
+                enrichedData.autoFill[key] === null ||
+                enrichedData.autoFill[key] === '')
             ) {
               enrichedData.autoFill[key] = value
             }
@@ -1032,119 +1032,4 @@ function getDefaultRegulatoryStatus(industry: string): string {
   }
   
   return defaults[industry] || 'none'
-}
-
-// OPENAI RESPONSES API – WEBB-SÖKNING
-// Använder det inbyggda web_search-verktyget för att hämta publik information om bolaget
-async function enrichWithOpenAIWebSearch(params: {
-  companyName: string
-  orgNumber?: string
-  website?: string
-  industry?: string
-}) {
-  const { companyName, orgNumber, website, industry } = params
-
-  if (!process.env.OPENAI_API_KEY) {
-    return null
-  }
-
-  try {
-    const instructions = `Du är en svensk företagsanalytiker.
-Du ska snabbt läsa in dig på ett svenskt bolag genom att använda webben.
-
-Regler:
-- Använd alltid officiella och trovärdiga källor (bolagets egna sajt, nyckeltalstjänster, artiklar).
-- Fokusera på VAD bolaget gör, målgrupp/kunder, geografi och ungefärlig storlek – inte spekulera.
-- Om information saknas, lämna fält tomma istället för att gissa.
-- Returnera ENBART JSON, ingen förklarande text.`
-
-    const input = `Företagsnamn: ${companyName}
-Organisationsnummer: ${orgNumber || 'okänt'}
-Känd webbplats: ${website || 'okänd'}
-Bransch (intern kod): ${industry || 'okänd'}
-
-Uppgift:
-1) Använd web_search-verktyget för att hitta relevant publik information om detta bolag.
-2) Extrahera och summera enligt följande JSON-schema:
-{
-  "autoFill": {
-    "website": "bolagets huvudsajt om den hittas, annars null",
-    "employees": "intervall som 1-5, 6-10, 11-25, 25+ eller null",
-    "competitiveAdvantage": "1-3 meningar om vad som verkar vara bolagets viktigaste styrkor/USP",
-    "customerBase": "kort beskrivning av typiska kunder/målgrupp om det går att se",
-    "locations": "städer/regioner där bolaget verkar om det går att se",
-    "services": "kort sammanfattning av huvudtjänster/produkter (max 2 meningar)"
-  },
-  "rawWebData": {
-    "mainWebsite": "URL som användes",
-    "notableSources": ["kort etikett + URL för 2-4 viktigaste källorna"],
-    "notes": "valfri kort teknisk kommentar, max 2 meningar"
-  }
-}
-
-Viktigt:
-- Följ JSON-schemat exakt.
-- Lämna värden som null om du inte hittar något säkert.`
-
-    const response = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-4.1-mini',
-        instructions,
-        input,
-        tools: [{ type: 'web_search' }],
-        max_output_tokens: 900,
-      }),
-      signal: createTimeoutSignal(30000),
-    })
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => '')
-      console.error('OpenAI web_search API error:', response.status, errorText)
-      return null
-    }
-
-    const json = await response.json()
-
-    // För Responses API ligger texten i output->content
-    let rawText = ''
-    try {
-      const firstOutput = json.output?.[0]
-      const contentArray = firstOutput?.content || []
-      const textPart =
-        contentArray.find((c: any) => c.type === 'output_text') ||
-        contentArray.find((c: any) => typeof c.text === 'string')
-
-      if (textPart?.text) {
-        rawText = typeof textPart.text === 'string' ? textPart.text : textPart.text.value
-      }
-    } catch (parseErr) {
-      console.error('Failed to extract text from Responses API payload:', parseErr)
-      return null
-    }
-
-    if (!rawText) {
-      return null
-    }
-
-    const cleaned = rawText
-      .replace(/```json/gi, '')
-      .replace(/```/g, '')
-      .trim()
-
-    try {
-      const parsed = JSON.parse(cleaned)
-      return parsed
-    } catch (jsonErr) {
-      console.error('Failed to parse JSON from web_search response:', jsonErr)
-      return null
-    }
-  } catch (error) {
-    console.error('enrichWithOpenAIWebSearch error:', error)
-    return null
-  }
 }

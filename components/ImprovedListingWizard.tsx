@@ -186,6 +186,10 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   const [uploadingImages, setUploadingImages] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const lastEnrichedOrgNumber = useRef<string | null>(null)
+  const lastEnrichedCompanyName = useRef<string | null>(null)
+  const lastFetchedListingInsightsFor = useRef<string | null>(null)
+  const [listingInsights, setListingInsights] = useState<any>(null)
+  const [listingInsightsStatus, setListingInsightsStatus] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle')
   
   const [data, setData] = useState<ListingData>({
     email: user?.email || '',
@@ -264,6 +268,14 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
     }
   }
 
+  const handleApplySuggestion = (field: keyof ListingData, value: string) => {
+    if (!value) return
+    const current = (data[field] as string) || ''
+    const formatted = current ? `${current.trim()}\n${value}` : value
+    updateData(field, formatted)
+    success('Förslag infogat!')
+  }
+
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {}
 
@@ -314,18 +326,69 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
     }
   }
 
+  const fetchListingInsights = async ({
+    companyName,
+    orgNumber
+  }: {
+    companyName: string
+    orgNumber?: string | null
+  }) => {
+    const trimmedName = companyName?.trim()
+    if (!trimmedName || trimmedName.length < 3) return
+
+    if (
+      listingInsightsStatus === 'loading' ||
+      lastFetchedListingInsightsFor.current === trimmedName
+    ) {
+      return
+    }
+
+    try {
+      setListingInsightsStatus('loading')
+      const response = await fetch('/api/web-insights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyName: trimmedName,
+          orgNumber,
+          industry: data.industry,
+          purpose: 'listing'
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch listing insights')
+      }
+
+      const { insights } = await response.json()
+      setListingInsights(insights || null)
+      lastFetchedListingInsightsFor.current = trimmedName
+      setListingInsightsStatus('loaded')
+    } catch (error) {
+      console.error('Listing insights error:', error)
+      setListingInsightsStatus('error')
+    }
+  }
+
   const handleEnrichData = async () => {
     const sanitizedOrgNumber = data.orgNumber?.replace(/\D/g, '')
     const normalizedOrgNumber =
       sanitizedOrgNumber && sanitizedOrgNumber.length === 12
         ? sanitizedOrgNumber.slice(-10)
         : sanitizedOrgNumber
+    const companyNameTrimmed = data.companyName?.trim() || ''
     
-    if (isEnriching || (!normalizedOrgNumber && !data.website)) return
+    const hasIdentifier =
+      (normalizedOrgNumber && normalizedOrgNumber.length === 10) ||
+      !!data.website ||
+      companyNameTrimmed.length >= 3
+    
+    if (isEnriching || !hasIdentifier) return
     
     setIsEnriching(true)
     setEnrichmentStatus('Hämtar företagsdata...')
     
+    let enrichedData: any = null
     try {
       const response = await fetch('/api/enrich-company', {
         method: 'POST',
@@ -333,12 +396,13 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         body: JSON.stringify({
           orgNumber: normalizedOrgNumber,
           website: data.website,
+          companyName: companyNameTrimmed,
           industry: data.industry
         })
       })
       
       if (response.ok) {
-        const enrichedData = await response.json()
+        enrichedData = await response.json()
         console.log('Enrichment data received:', enrichedData)
         
         // Always fill fields if data is available, overwriting existing values
@@ -434,40 +498,65 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
     } finally {
       setIsEnriching(false)
       setTimeout(() => setEnrichmentStatus(''), 5000)
+      const resolvedName =
+        enrichedData?.autoFill?.companyName ||
+        companyNameTrimmed ||
+        data.companyName
+      if (resolvedName) {
+        fetchListingInsights({
+          companyName: resolvedName,
+          orgNumber: normalizedOrgNumber
+        })
+      }
     }
   }
 
-  // Auto-enrich when org number changes
+  // Auto-enrich when org number or company name changes
   useEffect(() => {
     const sanitizedOrgNumber = data.orgNumber?.replace(/\D/g, '')
     const normalizedOrgNumber =
       sanitizedOrgNumber && sanitizedOrgNumber.length === 12
         ? sanitizedOrgNumber.slice(-10)
         : sanitizedOrgNumber
+    const companyNameTrimmed = data.companyName?.trim() || ''
     
-    // Only trigger if we have a valid org number, we're not already enriching,
-    // and we haven't already enriched this org number
     if (
       normalizedOrgNumber &&
       normalizedOrgNumber.length === 10 &&
       !isEnriching &&
       normalizedOrgNumber !== lastEnrichedOrgNumber.current
     ) {
-      console.log('Org number detected, will fetch data in 0.5 seconds:', normalizedOrgNumber)
-      
       const timer = setTimeout(() => {
         lastEnrichedOrgNumber.current = normalizedOrgNumber
+        if (companyNameTrimmed) {
+          lastEnrichedCompanyName.current = companyNameTrimmed
+        }
         handleEnrichData()
-      }, 500) // Debounce 0.5 seconds after typing stops
+      }, 500)
       
       return () => clearTimeout(timer)
     }
+
+    if (
+      (!normalizedOrgNumber || normalizedOrgNumber.length < 10) &&
+      companyNameTrimmed.length >= 3 &&
+      !isEnriching &&
+      companyNameTrimmed !== lastEnrichedCompanyName.current
+    ) {
+      const timer = setTimeout(() => {
+        lastEnrichedCompanyName.current = companyNameTrimmed
+        handleEnrichData()
+      }, 700)
+      return () => clearTimeout(timer)
+    }
     
-    // Reset last enriched org number if org number is cleared
     if (!normalizedOrgNumber || normalizedOrgNumber.length < 10) {
       lastEnrichedOrgNumber.current = null
     }
-  }, [data.orgNumber, isEnriching])
+    if (!companyNameTrimmed) {
+      lastEnrichedCompanyName.current = null
+    }
+  }, [data.orgNumber, data.companyName, isEnriching])
 
   // Generate title suggestion based on inputs
   useEffect(() => {
@@ -960,6 +1049,117 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               placeholder="Lista era huvudsakliga konkurrenter"
               rows={2}
             />
+
+            {listingInsightsStatus === 'loading' && (
+              <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800">
+                Hämtar webbinsikter (OpenAI web_search)...
+              </div>
+            )}
+
+            {listingInsightsStatus === 'error' && (
+              <div className="p-4 bg-red-50 border border-red-100 rounded-lg text-sm text-red-700">
+                Kunde inte hämta webbinsikter just nu.
+              </div>
+            )}
+
+            {listingInsightsStatus === 'loaded' && listingInsights && (
+              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg space-y-4">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div>
+                    <p className="text-sm font-semibold text-primary-navy">Förslag från webben</p>
+                    <p className="text-xs text-gray-600">Automatisk research på {data.companyName || 'bolaget'}</p>
+                  </div>
+                  <span className="text-xs text-gray-500">
+                    {new Date().toLocaleDateString('sv-SE')}
+                  </span>
+                </div>
+
+                {listingInsights.uspSuggestions?.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-600 mb-2">USP-idéer</p>
+                    <div className="space-y-2">
+                      {listingInsights.uspSuggestions.map((usp: string, index: number) => (
+                        <div
+                          key={index}
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white rounded-lg border border-gray-100 p-3"
+                        >
+                          <span className="text-sm text-gray-800">{usp}</span>
+                          <button
+                            type="button"
+                            className="text-xs px-3 py-1 rounded-full bg-primary-navy text-white hover:bg-primary-navy/90"
+                            onClick={() => handleApplySuggestion('competitiveAdvantages', `• ${usp}`)}
+                          >
+                            Lägg till i konkurrensfördelar
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {listingInsights.customerAngles?.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-600 mb-2">Målgrupp / kundvinklar</p>
+                    <div className="space-y-2">
+                      {listingInsights.customerAngles.map((angle: string, index: number) => (
+                        <div
+                          key={index}
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-white rounded-lg border border-gray-100 p-3"
+                        >
+                          <span className="text-sm text-gray-800">{angle}</span>
+                          <button
+                            type="button"
+                            className="text-xs px-3 py-1 rounded-full bg-accent-pink text-white hover:bg-accent-pink/90"
+                            onClick={() => handleApplySuggestion('idealBuyer', angle)}
+                          >
+                            Lägg till i ideal köpare
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {listingInsights.proofPoints?.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-600 mb-2">Bevis / traction</p>
+                    <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
+                      {listingInsights.proofPoints.map((point: string, index: number) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {listingInsights.riskNotes?.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-gray-600 mb-2">Risker att adressera</p>
+                    <ul className="list-disc list-inside text-sm text-gray-800 space-y-1">
+                      {listingInsights.riskNotes.map((risk: string, index: number) => (
+                        <li key={index}>{risk}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {listingInsights.sourceLinks?.length > 0 && (
+                  <div className="text-xs text-gray-500">
+                    Källor:{' '}
+                    {listingInsights.sourceLinks.map((link: any, index: number) => (
+                      <a
+                        key={index}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 underline mr-2"
+                      >
+                        {link.label || 'Länk'}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )
 
