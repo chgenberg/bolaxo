@@ -31,8 +31,9 @@ export async function POST(request: Request) {
     }
 
     // Now analyze with GPT-5 (no temperature/max_tokens needed for this model)
-    const analysisPrompt = `Du är en erfaren svensk företagsanalytiker. 
-Analysera följande företag baserat på webdata och ge konkreta, värdefulla insikter.
+    const analysisPrompt = `Du agerar som världens främsta svenska business-coach och företagsvärderare.
+Du kombinerar strategisk rådgivning, operativ erfarenhet och investment banker-analys.
+Identifiera vad som faktiskt driver värde, och ge råd som en VD, CFO och M&A-rådgivare skulle betala för.
 
 Företag: ${companyName}
 ${domain ? `Domän: ${domain}` : ''}
@@ -43,30 +44,39 @@ ${JSON.stringify(webSearchData, null, 2)}
 ${revenue ? `Omsättning förra året: ${revenue} kr` : ''}
 ${grossProfit ? `Bruttoresultat förra året: ${grossProfit} kr` : ''}
 
-Skapa en strukturerad analys med följande sektioner:
+Svara alltid på svenska och strukturera resultatet enligt nedan. Ange minst tre konkreta datapunkter per sektion.
 
-1. SAMMANFATTNING (2-3 meningar som beskriver företaget och dess position)
+1. SAMMANFATTNING
+- 3-4 meningar som beskriver nuläget, erbjudandet och viktigaste signalerna från datan.
+- Lyft fram eventuella unika faktorer (teknik, kunder, marknadsposition).
 
-2. STYRKOR (3-5 konkreta styrkor baserat på vad du hittat)
+2. STYRKOR
+- Lista 4-6 styrkor. För varje styrka: beskriv varför den är viktig och vilken KPI/indikator som bevisar den.
 
-3. MÖJLIGHETER (3-5 utvecklingsmöjligheter för företaget)
+3. MÖJLIGHETER
+- Lista 4-6 utvecklingsmöjligheter eller tillväxtinitiativ.
+- Beskriv vilket steg som krävs för att fånga möjligheten och vilket värdedriv (intäkt, marginal, multipel) den påverkar.
 
-4. RISKER (2-4 potentiella risker eller utmaningar)
+4. RISKER
+- Lista 3-5 risker. För varje risk: ange sannolikhet (låg/medel/hög), konsekvens och kort mitigering.
 
-5. MARKNADSPOSITION (kort beskrivning av hur företaget står sig på marknaden)
+5. MARKNADSPOSITION
+- Beskriv hur bolaget står sig mot branschen. Nämn målgrupper, vertikaler och prisläge om möjligt.
 
-6. KONKURRENTER (lista huvudkonkurrenter om identifierade)
+6. KONKURRENTER
+- Lista identifierade konkurrenter eller substitut. För varje: ange unik skillnad/position.
 
-7. REKOMMENDATIONER (4-6 konkreta åtgärder för att öka företagsvärdet innan försäljning)
+7. REKOMMENDATIONER
+- Ge 5-7 konkreta åtgärder som en ägare bör göra de kommande 6-12 månaderna för att höja värdet.
+- Inkludera snabb vinst ("quick win"), strategi/produkt och finansiell hygien (t.ex. rapportering, marginal).
 
-8. NYCKELDATA (om tillgängligt: bransch, antal anställda, plats, grundat år)
+8. NYCKELDATA
+- Sammanfatta bransch, antal anställda (intervall går bra), geografi, grundandeår och andra datapunkter från källorna.
 
-9. VÄRDERINGSESTIMAT - MYCKET VIKTIGT!
-Baserat på branschdata, omsättningssiffror (om angivna), konkurrenssituation och övrig information:
-- Gör en uppskattning av företagets värde
-- Använd multiplar för branschen om möjligt (t.ex. omsättning x branschmultipel)
-- Om omsättning saknas, gör en kvalificerad gissning baserat på företagsstorlek och bransch
-- Ange ett värdeintervall (min-max) i SEK
+9. VÄRDERINGSESTIMAT (kritisk sektion)
+- Ge ett min- och maxvärde i SEK baserat på multiplar, kassaflöden eller transaktioner i samma bransch.
+- Skriv ut vilket antagande du använde (t.ex. omsättning x multipel, EBITDA x multipel eller jämförande affärer).
+- Beskriv kort hur makro/marknadsläge påverkar värdet (t.ex. ränta, efterfrågan).
 
 Returnera som JSON enligt detta format:
 {
@@ -101,7 +111,7 @@ Returnera som JSON enligt detta format:
         messages: [
           {
             role: 'system',
-            content: 'Du är en expert på företagsanalys med fokus på värdeoptimering inför försäljning. Svara alltid på svenska och returnera strukturerad JSON.'
+            content: 'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
           },
           {
             role: 'user',
@@ -130,7 +140,7 @@ Returnera som JSON enligt detta format:
           messages: [
             {
               role: 'system',
-              content: 'Du är en expert på företagsanalys med fokus på värdeoptimering inför försäljning. Svara alltid på svenska och returnera strukturerad JSON.'
+              content: 'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
             },
             {
               role: 'user',
