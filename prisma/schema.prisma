@@ -251,6 +251,19 @@ model PremiumValuation {
   @@index([status])
 }
 
+model InstantAnalysis {
+  id          String   @id @default(cuid())
+  companyName String
+  domain      String?
+  orgNumber   String?
+  locale      String?
+  result      Json
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+
+  @@index([createdAt])
+}
+
 model Transaction {
   id              String    @id @default(cuid())
   createdAt       DateTime  @default(now())

@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server'
 import { searchCompanyWithWebSearch } from '@/lib/webInsights'
+import { prisma } from '@/lib/prisma'
+
+const ANALYSIS_TTL_MS = 1000 * 60 * 60 * 24 // 24 hours
 
 export async function POST(request: Request) {
   try {
-    const { companyName, domain } = await request.json()
+    const { companyName, domain, locale } = await request.json()
 
     if (!companyName) {
       return NextResponse.json(
@@ -94,10 +97,13 @@ Returnera som JSON enligt detta format:
       })
     })
 
-    if (!analysisResponse.ok) {
-      // Fallback to GPT-4 if GPT-5 fails
+    const finalAnalysis = await (async () => {
+      if (analysisResponse.ok) {
+        const analysisData = await analysisResponse.json()
+        return JSON.parse(analysisData.choices[0].message.content)
+      }
+
       console.log('GPT-5 unavailable, falling back to GPT-4')
-      
       const gpt4Response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -127,32 +133,31 @@ Returnera som JSON enligt detta format:
       }
 
       const gpt4Data = await gpt4Response.json()
-      const analysis = JSON.parse(gpt4Data.choices[0].message.content)
+      return JSON.parse(gpt4Data.choices[0].message.content)
+    })()
 
-      // Add sources from web search
-      const sources = webSearchData.sources || []
-      
-      return NextResponse.json({
-        companyName,
-        domain,
-        ...analysis,
-        sources: sources.slice(0, 5) // Limit to 5 most relevant sources
-      })
-    }
-
-    const analysisData = await analysisResponse.json()
-    const analysis = JSON.parse(analysisData.choices[0].message.content)
-
-    // Add sources from web search
     const sources = webSearchData.sources || []
-    
-    return NextResponse.json({
+    const resultPayload = {
       companyName,
       domain,
-      ...analysis,
-      sources: sources.slice(0, 5) // Limit to 5 most relevant sources
+      ...finalAnalysis,
+      sources: sources.slice(0, 5)
+    }
+
+    const record = await prisma.instantAnalysis.create({
+      data: {
+        companyName: companyName.trim(),
+        domain: domain?.trim(),
+        locale,
+        result: resultPayload,
+        expiresAt: new Date(Date.now() + ANALYSIS_TTL_MS)
+      }
     })
 
+    return NextResponse.json({
+      analysisId: record.id,
+      results: resultPayload
+    })
   } catch (error) {
     console.error('Company analysis error:', error)
     return NextResponse.json(

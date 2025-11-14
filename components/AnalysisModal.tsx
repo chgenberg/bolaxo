@@ -1,15 +1,86 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { X, Sparkles, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 interface AnalysisModalProps {
   onClose: () => void
 }
 
+const copy = {
+  sv: {
+    title: 'Analysera ditt företag',
+    labels: {
+      companyName: 'Företagsnamn',
+      domain: 'Domännamn (valfritt)'
+    },
+    placeholders: {
+      companyName: 'T.ex. Nordisk Tech AB',
+      domain: 'T.ex. nordisktech.se'
+    },
+    errors: {
+      missingName: 'Vänligen ange företagsnamn',
+      generic: 'Ett fel uppstod',
+      analysisFailed: 'Analysen misslyckades'
+    },
+    button: 'Analysera',
+    infoText:
+      'Analysen tar vanligtvis 2-3 minuter. Vi söker igenom öppna källor för att ge dig värdefulla insikter om ditt företag.',
+    loadingTitle: (company: string) => `Analyserar ${company}`,
+    loadingTitleFallback: 'Analyserar företaget',
+    loadingDescription: 'Vi söker igenom webben efter information om ditt företag...',
+    progressLabel: (progress: number) => `${progress}% klart`,
+    statusMessages: [
+      'Söker företagsinformation...',
+      'Analyserar marknadsposition...',
+      'Granskar konkurrenter...',
+      'Identifierar styrkor och möjligheter...',
+      'Sammanställer rekommendationer...'
+    ],
+    requiredAsterisk: 'Företagsnamn *'
+  },
+  en: {
+    title: 'Analyze your company',
+    labels: {
+      companyName: 'Company name',
+      domain: 'Domain name (optional)'
+    },
+    placeholders: {
+      companyName: 'e.g. Nordic Tech Ltd',
+      domain: 'e.g. nordictech.com'
+    },
+    errors: {
+      missingName: 'Please enter a company name',
+      generic: 'Something went wrong',
+      analysisFailed: 'Analysis failed'
+    },
+    button: 'Analyze',
+    infoText:
+      'The analysis usually takes 2-3 minutes. We scan public sources to deliver valuable insights about your company.',
+    loadingTitle: (company: string) => `Analyzing ${company}`,
+    loadingTitleFallback: 'Analyzing your company',
+    loadingDescription: 'We are scanning the web for information about your business…',
+    progressLabel: (progress: number) => `${progress}% complete`,
+    statusMessages: [
+      'Gathering company information…',
+      'Analyzing market position…',
+      'Reviewing competitors…',
+      'Identifying strengths and opportunities…',
+      'Compiling recommendations…'
+    ],
+    requiredAsterisk: 'Company name *'
+  }
+}
+
 export default function AnalysisModal({ onClose }: AnalysisModalProps) {
   const router = useRouter()
+  const locale = useLocale()
+  const text = useMemo(() => {
+    if (locale.startsWith('sv')) return copy.sv
+    return copy.en
+  }, [locale])
   const [companyName, setCompanyName] = useState('')
   const [domain, setDomain] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -18,7 +89,7 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
 
   const handleAnalyze = async () => {
     if (!companyName.trim()) {
-      setError('Vänligen ange företagsnamn')
+      setError(text.errors.missingName)
       return
     }
 
@@ -44,25 +115,32 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           companyName: companyName.trim(),
-          domain: domain.trim()
+          domain: domain.trim(),
+          locale
         })
       })
 
       if (!response.ok) {
-        throw new Error('Analysen misslyckades')
+        throw new Error(text.errors.analysisFailed)
       }
 
-      const result = await response.json()
+      const data = await response.json()
       clearInterval(progressInterval)
       
       // Store results in sessionStorage for the results page
-      sessionStorage.setItem('analysisResults', JSON.stringify(result))
+      if (data?.results) {
+        sessionStorage.setItem('analysisResults', JSON.stringify(data.results))
+      }
       
       // Navigate to results page
-      router.push('/analysera/resultat')
+      if (data?.analysisId) {
+        router.push(`/${locale}/analysera/resultat?id=${data.analysisId}`)
+      } else {
+        router.push(`/${locale}/analysera/resultat`)
+      }
     } catch (err) {
       clearInterval(progressInterval)
-      setError(err instanceof Error ? err.message : 'Ett fel uppstod')
+      setError(err instanceof Error ? err.message : text.errors.generic)
       setIsAnalyzing(false)
       setProgress(0)
     }
@@ -76,7 +154,7 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
             {/* Header */}
             <div className="p-6 border-b flex items-center justify-between">
               <h2 className="text-2xl font-bold text-primary-navy">
-                Analysera ditt företag
+                {text.title}
               </h2>
               <button
                 onClick={onClose}
@@ -90,13 +168,13 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
             <div className="p-6 space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Företagsnamn <span className="text-red-500">*</span>
+                  {text.labels.companyName} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  placeholder="T.ex. Nordisk Tech AB"
+                  placeholder={text.placeholders.companyName}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   autoFocus
                 />
@@ -104,13 +182,13 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Domännamn (valfritt)
+                  {text.labels.domain}
                 </label>
                 <input
                   type="text"
                   value={domain}
                   onChange={(e) => setDomain(e.target.value)}
-                  placeholder="T.ex. nordisktech.se"
+                  placeholder={text.placeholders.domain}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
@@ -126,12 +204,11 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-5 h-5" />
-                Analysera
+                {text.button}
               </button>
 
               <p className="text-xs text-center text-gray-500">
-                Analysen tar vanligtvis 2-3 minuter. Vi söker igenom öppna källor 
-                för att ge dig värdefulla insikter om ditt företag.
+                {text.infoText}
               </p>
             </div>
           </>
@@ -146,11 +223,11 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
               </div>
 
               <h3 className="text-2xl font-bold text-primary-navy mb-4">
-                Analyserar {companyName}
+                {companyName ? text.loadingTitle(companyName) : text.loadingTitleFallback}
               </h3>
 
               <p className="text-gray-600 mb-8">
-                Vi söker igenom webben efter information om ditt företag...
+                {text.loadingDescription}
               </p>
 
               {/* Progress Bar */}
@@ -162,16 +239,16 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
               </div>
 
               <p className="text-sm font-semibold text-gray-700">
-                {Math.round(progress)}% klart
+                {text.progressLabel(Math.round(progress))}
               </p>
 
               {/* Status Messages */}
               <div className="mt-6 text-sm text-gray-600">
-                {progress < 20 && "Söker företagsinformation..."}
-                {progress >= 20 && progress < 40 && "Analyserar marknadsposition..."}
-                {progress >= 40 && progress < 60 && "Granskar konkurrenter..."}
-                {progress >= 60 && progress < 80 && "Identifierar styrkor och möjligheter..."}
-                {progress >= 80 && "Sammanställer rekommendationer..."}
+                {progress < 20 && text.statusMessages[0]}
+                {progress >= 20 && progress < 40 && text.statusMessages[1]}
+                {progress >= 40 && progress < 60 && text.statusMessages[2]}
+                {progress >= 60 && progress < 80 && text.statusMessages[3]}
+                {progress >= 80 && text.statusMessages[4]}
               </div>
             </div>
           </>

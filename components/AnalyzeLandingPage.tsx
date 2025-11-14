@@ -1,12 +1,101 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Image from 'next/image'
-import { Sparkles, TrendingUp, Shield, Target, CheckCircle, AlertCircle, Zap } from 'lucide-react'
+import { TrendingUp, Shield, Target, Zap } from 'lucide-react'
+import { useLocale } from 'next-intl'
 import AnalysisModal from '@/components/AnalysisModal'
+
+const copy = {
+  sv: {
+    heroTitle: 'Utvärdera ditt företag innan försäljning - helt gratis',
+    heroCta: 'KLICKA HÄR!',
+    heroSubline: 'ingen registrering krävs',
+    descriptionTitle: 'Få insikter om ditt företag på sekunder',
+    descriptionLead:
+      'Vår AI-drivna analys söker igenom hela webben för att ge dig en omfattande bild av hur ditt företag uppfattas och presterar online.',
+    features: [
+      {
+        title: 'Marknadsposition',
+        description: 'Se hur ditt företag står sig mot konkurrenter och vilka möjligheter som finns för tillväxt och förbättring.'
+      },
+      {
+        title: 'Styrkor & Svagheter',
+        description: 'Identifiera vad som gör ditt företag unikt och vilka områden som kan förstärkas innan en eventuell försäljning.'
+      },
+      {
+        title: 'Handlingsplan',
+        description: 'Få konkreta rekommendationer för att maximera företagets värde och attraktivitet för potentiella köpare.'
+      }
+    ],
+    howItWorksTitle: 'Så fungerar det',
+    steps: [
+      {
+        title: 'Ange företagsuppgifter',
+        description: 'Fyll bara i företagsnamn och eventuell webbadress - inget mer krävs.'
+      },
+      {
+        title: 'AI-driven webbanalys',
+        description: 'Vår avancerade AI söker igenom sökmotorer, branschsidor, recensioner och mer för att samla in relevant information.'
+      },
+      {
+        title: 'Få din rapport',
+        description: 'Inom några minuter får du en omfattande analys med insikter och rekommendationer för ditt företag.'
+      }
+    ],
+    finalTitle: 'Redo att upptäcka ditt företags potential?',
+    finalLead: 'Få värdefulla insikter som kan hjälpa dig maximera företagets värde - helt kostnadsfritt.',
+    finalCta: 'Analysera mitt företag'
+  },
+  en: {
+    heroTitle: 'Evaluate your company before selling – completely free',
+    heroCta: 'CLICK HERE!',
+    heroSubline: 'no registration required',
+    descriptionTitle: 'Get insights about your company in seconds',
+    descriptionLead:
+      'Our AI-powered analysis scans the entire web to give you a comprehensive picture of how your company is perceived and performing online.',
+    features: [
+      {
+        title: 'Market Position',
+        description: 'See how your company stacks up against competitors and uncover opportunities for growth and improvement.'
+      },
+      {
+        title: 'Strengths & Weaknesses',
+        description: 'Identify what makes your company unique and which areas can be strengthened before a potential sale.'
+      },
+      {
+        title: 'Action Plan',
+        description: 'Receive concrete recommendations to maximize company value and attractiveness for potential buyers.'
+      }
+    ],
+    howItWorksTitle: 'How it works',
+    steps: [
+      {
+        title: 'Provide company details',
+        description: 'Just enter your company name and optional website – nothing else is required.'
+      },
+      {
+        title: 'AI-powered web analysis',
+        description: 'Our advanced AI scans search engines, industry sites, reviews and more to collect relevant information.'
+      },
+      {
+        title: 'Get your report',
+        description: 'Within minutes you’ll receive a comprehensive analysis with insights and recommendations for your business.'
+      }
+    ],
+    finalTitle: 'Ready to discover your company’s potential?',
+    finalLead: 'Gain valuable insights that can help you maximize your company value – completely free.',
+    finalCta: 'Analyze my company'
+  }
+}
 
 export default function AnalyzeLandingPage() {
   const [showModal, setShowModal] = useState(false)
+  const locale = useLocale()
+  const text = useMemo(() => {
+    if (locale.startsWith('sv')) return copy.sv
+    return copy.en
+  }, [locale])
 
   return (
     <div className="min-h-screen bg-white">
@@ -26,7 +115,7 @@ export default function AnalyzeLandingPage() {
         {/* CTA Content */}
         <div className="relative z-10 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 drop-shadow-lg">
-            Utvärdera ditt företag innan försäljning - helt gratis
+            {text.heroTitle}
           </h1>
           
           <button
@@ -36,11 +125,11 @@ export default function AnalyzeLandingPage() {
             {/* Pulsating shadow effect */}
             <div className="absolute inset-0 bg-primary-navy rounded-full animate-pulse-shadow" />
             
-            <span className="relative z-10">KLICKA HÄR!</span>
+            <span className="relative z-10">{text.heroCta}</span>
           </button>
           
           <p className="text-sm text-white/90 mt-4 drop-shadow">
-            ingen registrering krävs
+            {text.heroSubline}
           </p>
         </div>
       </div>
@@ -49,65 +138,47 @@ export default function AnalyzeLandingPage() {
       <section className="py-20 px-4 max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-primary-navy mb-6">
-            Få insikter om ditt företag på sekunder
+            {text.descriptionTitle}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Vår AI-drivna analys söker igenom hela webben för att ge dig en omfattande bild 
-            av hur ditt företag uppfattas och presterar online.
+            {text.descriptionLead}
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {/* Feature Box 1 */}
-          <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-all duration-500 cursor-pointer">
-            <div className="absolute inset-0 rounded-2xl bg-blue-500/10 animate-pulse-bg" />
-            <div className="relative z-10">
-              <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <TrendingUp className="w-8 h-8 text-white" />
+          {[TrendingUp, Shield, Target].map((Icon, index) => (
+            <div
+              key={text.features[index].title}
+              className={`group relative p-8 rounded-2xl transition-all duration-500 cursor-pointer ${
+                index === 0
+                  ? 'bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200'
+                  : index === 1
+                  ? 'bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200'
+                  : 'bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-200'
+              }`}
+            >
+              <div
+                className={`absolute inset-0 rounded-2xl animate-pulse-bg ${
+                  index === 0 ? 'bg-blue-500/10' : index === 1 ? 'bg-purple-500/10' : 'bg-pink-500/10'
+                }`}
+              />
+              <div className="relative z-10">
+                <div
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${
+                    index === 0 ? 'bg-blue-500' : index === 1 ? 'bg-purple-500' : 'bg-pink-500'
+                  }`}
+                >
+                  <Icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-primary-navy mb-3">
+                  {text.features[index].title}
+                </h3>
+                <p className="text-gray-700">
+                  {text.features[index].description}
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3">
-                Marknadsposition
-              </h3>
-              <p className="text-gray-700">
-                Se hur ditt företag står sig mot konkurrenter och vilka möjligheter som finns 
-                för tillväxt och förbättring.
-              </p>
             </div>
-          </div>
-
-          {/* Feature Box 2 */}
-          <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 transition-all duration-500 cursor-pointer">
-            <div className="absolute inset-0 rounded-2xl bg-purple-500/10 animate-pulse-bg" />
-            <div className="relative z-10">
-              <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Shield className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3">
-                Styrkor & Svagheter
-              </h3>
-              <p className="text-gray-700">
-                Identifiera vad som gör ditt företag unikt och vilka områden som kan 
-                förstärkas innan en eventuell försäljning.
-              </p>
-            </div>
-          </div>
-
-          {/* Feature Box 3 */}
-          <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-200 transition-all duration-500 cursor-pointer">
-            <div className="absolute inset-0 rounded-2xl bg-pink-500/10 animate-pulse-bg" />
-            <div className="relative z-10">
-              <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Target className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-primary-navy mb-3">
-                Handlingsplan
-              </h3>
-              <p className="text-gray-700">
-                Få konkreta rekommendationer för att maximera företagets värde och 
-                attraktivitet för potentiella köpare.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -115,47 +186,23 @@ export default function AnalyzeLandingPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-primary-navy mb-12">
-            Så fungerar det
+            {text.howItWorksTitle}
           </h2>
           
           <div className="space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-primary-navy text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
-                1
+            {text.steps.map((step, index) => (
+              <div key={step.title} className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-primary-navy text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+                  {index + 1}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-1">{step.title}</h3>
+                  <p className="text-gray-600">
+                    {step.description}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-1">Ange företagsuppgifter</h3>
-                <p className="text-gray-600">
-                  Fyll bara i företagsnamn och eventuell webbadress - inget mer krävs.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-primary-navy text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-1">AI-driven webbanalys</h3>
-                <p className="text-gray-600">
-                  Vår avancerade AI söker igenom sökmotorer, branschsidor, recensioner och mer 
-                  för att samla in relevant information.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-primary-navy text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-1">Få din rapport</h3>
-                <p className="text-gray-600">
-                  Inom några minuter får du en omfattande analys med insikter och 
-                  rekommendationer för ditt företag.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -163,10 +210,10 @@ export default function AnalyzeLandingPage() {
       {/* Final CTA Section */}
       <section className="py-20 px-4 text-center bg-gradient-to-br from-blue-900 to-purple-900 text-white">
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
-          Redo att upptäcka ditt företags potential?
+          {text.finalTitle}
         </h2>
         <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-          Få värdefulla insikter som kan hjälpa dig maximera företagets värde - helt kostnadsfritt.
+          {text.finalLead}
         </p>
         <button
           onClick={() => setShowModal(true)}
@@ -174,7 +221,7 @@ export default function AnalyzeLandingPage() {
         >
           <div className="absolute inset-0 bg-white rounded-full animate-pulse-shadow-white" />
           <span className="relative z-10 flex items-center gap-2">
-            Analysera mitt företag <Zap className="w-5 h-5" />
+            {text.finalCta} <Zap className="w-5 h-5" />
           </span>
         </button>
       </section>
