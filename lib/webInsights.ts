@@ -1,6 +1,11 @@
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 
-export type WebInsightFocus = 'enrichment' | 'valuation-result' | 'listing' | 'buyer-match'
+export type WebInsightFocus =
+  | 'enrichment'
+  | 'valuation-result'
+  | 'listing'
+  | 'buyer-match'
+  | 'analysis'
 
 interface WebInsightOptions {
   companyName: string
@@ -199,6 +204,45 @@ Fokusera på hårda fakta som omsättning, anställda, USP:er, kontaktinfo.`,
   }
 }`
       }
+    case 'analysis':
+      return {
+        focusInstructions: `Syfte: samla bred webbinformation inför en AI-analys av bolaget.
+Fokusera på fakta om affärsmodell, kunder, tillväxt, risker, nyckeltal och nyheter.`,
+        schema: `{
+  "companyProfile": {
+    "description": "Kort beskrivning av verksamheten",
+    "industry": "Bransch",
+    "customers": "Huvudkundsegment",
+    "valueProp": "Huvudvärdeerbjudande",
+    "locations": ["plats 1", "plats 2"],
+    "estimatedEmployees": "intervall eller null"
+  },
+  "marketSignals": ["signal 1", "signal 2"],
+  "growthNotes": ["tillväxtsignal 1"],
+  "riskNotes": ["risk 1"],
+  "notableActivities": ["projekt, expansioner, affärer"],
+  "sources": [
+    { "title": "Källa", "url": "https://...", "snippet": "kort citat" }
+  ]
+}`
+      }
   }
+}
+
+type CompanySearchOptions = {
+  companyName: string
+  orgNumber?: string
+  website?: string
+  industry?: string
+}
+
+export async function searchCompanyWithWebSearch(options: CompanySearchOptions) {
+  return fetchWebInsights({
+    companyName: options.companyName,
+    orgNumber: options.orgNumber,
+    website: options.website,
+    industry: options.industry,
+    focus: 'analysis'
+  })
 }
 
