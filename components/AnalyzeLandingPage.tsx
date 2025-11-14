@@ -120,7 +120,7 @@ export default function AnalyzeLandingPage() {
           
           <button
             onClick={() => setShowModal(true)}
-            className="group relative bg-white text-primary-navy px-12 py-5 rounded-full font-bold text-lg transition-all transform hover:scale-105"
+            className="group relative bg-primary-navy text-white px-12 py-5 rounded-full font-bold text-lg transition-all transform hover:scale-105"
           >
             {/* Pulsating shadow effect */}
             <div className="absolute inset-0 bg-primary-navy rounded-full animate-pulse-shadow" />
@@ -209,7 +209,7 @@ export default function AnalyzeLandingPage() {
 
       {/* Final CTA Section */}
       <section className="py-20 px-4 text-center bg-gradient-to-br from-blue-900 to-purple-900 text-white">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
           {text.finalTitle}
         </h2>
         <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
