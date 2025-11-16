@@ -118,6 +118,9 @@ Returnera som JSON enligt detta format:
 }`
 
       try {
+        console.log('[ANALYZE] Starting AI analysis for:', companyName)
+        console.log('[ANALYZE] Has web search data:', !!webSearchData)
+        
         const analysisResponse = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -125,7 +128,7 @@ Returnera som JSON enligt detta format:
             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
           },
           body: JSON.stringify({
-            model: 'gpt-5',
+            model: 'gpt-4o',
             messages: [
               {
                 role: 'system',
@@ -136,15 +139,23 @@ Returnera som JSON enligt detta format:
                 content: analysisPrompt
               }
             ],
-            response_format: { type: 'json_object' }
+            response_format: { type: 'json_object' },
+            temperature: 0.7,
+            max_tokens: 6000
           })
         })
+
+        console.log('[ANALYZE] OpenAI response status:', analysisResponse.status)
 
         if (analysisResponse.ok) {
           const analysisData = await analysisResponse.json()
           finalAnalysis = JSON.parse(analysisData.choices[0].message.content)
+          console.log('[ANALYZE] AI analysis completed successfully')
         } else {
-          console.log('GPT-5 unavailable, falling back to GPT-4')
+          const errorText = await analysisResponse.text()
+          console.error('[ANALYZE] Primary model failed:', analysisResponse.status, errorText)
+          console.log('[ANALYZE] Falling back to GPT-4')
+          
           const gpt4Response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -169,12 +180,17 @@ Returnera som JSON enligt detta format:
             })
           })
 
+          console.log('[ANALYZE] GPT-4 response status:', gpt4Response.status)
+          
           if (!gpt4Response.ok) {
+            const gpt4Error = await gpt4Response.text()
+            console.error('[ANALYZE] GPT-4 also failed:', gpt4Response.status, gpt4Error)
             throw new Error('Analys misslyckades')
           }
 
           const gpt4Data = await gpt4Response.json()
           finalAnalysis = JSON.parse(gpt4Data.choices[0].message.content)
+          console.log('[ANALYZE] GPT-4 fallback completed successfully')
         }
       } catch (error) {
         console.error('AI analysis failed, falling back to heuristic analysis:', error)
