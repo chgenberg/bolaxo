@@ -86,7 +86,13 @@ export async function handleValuationRequest(request: Request) {
 
     // Call OpenAI with gpt-5-mini
     // Note: gpt-5-mini uses max_completion_tokens (not max_tokens) and does NOT support temperature
-    console.log('Calling OpenAI API with model: gpt-5-mini')
+    console.log('[VALUATION] Starting valuation request')
+    console.log('[VALUATION] Company:', data.companyName)
+    console.log('[VALUATION] Industry:', data.industry)
+    console.log('[VALUATION] Revenue:', data.exactRevenue)
+    console.log('[VALUATION] Calling OpenAI API with model: gpt-5-mini')
+    console.log('[VALUATION] Prompt length:', combinedPrompt.length, 'characters')
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -103,6 +109,8 @@ export async function handleValuationRequest(request: Request) {
       }),
       signal: createTimeoutSignal(300000)
     })
+    
+    console.log('[VALUATION] OpenAI response status:', response.status)
 
     if (!response.ok) {
       const errorText = await response.text()
@@ -128,9 +136,10 @@ export async function handleValuationRequest(request: Request) {
     return NextResponse.json({ result })
     
   } catch (error) {
-    console.error('Valuation API error:', error)
-    console.error('Error details:', error instanceof Error ? error.message : String(error))
-    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+    console.error('[VALUATION] Caught exception in handler:', error)
+    console.error('[VALUATION] Error details:', error instanceof Error ? error.message : String(error))
+    console.error('[VALUATION] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+    console.error('[VALUATION] Raw data received:', JSON.stringify(rawData).substring(0, 500))
     
     // Try fallback valuation if we have the data
     if (rawData) {
