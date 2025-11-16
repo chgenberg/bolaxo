@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { useNdaTracking } from '@/lib/api-hooks'
 import ModernSelect from './ModernSelect'
+import InfoTooltip from './InfoTooltip'
 
 export default function NdaTracking() {
   const { fetchNdas, updateNdaStatus, performNdaAction, loading, error } = useNdaTracking()
@@ -106,6 +107,9 @@ export default function NdaTracking() {
         <h2 className="text-2xl font-bold text-primary-navy flex items-center gap-2 mb-2">
           <FileText className="w-6 h-6" />
           NDA Tracking & Management
+          <InfoTooltip
+            label="Godkänn eller avslå NDA:er här – först när status är approved låses listingen upp och chatten aktiveras. Använd påminnelse, resend eller förläng med 14 dagar när köparen fastnar."
+          />
         </h2>
         <p className="text-gray-600 text-sm">
           Monitor NDA status, deadlines, and signings

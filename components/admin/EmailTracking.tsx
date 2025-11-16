@@ -6,6 +6,7 @@ import {
   Send, AlertCircle, CheckCircle, Clock, MoreVertical
 } from 'lucide-react'
 import { useEmailTracking } from '@/lib/api-hooks'
+import InfoTooltip from './InfoTooltip'
 
 export default function EmailTracking() {
   const { fetchEmails, performEmailAction, loading, error } = useEmailTracking()
@@ -94,6 +95,9 @@ export default function EmailTracking() {
         <h2 className="text-2xl font-bold text-primary-navy flex items-center gap-2 mb-2">
           <Mail className="w-6 h-6" />
           Email Notification Tracking
+          <InfoTooltip
+            label="All e-post loggas i EmailLog via Brevo. Vid failed/bounced: använd menyvalet Resend eller Unsubscribe innan du eskalerar så support och notifieringar hålls i synk."
+          />
         </h2>
         <p className="text-gray-600 text-sm">
           Monitor email delivery, open rates, and engagement

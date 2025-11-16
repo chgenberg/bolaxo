@@ -6,6 +6,7 @@ import {
   FileCheck, CheckCircle, Zap, RefreshCw, Search
 } from 'lucide-react'
 import { useAdminTransactions } from '@/lib/api-hooks'
+import InfoTooltip from './InfoTooltip'
 
 interface Transaction {
   id: string
@@ -83,6 +84,9 @@ export default function TransactionPipeline() {
         <h2 className="text-2xl font-bold text-primary-navy mb-4 flex items-center gap-2">
           <Zap className="w-6 h-6" />
           Transaction Pipeline
+          <InfoTooltip
+            label="Flytta affärer via kortmenyn eller dropdownen i detaljvyn för att hålla LOI → DD → SPA → Closing uppdaterat. Markera även milstolpar och betalningar så notifieringar och dashboards stämmer."
+          />
         </h2>
         
         {/* Revenue Stats */}

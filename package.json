@@ -11,6 +11,7 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "seed": "tsx prisma/seed.ts",
+    "seed:demo": "tsx prisma/seed-demo.ts",
     "create-admin": "tsx scripts/create-admin.ts",
     "admin:create": "tsx scripts/create-admin.ts",
     "backup:database": "tsx scripts/backup-database.ts"
