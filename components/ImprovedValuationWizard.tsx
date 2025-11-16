@@ -1522,8 +1522,11 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${progress}%` }}
+                  className="h-2 rounded-full transition-all duration-300"
+                  style={{ 
+                    width: `${progress}%`,
+                    backgroundColor: '#1F3C58'
+                  }}
                 />
               </div>
             </div>
