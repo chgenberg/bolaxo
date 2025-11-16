@@ -97,7 +97,7 @@ export default function HomePageContent() {
               {/* Small discreet buyer link */}
               <div className="mt-2 sm:mt-3 md:mt-4 text-center">
                 <Link 
-                  href={`/${locale}/kopare`} 
+                  href="https://bolaxo-production.up.railway.app/sv/sok" 
                   className="inline-flex items-center gap-1 text-[10px] sm:text-xs text-gray-500 hover:text-navy transition-colors font-medium"
                 >
                   {t('buyerLink')} <span className="text-gray-400">→</span>
