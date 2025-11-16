@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 
 export async function GET(request: Request) {
   try {
-    console.log('🔐 [MAGIC LINK VERIFY] Starting verification...')
+    console.log(' [MAGIC LINK VERIFY] Starting verification...')
     
     // Detektera rätt base URL tidigt
     const protocol = request.headers.get('x-forwarded-proto') || 'https'
@@ -20,10 +20,10 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')
 
-    console.log('🔐 [MAGIC LINK VERIFY] Token received:', token ? `${token.substring(0, 20)}...` : 'none')
+    console.log(' [MAGIC LINK VERIFY] Token received:', token ? `${token.substring(0, 20)}...` : 'none')
 
     if (!token) {
-      console.log('❌ [MAGIC LINK VERIFY] No token provided')
+      console.log('X [MAGIC LINK VERIFY] No token provided')
       return NextResponse.json(
         { success: false, error: 'Invalid token' },
         { status: 400 }
@@ -35,10 +35,10 @@ export async function GET(request: Request) {
       where: { magicLinkToken: token }
     })
 
-    console.log('🔐 [MAGIC LINK VERIFY] User lookup:', user ? `Found user ${user.id} (${user.email})` : 'No user found')
+    console.log(' [MAGIC LINK VERIFY] User lookup:', user ? `Found user ${user.id} (${user.email})` : 'No user found')
 
     if (!user) {
-      console.log('❌ [MAGIC LINK VERIFY] User not found for token')
+      console.log('X [MAGIC LINK VERIFY] User not found for token')
       return NextResponse.json(
         { success: false, error: 'Invalid token' },
         { status: 400 }
@@ -47,7 +47,7 @@ export async function GET(request: Request) {
 
     // Kolla om token har gått ut
     if (!user.tokenExpiresAt || user.tokenExpiresAt < new Date()) {
-      console.log('❌ [MAGIC LINK VERIFY] Token expired:', user.tokenExpiresAt)
+      console.log('X [MAGIC LINK VERIFY] Token expired:', user.tokenExpiresAt)
       return NextResponse.json(
         { success: false, error: 'Token expired' },
         { status: 400 }
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
     // Always use secure cookies for HTTPS, and in production
     const useSecure = isHttps || process.env.NODE_ENV === 'production' || baseUrl.includes('bolaxo.com')
 
-    console.log('🔐 [MAGIC LINK VERIFY] Cookie settings:', {
+    console.log(' [MAGIC LINK VERIFY] Cookie settings:', {
       protocol,
       isHttps,
       useSecure,
@@ -118,12 +118,12 @@ export async function GET(request: Request) {
             document.cookie = 'bolaxo_user_email=${encodeURIComponent(user.email)}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
             document.cookie = 'bolaxo_user_role=${user.role}; path=/; max-age=${60 * 60 * 24 * 30}; ${useSecure ? 'secure; ' : ''}SameSite=Lax';
             
-            console.log('🍪 [VERIFY] Cookies set via JavaScript');
-            console.log('🍪 [VERIFY] Cookies:', document.cookie);
+            console.log('cookie [VERIFY] Cookies set via JavaScript');
+            console.log('cookie [VERIFY] Cookies:', document.cookie);
             
             // Wait a moment then redirect
             setTimeout(() => {
-              console.log('🔄 [VERIFY] Redirecting to:', '${redirectUrl}');
+              console.log(' [VERIFY] Redirecting to:', '${redirectUrl}');
               window.location.href = '${redirectUrl}';
             }, 500);
           </script>
@@ -175,15 +175,15 @@ export async function GET(request: Request) {
       path: '/',
     })
 
-    console.log('✅ [MAGIC LINK VERIFY] Verification successful, cookies set via HTML + headers')
-    console.log('✅ [MAGIC LINK VERIFY] Use secure cookies:', useSecure)
-    console.log('✅ [MAGIC LINK VERIFY] Protocol:', protocol)
-    console.log('✅ [MAGIC LINK VERIFY] User role:', user.role)
+    console.log('OK [MAGIC LINK VERIFY] Verification successful, cookies set via HTML + headers')
+    console.log('OK [MAGIC LINK VERIFY] Use secure cookies:', useSecure)
+    console.log('OK [MAGIC LINK VERIFY] Protocol:', protocol)
+    console.log('OK [MAGIC LINK VERIFY] User role:', user.role)
 
     return response
 
   } catch (error) {
-    console.error('❌ [MAGIC LINK VERIFY] Error:', error)
+    console.error('X [MAGIC LINK VERIFY] Error:', error)
     return NextResponse.json(
       { success: false, error: 'Server error' },
       { status: 500 }

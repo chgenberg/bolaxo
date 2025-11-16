@@ -195,7 +195,7 @@ export async function sendMagicLinkEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                     <p style="color: #9ca3af; font-size: 12px; margin: 0;">
                       Verifierade uppgifter • NDA innan detaljer • Kvalificerade köpare
@@ -291,7 +291,7 @@ export async function sendLOINotificationEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                   </td>
                 </tr>
@@ -347,7 +347,7 @@ export async function sendLOIApprovalEmail(
                 <tr>
                   <td style="padding: 40px 30px;">
                     <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
-                      LOI godkänd! 🎉
+                      LOI godkänd! 
                     </h2>
                     
                     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -383,7 +383,7 @@ export async function sendLOIApprovalEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                   </td>
                 </tr>
@@ -439,7 +439,7 @@ export async function sendNDAApprovalEmail(
                 <tr>
                   <td style="padding: 40px 30px;">
                     <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
-                      NDA godkänd! 🎉
+                      NDA godkänd! 
                     </h2>
                     
                     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -475,7 +475,7 @@ export async function sendNDAApprovalEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                   </td>
                 </tr>
@@ -569,7 +569,7 @@ export async function sendNDARejectionEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                   </td>
                 </tr>
@@ -662,7 +662,7 @@ export async function sendNewNDARequestEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                   </td>
                 </tr>
@@ -758,7 +758,7 @@ export async function sendNewMessageEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                   </td>
                 </tr>
@@ -832,7 +832,7 @@ export async function sendMatchNotificationEmail(
                 <tr>
                   <td style="padding: 40px 30px;">
                     <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
-                      Ny matchning! 🎯
+                      Ny matchning! 
                     </h2>
                     
                     <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
@@ -869,7 +869,7 @@ export async function sendMatchNotificationEmail(
                 <tr>
                   <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
                     <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
-                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                      <strong style="color: #1F3C58;">BOLAXO</strong> (C) 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
                     </p>
                   </td>
                 </tr>

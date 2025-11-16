@@ -31,19 +31,21 @@ export default function HomePageContent() {
         {/* Background Image - Fullscreen with no overlay */}
         <div className="absolute left-0 right-0 top-24 md:top-20 lg:top-16 bottom-0 z-0">
           <Image
-            src="/Home/hero_winter.png"
+            src="/Home/hero_winter.webp"
             alt="Hero background"
             fill
             className="object-cover object-top hidden md:block"
             style={{ objectPosition: 'center top' }}
+            sizes="(min-width: 768px) 100vw"
             priority
           />
           <Image
-            src="/Home/hero_winter_mobile.png"
+            src="/Home/hero_winter_mobile.webp"
             alt="Hero background mobile"
             fill
             className="object-cover object-top md:hidden"
             style={{ objectPosition: 'center top' }}
+            sizes="100vw"
             priority
           />
         </div>

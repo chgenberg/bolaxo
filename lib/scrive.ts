@@ -42,7 +42,7 @@ export class ScriveClient {
    */
   async createDocument(doc: ScriveDocument): Promise<{ id: string; signingUrl: string } | null> {
     if (!this.isConfigured()) {
-      console.log('⚠️ Scrive not configured. Set SCRIVE_API_TOKEN in environment.')
+      console.log('️ Scrive not configured. Set SCRIVE_API_TOKEN in environment.')
       return null
     }
 
@@ -155,7 +155,7 @@ export class MockScriveClient extends ScriveClient {
     const mockId = `scrive_mock_${Date.now()}`
     const mockUrl = `https://scrive.com/s/${mockId}` // Mock URL
     
-    console.log(`📝 Mock Scrive: Document "${doc.title}" created`)
+    console.log(` Mock Scrive: Document "${doc.title}" created`)
     console.log(`   Parties: ${doc.parties.map(p => p.name).join(', ')}`)
     console.log(`   Signing URL: ${mockUrl}`)
     

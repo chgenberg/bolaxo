@@ -181,7 +181,14 @@ export default function BuyerStartPageContent() {
                     required
                   />
                   <span className="text-sm text-gray-700">
-                    Jag godkänner <a href="/användarvillkor" className="text-primary-navy hover:underline">användarvillkoren</a> och <a href="/integritet" className="text-primary-navy hover:underline">integritetspolicyn</a>
+                    Jag godkänner{' '}
+                    <Link href="/sv/juridiskt/anvandarvillkor" className="text-primary-navy hover:underline">
+                      användarvillkoren
+                    </Link>{' '}
+                    och{' '}
+                    <Link href="/sv/juridiskt/integritetspolicy" className="text-primary-navy hover:underline">
+                      integritetspolicyn
+                    </Link>
                   </span>
                 </label>
               </div>

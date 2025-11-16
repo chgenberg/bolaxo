@@ -1385,11 +1385,17 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
               />
               <label htmlFor="privacy" className="text-sm text-gray-700">
                 Jag accepterar{' '}
-                <Link href="/integritet" className="text-primary-navy underline">
+                <Link
+                  href={`/${locale}/juridiskt/integritetspolicy`}
+                  className="text-primary-navy underline"
+                >
                   integritetspolicyn
                 </Link>{' '}
                 och{' '}
-                <Link href="/villkor" className="text-primary-navy underline">
+                <Link
+                  href={`/${locale}/juridiskt/anvandarvillkor`}
+                  className="text-primary-navy underline"
+                >
                   användarvillkoren
                 </Link>
               </label>

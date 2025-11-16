@@ -70,12 +70,12 @@ function initializeRateLimiters() {
         }),
       }
 
-      console.log('✓ Upstash rate limiting enabled')
+      console.log('- Upstash rate limiting enabled')
     } catch (error) {
-      console.log('⚠️ Upstash initialization failed, using in-memory rate limiting')
+      console.log('️ Upstash initialization failed, using in-memory rate limiting')
     }
   } else {
-    console.log('⚠️ Upstash not configured, using in-memory rate limiting (not suitable for production)')
+    console.log('️ Upstash not configured, using in-memory rate limiting (not suitable for production)')
   }
 }
 

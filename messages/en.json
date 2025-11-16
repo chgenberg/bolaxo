@@ -133,7 +133,7 @@
           "title": "Your control is maintained",
           "desc": "You decide what matches can see before they sign the NDA - you can be completely anonymous if you want."
         },
-        "saveTime": "⚡ Save time:",
+        "saveTime": "Save time:",
         "saveTimeDesc": "Instead of waiting for random inquiries, you get relevant buyers presented automatically."
       },
       "step4": {
@@ -325,7 +325,7 @@
     "securityDesc": "Bank-level security for your information and data",
     "partners": "Our partners",
     "partnersDesc": "Partnerships with leading players in the financial world",
-    "copyright": "© {year} BOLAXO AB. All rights reserved.",
+    "copyright": "(C) {year} BOLAXO AB. All rights reserved.",
     "description": "Security & Privacy Our partners",
     "address": "Norrmälarstrand 10\n114 62 Stockholm\nSweden",
     "sellInYourCity": "Sell in your city",
@@ -439,7 +439,7 @@
     "pipelineTitle": "Pipeline & Deal Tracking",
     "pipelineDesc": "See all your deals in the pipeline with AI-driven conversion analysis and risk assessment",
     "bankIdTitle": "BankID verified",
-    "bankIdDesc": "Your legitimacy as a broker is verified. Builds trust with buyers and sellers",
+    "bankIdDesc": "All broker licenses are personal and require BankID verification to ensure legitimacy. This gives you a \"Verified broker\" badge that increases trust with users.",
     "analyticsTitle": "Real-time Analytics",
     "analyticsDesc": "Volume, completion rate, pipeline value and conversion – all in your own dashboard",
     "licensesTitle": "Broker licenses",
@@ -477,7 +477,6 @@
       "manageDesc": "Create, edit and follow up on all objects"
     },
     "bankIdRequired": "BankID verification required",
-    "bankIdDesc": "All broker licenses are personal and require BankID verification to ensure legitimacy. This gives you a \"Verified broker\" badge that increases trust with users.",
     "faqTitle": "Frequently asked questions for brokers",
     "faqShare": "Can multiple brokers share a license?",
     "faqShareAnswer": "No, licenses are personal and require BankID verification. Each broker needs their own license.",
@@ -624,7 +623,8 @@
     "advancedFilters": "Advanced filters",
     "allVerified": "All ads are verified",
     "results": "results",
-    "adjustFilters": "Try adjusting your filters or search terms to see more results"
+    "adjustFilters": "Try adjusting your filters or search terms to see more results",
+    "loadError": "Could not load listings right now. Please try again shortly."
   },
   "salja": {
     "heroTitle": "From listing to closing – step by step",
@@ -1004,14 +1004,39 @@
         "price": "495",
         "subtitle": "/ month",
         "features": [
-          { "text": "Listing for 90 days", "included": true, "highlight": true },
-          { "text": "Up to 5 images", "included": true },
-          { "text": "Standard placement in lists", "included": true },
-          { "text": "Standard NDA", "included": true },
-          { "text": "Simple statistics", "included": true },
-          { "text": "Email support", "included": true },
-          { "text": "Highlighting", "included": false },
-          { "text": "Phone support", "included": false }
+          {
+            "text": "Listing for 90 days",
+            "included": true,
+            "highlight": true
+          },
+          {
+            "text": "Up to 5 images",
+            "included": true
+          },
+          {
+            "text": "Standard placement in lists",
+            "included": true
+          },
+          {
+            "text": "Standard NDA",
+            "included": true
+          },
+          {
+            "text": "Simple statistics",
+            "included": true
+          },
+          {
+            "text": "Email support",
+            "included": true
+          },
+          {
+            "text": "Highlighting",
+            "included": false
+          },
+          {
+            "text": "Phone support",
+            "included": false
+          }
         ],
         "cta": "Choose Basic"
       },
@@ -1020,14 +1045,39 @@
         "price": "995",
         "subtitle": "/ month",
         "features": [
-          { "text": "Listing for 180 days", "included": true, "highlight": true },
-          { "text": "Up to 20 images", "included": true },
-          { "text": "Highlighting + Boost 7 days/month", "included": true },
-          { "text": "Priority NDA handling", "included": true },
-          { "text": "Pitch deck templates (1–5 pages)", "included": true },
-          { "text": "Phone support weekdays 9–16", "included": true },
-          { "text": "1 due diligence checklist", "included": true },
-          { "text": "Dedicated advisor", "included": false }
+          {
+            "text": "Listing for 180 days",
+            "included": true,
+            "highlight": true
+          },
+          {
+            "text": "Up to 20 images",
+            "included": true
+          },
+          {
+            "text": "Highlighting + Boost 7 days/month",
+            "included": true
+          },
+          {
+            "text": "Priority NDA handling",
+            "included": true
+          },
+          {
+            "text": "Pitch deck templates (1–5 pages)",
+            "included": true
+          },
+          {
+            "text": "Phone support weekdays 9–16",
+            "included": true
+          },
+          {
+            "text": "1 due diligence checklist",
+            "included": true
+          },
+          {
+            "text": "Dedicated advisor",
+            "included": false
+          }
         ],
         "cta": "Choose Pro"
       },
@@ -1036,23 +1086,48 @@
         "price": "1 995",
         "subtitle": "/ month",
         "features": [
-          { "text": "Listing until sold", "included": true, "highlight": true },
-          { "text": "Unlimited images", "included": true },
-          { "text": "Top placement and first in watchlists", "included": true },
-          { "text": "Dedicated advisor", "included": true },
-          { "text": "Legal document templates (NDA, LOI, Term Sheet, Transfer Agreement)", "included": true },
-          { "text": "CRM/API integration", "included": true },
-          { "text": "Monthly market reporting view", "included": true },
-          { "text": "Priority matching", "included": true }
+          {
+            "text": "Listing until sold",
+            "included": true,
+            "highlight": true
+          },
+          {
+            "text": "Unlimited images",
+            "included": true
+          },
+          {
+            "text": "Top placement and first in watchlists",
+            "included": true
+          },
+          {
+            "text": "Dedicated advisor",
+            "included": true
+          },
+          {
+            "text": "Legal document templates (NDA, LOI, Term Sheet, Transfer Agreement)",
+            "included": true
+          },
+          {
+            "text": "CRM/API integration",
+            "included": true
+          },
+          {
+            "text": "Monthly market reporting view",
+            "included": true
+          },
+          {
+            "text": "Priority matching",
+            "included": true
+          }
         ],
         "cta": "Contact us"
       }
     },
     "termsTitle": "Terms in brief",
     "terms": [
-      "✓ <strong>Monthly billing</strong>, no commitment period",
-      "✓ <strong>15% discount on annual payment</strong>",
-      "✓ <strong>Success fee light (optional)</strong>: 0.75–1.5% on completed deal via platform"
+      "- <strong>Monthly billing</strong>, no commitment period",
+      "- <strong>15% discount on annual payment</strong>",
+      "- <strong>Success fee light (optional)</strong>: 0.75–1.5% on completed deal via platform"
     ],
     "termsNote": "All pricing plans include access to our marketing tools, statistics and support to ensure a successful sale.",
     "faqTitle": "Frequently asked questions",
@@ -1110,7 +1185,7 @@
       "title": "BOLAXO Support",
       "subtitle": "Always ready to help"
     },
-    "initialMessage": "Hi! I'm your AI assistant for BOLAXO. How can I help you today? 🤖",
+    "initialMessage": "Hi! I'm your AI assistant for BOLAXO. How can I help you today?",
     "commonQuestions": "Common questions:",
     "contactMe": "I want to be contacted",
     "inputPlaceholder": "Type your message...",
@@ -1135,7 +1210,7 @@
       }
     },
     "botResponses": {
-      "greeting": "Hi! How can I help you today? 😊",
+      "greeting": "Hi! How can I help you today?",
       "pricing": "We have three pricing plans: Basic (495 SEK/month), Pro (995 SEK/month) and Enterprise (1995 SEK/month). Valuation and creating an ad is completely free! Would you like to know more about what's included in each package?",
       "valuation": "Our AI valuation takes only 5 minutes and is completely free! You get a professional assessment based on industry standards and real deals. Would you like to start a valuation now?",
       "selling": "Perfect that you want to sell! The process is simple: 1) Do a free valuation, 2) Create an ad, 3) Get matched with buyers, 4) Complete the deal safely. Should I guide you to the valuation?",
@@ -1305,7 +1380,7 @@
       "title": "Recent deals",
       "subtitle": "Live updated from our platform",
       "soldFor": "Sold for",
-      "closed": "✓ CLOSED",
+      "closed": "- CLOSED",
       "bidsReceived": "bids received",
       "sales": [
         {
@@ -1691,7 +1766,7 @@
     }
   },
   "ddUpload": {
-    "title": "📋 Due Diligence - Step by Step",
+    "title": "Due Diligence - Step by Step",
     "subtitle": "Conduct a professional business inspection before purchase. We analyze all documents with GPT and generate a DD report.",
     "back": "← Back",
     "backToInstructions": "← Back to instructions",
@@ -1719,19 +1794,19 @@
         "You can present the report to your partners/lawyers"
       ]
     },
-    "startUpload": "▶ Start uploading documents →",
-    "tip": "💡 Tip: You don't need to upload all documents - the more you upload, the better the DD report. Even partial documentation adds value.",
-    "uploadTitle": "📤 Upload DD Documents",
+    "startUpload": "> Start uploading documents →",
+    "tip": "Tip: You don't need to upload all documents - the more you upload, the better the DD report. Even partial documentation adds value.",
+    "uploadTitle": "Upload DD Documents",
     "uploadSubtitle": "Upload documents for Your Due Diligence analysis",
     "clickToUpload": "Click to upload or drag-and-drop",
     "uploadedFiles": "Uploaded files:",
-    "generateReport": "✓ Generate DD Report",
-    "generatingReport": "⏳ Generating DD report...",
+    "generateReport": "- Generate DD Report",
+    "generatingReport": "Generating DD report...",
     "why": "Why:",
     "examples": "Examples:",
     "categories": {
       "financial": {
-        "name": "💰 Financial Due Diligence",
+        "name": "Financial Due Diligence",
         "description": "Financial statements, results, cash flow and financial status",
         "documents": {
           "bokslut": {
@@ -1762,7 +1837,7 @@
         }
       },
       "legal": {
-        "name": "⚖️ Legal Due Diligence",
+        "name": "️ Legal Due Diligence",
         "description": "Contracts, ownership, IP and legal risks",
         "documents": {
           "bolag": {
@@ -1793,7 +1868,7 @@
         }
       },
       "commercial": {
-        "name": "📊 Commercial Due Diligence",
+        "name": "Commercial Due Diligence",
         "description": "Market, customers and competition",
         "documents": {
           "kunder": {
@@ -1819,7 +1894,7 @@
         }
       },
       "hr": {
-        "name": "👥 HR & Organization",
+        "name": "HR & Organization",
         "description": "Personnel, key persons and labor law",
         "documents": {
           "personal": {
@@ -1845,7 +1920,7 @@
         }
       },
       "it": {
-        "name": "🔧 IT & Technical",
+        "name": "IT & Technical",
         "description": "Systems, security and infrastructure",
         "documents": {
           "it-system": {
@@ -1866,7 +1941,7 @@
         }
       },
       "tax": {
-        "name": "📋 Tax Due Diligence",
+        "name": "Tax Due Diligence",
         "description": "Tax situation and future risks",
         "documents": {
           "skatterevisioner": {
@@ -1882,7 +1957,7 @@
         }
       },
       "env": {
-        "name": "🌿 Environmental Due Diligence",
+        "name": "Environmental Due Diligence",
         "description": "Environmental compensation and ESG compliance",
         "documents": {
           "miljötillstånd": {
@@ -1935,7 +2010,7 @@
     }
   },
   "spaEditor": {
-    "title": "📄 SPA Editor",
+    "title": "SPA Editor",
     "back": "← Back",
     "version": "Version",
     "status": "Status",
@@ -2463,110 +2538,309 @@
       "publishError": "An error occurred while publishing the listing."
     },
     "navigation": {
-        "next": "Next step",
-        "previous": "Previous step",
-        "create": "Create listing",
-        "saveDraft": "Save as draft",
-        "back": "Back",
-        "nextButton": "Next",
-        "goToPublish": "Go to publishing",
-        "readyToPublish": "Ready to publish!",
-        "readyToPublishDesc": "Your listing is ready to be shown to thousands of qualified buyers",
-        "selectedPackage": "Selected package:",
-        "changePackage": "Change package",
-        "summary": "Summary",
-        "companyNameLabel": "Company name:",
-        "industryLabel": "Industry:",
-        "locationLabel": "Location:",
-        "priceRangeLabel": "Price range:",
-        "importantInfo": "Important information",
-        "importantInfoDesc": "By publishing you agree to our {termsLink} and confirm that all information is correct. The listing is reviewed before publication.",
-        "termsLink": "terms of use",
-        "allPackagesIncludeVAT": "All packages include VAT. No hidden fees or commitment period.",
-        "oneTimeCost": "One-time cost, no commitment period",
-        "publishing": "Publishing...",
-        "publishedSuccess": "Listing has been published!"
-      },
+      "next": "Next step",
+      "previous": "Previous step",
+      "create": "Create listing",
+      "saveDraft": "Save as draft",
+      "back": "Back",
+      "nextButton": "Next",
+      "goToPublish": "Go to publishing",
+      "readyToPublish": "Ready to publish!",
+      "readyToPublishDesc": "Your listing is ready to be shown to thousands of qualified buyers",
+      "selectedPackage": "Selected package:",
+      "changePackage": "Change package",
+      "summary": "Summary",
+      "companyNameLabel": "Company name:",
+      "industryLabel": "Industry:",
+      "locationLabel": "Location:",
+      "priceRangeLabel": "Price range:",
+      "importantInfo": "Important information",
+      "importantInfoDesc": "By publishing you agree to our {termsLink} and confirm that all information is correct. The listing is reviewed before publication.",
+      "termsLink": "terms of use",
+      "allPackagesIncludeVAT": "All packages include VAT. No hidden fees or commitment period.",
+      "oneTimeCost": "One-time cost, no commitment period",
+      "publishing": "Publishing...",
+      "publishedSuccess": "Listing has been published!"
+    },
     "industries": [
-      { "value": "it-konsult-utveckling", "label": "IT consulting & development" },
-      { "value": "ehandel-d2c", "label": "E-commerce/D2C" },
-      { "value": "saas-licensmjukvara", "label": "SaaS & licensed software" },
-      { "value": "bygg-anlaggning", "label": "Construction & infrastructure" },
-      { "value": "restaurang-cafe", "label": "Restaurant & café" },
-      { "value": "detaljhandel-fysisk", "label": "Retail (physical)" },
-      { "value": "grossist-partihandel", "label": "Wholesale/trade" },
-      { "value": "latt-tillverkning-verkstad", "label": "Light manufacturing/workshop" },
-      { "value": "ekonomitjanster-redovisning", "label": "Financial services & accounting" },
-      { "value": "marknadsforing-kommunikation-pr", "label": "Marketing, communication & PR" },
-      { "value": "halsa-skönhet", "label": "Health/beauty (salons, clinics, spa)" },
-      { "value": "gym-fitness-wellness", "label": "Gym, fitness & wellness" },
-      { "value": "stad-facility-services", "label": "Cleaning & facility services" },
-      { "value": "lager-logistik-3pl", "label": "Warehouse, logistics & 3PL" },
-      { "value": "el-vvs-installation", "label": "Electrical, plumbing & installation" },
-      { "value": "fastighetsservice-forvaltning", "label": "Property service & management" },
-      { "value": "event-konferens-upplevelser", "label": "Event, conference & experiences" },
-      { "value": "utbildning-kurser-edtech", "label": "Education, courses & edtech small scale" },
-      { "value": "bilverkstad-fordonsservice", "label": "Auto repair & vehicle service" },
-      { "value": "jord-skog-tradgard-gronyteskotsel", "label": "Agriculture/forestry, garden & green space management" }
+      {
+        "value": "it-konsult-utveckling",
+        "label": "IT consulting & development"
+      },
+      {
+        "value": "ehandel-d2c",
+        "label": "E-commerce/D2C"
+      },
+      {
+        "value": "saas-licensmjukvara",
+        "label": "SaaS & licensed software"
+      },
+      {
+        "value": "bygg-anlaggning",
+        "label": "Construction & infrastructure"
+      },
+      {
+        "value": "restaurang-cafe",
+        "label": "Restaurant & café"
+      },
+      {
+        "value": "detaljhandel-fysisk",
+        "label": "Retail (physical)"
+      },
+      {
+        "value": "grossist-partihandel",
+        "label": "Wholesale/trade"
+      },
+      {
+        "value": "latt-tillverkning-verkstad",
+        "label": "Light manufacturing/workshop"
+      },
+      {
+        "value": "ekonomitjanster-redovisning",
+        "label": "Financial services & accounting"
+      },
+      {
+        "value": "marknadsforing-kommunikation-pr",
+        "label": "Marketing, communication & PR"
+      },
+      {
+        "value": "halsa-skönhet",
+        "label": "Health/beauty (salons, clinics, spa)"
+      },
+      {
+        "value": "gym-fitness-wellness",
+        "label": "Gym, fitness & wellness"
+      },
+      {
+        "value": "stad-facility-services",
+        "label": "Cleaning & facility services"
+      },
+      {
+        "value": "lager-logistik-3pl",
+        "label": "Warehouse, logistics & 3PL"
+      },
+      {
+        "value": "el-vvs-installation",
+        "label": "Electrical, plumbing & installation"
+      },
+      {
+        "value": "fastighetsservice-forvaltning",
+        "label": "Property service & management"
+      },
+      {
+        "value": "event-konferens-upplevelser",
+        "label": "Event, conference & experiences"
+      },
+      {
+        "value": "utbildning-kurser-edtech",
+        "label": "Education, courses & edtech small scale"
+      },
+      {
+        "value": "bilverkstad-fordonsservice",
+        "label": "Auto repair & vehicle service"
+      },
+      {
+        "value": "jord-skog-tradgard-gronyteskotsel",
+        "label": "Agriculture/forestry, garden & green space management"
+      }
     ],
     "regions": [
-      { "value": "hela-sverige", "label": "All of Sweden" },
-      { "value": "stockholm-malardalen", "label": "Stockholm & Mälardalen" },
-      { "value": "vastsverige", "label": "West Sweden" },
-      { "value": "syd", "label": "South" },
-      { "value": "ostra-smaland", "label": "East & Småland" },
-      { "value": "norr-mitt", "label": "North & Central" }
+      {
+        "value": "hela-sverige",
+        "label": "All of Sweden"
+      },
+      {
+        "value": "stockholm-malardalen",
+        "label": "Stockholm & Mälardalen"
+      },
+      {
+        "value": "vastsverige",
+        "label": "West Sweden"
+      },
+      {
+        "value": "syd",
+        "label": "South"
+      },
+      {
+        "value": "ostra-smaland",
+        "label": "East & Småland"
+      },
+      {
+        "value": "norr-mitt",
+        "label": "North & Central"
+      }
     ],
     "industryQuestions": {
       "consulting": [
-        { "key": "consultantCount", "label": "Number of consultants", "type": "text" },
-        { "key": "utilizationRate", "label": "Utilization rate (%)", "type": "text", "fieldType": "percent" },
-        { "key": "avgHourlyRate", "label": "Average hourly rate (SEK)", "type": "text", "fieldType": "currency" }
+        {
+          "key": "consultantCount",
+          "label": "Number of consultants",
+          "type": "text"
+        },
+        {
+          "key": "utilizationRate",
+          "label": "Utilization rate (%)",
+          "type": "text",
+          "fieldType": "percent"
+        },
+        {
+          "key": "avgHourlyRate",
+          "label": "Average hourly rate (SEK)",
+          "type": "text",
+          "fieldType": "currency"
+        }
       ],
       "ecommerce": [
-        { "key": "monthlyVisitors", "label": "Visitors per month", "type": "text" },
-        { "key": "conversionRate", "label": "Conversion rate (%)", "type": "text", "fieldType": "percent" },
-        { "key": "avgOrderValue", "label": "Average order value (SEK)", "type": "text", "fieldType": "currency" }
+        {
+          "key": "monthlyVisitors",
+          "label": "Visitors per month",
+          "type": "text"
+        },
+        {
+          "key": "conversionRate",
+          "label": "Conversion rate (%)",
+          "type": "text",
+          "fieldType": "percent"
+        },
+        {
+          "key": "avgOrderValue",
+          "label": "Average order value (SEK)",
+          "type": "text",
+          "fieldType": "currency"
+        }
       ],
       "tech": [
-        { "key": "businessModel", "label": "Business model", "type": "select", "options": [
-          { "value": "saas", "label": "SaaS (Software as a Service)" },
-          { "value": "license", "label": "License sales" },
-          { "value": "services", "label": "Services/consulting" }
-        ]},
-        { "key": "recurringRevenue", "label": "Recurring revenue share / MRR", "type": "text", "fieldType": "percent" }
+        {
+          "key": "businessModel",
+          "label": "Business model",
+          "type": "select",
+          "options": [
+            {
+              "value": "saas",
+              "label": "SaaS (Software as a Service)"
+            },
+            {
+              "value": "license",
+              "label": "License sales"
+            },
+            {
+              "value": "services",
+              "label": "Services/consulting"
+            }
+          ]
+        },
+        {
+          "key": "recurringRevenue",
+          "label": "Recurring revenue share / MRR",
+          "type": "text",
+          "fieldType": "percent"
+        }
       ],
       "construction": [
-        { "key": "projectBacklog", "label": "Project backlog (SEK)", "type": "text", "fieldType": "currency" },
-        { "key": "avgProjectSize", "label": "Average project size (SEK)", "type": "text", "fieldType": "currency" }
+        {
+          "key": "projectBacklog",
+          "label": "Project backlog (SEK)",
+          "type": "text",
+          "fieldType": "currency"
+        },
+        {
+          "key": "avgProjectSize",
+          "label": "Average project size (SEK)",
+          "type": "text",
+          "fieldType": "currency"
+        }
       ],
       "restaurant": [
-        { "key": "seatingCapacity", "label": "Number of seats", "type": "text" },
-        { "key": "avgCheckSize", "label": "Average check size (SEK)", "type": "text", "fieldType": "currency" }
+        {
+          "key": "seatingCapacity",
+          "label": "Number of seats",
+          "type": "text"
+        },
+        {
+          "key": "avgCheckSize",
+          "label": "Average check size (SEK)",
+          "type": "text",
+          "fieldType": "currency"
+        }
       ],
       "retail": [
-        { "key": "storeLocation", "label": "Store location", "type": "select", "options": [
-          { "value": "prime", "label": "Prime location (city center, mall)" },
-          { "value": "good", "label": "Good location" },
-          { "value": "average", "label": "Average location" }
-        ]},
-        { "key": "leaseLength", "label": "How long is the lease remaining?", "type": "select", "options": [
-          { "value": "0-1", "label": "0-1 years" },
-          { "value": "2-3", "label": "2-3 years" },
-          { "value": "4-5", "label": "4-5 years" }
-        ]}
+        {
+          "key": "storeLocation",
+          "label": "Store location",
+          "type": "select",
+          "options": [
+            {
+              "value": "prime",
+              "label": "Prime location (city center, mall)"
+            },
+            {
+              "value": "good",
+              "label": "Good location"
+            },
+            {
+              "value": "average",
+              "label": "Average location"
+            }
+          ]
+        },
+        {
+          "key": "leaseLength",
+          "label": "How long is the lease remaining?",
+          "type": "select",
+          "options": [
+            {
+              "value": "0-1",
+              "label": "0-1 years"
+            },
+            {
+              "value": "2-3",
+              "label": "2-3 years"
+            },
+            {
+              "value": "4-5",
+              "label": "4-5 years"
+            }
+          ]
+        }
       ],
       "manufacturing": [
-        { "key": "productionCapacity", "label": "Capacity utilization", "type": "text", "fieldType": "percent" },
-        { "key": "equipmentAge", "label": "Average age of machinery (years)", "type": "text" }
+        {
+          "key": "productionCapacity",
+          "label": "Capacity utilization",
+          "type": "text",
+          "fieldType": "percent"
+        },
+        {
+          "key": "equipmentAge",
+          "label": "Average age of machinery (years)",
+          "type": "text"
+        }
       ],
       "services": [
-        { "key": "serviceType", "label": "Type of service", "type": "text" },
-        { "key": "contractRenewalRate", "label": "Contract renewal rate (%)", "type": "text", "fieldType": "percent" }
+        {
+          "key": "serviceType",
+          "label": "Type of service",
+          "type": "text"
+        },
+        {
+          "key": "contractRenewalRate",
+          "label": "Contract renewal rate (%)",
+          "type": "text",
+          "fieldType": "percent"
+        }
       ],
       "healthcare": [
-        { "key": "patientBase", "label": "Number of active patients/clients", "type": "text" },
-        { "key": "avgRevenuePerPatient", "label": "Average revenue per patient/year (SEK)", "type": "text", "fieldType": "currency" }
+        {
+          "key": "patientBase",
+          "label": "Number of active patients/clients",
+          "type": "text"
+        },
+        {
+          "key": "avgRevenuePerPatient",
+          "label": "Average revenue per patient/year (SEK)",
+          "type": "text",
+          "fieldType": "currency"
+        }
       ]
     }
   },

@@ -136,7 +136,7 @@ export const DEMO_ENGAGEMENT_DATA = [
     timeSpentMinutes: 145,
     downloaded: true,
     engagementScore: 85,
-    status: '🔥 Mycket intresse'
+    status: ' Mycket intresse'
   },
   {
     document: 'Information Memorandum',
@@ -144,7 +144,7 @@ export const DEMO_ENGAGEMENT_DATA = [
     timeSpentMinutes: 320,
     downloaded: true,
     engagementScore: 92,
-    status: '🔥 Mycket intresse'
+    status: ' Mycket intresse'
   },
   {
     document: 'Finansiella rapporter 2022-2024',
@@ -152,7 +152,7 @@ export const DEMO_ENGAGEMENT_DATA = [
     timeSpentMinutes: 180,
     downloaded: true,
     engagementScore: 78,
-    status: '🔥 Mycket intresse'
+    status: ' Mycket intresse'
   },
   {
     document: 'Kundbaser & Kontrakt',
@@ -160,7 +160,7 @@ export const DEMO_ENGAGEMENT_DATA = [
     timeSpentMinutes: 95,
     downloaded: false,
     engagementScore: 62,
-    status: '⚡ Måttligt intresse'
+    status: ' Måttligt intresse'
   },
   {
     document: 'IT-dokumentation',
@@ -168,7 +168,7 @@ export const DEMO_ENGAGEMENT_DATA = [
     timeSpentMinutes: 45,
     downloaded: false,
     engagementScore: 35,
-    status: '❄️ Lågt intresse'
+    status: '️ Lågt intresse'
   }
 ]
 

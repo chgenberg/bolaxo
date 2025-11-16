@@ -50,17 +50,28 @@ export async function GET(request: NextRequest) {
       )
     }
     
-    // Verify auth
-    const auth = await verifyUserAuth(request)
-    if (!auth.isValid || !auth.userId) {
-      return NextResponse.json({ error: auth.error }, { status: 401 })
-    }
-    
     const { searchParams } = new URL(request.url)
     const listingId = searchParams.get('listingId') || undefined
     const peerId = searchParams.get('peerId') || undefined
     const page = Math.max(1, parseInt(searchParams.get('page') || '1'))
     const limit = Math.min(100, parseInt(searchParams.get('limit') || '50'))
+    
+    // Verify auth
+    const auth = await verifyUserAuth(request)
+    if (!auth.isValid || !auth.userId) {
+      return NextResponse.json({
+        messages: [],
+        pagination: {
+          page,
+          limit,
+          total: 0,
+          pages: 0,
+          hasMore: false
+        },
+        unreadCount: 0,
+        error: auth.error,
+      })
+    }
     
     const userId = auth.userId
 

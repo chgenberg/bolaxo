@@ -70,7 +70,7 @@ ${schema}`
     input: inputBlock,
     tools: [{ type: 'web_search' }],
     max_output_tokens: maxOutputTokens,
-    response_format: { type: 'json_object' }
+    text: { format: 'json' }
   }
 
   let lastError: unknown = null

@@ -239,11 +239,11 @@ function LoginForm() {
                 />
                 <label htmlFor="privacy" className="text-sm text-gray-700 leading-relaxed cursor-pointer">
                   Jag godkänner{' '}
-                  <Link href="/juridiskt/integritetspolicy" className="text-primary-navy hover:underline font-bold" target="_blank">
+                  <Link href="/sv/juridiskt/integritetspolicy" className="text-primary-navy hover:underline font-bold" target="_blank">
                     integritetspolicyn
                   </Link>{' '}
                   och{' '}
-                  <Link href="/juridiskt/anvandarvillkor" className="text-primary-navy hover:underline font-bold" target="_blank">
+                  <Link href="/sv/juridiskt/anvandarvillkor" className="text-primary-navy hover:underline font-bold" target="_blank">
                     användarvillkoren
                   </Link>
                 </label>

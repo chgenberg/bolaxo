@@ -759,11 +759,19 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                   />
                   <span className="ml-3 text-sm text-gray-700">
                     Jag godkänner{' '}
-                    <Link href="/juridiskt/villkor" className="text-blue-600 hover:text-blue-700 underline" target="_blank">
+                    <Link
+                      href={`/${locale}/juridiskt/anvandarvillkor`}
+                      className="text-blue-600 hover:text-blue-700 underline"
+                      target="_blank"
+                    >
                       användarvillkoren
                     </Link>
                     {' '}och{' '}
-                    <Link href="/juridiskt/integritetspolicy" className="text-blue-600 hover:text-blue-700 underline" target="_blank">
+                    <Link
+                      href={`/${locale}/juridiskt/integritetspolicy`}
+                      className="text-blue-600 hover:text-blue-700 underline"
+                      target="_blank"
+                    >
                       integritetspolicyn
                     </Link>
                   </span>

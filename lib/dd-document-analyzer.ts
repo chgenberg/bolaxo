@@ -165,8 +165,8 @@ export async function generateDDFindingsFromDocuments(
   financialData?: any
 }> {
   try {
-    console.log('🔍 Starting comprehensive DD analysis with GPT...')
-    console.log(`📄 Analyzing ${documents.length} document categories`)
+    console.log(' Starting comprehensive DD analysis with GPT...')
+    console.log(` Analyzing ${documents.length} document categories`)
 
     // Create comprehensive analysis prompt
     const analysisPrompt = `
@@ -279,7 +279,7 @@ Analysera nu och returnera JSON-svaret:
       maxTokens: 8000, // Optimize for mini
     })
 
-    console.log('✅ GPT analysis completed')
+    console.log('OK GPT analysis completed')
 
     // Parse the response
     let findings: DDFinding[] = []
@@ -317,7 +317,7 @@ Analysera nu och returnera JSON-svaret:
       ]
     }
 
-    console.log(`📊 DD Analysis Summary:`)
+    console.log(` DD Analysis Summary:`)
     console.log(`   - Total Findings: ${findings.length}`)
     console.log(`   - Critical: ${findings.filter(f => f.severity === 'Critical').length}`)
     console.log(`   - High: ${findings.filter(f => f.severity === 'High').length}`)
@@ -340,7 +340,7 @@ export async function extractSPAData(
   documents: Array<{ type: string; content: string }>
 ) {
   try {
-    console.log('📋 Extracting SPA data from documents...')
+    console.log(' Extracting SPA data from documents...')
 
     const prompt = `
 Du är en erfaren M&A-advokat. Baserat på följande företagsdokument, extrahera all information som är viktig för ett SPA (Share Purchase Agreement):

@@ -16,7 +16,7 @@ export async function GET() {
     const userEmailCookie = cookieStore.get('bolaxo_user_email')?.value
     const userRoleCookie = cookieStore.get('bolaxo_user_role')?.value
 
-    console.log('🔍 [AUTH ME] Cookie check:', {
+    console.log(' [AUTH ME] Cookie check:', {
       userId: userIdCookie ? userIdCookie.substring(0, 10) + '...' : 'none',
       userEmail: userEmailCookie || 'none',
       userRole: userRoleCookie || 'none',
@@ -47,7 +47,7 @@ export async function GET() {
     })
 
     if (!user) {
-      console.log('❌ [AUTH ME] User not found for ID:', userIdCookie.substring(0, 10) + '...')
+      console.log('X [AUTH ME] User not found for ID:', userIdCookie.substring(0, 10) + '...')
       const response = NextResponse.json({ user: null })
       response.cookies.delete('bolaxo_user_id')
       response.cookies.delete('bolaxo_user_email')
@@ -55,7 +55,7 @@ export async function GET() {
       return response
     }
 
-    console.log('✅ [AUTH ME] User found:', user.email, user.role)
+    console.log('OK [AUTH ME] User found:', user.email, user.role)
     const response = NextResponse.json({ user })
 
     if (!userEmailCookie || userEmailCookie !== user.email) {
@@ -69,7 +69,7 @@ export async function GET() {
     return response
 
   } catch (error) {
-    console.error('❌ [AUTH ME] Error:', error)
+    console.error('X [AUTH ME] Error:', error)
     return NextResponse.json({ user: null })
   }
 }

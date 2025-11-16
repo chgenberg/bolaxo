@@ -199,7 +199,15 @@ export default function CheckoutClient() {
                   <label className="flex items-start">
                     <input type="checkbox" name="acceptTerms" checked={formData.acceptTerms} onChange={handleInputChange} className="mt-1 mr-3" />
                     <span className="text-sm text-graphite">
-                      Jag accepterar <Link href="/villkor" className="text-navy hover:underline">användarvillkoren</Link> och <Link href="/integritetspolicy" className="text-navy hover:underline">integritetspolicyn</Link>. Prenumerationen förnyas automatiskt varje månad tills den sägs upp.
+                      Jag accepterar{' '}
+                      <Link href="/sv/juridiskt/anvandarvillkor" className="text-navy hover:underline">
+                        användarvillkoren
+                      </Link>{' '}
+                      och{' '}
+                      <Link href="/sv/juridiskt/integritetspolicy" className="text-navy hover:underline">
+                        integritetspolicyn
+                      </Link>
+                      . Prenumerationen förnyas automatiskt varje månad tills den sägs upp.
                     </span>
                   </label>
                   {errors.acceptTerms && <p className="text-red-500 text-xs mt-1 ml-7">{errors.acceptTerms}</p>}

@@ -108,10 +108,10 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
       const ratio = ltv / cac
       
       if (ratio < 3) {
-        criticalFlags.push(`🚨 CRITICAL: LTV/CAC ratio ${ratio.toFixed(1)}x är OHÅLLBART (<3x). Detta företag förbränner cash!`)
+        criticalFlags.push(` CRITICAL: LTV/CAC ratio ${ratio.toFixed(1)}x är OHÅLLBART (<3x). Detta företag förbränner cash!`)
         adjustments.push('Sänk multipel med 30-40% pga ohållbar CAC-ekonomi')
       } else if (ratio > 5) {
-        adjustments.push(`✓ EXCELLENT: LTV/CAC ratio ${ratio.toFixed(1)}x är utmärkt (>5x). Hållbar tillväxtmaskin!`)
+        adjustments.push(`- EXCELLENT: LTV/CAC ratio ${ratio.toFixed(1)}x är utmärkt (>5x). Hållbar tillväxtmaskin!`)
         adjustments.push('Höj multipel med 15-20% för excellent unit economics')
       } else {
         warnings.push(`LTV/CAC ratio ${ratio.toFixed(1)}x är acceptabelt men kan förbättras`)
@@ -125,7 +125,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`Låg repeat rate (${repeat}%) - högt beroende av ny kundvärvning`)
         adjustments.push('Justera ned multipel 10-15% för hög churn')
       } else if (repeat > 50) {
-        adjustments.push(`✓ Hög repeat rate (${repeat}%) - stark kundlojalitet`)
+        adjustments.push(`- Hög repeat rate (${repeat}%) - stark kundlojalitet`)
         adjustments.push('Kan motivera 10-15% högre multipel')
       }
     }
@@ -153,7 +153,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
       const recurringPercent = (arr / totalRevenue) * 100
       
       if (recurringPercent > 80) {
-        adjustments.push(`✓ EXCELLENT: ${recurringPercent.toFixed(0)}% recurring revenue - ren SaaS-modell`)
+        adjustments.push(`- EXCELLENT: ${recurringPercent.toFixed(0)}% recurring revenue - ren SaaS-modell`)
         adjustments.push('Använd SaaS-multiplar (6-12x) istället för standard tech (4-8x)')
       } else if (recurringPercent < 50) {
         warnings.push(`Endast ${recurringPercent.toFixed(0)}% recurring - inte ren SaaS`)
@@ -165,10 +165,10 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
     if (data.customerChurn) {
       const churn = Number(data.customerChurn)
       if (churn > 10) {
-        criticalFlags.push(`🚨 CRITICAL: ${churn}% årlig churn är MYCKET HÖG för SaaS (target <5%)`)
+        criticalFlags.push(` CRITICAL: ${churn}% årlig churn är MYCKET HÖG för SaaS (target <5%)`)
         adjustments.push('Sänk multipel med 30-50% pga hög churn - produkt-market fit problem')
       } else if (churn < 5) {
-        adjustments.push(`✓ EXCELLENT: ${churn}% churn är excellent för SaaS`)
+        adjustments.push(`- EXCELLENT: ${churn}% churn är excellent för SaaS`)
         adjustments.push('Kan motivera 20-30% högre multipel')
       }
     }
@@ -177,7 +177,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
     if (data.netRevenueRetention) {
       const nrr = Number(data.netRevenueRetention)
       if (nrr > 110) {
-        adjustments.push(`✓ OUTSTANDING: ${nrr}% NRR - negativt churn med expansion!`)
+        adjustments.push(`- OUTSTANDING: ${nrr}% NRR - negativt churn med expansion!`)
         adjustments.push('Premium multipel motiverad (8-12x) - bästa-i-klassen SaaS')
       } else if (nrr < 90) {
         warnings.push(`Låg NRR (${nrr}%) - kunder minskar spenderingen`)
@@ -192,7 +192,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`CAC payback ${payback} mån är långt (target <12). Cash-intensiv tillväxt`)
         adjustments.push('Sänk multipel 10% för lång payback')
       } else if (payback < 6) {
-        adjustments.push(`✓ EXCELLENT: CAC payback ${payback} mån - snabb kapitalomsättning`)
+        adjustments.push(`- EXCELLENT: CAC payback ${payback} mån - snabb kapitalomsättning`)
       }
     }
   }
@@ -206,7 +206,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`Hög food cost (${foodCost}%) - bör vara 28-35%. Prispress eller ineffektivitet?`)
         adjustments.push('Justera ned 10-15% för dålig marginalkontroll')
       } else if (foodCost < 25) {
-        adjustments.push(`✓ Utmärkt food cost (${foodCost}%) - stark marginal`)
+        adjustments.push(`- Utmärkt food cost (${foodCost}%) - stark marginal`)
       }
     }
     
@@ -222,7 +222,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
     if (data.foodCostPercentage && data.laborCostPercentage) {
       const total = Number(data.foodCostPercentage) + Number(data.laborCostPercentage)
       if (total > 70) {
-        criticalFlags.push(`🚨 CRITICAL: Food + Labor = ${total}% (bör vara <65%). Svårt att gå med vinst!`)
+        criticalFlags.push(` CRITICAL: Food + Labor = ${total}% (bör vara <65%). Svårt att gå med vinst!`)
         adjustments.push('Sänk multipel kraftigt (30-40%) - dålig kostnadsstruktur')
       }
     }
@@ -249,7 +249,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`Låg debiteringsgrad (${util}%) - bör vara 70%+`)
         adjustments.push('Sänk multipel 15-20% för låg utnyttjandegrad')
       } else if (util > 85) {
-        adjustments.push(`✓ Hög debiteringsgrad (${util}%) - effektiv verksamhet`)
+        adjustments.push(`- Hög debiteringsgrad (${util}%) - effektiv verksamhet`)
       }
     }
     
@@ -260,7 +260,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`Låg förnyelserate (${renewal}%) - kunderna stannar inte kvar`)
         adjustments.push('Sänk multipel 10-15% för låg retention')
       } else if (renewal > 90) {
-        adjustments.push(`✓ EXCELLENT: ${renewal}% förnyelserate - stark kundlojalitet`)
+        adjustments.push(`- EXCELLENT: ${renewal}% förnyelserate - stark kundlojalitet`)
         adjustments.push('Höj multipel 10-15%')
       }
     }
@@ -278,13 +278,13 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`Mycket högt kapacitetsutnyttjande (${capacity}%) - svårt att växa utan investeringar`)
         adjustments.push('Justera för expansion-capex behov')
       } else if (capacity >= 70 && capacity <= 85) {
-        adjustments.push(`✓ Optimalt kapacitetsutnyttjande (${capacity}%)`)
+        adjustments.push(`- Optimalt kapacitetsutnyttjande (${capacity}%)`)
       }
     }
     
     // Customer concentration
     if (data.customerConcentration === 'yes') {
-      criticalFlags.push('🚨 HÖGRISK: >30% från en kund i manufacturing - mycket sårbart')
+      criticalFlags.push(' HÖGRISK: >30% från en kund i manufacturing - mycket sårbart')
       adjustments.push('Sänk multipel med 25-35% för kundkoncentration')
     }
     
@@ -294,7 +294,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
       if (backlog < 3) {
         warnings.push(`Kort orderstock (${backlog} mån) - osäker framtid`)
       } else if (backlog > 12) {
-        adjustments.push(`✓ Lång orderstock (${backlog} mån) - mycket förutsägbart`)
+        adjustments.push(`- Lång orderstock (${backlog} mån) - mycket förutsägbart`)
         adjustments.push('Höj multipel 10-15%')
       }
     }
@@ -329,7 +329,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`Låg lageromsättning (${turnover}x/år) - binder mycket kapital`)
         adjustments.push('Justera för högt working capital behov')
       } else if (turnover > 12) {
-        adjustments.push(`✓ Hög lageromsättning (${turnover}x/år) - effektiv lagerhantering`)
+        adjustments.push(`- Hög lageromsättning (${turnover}x/år) - effektiv lagerhantering`)
       }
     }
     
@@ -340,7 +340,7 @@ export function buildConditionalPrompts(data: any): ConditionalPrompt {
         warnings.push(`Kort hyresavtal (${lease} år kvar) - risk för ökad hyra eller flyttkrav`)
         adjustments.push('Sänk multipel 10-15% för hyresrisk')
       } else if (lease > 5) {
-        adjustments.push(`✓ Långt hyresavtal (${lease} år) - stabilitet`)
+        adjustments.push(`- Långt hyresavtal (${lease} år) - stabilitet`)
       }
     }
   }

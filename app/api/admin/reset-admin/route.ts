@@ -13,23 +13,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('🔐 Starting admin account reset...')
+    console.log(' Starting admin account reset...')
 
     // Delete old admin account
     const oldEmail = 'admin@bolagsplatsen.se'
-    console.log(`⏳ Deleting ${oldEmail}...`)
+    console.log(` Deleting ${oldEmail}...`)
     
     const deleted = await prisma.user.deleteMany({
       where: { email: oldEmail }
     })
     
-    console.log(`✅ Deleted ${deleted.count} old account(s)`)
+    console.log(`OK Deleted ${deleted.count} old account(s)`)
 
     // Create new admin account
     const newEmail = 'admin@bolaxo.com'
     const password = 'Password123'
     
-    console.log(`⏳ Creating new admin account...`)
+    console.log(` Creating new admin account...`)
     
     const saltRounds = 12
     const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    console.log('✅ Admin account created successfully!')
+    console.log('OK Admin account created successfully!')
     
     return NextResponse.json({
       success: true,
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('❌ Error resetting admin:', error)
+    console.error('X Error resetting admin:', error)
     return NextResponse.json(
       { error: 'Failed to reset admin account', details: String(error) },
       { status: 500 }

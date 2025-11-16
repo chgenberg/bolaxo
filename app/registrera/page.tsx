@@ -277,9 +277,9 @@ export default function RegisterPage() {
 
               <p className="text-xs text-gray-600 text-center">
                 Genom att skapa konto godkänner du våra{' '}
-                <a href="/juridiskt/anvandarvillkor" className="underline">användarvillkor</a>
+                <a href="/sv/juridiskt/anvandarvillkor" className="underline">användarvillkor</a>
                 {' '}och{' '}
-                <a href="/juridiskt/integritetspolicy" className="underline">integritetspolicy</a>
+                <a href="/sv/juridiskt/integritetspolicy" className="underline">integritetspolicy</a>
               </p>
             </form>
           )}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { mockObjects, BusinessObject } from '@/data/mockObjects'
+import type { BusinessObject } from '@/data/mockObjects'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
 import ObjectCard from '@/components/ObjectCard'
@@ -21,8 +21,8 @@ export default function SearchPageContent() {
   const getLocalizedPath = (path: string) => `/${locale}${path}`
   
   const [profileChecked, setProfileChecked] = useState(false)
-  const [allObjects, setAllObjects] = useState<BusinessObject[]>(mockObjects)
-  const [filteredObjects, setFilteredObjects] = useState<BusinessObject[]>(mockObjects)
+  const [allObjects, setAllObjects] = useState<BusinessObject[]>([])
+  const [filteredObjects, setFilteredObjects] = useState<BusinessObject[]>([])
   const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -88,55 +88,55 @@ export default function SearchPageContent() {
           ? `/api/listings?status=active&currentUserId=${user.id}`
           : '/api/listings?status=active'
         const response = await fetch(url)
-        if (response.ok) {
-          const listings = await response.json()
-          
-          // Transform API listings to BusinessObject format
-          const transformedListings: BusinessObject[] = listings.map((listing: any) => ({
-            id: listing.id,
-            title: listing.companyName,
-            anonymousTitle: listing.anonymousTitle,
-            type: listing.type,
-            category: listing.category,
-            description: listing.description,
-            region: listing.region,
-            location: listing.location,
-            revenue: listing.revenue,
-            revenueRange: listing.revenueRange,
-            priceMin: listing.priceMin,
-            priceMax: listing.priceMax,
-            abstainPriceMin: listing.abstainPriceMin || false,
-            abstainPriceMax: listing.abstainPriceMax || false,
-            employees: listing.employees?.toString() || '0',
-            image: listing.image,
-            verified: listing.verified,
-            isNew: listing.isNew,
-            broker: listing.broker,
-            views: listing.views || 0,
-            createdAt: new Date(listing.createdAt),
-            ebitda: listing.ebitda || 0,
-            ownerRole: '',
-            strengths: listing.strengths || [],
-            risks: listing.risks || [],
-            whySelling: listing.whySelling || '',
-            companyName: listing.companyName,
-            orgNumber: listing.orgNumber || '',
-            address: listing.address || '',
-            detailedFinancials: {},
-            customers: [],
-            ndaRequired: false,
-            matchScore: listing.matchScore, // Include match score if available
-            matchReasons: listing.matchReasons
-          }))
-          
-          setAllObjects(transformedListings)
-          setFilteredObjects(transformedListings)
-        }
+        if (!response.ok) throw new Error('Failed to fetch listings')
+
+        const listings = await response.json()
+        
+        // Transform API listings to BusinessObject format
+        const transformedListings: BusinessObject[] = listings.map((listing: any) => ({
+          id: listing.id,
+          title: listing.companyName,
+          anonymousTitle: listing.anonymousTitle,
+          type: listing.type || listing.category,
+          category: listing.category,
+          description: listing.description || '',
+          region: listing.region || '',
+          location: listing.location || '',
+          revenue: listing.revenue || 0,
+          revenueRange: listing.revenueRange || '',
+          priceMin: listing.priceMin || 0,
+          priceMax: listing.priceMax || 0,
+          abstainPriceMin: listing.abstainPriceMin || false,
+          abstainPriceMax: listing.abstainPriceMax || false,
+          employees: listing.employees?.toString() || '0',
+          image: listing.image,
+          verified: listing.verified,
+          isNew: listing.isNew,
+          broker: listing.broker,
+          views: listing.views || 0,
+          createdAt: new Date(listing.createdAt),
+          ebitda: listing.ebitda || 0,
+          ownerRole: '',
+          strengths: listing.strengths || [],
+          risks: listing.risks || [],
+          whySelling: listing.whySelling || '',
+          companyName: listing.companyName,
+          orgNumber: listing.orgNumber || '',
+          address: listing.address || '',
+          detailedFinancials: {},
+          customers: [],
+          ndaRequired: listing.ndaRequired ?? true,
+          matchScore: listing.matchScore,
+          matchReasons: listing.matchReasons
+        }))
+        
+        setAllObjects(transformedListings)
+        setFilteredObjects(transformedListings)
       } catch (error) {
         console.error('Error fetching listings:', error)
-        // Fallback to mock objects if API fails
-        setAllObjects(mockObjects)
-        setFilteredObjects(mockObjects)
+        setAllObjects([])
+        setFilteredObjects([])
+        showError?.(t('loadError'))
       } finally {
         setLoading(false)
       }

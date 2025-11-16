@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 async function seedDatabase() {
   try {
 
-    console.log('🌱 Seeding database...')
+    console.log(' Seeding database...')
 
     // 1. Skapa demo-users (passwordless - använder magic links)
     const demoSeller = await prisma.user.upsert({
@@ -21,7 +21,7 @@ async function seedDatabase() {
         bankIdVerified: true,
       },
     })
-    console.log('✅ Demo seller created:', demoSeller.email)
+    console.log('OK Demo seller created:', demoSeller.email)
 
     const demoBuyer = await prisma.user.upsert({
       where: { email: 'demo@buyer.com' },
@@ -35,7 +35,7 @@ async function seedDatabase() {
         bankIdVerified: true,
       },
     })
-    console.log('✅ Demo buyer created:', demoBuyer.email)
+    console.log('OK Demo buyer created:', demoBuyer.email)
 
     const demoAdvisor = await prisma.user.upsert({
       where: { email: 'advisor@bolaxo.se' },
@@ -49,7 +49,7 @@ async function seedDatabase() {
         bankIdVerified: true,
       },
     })
-    console.log('✅ Demo advisor created:', demoAdvisor.email)
+    console.log('OK Demo advisor created:', demoAdvisor.email)
 
     // 2. Skapa demo listing först
     const demoListing = await prisma.listing.upsert({
@@ -77,7 +77,7 @@ async function seedDatabase() {
         publishedAt: new Date(),
       },
     })
-    console.log('✅ Demo listing created:', demoListing.id)
+    console.log('OK Demo listing created:', demoListing.id)
 
     // 3. Skapa demo-transaktion med känt ID
     const demoTransaction = await prisma.transaction.upsert({
@@ -94,7 +94,7 @@ async function seedDatabase() {
         closingDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 dagar framåt
       },
     })
-    console.log('✅ Demo transaction created:', demoTransaction.id)
+    console.log('OK Demo transaction created:', demoTransaction.id)
 
     // 4. Skapa milestones för transaktionen
     const milestones = [
@@ -145,11 +145,11 @@ async function seedDatabase() {
         data: milestone,
       })
     }
-    console.log('✅ Milestones created')
+    console.log('OK Milestones created')
 
     return {
       success: true,
-      message: '✨ Database seeded successfully!',
+      message: ' Database seeded successfully!',
       data: {
         seller: demoSeller.email,
         buyer: demoBuyer.email,
@@ -160,7 +160,7 @@ async function seedDatabase() {
     }
 
   } catch (error) {
-    console.error('❌ Seed error:', error)
+    console.error('X Seed error:', error)
     return {
       success: false,
       error: 'Seed failed',

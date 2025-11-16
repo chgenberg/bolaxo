@@ -5,14 +5,14 @@ import { createAdminToken } from '@/lib/admin-auth'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔐 [LOGIN] POST request received')
+    console.log(' [LOGIN] POST request received')
     
     const { email, password } = await request.json()
-    console.log('🔐 [LOGIN] Email:', email, 'Password length:', password?.length)
+    console.log(' [LOGIN] Email:', email, 'Password length:', password?.length)
 
     // Validate inputs
     if (!email || !password) {
-      console.log('❌ [LOGIN] Missing email or password')
+      console.log('X [LOGIN] Missing email or password')
       return NextResponse.json(
         { error: 'E-post och lösenord krävs' },
         { status: 400 }
@@ -20,24 +20,24 @@ export async function POST(request: NextRequest) {
     }
 
     // Find user
-    console.log('🔐 [LOGIN] Looking up user...')
+    console.log(' [LOGIN] Looking up user...')
     const user = await prisma.user.findUnique({
       where: { email }
     })
 
     if (!user) {
-      console.log('❌ [LOGIN] User not found:', email)
+      console.log('X [LOGIN] User not found:', email)
       return NextResponse.json(
         { error: 'Ogiltig e-post eller lösenord' },
         { status: 401 }
       )
     }
     
-    console.log('✅ [LOGIN] User found:', user.id, user.role)
+    console.log('OK [LOGIN] User found:', user.id, user.role)
 
     // Check admin role
     if (user.role !== 'admin') {
-      console.log('❌ [LOGIN] User is not admin, role:', user.role)
+      console.log('X [LOGIN] User is not admin, role:', user.role)
       return NextResponse.json(
         { error: 'Endast admin-användare kan logga in här' },
         { status: 403 }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     // Check password hash exists
     if (!user.passwordHash) {
-      console.log('❌ [LOGIN] No password hash for user')
+      console.log('X [LOGIN] No password hash for user')
       return NextResponse.json(
         { error: 'Lösenord är inte konfigurerat för denna användare' },
         { status: 403 }
@@ -54,31 +54,31 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    console.log('🔐 [LOGIN] Comparing passwords...')
+    console.log(' [LOGIN] Comparing passwords...')
     const passwordValid = await bcrypt.compare(password, user.passwordHash)
 
     if (!passwordValid) {
-      console.log('❌ [LOGIN] Password mismatch')
+      console.log('X [LOGIN] Password mismatch')
       return NextResponse.json(
         { error: 'Ogiltig e-post eller lösenord' },
         { status: 401 }
       )
     }
     
-    console.log('✅ [LOGIN] Password valid!')
+    console.log('OK [LOGIN] Password valid!')
 
     // Create JWT token
-    console.log('🔐 [LOGIN] Creating JWT token...')
+    console.log(' [LOGIN] Creating JWT token...')
     const token = await createAdminToken(user.id, user.email, user.role)
-    console.log('✅ [LOGIN] Token created')
+    console.log('OK [LOGIN] Token created')
 
     // Update lastLoginAt
-    console.log('🔐 [LOGIN] Updating lastLoginAt...')
+    console.log(' [LOGIN] Updating lastLoginAt...')
     await prisma.user.update({
       where: { id: user.id },
       data: { lastLoginAt: new Date() }
     })
-    console.log('✅ [LOGIN] lastLoginAt updated')
+    console.log('OK [LOGIN] lastLoginAt updated')
 
     // Create response with token cookie
     const response = NextResponse.json({
@@ -101,11 +101,11 @@ export async function POST(request: NextRequest) {
       path: '/'
     })
     
-    console.log('✅ [LOGIN] Success! Cookie set, response sent')
+    console.log('OK [LOGIN] Success! Cookie set, response sent')
 
     return response
   } catch (error) {
-    console.error('❌ [LOGIN] Unexpected error:', error)
+    console.error('X [LOGIN] Unexpected error:', error)
     
     // Log detailed error info
     if (error instanceof Error) {
