@@ -65,7 +65,7 @@ JSON-schema (måste följas exakt):
 ${schema}`
 
   const payload = {
-    model: 'gpt-4.1-mini',
+    model: 'gpt-4o',
     instructions,
     input: inputBlock,
     tools: [{ type: 'web_search' }],
