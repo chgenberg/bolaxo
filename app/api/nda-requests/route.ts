@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendNewNDARequestEmail } from '@/lib/email'
+import { createNotification } from '@/lib/notifications'
 
 // GET /api/nda-requests?listingId=&buyerId=&sellerId=&status=
 export async function GET(request: NextRequest) {
@@ -197,6 +198,14 @@ export async function POST(request: NextRequest) {
         console.error('Error sending new NDA request email:', emailError)
         // Don't fail the request if email fails
       }
+
+      await createNotification({
+        userId: created.seller.id,
+        type: 'nda',
+        title: 'Ny NDA-förfrågan',
+        message: `${created.buyer.name || created.buyer.email || 'En köpare'} vill signera NDA för ${created.listing.anonymousTitle || 'ditt objekt'}.`,
+        listingId: listingId
+      })
 
       return NextResponse.json({ request: created }, { status: 201 })
     } catch (dbError) {

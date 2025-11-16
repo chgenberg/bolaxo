@@ -880,8 +880,8 @@ export default function PremiumValuationWizard({
         {/* Progress bar */}
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 
-            className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
+            className="h-2 rounded-full transition-all duration-300"
+            style={{ width: `${progress}%`, backgroundColor: '#1F3C58' }}
           />
         </div>
       </div>

@@ -1,9 +1,45 @@
+import { prisma } from '@/lib/prisma'
+
+const DEFAULT_FROM_EMAIL = process.env.EMAIL_FROM || 'noreply@bolaxo.com'
+const DEFAULT_FROM_NAME = process.env.EMAIL_FROM_NAME || 'BOLAXO'
+
 export interface EmailOptions {
   to: string | string[]
   subject: string
   html: string
   from?: string
   fromName?: string
+}
+
+async function logEmailResult({
+  to,
+  subject,
+  status,
+  providerMessageId,
+  error,
+  payload
+}: {
+  to: string[]
+  subject: string
+  status: 'success' | 'failed'
+  providerMessageId?: string
+  error?: string
+  payload?: Record<string, unknown>
+}) {
+  try {
+    await prisma.emailLog.create({
+      data: {
+        to: to.join(', '),
+        subject,
+        status,
+        providerMessageId,
+        errorMessage: error,
+        payload: payload ? JSON.parse(JSON.stringify(payload)) : null
+      }
+    })
+  } catch (logError) {
+    console.error('Email log error:', logError)
+  }
 }
 
 /**
@@ -29,8 +65,8 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
       },
       body: JSON.stringify({
         sender: {
-          name: options.fromName || 'BOLAXO',
-          email: options.from || 'noreply@bolaxo.com', // Domänen är nu verifierad hos Brevo ✅
+          name: options.fromName || DEFAULT_FROM_NAME,
+          email: options.from || DEFAULT_FROM_EMAIL,
         },
         to: recipients.map(email => ({ email })),
         subject: options.subject,
@@ -41,6 +77,13 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
     if (!response.ok) {
       const errorText = await response.text()
       console.error('Sendinblue API error:', errorText)
+      await logEmailResult({
+        to: recipients,
+        subject: options.subject,
+        status: 'failed',
+        error: `Sendinblue API error: ${response.status} ${errorText}`,
+        payload: { preview: options.html.slice(0, 200) }
+      })
       return { 
         success: false, 
         error: `Sendinblue API error: ${response.status} ${errorText}` 
@@ -48,12 +91,26 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
     }
 
     const data = await response.json()
+    await logEmailResult({
+      to: recipients,
+      subject: options.subject,
+      status: 'success',
+      providerMessageId: data.messageId,
+      payload: { preview: options.html.slice(0, 200) }
+    })
     return { 
       success: true, 
       messageId: data.messageId 
     }
   } catch (error) {
     console.error('Email send error:', error)
+    await logEmailResult({
+      to: Array.isArray(options.to) ? options.to : [options.to],
+      subject: options.subject,
+      status: 'failed',
+      error: error instanceof Error ? error.message : 'Unknown error',
+      payload: { preview: options.html.slice(0, 200) }
+    })
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Unknown error' 
@@ -152,8 +209,8 @@ export async function sendMagicLinkEmail(
       </body>
       </html>
     `,
-    fromName: 'BOLAXO',
-    from: 'noreply@bolaxo.com'
+    fromName: DEFAULT_FROM_NAME,
+    from: DEFAULT_FROM_EMAIL
   })
 }
 

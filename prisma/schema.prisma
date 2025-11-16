@@ -762,6 +762,35 @@ model TeaserIM {
   @@index([status])
 }
 
+model EmailLog {
+  id                String   @id @default(cuid())
+  to                String
+  subject           String
+  status            String   // success, failed
+  providerMessageId String?
+  errorMessage      String?
+  payload           Json?
+  createdAt         DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
+model BuyerMatchLog {
+  id          String   @id @default(cuid())
+  buyerId     String
+  listingId   String
+  score       Int
+  action      String   // match_created, notified, nda_signed, nda_rejected, message_sent, dd_started, loi_signed
+  details     Json?
+  note        String?
+  createdAt   DateTime @default(now())
+
+  @@index([buyerId])
+  @@index([listingId])
+  @@index([action])
+  @@index([createdAt])
+}
+
 model NDASignature {
   id              String   @id @default(cuid())
   listingId       String

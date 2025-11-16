@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Bell, X, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Bell, X, CheckCircle2 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTranslations } from 'next-intl'
 
@@ -121,7 +121,9 @@ export default function NotificationCenter() {
                   <p className="text-sm">{t('noNotifications')}</p>
                 </div>
               ) : (
-                notifications.map((notification) => (
+                notifications.map((notification) => {
+                  const meta = getNotificationMeta(notification.subject)
+                  return (
                   <div
                     key={notification.id}
                     className={`px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
@@ -134,14 +136,22 @@ export default function NotificationCenter() {
                         <div className="w-2 h-2 bg-primary-navy rounded-full mt-2 flex-shrink-0" />
                       )}
                       <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span
+                            className={`text-[11px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full`}
+                            style={{ backgroundColor: meta.bg, color: meta.color }}
+                          >
+                            {meta.label}
+                          </span>
+                          <span className="text-xs text-gray-500">
+                            {formatTime(notification.createdAt, t)}
+                          </span>
+                        </div>
                         <h4 className="font-medium text-gray-900 text-sm">
-                          {notification.subject.replace(/^\[.*?\]\s/, '')}
+                          {meta.title}
                         </h4>
                         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
                           {notification.content}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-2">
-                          {formatTime(notification.createdAt, t)}
                         </p>
                       </div>
                       {!notification.read && (
@@ -149,7 +159,7 @@ export default function NotificationCenter() {
                       )}
                     </div>
                   </div>
-                ))
+                )})
               )}
             </div>
 
@@ -193,4 +203,19 @@ function formatTime(dateString: string, t: (key: string) => string): string {
   if (diffDays < 7) return `${diffDays} ${t('time.daysAgo')}`
   
   return date.toLocaleDateString('sv-SE')
+}
+
+const notificationBadges = {
+  match: { label: 'Matchning', bg: '#E0F2FE', color: '#0369A1' },
+  nda: { label: 'NDA', bg: '#DCFCE7', color: '#15803D' },
+  message: { label: 'Meddelande', bg: '#FCE7F3', color: '#9D174D' },
+  system: { label: 'Notifiering', bg: '#E5E7EB', color: '#374151' }
+}
+
+function getNotificationMeta(subject?: string | null) {
+  const match = subject?.match(/^\[(.*?)\]\s*(.*)$/)
+  const type = match?.[1]?.toLowerCase() as keyof typeof notificationBadges | undefined
+  const title = match?.[2] || subject || ''
+  const badge = (type && notificationBadges[type]) || notificationBadges.system
+  return { ...badge, title }
 }

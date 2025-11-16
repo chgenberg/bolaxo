@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { getClientIp, checkRateLimit, RATE_LIMIT_CONFIGS } from '@/app/lib/rate-limiter'
 import { sendNewMessageEmail } from '@/lib/email'
-
-const prisma = new PrismaClient()
+import { createNotification } from '@/lib/notifications'
 
 // Helper to verify user authentication
 async function verifyUserAuth(request: NextRequest) {
@@ -258,6 +257,14 @@ export async function POST(request: NextRequest) {
       console.error('Error sending new message email:', emailError)
       // Don't fail the request if email fails
     }
+
+    await createNotification({
+      userId: recipientId,
+      type: 'message',
+      title: `Nytt meddelande om ${created.listing?.anonymousTitle || 'ditt objekt'}`,
+      message: created.content.substring(0, 160),
+      listingId: created.listingId || undefined
+    })
     
     return NextResponse.json({ message: created }, { status: 201 })
   } catch (error) {

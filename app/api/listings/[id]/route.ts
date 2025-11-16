@@ -1,7 +1,64 @@
 import { NextResponse, NextRequest } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 
-const prisma = new PrismaClient()
+const SENSITIVE_FIELDS = [
+  'companyName',
+  'orgNumber',
+  'address',
+  'website',
+  'revenue',
+  'revenueRange',
+  'revenueYear1',
+  'revenueYear2',
+  'revenueYear3',
+  'revenue3Years',
+  'revenueGrowthRate',
+  'profitMargin',
+  'grossMargin',
+  'ebitda',
+  'priceMin',
+  'priceMax',
+  'askingPrice',
+  'cash',
+  'accountsReceivable',
+  'inventory',
+  'totalAssets',
+  'totalLiabilities',
+  'shortTermDebt',
+  'longTermDebt',
+  'operatingCosts',
+  'salaries',
+  'rentCosts',
+  'marketingCosts',
+  'otherOperatingCosts',
+  'description',
+  'strengths',
+  'risks',
+  'whySelling',
+  'whatIncluded',
+  'competitiveAdvantages',
+  'customerConcentrationRisk'
+]
+
+const PRIVILEGED_ROLES = new Set(['admin', 'broker'])
+
+function maskListing(listing: any, canViewSensitive: boolean) {
+  if (canViewSensitive) return listing
+  const masked = { ...listing }
+  SENSITIVE_FIELDS.forEach((field) => {
+    if (Array.isArray(masked[field])) {
+      masked[field] = []
+    } else if (typeof masked[field] === 'number') {
+      masked[field] = null
+    } else {
+      masked[field] = undefined
+    }
+  })
+  masked.masked = true
+  masked.description =
+    'Detaljerad information visas efter att NDA har signerats och godkänts.'
+  return masked
+}
 
 // Helper: Calculate match score between listing and buyer profile
 function calculateMatchScore(listing: any, buyerProfile: any): number {
@@ -124,16 +181,25 @@ export async function GET(
     let matchScore: number | null = null
     let matchReasons: string[] = []
     
+    const viewer =
+      currentUserId
+        ? await prisma.user.findUnique({
+            where: { id: currentUserId },
+            select: { id: true, role: true }
+          })
+        : null
+    const viewerRole = viewer?.role || 'guest'
+
     if (currentUserId) {
       const ndaRequest = await prisma.nDARequest.findFirst({
         where: {
           listingId: params.id,
           buyerId: currentUserId,
-          status: 'approved'
+          status: { in: ['approved', 'signed'] }
         }
       })
       hasNDA = !!ndaRequest
-      
+    
       // Calculate match score if user is a buyer
       const buyerProfile = await prisma.buyerProfile.findUnique({
         where: { userId: currentUserId }
@@ -149,16 +215,11 @@ export async function GET(
     const isOwner = listing.userId === currentUserId
 
     // Anonymize if not owner and no NDA
-    const anonymizedListing = {
-      ...listing,
-      ...(isOwner || hasNDA ? {} : {
-        companyName: undefined,
-        orgNumber: undefined,
-        address: undefined,
-        website: undefined,
-        // Keep anonymousTitle visible
-      })
-    }
+    const canViewSensitive =
+      isOwner ||
+      hasNDA ||
+      PRIVILEGED_ROLES.has(viewerRole)
+    const anonymizedListing = maskListing(listing, canViewSensitive)
 
     // Increment views asynchronously (non-blocking)
     prisma.listing.update({

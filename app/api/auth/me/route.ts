@@ -1,28 +1,33 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
+import { prisma } from '@/lib/prisma'
 
-const prisma = new PrismaClient()
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  sameSite: 'lax' as const,
+  secure: process.env.NODE_ENV === 'production',
+  path: '/',
+}
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const cookieStore = await cookies()
-    const userId = cookieStore.get('bolaxo_user_id')?.value
-    const userEmail = cookieStore.get('bolaxo_user_email')?.value
-    const userRole = cookieStore.get('bolaxo_user_role')?.value
+    const userIdCookie = cookieStore.get('bolaxo_user_id')?.value
+    const userEmailCookie = cookieStore.get('bolaxo_user_email')?.value
+    const userRoleCookie = cookieStore.get('bolaxo_user_role')?.value
 
     console.log('🔍 [AUTH ME] Cookie check:', {
-      userId: userId ? userId.substring(0, 10) + '...' : 'none',
-      userEmail: userEmail || 'none',
-      userRole: userRole || 'none',
+      userId: userIdCookie ? userIdCookie.substring(0, 10) + '...' : 'none',
+      userEmail: userEmailCookie || 'none',
+      userRole: userRoleCookie || 'none',
     })
 
-    if (!userId) {
+    if (!userIdCookie) {
       return NextResponse.json({ user: null })
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: userIdCookie },
       select: {
         id: true,
         email: true,
@@ -42,16 +47,26 @@ export async function GET(request: Request) {
     })
 
     if (!user) {
-      console.log('❌ [AUTH ME] User not found for ID:', userId.substring(0, 10) + '...')
-      // User deleted, clear cookies
-      cookieStore.delete('bolaxo_user_id')
-      cookieStore.delete('bolaxo_user_email')
-      cookieStore.delete('bolaxo_user_role')
-      return NextResponse.json({ user: null })
+      console.log('❌ [AUTH ME] User not found for ID:', userIdCookie.substring(0, 10) + '...')
+      const response = NextResponse.json({ user: null })
+      response.cookies.delete('bolaxo_user_id')
+      response.cookies.delete('bolaxo_user_email')
+      response.cookies.delete('bolaxo_user_role')
+      return response
     }
 
     console.log('✅ [AUTH ME] User found:', user.email, user.role)
-    return NextResponse.json({ user })
+    const response = NextResponse.json({ user })
+
+    if (!userEmailCookie || userEmailCookie !== user.email) {
+      response.cookies.set('bolaxo_user_email', user.email, COOKIE_OPTIONS)
+    }
+
+    if (!userRoleCookie || userRoleCookie !== user.role) {
+      response.cookies.set('bolaxo_user_role', user.role, COOKIE_OPTIONS)
+    }
+
+    return response
 
   } catch (error) {
     console.error('❌ [AUTH ME] Error:', error)

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendNDAApprovalEmail, sendNDARejectionEmail } from '@/lib/email'
+import { createNotification } from '@/lib/notifications'
 
 /**
  * GET /api/nda-requests/[id] - Get specific NDA request
@@ -178,6 +179,14 @@ export async function PATCH(
         console.error('Error sending NDA approval email:', emailError)
         // Don't fail the request if email fails
       }
+
+      await createNotification({
+        userId: updated.buyer.id,
+        type: 'nda',
+        title: 'NDA godkänd',
+        message: `Du kan nu se all information om ${updated.listing.anonymousTitle || updated.listing.companyName || 'objektet'}.`,
+        listingId: updated.listing.id
+      })
     } else if (status === 'rejected') {
       // Send email notification to buyer
       try {
@@ -194,6 +203,22 @@ export async function PATCH(
         console.error('Error sending NDA rejection email:', emailError)
         // Don't fail the request if email fails
       }
+
+      await createNotification({
+        userId: updated.buyer.id,
+        type: 'nda',
+        title: 'NDA avslogs',
+        message: `Säljaren av ${updated.listing.anonymousTitle || updated.listing.companyName || 'objektet'} avslog din NDA-förfrågan.`,
+        listingId: updated.listing.id
+      })
+    } else if (status === 'signed') {
+      await createNotification({
+        userId: updated.seller.id,
+        type: 'nda',
+        title: 'NDA signerad',
+        message: `${updated.buyer.name || 'Köparen'} har signerat NDA för ${updated.listing.anonymousTitle || updated.listing.companyName || 'objektet'}.`,
+        listingId: updated.listing.id
+      })
     }
 
     return NextResponse.json({ request: updated })

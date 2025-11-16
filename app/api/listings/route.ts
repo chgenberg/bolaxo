@@ -1,8 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
 import { sendMatchNotificationEmail } from '@/lib/email'
+import { prisma } from '@/lib/prisma'
+import { createNotification } from '@/lib/notifications'
 
-const prisma = new PrismaClient()
+const SENSITIVE_FIELDS = [
+  'companyName',
+  'orgNumber',
+  'address',
+  'website',
+  'revenue',
+  'revenueRange',
+  'revenueYear1',
+  'revenueYear2',
+  'revenueYear3',
+  'revenue3Years',
+  'revenueGrowthRate',
+  'profitMargin',
+  'grossMargin',
+  'ebitda',
+  'priceMin',
+  'priceMax',
+  'askingPrice',
+  'cash',
+  'accountsReceivable',
+  'inventory',
+  'totalAssets',
+  'totalLiabilities',
+  'shortTermDebt',
+  'longTermDebt',
+  'operatingCosts',
+  'salaries',
+  'rentCosts',
+  'marketingCosts',
+  'otherOperatingCosts',
+  'description',
+  'strengths',
+  'risks',
+  'whySelling',
+  'whatIncluded',
+  'competitiveAdvantages',
+  'customerConcentrationRisk'
+]
+
+const PRIVILEGED_ROLES = new Set(['admin', 'broker'])
 
 // Helper: Calculate match score between listing and buyer profile
 function calculateMatchScore(listing: any, buyerProfile: any): number {
@@ -81,6 +121,40 @@ function generateAnonymousTitle(listing: any): string {
   return `${type} i ${region}`
 }
 
+function maskListing(listing: any, canViewSensitive: boolean) {
+  if (canViewSensitive) return listing
+
+  const masked = { ...listing }
+
+  SENSITIVE_FIELDS.forEach((field) => {
+    if (Array.isArray(masked[field])) {
+      masked[field] = []
+    } else if (typeof masked[field] === 'number') {
+      masked[field] = null
+    } else {
+      masked[field] = undefined
+    }
+  })
+
+  masked.masked = true
+  masked.description =
+    'Detaljerad information är låst tills NDA är signerad och godkänd.'
+
+  return masked
+}
+
+async function getApprovedNDASet(userId?: string) {
+  if (!userId) return new Set<string>()
+  const approvals = await prisma.nDARequest.findMany({
+    where: {
+      buyerId: userId,
+      status: { in: ['approved', 'signed'] }
+    },
+    select: { listingId: true }
+  })
+  return new Set(approvals.map((nda) => nda.listingId))
+}
+
 // GET /api/listings - Fetch all published listings
 export async function GET(request: NextRequest) {
   try {
@@ -117,6 +191,16 @@ export async function GET(request: NextRequest) {
       }
     })
     
+    const viewer =
+      currentUserId
+        ? await prisma.user.findUnique({
+            where: { id: currentUserId },
+            select: { id: true, role: true }
+          })
+        : null
+    const viewerRole = viewer?.role || 'guest'
+    const approvedNDAs = await getApprovedNDASet(currentUserId || undefined)
+
     // Calculate match scores for buyer if currentUserId is provided
     let listingsWithMatchScores = listings
     if (currentUserId) {
@@ -138,22 +222,18 @@ export async function GET(request: NextRequest) {
     // Anonymize listings om inte current user är ägaren
     const anonymizedListings = listingsWithMatchScores.map(listing => {
       const isOwner = listing.userId === currentUserId
-      
-      return {
-        ...listing,
-        companyName: isOwner ? listing.companyName : undefined,
-        orgNumber: isOwner ? listing.orgNumber : undefined,
-        address: isOwner ? listing.address : undefined,
-        website: isOwner ? listing.website : undefined,
-        title: generateAnonymousTitle(listing),
-        // För köpare: visa bara anonymtitel tills NDA är accepterad
-        ...(isOwner ? {} : {
-          companyName: undefined,
-          orgNumber: undefined,
-          address: undefined,
-          website: undefined
-        })
-      }
+      const canViewSensitive =
+        isOwner ||
+        PRIVILEGED_ROLES.has(viewerRole) ||
+        approvedNDAs.has(listing.id)
+
+      return maskListing(
+        {
+          ...listing,
+          title: generateAnonymousTitle(listing)
+        },
+        canViewSensitive
+      )
     })
     
     return NextResponse.json(anonymizedListings)
@@ -398,6 +478,36 @@ async function triggerMatching(listingId: string, listing: any) {
         } catch (emailError) {
           console.error('Error sending match notification email to seller:', emailError)
         }
+
+        await createNotification({
+          userId: profile.user?.id,
+          type: 'match',
+          title: 'Ny matchning',
+          message: `${listingTitle} matchar dina kriterier (${matchScore}%).`,
+          listingId
+        })
+
+        if (seller?.id) {
+          await createNotification({
+            userId: seller.id,
+            type: 'match',
+            title: 'Ny intresserad köpare',
+            message: `En köpare matchades mot ${listingTitle} (${matchScore}%).`,
+            listingId
+          })
+        }
+
+        await prisma.buyerMatchLog.create({
+          data: {
+            buyerId: profile.userId,
+            listingId,
+            score: matchScore,
+            action: 'match_created',
+            details: profile.preferredIndustries
+              ? { industries: profile.preferredIndustries, regions: profile.preferredRegions }
+              : undefined
+          }
+        })
 
         console.log(`Match found: Listing ${listingId} matches buyer ${profile.userId} with score ${matchScore}`)
       }
