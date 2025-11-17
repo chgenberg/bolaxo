@@ -24,6 +24,7 @@ function getPrisma() {
 
 export async function handleValuationRequest(request: Request) {
   let rawData: any = null
+  let sanitizedInput: any = null
   
   try {
     // Safe header access
@@ -61,6 +62,7 @@ export async function handleValuationRequest(request: Request) {
     }
     
     const data = sanitized
+    sanitizedInput = data
 
     // Get enriched data
     let enrichedData = null
@@ -142,25 +144,33 @@ export async function handleValuationRequest(request: Request) {
     console.error('[VALUATION] Raw data received:', JSON.stringify(rawData).substring(0, 500))
     
     // Try fallback valuation if we have the data
-    if (rawData) {
+    const fallbackPayload = sanitizedInput || rawData || getMinimalFallbackInput()
+    
+    try {
+      const fallbackResult = generateFallbackValuation(fallbackPayload)
+      await saveValuationSafely(fallbackPayload, fallbackResult).catch((e) => {
+        console.error('Failed to save fallback valuation:', e)
+      })
+      return NextResponse.json({ result: fallbackResult })
+    } catch (fallbackError) {
+      console.error('[VALUATION] Critical fallback failure:', fallbackError)
       try {
-        const result = generateFallbackValuation(rawData)
-        await saveValuationSafely(rawData, result).catch((e) => {
-          console.error('Failed to save fallback valuation:', e)
+        const backupResult = generateFallbackValuation(getMinimalFallbackInput())
+        await saveValuationSafely(getMinimalFallbackInput(), backupResult).catch((e) => {
+          console.error('Failed to save backup fallback valuation:', e)
         })
-        return NextResponse.json({ result })
-      } catch (e) {
-        console.error('Failed to generate fallback valuation:', e)
+        return NextResponse.json({ result: backupResult })
+      } catch (backupError) {
+        console.error('[VALUATION] Backup fallback failed:', backupError)
+        return NextResponse.json(
+          { 
+            error: 'Failed to generate valuation',
+            details: error instanceof Error ? error.message : String(error)
+          },
+          { status: 500 }
+        )
       }
     }
-    
-    return NextResponse.json(
-      { 
-        error: 'Failed to generate valuation',
-        details: error instanceof Error ? error.message : String(error)
-      },
-      { status: 500 }
-    )
   }
 }
 
@@ -763,5 +773,16 @@ function parseRevenueRange(range: string): number {
     '0-1': 0.5, '1-5': 3, '5-10': 7.5, '10-20': 15, '20-50': 35, '50+': 75,
   }
   return ranges[range] || 5
+}
+
+function getMinimalFallbackInput() {
+  return {
+    industry: 'services',
+    revenue: '5-10',
+    profitMargin: '5-10',
+    companyAge: '5-10',
+    employees: '5-10',
+    revenue3Years: 'stable'
+  }
 }
 
