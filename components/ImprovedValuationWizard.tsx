@@ -132,6 +132,173 @@ const INDUSTRY_MULTIPLIERS: Record<string, { base: number; spread: number }> = {
   other: { base: 4.5, spread: 0.25 },
 }
 
+type DemoValuationProfile = {
+  label: string
+  data: Partial<ValuationData>
+}
+
+const demoValuationProfiles: DemoValuationProfile[] = [
+  {
+    label: 'Nimbus Analytics (SaaS)',
+    data: {
+      email: 'demo+saas@bolaxo.se',
+      companyName: 'Nimbus Analytics AB',
+      website: 'https://nimbusanalytics.se',
+      orgNumber: '5591234567',
+      industry: 'webbtjanster',
+      revenue: '42000000',
+      revenue3Years: '36000000',
+      profitMargin: '18',
+      ebitda: '7560000',
+      grossMargin: '72',
+      revenueGrowthRate: '22',
+      recurringRevenuePercentage: '88',
+      salaries: '17000000',
+      rentCosts: '1200000',
+      marketingCosts: '3200000',
+      otherOperatingCosts: '2600000',
+      cogs: '11800000',
+      totalAssets: '22000000',
+      totalLiabilities: '8000000',
+      cash: '3500000',
+      accountsReceivable: '4800000',
+      inventory: '0',
+      equipment: '2400000',
+      realEstate: '0',
+      intangibleAssets: '3200000',
+      shortTermDebt: '1500000',
+      longTermDebt: '5000000',
+      customerCount: '120',
+      averageCustomerValue: '350000',
+      customerChurnRate: '4',
+      customerConcentrationRisk: 'medium',
+      contractLength: 'multi-year',
+      paymentTerms: '30-days',
+      marketSize: '1500000000',
+      marketShare: '2',
+      competitiveAdvantages: 'Egen AI-plattform, ISO 27001 och 98% kundförnyelse.',
+      mainCompetitors: 'Planhat, Funnel samt interna BI-team.',
+      geographicReach: 'Sverige, Norge och Finland.',
+      employees: '32',
+      keyEmployeeDependency: 'medium',
+      companyAge: '8',
+      ownerInvolvement: 'strategic',
+      majorRisks: 'Tekniskt beroende av CTO och få enterprise-kunder står för 40% av intäkterna.',
+      regulatoryLicenses: 'SOC2 under införande, ISO 27001 certifierad.',
+      growthPotential: 'high',
+      expansionPlans: 'Lansera i DACH-regionen, bygga partnernätverk och dubbla ARR inom 24 månader.',
+      investmentNeeds: '30000000',
+      exitStrategy: 'strategic'
+    }
+  },
+  {
+    label: 'Nordic Precision Manufacturing',
+    data: {
+      email: 'demo+manufacturing@bolaxo.se',
+      companyName: 'Nordic Precision Manufacturing AB',
+      website: 'https://npm.se',
+      orgNumber: '5567788990',
+      industry: 'tillverkning',
+      revenue: '68000000',
+      revenue3Years: '62000000',
+      profitMargin: '14',
+      ebitda: '9520000',
+      grossMargin: '38',
+      revenueGrowthRate: '9',
+      recurringRevenuePercentage: '35',
+      salaries: '24000000',
+      rentCosts: '2800000',
+      marketingCosts: '1800000',
+      otherOperatingCosts: '3200000',
+      cogs: '42160000',
+      totalAssets: '52000000',
+      totalLiabilities: '22000000',
+      cash: '4200000',
+      accountsReceivable: '8600000',
+      inventory: '9000000',
+      equipment: '14500000',
+      realEstate: '18000000',
+      intangibleAssets: '2500000',
+      shortTermDebt: '3200000',
+      longTermDebt: '14000000',
+      customerCount: '48',
+      averageCustomerValue: '1400000',
+      customerChurnRate: '6',
+      customerConcentrationRisk: 'medium',
+      contractLength: 'yearly',
+      paymentTerms: '60-days',
+      marketSize: '2500000000',
+      marketShare: '3',
+      competitiveAdvantages: 'ISO 9001/14001, robotiserade celler och egen produktutveckling.',
+      mainCompetitors: 'Lokala verkstäder och lågkostnadsproducenter i Baltikum.',
+      geographicReach: 'Sverige och Norge, export till Tyskland.',
+      employees: '68',
+      keyEmployeeDependency: 'medium',
+      companyAge: '15',
+      ownerInvolvement: 'operational',
+      majorRisks: 'Stålpris-volatilitet och beroende av två fordonskunder.',
+      regulatoryLicenses: 'ISO 9001, 14001 och svetscertifikat enligt EN 1090.',
+      growthPotential: 'moderate',
+      expansionPlans: 'Automatisera ytterligare två linjer och etablera säljkontor i Danmark.',
+      investmentNeeds: '18000000',
+      exitStrategy: 'financial'
+    }
+  },
+  {
+    label: 'CityCare Kliniken',
+    data: {
+      email: 'demo+care@bolaxo.se',
+      companyName: 'CityCare Kliniken AB',
+      website: 'https://citycarekliniken.se',
+      orgNumber: '5561122334',
+      industry: 'halsa',
+      revenue: '22000000',
+      revenue3Years: '19000000',
+      profitMargin: '21',
+      ebitda: '4620000',
+      grossMargin: '58',
+      revenueGrowthRate: '11',
+      recurringRevenuePercentage: '62',
+      salaries: '9800000',
+      rentCosts: '2200000',
+      marketingCosts: '900000',
+      otherOperatingCosts: '1200000',
+      cogs: '9240000',
+      totalAssets: '18000000',
+      totalLiabilities: '6000000',
+      cash: '2600000',
+      accountsReceivable: '3100000',
+      inventory: '450000',
+      equipment: '5200000',
+      realEstate: '0',
+      intangibleAssets: '1300000',
+      shortTermDebt: '800000',
+      longTermDebt: '4200000',
+      customerCount: '6200',
+      averageCustomerValue: '3200',
+      customerChurnRate: '8',
+      customerConcentrationRisk: 'low',
+      contractLength: 'yearly',
+      paymentTerms: 'advance',
+      marketSize: '900000000',
+      marketShare: '1',
+      competitiveAdvantages: 'Multidisciplinärt team, abonnemangsmodell och korta väntetider.',
+      mainCompetitors: 'MinDoktor, Kry och lokala specialistkliniker.',
+      geographicReach: 'Stockholm huvudclinic, digital vård nationellt.',
+      employees: '22',
+      keyEmployeeDependency: 'low',
+      companyAge: '9',
+      ownerInvolvement: 'strategic',
+      majorRisks: 'Behöver säkra fler specialistläkare och hantera regionavtal.',
+      regulatoryLicenses: 'IVO-tillstånd, regionavtal och ISO 13485-processer.',
+      growthPotential: 'high',
+      expansionPlans: 'Öppna satellitklinik i Malmö och lansera digital abonnemangstjänst.',
+      investmentNeeds: '12000000',
+      exitStrategy: 'strategic'
+    }
+  }
+]
+
 export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user, login } = useAuth()
@@ -200,6 +367,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const lastEnrichedCompanyName = useRef<string | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [valuationResult, setValuationResult] = useState<any>(null)
+  const [autoFillMessage, setAutoFillMessage] = useState<string | null>(null)
   
   const progress = (currentStep / steps.length) * 100
 
@@ -265,6 +433,12 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
     return () => clearTimeout(timer)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [acceptedPrivacy, data.email, data.companyName, data.industry, draftValuationId])
+
+  useEffect(() => {
+    if (!autoFillMessage) return
+    const timer = setTimeout(() => setAutoFillMessage(null), 5000)
+    return () => clearTimeout(timer)
+  }, [autoFillMessage])
 
   const updateData = (field: string, value: string) => {
     setData(prev => ({ ...prev, [field]: value }))
@@ -689,6 +863,22 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
     } finally {
       setIsEnriching(false)
     }
+  }
+
+  const handleFillDemoData = () => {
+    if (!demoValuationProfiles.length) return
+    const profile = demoValuationProfiles[Math.floor(Math.random() * demoValuationProfiles.length)]
+    if (!profile) return
+
+    setData(prev => ({
+      ...prev,
+      ...profile.data,
+      email: user?.email || prev.email || profile.data.email || ''
+    }))
+    setAcceptedPrivacy(true)
+    setErrors({})
+    setEnrichmentStatus('')
+    setAutoFillMessage(`Fyllde i ${profile.label}`)
   }
 
   useEffect(() => {
@@ -1501,17 +1691,33 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
           {/* Header */}
           <div className="px-8 py-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold text-primary-navy">Företagsvärdering</h1>
                 <p className="text-gray-600 mt-1">Få en professionell värdering på 5 minuter</p>
               </div>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <X className="w-6 h-6 text-gray-500" />
-              </button>
+              <div className="flex flex-col items-end gap-2">
+                {autoFillMessage && (
+                  <span className="text-xs text-green-700">{autoFillMessage}</span>
+                )}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleFillDemoData}
+                    disabled={isSubmitting || isEnriching}
+                    className="px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors disabled:opacity-60"
+                    style={{ borderColor: '#1F3C58', color: '#1F3C58' }}
+                  >
+                    Fyll med demo-data
+                  </button>
+                  <button
+                    onClick={onClose}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <X className="w-6 h-6 text-gray-500" />
+                  </button>
+                </div>
+              </div>
             </div>
             
             {/* Progress bar */}
