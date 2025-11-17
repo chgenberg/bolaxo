@@ -1,5 +1,4 @@
-import { openai } from '@ai-sdk/openai'
-import { generateText } from 'ai'
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 
 export interface DDFinding {
   title: string
@@ -273,10 +272,20 @@ SVAR FORMAT (JSON):
 Analysera nu och returnera JSON-svaret:
 `
 
-    const result = await generateText({
-      model: openai('gpt-5-mini') as any,
-      prompt: analysisPrompt,
-      maxTokens: 8000, // Optimize for mini
+    const { text: analysisText } = await callOpenAIResponses({
+      model: 'gpt-5-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'Du är en DD-expert. Returnera alltid giltig JSON enligt instruktionerna.'
+        },
+        { role: 'user', content: analysisPrompt }
+      ],
+      maxOutputTokens: 8000,
+      metadata: {
+        feature: 'dd-analysis',
+        documents: documents.length
+      }
     })
 
     console.log('OK GPT analysis completed')
@@ -286,7 +295,7 @@ Analysera nu och returnera JSON-svaret:
     let dealRecommendation = 'Proceed with further review'
 
     try {
-      const jsonMatch = result.text.match(/\{[\s\S]*\}/)
+      const jsonMatch = (analysisText || '').match(/\{[\s\S]*\}/)
       if (jsonMatch) {
         const parsedResult = JSON.parse(jsonMatch[0])
         findings = parsedResult.findings || []
@@ -331,7 +340,11 @@ Analysera nu och returnera JSON-svaret:
       }
     }
   } catch (error) {
-    console.error('DD Analysis error:', error)
+    if (error instanceof OpenAIResponseError) {
+      console.error('DD Analysis OpenAI error:', error.status, error.body)
+    } else {
+      console.error('DD Analysis error:', error)
+    }
     throw error
   }
 }
@@ -368,11 +381,20 @@ Extrahera följande och returnera som JSON:
 }
 `
 
-    const result = await generateText({
-      model: openai('gpt-5-mini') as any,
-      prompt,
-      temperature: undefined, // GPT-5 uses verbosity
-      maxTokens: undefined // GPT-5 handles automatically
+    const { text } = await callOpenAIResponses({
+      model: 'gpt-5-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'Du är en M&A-advokat. Returnera alltid JSON enligt instruktionen.'
+        },
+        { role: 'user', content: prompt }
+      ],
+      maxOutputTokens: 8000,
+      metadata: {
+        feature: 'spa-extraction',
+        documents: documents.length
+      }
     })
 
     let extractedData = {
@@ -390,7 +412,7 @@ Extrahera följande och returnera som JSON:
     }
 
     try {
-      const jsonMatch = result.text.match(/\{[\s\S]*\}/)
+      const jsonMatch = (text || '').match(/\{[\s\S]*\}/)
       if (jsonMatch) {
         extractedData = JSON.parse(jsonMatch[0])
       }
@@ -400,7 +422,11 @@ Extrahera följande och returnera som JSON:
 
     return extractedData
   } catch (error) {
-    console.error('SPA extraction error:', error)
+    if (error instanceof OpenAIResponseError) {
+      console.error('SPA extraction OpenAI error:', error.status, error.body)
+    } else {
+      console.error('SPA extraction error:', error)
+    }
     throw error
   }
 }

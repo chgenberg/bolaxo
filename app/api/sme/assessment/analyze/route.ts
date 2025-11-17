@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { openai } from '@ai-sdk/openai'
-import { generateObject } from 'ai'
 import { z } from 'zod'
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 
 // Schema for GPT assessment response
 const AssessmentSchema = z.object({
@@ -67,15 +66,37 @@ export async function POST(req: NextRequest) {
     
     Var specifik och praktisk i dina rekommendationer. Fokusera på vad som verkligen behövs för en framgångsrik försäljningsprocess.`
 
-    // Cast to any to bypass TypeScript issues with GPT-5-mini
-    const model = openai('gpt-5-mini') as any
+    let assessmentData: any
+    
+    try {
+      const { text } = await callOpenAIResponses({
+        model: 'gpt-5-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Analysera följande företagsinformation för försäljningsberedskap:\n\n${JSON.stringify(dataSummary, null, 2)}\n\nReturnera JSON enligt schemat.` }
+        ],
+        maxOutputTokens: 4000,
+        metadata: {
+          feature: 'sme-assessment',
+          documentCount: dataSummary.documentation.totalUploaded
+        }
+      })
+      
+      const cleaned = (text || '{}').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+      assessmentData = JSON.parse(cleaned)
+    } catch (error) {
+      if (error instanceof OpenAIResponseError) {
+        console.error('SME assessment OpenAI error:', error.status, error.body)
+      } else {
+        console.error('SME assessment parse error:', error)
+      }
+      return NextResponse.json(
+        { error: 'Failed to analyze completeness', details: 'OpenAI processing failed' },
+        { status: 502 }
+      )
+    }
 
-    const { object: assessment } = await generateObject({
-      model,
-      schema: AssessmentSchema,
-      system: systemPrompt,
-      prompt: `Analysera följande företagsinformation för försäljningsberedskap:\n\n${JSON.stringify(dataSummary, null, 2)}`
-    })
+    const assessment = AssessmentSchema.parse(assessmentData)
 
     // Add timestamp
     const result = {

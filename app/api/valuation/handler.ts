@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { checkRateLimit } from '@/lib/ratelimit'
 import { validateAndSanitize } from '@/lib/sanitize'
 import { buildConditionalPrompts, getIndustrySpecificInstructions, validateDataCombinations } from '@/lib/valuation-rules'
-import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 import {
   analyzeHistoricalTrends,
   calculateDebtAdjustments,
@@ -86,46 +86,43 @@ export async function handleValuationRequest(request: Request) {
       return NextResponse.json({ result })
     }
 
-    // Call OpenAI with gpt-5-mini
-    // Note: gpt-5-mini uses max_completion_tokens (not max_tokens) and does NOT support temperature
     console.log('[VALUATION] Starting valuation request')
     console.log('[VALUATION] Company:', data.companyName)
     console.log('[VALUATION] Industry:', data.industry)
     console.log('[VALUATION] Revenue:', data.exactRevenue)
-    console.log('[VALUATION] Calling OpenAI API with model: gpt-5-mini')
+    console.log('[VALUATION] Calling OpenAI Responses API with model: gpt-5-mini')
     console.log('[VALUATION] Prompt length:', combinedPrompt.length, 'characters')
     
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
+    let rawContent = ''
+    
+    try {
+      const { text } = await callOpenAIResponses({
         model: 'gpt-5-mini',
         messages: [
-          { role: 'user', content: combinedPrompt }
+          { role: 'system', content: getSystemPrompt() },
+          { role: 'user', content: prompt }
         ],
-        max_completion_tokens: 16000 // Required for gpt-5-mini (replaces max_tokens)
-        // Note: temperature is NOT supported by gpt-5-mini
-      }),
-      signal: createTimeoutSignal(300000)
-    })
-    
-    console.log('[VALUATION] OpenAI response status:', response.status)
-
-    if (!response.ok) {
-      const errorText = await response.text()
-      console.error('OpenAI API request failed:', response.status, errorText)
+        maxOutputTokens: 16000,
+        metadata: {
+          feature: 'valuation-handler',
+          priority: 'free-valuation'
+        },
+        timeoutMs: 300000
+      })
+      
+      console.log('OpenAI API response received successfully')
+      rawContent = text
+    } catch (error) {
+      if (error instanceof OpenAIResponseError) {
+        console.error('OpenAI API request failed:', error.status, error.body)
+      } else {
+        console.error('OpenAI API request failed:', error)
+      }
       console.log('Falling back to default valuation')
       const result = generateFallbackValuation(data)
       await saveValuationSafely(data, result)
       return NextResponse.json({ result })
     }
-
-    const aiResponse = await response.json()
-    console.log('OpenAI API response received successfully')
-    const rawContent = aiResponse?.choices?.[0]?.message?.content ?? ''
 
     // Parse
     const cleaned = String(rawContent)

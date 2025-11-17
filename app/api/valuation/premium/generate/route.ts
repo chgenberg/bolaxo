@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
 import { prisma } from '@/lib/prisma'
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 
 interface DDData {
   [key: string]: string | number | boolean | undefined
@@ -37,35 +33,50 @@ export async function POST(request: NextRequest) {
     // Prepare the comprehensive prompt
     const prompt = createComprehensivePrompt(formData as DDData)
 
-    // Call GPT-5 (not mini) for comprehensive analysis
-    const completion = await openai.chat.completions.create({
-      model: "gpt-5",
-      max_completion_tokens: 60000, // Absolute maximum quality - comprehensive 42-section DD analysis with extensive detail
-      messages: [
-        {
-          role: "system",
-          content: `Du är en erfaren M&A-rådgivare och företagsvärderare i Sverige. Du har just genomfört en omfattande due diligence (42 områden) av ett företag. 
-          
-          Din uppgift är att skapa en extremt detaljerad och professionell företagsvärdering och DD-rapport. Inkludera:
-          1. Exakt företagsvärdering med motivering
-          2. Detaljerad analys av alla 42 DD-områden
-          3. Identifierade röda flaggor och risker
-          4. Affärsmöjligheter och värdeskapande åtgärder
-          5. Konkreta rekommendationer för försäljningsprocessen
-          6. Förhandlingspunkter och strategier
-          
-          Var extremt detaljerad och professionell. Detta är en rapport som ska användas i verkliga förhandlingar.
-          
-          VIKTIGT: Returnera ALLTID ett giltigt JSON-objekt enligt strukturen nedan.`
-        },
-        {
-          role: "user",
-          content: prompt
-        }
-      ],
-    })
+    let result: any = {}
 
-    const result = JSON.parse(completion.choices[0].message.content || '{}')
+    try {
+      const { text } = await callOpenAIResponses({
+        model: 'gpt-5.1',
+        messages: [
+          {
+            role: 'system',
+            content: `Du är en erfaren M&A-rådgivare och företagsvärderare i Sverige. Du har just genomfört en omfattande due diligence (42 områden) av ett företag. 
+            
+Din uppgift är att skapa en extremt detaljerad och professionell företagsvärdering och DD-rapport. Inkludera:
+1. Exakt företagsvärdering med motivering
+2. Detaljerad analys av alla 42 DD-områden
+3. Identifierade röda flaggor och risker
+4. Affärsmöjligheter och värdeskapande åtgärder
+5. Konkreta rekommendationer för försäljningsprocessen
+6. Förhandlingspunkter och strategier
+
+Var extremt detaljerad och professionell. Detta är en rapport som ska användas i verkliga förhandlingar.
+
+VIKTIGT: Returnera ALLTID ett giltigt JSON-objekt enligt strukturen nedan.`
+          },
+          { role: 'user', content: prompt }
+        ],
+        maxOutputTokens: 60000,
+        metadata: {
+          feature: 'premium-valuation',
+          purchaseId
+        }
+      })
+
+      const cleaned = (text || '{}').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+      result = JSON.parse(cleaned || '{}')
+    } catch (error) {
+      if (error instanceof OpenAIResponseError) {
+        console.error('Premium valuation OpenAI error:', error.status, error.body)
+      } else {
+        console.error('Premium valuation OpenAI error:', error)
+      }
+      return NextResponse.json(
+        { error: 'Failed to generate premium valuation' },
+        { status: 502 }
+      )
+    }
 
     // Update the premium valuation with results
     await prisma.premiumValuation.update({

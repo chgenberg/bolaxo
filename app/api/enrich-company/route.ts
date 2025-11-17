@@ -8,6 +8,7 @@ import { scrapeGoogleMyBusiness, calculateBrandStrength } from '@/lib/scrapers/g
 import { scrapeTrustpilot, calculateEcommerceTrust } from '@/lib/scrapers/trustpilot'
 import { searchGoogle } from '@/lib/scrapers/google-search'
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 import { fetchWebInsights } from '@/lib/webInsights'
 import { fetchBolagsverketCompanyData } from '@/lib/bolagsverket-api'
 
@@ -876,36 +877,33 @@ Extrahera och returnera JSON med följande fält (lämna tomt om inte hittas):
 
 Returnera ENDAST giltig JSON, ingen annan text.`
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+    const { text } = await callOpenAIResponses({
+      model: 'gpt-5-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'Du är en företagsanalytiker. Returnera alltid giltig JSON.'
+        },
+        { role: 'user', content: prompt }
+      ],
+      maxOutputTokens: 800,
+      metadata: {
+        feature: 'enrich-company',
+        companyName
       },
-      body: JSON.stringify({
-        model: 'gpt-5-mini',
-        messages: [{ role: 'user', content: prompt }],
-        max_completion_tokens: 800,
-      }),
-      signal: createTimeoutSignal(30000) // 30s timeout
+      timeoutMs: 30000
     })
-
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`)
-    }
-
-    const aiResponse = await response.json()
-    const content = aiResponse?.choices?.[0]?.message?.content || '{}'
-    
-    // Parse JSON (robust)
-    const cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
+    const cleaned = (text || '{}').replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
     const extracted = JSON.parse(cleaned)
     
     console.log('AI extraction successful:', Object.keys(extracted))
     return extracted
-
   } catch (error) {
-    console.error('AI extraction error:', error)
+    if (error instanceof OpenAIResponseError) {
+      console.error('AI extraction OpenAI error:', error.status, error.body)
+    } else {
+      console.error('AI extraction error:', error)
+    }
     throw error // Let caller handle fallback
   }
 }

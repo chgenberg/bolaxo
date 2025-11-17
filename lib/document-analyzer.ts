@@ -1,8 +1,4 @@
-import OpenAI from 'openai'
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-})
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 
 export interface DocumentAnalysisResult {
   documentType: string
@@ -327,7 +323,7 @@ export async function analyzeDocument(documentContent: string, documentType: key
     throw new Error(`Unknown document type: ${documentType}`)
   }
 
-  const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+  const messages = [
     {
       role: 'system',
       content: prompt
@@ -339,14 +335,18 @@ export async function analyzeDocument(documentContent: string, documentType: key
   ]
 
   try {
-    const response = await openai.chat.completions.create({
+    const { text } = await callOpenAIResponses({
       model: 'gpt-5-mini',
-      messages: messages,
-      response_format: { type: 'json_object' },
-      // GPT-5-mini uses its own sampling strategy
+      messages: messages as any,
+      maxOutputTokens: 4000,
+      metadata: {
+        feature: 'document-analyzer',
+        documentType
+      },
+      responseFormat: { type: 'json_object' }
     })
 
-    const extractedData = JSON.parse(response.choices[0].message?.content || '{}')
+    const extractedData = JSON.parse(text || '{}')
 
     return {
       documentType,
@@ -355,6 +355,10 @@ export async function analyzeDocument(documentContent: string, documentType: key
       summary: `Successfully extracted data from ${documentType} document`
     }
   } catch (error) {
+    if (error instanceof OpenAIResponseError) {
+      console.error('Document analysis OpenAI error:', error.status, error.body)
+      throw new Error(`Failed to analyze ${documentType}: OpenAI error ${error.status}`)
+    }
     console.error('Document analysis error:', error)
     throw new Error(`Failed to analyze ${documentType}: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }

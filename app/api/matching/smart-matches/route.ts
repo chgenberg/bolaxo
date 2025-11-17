@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
-import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 import { fetchWebInsights } from '@/lib/webInsights'
 
 const prisma = new PrismaClient()
@@ -143,24 +143,35 @@ Viktiga faktorer:
 - Tillväxtpotential
 - Risk-profil`
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-        model: 'gpt-5-mini',
-      messages: [{ role: 'user', content: prompt }],
-      max_completion_tokens: 1500,
-    }),
-    signal: createTimeoutSignal(20000)
-  })
+  let content = '{}'
 
-  if (!response.ok) throw new Error('AI matching failed')
+  try {
+    const { text } = await callOpenAIResponses({
+      model: 'gpt-5-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'Du är en AI-matchmaker. Returnera endast giltig JSON.'
+        },
+        { role: 'user', content: prompt }
+      ],
+      maxOutputTokens: 2000,
+      metadata: {
+        feature: 'smart-matching',
+        userId: user.id
+      },
+      timeoutMs: 20000,
+    })
+    content = text || '{}'
+  } catch (error) {
+    if (error instanceof OpenAIResponseError) {
+      console.error('AI matching OpenAI error:', error.status, error.body)
+    } else {
+      console.error('AI matching error:', error)
+    }
+    throw new Error('AI matching failed')
+  }
 
-  const aiResponse = await response.json()
-  const content = aiResponse?.choices?.[0]?.message?.content || '{}'
   const cleaned = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
   const parsed = JSON.parse(cleaned)
 
