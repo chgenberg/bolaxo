@@ -69,8 +69,7 @@ ${schema}`
     instructions,
     input: inputBlock,
     tools: [{ type: 'web_search' }],
-    max_output_tokens: maxOutputTokens,
-    text: { format: 'json' }
+    max_output_tokens: maxOutputTokens
   }
 
   let lastError: unknown = null
