@@ -146,7 +146,15 @@ export async function POST(request: Request) {
   return handleValuationRequest(request)
 }
 
-async function handleValuationRequest(request: Request) {
+async function handleValuationRequest(request?: Request) {
+  if (!request) {
+    console.warn('[VALUATION] handleValuationRequest invoked without a Request object')
+    return NextResponse.json(
+      { error: 'Begäran saknas eller är ogiltig.' },
+      { status: 400 }
+    )
+  }
+
   let rawData: any = null
   let sanitizedInput: any = null
   
