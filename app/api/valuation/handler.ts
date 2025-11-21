@@ -14,6 +14,34 @@ import {
   calculateTotalDebt
 } from '@/lib/valuation-helpers'
 
+type WebInsightsParams = {
+  companyName?: string
+  orgNumber?: string
+  industry?: string
+}
+
+async function getWebInsightsSafely({
+  companyName,
+  orgNumber,
+  industry
+}: WebInsightsParams) {
+  if (!companyName || typeof companyName !== 'string' || !companyName.trim()) {
+    return null
+  }
+
+  try {
+    return await fetchWebInsights({
+      companyName: companyName.trim(),
+      orgNumber: orgNumber?.trim(),
+      industry,
+      focus: 'analysis'
+    })
+  } catch (error) {
+    console.error('[VALUATION] Failed to fetch web insights:', error)
+    return null
+  }
+}
+
 // Lazy initialization
 let prisma: PrismaClient | null = null
 function getPrisma() {
