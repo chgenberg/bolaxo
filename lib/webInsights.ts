@@ -69,6 +69,7 @@ ${schema}`
     instructions,
     input: inputBlock,
     tools: [{ type: 'web_search' }],
+    text: { format: 'json' },
     max_output_tokens: maxOutputTokens
   }
 

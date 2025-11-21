@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { searchCompanyWithWebSearch } from '@/lib/webInsights'
+import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 import { prisma } from '@/lib/prisma'
 
 const ANALYSIS_TTL_MS = 1000 * 60 * 60 * 24 // 24 hours
@@ -42,7 +43,7 @@ export async function POST(request: Request) {
       usedFallback = true
       finalAnalysis = fallbackAnalysis()
     } else {
-      // Now analyze with GPT-5 (no temperature/max_tokens needed for this model)
+      // Now analyze with GPT-4o via Responses API
       const analysisPrompt = `Du agerar som världens främsta svenska business-coach och företagsvärderare.
 Du kombinerar strategisk rådgivning, operativ erfarenhet och investment banker-analys.
 Identifiera vad som faktiskt driver värde, och ge råd som en VD, CFO och M&A-rådgivare skulle betala för.
@@ -120,80 +121,39 @@ Returnera som JSON enligt detta format:
       try {
         console.log('[ANALYZE] Starting AI analysis for:', companyName)
         console.log('[ANALYZE] Has web search data:', !!webSearchData)
-        
-        const analysisResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        const { text } = await callOpenAIResponses({
+          model: 'gpt-4o',
+          messages: [
+            {
+              role: 'system',
+              content:
+                'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
+            },
+            {
+              role: 'user',
+              content: analysisPrompt
+            }
+          ],
+          maxOutputTokens: 6000,
+          metadata: {
+            feature: 'company-analysis'
           },
-          body: JSON.stringify({
-            model: 'gpt-4o',
-            messages: [
-              {
-                role: 'system',
-                content: 'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
-              },
-              {
-                role: 'user',
-                content: analysisPrompt
-              }
-            ],
-            response_format: { type: 'json_object' },
-            temperature: 0.7,
-            max_tokens: 6000
-          })
+          responseFormat: { type: 'json_object' }
         })
 
-        console.log('[ANALYZE] OpenAI response status:', analysisResponse.status)
-
-        if (analysisResponse.ok) {
-          const analysisData = await analysisResponse.json()
-          finalAnalysis = JSON.parse(analysisData.choices[0].message.content)
-          console.log('[ANALYZE] AI analysis completed successfully')
-        } else {
-          const errorText = await analysisResponse.text()
-          console.error('[ANALYZE] Primary model failed:', analysisResponse.status, errorText)
-          console.log('[ANALYZE] Falling back to GPT-4')
-          
-          const gpt4Response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-            },
-            body: JSON.stringify({
-              model: 'gpt-4-turbo-preview',
-              messages: [
-                {
-                  role: 'system',
-                  content: 'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
-                },
-                {
-                  role: 'user',
-                  content: analysisPrompt
-                }
-              ],
-              response_format: { type: 'json_object' },
-              temperature: 0.7,
-              max_tokens: 6000
-            })
-          })
-
-          console.log('[ANALYZE] GPT-4 response status:', gpt4Response.status)
-          
-          if (!gpt4Response.ok) {
-            const gpt4Error = await gpt4Response.text()
-            console.error('[ANALYZE] GPT-4 also failed:', gpt4Response.status, gpt4Error)
-            throw new Error('Analys misslyckades')
-          }
-
-          const gpt4Data = await gpt4Response.json()
-          finalAnalysis = JSON.parse(gpt4Data.choices[0].message.content)
-          console.log('[ANALYZE] GPT-4 fallback completed successfully')
-        }
+        finalAnalysis = JSON.parse(text || '{}')
+        console.log('[ANALYZE] AI analysis completed successfully')
       } catch (error) {
-        console.error('AI analysis failed, falling back to heuristic analysis:', error)
+        if (error instanceof OpenAIResponseError) {
+          console.error(
+            '[ANALYZE] OpenAI Responses API error:',
+            error.status,
+            error.body
+          )
+        } else {
+          console.error('AI analysis failed:', error)
+        }
+        console.error('AI analysis failed, falling back to heuristic analysis')
         usedFallback = true
         finalAnalysis = fallbackAnalysis()
       }

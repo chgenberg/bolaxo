@@ -61,7 +61,7 @@ export async function callOpenAIResponses({
       modalities: ['text'],
       max_output_tokens: maxOutputTokens,
       metadata,
-      ...(responseFormat ? { response_format: responseFormat } : {})
+      ...(responseFormat ? { text: { format: responseFormat } } : {})
     }),
     signal: createTimeoutSignal(timeoutMs)
   })
