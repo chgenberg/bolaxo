@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Bookmark, Shield, MapPin, TrendingUp, Clock, CheckCircle, Eye, XCircle, MessageSquare, FileText, ClipboardCheck, Scale } from 'lucide-react'
-import { DEMO_DEALS, DEMO_QA_QUESTIONS } from '@/lib/demo-data'
+import { DEMO_DEALS } from '@/lib/demo-data'
 import { useLocale, useTranslations } from 'next-intl'
 
-const DEMO_MODE = true // Set to true to show demo data
+const DEMO_MODE = process.env.NEXT_PUBLIC_DASHBOARD_DEMO === 'true'
 
 interface BuyerDashboardProps {
   userId: string
@@ -57,7 +57,6 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
         const matchRes = await fetch(`/api/matches?buyerId=${userId}`)
         if (matchRes.ok) {
           const data = await matchRes.json()
-          // Extract listings from matches
           const matchedListingsData = (data.matches || []).map((match: any) => ({
             ...match.listing,
             matchScore: match.matchScore,
@@ -66,6 +65,8 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
             ndaStatus: match.ndaStatus
           }))
           setMatchedListings(matchedListingsData.slice(0, 6))
+        } else {
+          setMatchedListings([])
         }
       }
     } catch (error) {
@@ -85,6 +86,12 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
 
   const approvedNDAs = ndaRequests.filter(n => n.status === 'approved')
   const pendingNDAs = ndaRequests.filter(n => n.status === 'pending')
+  const formatRevenue = (revenue?: number) => {
+    if (!revenue || revenue <= 0) {
+      return t('priceNotSpecified')
+    }
+    return `${(revenue / 1_000_000).toFixed(1)}M SEK`
+  }
 
   return (
     <div className="space-y-8">
@@ -180,7 +187,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
                   </div>
                 )}
                 <div className="grid grid-cols-2 gap-2 text-xs mb-3">
-                  <div className="text-text-gray">{t('revenue')} <span className="font-medium text-text-dark">{(listing.revenue / 1000000).toFixed(1)}M SEK</span></div>
+                  <div className="text-text-gray">{t('revenue')} <span className="font-medium text-text-dark">{formatRevenue(listing.revenue)}</span></div>
                   <div className="text-text-gray">{t('price')} <span className="font-medium text-primary-blue">
                     {listing.abstainPriceMin && listing.abstainPriceMax ? 
                       t('priceNotSpecified') :

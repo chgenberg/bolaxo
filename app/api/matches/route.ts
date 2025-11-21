@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createNotification } from '@/lib/notifications'
 
 // GET /api/matches?sellerId= OR /api/matches?buyerId=
 export async function GET(request: NextRequest) {
@@ -67,6 +68,7 @@ async function getBuyerMatches(buyerId: string) {
       matches.push({
         id: `${buyerId}-${listing.id}`,
         listingId: listing.id,
+        sellerId: listing.userId,
         listing: {
           id: listing.id,
           anonymousTitle: listing.anonymousTitle,
@@ -90,6 +92,10 @@ async function getBuyerMatches(buyerId: string) {
 
   // Sort by score descending
   matches.sort((a, b) => b.matchScore - a.matchScore)
+
+  if (matches.length > 0) {
+    await notifyNewBuyerMatches(buyerId, matches)
+  }
 
   return NextResponse.json({ matches })
 }
@@ -240,4 +246,54 @@ function getMatchReasons(listing: any, buyerProfile: any): string[] {
   }
 
   return reasons
+}
+
+async function notifyNewBuyerMatches(buyerId: string, matches: any[]) {
+  for (const match of matches) {
+    try {
+      const alreadyNotifiedBuyer = await prisma.message.findFirst({
+        where: {
+          senderId: 'system',
+          recipientId: buyerId,
+          listingId: match.listingId,
+          subject: { startsWith: '[MATCH]' }
+        },
+        select: { id: true }
+      })
+
+      if (!alreadyNotifiedBuyer) {
+        await createNotification({
+          userId: buyerId,
+          type: 'match',
+          title: `Ny matchning: ${match.listing.anonymousTitle || 'Objekt'}`,
+          message: `Vi hittade en ny matchning (${Math.round(match.matchScore)}%). Signera NDA för att se detaljer. [listing:${match.listingId}]`,
+          listingId: match.listingId
+        })
+      }
+
+      if (match.sellerId) {
+        const alreadyNotifiedSeller = await prisma.message.findFirst({
+          where: {
+            senderId: 'system',
+            recipientId: match.sellerId,
+            listingId: match.listingId,
+            content: { contains: `[buyer:${buyerId}]` }
+          },
+          select: { id: true }
+        })
+
+        if (!alreadyNotifiedSeller) {
+          await createNotification({
+            userId: match.sellerId,
+            type: 'match',
+            title: 'Ny intresserad köpare',
+            message: `En verifierad köpare matchar ${match.listing.anonymousTitle || 'ditt objekt'} (${Math.round(match.matchScore)}%). [buyer:${buyerId}]`,
+            listingId: match.listingId
+          })
+        }
+      }
+    } catch (error) {
+      console.error('Failed to send match notification', error)
+    }
+  }
 }
