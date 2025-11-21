@@ -27,6 +27,41 @@ type ValuationContext = {
   prompt: string
 }
 
+function getHeaderValue(request: Request | undefined, headerName: string) {
+  if (!request) return undefined
+  const headers: any = (request as any).headers
+  if (!headers) return undefined
+
+  try {
+    if (typeof headers.get === 'function') {
+      return headers.get(headerName) ?? undefined
+    }
+
+    if (Array.isArray(headers)) {
+      const lower = headerName.toLowerCase()
+      for (const entry of headers) {
+        if (!entry) continue
+        const [key, value] = entry
+        if (typeof key === 'string' && key.toLowerCase() === lower) {
+          return value
+        }
+      }
+    } else if (typeof headers === 'object') {
+      const lower = headerName.toLowerCase()
+      for (const key of Object.keys(headers)) {
+        if (key.toLowerCase() === lower) {
+          const value = headers[key as keyof typeof headers]
+          return Array.isArray(value) ? value[0] : value
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('[VALUATION] Failed to read header value:', headerName, error)
+  }
+
+  return undefined
+}
+
 async function getWebInsightsSafely({
   companyName,
   orgNumber,
@@ -160,16 +195,10 @@ async function handleValuationRequest(request?: Request) {
   
   try {
     // Safe header access
-    let ip = 'unknown'
-    try {
-      if (request?.headers && typeof request.headers.get === 'function') {
-        ip = request.headers.get('x-forwarded-for') || 
-             request.headers.get('x-real-ip') || 
-             'unknown'
-      }
-    } catch (e) {
-      ip = 'unknown'
-    }
+    const ip =
+      getHeaderValue(request, 'x-forwarded-for') ||
+      getHeaderValue(request, 'x-real-ip') ||
+      'unknown'
 
     // Rate limit
     const { success } = await checkRateLimit(ip, 'valuation')
