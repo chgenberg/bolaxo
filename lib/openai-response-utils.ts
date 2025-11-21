@@ -10,13 +10,18 @@ type OpenAIMessage =
       content: Array<{ type: 'text'; text: string }>
     }
 
+type TextFormatOption = {
+  type: string
+  [key: string]: any
+}
+
 interface CallResponsesArgs {
   model: string
   messages: OpenAIMessage[]
   maxOutputTokens?: number
   metadata?: Record<string, any>
   timeoutMs?: number
-  responseFormat?: any
+  responseFormat?: TextFormatOption
 }
 
 export class OpenAIResponseError extends Error {
@@ -49,6 +54,11 @@ export async function callOpenAIResponses({
       : [{ type: 'text', text: message.content }]
   }))
 
+  const formatPayload =
+    responseFormat && typeof responseFormat === 'object'
+      ? { text: { format: responseFormat } }
+      : {}
+
   const response = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST',
     headers: {
@@ -61,7 +71,7 @@ export async function callOpenAIResponses({
       modalities: ['text'],
       max_output_tokens: maxOutputTokens,
       metadata,
-      ...(responseFormat ? { text: { format: responseFormat } } : {})
+      ...formatPayload
     }),
     signal: createTimeoutSignal(timeoutMs)
   })

@@ -69,7 +69,7 @@ ${schema}`
     instructions,
     input: inputBlock,
     tools: [{ type: 'web_search' }],
-    text: { format: 'json' },
+    text: { format: { type: 'json_object' } },
     max_output_tokens: maxOutputTokens
   }
 
