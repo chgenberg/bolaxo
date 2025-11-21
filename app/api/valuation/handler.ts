@@ -4,6 +4,7 @@ import { checkRateLimit } from '@/lib/ratelimit'
 import { validateAndSanitize } from '@/lib/sanitize'
 import { buildConditionalPrompts, getIndustrySpecificInstructions, validateDataCombinations } from '@/lib/valuation-rules'
 import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
+import { fetchWebInsights } from '@/lib/webInsights'
 import {
   analyzeHistoricalTrends,
   calculateDebtAdjustments,
@@ -22,7 +23,23 @@ function getPrisma() {
   return prisma
 }
 
-export async function handleValuationRequest(request: Request) {
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
+
+export async function GET() {
+  return NextResponse.json({
+    message: 'Valuation API',
+    status: 'active',
+    method: 'POST'
+  })
+}
+
+export async function POST(request: Request) {
+  return handleValuationRequest(request)
+}
+
+async function handleValuationRequest(request: Request) {
   let rawData: any = null
   let sanitizedInput: any = null
   
@@ -74,14 +91,22 @@ export async function handleValuationRequest(request: Request) {
       }
     }
 
-    // Build prompt
-    const prompt = buildValuationPrompt(data, enrichedData)
-    const combinedPrompt = `${getSystemPrompt()}\n\n${prompt}`
+    const webInsights = await getWebInsightsSafely({
+      companyName: data.companyName,
+      orgNumber: data.orgNumber,
+      industry: data.industry
+    })
+
+    const context = buildValuationContext({
+      input: data,
+      enrichedData,
+      webInsights
+    })
 
     // Check OpenAI key
     if (!process.env.OPENAI_API_KEY) {
       console.log('OpenAI API key not set, using fallback valuation')
-      const result = generateFallbackValuation(data)
+      const result = generateDeterministicValuation(context)
       await saveValuationSafely(data, result)
       return NextResponse.json({ result })
     }
@@ -90,22 +115,23 @@ export async function handleValuationRequest(request: Request) {
     console.log('[VALUATION] Company:', data.companyName)
     console.log('[VALUATION] Industry:', data.industry)
     console.log('[VALUATION] Revenue:', data.exactRevenue)
-    console.log('[VALUATION] Calling OpenAI Responses API with model: gpt-5-mini')
-    console.log('[VALUATION] Prompt length:', combinedPrompt.length, 'characters')
+    console.log('[VALUATION] Insights included:', !!webInsights)
+    console.log('[VALUATION] Calling OpenAI Responses API with model: gpt-5.1')
     
     let rawContent = ''
     
     try {
       const { text } = await callOpenAIResponses({
-        model: 'gpt-5-mini',
+        model: 'gpt-5.1',
         messages: [
-          { role: 'system', content: getSystemPrompt() },
-          { role: 'user', content: prompt }
+          { role: 'system', content: buildSystemPrompt(context) },
+          { role: 'user', content: buildUserPrompt(context) }
         ],
-        maxOutputTokens: 16000,
+        maxOutputTokens: 32000,
         metadata: {
           feature: 'valuation-handler',
-          priority: 'free-valuation'
+          priority: 'free-valuation',
+          hasInsights: webInsights ? 'true' : 'false'
         },
         timeoutMs: 300000
       })
@@ -119,17 +145,12 @@ export async function handleValuationRequest(request: Request) {
         console.error('OpenAI API request failed:', error)
       }
       console.log('Falling back to default valuation')
-      const result = generateFallbackValuation(data)
+      const result = generateDeterministicValuation(context)
       await saveValuationSafely(data, result)
       return NextResponse.json({ result })
     }
 
-    // Parse
-    const cleaned = String(rawContent)
-      .replace(/```json[\s\S]*?```/g, (m) => m.replace(/```json|```/g, ''))
-      .replace(/```[\s\S]*?```/g, (m) => m.replace(/```/g, ''))
-
-    const result = parseAIResponse(cleaned || rawContent, data)
+    const result = parseModelResponse(rawContent, context)
 
     await saveValuationSafely(data, result)
     return NextResponse.json({ result })
@@ -142,30 +163,40 @@ export async function handleValuationRequest(request: Request) {
     
     // Try fallback valuation if we have the data
     const fallbackPayload = sanitizedInput || rawData || getMinimalFallbackInput()
+    const fallbackContext = buildValuationContext({
+      input: fallbackPayload,
+      enrichedData: null,
+      webInsights: null
+    })
     
-    try {
-      const fallbackResult = generateFallbackValuation(fallbackPayload)
+      try {
+      const fallbackResult = generateDeterministicValuation(fallbackContext)
       await saveValuationSafely(fallbackPayload, fallbackResult).catch((e) => {
-        console.error('Failed to save fallback valuation:', e)
-      })
+          console.error('Failed to save fallback valuation:', e)
+        })
       return NextResponse.json({ result: fallbackResult })
     } catch (fallbackError) {
       console.error('[VALUATION] Critical fallback failure:', fallbackError)
       try {
-        const backupResult = generateFallbackValuation(getMinimalFallbackInput())
+        const minimalContext = buildValuationContext({
+          input: getMinimalFallbackInput(),
+          enrichedData: null,
+          webInsights: null
+        })
+        const backupResult = generateDeterministicValuation(minimalContext)
         await saveValuationSafely(getMinimalFallbackInput(), backupResult).catch((e) => {
           console.error('Failed to save backup fallback valuation:', e)
         })
         return NextResponse.json({ result: backupResult })
       } catch (backupError) {
         console.error('[VALUATION] Backup fallback failed:', backupError)
-        return NextResponse.json(
-          { 
-            error: 'Failed to generate valuation',
-            details: error instanceof Error ? error.message : String(error)
-          },
-          { status: 500 }
-        )
+    return NextResponse.json(
+      { 
+        error: 'Failed to generate valuation',
+        details: error instanceof Error ? error.message : String(error)
+      },
+      { status: 500 }
+    )
       }
     }
   }
