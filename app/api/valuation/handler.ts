@@ -20,6 +20,13 @@ type WebInsightsParams = {
   industry?: string
 }
 
+type ValuationContext = {
+  input: any
+  enrichedData: any
+  webInsights: any
+  prompt: string
+}
+
 async function getWebInsightsSafely({
   companyName,
   orgNumber,
@@ -40,6 +47,78 @@ async function getWebInsightsSafely({
     console.error('[VALUATION] Failed to fetch web insights:', error)
     return null
   }
+}
+
+function buildValuationContext({
+  input,
+  enrichedData,
+  webInsights
+}: {
+  input: any
+  enrichedData: any
+  webInsights: any
+}): ValuationContext {
+  const prompt = buildValuationPrompt(input, enrichedData)
+  return {
+    input,
+    enrichedData,
+    webInsights,
+    prompt
+  }
+}
+
+function buildSystemPrompt(_: ValuationContext) {
+  return getSystemPrompt()
+}
+
+function buildUserPrompt(context: ValuationContext) {
+  let prompt = context.prompt
+
+  if (context.webInsights) {
+    const formatted = summarizeWebInsights(context.webInsights)
+    if (formatted) {
+      prompt += `\n\n**WEBBINSIKTER:**\n${formatted}`
+    }
+  }
+
+  return prompt
+}
+
+function summarizeWebInsights(webInsights: any) {
+  try {
+    if (typeof webInsights === 'string') {
+      return webInsights
+    }
+    return JSON.stringify(webInsights, null, 2)
+  } catch (error) {
+    console.error('[VALUATION] Failed to stringify web insights:', error)
+    return ''
+  }
+}
+
+function generateDeterministicValuation(context: ValuationContext) {
+  if (!context?.input) {
+    return generateFallbackValuation(getMinimalFallbackInput())
+  }
+  return generateFallbackValuation(context.input)
+}
+
+function parseModelResponse(rawContent: string, context: ValuationContext) {
+  if (!rawContent || typeof rawContent !== 'string') {
+    return generateDeterministicValuation(context)
+  }
+
+  const originalData = { ...(context?.input || getMinimalFallbackInput()) }
+
+  if (context.enrichedData && !originalData.enrichedCompanyData) {
+    try {
+      originalData.enrichedCompanyData = JSON.stringify(context.enrichedData)
+    } catch (error) {
+      console.warn('[VALUATION] Failed to serialize enriched data for parsing:', error)
+    }
+  }
+
+  return parseAIResponse(rawContent, originalData)
 }
 
 // Lazy initialization
