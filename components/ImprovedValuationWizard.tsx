@@ -299,6 +299,59 @@ const demoValuationProfiles: DemoValuationProfile[] = [
   }
 ]
 
+function truncateString(value: string | undefined, maxLength = 500) {
+  if (!value || typeof value !== 'string') return value ?? ''
+  return value.length > maxLength ? `${value.slice(0, maxLength)}…` : value
+}
+
+function buildSlimEnrichedData(data: any) {
+  if (!data || typeof data !== 'object') return null
+
+  const slim: Record<string, any> = {}
+
+  if (data.autoFill) {
+    slim.autoFill = data.autoFill
+  }
+
+  const rawDataSource = data.rawData || {}
+  const whitelistedRawKeys = [
+    'bolagsverketData',
+    'scbData',
+    'proffData',
+    'ratsitData',
+    'linkedinData',
+    'trustpilotData'
+  ] as const
+
+  const slimRawData: Record<string, any> = {}
+
+  whitelistedRawKeys.forEach((key) => {
+    if (rawDataSource?.[key]) {
+      slimRawData[key] = rawDataSource[key]
+    }
+  })
+
+  if (rawDataSource?.webSearchData) {
+    slimRawData.webSearchData = {
+      mainWebsite: rawDataSource.webSearchData.mainWebsite ?? null,
+      notes: truncateString(rawDataSource.webSearchData.notes, 500),
+      notableSources: (rawDataSource.webSearchData.notableSources || []).slice(0, 3)
+    }
+  }
+
+  if (rawDataSource?.googleMyBusinessData) {
+    slimRawData.googleMyBusinessData = {
+      rating: rawDataSource.googleMyBusinessData.rating ?? null
+    }
+  }
+
+  if (Object.keys(slimRawData).length > 0) {
+    slim.rawData = slimRawData
+  }
+
+  return Object.keys(slim).length > 0 ? slim : null
+}
+
 export default function ImprovedValuationWizard({ onClose }: WizardProps) {
   const router = useRouter()
   const { user, login } = useAuth()
@@ -966,9 +1019,15 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
       // Save to localStorage
       localStorage.setItem('valuationData', JSON.stringify(submitData))
       
-      // Get enriched company data from localStorage
-      const enrichedDataStr = localStorage.getItem('enrichedCompanyData')
-      const enrichedData = enrichedDataStr ? JSON.parse(enrichedDataStr) : null
+      // Get enriched company data from localStorage and slim it down before sending
+      let slimEnrichedData: any = null
+      try {
+        const enrichedDataStr = localStorage.getItem('enrichedCompanyData')
+        const enrichedData = enrichedDataStr ? JSON.parse(enrichedDataStr) : null
+        slimEnrichedData = buildSlimEnrichedData(enrichedData)
+      } catch (error) {
+        console.warn('Failed to parse enriched company data. Continuing without it.', error)
+      }
       
       // Call valuation API
       const response = await fetch('/api/valuation', {
@@ -978,7 +1037,7 @@ export default function ImprovedValuationWizard({ onClose }: WizardProps) {
         },
         body: JSON.stringify({
           ...submitData,
-          enrichedCompanyData: enrichedData
+          enrichedCompanyData: slimEnrichedData
         })
       })
       
