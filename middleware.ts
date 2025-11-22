@@ -15,6 +15,17 @@ const intlMiddleware = createMiddleware({
   localeDetection: false // Disable automatic locale detection - always use URL locale
 })
 
+function safeHeader(request: NextRequest, headerName: string): string {
+  try {
+    if (request?.headers && typeof request.headers.get === 'function') {
+      return request.headers.get(headerName) ?? ''
+    }
+  } catch (error) {
+    console.warn('[middleware] Failed to read header:', headerName, error)
+  }
+  return ''
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   
@@ -68,7 +79,7 @@ export async function middleware(request: NextRequest) {
     response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
     
     if (process.env.NODE_ENV === 'production') {
-      const currentHost = request.headers.get('host') || ''
+      const currentHost = safeHeader(request, 'host')
       const isBolaxoDomain = currentHost.includes('bolaxo.com')
       response.headers.set(
         'Content-Security-Policy',
@@ -95,7 +106,7 @@ export async function middleware(request: NextRequest) {
   // But only for paths that don't have one
   if (!hasValidLocalePrefix && pathname !== '/') {
     // Extract locale from referer header if available
-    const referer = request.headers.get('referer')
+    const referer = safeHeader(request, 'referer')
     if (referer) {
       try {
         const refererUrl = new URL(referer)
@@ -125,7 +136,7 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
 
   if (process.env.NODE_ENV === 'production') {
-    const currentHost = request.headers.get('host') || ''
+    const currentHost = safeHeader(request, 'host')
     const isBolaxoDomain = currentHost.includes('bolaxo.com')
     
     response.headers.set(
