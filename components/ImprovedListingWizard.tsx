@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { X, ArrowLeft, ArrowRight, CheckCircle, Info, Building, TrendingUp, FileText, Lightbulb, ImageIcon, Package, Eye, Sparkles, AlertCircle, ChevronDown, ChevronUp, Loader2, Users, Target, Calendar, Globe, Award, Shield, Clock, Zap, DollarSign, Search, MapPin, Upload, Plus, Trash2, Move } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
@@ -257,6 +257,39 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   const totalSteps = steps.length + 1 // +1 for preview
   const progress = showPreview ? 100 : (currentStep / steps.length) * 100
 
+  const getStepErrors = (step: number): Record<string, string> => {
+    const newErrors: Record<string, string> = {}
+
+    switch (step) {
+      case 1:
+        if (!data.email) newErrors.email = 'E-post krävs'
+        if (!data.companyName) newErrors.companyName = 'Företagsnamn krävs'
+        if (!data.industry) newErrors.industry = 'Bransch krävs'
+        break
+      case 2:
+        if (!data.revenue) newErrors.revenue = 'Omsättning krävs'
+        if (!data.profitMargin) newErrors.profitMargin = 'Vinstmarginal krävs'
+        break
+      case 3:
+        if (
+          !data.salaries &&
+          !data.rentCosts &&
+          !data.marketingCosts &&
+          !data.otherOperatingCosts
+        ) {
+          newErrors.costs = 'Minst en kostnadskategori krävs'
+        }
+        break
+      case 8:
+        if (!data.askingPrice) newErrors.askingPrice = 'Begärt pris krävs'
+        if (!data.anonymousTitle) newErrors.anonymousTitle = 'Annonsen behöver en titel'
+        if (!data.description) newErrors.description = 'Annonsen behöver en beskrivning'
+        break
+    }
+
+    return newErrors
+  }
+
   const updateData = <K extends keyof ListingData>(field: K, value: ListingData[K]) => {
     setData(prev => ({ ...prev, [field]: value }))
     if (errors[field]) {
@@ -277,30 +310,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   }
 
   const validateStep = (step: number): boolean => {
-    const newErrors: Record<string, string> = {}
-
-    switch (step) {
-      case 1:
-        if (!data.email) newErrors.email = 'E-post krävs'
-        if (!data.companyName) newErrors.companyName = 'Företagsnamn krävs'
-        if (!data.industry) newErrors.industry = 'Bransch krävs'
-        break
-      case 2:
-        if (!data.revenue) newErrors.revenue = 'Omsättning krävs'
-        if (!data.profitMargin) newErrors.profitMargin = 'Vinstmarginal krävs'
-        break
-      case 3:
-        if (!data.salaries && !data.rentCosts && !data.marketingCosts && !data.otherOperatingCosts) {
-          newErrors.costs = 'Minst en kostnadskategori krävs'
-        }
-        break
-      case 8:
-        if (!data.askingPrice) newErrors.askingPrice = 'Begärt pris krävs'
-        if (!data.anonymousTitle) newErrors.anonymousTitle = 'Annonsen behöver en titel'
-        if (!data.description) newErrors.description = 'Annonsen behöver en beskrivning'
-        break
-    }
-
+    const newErrors = getStepErrors(step)
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -1452,6 +1462,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
     }
   }
 
+  const isCurrentStepValid = Object.keys(getStepErrors(currentStep)).length === 0
+
   if (showPreview) {
     return (
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -1910,7 +1922,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
           
           <button
             onClick={handleNext}
-            disabled={!validateStep(currentStep) && currentStep !== steps.length}
+            disabled={!isCurrentStepValid && currentStep !== steps.length}
             className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
           >
             {currentStep === steps.length ? (
