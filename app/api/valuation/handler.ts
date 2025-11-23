@@ -31,12 +31,15 @@ function getHeaderValue(request: Request | undefined, headerName: string) {
   if (!request) return undefined
   let headers: any
   try {
-    headers = (request as any).headers
+    headers = (request as any)?.headers
   } catch (error) {
     console.warn('[VALUATION] Unable to access request headers:', error)
     return undefined
   }
-  if (!headers) return undefined
+
+  if (!headers) {
+    return undefined
+  }
 
   try {
     if (typeof headers.get === 'function') {
