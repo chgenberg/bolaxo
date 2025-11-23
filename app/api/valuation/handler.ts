@@ -28,7 +28,11 @@ type ValuationContext = {
 }
 
 function getHeaderValue(request: Request | undefined, headerName: string) {
-  if (!request) return undefined
+  if (!request) {
+    console.warn('[VALUATION] getHeaderValue called without request for header:', headerName)
+    return undefined
+  }
+
   let headers: any
   try {
     headers = (request as any)?.headers
@@ -38,6 +42,7 @@ function getHeaderValue(request: Request | undefined, headerName: string) {
   }
 
   if (!headers) {
+    console.warn('[VALUATION] Request headers missing for header:', headerName)
     return undefined
   }
 
