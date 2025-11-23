@@ -196,12 +196,36 @@ export async function POST(request: Request) {
 }
 
 async function handleValuationRequest(request?: Request) {
+  console.log('[VALUATION] handleValuationRequest invoked', {
+    hasRequest: !!request,
+    requestType: request ? (request as any).constructor?.name : 'none',
+  })
+
   if (!request) {
     console.warn('[VALUATION] handleValuationRequest invoked without a Request object')
     return NextResponse.json(
       { error: 'Begäran saknas eller är ogiltig.' },
       { status: 400 }
     )
+  }
+
+  try {
+    const rawHeaders = (request as any)?.headers
+    const headerInfo =
+      rawHeaders && typeof rawHeaders === 'object'
+        ? {
+            type: rawHeaders.constructor?.name || typeof rawHeaders,
+            hasGet: typeof rawHeaders.get === 'function',
+            keys:
+              typeof rawHeaders.keys === 'function'
+                ? Array.from(rawHeaders.keys()).slice(0, 5)
+                : undefined,
+          }
+        : { type: typeof rawHeaders }
+
+    console.log('[VALUATION] Request headers inspection:', headerInfo)
+  } catch (headerError) {
+    console.warn('[VALUATION] Failed to inspect request headers:', headerError)
   }
 
   let rawData: any = null
