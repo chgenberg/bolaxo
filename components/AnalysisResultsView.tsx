@@ -19,42 +19,6 @@ import {
   HelpCircle,
   X
 } from 'lucide-react'
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip as RechartsTooltip,
-  Legend,
-  BarChart,
-  Bar,
-  Cell
-} from 'recharts'
-
-interface TrendPoint {
-  label: string
-  year?: number
-  value?: number
-  unit?: string
-  growthNote?: string
-  domain?: string
-  sourceType?: string
-  sourceUrl?: string
-}
-
-interface CompanyTrendPoint {
-  label: string
-  year?: number
-  value?: number
-  unit?: string
-  note?: string
-  domain?: string
-  sourceType?: string
-  sourceUrl?: string
-}
-
 interface AnalysisResults {
   companyName: string
   domain?: string
@@ -112,30 +76,6 @@ interface AnalysisResults {
     }
     pagesAnalyzed?: number
   }
-  industryTrend?: Array<TrendPoint | null>
-  companyTrend?: Array<CompanyTrendPoint | null>
-  valueDrivers?: Array<{
-    label: string
-    direction?: 'positive' | 'negative'
-    impactMin?: number
-    impactMax?: number
-    impactUnit?: string
-    rationale?: string
-    domain?: string
-    sourceType?: string
-    sourceUrl?: string
-  }>
-  riskDrivers?: Array<{
-    label: string
-    direction?: 'positive' | 'negative'
-    impactMin?: number
-    impactMax?: number
-    impactUnit?: string
-    rationale?: string
-    domain?: string
-    sourceType?: string
-    sourceUrl?: string
-  }>
 }
 
 export default function AnalysisResultsView() {
@@ -244,29 +184,14 @@ export default function AnalysisResultsView() {
     )
   }
 
-  const parseNumericValue = (value: any): number | null => {
-    if (typeof value === 'number' && Number.isFinite(value)) return value
-    if (typeof value === 'string') {
-      const numeric = Number(value.replace(/[^\d.-]/g, ''))
-      return Number.isFinite(numeric) ? numeric : null
-    }
-    return null
-  }
-
   const formatSekValue = (value?: string | number | null) => {
     if (value === undefined || value === null || value === '') return null
-    const numeric = parseNumericValue(value)
-    if (numeric === null) return value
+    const numeric =
+      typeof value === 'number'
+        ? value
+        : Number(value.toString().replace(/[^\d.-]/g, ''))
+    if (!Number.isFinite(numeric)) return value
     return new Intl.NumberFormat('sv-SE').format(numeric)
-  }
-
-  const formatSekShort = (value?: number | null) => {
-    if (value === undefined || value === null) return ''
-    const abs = Math.abs(value)
-    if (abs >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)} mdkr`
-    if (abs >= 1_000_000) return `${(value / 1_000_000).toFixed(1)} Mkr`
-    if (abs >= 1_000) return `${(value / 1_000).toFixed(1)} kkr`
-    return new Intl.NumberFormat('sv-SE').format(value)
   }
 
   const baseTabs = [
@@ -280,150 +205,6 @@ export default function AnalysisResultsView() {
     baseTabs.splice(1, 0, { id: 'questions', label: 'Nyckelfrågor', icon: HelpCircle })
   }
   const tabs = baseTabs
-
-  type IndustryTrendPoint = TrendPoint & { market: number }
-  type CompanyTrendMappedPoint = CompanyTrendPoint & { company: number }
-
-  const industryTrendPoints: IndustryTrendPoint[] = (results.industryTrend ?? []).reduce<
-    IndustryTrendPoint[]
-  >((acc, item, index) => {
-    if (!item) return acc
-    const value = parseNumericValue(item.value)
-    if (value === null) return acc
-    const label =
-      item.label ||
-      (typeof item.year === 'number' ? item.year.toString() : `Period ${index + 1}`)
-    acc.push({
-      label,
-      year: item.year,
-      value,
-      market: value,
-      unit: item.unit || 'MSEK',
-      sourceUrl: item.sourceUrl,
-      domain: item.domain,
-      sourceType: item.sourceType,
-      growthNote: item.growthNote
-    })
-    return acc
-  }, [])
-
-  const companyTrendPoints: CompanyTrendMappedPoint[] = (results.companyTrend ?? []).reduce<
-    CompanyTrendMappedPoint[]
-  >((acc, item, index) => {
-    if (!item) return acc
-    const value = parseNumericValue(item.value)
-    if (value === null) return acc
-    const label =
-      item.label ||
-      (typeof item.year === 'number' ? item.year.toString() : `Period ${index + 1}`)
-    acc.push({
-      label,
-      year: item.year,
-      value,
-      company: value,
-      unit: item.unit || 'MSEK',
-      sourceUrl: item.sourceUrl,
-      domain: item.domain,
-      sourceType: item.sourceType,
-      note: item.note
-    })
-    return acc
-  }, [])
-
-  const trendLabelSet = new Set<string>()
-  const trendChartData: Array<{
-    label: string
-    market?: number
-    company?: number
-    unit?: string
-    growthNote?: string
-    marketSource?: string
-    companySource?: string
-  }> = []
-
-  industryTrendPoints.forEach((point) => {
-    trendLabelSet.add(point.label)
-    const companyPoint = companyTrendPoints.find(
-      (cp) => cp.label === point.label || (cp.year && point.year && cp.year === point.year)
-    )
-    trendChartData.push({
-      label: point.label,
-      market: point.market,
-      company: companyPoint?.company,
-      unit: point.unit || companyPoint?.unit,
-      growthNote: point.growthNote || companyPoint?.note,
-      marketSource: point.sourceUrl,
-      companySource: companyPoint?.sourceUrl
-    })
-  })
-
-  companyTrendPoints.forEach((point) => {
-    if (!trendLabelSet.has(point.label)) {
-      trendChartData.push({
-        label: point.label,
-        company: point.company,
-        unit: point.unit,
-        companySource: point.sourceUrl,
-        growthNote: point.note
-      })
-    }
-  })
-
-  trendChartData.sort((a, b) => {
-    const aNum = Number(a.label)
-    const bNum = Number(b.label)
-    if (!Number.isNaN(aNum) && !Number.isNaN(bNum)) return aNum - bNum
-    return a.label.localeCompare(b.label)
-  })
-
-  const trendUnit =
-    trendChartData.find((point) => point.unit)?.unit ||
-    (industryTrendPoints[0]?.unit ?? companyTrendPoints[0]?.unit ?? 'MSEK')
-  const hasTrendChart = trendChartData.length >= 2
-  const hasCompanyTrendLine = trendChartData.some((point) => typeof point.company === 'number')
-
-  const mapDrivers = (
-    entries: AnalysisResults['valueDrivers'] | AnalysisResults['riskDrivers'],
-    fallbackDirection: 'positive' | 'negative'
-  ) =>
-    (entries || [])
-      .map((driver, index) => {
-        if (!driver) return null
-        const min = parseNumericValue(driver.impactMin)
-        const max = parseNumericValue(driver.impactMax)
-        let impact: number | null = null
-        if (min !== null && max !== null) impact = (min + max) / 2
-        else if (min !== null) impact = min
-        else if (max !== null) impact = max
-        if (impact === null) return null
-        const direction = driver.direction || fallbackDirection
-        if (direction === 'negative' && impact > 0) impact = impact * -1
-        if (direction === 'positive' && impact < 0) impact = Math.abs(impact)
-        return {
-          name: driver.label || `Post ${index + 1}`,
-          impact,
-          unit: driver.impactUnit || 'MSEK',
-          rationale: driver.rationale,
-          domain: driver.domain,
-          sourceUrl: driver.sourceUrl,
-          sourceType: driver.sourceType
-        }
-      })
-      .filter(Boolean) as Array<{
-        name: string
-        impact: number
-        unit: string
-        rationale?: string
-        domain?: string
-        sourceUrl?: string
-        sourceType?: string
-      }>
-
-  const impactData = [...mapDrivers(results.valueDrivers, 'positive'), ...mapDrivers(results.riskDrivers, 'negative')].sort(
-    (a, b) => Math.abs(b.impact) - Math.abs(a.impact)
-  )
-  const hasImpactChart = impactData.length > 0
-  const impactChartHeight = Math.max(impactData.length * 48 + 80, 280)
   const officialAnnualReports = results.officialData?.annualReports ?? []
   const hasOfficialFinancials = officialAnnualReports.some(
     (report) => report && (report.revenue || report.profit || report.equity)
@@ -443,65 +224,6 @@ export default function AnalysisResultsView() {
   const hasDataInsights =
     (results.officialInsights && results.officialInsights.length > 0) ||
     (results.webInsights && results.webInsights.length > 0)
-
-  const TrendTooltipContent = ({
-    active,
-    payload
-  }: {
-    active?: boolean
-    payload?: Array<{ value: number; name: string; payload: any }>
-  }) => {
-    if (!active || !payload || payload.length === 0) return null
-    const data = payload[0].payload
-    return (
-      <div className="bg-white/95 shadow-lg rounded-lg px-4 py-3 text-sm">
-        <p className="font-semibold text-primary-navy mb-1">{data.label}</p>
-        <div className="space-y-1">
-          {typeof data.market === 'number' && (
-            <p className="text-blue-700">
-              Bransch: <span className="font-semibold">{formatSekShort(data.market)}</span>
-            </p>
-          )}
-          {typeof data.company === 'number' && (
-            <p className="text-primary-navy">
-              Företaget: <span className="font-semibold">{formatSekShort(data.company)}</span>
-            </p>
-          )}
-          {data.growthNote && <p className="text-xs text-gray-500">{data.growthNote}</p>}
-        </div>
-      </div>
-    )
-  }
-
-  const ImpactTooltipContent = ({
-    active,
-    payload
-  }: {
-    active?: boolean
-    payload?: Array<{ value: number; payload: any }>
-  }) => {
-    if (!active || !payload || payload.length === 0) return null
-    const data = payload[0].payload
-    return (
-      <div className="bg-white/95 shadow-lg rounded-lg px-4 py-3 text-sm max-w-xs">
-        <p className="font-semibold text-primary-navy mb-1">{data.name}</p>
-        <p className="text-blue-700 mb-1">
-          Effekt: <span className="font-semibold">{formatSekShort(data.impact)} {data.unit}</span>
-        </p>
-        {data.rationale && <p className="text-xs text-gray-500">{data.rationale}</p>}
-        {data.sourceUrl && (
-          <a
-            href={data.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-blue-600 underline"
-          >
-            Källa
-          </a>
-        )}
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-blue-50">
@@ -777,103 +499,6 @@ export default function AnalysisResultsView() {
                 ) : null}
               </div>
             )}
-          </div>
-        )}
-
-        {hasTrendChart && (
-          <div className="bg-white rounded-xl p-6 mb-8 shadow-sm border border-blue-100">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <div>
-                <h3 className="text-xl font-semibold text-primary-navy">
-                  Branschens utveckling
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Värden i {trendUnit}. Linjer visar branschstorlek och företagets uppskattade omsättning.
-                </p>
-              </div>
-              <span className="text-xs text-gray-400 uppercase tracking-wide">Källa: web search</span>
-            </div>
-            <div className="h-[320px] w-full">
-              <ResponsiveContainer>
-                <LineChart data={trendChartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis dataKey="label" stroke="#94a3b8" />
-                  <YAxis
-                    stroke="#94a3b8"
-                    tickFormatter={(value) => formatSekShort(value as number)}
-                  />
-                  <RechartsTooltip content={<TrendTooltipContent />} />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="market"
-                    name="Bransch"
-                    stroke="#1d4ed8"
-                    strokeWidth={3}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6, strokeWidth: 0 }}
-                  />
-                  {hasCompanyTrendLine && (
-                    <Line
-                      type="monotone"
-                      dataKey="company"
-                      name="Företaget"
-                      stroke="#0ea5e9"
-                      strokeDasharray="4 4"
-                      strokeWidth={3}
-                      dot={{ r: 4 }}
-                    />
-                  )}
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        )}
-
-        {hasImpactChart && (
-          <div className="bg-white rounded-xl p-6 mb-8 shadow-sm border border-blue-100">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-              <div>
-                <h3 className="text-xl font-semibold text-primary-navy">
-                  Värdedrivare & risker (uppskattad effekt)
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Staplarna visar hur mycket värdet kan påverkas (MSEK). Positivt till höger, risker till vänster.
-                </p>
-              </div>
-              <span className="text-xs text-gray-400 uppercase tracking-wide">Källa: GPT-analys + web search</span>
-            </div>
-            <div className="w-full" style={{ height: impactChartHeight }}>
-              <ResponsiveContainer>
-                <BarChart
-                  data={impactData}
-                  layout="vertical"
-                  margin={{ left: 0, right: 20, top: 0, bottom: 0 }}
-                >
-                  <CartesianGrid horizontal stroke="#e2e8f0" />
-                  <XAxis
-                    type="number"
-                    tickFormatter={(value) => formatSekShort(value as number)}
-                    stroke="#94a3b8"
-                  />
-                  <YAxis
-                    dataKey="name"
-                    type="category"
-                    width={160}
-                    stroke="#94a3b8"
-                  />
-                  <RechartsTooltip content={<ImpactTooltipContent />} />
-                  <Bar dataKey="impact" radius={[4, 4, 4, 4]}>
-                    {impactData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${entry.name}-${index}`}
-                        fill={entry.impact >= 0 ? '#2563eb' : '#0f172a'}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
           </div>
         )}
 
