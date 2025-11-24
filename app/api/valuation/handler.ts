@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { checkRateLimit } from '@/lib/ratelimit'
 import { validateAndSanitize } from '@/lib/sanitize'
 import { buildConditionalPrompts, getIndustrySpecificInstructions, validateDataCombinations } from '@/lib/valuation-rules'
@@ -170,18 +170,6 @@ function parseModelResponse(rawContent: string, context: ValuationContext) {
   return parseAIResponse(rawContent, originalData)
 }
 
-// Lazy initialization
-let prisma: PrismaClient | null = null
-function getPrisma() {
-  if (!prisma) {
-    prisma = new PrismaClient()
-  }
-  return prisma
-}
-
-export const dynamic = 'force-dynamic'
-export const runtime = 'nodejs'
-export const revalidate = 0
 
 export async function GET() {
   return NextResponse.json({
@@ -386,7 +374,7 @@ async function handleValuationRequest(request?: Request) {
 
 async function saveValuationSafely(input: any, result: any) {
   try {
-    const db = getPrisma()
+    const db = prisma
     let userId: string | null = null
     
     if (input?.email) {
