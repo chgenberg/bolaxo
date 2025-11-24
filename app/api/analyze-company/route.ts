@@ -329,61 +329,123 @@ function buildAnalysisPrompt({
   websiteSnapshot: Awaited<ReturnType<typeof fetchWebsiteSnapshot>> | null
   dataSourceStatus: DataSourceStatus
 }) {
-  const webBlock = webSearchData
-    ? `WEBBSOKNING:\n${JSON.stringify(webSearchData, null, 2)}`
-    : 'Webbsokningen gav ingen traff.'
-  
-  const websiteBlock = websiteSnapshot?.summary
-    ? `HEMSIDA (${websiteSnapshot.rootDomain}):\n${websiteSnapshot.summary}\n\nNyckelteman: ${websiteSnapshot.keyHighlights?.join(', ') || 'Inga'}`
-    : 'Ingen hemsidedata kunde hamtas.'
-  
-  const manualFigures = revenueValue || grossProfitValue ? `
-ANVANDARDATA:
-Omsattning: ${formatManualFigure(revenueValue)}
-Bruttoresultat: ${formatManualFigure(grossProfitValue)}
-` : ''
+  // Extract meaningful content from website snapshot
+  let websiteAnalysis = ''
+  if (websiteSnapshot) {
+    const highlights = websiteSnapshot.keyHighlights?.slice(0, 6).join(', ') || ''
+    const contacts = []
+    if (websiteSnapshot.contact?.emails?.length) contacts.push(`E-post: ${websiteSnapshot.contact.emails[0]}`)
+    if (websiteSnapshot.contact?.phones?.length) contacts.push(`Telefon: ${websiteSnapshot.contact.phones[0]}`)
+    
+    websiteAnalysis = `
+HEMSIDEDATA (${websiteSnapshot.rootDomain}):
+- Titel: ${websiteSnapshot.title || 'Ej tillganglig'}
+- Beskrivning: ${websiteSnapshot.metaDescription || 'Ej tillganglig'}
+- Huvudteman fran hemsidan: ${highlights || 'Inga identifierade'}
+- Kontaktuppgifter: ${contacts.join(', ') || 'Ej tillgangliga'}
+- Antal sidor analyserade: ${websiteSnapshot.pagesAnalyzed}
+
+RATT INNEHALL FRAN HEMSIDAN:
+${websiteSnapshot.summary?.slice(0, 2000) || 'Inget innehall'}
+`
+  }
+
+  // Format web search data
+  let webSearchAnalysis = ''
+  if (webSearchData) {
+    const profile = webSearchData.companyProfile || {}
+    const signals = webSearchData.marketSignals || []
+    const growth = webSearchData.growthNotes || []
+    const risks = webSearchData.riskNotes || []
+    const sources = webSearchData.sources || []
+    
+    webSearchAnalysis = `
+WEBBSOKNINGSRESULTAT:
+- Verksamhetsbeskrivning: ${profile.description || 'Ej tillganglig'}
+- Bransch: ${profile.industry || 'Ej specificerad'}
+- Kunder: ${profile.customers || 'Ej specificerade'}
+- Vardeerbjudande: ${profile.valueProp || 'Ej specificerat'}
+- Platser: ${profile.locations?.join(', ') || 'Ej specificerade'}
+- Uppskattade anstallda: ${profile.estimatedEmployees || 'Okant'}
+
+MARKNADSSIGNALER: ${signals.join('; ') || 'Inga'}
+TILLVAXTSIGNALER: ${growth.join('; ') || 'Inga'}
+RISKSIGNALER: ${risks.join('; ') || 'Inga'}
+AKTIVITETER: ${webSearchData.notableActivities?.join('; ') || 'Inga noterade'}
+
+KALLOR: ${sources.map((s: any) => s.title || s.domain).slice(0, 5).join(', ') || 'Inga'}
+`
+  }
 
   const questionsBlock = KEY_QUESTIONS.map((question, index) => `${index + 1}. ${question}`).join('\n')
 
-  return `Analysera detta foretag baserat pa webbsokning och hemsidedata.
-Fokusera pa kvalitativa insikter - styrkor, mojligheter, risker och rekommendationer.
+  return `Du ar en erfaren svensk foretagsanalytiker. Analysera folande foretag och ge en gedigen, handlingsinriktad analys.
 
-Foretag: ${companyName}
-Doman: ${domain || 'okand'}
-${orgNumber ? `Organisationsnummer: ${orgNumber}` : ''}
+FORETAG: ${companyName}
+HEMSIDA: ${domain || 'Ej angiven'}
+${orgNumber ? `ORGANISATIONSNUMMER: ${orgNumber}` : ''}
 
-=== ${websiteBlock} ===
+${websiteAnalysis}
 
-=== ${webBlock} ===
-${manualFigures}
+${webSearchAnalysis}
 
-Fragor att besvara i "keyAnswers":
+ANALYSUPPDRAG:
+Baserat pa ovanstaende information, skapa en djupgaende analys av foretaget. Fokusera pa:
+1. Vad foretaget faktiskt gor och erbjuder
+2. Vilka styrkor som framgar av deras kommunikation och position
+3. Vilka tillvaxtmojligheter som finns
+4. Vilka risker eller svagheter som kan identifieras
+5. Konkreta rekommendationer for att oka foretagets varde
+
+NYCKELFRAGAR ATT BESVARA (i "keyAnswers"):
 ${questionsBlock}
 
-Krav:
-- "keyAnswers" ska innehalla exakt ${KEY_QUESTIONS.length} objekt
-- "salePreparationPlan" ska innehalla exakt 10 punkter
-- "recommendations" ska innehalla minst 5 atgarder
-- Alla texter pa svenska
-- Ingen vardering
+INSTRUKTIONER:
+- Skriv konkret och handlingsinriktat pa svenska
+- Basera analysen pa tillganglig data - spekulera inte
+- Ge minst 4-5 punkter i varje kategori (styrkor, mojligheter, risker)
+- Rekommendationerna ska vara specifika och genomforbara
+- Forsaljningsplanen ska vara 10 konkreta steg
 
-JSON-format:
+RETURNERA ENDAST DENNA JSON-STRUKTUR:
 {
-  "summary": "sammanfattning",
-  "keyAnswers": [{ "question": "fraga", "answer": "svar" }],
-  "webInsights": ["insikt fran webb/hemsida"],
-  "strengths": ["styrka"],
-  "opportunities": ["mojlighet"],
-  "risks": ["risk"],
-  "marketPosition": "beskrivning",
-  "competitors": ["konkurrent"],
-  "recommendations": ["atgard"],
-  "salePreparationPlan": ["punkt1", "...punkt10"],
+  "summary": "2-3 meningar som sammanfattar foretagets verksamhet och position",
+  "keyAnswers": [
+    { "question": "fraga fran listan ovan", "answer": "detaljerat svar baserat pa data" }
+  ],
+  "webInsights": [
+    "konkret insikt 1 fran webbdata",
+    "konkret insikt 2 fran hemsidan",
+    "konkret insikt 3 om marknaden"
+  ],
+  "strengths": [
+    "styrka 1 med forklaring",
+    "styrka 2 med forklaring"
+  ],
+  "opportunities": [
+    "mojlighet 1 med forklaring",
+    "mojlighet 2 med forklaring"
+  ],
+  "risks": [
+    "risk 1 med forklaring",
+    "risk 2 med forklaring"
+  ],
+  "marketPosition": "beskrivning av foretagets position i marknaden",
+  "competitors": ["konkurrent 1", "konkurrent 2"],
+  "recommendations": [
+    "rekommendation 1 - konkret atgard",
+    "rekommendation 2 - konkret atgard"
+  ],
+  "salePreparationPlan": [
+    "1. Forsta steget",
+    "2. Andra steget",
+    "... upp till 10 steg"
+  ],
   "keyMetrics": {
-    "industry": "bransch",
-    "estimatedEmployees": "antal eller okant",
-    "location": "plats",
-    "foundedYear": "ar eller okant"
+    "industry": "bransch baserad pa data",
+    "estimatedEmployees": "antal om tillgangligt",
+    "location": "plats om tillganglig",
+    "foundedYear": "ar om tillgangligt"
   }
 }`
 }

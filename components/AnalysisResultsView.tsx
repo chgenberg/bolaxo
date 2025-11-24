@@ -179,106 +179,23 @@ export default function AnalysisResultsView() {
           ← Ny analys
         </Link>
 
-        {/* Hero Card */}
-        <div className="bg-[#1F3C58] rounded-2xl p-6 sm:p-8 mb-8 text-white">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">{results.companyName}</h1>
-          {results.orgNumber && (
-            <p className="text-white/70 text-sm mb-4">Org.nr {results.orgNumber}</p>
+        {/* Company Name Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#1F3C58]">{results.companyName}</h1>
+          {results.domain && (
+            <a 
+              href={results.domain.startsWith('http') ? results.domain : `https://${results.domain}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:text-[#1F3C58] text-sm"
+            >
+              {results.domain} →
+            </a>
           )}
-          <p className="text-white/90 text-lg leading-relaxed">{results.summary}</p>
         </div>
 
-        {/* Key Metrics */}
-        {results.keyMetrics && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-            {results.keyMetrics.industry && results.keyMetrics.industry !== 'Okand' && (
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase mb-1">Bransch</p>
-                <p className="font-medium text-gray-900">{results.keyMetrics.industry}</p>
-              </div>
-            )}
-            {results.keyMetrics.location && (
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase mb-1">Plats</p>
-                <p className="font-medium text-gray-900">{results.keyMetrics.location}</p>
-              </div>
-            )}
-            {results.keyMetrics.estimatedEmployees && results.keyMetrics.estimatedEmployees !== 'Okant' && (
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase mb-1">Anstallda</p>
-                <p className="font-medium text-gray-900">{results.keyMetrics.estimatedEmployees}</p>
-              </div>
-            )}
-            {results.keyMetrics.foundedYear && results.keyMetrics.foundedYear !== 'Okant' && (
-              <div className="bg-white rounded-lg p-4 border border-gray-200">
-                <p className="text-xs text-gray-500 uppercase mb-1">Grundat</p>
-                <p className="font-medium text-gray-900">{results.keyMetrics.foundedYear}</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Web Insights */}
-        {results.webInsights && results.webInsights.length > 0 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
-            <h3 className="font-semibold text-gray-900 mb-4">Webbinsikter</h3>
-            <ul className="space-y-2">
-              {results.webInsights.map((insight, idx) => (
-                <li key={idx} className="text-gray-700">{insight}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Website Insights */}
-        {results.websiteInsights && results.websiteInsights.summary && (
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Hemsidesanalys</h3>
-              {results.websiteInsights.canonicalUrl && (
-                <a
-                  href={results.websiteInsights.canonicalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[#1F3C58] hover:underline"
-                >
-                  Besok hemsida →
-                </a>
-              )}
-            </div>
-            <p className="text-gray-700 mb-4">{results.websiteInsights.summary.slice(0, 400)}...</p>
-            
-            {results.websiteInsights.keyHighlights && results.websiteInsights.keyHighlights.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {results.websiteInsights.keyHighlights.slice(0, 5).map((highlight, idx) => (
-                  <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
-                    {highlight}
-                  </span>
-                ))}
-              </div>
-            )}
-            
-            {results.websiteInsights.contact && (
-              <div className="flex flex-wrap gap-6 pt-4 border-t border-gray-100 text-sm">
-                {results.websiteInsights.contact.emails && results.websiteInsights.contact.emails.length > 0 && (
-                  <div>
-                    <span className="text-gray-500">E-post:</span>{' '}
-                    <span className="text-gray-900">{results.websiteInsights.contact.emails[0]}</span>
-                  </div>
-                )}
-                {results.websiteInsights.contact.phones && results.websiteInsights.contact.phones.length > 0 && (
-                  <div>
-                    <span className="text-gray-500">Telefon:</span>{' '}
-                    <span className="text-gray-900">{results.websiteInsights.contact.phones[0]}</span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Tab Navigation */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        {/* Tab Navigation - Now at the top */}
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-8">
           <div className="border-b border-gray-200 overflow-x-auto">
             <nav className="flex">
               {availableTabs.map((tab) => (
@@ -301,6 +218,46 @@ export default function AnalysisResultsView() {
           <div className="p-6">
             {activeTab === 'overview' && (
               <div className="space-y-6">
+                {/* Summary */}
+                <section>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Sammanfattning</h3>
+                  <p className="text-gray-700 leading-relaxed">{results.summary}</p>
+                </section>
+
+                {/* Key Metrics */}
+                {results.keyMetrics && (
+                  <section>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Nyckeldata</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {results.keyMetrics.industry && results.keyMetrics.industry !== 'Okand' && results.keyMetrics.industry !== 'Se webbanalys' && (
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500 uppercase mb-1">Bransch</p>
+                          <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.industry}</p>
+                        </div>
+                      )}
+                      {results.keyMetrics.location && results.keyMetrics.location !== 'Okant' && (
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500 uppercase mb-1">Plats</p>
+                          <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.location}</p>
+                        </div>
+                      )}
+                      {results.keyMetrics.estimatedEmployees && results.keyMetrics.estimatedEmployees !== 'Okant' && (
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500 uppercase mb-1">Anstallda</p>
+                          <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.estimatedEmployees}</p>
+                        </div>
+                      )}
+                      {results.keyMetrics.foundedYear && results.keyMetrics.foundedYear !== 'Okant' && (
+                        <div className="bg-gray-50 rounded-lg p-3">
+                          <p className="text-xs text-gray-500 uppercase mb-1">Grundat</p>
+                          <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.foundedYear}</p>
+                        </div>
+                      )}
+                    </div>
+                  </section>
+                )}
+
+                {/* Market Position */}
                 {results.marketPosition && (
                   <section>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Marknadsposition</h3>
@@ -308,6 +265,7 @@ export default function AnalysisResultsView() {
                   </section>
                 )}
 
+                {/* Competitors */}
                 {results.competitors && results.competitors.length > 0 && results.competitors[0] !== '' && (
                   <section>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Konkurrenter</h3>
@@ -321,28 +279,64 @@ export default function AnalysisResultsView() {
                   </section>
                 )}
 
+                {/* Web Insights */}
+                {results.webInsights && results.webInsights.length > 0 && (
+                  <section>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Webbinsikter</h3>
+                    <ul className="space-y-2">
+                      {results.webInsights.map((insight, idx) => (
+                        <li key={idx} className="text-gray-700 pl-4 border-l-2 border-[#1F3C58]/30">{insight}</li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {/* Contact Info from Website */}
+                {results.websiteInsights?.contact && (
+                  (results.websiteInsights.contact.emails?.length || results.websiteInsights.contact.phones?.length) ? (
+                    <section>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Kontaktuppgifter</h3>
+                      <div className="flex flex-wrap gap-4 text-sm">
+                        {results.websiteInsights.contact.emails && results.websiteInsights.contact.emails.length > 0 && (
+                          <div>
+                            <span className="text-gray-500">E-post:</span>{' '}
+                            <span className="text-gray-900">{results.websiteInsights.contact.emails[0]}</span>
+                          </div>
+                        )}
+                        {results.websiteInsights.contact.phones && results.websiteInsights.contact.phones.length > 0 && (
+                          <div>
+                            <span className="text-gray-500">Telefon:</span>{' '}
+                            <span className="text-gray-900">{results.websiteInsights.contact.phones[0]}</span>
+                          </div>
+                        )}
+                      </div>
+                    </section>
+                  ) : null
+                )}
+
+                {/* Quick Stats */}
                 <section>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Snabboversikt</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Analysresultat</h3>
                   <div className="grid sm:grid-cols-3 gap-4">
                     <button
                       onClick={() => setActiveTab('strengths')}
                       className="p-4 rounded-lg border border-gray-200 hover:border-[#1F3C58] text-left transition-colors"
                     >
-                      <p className="text-2xl font-bold text-gray-900">{results.strengths?.length || 0}</p>
+                      <p className="text-2xl font-bold text-[#1F3C58]">{results.strengths?.length || 0}</p>
                       <p className="text-sm text-gray-600">Styrkor</p>
                     </button>
                     <button
                       onClick={() => setActiveTab('opportunities')}
                       className="p-4 rounded-lg border border-gray-200 hover:border-[#1F3C58] text-left transition-colors"
                     >
-                      <p className="text-2xl font-bold text-gray-900">{results.opportunities?.length || 0}</p>
+                      <p className="text-2xl font-bold text-[#1F3C58]">{results.opportunities?.length || 0}</p>
                       <p className="text-sm text-gray-600">Mojligheter</p>
                     </button>
                     <button
                       onClick={() => setActiveTab('risks')}
                       className="p-4 rounded-lg border border-gray-200 hover:border-[#1F3C58] text-left transition-colors"
                     >
-                      <p className="text-2xl font-bold text-gray-900">{results.risks?.length || 0}</p>
+                      <p className="text-2xl font-bold text-[#1F3C58]">{results.risks?.length || 0}</p>
                       <p className="text-sm text-gray-600">Risker</p>
                     </button>
                   </div>
@@ -417,7 +411,7 @@ export default function AnalysisResultsView() {
 
         {/* Sources */}
         {results.sources && results.sources.length > 0 && (
-          <div className="mt-8 bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <button
               onClick={() => setExpandedSources(!expandedSources)}
               className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50"
