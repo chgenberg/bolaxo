@@ -4,11 +4,12 @@ import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-
 import { prisma } from '@/lib/prisma'
 import { fetchBolagsverketCompanyData } from '@/lib/bolagsverket-api'
 import { fetchWebsiteSnapshot } from '@/lib/website-snapshot'
+import { scrapeAllabolag } from '@/lib/scrapers/allabolag'
 
 const ANALYSIS_TTL_MS = 1000 * 60 * 60 * 24 // 24 hours
 
 const KEY_QUESTIONS = [
-  'Vilka siffror från Bolagsverket sticker ut och vad betyder de för bolagets nuläge?',
+  'Vilka siffror från officiella källor sticker ut och vad betyder de för bolagets nuläge?',
   'Hur står sig bolaget mot marknaden och konkurrenter enligt webbsökningen?',
   'Vilka risker måste reduceras för att stärka bolaget de kommande 12 månaderna?',
   'Vilka möjligheter och initiativ kan skapa störst värde inom 6-12 månader?',
@@ -17,14 +18,25 @@ const KEY_QUESTIONS = [
 
 interface OfficialDataSummary {
   orgNumber?: string
+  companyName?: string
   registrationDate?: string
   legalForm?: string
   status?: string
   address?: string
   employees?: number
   industryCode?: string
+  ceo?: string
+  creditRating?: string
   latestRevenue?: number
   latestGrossProfit?: number
+  latestProfit?: number
+  operatingProfit?: number
+  equity?: number
+  assets?: number
+  liabilities?: number
+  revenueGrowth?: number
+  profitMargin?: number
+  grossMargin?: number
   annualReports?: Array<{
     year: string
     filingDate?: string
@@ -32,6 +44,14 @@ interface OfficialDataSummary {
     profit?: number
     equity?: number
   }>
+  source: 'bolagsverket' | 'allabolag' | 'combined' | 'none'
+}
+
+interface DataSourceStatus {
+  bolagsverket: 'success' | 'failed' | 'no_api_key' | 'no_data'
+  allabolag: 'success' | 'failed' | 'no_data'
+  webSearch: 'success' | 'failed' | 'no_data'
+  website: 'success' | 'failed' | 'no_data' | 'no_url'
 }
 
 export async function POST(request: Request) {
@@ -48,10 +68,20 @@ export async function POST(request: Request) {
     const normalizedDomain = domain?.trim() || undefined
     const normalizedOrgNumber = normalizeOrgNumber(orgNumber)
 
-    console.log('Starting company analysis for:', companyName, normalizedDomain, normalizedOrgNumber)
+    console.log('[ANALYZE] Starting company analysis for:', companyName, normalizedDomain, normalizedOrgNumber)
 
-    const [bolagsverketResult, webSearchResult, websiteResult] = await Promise.allSettled([
+    // Track data source status
+    const dataSourceStatus: DataSourceStatus = {
+      bolagsverket: 'no_api_key',
+      allabolag: 'no_data',
+      webSearch: 'no_data',
+      website: normalizedDomain ? 'no_data' : 'no_url'
+    }
+
+    // Fetch data from all sources in parallel
+    const [bolagsverketResult, allabolagResult, webSearchResult, websiteResult] = await Promise.allSettled([
       normalizedOrgNumber ? fetchBolagsverketCompanyData(normalizedOrgNumber) : Promise.resolve(null),
+      normalizedOrgNumber ? scrapeAllabolag(normalizedOrgNumber) : Promise.resolve(null),
       searchCompanyWithWebSearch({
         companyName,
         orgNumber: normalizedOrgNumber,
@@ -60,25 +90,64 @@ export async function POST(request: Request) {
       normalizedDomain ? fetchWebsiteSnapshot(normalizedDomain, companyName) : Promise.resolve(null)
     ])
 
-    const bolagsverketData =
-      bolagsverketResult.status === 'fulfilled' ? bolagsverketResult.value : null
-    if (bolagsverketResult.status === 'rejected') {
+    // Process Bolagsverket data
+    let bolagsverketData = null
+    if (bolagsverketResult.status === 'fulfilled' && bolagsverketResult.value) {
+      bolagsverketData = bolagsverketResult.value
+      dataSourceStatus.bolagsverket = 'success'
+      console.log('[ANALYZE] ✓ Bolagsverket data retrieved')
+    } else if (bolagsverketResult.status === 'rejected') {
+      dataSourceStatus.bolagsverket = 'failed'
       console.error('[ANALYZE] Bolagsverket fetch failed:', bolagsverketResult.reason)
+    } else {
+      dataSourceStatus.bolagsverket = normalizedOrgNumber ? 'no_data' : 'no_api_key'
     }
 
+    // Process Allabolag data
+    let allabolagData = null
+    if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
+      allabolagData = allabolagResult.value
+      dataSourceStatus.allabolag = 'success'
+      console.log('[ANALYZE] ✓ Allabolag data retrieved:', {
+        revenue: allabolagData.financials?.revenue,
+        profit: allabolagData.financials?.profit,
+        employees: allabolagData.financials?.employees
+      })
+    } else if (allabolagResult.status === 'rejected') {
+      dataSourceStatus.allabolag = 'failed'
+      console.error('[ANALYZE] Allabolag fetch failed:', allabolagResult.reason)
+    }
+
+    // Process web search data
     const webSearchData = webSearchResult.status === 'fulfilled' ? webSearchResult.value : null
-    if (webSearchResult.status === 'rejected') {
-      console.error('[ANALYZE] Web search fetch failed:', webSearchResult.reason)
+    if (webSearchData) {
+      dataSourceStatus.webSearch = 'success'
+      console.log('[ANALYZE] ✓ Web search data retrieved')
+    } else if (webSearchResult.status === 'rejected') {
+      dataSourceStatus.webSearch = 'failed'
+      console.error('[ANALYZE] Web search failed:', webSearchResult.reason)
     }
 
+    // Process website snapshot
     const websiteSnapshot = websiteResult.status === 'fulfilled' ? websiteResult.value : null
-    if (websiteResult.status === 'rejected') {
+    if (websiteSnapshot) {
+      dataSourceStatus.website = 'success'
+      console.log('[ANALYZE] ✓ Website snapshot retrieved')
+    } else if (websiteResult.status === 'rejected') {
+      dataSourceStatus.website = 'failed'
       console.error('[ANALYZE] Website snapshot failed:', websiteResult.reason)
     }
 
-    const officialData = bolagsverketData ? buildOfficialDataSummary(bolagsverketData) : null
+    // Combine official data from all sources
+    const officialData = buildCombinedOfficialData(bolagsverketData, allabolagData, dataSourceStatus)
+    
+    // Use official data first, then fall back to user-provided values
     const revenueValue = officialData?.latestRevenue ?? parseSekValue(revenue)
     const grossProfitValue = officialData?.latestGrossProfit ?? parseSekValue(grossProfit)
+
+    // Determine if we have meaningful data
+    const hasOfficialData = dataSourceStatus.bolagsverket === 'success' || dataSourceStatus.allabolag === 'success'
+    const hasAnyExternalData = hasOfficialData || dataSourceStatus.webSearch === 'success' || dataSourceStatus.website === 'success'
 
     const analysisPrompt = buildAnalysisPrompt({
       companyName,
@@ -88,32 +157,33 @@ export async function POST(request: Request) {
       grossProfitValue,
       webSearchData,
       websiteSnapshot,
-      officialData
+      officialData,
+      dataSourceStatus
     })
-
-    const fallbackAnalysis = () =>
-      createFallbackAnalysis({
-        companyName,
-        revenue: revenueValue?.toString() || revenue,
-        grossProfit: grossProfitValue?.toString() || grossProfit
-      })
 
     let finalAnalysis: any
     let usedFallback = false
 
     try {
       console.log('[ANALYZE] Starting AI analysis for:', companyName, {
-        hasWebSearch: !!webSearchData,
-        hasOfficial: !!officialData,
-        hasWebsite: !!websiteSnapshot
+        hasBolagsverket: dataSourceStatus.bolagsverket === 'success',
+        hasAllabolag: dataSourceStatus.allabolag === 'success',
+        hasWebSearch: dataSourceStatus.webSearch === 'success',
+        hasWebsite: dataSourceStatus.website === 'success'
       })
+      
       const { text } = await callOpenAIResponses({
         model: 'gpt-4o',
         messages: [
           {
             role: 'system',
-            content:
-              'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
+            content: `Du är världens bästa svenska business-coach och företagsanalytiker. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.
+
+VIKTIGT OM DATAKVALITET:
+- Om officiell data finns (Bolagsverket/Allabolag), använd de faktiska siffrorna och markera dem tydligt
+- Om data saknas, ange detta explicit istället för att gissa
+- Skilj ALLTID på verifierad data vs uppskattningar
+- Hitta ALDRIG på siffror - ange "okänt" eller "uppgift saknas" om du inte har data`
           },
           {
             role: 'user',
@@ -131,24 +201,26 @@ export async function POST(request: Request) {
       console.log('[ANALYZE] AI analysis completed successfully')
     } catch (error) {
       if (error instanceof OpenAIResponseError) {
-        console.error(
-          '[ANALYZE] OpenAI Responses API error:',
-          error.status,
-          error.body
-        )
+        console.error('[ANALYZE] OpenAI Responses API error:', error.status, error.body)
       } else {
-        console.error('AI analysis failed:', error)
+        console.error('[ANALYZE] AI analysis failed:', error)
       }
-      console.error('AI analysis failed, falling back to heuristic analysis')
       usedFallback = true
-      finalAnalysis = fallbackAnalysis()
+      finalAnalysis = createFallbackAnalysis({
+        companyName,
+        officialData,
+        dataSourceStatus,
+        revenue: revenueValue?.toString() || revenue,
+        grossProfit: grossProfitValue?.toString() || grossProfit
+      })
     }
 
     const sources = buildSources({
       usedFallback,
       webSearchData,
       websiteSnapshot,
-      officialData
+      officialData,
+      dataSourceStatus
     })
 
     const resultPayload = {
@@ -161,11 +233,14 @@ export async function POST(request: Request) {
       officialData: officialData || undefined,
       websiteInsights: websiteSnapshot || undefined,
       sources,
+      dataSourceStatus,
       meta: {
         source: usedFallback ? 'fallback' : 'ai',
-        hasBolagsverket: !!officialData,
-        hasWebSearch: !!webSearchData,
-        hasWebsite: !!websiteSnapshot
+        hasBolagsverket: dataSourceStatus.bolagsverket === 'success',
+        hasAllabolag: dataSourceStatus.allabolag === 'success',
+        hasWebSearch: dataSourceStatus.webSearch === 'success',
+        hasWebsite: dataSourceStatus.website === 'success',
+        dataQuality: hasOfficialData ? 'verified' : hasAnyExternalData ? 'partial' : 'limited'
       }
     }
 
@@ -179,7 +254,6 @@ export async function POST(request: Request) {
         locale,
         result: resultPayload,
         expiresAt: new Date(Date.now() + ANALYSIS_TTL_MS),
-        // Store email and consent for future features (email notifications, etc)
         email: email?.trim(),
         hasConsented: hasConsented || false
       }
@@ -198,6 +272,86 @@ export async function POST(request: Request) {
   }
 }
 
+function buildCombinedOfficialData(
+  bolagsverketData: any,
+  allabolagData: any,
+  dataSourceStatus: DataSourceStatus
+): OfficialDataSummary | null {
+  const hasBolagsverket = dataSourceStatus.bolagsverket === 'success' && bolagsverketData
+  const hasAllabolag = dataSourceStatus.allabolag === 'success' && allabolagData
+
+  if (!hasBolagsverket && !hasAllabolag) {
+    return null
+  }
+
+  // Build annual reports from Bolagsverket
+  let annualReports: Array<{
+    year: string
+    filingDate?: string
+    revenue?: number
+    profit?: number
+    equity?: number
+  }> = []
+  
+  if (hasBolagsverket && bolagsverketData.annualReports) {
+    annualReports = bolagsverketData.annualReports
+      .filter((report: any) => report && report.year)
+      .map((report: any) => ({
+        year: report.year?.toString(),
+        filingDate: report.filingDate,
+        revenue: toNumber(report.revenue),
+        profit: toNumber(report.profit),
+        equity: toNumber(report.equity)
+      }))
+      .sort((a: any, b: any) => parseInt(b.year) - parseInt(a.year))
+  }
+
+  // If we have Allabolag history, use it if Bolagsverket doesn't have data
+  if (hasAllabolag && allabolagData.history && annualReports.length === 0) {
+    annualReports = allabolagData.history
+      .filter((h: any) => h.year)
+      .map((h: any) => ({
+        year: h.year.toString(),
+        revenue: h.revenue,
+        profit: h.profit
+      }))
+      .sort((a: any, b: any) => parseInt(b.year) - parseInt(a.year))
+  }
+
+  const latestReport = annualReports.length > 0 ? annualReports[0] : undefined
+
+  // Combine data prioritizing different sources for different fields
+  const combined: OfficialDataSummary = {
+    source: hasBolagsverket && hasAllabolag ? 'combined' : hasBolagsverket ? 'bolagsverket' : 'allabolag',
+    orgNumber: bolagsverketData?.orgNumber || allabolagData?.orgNumber,
+    companyName: allabolagData?.companyName || bolagsverketData?.name,
+    registrationDate: bolagsverketData?.registrationDate || allabolagData?.registrationDate,
+    legalForm: bolagsverketData?.legalForm,
+    status: bolagsverketData?.status || allabolagData?.status,
+    address: bolagsverketData?.address || allabolagData?.address,
+    ceo: allabolagData?.ceo,
+    creditRating: allabolagData?.creditRating,
+    
+    // Financial data - prefer Allabolag as it's often more detailed
+    employees: allabolagData?.financials?.employees ?? bolagsverketData?.employees,
+    industryCode: bolagsverketData?.industryCode,
+    latestRevenue: allabolagData?.financials?.revenue ?? latestReport?.revenue,
+    latestGrossProfit: allabolagData?.financials?.grossProfit ?? (typeof latestReport?.profit === 'number' ? latestReport.profit : undefined),
+    latestProfit: allabolagData?.financials?.profit ?? latestReport?.profit,
+    operatingProfit: allabolagData?.financials?.operatingProfit,
+    equity: allabolagData?.financials?.equity ?? latestReport?.equity,
+    assets: allabolagData?.financials?.assets,
+    liabilities: allabolagData?.financials?.liabilities,
+    revenueGrowth: allabolagData?.financials?.revenueGrowth,
+    profitMargin: allabolagData?.financials?.profitMargin,
+    grossMargin: allabolagData?.financials?.grossMargin,
+    
+    annualReports
+  }
+
+  return combined
+}
+
 function buildAnalysisPrompt({
   companyName,
   domain,
@@ -206,7 +360,8 @@ function buildAnalysisPrompt({
   grossProfitValue,
   webSearchData,
   websiteSnapshot,
-  officialData
+  officialData,
+  dataSourceStatus
 }: {
   companyName: string
   domain?: string
@@ -216,168 +371,180 @@ function buildAnalysisPrompt({
   webSearchData: any
   websiteSnapshot: Awaited<ReturnType<typeof fetchWebsiteSnapshot>> | null
   officialData: OfficialDataSummary | null
+  dataSourceStatus: DataSourceStatus
 }) {
+  const hasOfficialData = dataSourceStatus.bolagsverket === 'success' || dataSourceStatus.allabolag === 'success'
+
   const officialBlock = officialData
-    ? JSON.stringify(officialData, null, 2)
-    : 'Ingen verifierad Bolagsverket-data kunde hämtas.'
+    ? `VERIFIERAD DATA (${officialData.source === 'combined' ? 'Bolagsverket + Allabolag' : officialData.source === 'bolagsverket' ? 'Bolagsverket' : 'Allabolag'}):
+${JSON.stringify(officialData, null, 2)}`
+    : `INGEN VERIFIERAD FÖRETAGSDATA TILLGÄNGLIG
+Status:
+- Bolagsverket: ${dataSourceStatus.bolagsverket}
+- Allabolag: ${dataSourceStatus.allabolag}`
+
   const webBlock = webSearchData
-    ? JSON.stringify(webSearchData, null, 2)
+    ? `WEBB-SÖK RESULTAT:\n${JSON.stringify(webSearchData, null, 2)}`
     : 'Webbsökningen gav ingen träff eller misslyckades.'
+  
   const websiteBlock = websiteSnapshot?.summary
-    ? websiteSnapshot.summary
+    ? `HEMSIDA (${websiteSnapshot.rootDomain}):\n${websiteSnapshot.summary}\n\nNyckelteman: ${websiteSnapshot.keyHighlights?.join(', ') || 'Inga'}`
     : 'Ingen hemsidedata kunde hämtas.'
+  
   const manualFigures = `
+ANVÄNDARENS INMATADE SIFFROR:
 Omsättning (senaste år): ${formatManualFigure(revenueValue)}
 Bruttoresultat (senaste år): ${formatManualFigure(grossProfitValue)}
 `
 
   const questionsBlock = KEY_QUESTIONS.map((question, index) => `${index + 1}. ${question}`).join('\n')
 
-  return `Du agerar som världens främsta svenska business-coach och företagsanalyiker.
+  const dataQualityNote = hasOfficialData
+    ? 'DU HAR TILLGÅNG TILL VERIFIERADE FINANSIELLA SIFFROR - använd dessa i din analys.'
+    : 'OBS: Ingen verifierad finansiell data finns tillgänglig. Basera analysen på webbsök och hemsida. Var tydlig med att siffror är uppskattningar.'
+
+  return `Du agerar som världens främsta svenska business-coach och företagsanalytiker.
 Du kombinerar strategisk rådgivning, operativ erfarenhet och investment banker-analys.
 Leverera en kvalitativ nulägesanalys – ingen värdering ska tas fram.
+
+${dataQualityNote}
 
 Företag: ${companyName}
 Organisationsnummer: ${orgNumber || 'okänt'}
 Domän: ${domain || 'okänd'}
 
-=== OFFENTLIG DATA (Bolagsverket) ===
-${officialBlock}
+=== ${officialBlock} ===
 
-=== HEMSIDA (användarens inmatning) ===
-${websiteBlock}
+=== ${websiteBlock} ===
 
-=== WEBB-SÖK via OpenAI web_search ===
-${webBlock}
+=== ${webBlock} ===
 
-=== MANUELLT INMATADE SIFFROR ===
 ${manualFigures}
 
-Viktigt:
-- Referera alltid till källan när du använder siffror (Bolagsverket, webbsök, hemsida, användare).
-- Markera när data saknas eller är osäker.
-- När du använder omsättning vs bruttoresultat måste du ange vilket tal du baserar resonemanget på.
-- Under "officialInsights" ska du lista 3 konkreta datapunkter från Bolagsverket (eller ange tydligt att data saknas).
-- Under "webInsights" ska du lista 3-5 datapunkter från webbsökning/hemsidan och nämna källans natur.
-- Följ JSON-schemat exakt.
-- Hitta inte på antal anställda om källorna inte nämner det.
+DATAKVALITETSREGLER:
+- Om du har verifierad data (Bolagsverket/Allabolag), använd de exakta siffrorna
+- Markera ALLTID källan för varje siffra du nämner
+- Om data saknas, skriv "Uppgift saknas" istället för att gissa
+- Hitta ALDRIG på siffror som anställda, omsättning etc om de inte finns i källorna
+- Under "officialInsights" ska du lista faktiska datapunkter från källorna (eller tydligt ange att data saknas)
+- Under "webInsights" ska du lista datapunkter från webbsökning/hemsidan
 
 Frågor du måste besvara i sektionen "keyAnswers":
 ${questionsBlock}
 
 Krav:
-- "keyAnswers" ska innehålla exakt ${KEY_QUESTIONS.length} objekt med fälten "question" (sträng) och "answer" (sträng). Använd frågorna ovan ordagrant.
-- "salePreparationPlan" ska alltid innehålla exakt 10 konkreta och prioriterade punkter (1-2 meningar vardera) som förbättrar bolaget inom 6-12 månader.
-- "recommendations" ska innehålla minst 5 strategiska åtgärder.
-- Alla texter ska vara på svenska, professionella och koncisa.
-- Ingen värdering får nämnas.
+- "keyAnswers" ska innehålla exakt ${KEY_QUESTIONS.length} objekt med fälten "question" och "answer"
+- "salePreparationPlan" ska innehålla exakt 10 konkreta och prioriterade punkter
+- "recommendations" ska innehålla minst 5 strategiska åtgärder
+- Alla texter ska vara på svenska, professionella och koncisa
+- Ingen värdering får nämnas
 
 Returnera som JSON enligt detta format:
 {
-  "summary": "sammanfattning",
+  "summary": "sammanfattning baserad på faktisk data",
   "keyAnswers": [
-    { "question": "fråga 1", "answer": "svar" }
+    { "question": "fråga", "answer": "svar med källhänvisning" }
   ],
-  "officialInsights": ["punkt från Bolagsverket eller 'Ingen data'"],
-  "webInsights": ["punkt från web search/hemsida"],
-  "strengths": ["styrka1", "styrka2"],
-  "opportunities": ["möjlighet1"],
-  "risks": ["risk1"],
-  "marketPosition": "beskrivning",
-  "competitors": ["konkurrent1"],
-  "recommendations": ["åtgärd1"],
+  "officialInsights": ["faktisk datapunkt från Bolagsverket/Allabolag eller 'Data saknas'"],
+  "webInsights": ["datapunkt från webbsök/hemsida"],
+  "strengths": ["styrka baserad på data"],
+  "opportunities": ["möjlighet"],
+  "risks": ["risk"],
+  "marketPosition": "beskrivning baserad på tillgänglig data",
+  "competitors": ["konkurrent om hittad i källor"],
+  "recommendations": ["åtgärd"],
   "salePreparationPlan": ["punkt1", "...punkt10"],
   "keyMetrics": {
-    "industry": "bransch om känd",
-    "estimatedEmployees": "antal/intervall",
-    "location": "huvudkontor",
-    "foundedYear": "år"
+    "industry": "bransch om känd från källor",
+    "estimatedEmployees": "antal från källor eller 'okänt'",
+    "location": "plats från källor",
+    "foundedYear": "år från källor eller 'okänt'"
+  },
+  "financialHighlights": {
+    "revenue": ${revenueValue || 'null'},
+    "revenueFormatted": "${revenueValue ? formatSekValueDisplay(revenueValue) : 'Uppgift saknas'}",
+    "profit": ${officialData?.latestProfit || 'null'},
+    "profitFormatted": "${officialData?.latestProfit ? formatSekValueDisplay(officialData.latestProfit) : 'Uppgift saknas'}",
+    "employees": ${officialData?.employees || 'null'},
+    "revenueGrowth": ${officialData?.revenueGrowth ? `"${officialData.revenueGrowth.toFixed(1)}%"` : 'null'},
+    "profitMargin": ${officialData?.profitMargin ? `"${officialData.profitMargin.toFixed(1)}%"` : 'null'},
+    "dataSource": "${officialData?.source || 'none'}"
   }
 }`
+}
+
+function formatSekValueDisplay(value: number): string {
+  if (value >= 1000000) {
+    return `${(value / 1000000).toFixed(1)} MSEK`
+  } else if (value >= 1000) {
+    return `${(value / 1000).toFixed(0)} TSEK`
+  }
+  return `${value.toLocaleString('sv-SE')} kr`
 }
 
 function buildSources({
   usedFallback,
   webSearchData,
   websiteSnapshot,
-  officialData
+  officialData,
+  dataSourceStatus
 }: {
   usedFallback: boolean
   webSearchData: any
   websiteSnapshot: Awaited<ReturnType<typeof fetchWebsiteSnapshot>> | null
   officialData: OfficialDataSummary | null
+  dataSourceStatus: DataSourceStatus
 }) {
-  const sources: Array<{ title: string; url: string }> = []
+  const sources: Array<{ title: string; url: string; type: string }> = []
 
-  const addSource = (title: string, url?: string | null) => {
+  const addSource = (title: string, url?: string | null, type: string = 'other') => {
     if (!url) return
     if (sources.some((source) => source.url === url)) return
-    sources.push({ title, url })
+    sources.push({ title, url, type })
   }
 
-  if (usedFallback) {
-    return [
-      {
-        title: 'Bolaxo heuristisk analys',
-        url: 'https://bolaxo-production.up.railway.app/sv/analysera'
-      }
-    ]
+  // Add official data sources
+  if (dataSourceStatus.bolagsverket === 'success') {
+    addSource('Bolagsverket', 'https://bolagsverket.se', 'official')
+  }
+  
+  if (dataSourceStatus.allabolag === 'success' && officialData?.orgNumber) {
+    const formattedOrg = officialData.orgNumber.length === 10
+      ? `${officialData.orgNumber.slice(0, 6)}-${officialData.orgNumber.slice(6)}`
+      : officialData.orgNumber
+    addSource('Allabolag.se', `https://www.allabolag.se/what/${formattedOrg}`, 'official')
   }
 
+  // Add web search sources
   if (Array.isArray(webSearchData?.sources)) {
     webSearchData.sources.forEach((source: any) => {
       if (source?.title && source?.url) {
-        addSource(source.title, source.url)
+        addSource(source.title, source.url, source.sourceType || 'web')
       }
     })
   } else if (Array.isArray(webSearchData?.rawWebData?.notableSources)) {
     webSearchData.rawWebData.notableSources.forEach((source: any) => {
       if (source?.label && source?.url) {
-        addSource(source.label, source.url)
+        addSource(source.label, source.url, source.sourceType || 'web')
       }
     })
   }
 
-  if (officialData) {
-    addSource('Bolagsverket', 'https://bolagsverket.se')
-  }
-
+  // Add website source
   if (websiteSnapshot) {
-    addSource('Företagets webbplats', websiteSnapshot.canonicalUrl)
+    addSource('Företagets webbplats', websiteSnapshot.canonicalUrl, 'company')
   }
 
-  return sources.slice(0, 5)
-}
-
-function buildOfficialDataSummary(data: any): OfficialDataSummary | null {
-  if (!data) return null
-
-  const annualReports =
-    data.annualReports
-      ?.filter((report: any) => report && report.year)
-      .map((report: any) => ({
-        year: report.year?.toString(),
-        filingDate: report.filingDate,
-        revenue: toNumber(report.revenue),
-        profit: toNumber(report.profit),
-        equity: toNumber(report.equity)
-      }))
-      .sort((a: any, b: any) => parseInt(b.year) - parseInt(a.year)) || []
-
-  const latest = annualReports[0]
-
-  return {
-    orgNumber: data.orgNumber,
-    registrationDate: data.registrationDate,
-    legalForm: data.legalForm,
-    status: data.status,
-    address: data.address,
-    employees: data.employees,
-    industryCode: data.industryCode,
-    latestRevenue: latest?.revenue,
-    latestGrossProfit: typeof latest?.profit === 'number' ? latest.profit : undefined,
-    annualReports
+  // If using fallback and no other sources, add that
+  if (usedFallback && sources.length === 0) {
+    sources.push({
+      title: 'Bolaxo heuristisk analys',
+      url: 'https://bolaxo-production.up.railway.app/sv/analysera',
+      type: 'internal'
+    })
   }
+
+  return sources.slice(0, 8)
 }
 
 function normalizeOrgNumber(value?: string | null) {
@@ -398,7 +565,7 @@ function parseSekValue(value?: string) {
 
 function formatManualFigure(value?: number | null) {
   if (typeof value === 'number' && Number.isFinite(value)) {
-    return `${value} SEK`
+    return formatSekValueDisplay(value)
   }
   return 'saknas'
 }
@@ -417,192 +584,162 @@ function toNumber(value: unknown): number | undefined {
 
 function createFallbackAnalysis({
   companyName,
+  officialData,
+  dataSourceStatus,
   revenue,
   grossProfit
 }: {
   companyName: string
+  officialData: OfficialDataSummary | null
+  dataSourceStatus: DataSourceStatus
   revenue?: string
   grossProfit?: string
 }) {
   const safeName = companyName?.trim() || 'Bolaget'
-  const revenueValue = parseSekValue(revenue) ?? 28000000
-  const grossProfitValue =
-    parseSekValue(grossProfit) ?? Math.round(revenueValue * 0.38)
-  const ebitdaEstimate = Math.round(grossProfitValue * 0.45)
-  const marginPercent = revenueValue
-    ? Math.max(10, Math.min(35, Math.round((ebitdaEstimate / revenueValue) * 100)))
-    : 24
-  const minValue = Math.max(Math.round(revenueValue * 0.55), 15000000)
-  const maxValue = Math.max(Math.round(revenueValue * 1.05), minValue + 5000000)
-  const revenueInMsek = Number((revenueValue / 1_000_000).toFixed(1))
-  const grossInMsek = Number((grossProfitValue / 1_000_000).toFixed(1))
-  const year = new Date().getFullYear()
+  const hasOfficialData = officialData && officialData.source !== 'none'
+  
+  // Use actual data if available, otherwise mark as unknown
+  const revenueValue = officialData?.latestRevenue ?? parseSekValue(revenue)
+  const profitValue = officialData?.latestProfit
+  const employees = officialData?.employees
+  const revenueGrowth = officialData?.revenueGrowth
 
-  const industryTrend = Array.from({ length: 4 }, (_, index) => {
-    const labelYear = year - (3 - index)
-    return {
-      label: labelYear.toString(),
-      year: labelYear,
-      value: Number((revenueInMsek * (0.8 + index * 0.07)).toFixed(1)),
-      unit: 'MSEK',
-      growthNote: 'Estimerat branschindex baserat på SMB-data',
-      domain: 'bolaxo.internal',
-      sourceType: 'internal',
-      sourceUrl: 'https://bolaxo-production.up.railway.app/sv/analysera'
-    }
-  })
-
-  const companyTrend = Array.from({ length: 3 }, (_, index) => {
-    const labelYear = year - (2 - index)
-    return {
-      label: labelYear.toString(),
-      year: labelYear,
-      value: Number((revenueInMsek * (0.82 + index * 0.08)).toFixed(1)),
-      unit: 'MSEK',
-      note: 'Estimerad omsättningsutveckling baserat på SMB-snitt',
-      domain: 'bolaxo.internal',
-      sourceType: 'internal',
-      sourceUrl: 'https://bolaxo-production.up.railway.app/sv/analysera'
-    }
-  })
-
-  const valueDriverImpact = Math.round((maxValue - minValue) * 0.15)
   const keyAnswers = KEY_QUESTIONS.map((question, index) => {
     const answerMap: Record<number, string> = {
-      0: `Bolagets omsättning uppskattas till cirka ${revenueInMsek} MSEK och bruttomarginalen runt ${marginPercent} %, vilket signalerar en stabil bas men med utrymme att lyfta EBITDA inför en försäljning.`,
-      1: `${safeName} verkar i en nischad svensk SMB-marknad med begränsat antal etablerade konkurrenter, vilket gör tydlig positionering och paketering avgörande för att stå ut.`,
-      2: `Största riskerna är beroendet av nyckelpersoner och kundkoncentration. Utan dokumenterade processer och kontrakt blir en DD mer riskfylld och värdedrivande multiplar pressas.`,
-      3: `Tillväxtpotentialen ligger i att produktifiera erbjudandet, växla upp digital leadsgenerering och fördjupa partnerskap som kan dubbla inflödet av kvalificerade affärer.`,
-      4: `Operativt bör bolaget stärka rapportering, bygga pipeline-övervakning och formalisera kundavtal för att höja förtroendet hos köpare och underlätta överlämning.`
+      0: hasOfficialData && revenueValue
+        ? `Enligt ${officialData.source === 'allabolag' ? 'Allabolag' : 'Bolagsverket'} har bolaget en omsättning på ${formatSekValueDisplay(revenueValue)}${profitValue ? ` och ett resultat på ${formatSekValueDisplay(profitValue)}` : ''}.`
+        : 'Ingen verifierad finansiell data kunde hämtas. För en komplett analys rekommenderar vi att ange organisationsnummer eller ladda upp bokslut.',
+      1: 'Utan tillgång till extern marknadsdata är det svårt att bedöma konkurrensposition. Webbsökningen gav begränsade resultat.',
+      2: 'Generella risker för svenska SMB inkluderar nyckelpersonberoende, kundkoncentration och operativ komplexitet.',
+      3: 'Typiska möjligheter inkluderar digitalisering, paketering av erbjudandet och systematiserad försäljning.',
+      4: 'Prioritera dokumentation av processer, tydlig finansiell rapportering och formaliserade kundavtal.'
     }
     return {
       question,
-      answer: answerMap[index] || ''
+      answer: answerMap[index] || 'Otillräcklig data för att besvara frågan.'
     }
   })
 
   const salePreparationPlan = [
-    'Kartlägg alla kundkontrakt, marginaler och bindningstider så att köpare får transparens i due diligence.',
-    'Produktifiera erbjudandet i 2–3 paket med tydliga priser och KPI:er för att öka repetitiva intäkter.',
-    'Implementera månatlig ledningsrapport med omsättning, bruttomarginal, pipeline och kassaposition.',
-    'Säkra överlämningsplan för nyckelpersoner inklusive dokumenterade processer och utbildningsmaterial.',
-    'Genomför prishöjningsanalys på toppkunder och testa 3–5 % höjning kopplat till ökat kundvärde.',
-    'Automatisera leadshantering (CRM) och bygg en alltid-aktuell pipeline-översikt för investerare.',
-    'Optimera rörelsekapitalet genom att förhandla betalningsvillkor och införa delbetalningar för projekt.',
-    'Skapa referenscase och kvantifierade kundresultat som kan bifogas datarum inför transaktion.',
-    'Identifiera minst två strategiska partners som kan stå för 20 % av nykundsintäkterna via co-selling.',
-    'Förbered finansiellt material (3-års historik + budget) med tydlig EBITDA-brygga och scenarioanalys.'
+    'Kartlägg alla kundkontrakt, marginaler och bindningstider för transparens i due diligence.',
+    'Produktifiera erbjudandet i tydliga paket med priser och KPI:er.',
+    'Implementera månatlig ledningsrapport med omsättning, bruttomarginal och pipeline.',
+    'Säkra överlämningsplan för nyckelpersoner med dokumenterade processer.',
+    'Genomför prishöjningsanalys på toppkunder och testa höjningar kopplat till ökat kundvärde.',
+    'Automatisera leadshantering (CRM) och bygg aktuell pipeline-översikt.',
+    'Optimera rörelsekapitalet genom bättre betalningsvillkor.',
+    'Skapa referenscase med kvantifierade kundresultat.',
+    'Identifiera strategiska partners för co-selling.',
+    'Förbered finansiellt material med tydlig EBITDA-brygga.'
   ]
 
-  const officialInsights = [
-    revenueValue
-      ? `Bedömd omsättning cirka ${revenueInMsek} MSEK med bruttomarginal på ungefär ${marginPercent} %.`
-      : 'Inga verifierade omsättningssiffror fanns tillgängliga – användaren bör komplettera med underlag.',
-    `EBITDA uppskattas till runt ${ebitdaEstimate.toLocaleString('sv-SE')} kr baserat på historiska SMB-marginaler.`
-  ]
+  const dataQualityNote = hasOfficialData
+    ? `Analysen baseras på verifierad data från ${officialData.source === 'allabolag' ? 'Allabolag' : officialData.source === 'bolagsverket' ? 'Bolagsverket' : 'flera officiella källor'}.`
+    : 'OBS: Ingen verifierad finansiell data kunde hämtas. Analysen är generell och baserad på typiska svenska SMB.'
+
+  const officialInsights = hasOfficialData
+    ? [
+        revenueValue ? `Omsättning: ${formatSekValueDisplay(revenueValue)} (${officialData.source})` : 'Omsättning: Uppgift saknas',
+        profitValue ? `Resultat: ${formatSekValueDisplay(profitValue)}` : 'Resultat: Uppgift saknas',
+        employees ? `Antal anställda: ${employees}` : 'Antal anställda: Uppgift saknas'
+      ]
+    : [
+        'Ingen verifierad företagsdata tillgänglig.',
+        'För bättre analys, ange organisationsnummer.',
+        'Alternativt kan du ladda upp senaste bokslut.'
+      ]
 
   const webInsights = [
-    'Inga externa källor kunde hämtas automatiskt – resultatet bygger på generella SME-antaganden.',
-    'Komplettera gärna analysen med bolagets webbplats och oberoende nyhetsartiklar.'
+    dataSourceStatus.webSearch === 'success'
+      ? 'Webbsökning genomförd – se resultat ovan.'
+      : 'Webbsökningen gav begränsade resultat.',
+    dataSourceStatus.website === 'success'
+      ? 'Hemsida analyserad – se insikter ovan.'
+      : 'Ingen hemsida kunde analyseras.'
   ]
 
   return {
-    summary: `${safeName} visar en stabil SME-profil med möjlighet att förbättra marginaler och värdeskapande genom tydligare kommersiellt fokus.`,
+    summary: `${dataQualityNote} ${safeName} analyseras baserat på tillgänglig data.`,
     officialInsights,
     webInsights,
     keyAnswers,
-    strengths: [
-      'Stadig kundbas med återkommande intäkter och låg churn jämfört med typiska svenska privatägda bolag.',
-      'Hälsosam bruttomarginal driver goda kassaflöden som kan återinvesteras i tillväxt.',
-      'Bolaget har bevisad leveransförmåga och referenskunder som stärker trovärdigheten mot nya kunder.',
-      'Kombination av digitala arbetsflöden och relationsförsäljning skapar inträdesbarriärer.'
-    ],
+    strengths: hasOfficialData
+      ? [
+          revenueValue && revenueValue > 10000000 ? 'Etablerad verksamhet med betydande omsättning.' : 'Verksamt företag.',
+          employees && employees > 5 ? 'Organisation med flera anställda.' : 'Smidig organisationsstruktur.',
+          'Svensk registrering och bolagsform ger stabilitet.'
+        ]
+      : [
+          'Analysen begränsas av avsaknad av verifierad data.',
+          'Komplettera med organisationsnummer för bättre insikter.',
+          'Svenska bolag har generellt god juridisk struktur.'
+        ],
     opportunities: [
-      'Paketera erbjudandet i tydliga nivåer för att förenkla försäljning och höja snittintäkt per kund.',
-      'Systematisera merförsäljning mot befintlig kundbas, t.ex. serviceavtal och förlängda supportpaket.',
-      'Investera i digital marknadsföring för att driva inkommande leads och minska beroendet av referenser.',
-      'Förbered dokumentation och nyckeltal för att snabbt kunna ta dialoger med investerare/köpare.',
-      'Säkra skalbara partnerskap inom angränsande branscher för att öppna nya försäljningskanaler.'
+      'Paketera erbjudandet för tydligare värdeproposition.',
+      'Systematisera försäljning och marknadsföring.',
+      'Dokumentera processer för bättre skalbarhet.',
+      'Bygg starkare digitalt fotavtryck.'
     ],
     risks: [
-      'Nyckelpersonberoende i kundrelationer och affärsutveckling kan påverka värde om processer inte dokumenteras.',
-      'Kundkoncentration eller projektberoende riskerar intäktsvolatilitet vid tappad affär.',
-      'Teknisk skuld och manuella arbetssätt kan bromsa bruttomarginalen om de inte moderniseras.',
-      'Kapitalbehov för framtida tillväxtplaner kan kräva extern finansiering eller lägre utdelning.'
+      hasOfficialData ? 'Se finansiell data för specifika riskindikatorer.' : 'Utan finansiell data är riskbedömning generell.',
+      'Nyckelpersonberoende är vanligt i svenska SMB.',
+      'Kundkoncentration kan påverka stabilitet.',
+      'Operativ komplexitet kan hämma tillväxt.'
     ],
-    marketPosition: `${safeName} bedöms verka i en nischad svensk marknad med tydligt kundvärde och möjlighet att positionera sig som premiumleverantör genom bättre paketering och KPI-styrd försäljning.`,
+    marketPosition: hasOfficialData
+      ? `${safeName} är ett registrerat svenskt bolag${employees ? ` med ${employees} anställda` : ''}${revenueValue ? ` och omsättning på ${formatSekValueDisplay(revenueValue)}` : ''}.`
+      : `${safeName} är ett svenskt bolag. För detaljerad marknadspositionering krävs tillgång till finansiell data.`,
     competitors: [
-      'Regionala nischaktörer med liknande tjänsteerbjudanden',
-      'Internationella SaaS-plattformar som kan komplettera eller ersätta delar av värdekedjan',
-      'Konsultbolag med digitala erbjudanden inom samma vertikal'
+      'Komplettera med branschkod eller beskrivning för konkurrentanalys.'
     ],
     recommendations: [
-      'Skapa en 90-dagars kommersiell playbook med tydliga KPI:er för leads, offerter och konvertering.',
-      'Produktifiera leveransen (paket/priser) för att förbättra predictability och bruttomarginal.',
-      'Säkra kunddokumentation och handover-planer för alla nyckelkonton.',
-      'Bygg upp ett enkelt control tower med månatlig rapportering av ARR, churn, pipeline och cash.',
-      'Planera kapitalstruktur och bankdialoger så att expansion inte begränsas av rörelsekapital.'
+      'Säkerställ att organisationsnummer är korrekt för att möjliggöra datahämtning.',
+      'Dokumentera alla affärsprocesser och kundrelationer.',
+      'Bygg systematisk finansiell rapportering.',
+      'Skapa tydlig prissättningsstrategi.',
+      'Investera i CRM och säljprocesser.'
     ],
     salePreparationPlan,
     keyMetrics: {
-      industry: 'Svenska privatägda SMB',
-      location: 'Sverige',
-      foundedYear: undefined
+      industry: officialData?.industryCode || 'Okänd',
+      estimatedEmployees: employees?.toString() || 'Okänt',
+      location: officialData?.address ? extractCity(officialData.address) : 'Sverige',
+      foundedYear: extractYear(officialData?.registrationDate) || 'Okänt'
     },
-    industryTrend,
-    companyTrend,
-    valueDrivers: [
-      {
-        label: 'Återkommande intäkter och kundlojalitet',
-        direction: 'positive',
-        impactMin: Math.round(valueDriverImpact * 0.6),
-        impactMax: Math.round(valueDriverImpact),
-        impactUnit: 'SEK',
-        rationale: 'Förbättrad retention och prishöjningar kan öka värdet genom högre multipel.',
-        domain: 'bolaxo.internal',
-        sourceType: 'internal',
-        sourceUrl: 'https://bolaxo-production.up.railway.app/sv/analysera'
-      },
-      {
-        label: 'Digitalisering och automation',
-        direction: 'positive',
-        impactMin: Math.round(valueDriverImpact * 0.4),
-        impactMax: Math.round(valueDriverImpact * 0.9),
-        impactUnit: 'SEK',
-        rationale: 'Automatisering av leverans/rapportering förbättrar marginal och skalbarhet.',
-        domain: 'bolaxo.internal',
-        sourceType: 'internal',
-        sourceUrl: 'https://bolaxo-production.up.railway.app/sv/analysera'
-      }
-    ],
-    riskDrivers: [
-      {
-        label: 'Nyckelpersonberoende',
-        direction: 'negative',
-        impactMin: Math.round(valueDriverImpact * 0.4),
-        impactMax: Math.round(valueDriverImpact * 0.8),
-        impactUnit: 'SEK',
-        rationale: 'Beroende av ledning och seniora säljare kan påverka värde vid ägarbyte.',
-        domain: 'bolaxo.internal',
-        sourceType: 'internal',
-        sourceUrl: 'https://bolaxo-production.up.railway.app/sv/analysera'
-      },
-      {
-        label: 'Kundkoncentration',
-        direction: 'negative',
-        impactMin: Math.round(valueDriverImpact * 0.3),
-        impactMax: Math.round(valueDriverImpact * 0.7),
-        impactUnit: 'SEK',
-        rationale: 'Tappar man 1-2 huvudkunder kan kassaflöde och köparens riskbedömning försämras.',
-        domain: 'bolaxo.internal',
-        sourceType: 'internal',
-        sourceUrl: 'https://bolaxo-production.up.railway.app/sv/analysera'
-      }
-    ],
-    metrics: {
-      revenueMsek: revenueInMsek,
-      grossProfitMsek: grossInMsek,
-      ebitdaMargin: `${marginPercent}%`
+    financialHighlights: {
+      revenue: revenueValue || null,
+      revenueFormatted: revenueValue ? formatSekValueDisplay(revenueValue) : 'Uppgift saknas',
+      profit: profitValue || null,
+      profitFormatted: profitValue ? formatSekValueDisplay(profitValue) : 'Uppgift saknas',
+      employees: employees || null,
+      revenueGrowth: revenueGrowth ? `${revenueGrowth.toFixed(1)}%` : null,
+      profitMargin: officialData?.profitMargin ? `${officialData.profitMargin.toFixed(1)}%` : null,
+      dataSource: officialData?.source || 'none'
     }
   }
+}
+
+function extractCity(address?: string): string {
+  if (!address) return 'Sverige'
+  // Try to extract city from Swedish address format
+  const parts = address.split(/[,\s]+/)
+  // Look for common Swedish cities or postal code pattern
+  const cities = ['Stockholm', 'Göteborg', 'Malmö', 'Uppsala', 'Linköping', 'Västerås', 'Örebro', 'Norrköping', 'Helsingborg', 'Jönköping']
+  for (const city of cities) {
+    if (address.toLowerCase().includes(city.toLowerCase())) {
+      return city
+    }
+  }
+  // Try to find word after postal code (5 digits)
+  const postalMatch = address.match(/\d{3}\s?\d{2}\s+(\w+)/)
+  if (postalMatch && postalMatch[1]) {
+    return postalMatch[1]
+  }
+  return 'Sverige'
+}
+
+function extractYear(dateStr?: string): string | null {
+  if (!dateStr) return null
+  const match = dateStr.match(/(\d{4})/)
+  return match ? match[1] : null
 }
