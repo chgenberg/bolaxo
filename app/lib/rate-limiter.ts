@@ -30,12 +30,48 @@ setInterval(() => {
 /**
  * Get client IP from request
  */
-export function getClientIp(request: Request): string {
-  const forwardedFor = request.headers.get('x-forwarded-for')
-  if (forwardedFor) {
-    return forwardedFor.split(',')[0].trim()
+export function getClientIp(request?: Request): string {
+  if (!request) {
+    return 'unknown'
   }
-  return request.headers.get('x-real-ip') || 'unknown'
+
+  // Some build/runtime environments provide a plain object instead of the Headers API.
+  const headers = (request as any).headers
+  if (!headers) {
+    return 'unknown'
+  }
+
+  try {
+    if (typeof headers.get === 'function') {
+      const forwardedFor = headers.get('x-forwarded-for')
+      if (forwardedFor) {
+        return forwardedFor.split(',')[0].trim()
+      }
+      return headers.get('x-real-ip') || 'unknown'
+    }
+
+    // Fall back to object-style headers
+    const normalizedHeaders: Record<string, string | string[] | undefined> =
+      typeof headers === 'object' ? headers : {}
+    const forwardedFor = normalizedHeaders['x-forwarded-for']
+    if (typeof forwardedFor === 'string') {
+      return forwardedFor.split(',')[0].trim()
+    }
+    if (Array.isArray(forwardedFor) && forwardedFor.length > 0) {
+      return forwardedFor[0].split(',')[0].trim()
+    }
+    const realIp = normalizedHeaders['x-real-ip']
+    if (typeof realIp === 'string') {
+      return realIp
+    }
+    if (Array.isArray(realIp) && realIp.length > 0) {
+      return realIp[0]
+    }
+  } catch (error) {
+    console.warn('[RateLimiter] Failed to read client IP headers:', error)
+  }
+
+  return 'unknown'
 }
 
 /**
