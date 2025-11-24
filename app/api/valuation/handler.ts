@@ -135,6 +135,11 @@ function parseModelResponse(rawContent: string, context: ValuationContext) {
 
 
 export async function GET(request: Request) {
+  // Prevent execution during build time
+  if (!request?.headers) {
+    return new Response('Build time - skipping', { status: 200 })
+  }
+  
   return NextResponse.json({
     message: 'Valuation API',
     status: 'active',
@@ -143,6 +148,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  // Prevent execution during build time
+  if (!request?.headers) {
+    return new Response('Build time - skipping', { status: 200 })
+  }
+  
   return handleValuationRequest(request)
 }
 
