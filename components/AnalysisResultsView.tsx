@@ -48,12 +48,12 @@ interface AnalysisResults {
 }
 
 const tabs = [
-  { id: 'overview', label: 'Oversikt' },
-  { id: 'questions', label: 'Nyckelfragar' },
+  { id: 'overview', label: 'Översikt' },
+  { id: 'questions', label: 'Nyckelfrågor' },
   { id: 'strengths', label: 'Styrkor' },
-  { id: 'opportunities', label: 'Mojligheter' },
+  { id: 'opportunities', label: 'Möjligheter' },
   { id: 'risks', label: 'Risker' },
-  { id: 'recommendations', label: 'Atgarder' }
+  { id: 'recommendations', label: 'Åtgärder' }
 ]
 
 export default function AnalysisResultsView() {
@@ -100,7 +100,7 @@ export default function AnalysisResultsView() {
           const response = await fetch(`/api/analyze-company/${analysisId}`)
           if (!response.ok) {
             if (!local) {
-              setError('Kunde inte hamta analysen.')
+              setError('Kunde inte hämta analysen.')
             }
             setLoading(false)
             return
@@ -118,7 +118,7 @@ export default function AnalysisResultsView() {
         } catch (err) {
           console.error('Failed to load analysis result:', err)
           if (!local) {
-            setError('Kunde inte hamta analysen.')
+            setError('Kunde inte hämta analysen.')
           }
           setLoading(false)
         }
@@ -172,12 +172,12 @@ export default function AnalysisResultsView() {
     <div className="bg-gray-50 min-h-[60vh] pb-12">
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Back Link */}
-        <Link
-          href={`/${locale}/analysera`}
+          <Link
+            href={`/${locale}/analysera`}
           className="inline-block text-[#1F3C58] hover:underline mb-6"
-        >
+          >
           ← Ny analys
-        </Link>
+          </Link>
 
         {/* Company Name Header */}
         <div className="mb-6">
@@ -185,31 +185,31 @@ export default function AnalysisResultsView() {
           {results.domain && (
             <a 
               href={results.domain.startsWith('http') ? results.domain : `https://${results.domain}`}
-              target="_blank"
-              rel="noopener noreferrer"
+                  target="_blank"
+                  rel="noopener noreferrer"
               className="text-gray-500 hover:text-[#1F3C58] text-sm"
-            >
+                >
               {results.domain} →
-            </a>
-          )}
-        </div>
+                </a>
+              )}
+            </div>
 
         {/* Tab Navigation - Now at the top */}
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden mb-8">
           <div className="border-b border-gray-200 overflow-x-auto">
             <nav className="flex">
               {availableTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
                   className={`px-4 sm:px-6 py-3 font-medium whitespace-nowrap border-b-2 -mb-px transition-colors ${
                     activeTab === tab.id
                       ? 'text-[#1F3C58] border-[#1F3C58] bg-[#1F3C58]/5'
                       : 'text-gray-500 border-transparent hover:text-gray-700'
                   }`}
-                >
-                  {tab.label}
-                </button>
+                  >
+                    {tab.label}
+                  </button>
               ))}
             </nav>
           </div>
@@ -229,31 +229,31 @@ export default function AnalysisResultsView() {
                   <section>
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Nyckeldata</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      {results.keyMetrics.industry && results.keyMetrics.industry !== 'Okand' && results.keyMetrics.industry !== 'Se webbanalys' && (
+                      {results.keyMetrics.industry && results.keyMetrics.industry !== 'Okänd' && results.keyMetrics.industry !== 'Se webbanalys' && (
                         <div className="bg-gray-50 rounded-lg p-3">
                           <p className="text-xs text-gray-500 uppercase mb-1">Bransch</p>
                           <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.industry}</p>
                         </div>
                       )}
-                      {results.keyMetrics.location && results.keyMetrics.location !== 'Okant' && (
+                      {results.keyMetrics.location && results.keyMetrics.location !== 'Okänt' && (
                         <div className="bg-gray-50 rounded-lg p-3">
                           <p className="text-xs text-gray-500 uppercase mb-1">Plats</p>
                           <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.location}</p>
                         </div>
                       )}
-                      {results.keyMetrics.estimatedEmployees && results.keyMetrics.estimatedEmployees !== 'Okant' && (
+                      {results.keyMetrics.estimatedEmployees && results.keyMetrics.estimatedEmployees !== 'Okänt' && (
                         <div className="bg-gray-50 rounded-lg p-3">
-                          <p className="text-xs text-gray-500 uppercase mb-1">Anstallda</p>
+                          <p className="text-xs text-gray-500 uppercase mb-1">Anställda</p>
                           <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.estimatedEmployees}</p>
                         </div>
                       )}
-                      {results.keyMetrics.foundedYear && results.keyMetrics.foundedYear !== 'Okant' && (
+                      {results.keyMetrics.foundedYear && results.keyMetrics.foundedYear !== 'Okänt' && (
                         <div className="bg-gray-50 rounded-lg p-3">
                           <p className="text-xs text-gray-500 uppercase mb-1">Grundat</p>
                           <p className="font-medium text-gray-900 text-sm">{results.keyMetrics.foundedYear}</p>
                         </div>
                       )}
-                    </div>
+                </div>
                   </section>
                 )}
 
@@ -307,9 +307,9 @@ export default function AnalysisResultsView() {
                           <div>
                             <span className="text-gray-500">Telefon:</span>{' '}
                             <span className="text-gray-900">{results.websiteInsights.contact.phones[0]}</span>
-                          </div>
-                        )}
                       </div>
+                    )}
+                  </div>
                     </section>
                   ) : null
                 )}
@@ -330,7 +330,7 @@ export default function AnalysisResultsView() {
                       className="p-4 rounded-lg border border-gray-200 hover:border-[#1F3C58] text-left transition-colors"
                     >
                       <p className="text-2xl font-bold text-[#1F3C58]">{results.opportunities?.length || 0}</p>
-                      <p className="text-sm text-gray-600">Mojligheter</p>
+                      <p className="text-sm text-gray-600">Möjligheter</p>
                     </button>
                     <button
                       onClick={() => setActiveTab('risks')}
@@ -345,14 +345,14 @@ export default function AnalysisResultsView() {
             )}
 
             {activeTab === 'questions' && results.keyAnswers && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Nyckelfragar</h3>
+                <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Nyckelfrågor</h3>
                 {results.keyAnswers.map((qa, idx) => (
                   <div key={idx} className="p-4 bg-gray-50 rounded-lg">
                     <p className="font-medium text-gray-900 mb-2">{qa.question}</p>
                     <p className="text-gray-700">{qa.answer}</p>
-                  </div>
-                ))}
+                    </div>
+                  ))}
               </div>
             )}
 
@@ -361,7 +361,7 @@ export default function AnalysisResultsView() {
             )}
 
             {activeTab === 'opportunities' && (
-              <ContentList title="Mojligheter" items={results.opportunities} />
+              <ContentList title="Möjligheter" items={results.opportunities} />
             )}
 
             {activeTab === 'risks' && (
@@ -374,7 +374,7 @@ export default function AnalysisResultsView() {
 
                 {results.salePreparationPlan && results.salePreparationPlan.length > 0 && (
                   <section>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">10-punktsplan infor forsaljning</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">10-punktsplan inför försäljning</h3>
                     <ol className="space-y-3">
                       {results.salePreparationPlan.map((item, idx) => (
                         <li key={idx} className="flex gap-3 p-3 bg-gray-50 rounded-lg">
@@ -390,9 +390,9 @@ export default function AnalysisResultsView() {
 
                 {/* CTA */}
                 <div className="p-6 sm:p-8 bg-[#1F3C58] rounded-xl text-center text-white">
-                  <h3 className="text-xl font-bold mb-2">Vill du fa en komplett foretagsvardering?</h3>
+                  <h3 className="text-xl font-bold mb-2">Vill du få en komplett företagsvärdering?</h3>
                   <p className="text-white/80 mb-4">
-                    Professionell vardering baserad pa finansiella nyckeltal och marknadsdata.
+                    Professionell värdering baserad på finansiella nyckeltal och marknadsdata.
                   </p>
                   <div className="mb-4">
                     <span className="text-3xl font-bold">5 000 kr</span>
@@ -401,7 +401,7 @@ export default function AnalysisResultsView() {
                     href={`/${locale}/vardering`}
                     className="inline-block bg-white text-[#1F3C58] px-6 py-3 rounded-lg font-medium hover:bg-gray-100"
                   >
-                    Bestall vardering →
+                    Beställ värdering →
                   </Link>
                 </div>
               </div>
@@ -416,7 +416,7 @@ export default function AnalysisResultsView() {
               onClick={() => setExpandedSources(!expandedSources)}
               className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50"
             >
-              <h3 className="font-medium text-gray-900">Kallor ({results.sources.length})</h3>
+              <h3 className="font-medium text-gray-900">Källor ({results.sources.length})</h3>
               <span className="text-gray-400">{expandedSources ? '−' : '+'}</span>
             </button>
             {expandedSources && (
@@ -424,18 +424,18 @@ export default function AnalysisResultsView() {
                 {results.sources.map((source, idx) => (
                   <a
                     key={idx}
-                    href={source.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                     className="block p-3 rounded-lg hover:bg-gray-50 transition-colors"
                   >
                     <p className="text-sm font-medium text-gray-900 hover:text-[#1F3C58]">
                       {source.title}
                     </p>
                     <p className="text-xs text-gray-500 truncate">{source.url}</p>
-                  </a>
-                ))}
-              </div>
+                </a>
+              ))}
+            </div>
             )}
           </div>
         )}

@@ -140,12 +140,12 @@ export async function POST(request: Request) {
         messages: [
           {
             role: 'system',
-            content: `Du ar en erfaren svensk foretagsanalytiker. Analysera foretag baserat pa webbsokning och hemsidedata. Leverera alltid strukturerad JSON pa svenska.
+            content: `Du är en erfaren svensk företagsanalytiker. Analysera företag baserat på webbsökning och hemsidedata. Leverera alltid strukturerad JSON på svenska.
 
 VIKTIGT:
-- Basera analysen pa tillganglig webbdata och hemsideinformation
-- Var tydlig med vad som ar fakta vs uppskattningar
-- Fokusera pa kvalitativa insikter: styrkor, mojligheter, risker, rekommendationer
+- Basera analysen på tillgänglig webbdata och hemsideinformation
+- Var tydlig med vad som är fakta vs uppskattningar
+- Fokusera på kvalitativa insikter: styrkor, möjligheter, risker, rekommendationer
 - Skriv koncist och handlingsinriktat`
           },
           {
@@ -360,28 +360,28 @@ ${websiteSnapshot.summary?.slice(0, 2000) || 'Inget innehall'}
     const sources = webSearchData.sources || []
     
     webSearchAnalysis = `
-WEBBSOKNINGSRESULTAT:
-- Verksamhetsbeskrivning: ${profile.description || 'Ej tillganglig'}
+WEBBSÖKNINGSRESULTAT:
+- Verksamhetsbeskrivning: ${profile.description || 'Ej tillgänglig'}
 - Bransch: ${profile.industry || 'Ej specificerad'}
 - Kunder: ${profile.customers || 'Ej specificerade'}
-- Vardeerbjudande: ${profile.valueProp || 'Ej specificerat'}
+- Värdeerbjudande: ${profile.valueProp || 'Ej specificerat'}
 - Platser: ${profile.locations?.join(', ') || 'Ej specificerade'}
-- Uppskattade anstallda: ${profile.estimatedEmployees || 'Okant'}
+- Uppskattade anställda: ${profile.estimatedEmployees || 'Okänt'}
 
 MARKNADSSIGNALER: ${signals.join('; ') || 'Inga'}
-TILLVAXTSIGNALER: ${growth.join('; ') || 'Inga'}
+TILLVÄXTSIGNALER: ${growth.join('; ') || 'Inga'}
 RISKSIGNALER: ${risks.join('; ') || 'Inga'}
 AKTIVITETER: ${webSearchData.notableActivities?.join('; ') || 'Inga noterade'}
 
-KALLOR: ${sources.map((s: any) => s.title || s.domain).slice(0, 5).join(', ') || 'Inga'}
+KÄLLOR: ${sources.map((s: any) => s.title || s.domain).slice(0, 5).join(', ') || 'Inga'}
 `
   }
 
   const questionsBlock = KEY_QUESTIONS.map((question, index) => `${index + 1}. ${question}`).join('\n')
 
-  return `Du ar en erfaren svensk foretagsanalytiker. Analysera folande foretag och ge en gedigen, handlingsinriktad analys.
+  return `Du är en erfaren svensk företagsanalytiker. Analysera följande företag och ge en gedigen, handlingsinriktad analys.
 
-FORETAG: ${companyName}
+FÖRETAG: ${companyName}
 HEMSIDA: ${domain || 'Ej angiven'}
 ${orgNumber ? `ORGANISATIONSNUMMER: ${orgNumber}` : ''}
 
@@ -390,62 +390,62 @@ ${websiteAnalysis}
 ${webSearchAnalysis}
 
 ANALYSUPPDRAG:
-Baserat pa ovanstaende information, skapa en djupgaende analys av foretaget. Fokusera pa:
-1. Vad foretaget faktiskt gor och erbjuder
-2. Vilka styrkor som framgar av deras kommunikation och position
-3. Vilka tillvaxtmojligheter som finns
+Baserat på ovanstående information, skapa en djupgående analys av företaget. Fokusera på:
+1. Vad företaget faktiskt gör och erbjuder
+2. Vilka styrkor som framgår av deras kommunikation och position
+3. Vilka tillväxtmöjligheter som finns
 4. Vilka risker eller svagheter som kan identifieras
-5. Konkreta rekommendationer for att oka foretagets varde
+5. Konkreta rekommendationer för att öka företagets värde
 
-NYCKELFRAGAR ATT BESVARA (i "keyAnswers"):
+NYCKELFRÅGOR ATT BESVARA (i "keyAnswers"):
 ${questionsBlock}
 
 INSTRUKTIONER:
-- Skriv konkret och handlingsinriktat pa svenska
-- Basera analysen pa tillganglig data - spekulera inte
-- Ge minst 4-5 punkter i varje kategori (styrkor, mojligheter, risker)
-- Rekommendationerna ska vara specifika och genomforbara
-- Forsaljningsplanen ska vara 10 konkreta steg
+- Skriv konkret och handlingsinriktat på svenska
+- Basera analysen på tillgänglig data - spekulera inte
+- Ge minst 4-5 punkter i varje kategori (styrkor, möjligheter, risker)
+- Rekommendationerna ska vara specifika och genomförbara
+- Försäljningsplanen ska vara 10 konkreta steg
 
 RETURNERA ENDAST DENNA JSON-STRUKTUR:
 {
-  "summary": "2-3 meningar som sammanfattar foretagets verksamhet och position",
+  "summary": "2-3 meningar som sammanfattar företagets verksamhet och position",
   "keyAnswers": [
-    { "question": "fraga fran listan ovan", "answer": "detaljerat svar baserat pa data" }
+    { "question": "fråga från listan ovan", "answer": "detaljerat svar baserat på data" }
   ],
   "webInsights": [
-    "konkret insikt 1 fran webbdata",
-    "konkret insikt 2 fran hemsidan",
+    "konkret insikt 1 från webbdata",
+    "konkret insikt 2 från hemsidan",
     "konkret insikt 3 om marknaden"
   ],
   "strengths": [
-    "styrka 1 med forklaring",
-    "styrka 2 med forklaring"
+    "styrka 1 med förklaring",
+    "styrka 2 med förklaring"
   ],
   "opportunities": [
-    "mojlighet 1 med forklaring",
-    "mojlighet 2 med forklaring"
+    "möjlighet 1 med förklaring",
+    "möjlighet 2 med förklaring"
   ],
   "risks": [
-    "risk 1 med forklaring",
-    "risk 2 med forklaring"
+    "risk 1 med förklaring",
+    "risk 2 med förklaring"
   ],
-  "marketPosition": "beskrivning av foretagets position i marknaden",
+  "marketPosition": "beskrivning av företagets position i marknaden",
   "competitors": ["konkurrent 1", "konkurrent 2"],
   "recommendations": [
-    "rekommendation 1 - konkret atgard",
-    "rekommendation 2 - konkret atgard"
+    "rekommendation 1 - konkret åtgärd",
+    "rekommendation 2 - konkret åtgärd"
   ],
   "salePreparationPlan": [
-    "1. Forsta steget",
+    "1. Första steget",
     "2. Andra steget",
     "... upp till 10 steg"
   ],
   "keyMetrics": {
-    "industry": "bransch baserad pa data",
-    "estimatedEmployees": "antal om tillgangligt",
-    "location": "plats om tillganglig",
-    "foundedYear": "ar om tillgangligt"
+    "industry": "bransch baserad på data",
+    "estimatedEmployees": "antal om tillgängligt",
+    "location": "plats om tillgänglig",
+    "foundedYear": "år om tillgängligt"
   }
 }`
 }
@@ -495,7 +495,7 @@ function buildSources({
 
   // Add website source
   if (websiteSnapshot) {
-    addSource('Foretagets webbplats', websiteSnapshot.canonicalUrl, 'company')
+    addSource('Företagets webbplats', websiteSnapshot.canonicalUrl, 'company')
   }
 
   // If using fallback and no other sources
@@ -530,7 +530,7 @@ function formatManualFigure(value?: number | null) {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return formatSekValueDisplay(value)
   }
-  return 'saknas'
+  return 'Saknas'
 }
 
 function toNumber(value: unknown): number | undefined {
@@ -561,75 +561,75 @@ function createFallbackAnalysis({
 
   const keyAnswers = KEY_QUESTIONS.map((question, index) => {
     const answerMap: Record<number, string> = {
-      0: 'Analysen baseras pa webbsokning och hemsidedata.',
-      1: 'Konkurrensposition bedoms baserat pa tillganglig webbinformation.',
-      2: 'Generella risker for svenska SMB inkluderar nyckelpersonberoende och kundkoncentration.',
-      3: 'Mojligheter inkluderar digitalisering och systematiserad forsaljning.',
+      0: 'Analysen baseras på webbsökning och hemsidedata.',
+      1: 'Konkurrensposition bedöms baserat på tillgänglig webbinformation.',
+      2: 'Generella risker för svenska SMB inkluderar nyckelpersonberoende och kundkoncentration.',
+      3: 'Möjligheter inkluderar digitalisering och systematiserad försäljning.',
       4: 'Prioritera dokumentation av processer och formaliserade kundavtal.'
     }
     return {
       question,
-      answer: answerMap[index] || 'Otillracklig data for att besvara fragan.'
+      answer: answerMap[index] || 'Otillräcklig data för att besvara frågan.'
     }
   })
 
   const salePreparationPlan = [
-    'Kartlagg alla kundkontrakt och marginaler.',
+    'Kartlägg alla kundkontrakt och marginaler.',
     'Produktifiera erbjudandet i tydliga paket.',
-    'Implementera manatlig ledningsrapport.',
-    'Sakra overlamningsplan for nyckelpersoner.',
-    'Genomfor prishojningsanalys pa toppkunder.',
+    'Implementera månatlig ledningsrapport.',
+    'Säkra överlämningsplan för nyckelpersoner.',
+    'Genomför prishöjningsanalys på toppkunder.',
     'Automatisera leadshantering med CRM.',
-    'Optimera rorelsekapitalet.',
+    'Optimera rörelsekapitalet.',
     'Skapa referenscase med kundresultat.',
     'Identifiera strategiska partners.',
-    'Forbered finansiellt material.'
+    'Förbered finansiellt material.'
   ]
 
   const webInsights = [
     dataSourceStatus.webSearch === 'success'
-      ? 'Webbsokning genomford.'
-      : 'Webbsokningen gav begransade resultat.',
+      ? 'Webbsökning genomförd.'
+      : 'Webbsökningen gav begränsade resultat.',
     dataSourceStatus.website === 'success'
       ? 'Hemsida analyserad.'
       : 'Ingen hemsida kunde analyseras.'
   ]
 
   return {
-    summary: `${safeName} analyseras baserat pa tillganglig webbdata.`,
+    summary: `${safeName} analyseras baserat på tillgänglig webbdata.`,
     webInsights,
     keyAnswers,
     strengths: [
       'Svenskt bolag med etablerad verksamhet.',
-      'Digital narvaro via hemsida.',
-      'Potential for systematisering.'
+      'Digital närvaro via hemsida.',
+      'Potential för systematisering.'
     ],
     opportunities: [
-      'Paketera erbjudandet for tydligare vardeproposition.',
-      'Systematisera forsaljning och marknadsforing.',
-      'Dokumentera processer for battre skalbarhet.',
+      'Paketera erbjudandet för tydligare värdeproposition.',
+      'Systematisera försäljning och marknadsföring.',
+      'Dokumentera processer för bättre skalbarhet.',
       'Bygg starkare digitalt fotavtryck.'
     ],
     risks: [
-      'Nyckelpersonberoende ar vanligt i svenska SMB.',
-      'Kundkoncentration kan paverka stabilitet.',
-      'Operativ komplexitet kan hamma tillvaxt.'
+      'Nyckelpersonberoende är vanligt i svenska SMB.',
+      'Kundkoncentration kan påverka stabilitet.',
+      'Operativ komplexitet kan hämma tillväxt.'
     ],
-    marketPosition: `${safeName} ar ett svenskt bolag med digital narvaro.`,
+    marketPosition: `${safeName} är ett svenskt bolag med digital närvaro.`,
     competitors: [],
     recommendations: [
-      'Dokumentera alla affarsprocesser och kundrelationer.',
+      'Dokumentera alla affärsprocesser och kundrelationer.',
       'Bygg systematisk finansiell rapportering.',
-      'Skapa tydlig prissattningsstrategi.',
-      'Investera i CRM och saljprocesser.',
-      'Starkt vardeproposition.'
+      'Skapa tydlig prissättningsstrategi.',
+      'Investera i CRM och säljprocesser.',
+      'Stärk värdepropositionen.'
     ],
     salePreparationPlan,
     keyMetrics: {
       industry: 'Se webbanalys',
-      estimatedEmployees: 'Okant',
+      estimatedEmployees: 'Okänt',
       location: 'Sverige',
-      foundedYear: 'Okant'
+      foundedYear: 'Okänt'
     }
   }
 }
