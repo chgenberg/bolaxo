@@ -68,7 +68,6 @@ export async function callOpenAIResponses({
     body: JSON.stringify({
       model,
       input,
-      modalities: ['text'],
       max_output_tokens: maxOutputTokens,
       metadata,
       ...formatPayload
