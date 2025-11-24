@@ -27,52 +27,15 @@ type ValuationContext = {
   prompt: string
 }
 
-function getHeaderValue(request: Request | undefined, headerName: string) {
-  if (!request) {
-    console.warn('[VALUATION] getHeaderValue called without request for header:', headerName)
-    return undefined
-  }
-
-  let headers: any
+function getHeaderValue(request: Request, headerName: string) {
   try {
-    headers = (request as any)?.headers
-  } catch (error) {
-    console.warn('[VALUATION] Unable to access request headers:', error)
-    return undefined
-  }
-
-  if (!headers) {
-    console.warn('[VALUATION] Request headers missing for header:', headerName)
-    return undefined
-  }
-
-  try {
-    if (typeof headers.get === 'function') {
+    const headers = request.headers
+    if (headers && typeof headers.get === 'function') {
       return headers.get(headerName) ?? undefined
-    }
-
-    if (Array.isArray(headers)) {
-      const lower = headerName.toLowerCase()
-      for (const entry of headers) {
-        if (!entry) continue
-        const [key, value] = entry
-        if (typeof key === 'string' && key.toLowerCase() === lower) {
-          return value
-        }
-      }
-    } else if (typeof headers === 'object') {
-      const lower = headerName.toLowerCase()
-      for (const key of Object.keys(headers)) {
-        if (key.toLowerCase() === lower) {
-          const value = headers[key as keyof typeof headers]
-          return Array.isArray(value) ? value[0] : value
-        }
-      }
     }
   } catch (error) {
     console.warn('[VALUATION] Failed to read header value:', headerName, error)
   }
-
   return undefined
 }
 
@@ -171,7 +134,7 @@ function parseModelResponse(rawContent: string, context: ValuationContext) {
 }
 
 
-export async function GET() {
+export async function GET(request: Request) {
   return NextResponse.json({
     message: 'Valuation API',
     status: 'active',
@@ -183,19 +146,11 @@ export async function POST(request: Request) {
   return handleValuationRequest(request)
 }
 
-async function handleValuationRequest(request?: Request) {
+async function handleValuationRequest(request: Request) {
   console.log('[VALUATION] handleValuationRequest invoked', {
     hasRequest: !!request,
     requestType: request ? (request as any).constructor?.name : 'none',
   })
-
-  if (!request) {
-    console.warn('[VALUATION] handleValuationRequest invoked without a Request object')
-    return NextResponse.json(
-      { error: 'Begäran saknas eller är ogiltig.' },
-      { status: 400 }
-    )
-  }
 
   try {
     const rawHeaders = (request as any)?.headers
