@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { X, Sparkles, Loader2 } from 'lucide-react'
+import { X, Sparkles, Loader2, Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 
@@ -11,25 +11,35 @@ interface AnalysisModalProps {
 
 const copy = {
   sv: {
-    title: 'Analysera ditt företag',
+    title: 'Få insikter om ditt företag',
     labels: {
+      email: 'E-postadress',
       companyName: 'Företagsnamn',
-      domain: 'Domännamn (valfritt)',
+      domain: 'Webbplats (valfritt)',
       orgNumber: 'Organisationsnummer (valfritt)'
     },
     placeholders: {
+      email: 'din@epost.se',
       companyName: 'T.ex. Nordisk Tech AB',
       domain: 'T.ex. nordisktech.se',
       orgNumber: '556123-4567'
     },
     errors: {
+      missingEmail: 'Vänligen ange din e-postadress',
+      invalidEmail: 'Vänligen ange en giltig e-postadress',
       missingName: 'Vänligen ange företagsnamn',
+      missingConsent: 'Du måste godkänna integritetspolicyn för att fortsätta',
       generic: 'Ett fel uppstod',
       analysisFailed: 'Analysen misslyckades'
     },
-    button: 'Analysera',
+    consent: {
+      label: 'Jag godkänner att Bolaxo',
+      text: 'sparar min information för produktutveckling och skickar analysresultatet till min e-post',
+      link: 'Läs integritetspolicy'
+    },
+    button: 'Starta analys',
     infoText:
-      'Analysen tar vanligtvis 2-3 minuter. Vi söker igenom öppna källor för att ge dig värdefulla insikter om ditt företag.',
+      'Vi analyserar offentlig data från Bolagsverket, webben och din hemsida för att ge dig värdefulla insikter om ditt företag.',
     loadingTitle: (company: string) => `Analyserar ${company}`,
     loadingTitleFallback: 'Analyserar företaget',
     loadingDescription: 'Vi söker igenom webben efter information om ditt företag...',
@@ -44,25 +54,35 @@ const copy = {
     requiredAsterisk: 'Företagsnamn *'
   },
   en: {
-    title: 'Analyze your company',
+    title: 'Get insights about your company',
     labels: {
+      email: 'Email address',
       companyName: 'Company name',
-      domain: 'Domain name (optional)',
+      domain: 'Website (optional)',
       orgNumber: 'Organization number (optional)'
     },
     placeholders: {
+      email: 'your@email.com',
       companyName: 'e.g. Nordic Tech Ltd',
       domain: 'e.g. nordictech.com',
       orgNumber: '556123-4567'
     },
     errors: {
+      missingEmail: 'Please enter your email address',
+      invalidEmail: 'Please enter a valid email address',
       missingName: 'Please enter a company name',
+      missingConsent: 'You must accept the privacy policy to continue',
       generic: 'Something went wrong',
       analysisFailed: 'Analysis failed'
     },
-    button: 'Analyze',
+    consent: {
+      label: 'I agree that Bolaxo',
+      text: 'saves my information for product development and sends the analysis result to my email',
+      link: 'Read privacy policy'
+    },
+    button: 'Start analysis',
     infoText:
-      'The analysis usually takes 2-3 minutes. We scan public sources to deliver valuable insights about your company.',
+      'We analyze public data from Companies House, the web and your website to give you valuable insights about your company.',
     loadingTitle: (company: string) => `Analyzing ${company}`,
     loadingTitleFallback: 'Analyzing your company',
     loadingDescription: 'We are scanning the web for information about your business…',
@@ -85,22 +105,20 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
     if (locale.startsWith('sv')) return copy.sv
     return copy.en
   }, [locale])
+  const [email, setEmail] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [domain, setDomain] = useState('')
   const [orgNumber, setOrgNumber] = useState('')
-  const [revenue, setRevenue] = useState('')
-  const [grossProfit, setGrossProfit] = useState('')
+  const [hasConsented, setHasConsented] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState('')
 
-  const formatSekInput = (value: string) => {
-    const digitsOnly = value.replace(/\D/g, '')
-    if (!digitsOnly) return ''
-    return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return re.test(email)
   }
 
-  const sanitizeSek = (value: string) => value.replace(/\D/g, '')
   const formatOrgNumber = (value: string) => {
     const digitsOnly = value.replace(/\D/g, '')
     if (!digitsOnly) return ''
@@ -110,8 +128,23 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
   const sanitizeOrgNumber = (value: string) => value.replace(/\D/g, '')
 
   const handleAnalyze = async () => {
+    if (!email.trim()) {
+      setError(text.errors.missingEmail)
+      return
+    }
+    
+    if (!validateEmail(email)) {
+      setError(text.errors.invalidEmail)
+      return
+    }
+    
     if (!companyName.trim()) {
       setError(text.errors.missingName)
+      return
+    }
+    
+    if (!hasConsented) {
+      setError(text.errors.missingConsent)
       return
     }
 
@@ -136,11 +169,11 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          email: email.trim(),
           companyName: companyName.trim(),
           domain: domain.trim(),
           orgNumber: sanitizeOrgNumber(orgNumber),
-          revenue: sanitizeSek(revenue),
-          grossProfit: sanitizeSek(grossProfit),
+          hasConsented,
           locale
         })
       })
@@ -190,7 +223,21 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
             </div>
 
             {/* Form */}
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {text.labels.email} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={text.placeholders.email}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  autoFocus
+                />
+              </div>
+              
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   {text.labels.companyName} <span className="text-red-500">*</span>
@@ -201,7 +248,6 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder={text.placeholders.companyName}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  autoFocus
                 />
               </div>
 
@@ -231,30 +277,28 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Omsättning förra året (kr)
+              {/* Privacy consent */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={hasConsented}
+                    onChange={(e) => setHasConsented(e.target.checked)}
+                    className="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <div className="flex-1">
+                    <span className="text-sm text-gray-700">
+                      {text.consent.label} {text.consent.text}
+                    </span>
+                    <a 
+                      href="/juridiskt/integritetspolicy" 
+                      target="_blank"
+                      className="block text-xs text-blue-600 hover:text-blue-800 underline mt-1"
+                    >
+                      {text.consent.link}
+                    </a>
+                  </div>
                 </label>
-                <input
-                  type="text"
-                  value={revenue}
-                  onChange={(e) => setRevenue(formatSekInput(e.target.value))}
-                  placeholder="10.000.000"
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bruttoresultat förra året (kr)
-                </label>
-                <input
-                  type="text"
-                  value={grossProfit}
-                  onChange={(e) => setGrossProfit(formatSekInput(e.target.value))}
-                  placeholder="3.000.000"
-                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                />
               </div>
 
               {error && (
@@ -265,7 +309,12 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
 
               <button
                 onClick={handleAnalyze}
-                className="w-full bg-primary-navy text-white py-4 rounded-lg font-semibold hover:bg-primary-navy/90 transition-all transform hover:scale-[1.02]"
+                disabled={!hasConsented}
+                className={`w-full py-4 rounded-lg font-semibold transition-all transform ${
+                  hasConsented 
+                    ? 'bg-primary-navy text-white hover:bg-primary-navy/90 hover:scale-[1.02]' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
               >
                 {text.button}
               </button>

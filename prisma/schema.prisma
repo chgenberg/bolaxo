@@ -259,11 +259,14 @@ model InstantAnalysis {
   revenue     String?
   grossProfit String?
   locale      String?
+  email       String?
+  hasConsented Boolean @default(false)
   result      Json
   createdAt   DateTime @default(now())
   expiresAt   DateTime
 
   @@index([createdAt])
+  @@index([email])
 }
 
 model PrefillMetric {

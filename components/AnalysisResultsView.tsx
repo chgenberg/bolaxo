@@ -66,6 +66,8 @@ interface AnalysisResults {
     question: string
     answer: string
   }>
+  officialInsights?: string[]
+  webInsights?: string[]
   strengths: string[]
   opportunities: string[]
   risks: string[]
@@ -438,6 +440,9 @@ export default function AnalysisResultsView() {
     : null
   const websiteHighlights = results.websiteInsights?.keyHighlights ?? []
   const websiteContact = results.websiteInsights?.contact
+  const hasDataInsights =
+    (results.officialInsights && results.officialInsights.length > 0) ||
+    (results.webInsights && results.webInsights.length > 0)
 
   const TrendTooltipContent = ({
     active,
@@ -760,6 +765,44 @@ export default function AnalysisResultsView() {
                 </table>
               </div>
             )}
+          </div>
+        )}
+
+        {hasDataInsights && (
+          <div className="bg-white rounded-xl p-6 mb-8 shadow-sm border border-blue-100">
+            <h3 className="text-xl font-semibold text-primary-navy mb-4">Datainsikter</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {results.officialInsights?.length ? (
+                <div>
+                  <p className="text-sm font-semibold text-primary-navy uppercase tracking-wide mb-2">
+                    Officiella siffror (Bolagsverket)
+                  </p>
+                  <ul className="space-y-2 text-gray-700">
+                    {results.officialInsights.map((item, index) => (
+                      <li key={`official-${index}`} className="flex items-start gap-2">
+                        <span className="text-blue-600 mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {results.webInsights?.length ? (
+                <div>
+                  <p className="text-sm font-semibold text-primary-navy uppercase tracking-wide mb-2">
+                    Webbsignaler (GPT-sök & hemsida)
+                  </p>
+                  <ul className="space-y-2 text-gray-700">
+                    {results.webInsights.map((item, index) => (
+                      <li key={`web-${index}`} className="flex items-start gap-2">
+                        <span className="text-blue-600 mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
           </div>
         )}
 

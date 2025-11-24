@@ -36,7 +36,7 @@ interface OfficialDataSummary {
 
 export async function POST(request: Request) {
   try {
-    const { companyName, domain, locale, revenue, grossProfit, orgNumber } = await request.json()
+    const { email, companyName, domain, locale, revenue, grossProfit, orgNumber, hasConsented } = await request.json()
 
     if (!companyName) {
       return NextResponse.json(
@@ -178,7 +178,10 @@ export async function POST(request: Request) {
         grossProfit: grossProfit?.trim(),
         locale,
         result: resultPayload,
-        expiresAt: new Date(Date.now() + ANALYSIS_TTL_MS)
+        expiresAt: new Date(Date.now() + ANALYSIS_TTL_MS),
+        // Store email and consent for future features (email notifications, etc)
+        email: email?.trim(),
+        hasConsented: hasConsented || false
       }
     })
 
@@ -254,7 +257,10 @@ Viktigt:
 - Referera alltid till källan när du använder siffror (Bolagsverket, webbsök, hemsida, användare).
 - Markera när data saknas eller är osäker.
 - När du använder omsättning vs bruttoresultat måste du ange vilket tal som används i värderingen.
+- Under "officialInsights" ska du lista 3 konkreta datapunkter från Bolagsverket (eller ange tydligt att data saknas).
+- Under "webInsights" ska du lista 3-5 datapunkter från webbsökning/hemsidan och nämna källans natur.
 - Följ JSON-schemat exakt.
+- Hitta inte på antal anställda om källorna inte nämner det.
 
 Frågor du måste besvara i sektionen "keyAnswers":
 ${questionsBlock}
@@ -271,6 +277,8 @@ Returnera som JSON enligt detta format:
   "keyAnswers": [
     { "question": "fråga 1", "answer": "svar" }
   ],
+  "officialInsights": ["punkt från Bolagsverket eller 'Ingen data'"],
+  "webInsights": ["punkt från web search/hemsida"],
   "strengths": ["styrka1", "styrka2"],
   "opportunities": ["möjlighet1"],
   "risks": ["risk1"],
@@ -490,8 +498,22 @@ function createFallbackAnalysis({
     'Förbered finansiellt material (3-års historik + budget) med tydlig EBITDA-brygga och scenarioanalys.'
   ]
 
+  const officialInsights = [
+    revenueValue
+      ? `Bedömd omsättning cirka ${revenueInMsek} MSEK med bruttomarginal på ungefär ${marginPercent} %.`
+      : 'Inga verifierade omsättningssiffror fanns tillgängliga – användaren bör komplettera med underlag.',
+    `EBITDA uppskattas till runt ${ebitdaEstimate.toLocaleString('sv-SE')} kr baserat på historiska SMB-marginaler.`
+  ]
+
+  const webInsights = [
+    'Inga externa källor kunde hämtas automatiskt – resultatet bygger på generella SME-antaganden.',
+    'Komplettera gärna analysen med bolagets webbplats och oberoende nyhetsartiklar.'
+  ]
+
   return {
     summary: `${safeName} visar en stabil SME-profil med möjlighet att förbättra marginaler och värdeskapande genom tydligare kommersiellt fokus.`,
+    officialInsights,
+    webInsights,
     keyAnswers,
     strengths: [
       'Stadig kundbas med återkommande intäkter och låg churn jämfört med typiska svenska privatägda bolag.',
@@ -527,7 +549,6 @@ function createFallbackAnalysis({
     ],
     salePreparationPlan,
     keyMetrics: {
-      estimatedEmployees: revenueValue ? '10-40 (estimat baserat på omsättning)' : undefined,
       industry: 'Svenska privatägda SMB',
       location: 'Sverige',
       foundedYear: undefined
