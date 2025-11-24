@@ -269,9 +269,9 @@ export default function AnalysisResultsView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-2xl flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto mb-4 bg-[#1F3C58] rounded-2xl flex items-center justify-center">
             <Loader2 className="w-8 h-8 text-white animate-spin" />
           </div>
           <p className="text-slate-600 font-medium">Laddar analys...</p>
@@ -282,7 +282,7 @@ export default function AnalysisResultsView() {
 
   if (error || !results) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+      <div className="min-h-[60vh] flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md text-center border border-slate-200">
           <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-2xl flex items-center justify-center">
             <AlertCircle className="w-8 h-8 text-red-600" />
@@ -291,7 +291,7 @@ export default function AnalysisResultsView() {
           <p className="text-slate-600 mb-6">{error || 'Analysen kunde inte hittas eller har förfallit.'}</p>
           <Link
             href={`/${locale}/analysera`}
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 bg-[#1F3C58] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#1F3C58]/90 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Tillbaka till analys
@@ -310,40 +310,32 @@ export default function AnalysisResultsView() {
   const hasFinancialData = results.officialData?.latestRevenue || results.financialHighlights?.revenue
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/50">
-        <div className="max-w-6xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <Link
-              href={`/${locale}/analysera`}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors font-medium"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="hidden sm:inline">Tillbaka</span>
-            </Link>
-
-            <div className="text-center">
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900">
-                {results.companyName}
-              </h1>
-              {results.orgNumber && (
-                <p className="text-xs text-slate-500">Org.nr {results.orgNumber}</p>
-              )}
-            </div>
-
-            {getDataSourceBadge()}
-          </div>
-        </div>
-      </header>
-
+    <div className="bg-gray-50 min-h-[60vh]">
       <main className="max-w-6xl mx-auto px-4 py-8">
+        {/* Back Link */}
+        <Link
+          href={`/${locale}/analysera`}
+          className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors font-medium mb-6"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span>Ny analys</span>
+        </Link>
+
         {/* Hero Card */}
-        <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
+        <div className="bg-[#1F3C58] rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
           <div className="relative">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">Företagsanalys</h2>
-            <p className="text-blue-100 text-lg max-w-2xl">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white">{results.companyName}</h1>
+                {results.orgNumber && (
+                  <p className="text-white/70 text-sm mt-1">Org.nr {results.orgNumber}</p>
+                )}
+              </div>
+              {getDataSourceBadge()}
+            </div>
+            <h2 className="text-xl font-semibold mb-3 text-white/90">Företagsanalys</h2>
+            <p className="text-white/80 text-lg max-w-2xl">
               {results.summary}
             </p>
           </div>
@@ -507,7 +499,7 @@ export default function AnalysisResultsView() {
               <InsightCard
                 title="Webbinsikter"
                 icon={<Globe className="w-5 h-5" />}
-                iconBg="bg-blue-600"
+                iconBg="bg-[#1F3C58]"
                 items={results.webInsights}
               />
             )}
@@ -519,7 +511,7 @@ export default function AnalysisResultsView() {
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-[#1F3C58] rounded-xl flex items-center justify-center">
                   <Globe className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -532,7 +524,7 @@ export default function AnalysisResultsView() {
                   href={results.websiteInsights.canonicalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  className="inline-flex items-center gap-1.5 text-sm text-[#1F3C58] hover:text-[#1F3C58]/80 font-medium"
                 >
                   Besök <ExternalLink className="w-4 h-4" />
                 </a>
@@ -546,7 +538,7 @@ export default function AnalysisResultsView() {
             {results.websiteInsights.keyHighlights && results.websiteInsights.keyHighlights.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {results.websiteInsights.keyHighlights.slice(0, 6).map((highlight, idx) => (
-                  <span key={idx} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium">
+                  <span key={idx} className="px-3 py-1 bg-[#1F3C58]/10 text-[#1F3C58] rounded-full text-sm font-medium">
                     {highlight}
                   </span>
                 ))}
@@ -586,7 +578,7 @@ export default function AnalysisResultsView() {
                     className={`
                       flex items-center gap-2 px-5 py-4 font-medium whitespace-nowrap transition-all border-b-2 -mb-px
                       ${isActive 
-                        ? 'text-blue-600 border-blue-600 bg-blue-50/50' 
+                        ? 'text-[#1F3C58] border-[#1F3C58] bg-[#1F3C58]/5' 
                         : 'text-slate-600 border-transparent hover:text-slate-900 hover:bg-slate-50'
                       }
                     `}
@@ -607,7 +599,7 @@ export default function AnalysisResultsView() {
                 {results.marketPosition && (
                   <section>
                     <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
-                      <Target className="w-5 h-5 text-blue-600" />
+                      <Target className="w-5 h-5 text-[#1F3C58]" />
                       Marknadsposition
                     </h3>
                     <p className="text-slate-700 leading-relaxed">{results.marketPosition}</p>
@@ -622,7 +614,7 @@ export default function AnalysisResultsView() {
                       className="w-full flex items-center justify-between mb-3"
                     >
                       <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <Users className="w-5 h-5 text-blue-600" />
+                        <Users className="w-5 h-5 text-[#1F3C58]" />
                         Identifierade konkurrenter
                       </h3>
                       {expandedSections.competitors ? (
@@ -744,18 +736,18 @@ export default function AnalysisResultsView() {
                 )}
 
                 {/* CTA */}
-                <div className="mt-12 p-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl text-center text-white">
-                  <h3 className="text-2xl font-bold mb-3">Vill du få en komplett företagsvärdering?</h3>
-                  <p className="text-blue-100 mb-6 max-w-xl mx-auto">
+                <div className="mt-12 p-8 bg-[#1F3C58] rounded-2xl text-center text-white">
+                  <h3 className="text-2xl font-bold mb-3 text-white">Vill du få en komplett företagsvärdering?</h3>
+                  <p className="text-white/80 mb-6 max-w-xl mx-auto">
                     Få en professionell värdering baserad på finansiella nyckeltal, branschanalys och AI-driven marknadsdata.
                   </p>
                   <div className="mb-6">
-                    <span className="text-4xl font-bold">5 000 kr</span>
-                    <span className="text-blue-200 ml-2">engångskostnad</span>
+                    <span className="text-4xl font-bold text-white">5 000 kr</span>
+                    <span className="text-white/70 ml-2">engångskostnad</span>
                   </div>
                   <Link
                     href={`/${locale}/vardering`}
-                    className="inline-flex items-center gap-2 bg-white text-blue-700 px-8 py-4 rounded-xl font-bold hover:bg-blue-50 transition-colors"
+                    className="inline-flex items-center gap-2 bg-white text-[#1F3C58] px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-colors"
                   >
                     Beställ komplett värdering
                     <ChevronRight className="w-5 h-5" />
@@ -793,9 +785,9 @@ export default function AnalysisResultsView() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors group"
                   >
-                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
+                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#1F3C58]" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
+                      <p className="text-sm font-medium text-slate-900 truncate group-hover:text-[#1F3C58]">
                         {source.title}
                       </p>
                       <p className="text-xs text-slate-500 truncate">{source.url}</p>
@@ -804,7 +796,7 @@ export default function AnalysisResultsView() {
                       <span className={`
                         text-xs px-2 py-1 rounded-full font-medium
                         ${source.type === 'official' ? 'bg-emerald-100 text-emerald-700' :
-                          source.type === 'company' ? 'bg-indigo-100 text-indigo-700' :
+                          source.type === 'company' ? 'bg-[#1F3C58]/10 text-[#1F3C58]' :
                           'bg-slate-100 text-slate-600'}
                       `}>
                         {source.type === 'official' ? 'Officiell' :
@@ -910,12 +902,12 @@ function StatCard({ label, count, color, icon, onClick }: {
 }) {
   const colorClasses = {
     emerald: 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100',
-    blue: 'bg-blue-50 border-blue-200 hover:bg-blue-100',
+    blue: 'bg-[#1F3C58]/5 border-[#1F3C58]/20 hover:bg-[#1F3C58]/10',
     amber: 'bg-amber-50 border-amber-200 hover:bg-amber-100'
   }
   const iconColorClasses = {
     emerald: 'text-emerald-600',
-    blue: 'text-blue-600',
+    blue: 'text-[#1F3C58]',
     amber: 'text-amber-600'
   }
 
@@ -939,15 +931,15 @@ function ContentList({ title, items, icon, color }: {
 }) {
   const colorClasses = {
     emerald: 'from-emerald-50 to-teal-50 border-emerald-200/50',
-    blue: 'from-blue-50 to-cyan-50 border-blue-200/50',
+    blue: 'from-[#1F3C58]/5 to-[#1F3C58]/10 border-[#1F3C58]/20',
     amber: 'from-amber-50 to-orange-50 border-amber-200/50',
-    indigo: 'from-indigo-50 to-purple-50 border-indigo-200/50'
+    indigo: 'from-[#1F3C58]/5 to-[#1F3C58]/10 border-[#1F3C58]/20'
   }
   const iconColorClasses = {
     emerald: 'text-emerald-600',
-    blue: 'text-blue-600',
+    blue: 'text-[#1F3C58]',
     amber: 'text-amber-600',
-    indigo: 'text-indigo-600'
+    indigo: 'text-[#1F3C58]'
   }
 
   return (
