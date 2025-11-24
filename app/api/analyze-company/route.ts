@@ -70,18 +70,16 @@ export async function POST(request: Request) {
 
     console.log('[ANALYZE] Starting company analysis for:', companyName, normalizedDomain, normalizedOrgNumber)
 
-    // Track data source status
+    // Track data source status - only using GPT web search and website now
     const dataSourceStatus: DataSourceStatus = {
-      bolagsverket: 'no_api_key',
+      bolagsverket: 'no_data',
       allabolag: 'no_data',
       webSearch: 'no_data',
       website: normalizedDomain ? 'no_data' : 'no_url'
     }
 
-    // Fetch data from all sources in parallel
-    const [bolagsverketResult, allabolagResult, webSearchResult, websiteResult] = await Promise.allSettled([
-      normalizedOrgNumber ? fetchBolagsverketCompanyData(normalizedOrgNumber) : Promise.resolve(null),
-      normalizedOrgNumber ? scrapeAllabolag(normalizedOrgNumber) : Promise.resolve(null),
+    // Fetch data from GPT web search and website only
+    const [webSearchResult, websiteResult] = await Promise.allSettled([
       searchCompanyWithWebSearch({
         companyName,
         orgNumber: normalizedOrgNumber,
@@ -90,39 +88,11 @@ export async function POST(request: Request) {
       normalizedDomain ? fetchWebsiteSnapshot(normalizedDomain, companyName) : Promise.resolve(null)
     ])
 
-    // Process Bolagsverket data
-    let bolagsverketData = null
-    if (bolagsverketResult.status === 'fulfilled' && bolagsverketResult.value) {
-      bolagsverketData = bolagsverketResult.value
-      dataSourceStatus.bolagsverket = 'success'
-      console.log('[ANALYZE] ✓ Bolagsverket data retrieved')
-    } else if (bolagsverketResult.status === 'rejected') {
-      dataSourceStatus.bolagsverket = 'failed'
-      console.error('[ANALYZE] Bolagsverket fetch failed:', bolagsverketResult.reason)
-    } else {
-      dataSourceStatus.bolagsverket = normalizedOrgNumber ? 'no_data' : 'no_api_key'
-    }
-
-    // Process Allabolag data
-    let allabolagData = null
-    if (allabolagResult.status === 'fulfilled' && allabolagResult.value) {
-      allabolagData = allabolagResult.value
-      dataSourceStatus.allabolag = 'success'
-      console.log('[ANALYZE] ✓ Allabolag data retrieved:', {
-        revenue: allabolagData.financials?.revenue,
-        profit: allabolagData.financials?.profit,
-        employees: allabolagData.financials?.employees
-      })
-    } else if (allabolagResult.status === 'rejected') {
-      dataSourceStatus.allabolag = 'failed'
-      console.error('[ANALYZE] Allabolag fetch failed:', allabolagResult.reason)
-    }
-
     // Process web search data
     const webSearchData = webSearchResult.status === 'fulfilled' ? webSearchResult.value : null
     if (webSearchData) {
       dataSourceStatus.webSearch = 'success'
-      console.log('[ANALYZE] ✓ Web search data retrieved')
+      console.log('[ANALYZE] Web search data retrieved')
     } else if (webSearchResult.status === 'rejected') {
       dataSourceStatus.webSearch = 'failed'
       console.error('[ANALYZE] Web search failed:', webSearchResult.reason)
@@ -132,22 +102,18 @@ export async function POST(request: Request) {
     const websiteSnapshot = websiteResult.status === 'fulfilled' ? websiteResult.value : null
     if (websiteSnapshot) {
       dataSourceStatus.website = 'success'
-      console.log('[ANALYZE] ✓ Website snapshot retrieved')
+      console.log('[ANALYZE] Website snapshot retrieved')
     } else if (websiteResult.status === 'rejected') {
       dataSourceStatus.website = 'failed'
       console.error('[ANALYZE] Website snapshot failed:', websiteResult.reason)
     }
 
-    // Combine official data from all sources
-    const officialData = buildCombinedOfficialData(bolagsverketData, allabolagData, dataSourceStatus)
-    
-    // Use official data first, then fall back to user-provided values
-    const revenueValue = officialData?.latestRevenue ?? parseSekValue(revenue)
-    const grossProfitValue = officialData?.latestGrossProfit ?? parseSekValue(grossProfit)
+    // Use user-provided values
+    const revenueValue = parseSekValue(revenue)
+    const grossProfitValue = parseSekValue(grossProfit)
 
     // Determine if we have meaningful data
-    const hasOfficialData = dataSourceStatus.bolagsverket === 'success' || dataSourceStatus.allabolag === 'success'
-    const hasAnyExternalData = hasOfficialData || dataSourceStatus.webSearch === 'success' || dataSourceStatus.website === 'success'
+    const hasAnyExternalData = dataSourceStatus.webSearch === 'success' || dataSourceStatus.website === 'success'
 
     const analysisPrompt = buildAnalysisPrompt({
       companyName,
@@ -157,17 +123,14 @@ export async function POST(request: Request) {
       grossProfitValue,
       webSearchData,
       websiteSnapshot,
-      officialData,
       dataSourceStatus
-    })
+      })
 
     let finalAnalysis: any
     let usedFallback = false
 
     try {
       console.log('[ANALYZE] Starting AI analysis for:', companyName, {
-        hasBolagsverket: dataSourceStatus.bolagsverket === 'success',
-        hasAllabolag: dataSourceStatus.allabolag === 'success',
         hasWebSearch: dataSourceStatus.webSearch === 'success',
         hasWebsite: dataSourceStatus.website === 'success'
       })
@@ -177,13 +140,13 @@ export async function POST(request: Request) {
         messages: [
           {
             role: 'system',
-            content: `Du är världens bästa svenska business-coach och företagsanalytiker. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.
+            content: `Du ar en erfaren svensk foretagsanalytiker. Analysera foretag baserat pa webbsokning och hemsidedata. Leverera alltid strukturerad JSON pa svenska.
 
-VIKTIGT OM DATAKVALITET:
-- Om officiell data finns (Bolagsverket/Allabolag), använd de faktiska siffrorna och markera dem tydligt
-- Om data saknas, ange detta explicit istället för att gissa
-- Skilj ALLTID på verifierad data vs uppskattningar
-- Hitta ALDRIG på siffror - ange "okänt" eller "uppgift saknas" om du inte har data`
+VIKTIGT:
+- Basera analysen pa tillganglig webbdata och hemsideinformation
+- Var tydlig med vad som ar fakta vs uppskattningar
+- Fokusera pa kvalitativa insikter: styrkor, mojligheter, risker, rekommendationer
+- Skriv koncist och handlingsinriktat`
           },
           {
             role: 'user',
@@ -208,7 +171,6 @@ VIKTIGT OM DATAKVALITET:
       usedFallback = true
       finalAnalysis = createFallbackAnalysis({
         companyName,
-        officialData,
         dataSourceStatus,
         revenue: revenueValue?.toString() || revenue,
         grossProfit: grossProfitValue?.toString() || grossProfit
@@ -219,7 +181,6 @@ VIKTIGT OM DATAKVALITET:
       usedFallback,
       webSearchData,
       websiteSnapshot,
-      officialData,
       dataSourceStatus
     })
 
@@ -230,17 +191,14 @@ VIKTIGT OM DATAKVALITET:
       revenue: revenueValue ? revenueValue.toString() : revenue,
       grossProfit: grossProfitValue ? grossProfitValue.toString() : grossProfit,
       ...finalAnalysis,
-      officialData: officialData || undefined,
       websiteInsights: websiteSnapshot || undefined,
       sources,
       dataSourceStatus,
       meta: {
         source: usedFallback ? 'fallback' : 'ai',
-        hasBolagsverket: dataSourceStatus.bolagsverket === 'success',
-        hasAllabolag: dataSourceStatus.allabolag === 'success',
         hasWebSearch: dataSourceStatus.webSearch === 'success',
         hasWebsite: dataSourceStatus.website === 'success',
-        dataQuality: hasOfficialData ? 'verified' : hasAnyExternalData ? 'partial' : 'limited'
+        dataQuality: hasAnyExternalData ? 'partial' : 'limited'
       }
     }
 
@@ -360,7 +318,6 @@ function buildAnalysisPrompt({
   grossProfitValue,
   webSearchData,
   websiteSnapshot,
-  officialData,
   dataSourceStatus
 }: {
   companyName: string
@@ -370,105 +327,63 @@ function buildAnalysisPrompt({
   grossProfitValue?: number | null
   webSearchData: any
   websiteSnapshot: Awaited<ReturnType<typeof fetchWebsiteSnapshot>> | null
-  officialData: OfficialDataSummary | null
   dataSourceStatus: DataSourceStatus
 }) {
-  const hasOfficialData = dataSourceStatus.bolagsverket === 'success' || dataSourceStatus.allabolag === 'success'
-
-  const officialBlock = officialData
-    ? `VERIFIERAD DATA (${officialData.source === 'combined' ? 'Bolagsverket + Allabolag' : officialData.source === 'bolagsverket' ? 'Bolagsverket' : 'Allabolag'}):
-${JSON.stringify(officialData, null, 2)}`
-    : `INGEN VERIFIERAD FÖRETAGSDATA TILLGÄNGLIG
-Status:
-- Bolagsverket: ${dataSourceStatus.bolagsverket}
-- Allabolag: ${dataSourceStatus.allabolag}`
-
   const webBlock = webSearchData
-    ? `WEBB-SÖK RESULTAT:\n${JSON.stringify(webSearchData, null, 2)}`
-    : 'Webbsökningen gav ingen träff eller misslyckades.'
+    ? `WEBBSOKNING:\n${JSON.stringify(webSearchData, null, 2)}`
+    : 'Webbsokningen gav ingen traff.'
   
   const websiteBlock = websiteSnapshot?.summary
     ? `HEMSIDA (${websiteSnapshot.rootDomain}):\n${websiteSnapshot.summary}\n\nNyckelteman: ${websiteSnapshot.keyHighlights?.join(', ') || 'Inga'}`
-    : 'Ingen hemsidedata kunde hämtas.'
+    : 'Ingen hemsidedata kunde hamtas.'
   
-  const manualFigures = `
-ANVÄNDARENS INMATADE SIFFROR:
-Omsättning (senaste år): ${formatManualFigure(revenueValue)}
-Bruttoresultat (senaste år): ${formatManualFigure(grossProfitValue)}
-`
+  const manualFigures = revenueValue || grossProfitValue ? `
+ANVANDARDATA:
+Omsattning: ${formatManualFigure(revenueValue)}
+Bruttoresultat: ${formatManualFigure(grossProfitValue)}
+` : ''
 
   const questionsBlock = KEY_QUESTIONS.map((question, index) => `${index + 1}. ${question}`).join('\n')
 
-  const dataQualityNote = hasOfficialData
-    ? 'DU HAR TILLGÅNG TILL VERIFIERADE FINANSIELLA SIFFROR - använd dessa i din analys.'
-    : 'OBS: Ingen verifierad finansiell data finns tillgänglig. Basera analysen på webbsök och hemsida. Var tydlig med att siffror är uppskattningar.'
+  return `Analysera detta foretag baserat pa webbsokning och hemsidedata.
+Fokusera pa kvalitativa insikter - styrkor, mojligheter, risker och rekommendationer.
 
-  return `Du agerar som världens främsta svenska business-coach och företagsanalytiker.
-Du kombinerar strategisk rådgivning, operativ erfarenhet och investment banker-analys.
-Leverera en kvalitativ nulägesanalys – ingen värdering ska tas fram.
-
-${dataQualityNote}
-
-Företag: ${companyName}
-Organisationsnummer: ${orgNumber || 'okänt'}
-Domän: ${domain || 'okänd'}
-
-=== ${officialBlock} ===
+Foretag: ${companyName}
+Doman: ${domain || 'okand'}
+${orgNumber ? `Organisationsnummer: ${orgNumber}` : ''}
 
 === ${websiteBlock} ===
 
 === ${webBlock} ===
-
 ${manualFigures}
 
-DATAKVALITETSREGLER:
-- Om du har verifierad data (Bolagsverket/Allabolag), använd de exakta siffrorna
-- Markera ALLTID källan för varje siffra du nämner
-- Om data saknas, skriv "Uppgift saknas" istället för att gissa
-- Hitta ALDRIG på siffror som anställda, omsättning etc om de inte finns i källorna
-- Under "officialInsights" ska du lista faktiska datapunkter från källorna (eller tydligt ange att data saknas)
-- Under "webInsights" ska du lista datapunkter från webbsökning/hemsidan
-
-Frågor du måste besvara i sektionen "keyAnswers":
+Fragor att besvara i "keyAnswers":
 ${questionsBlock}
 
 Krav:
-- "keyAnswers" ska innehålla exakt ${KEY_QUESTIONS.length} objekt med fälten "question" och "answer"
-- "salePreparationPlan" ska innehålla exakt 10 konkreta och prioriterade punkter
-- "recommendations" ska innehålla minst 5 strategiska åtgärder
-- Alla texter ska vara på svenska, professionella och koncisa
-- Ingen värdering får nämnas
+- "keyAnswers" ska innehalla exakt ${KEY_QUESTIONS.length} objekt
+- "salePreparationPlan" ska innehalla exakt 10 punkter
+- "recommendations" ska innehalla minst 5 atgarder
+- Alla texter pa svenska
+- Ingen vardering
 
-Returnera som JSON enligt detta format:
+JSON-format:
 {
-  "summary": "sammanfattning baserad på faktisk data",
-  "keyAnswers": [
-    { "question": "fråga", "answer": "svar med källhänvisning" }
-  ],
-  "officialInsights": ["faktisk datapunkt från Bolagsverket/Allabolag eller 'Data saknas'"],
-  "webInsights": ["datapunkt från webbsök/hemsida"],
-  "strengths": ["styrka baserad på data"],
-  "opportunities": ["möjlighet"],
+  "summary": "sammanfattning",
+  "keyAnswers": [{ "question": "fraga", "answer": "svar" }],
+  "webInsights": ["insikt fran webb/hemsida"],
+  "strengths": ["styrka"],
+  "opportunities": ["mojlighet"],
   "risks": ["risk"],
-  "marketPosition": "beskrivning baserad på tillgänglig data",
-  "competitors": ["konkurrent om hittad i källor"],
-  "recommendations": ["åtgärd"],
+  "marketPosition": "beskrivning",
+  "competitors": ["konkurrent"],
+  "recommendations": ["atgard"],
   "salePreparationPlan": ["punkt1", "...punkt10"],
   "keyMetrics": {
-    "industry": "bransch om känd från källor",
-    "estimatedEmployees": "antal från källor eller 'okänt'",
-    "location": "plats från källor",
-    "foundedYear": "år från källor eller 'okänt'"
-  },
-  "financialHighlights": {
-    "revenue": ${revenueValue || 'null'},
-    "revenueFormatted": "${revenueValue ? formatSekValueDisplay(revenueValue) : 'Uppgift saknas'}",
-    "profit": ${officialData?.latestProfit || 'null'},
-    "profitFormatted": "${officialData?.latestProfit ? formatSekValueDisplay(officialData.latestProfit) : 'Uppgift saknas'}",
-    "employees": ${officialData?.employees || 'null'},
-    "revenueGrowth": ${officialData?.revenueGrowth ? `"${officialData.revenueGrowth.toFixed(1)}%"` : 'null'},
-    "profitMargin": ${officialData?.profitMargin ? `"${officialData.profitMargin.toFixed(1)}%"` : 'null'},
-    "dataSource": "${officialData?.source || 'none'}"
+    "industry": "bransch",
+    "estimatedEmployees": "antal eller okant",
+    "location": "plats",
+    "foundedYear": "ar eller okant"
   }
 }`
 }
@@ -486,13 +401,11 @@ function buildSources({
   usedFallback,
   webSearchData,
   websiteSnapshot,
-  officialData,
   dataSourceStatus
 }: {
   usedFallback: boolean
   webSearchData: any
   websiteSnapshot: Awaited<ReturnType<typeof fetchWebsiteSnapshot>> | null
-  officialData: OfficialDataSummary | null
   dataSourceStatus: DataSourceStatus
 }) {
   const sources: Array<{ title: string; url: string; type: string }> = []
@@ -501,18 +414,6 @@ function buildSources({
     if (!url) return
     if (sources.some((source) => source.url === url)) return
     sources.push({ title, url, type })
-  }
-
-  // Add official data sources
-  if (dataSourceStatus.bolagsverket === 'success') {
-    addSource('Bolagsverket', 'https://bolagsverket.se', 'official')
-  }
-  
-  if (dataSourceStatus.allabolag === 'success' && officialData?.orgNumber) {
-    const formattedOrg = officialData.orgNumber.length === 10
-      ? `${officialData.orgNumber.slice(0, 6)}-${officialData.orgNumber.slice(6)}`
-      : officialData.orgNumber
-    addSource('Allabolag.se', `https://www.allabolag.se/what/${formattedOrg}`, 'official')
   }
 
   // Add web search sources
@@ -532,14 +433,14 @@ function buildSources({
 
   // Add website source
   if (websiteSnapshot) {
-    addSource('Företagets webbplats', websiteSnapshot.canonicalUrl, 'company')
+    addSource('Foretagets webbplats', websiteSnapshot.canonicalUrl, 'company')
   }
 
-  // If using fallback and no other sources, add that
+  // If using fallback and no other sources
   if (usedFallback && sources.length === 0) {
     sources.push({
-      title: 'Bolaxo heuristisk analys',
-      url: 'https://bolaxo-production.up.railway.app/sv/analysera',
+      title: 'Bolaxo analys',
+      url: 'https://bolaxo.com/sv/analysera',
       type: 'internal'
     })
   }
@@ -584,137 +485,89 @@ function toNumber(value: unknown): number | undefined {
 
 function createFallbackAnalysis({
   companyName,
-  officialData,
   dataSourceStatus,
   revenue,
   grossProfit
 }: {
   companyName: string
-  officialData: OfficialDataSummary | null
   dataSourceStatus: DataSourceStatus
   revenue?: string
   grossProfit?: string
 }) {
   const safeName = companyName?.trim() || 'Bolaget'
-  const hasOfficialData = officialData && officialData.source !== 'none'
-  
-  // Use actual data if available, otherwise mark as unknown
-  const revenueValue = officialData?.latestRevenue ?? parseSekValue(revenue)
-  const profitValue = officialData?.latestProfit
-  const employees = officialData?.employees
-  const revenueGrowth = officialData?.revenueGrowth
+  const revenueValue = parseSekValue(revenue)
 
   const keyAnswers = KEY_QUESTIONS.map((question, index) => {
     const answerMap: Record<number, string> = {
-      0: hasOfficialData && revenueValue
-        ? `Enligt ${officialData.source === 'allabolag' ? 'Allabolag' : 'Bolagsverket'} har bolaget en omsättning på ${formatSekValueDisplay(revenueValue)}${profitValue ? ` och ett resultat på ${formatSekValueDisplay(profitValue)}` : ''}.`
-        : 'Ingen verifierad finansiell data kunde hämtas. För en komplett analys rekommenderar vi att ange organisationsnummer eller ladda upp bokslut.',
-      1: 'Utan tillgång till extern marknadsdata är det svårt att bedöma konkurrensposition. Webbsökningen gav begränsade resultat.',
-      2: 'Generella risker för svenska SMB inkluderar nyckelpersonberoende, kundkoncentration och operativ komplexitet.',
-      3: 'Typiska möjligheter inkluderar digitalisering, paketering av erbjudandet och systematiserad försäljning.',
-      4: 'Prioritera dokumentation av processer, tydlig finansiell rapportering och formaliserade kundavtal.'
+      0: 'Analysen baseras pa webbsokning och hemsidedata.',
+      1: 'Konkurrensposition bedoms baserat pa tillganglig webbinformation.',
+      2: 'Generella risker for svenska SMB inkluderar nyckelpersonberoende och kundkoncentration.',
+      3: 'Mojligheter inkluderar digitalisering och systematiserad forsaljning.',
+      4: 'Prioritera dokumentation av processer och formaliserade kundavtal.'
     }
     return {
       question,
-      answer: answerMap[index] || 'Otillräcklig data för att besvara frågan.'
+      answer: answerMap[index] || 'Otillracklig data for att besvara fragan.'
     }
   })
 
   const salePreparationPlan = [
-    'Kartlägg alla kundkontrakt, marginaler och bindningstider för transparens i due diligence.',
-    'Produktifiera erbjudandet i tydliga paket med priser och KPI:er.',
-    'Implementera månatlig ledningsrapport med omsättning, bruttomarginal och pipeline.',
-    'Säkra överlämningsplan för nyckelpersoner med dokumenterade processer.',
-    'Genomför prishöjningsanalys på toppkunder och testa höjningar kopplat till ökat kundvärde.',
-    'Automatisera leadshantering (CRM) och bygg aktuell pipeline-översikt.',
-    'Optimera rörelsekapitalet genom bättre betalningsvillkor.',
-    'Skapa referenscase med kvantifierade kundresultat.',
-    'Identifiera strategiska partners för co-selling.',
-    'Förbered finansiellt material med tydlig EBITDA-brygga.'
+    'Kartlagg alla kundkontrakt och marginaler.',
+    'Produktifiera erbjudandet i tydliga paket.',
+    'Implementera manatlig ledningsrapport.',
+    'Sakra overlamningsplan for nyckelpersoner.',
+    'Genomfor prishojningsanalys pa toppkunder.',
+    'Automatisera leadshantering med CRM.',
+    'Optimera rorelsekapitalet.',
+    'Skapa referenscase med kundresultat.',
+    'Identifiera strategiska partners.',
+    'Forbered finansiellt material.'
   ]
-
-  const dataQualityNote = hasOfficialData
-    ? `Analysen baseras på verifierad data från ${officialData.source === 'allabolag' ? 'Allabolag' : officialData.source === 'bolagsverket' ? 'Bolagsverket' : 'flera officiella källor'}.`
-    : 'OBS: Ingen verifierad finansiell data kunde hämtas. Analysen är generell och baserad på typiska svenska SMB.'
-
-  const officialInsights = hasOfficialData
-    ? [
-        revenueValue ? `Omsättning: ${formatSekValueDisplay(revenueValue)} (${officialData.source})` : 'Omsättning: Uppgift saknas',
-        profitValue ? `Resultat: ${formatSekValueDisplay(profitValue)}` : 'Resultat: Uppgift saknas',
-        employees ? `Antal anställda: ${employees}` : 'Antal anställda: Uppgift saknas'
-      ]
-    : [
-        'Ingen verifierad företagsdata tillgänglig.',
-        'För bättre analys, ange organisationsnummer.',
-        'Alternativt kan du ladda upp senaste bokslut.'
-      ]
 
   const webInsights = [
     dataSourceStatus.webSearch === 'success'
-      ? 'Webbsökning genomförd – se resultat ovan.'
-      : 'Webbsökningen gav begränsade resultat.',
+      ? 'Webbsokning genomford.'
+      : 'Webbsokningen gav begransade resultat.',
     dataSourceStatus.website === 'success'
-      ? 'Hemsida analyserad – se insikter ovan.'
+      ? 'Hemsida analyserad.'
       : 'Ingen hemsida kunde analyseras.'
   ]
 
   return {
-    summary: `${dataQualityNote} ${safeName} analyseras baserat på tillgänglig data.`,
-    officialInsights,
+    summary: `${safeName} analyseras baserat pa tillganglig webbdata.`,
     webInsights,
     keyAnswers,
-    strengths: hasOfficialData
-      ? [
-          revenueValue && revenueValue > 10000000 ? 'Etablerad verksamhet med betydande omsättning.' : 'Verksamt företag.',
-          employees && employees > 5 ? 'Organisation med flera anställda.' : 'Smidig organisationsstruktur.',
-          'Svensk registrering och bolagsform ger stabilitet.'
-        ]
-      : [
-          'Analysen begränsas av avsaknad av verifierad data.',
-          'Komplettera med organisationsnummer för bättre insikter.',
-          'Svenska bolag har generellt god juridisk struktur.'
-        ],
+    strengths: [
+      'Svenskt bolag med etablerad verksamhet.',
+      'Digital narvaro via hemsida.',
+      'Potential for systematisering.'
+    ],
     opportunities: [
-      'Paketera erbjudandet för tydligare värdeproposition.',
-      'Systematisera försäljning och marknadsföring.',
-      'Dokumentera processer för bättre skalbarhet.',
+      'Paketera erbjudandet for tydligare vardeproposition.',
+      'Systematisera forsaljning och marknadsforing.',
+      'Dokumentera processer for battre skalbarhet.',
       'Bygg starkare digitalt fotavtryck.'
     ],
     risks: [
-      hasOfficialData ? 'Se finansiell data för specifika riskindikatorer.' : 'Utan finansiell data är riskbedömning generell.',
-      'Nyckelpersonberoende är vanligt i svenska SMB.',
-      'Kundkoncentration kan påverka stabilitet.',
-      'Operativ komplexitet kan hämma tillväxt.'
+      'Nyckelpersonberoende ar vanligt i svenska SMB.',
+      'Kundkoncentration kan paverka stabilitet.',
+      'Operativ komplexitet kan hamma tillvaxt.'
     ],
-    marketPosition: hasOfficialData
-      ? `${safeName} är ett registrerat svenskt bolag${employees ? ` med ${employees} anställda` : ''}${revenueValue ? ` och omsättning på ${formatSekValueDisplay(revenueValue)}` : ''}.`
-      : `${safeName} är ett svenskt bolag. För detaljerad marknadspositionering krävs tillgång till finansiell data.`,
-    competitors: [
-      'Komplettera med branschkod eller beskrivning för konkurrentanalys.'
-    ],
+    marketPosition: `${safeName} ar ett svenskt bolag med digital narvaro.`,
+    competitors: [],
     recommendations: [
-      'Säkerställ att organisationsnummer är korrekt för att möjliggöra datahämtning.',
-      'Dokumentera alla affärsprocesser och kundrelationer.',
+      'Dokumentera alla affarsprocesser och kundrelationer.',
       'Bygg systematisk finansiell rapportering.',
-      'Skapa tydlig prissättningsstrategi.',
-      'Investera i CRM och säljprocesser.'
+      'Skapa tydlig prissattningsstrategi.',
+      'Investera i CRM och saljprocesser.',
+      'Starkt vardeproposition.'
     ],
     salePreparationPlan,
     keyMetrics: {
-      industry: officialData?.industryCode || 'Okänd',
-      estimatedEmployees: employees?.toString() || 'Okänt',
-      location: officialData?.address ? extractCity(officialData.address) : 'Sverige',
-      foundedYear: extractYear(officialData?.registrationDate) || 'Okänt'
-    },
-    financialHighlights: {
-      revenue: revenueValue || null,
-      revenueFormatted: revenueValue ? formatSekValueDisplay(revenueValue) : 'Uppgift saknas',
-      profit: profitValue || null,
-      profitFormatted: profitValue ? formatSekValueDisplay(profitValue) : 'Uppgift saknas',
-      employees: employees || null,
-      revenueGrowth: revenueGrowth ? `${revenueGrowth.toFixed(1)}%` : null,
-      profitMargin: officialData?.profitMargin ? `${officialData.profitMargin.toFixed(1)}%` : null,
-      dataSource: officialData?.source || 'none'
+      industry: 'Se webbanalys',
+      estimatedEmployees: 'Okant',
+      location: 'Sverige',
+      foundedYear: 'Okant'
     }
   }
 }
