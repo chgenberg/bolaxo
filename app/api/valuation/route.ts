@@ -2,4 +2,6 @@ export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 export const revalidate = 0
 
-export { GET, POST } from './handler'
+import { GET, POST } from './handler'
+
+export { GET, POST }
