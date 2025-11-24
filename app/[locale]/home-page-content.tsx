@@ -4,13 +4,34 @@ import { useState, useEffect, useMemo } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Star, ArrowRight, TrendingUp, ChevronDown, X, CheckCircle, Lightbulb, Zap, Lock, MessageCircle } from 'lucide-react'
-import ImprovedValuationWizard from '@/components/ImprovedValuationWizard'
+import { 
+  Star, 
+  ArrowRight, 
+  TrendingUp, 
+  ChevronDown, 
+  X, 
+  CheckCircle, 
+  Lightbulb, 
+  Zap, 
+  Lock, 
+  MessageCircle,
+  Shield,
+  Target,
+  BarChart3,
+  Globe,
+  Search,
+  FileText,
+  Users,
+  AlertTriangle,
+  Info
+} from 'lucide-react'
+import AnalysisModal from '@/components/AnalysisModal'
 
 export default function HomePageContent() {
-  const [isValuationModalOpen, setIsValuationModalOpen] = useState(false)
+  const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false)
+  const [isHowItWorksOpen, setIsHowItWorksOpen] = useState(false)
+  const [howItWorksTab, setHowItWorksTab] = useState('overview')
   const [activeReview, setActiveReview] = useState(0)
-  const [selectedStep, setSelectedStep] = useState<number | null>(null)
   const t = useTranslations('home')
   const locale = useLocale()
 
@@ -22,96 +43,104 @@ export default function HomePageContent() {
       setActiveReview((prev) => (prev + 1) % reviews.length)
     }, 4000)
     return () => clearInterval(interval)
-  }, [])
+  }, [reviews.length])
+
+  const analysisFeatures = [
+    { icon: BarChart3, text: 'Marknadsposition & konkurrenter' },
+    { icon: Shield, text: 'Styrkor & svagheter' },
+    { icon: Target, text: 'Konkreta rekommendationer' },
+    { icon: TrendingUp, text: 'Tillväxtmöjligheter' }
+  ]
 
   return (
     <main className="bg-cream">
-      {/* HERO SECTION - Fullscreen */}
-      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-24 md:pt-20 lg:pt-16 pb-8 md:pb-0">
-        {/* Background Image - Fullscreen with no overlay */}
-        <div className="absolute left-0 right-0 top-24 md:top-20 lg:top-16 bottom-0 z-0">
+      {/* HERO SECTION - Analysis Focus */}
+      <section className="relative min-h-screen flex items-center justify-center pt-20 pb-8">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
           <Image
-            src="/Home/hero_winter.webp"
+            src="/hero_kopare.png"
             alt="Hero background"
             fill
-            className="object-cover object-top hidden md:block"
-            style={{ objectPosition: 'center top' }}
-            sizes="(min-width: 768px) 100vw"
+            className="object-cover"
             priority
           />
-          <Image
-            src="/Home/hero_winter_mobile.webp"
-            alt="Hero background mobile"
-            fill
-            className="object-cover object-top md:hidden"
-            style={{ objectPosition: 'center top' }}
-            sizes="100vw"
-            priority
-          />
+          {/* Subtle dark overlay for readability */}
+          <div className="absolute inset-0 bg-black/20" />
         </div>
 
-        {/* Minimalist Content Box */}
-        <div className="relative w-full flex items-start justify-center md:justify-start px-4 sm:px-6 md:px-12 lg:px-24 z-10 -mt-48 sm:-mt-32 md:pt-28 lg:pt-24">
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
-            {/* Pulsing shadow effect */}
-            <div className="absolute -inset-2 sm:-inset-4 bg-black/30 sm:bg-black/50 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl animate-pulse-shadow" />
+        {/* Centered Content Box */}
+        <div className="relative z-10 w-full max-w-md mx-4 sm:mx-auto">
+          {/* Pulsating black shadow effect */}
+          <div className="absolute -inset-3 sm:-inset-4 bg-black/40 rounded-2xl sm:rounded-3xl blur-2xl animate-pulse-shadow-dark" />
+          
+          {/* Main content box */}
+          <div className="relative bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl">
+            {/* Free badge */}
+            <div className="flex justify-center mb-4">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 text-xs sm:text-sm font-semibold rounded-full">
+                <CheckCircle className="w-3.5 h-3.5" />
+                100% GRATIS
+              </span>
+            </div>
             
-            {/* Main content box */}
-            <div className="relative bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 lg:p-12 shadow-2xl">
-              <div className="flex justify-center mb-2 sm:mb-3 md:mb-4">
-                <span className="inline-block px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 bg-green-100 text-green-700 text-[10px] sm:text-xs md:text-sm font-semibold rounded-full whitespace-nowrap">
-                  ✓ {t('free')}
-                </span>
-              </div>
-              
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-navy uppercase tracking-tight text-center mb-2 sm:mb-3 md:mb-4 leading-tight">
-                {t('title')}
-              </h1>
-              
-              <p className="text-center text-gray-700 mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base md:text-lg leading-relaxed">
-                {t('subtitle')}
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>
-                {t('subtitle2')}
-              </p>
-              
-              {/* CTA Button */}
+            {/* Main title */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-navy uppercase tracking-tight text-center mb-4 leading-tight">
+              Gratis analys av ditt företag
+            </h1>
+            
+            {/* Benefits list */}
+            <div className="space-y-2 mb-6">
+              {analysisFeatures.map((feature, idx) => {
+                const Icon = feature.icon
+                return (
+                  <div key={idx} className="flex items-center gap-3 text-gray-700">
+                    <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <span className="text-sm sm:text-base">{feature.text}</span>
+                  </div>
+                )
+              })}
+            </div>
+            
+            {/* CTA Button */}
+            <button
+              onClick={() => setIsAnalysisModalOpen(true)}
+              className="w-full bg-navy text-white font-bold py-3.5 sm:py-4 px-6 rounded-xl hover:bg-navy/90 transition-all transform hover:scale-[1.02] active:scale-[0.98] text-base sm:text-lg group shadow-lg"
+            >
+              <span className="flex items-center justify-center gap-2">
+                Starta gratis analys
+                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+              </span>
+            </button>
+            
+            {/* How it works link */}
+            <div className="mt-4 text-center">
               <button
-                onClick={() => setIsValuationModalOpen(true)}
-                className="w-full bg-navy text-white font-bold py-2.5 sm:py-3 md:py-4 px-4 sm:px-6 md:px-8 rounded-lg sm:rounded-xl hover:bg-navy/90 transition-all transform hover:scale-105 active:scale-95 text-sm sm:text-base md:text-lg group shadow-lg"
+                onClick={() => setIsHowItWorksOpen(true)}
+                className="text-sm text-gray-500 hover:text-navy transition-colors underline underline-offset-2 decoration-dotted"
               >
-                <span className="flex items-center justify-center gap-2 sm:gap-3">
-                  {t('cta')}
-                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 transition-transform group-hover:translate-x-1" />
-                </span>
+                Så fungerar det
               </button>
-              
-              {/* Minimal trust indicator */}
-              <div className="mt-3 sm:mt-4 md:mt-6 flex items-center justify-center gap-0.5 sm:gap-1 text-[10px] sm:text-xs md:text-sm text-gray-600 flex-wrap">
-                <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-yellow-500 fill-yellow-500" />
-                <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-yellow-500 fill-yellow-500" />
-                <span className="ml-0.5 sm:ml-1">{t('satisfiedSellers')}</span>
-              </div>
-              
-              {/* Small discreet buyer link */}
-              <div className="mt-2 sm:mt-3 md:mt-4 text-center">
-                <Link 
-                  href="https://bolaxo-production.up.railway.app/sv/sok" 
-                  className="inline-flex items-center gap-1 text-[10px] sm:text-xs text-gray-500 hover:text-navy transition-colors font-medium"
-                >
-                  {t('buyerLink')} <span className="text-gray-400">→</span>
-                </Link>
-              </div>
+            </div>
+            
+            {/* Buyer link */}
+            <div className="mt-4 pt-4 border-t border-gray-200 text-center">
+              <Link 
+                href={`/${locale}/sok`}
+                className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-navy transition-colors font-medium"
+              >
+                Vill du köpa företag?
+                <span className="text-navy">→</span>
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10 hidden sm:block">
-          <ChevronDown className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-navy opacity-60" />
+        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 animate-bounce z-10">
+          <ChevronDown className="w-7 h-7 sm:w-8 sm:h-8 text-white opacity-70" />
         </div>
       </section>
 
@@ -157,7 +186,7 @@ export default function HomePageContent() {
                 image: "/4.png",
                 cashback: t('steps.cashback.secure')
               }
-            ].map((step, index) => (
+            ].map((step) => (
               <Link
                 key={step.num}
                 href={step.link}
@@ -220,7 +249,7 @@ export default function HomePageContent() {
         </div>
       </section>
 
-      {/* NEW INTERACTIVE CARDS SECTION - Klarna Cashback Style */}
+      {/* NEW INTERACTIVE CARDS SECTION */}
       <section className="section section-sand overflow-hidden py-12 sm:py-16 md:py-20">
         <div className="container-custom px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
@@ -230,66 +259,18 @@ export default function HomePageContent() {
           
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 auto-rows-auto">
             {[
-              {
-                link: `/${locale}/sok`,
-                image: "/Badringar/badring1.png",
-                shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2"
-              },
-              {
-                link: `/${locale}/salja`,
-                image: "/Badringar/badring2.png",
-                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
-              },
-              {
-                link: `/${locale}/kopare`,
-                image: "/Badringar/badring3.png",
-                shape: "col-span-1 row-span-1"
-              },
-              {
-                link: `/${locale}/priser`,
-                image: "/Badringar/badring4.png",
-                shape: "col-span-1 row-span-1"
-              },
-              {
-                link: `/${locale}/partners`,
-                image: "/Badringar/badring5.png",
-                shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2"
-              },
-              {
-                link: `/${locale}/vardering`,
-                image: "/Badringar/badring6.png",
-                shape: "col-span-1 row-span-1"
-              },
-              {
-                link: `/${locale}/investor`,
-                image: "/Badringar/badring7.png",
-                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
-              },
-              {
-                link: `/${locale}/success-stories`,
-                image: "/Badringar/badring8.png",
-                shape: "col-span-1 row-span-1"
-              },
-              {
-                link: `/${locale}/blogg`,
-                image: "/Badringar/badring9.png",
-                shape: "col-span-1 row-span-1"
-              },
-              {
-                link: `/${locale}/faq`,
-                image: "/Badringar/badring10.png",
-                shape: "col-span-1 row-span-1"
-              },
-              {
-                link: `/${locale}/kontakt`,
-                image: "/Badringar/badring11.png",
-                shape: "col-span-1 row-span-1"
-              },
-              {
-                link: `/${locale}/for-maklare`,
-                image: "/Badringar/badring12.png",
-                shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1"
-              }
+              { link: `/${locale}/sok`, image: "/Badringar/badring1.png", shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2" },
+              { link: `/${locale}/salja`, image: "/Badringar/badring2.png", shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1" },
+              { link: `/${locale}/kopare`, image: "/Badringar/badring3.png", shape: "col-span-1 row-span-1" },
+              { link: `/${locale}/priser`, image: "/Badringar/badring4.png", shape: "col-span-1 row-span-1" },
+              { link: `/${locale}/partners`, image: "/Badringar/badring5.png", shape: "col-span-1 row-span-2 lg:col-span-1 lg:row-span-2" },
+              { link: `/${locale}/vardering`, image: "/Badringar/badring6.png", shape: "col-span-1 row-span-1" },
+              { link: `/${locale}/investor`, image: "/Badringar/badring7.png", shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1" },
+              { link: `/${locale}/success-stories`, image: "/Badringar/badring8.png", shape: "col-span-1 row-span-1" },
+              { link: `/${locale}/blogg`, image: "/Badringar/badring9.png", shape: "col-span-1 row-span-1" },
+              { link: `/${locale}/faq`, image: "/Badringar/badring10.png", shape: "col-span-1 row-span-1" },
+              { link: `/${locale}/kontakt`, image: "/Badringar/badring11.png", shape: "col-span-1 row-span-1" },
+              { link: `/${locale}/for-maklare`, image: "/Badringar/badring12.png", shape: "col-span-2 row-span-1 lg:col-span-2 lg:row-span-1" }
             ].map((card, index) => (
               <Link
                 key={index}
@@ -301,22 +282,12 @@ export default function HomePageContent() {
                 }}
               >
                 <div className="relative overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-[2rem] h-full min-h-[120px] sm:min-h-[150px] md:min-h-[180px] lg:min-h-[200px] bg-gray-100 transform transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:shadow-2xl">
-                  {/* Background Image */}
                   <div className="absolute inset-0">
-                    <Image
-                      src={card.image}
-                      alt="Card"
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
+                    <Image src={card.image} alt="Card" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                   </div>
-                  
-                  {/* Hover Pulse Effect */}
                   <div className="absolute inset-0 pointer-events-none">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-white/20 rounded-full opacity-0 group-hover:opacity-100 scale-0 group-hover:scale-[3] transition-all duration-1000 ease-out animate-pulse" />
                   </div>
-                  
-                  {/* Animated Border */}
                   <div className="absolute inset-0 rounded-[2rem] border-2 border-white/0 group-hover:border-white/30 transition-all duration-500" />
                 </div>
               </Link>
@@ -325,19 +296,14 @@ export default function HomePageContent() {
         </div>
       </section>
 
-      {/* REVIEWS SECTION - Interactive & Animated */}
+      {/* REVIEWS SECTION */}
       <section className="section section-sand overflow-hidden py-12 sm:py-16 md:py-20">
         <div className="container-custom px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-              {t('reviewsTitle')}
-            </h2>
-            <p className="text-base sm:text-lg text-graphite">
-              {t('reviewsSubtitle')}
-            </p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">{t('reviewsTitle')}</h2>
+            <p className="text-base sm:text-lg text-graphite">{t('reviewsSubtitle')}</p>
           </div>
 
-          {/* Review Cards - Animated */}
           <div className="relative h-[300px] sm:h-[350px] md:h-[400px] flex items-center justify-center px-4">
             {reviews.map((review: { text: string; author: string; company: string; date: string; rating: number }, index: number) => (
               <div
@@ -351,19 +317,14 @@ export default function HomePageContent() {
                 }`}
               >
                 <div className="bg-white rounded-xl sm:rounded-2xl md:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 shadow-hover border border-sand">
-                  {/* Stars */}
                   <div className="flex gap-0.5 sm:gap-1 mb-3 sm:mb-4 md:mb-6">
                     {[...Array(review.rating)].map((_, i) => (
                       <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 fill-butter text-butter" />
                     ))}
                   </div>
-
-                  {/* Review Text */}
                   <p className="text-sm sm:text-base md:text-xl lg:text-2xl text-graphite mb-4 sm:mb-6 md:mb-8 leading-relaxed">
                     "{review.text}"
                   </p>
-
-                  {/* Author */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
                     <div>
                       <p className="font-bold text-navy text-xs sm:text-sm md:text-base">{review.author}</p>
@@ -376,16 +337,13 @@ export default function HomePageContent() {
             ))}
           </div>
 
-          {/* Review Indicators */}
           <div className="flex justify-center gap-2 mt-8">
             {reviews.map((_: any, index: number) => (
               <button
                 key={index}
                 onClick={() => setActiveReview(index)}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  index === activeReview
-                    ? 'w-8 bg-navy'
-                    : 'w-2 bg-gray-soft hover:bg-sky'
+                  index === activeReview ? 'w-8 bg-navy' : 'w-2 bg-gray-soft hover:bg-sky'
                 }`}
               />
             ))}
@@ -396,245 +354,201 @@ export default function HomePageContent() {
       {/* CTA Section */}
       <section className="section gradient-sky-mint text-navy py-12 sm:py-16 md:py-20">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
-            {t('ctaTitle')}
-          </h2>
-          <p className="text-base sm:text-lg mb-6 sm:mb-8 text-graphite">
-            {t('ctaSubtitle')}
-          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">{t('ctaTitle')}</h2>
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 text-graphite">{t('ctaSubtitle')}</p>
           <button
-            onClick={() => setIsValuationModalOpen(true)}
+            onClick={() => setIsAnalysisModalOpen(true)}
             className="btn-primary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4"
           >
-            {t('ctaButton')}
+            Starta gratis analys
           </button>
         </div>
       </section>
 
-      {/* Valuation Form Modal */}
-      {isValuationModalOpen && (
-        <ImprovedValuationWizard 
-          onClose={() => setIsValuationModalOpen(false)}
-        />
+      {/* Analysis Modal */}
+      {isAnalysisModalOpen && (
+        <AnalysisModal onClose={() => setIsAnalysisModalOpen(false)} />
       )}
 
-      {/* Process Step Modal */}
-      {selectedStep && (
+      {/* How It Works Modal */}
+      {isHowItWorksOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+          <div className="flex items-center justify-center min-h-screen px-4 py-8">
             <div
-              className="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-sm"
-              onClick={() => setSelectedStep(null)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setIsHowItWorksOpen(false)}
             />
             
-            <div className="inline-block w-full max-w-4xl p-4 sm:p-6 md:p-8 my-4 sm:my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-xl sm:rounded-2xl md:rounded-3xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto">
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedStep(null)}
-                className="absolute top-4 right-4 sm:top-6 sm:right-6 p-1.5 sm:p-2 hover:bg-gray-100 rounded-full transition-all"
-              >
-                <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />
-              </button>
-
-              <div className="text-center mb-6 sm:mb-8">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-primary-navy uppercase tracking-wide mb-3 sm:mb-4">
-                  {selectedStep === 1 && t('stepModal.step1.title')}
-                  {selectedStep === 2 && t('stepModal.step2.title')}
-                  {selectedStep === 3 && t('stepModal.step3.title')}
-                  {selectedStep === 4 && t('stepModal.step4.title')}
-                </h2>
-                <div className="w-16 sm:w-20 md:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-accent-pink to-primary-navy mx-auto" />
+            <div className="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-5 text-white">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl sm:text-2xl font-bold">Så fungerar analysen</h2>
+                  <button
+                    onClick={() => setIsHowItWorksOpen(false)}
+                    className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
-              <div className="space-y-4 sm:space-y-6">
-                {selectedStep === 1 && (
-                  <>
-                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-blue-200">
-                      <h3 className="text-xl sm:text-2xl font-bold text-primary-navy mb-2 sm:mb-3">{t('stepModal.step1.header')}</h3>
-                      <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                        {t('stepModal.step1.description')}
-                      </p>
-                    </div>
+              {/* Tabs */}
+              <div className="border-b border-gray-200">
+                <nav className="flex">
+                  {[
+                    { id: 'overview', label: 'Översikt', icon: Info },
+                    { id: 'data', label: 'Datakällor', icon: Globe },
+                    { id: 'analysis', label: 'Analysinnehåll', icon: FileText }
+                  ].map((tab) => {
+                    const Icon = tab.icon
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setHowItWorksTab(tab.id)}
+                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
+                          howItWorksTab === tab.id
+                            ? 'text-blue-600 border-blue-600 bg-blue-50'
+                            : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span className="hidden sm:inline">{tab.label}</span>
+                      </button>
+                    )
+                  })}
+                </nav>
+              </div>
 
-                    <div className="space-y-3 sm:space-y-4">
-                      <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white border-2 border-blue-200 rounded-lg sm:rounded-xl hover:shadow-lg transition-all">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm sm:text-base">1</div>
-                        <div>
-                          <h4 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step1.step1Title')}</h4>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step1.step1Desc')}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white border-2 border-blue-200 rounded-lg sm:rounded-xl hover:shadow-lg transition-all">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm sm:text-base">2</div>
-                        <div>
-                          <h4 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step1.step2Title')}</h4>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step1.step2Desc')}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white border-2 border-blue-200 rounded-lg sm:rounded-xl hover:shadow-lg transition-all">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm sm:text-base">3</div>
-                        <div>
-                          <h4 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step1.step3Title')}</h4>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step1.step3Desc')}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white border-2 border-blue-200 rounded-lg sm:rounded-xl hover:shadow-lg transition-all">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0 text-sm sm:text-base">4</div>
-                        <div>
-                          <h4 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step1.step4Title')}</h4>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step1.step4Desc')}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-green-50 border border-green-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
-                        <p className="text-xs sm:text-sm text-green-800"><strong>{t('stepModal.step1.free')}</strong> {t('stepModal.step1.freeDesc')}</p>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {selectedStep === 2 && (
-                  <>
-                    <div className="bg-gradient-to-br from-yellow-50 to-amber-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-amber-200">
-                      <h3 className="text-xl sm:text-2xl font-bold text-primary-navy mb-2 sm:mb-3">{t('stepModal.step2.header')}</h3>
-                      <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                        {t('stepModal.step2.description')}
-                      </p>
-                    </div>
-
-                    <div>
-                      <h4 className="font-bold text-primary-navy mb-3 sm:mb-4 text-base sm:text-lg">{t('stepModal.step2.howWorks')}</h4>
-                      <div className="space-y-2 sm:space-y-3">
-                        <div className="bg-white border-l-4 border-amber-500 p-3 sm:p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step2.financial.title')}</h5>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step2.financial.desc')}</p>
-                        </div>
-                        <div className="bg-white border-l-4 border-amber-500 p-3 sm:p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step2.comparison.title')}</h5>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step2.comparison.desc')}</p>
-                        </div>
-                        <div className="bg-white border-l-4 border-amber-500 p-3 sm:p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step2.methods.title')}</h5>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step2.methods.desc')}</p>
-                        </div>
-                        <div className="bg-white border-l-4 border-amber-500 p-3 sm:p-4 rounded-r-lg">
-                          <h5 className="font-bold text-primary-navy mb-1 text-sm sm:text-base">{t('stepModal.step2.report.title')}</h5>
-                          <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step2.report.desc')}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 flex-shrink-0" />
-                        <p className="text-xs sm:text-sm text-amber-900"><strong>{t('stepModal.step2.tip')}</strong> {t('stepModal.step2.tipDesc')}</p>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {selectedStep === 3 && (
-                  <>
-                    <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-pink-200">
-                      <h3 className="text-xl sm:text-2xl font-bold text-primary-navy mb-2 sm:mb-3">{t('stepModal.step3.header')}</h3>
-                      <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                        {t('stepModal.step3.description')}
-                      </p>
-                    </div>
-
-                    <div>
-                      <h4 className="font-bold text-primary-navy mb-3 sm:mb-4 text-base sm:text-lg">{t('stepModal.step3.howWorks')}</h4>
-                      <div className="bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 border-pink-200 mb-3 sm:mb-4">
-                        <div className="space-y-2 sm:space-y-3">
-                          <div className="flex gap-3 sm:gap-4 mb-3 sm:mb-4">
-                            <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500 flex-shrink-0 mt-0.5 sm:mt-1" />
+              {/* Content */}
+              <div className="p-6 max-h-[60vh] overflow-y-auto">
+                {howItWorksTab === 'overview' && (
+                  <div className="space-y-6">
+                    <p className="text-gray-700 leading-relaxed">
+                      Vår AI-drivna analysplattform ger dig en omfattande bild av ditt företags position, 
+                      styrkor, svagheter och möjligheter – helt gratis och utan förpliktelser.
+                    </p>
+                    
+                    <div className="grid gap-4">
+                      {[
+                        { step: 1, title: 'Fyll i grunduppgifter', desc: 'Ange företagsnamn, webbplats och organisationsnummer', icon: FileText },
+                        { step: 2, title: 'AI söker information', desc: 'Vi hämtar data från officiella källor och webben', icon: Search },
+                        { step: 3, title: 'Få din analys', desc: 'Inom några minuter får du en komplett rapport', icon: BarChart3 }
+                      ].map((item) => {
+                        const Icon = item.icon
+                        return (
+                          <div key={item.step} className="flex gap-4 p-4 bg-gray-50 rounded-xl">
+                            <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">
+                              {item.step}
+                            </div>
                             <div>
-                              <h5 className="font-bold text-primary-navy mb-1 sm:mb-2 text-sm sm:text-base">{t('stepModal.step3.aiAnalysis.title')}</h5>
-                              <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step3.aiAnalysis.desc')}</p>
+                              <h4 className="font-semibold text-gray-900">{item.title}</h4>
+                              <p className="text-sm text-gray-600">{item.desc}</p>
                             </div>
                           </div>
-                          <div className="flex gap-3 sm:gap-4 mb-3 sm:mb-4">
-                            <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500 flex-shrink-0 mt-0.5 sm:mt-1" />
-                            <div>
-                              <h5 className="font-bold text-primary-navy mb-1 sm:mb-2 text-sm sm:text-base">{t('stepModal.step3.automatic.title')}</h5>
-                              <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step3.automatic.desc')}</p>
-                            </div>
-                          </div>
-                          <div className="flex gap-3 sm:gap-4 mb-3 sm:mb-4">
-                            <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500 flex-shrink-0 mt-0.5 sm:mt-1" />
-                            <div>
-                              <h5 className="font-bold text-primary-navy mb-1 sm:mb-2 text-sm sm:text-base">{t('stepModal.step3.verified.title')}</h5>
-                              <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step3.verified.desc')}</p>
-                            </div>
-                          </div>
-                          <div className="flex gap-3 sm:gap-4">
-                            <Lock className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500 flex-shrink-0 mt-0.5 sm:mt-1" />
-                            <div>
-                              <h5 className="font-bold text-primary-navy mb-1 sm:mb-2 text-sm sm:text-base">{t('stepModal.step3.control.title')}</h5>
-                              <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step3.control.desc')}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                        )
+                      })}
                     </div>
-
-                    <div className="bg-pink-50 border border-pink-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
-                      <p className="text-xs sm:text-sm text-pink-900"><strong>{t('stepModal.step3.saveTime')}</strong> {t('stepModal.step3.saveTimeDesc')}</p>
-                    </div>
-                  </>
+                  </div>
                 )}
 
-                {selectedStep === 4 && (
-                  <>
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-emerald-200">
-                      <h3 className="text-xl sm:text-2xl font-bold text-primary-navy mb-2 sm:mb-3">{t('stepModal.step4.header')}</h3>
-                      <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                        {t('stepModal.step4.description')}
-                      </p>
+                {howItWorksTab === 'data' && (
+                  <div className="space-y-6">
+                    <p className="text-gray-700 leading-relaxed">
+                      Vi kombinerar data från flera källor för att ge dig en så komplett bild som möjligt:
+                    </p>
+                    
+                    <div className="space-y-4">
+                      {[
+                        { 
+                          title: 'Bolagsverket & Allabolag', 
+                          desc: 'Officiella siffror som omsättning, resultat, antal anställda och årsredovisningar.',
+                          badge: 'Verifierad data',
+                          badgeColor: 'bg-emerald-100 text-emerald-700'
+                        },
+                        { 
+                          title: 'Webbsökning (AI)', 
+                          desc: 'Nyheter, artiklar, recensioner och marknadssignaler från hela webben.',
+                          badge: 'AI-driven',
+                          badgeColor: 'bg-blue-100 text-blue-700'
+                        },
+                        { 
+                          title: 'Din hemsida', 
+                          desc: 'Vi analyserar innehåll, erbjudande och tonalitet på din webbplats.',
+                          badge: 'Automatiskt',
+                          badgeColor: 'bg-purple-100 text-purple-700'
+                        }
+                      ].map((source, idx) => (
+                        <div key={idx} className="p-4 border border-gray-200 rounded-xl">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-semibold text-gray-900">{source.title}</h4>
+                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${source.badgeColor}`}>
+                              {source.badge}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600">{source.desc}</p>
+                        </div>
+                      ))}
                     </div>
-
-                    <div className="space-y-2 sm:space-y-3 md:space-y-4">
-                      <div className="bg-white border-l-4 border-emerald-500 p-3 sm:p-4 rounded-r-lg">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy text-sm sm:text-base">{t('stepModal.step4.nda.title')}</h5>
-                        </div>
-                        <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step4.nda.desc')}</p>
-                      </div>
-                      <div className="bg-white border-l-4 border-emerald-500 p-3 sm:p-4 rounded-r-lg">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy text-sm sm:text-base">{t('stepModal.step4.encrypted.title')}</h5>
-                        </div>
-                        <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step4.encrypted.desc')}</p>
-                      </div>
-                      <div className="bg-white border-l-4 border-emerald-500 p-3 sm:p-4 rounded-r-lg">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                          <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy text-sm sm:text-base">{t('stepModal.step4.templates.title')}</h5>
-                        </div>
-                        <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step4.templates.desc')}</p>
-                      </div>
-                      <div className="bg-white border-l-4 border-emerald-500 p-3 sm:p-4 rounded-r-lg">
-                        <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                          <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
-                          <h5 className="font-bold text-primary-navy text-sm sm:text-base">{t('stepModal.step4.dealManagement.title')}</h5>
-                        </div>
-                        <p className="text-gray-600 text-xs sm:text-sm">{t('stepModal.step4.dealManagement.desc')}</p>
-                      </div>
-                    </div>
-
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" />
-                        <p className="text-xs sm:text-sm text-emerald-900"><strong>{t('stepModal.step4.result')}</strong> {t('stepModal.step4.resultDesc')}</p>
-                      </div>
-                    </div>
-                  </>
+                  </div>
                 )}
+
+                {howItWorksTab === 'analysis' && (
+                  <div className="space-y-6">
+                    <p className="text-gray-700 leading-relaxed">
+                      Analysen täcker alla viktiga aspekter av ditt företag:
+                    </p>
+                    
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {[
+                        { icon: Shield, title: 'Styrkor', desc: 'Vad som gör ditt företag unikt' },
+                        { icon: Target, title: 'Möjligheter', desc: 'Tillväxtpotential och utvecklingsområden' },
+                        { icon: AlertTriangle, title: 'Risker', desc: 'Utmaningar att vara medveten om' },
+                        { icon: Users, title: 'Konkurrenter', desc: 'Marknadsposition och konkurrensläge' },
+                        { icon: TrendingUp, title: 'Finansiella nyckeltal', desc: 'Omsättning, resultat, marginaler' },
+                        { icon: Lightbulb, title: 'Rekommendationer', desc: 'Konkreta åtgärder för värdeökning' }
+                      ].map((item, idx) => {
+                        const Icon = item.icon
+                        return (
+                          <div key={idx} className="flex gap-3 p-3 bg-gray-50 rounded-lg">
+                            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+                              <Icon className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <h5 className="font-medium text-gray-900 text-sm">{item.title}</h5>
+                              <p className="text-xs text-gray-500">{item.desc}</p>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                      <div className="flex items-start gap-3">
+                        <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-medium text-blue-900">Tips för bästa resultat</p>
+                          <p className="text-sm text-blue-700 mt-1">
+                            Ange organisationsnummer för att få verifierad finansiell data från officiella källor.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                <button
+                  onClick={() => {
+                    setIsHowItWorksOpen(false)
+                    setIsAnalysisModalOpen(true)
+                  }}
+                  className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
+                >
+                  Starta gratis analys
+                </button>
               </div>
             </div>
           </div>
@@ -643,4 +557,3 @@ export default function HomePageContent() {
     </main>
   )
 }
-
