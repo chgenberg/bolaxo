@@ -84,6 +84,8 @@ export async function fetchWebsiteSnapshot(rawUrl?: string, companyName?: string
         if (meta) metaDescription = meta
       }
 
+      $('script, style, noscript, template').remove()
+
       $('h1, h2').each((_, el) => {
         const heading = $(el)
           .text()

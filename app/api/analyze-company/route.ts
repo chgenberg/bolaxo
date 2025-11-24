@@ -8,9 +8,9 @@ import { fetchWebsiteSnapshot } from '@/lib/website-snapshot'
 const ANALYSIS_TTL_MS = 1000 * 60 * 60 * 24 // 24 hours
 
 const KEY_QUESTIONS = [
-  'Vilka siffror från Bolagsverket sticker ut och vad betyder de för en försäljning?',
+  'Vilka siffror från Bolagsverket sticker ut och vad betyder de för bolagets nuläge?',
   'Hur står sig bolaget mot marknaden och konkurrenter enligt webbsökningen?',
-  'Vilka risker måste reduceras innan en försäljning kan maximera värdet?',
+  'Vilka risker måste reduceras för att stärka bolaget de kommande 12 månaderna?',
   'Vilka möjligheter och initiativ kan skapa störst värde inom 6-12 månader?',
   'Vilka operativa förbättringar och processer bör prioriteras för att öka köparnas förtroende?'
 ]
@@ -233,9 +233,9 @@ Bruttoresultat (senaste år): ${formatManualFigure(grossProfitValue)}
 
   const questionsBlock = KEY_QUESTIONS.map((question, index) => `${index + 1}. ${question}`).join('\n')
 
-  return `Du agerar som världens främsta svenska business-coach och företagsvärderare.
+  return `Du agerar som världens främsta svenska business-coach och företagsanalyiker.
 Du kombinerar strategisk rådgivning, operativ erfarenhet och investment banker-analys.
-Du måste väga officiella siffror från Bolagsverket tyngst, komplettera med webbsökning och hemsidesanalys och vara tydlig när data saknas.
+Leverera en kvalitativ nulägesanalys – ingen värdering ska tas fram.
 
 Företag: ${companyName}
 Organisationsnummer: ${orgNumber || 'okänt'}
@@ -256,7 +256,7 @@ ${manualFigures}
 Viktigt:
 - Referera alltid till källan när du använder siffror (Bolagsverket, webbsök, hemsida, användare).
 - Markera när data saknas eller är osäker.
-- När du använder omsättning vs bruttoresultat måste du ange vilket tal som används i värderingen.
+- När du använder omsättning vs bruttoresultat måste du ange vilket tal du baserar resonemanget på.
 - Under "officialInsights" ska du lista 3 konkreta datapunkter från Bolagsverket (eller ange tydligt att data saknas).
 - Under "webInsights" ska du lista 3-5 datapunkter från webbsökning/hemsidan och nämna källans natur.
 - Följ JSON-schemat exakt.
@@ -267,9 +267,10 @@ ${questionsBlock}
 
 Krav:
 - "keyAnswers" ska innehålla exakt ${KEY_QUESTIONS.length} objekt med fälten "question" (sträng) och "answer" (sträng). Använd frågorna ovan ordagrant.
-- "salePreparationPlan" ska alltid innehålla exakt 10 konkreta och prioriterade punkter (1-2 meningar vardera) som förbättrar bolaget inför försäljning (finansiellt, kommersiellt och operationellt).
+- "salePreparationPlan" ska alltid innehålla exakt 10 konkreta och prioriterade punkter (1-2 meningar vardera) som förbättrar bolaget inom 6-12 månader.
 - "recommendations" ska innehålla minst 5 strategiska åtgärder.
 - Alla texter ska vara på svenska, professionella och koncisa.
+- Ingen värdering får nämnas.
 
 Returnera som JSON enligt detta format:
 {
@@ -291,11 +292,6 @@ Returnera som JSON enligt detta format:
     "estimatedEmployees": "antal/intervall",
     "location": "huvudkontor",
     "foundedYear": "år"
-  },
-  "valuation": {
-    "minValue": nummer i SEK,
-    "maxValue": nummer i SEK,
-    "methodology": "kort förklaring"
   }
 }`
 }
@@ -552,11 +548,6 @@ function createFallbackAnalysis({
       industry: 'Svenska privatägda SMB',
       location: 'Sverige',
       foundedYear: undefined
-    },
-    valuation: {
-      minValue,
-      maxValue,
-      methodology: 'Heuristik baserad på 0,55-1,05x omsättning för svenska SMB-transaktioner'
     },
     industryTrend,
     companyTrend,

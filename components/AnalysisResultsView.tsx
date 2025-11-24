@@ -112,11 +112,6 @@ interface AnalysisResults {
     }
     pagesAnalyzed?: number
   }
-  valuation?: {
-    minValue: number
-    maxValue: number
-    methodology: string
-  }
   industryTrend?: Array<TrendPoint | null>
   companyTrend?: Array<CompanyTrendPoint | null>
   valueDrivers?: Array<{
@@ -153,8 +148,6 @@ export default function AnalysisResultsView() {
   const [results, setResults] = useState<AnalysisResults | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [showValuationInfo, setShowValuationInfo] = useState(false)
-  const [showValuationDetails, setShowValuationDetails] = useState(false)
   const [showCompetitors, setShowCompetitors] = useState(false)
 
   useEffect(() => {
@@ -435,9 +428,16 @@ export default function AnalysisResultsView() {
   const hasOfficialFinancials = officialAnnualReports.some(
     (report) => report && (report.revenue || report.profit || report.equity)
   )
-  const websiteSummaryPreview = results.websiteInsights?.summary
-    ? results.websiteInsights.summary.split('\n').slice(0, 3).join(' ')
-    : null
+
+  const buildWebsiteSummaryPreview = (summary?: string | null) => {
+    if (!summary) return null
+    const normalized = summary.replace(/\s+/g, ' ').trim()
+    if (!normalized) return null
+    const limit = 600
+    return normalized.length > limit ? `${normalized.slice(0, limit)} …` : normalized
+  }
+
+  const websiteSummaryPreview = buildWebsiteSummaryPreview(results.websiteInsights?.summary)
   const websiteHighlights = results.websiteInsights?.keyHighlights ?? []
   const websiteContact = results.websiteInsights?.contact
   const hasDataInsights =
@@ -535,94 +535,14 @@ export default function AnalysisResultsView() {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Valuation Box - Show at top if available */}
-        {results.valuation && (
-          <div className="bg-primary-navy rounded-2xl p-8 mb-8 shadow-lg text-center">
-            <h2 className="text-2xl font-bold text-white mb-2">Uppskattad företagsvärdering</h2>
-            <div className="flex items-center justify-center gap-4 text-white mb-4">
-              <span className="text-4xl font-bold">
-                {new Intl.NumberFormat('sv-SE', { 
-                  style: 'currency', 
-                  currency: 'SEK',
-                  maximumFractionDigits: 0
-                }).format(results.valuation.minValue)}
-              </span>
-              <span className="text-2xl">-</span>
-              <span className="text-4xl font-bold">
-                {new Intl.NumberFormat('sv-SE', { 
-                  style: 'currency', 
-                  currency: 'SEK',
-                  maximumFractionDigits: 0
-                }).format(results.valuation.maxValue)}
-              </span>
-            </div>
-            {showValuationDetails && (
-              <p className="text-white/80 text-sm max-w-2xl mx-auto">
-                {results.valuation.methodology}
-              </p>
-            )}
-            <div className="mt-4 flex flex-col items-center gap-2">
-              <button
-                onClick={() => setShowValuationDetails((prev) => !prev)}
-                className="inline-flex items-center gap-2 text-white/80 text-sm underline decoration-white/40 decoration-dotted hover:text-white"
-                aria-expanded={showValuationDetails}
-              >
-                <span
-                  className={`inline-block transform transition-transform ${
-                    showValuationDetails ? 'rotate-90' : 'rotate-0'
-                  }`}
-                >
-                  &gt;
-                </span>
-                Så har vi räknat
-              </button>
-              <button
-                onClick={() => setShowValuationInfo(true)}
-                className="text-white/70 hover:text-white transition-colors text-sm"
-                aria-label="Mer information om värderingen"
-              >
-                Mer om processen
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Valuation Info Modal */}
-        {showValuationInfo && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl transform transition-all">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-primary-navy">Om värderingen</h3>
-                  <button
-                    onClick={() => setShowValuationInfo(false)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-                <p className="text-gray-600 mb-6">
-                  Detta är en generell uppskattning baserat på offentlig information och branschdata. 
-                  För en mer noggrann och detaljerad företagsvärdering rekommenderar vi vår kompletta 
-                  värderingstjänst som inkluderar:
-                </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
-                  <li>Djupgående finansiell analys</li>
-                  <li>Branschspecifika multiplar</li>
-                  <li>Kassaflödesanalys</li>
-                  <li>Riskbedömning</li>
-                  <li>Professionell värderingsrapport</li>
-                </ul>
-                <Link
-                  href={`/${locale}/vardering`}
-                  className="block w-full bg-primary-navy text-white py-3 rounded-lg font-semibold text-center hover:bg-primary-navy/90 transition-all"
-                >
-                  Få en komplett värdering
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Hero summary */}
+        <div className="bg-primary-navy rounded-2xl p-8 mb-8 shadow-lg text-center">
+          <h2 className="text-2xl font-bold text-white mb-2">Översiktlig företagsanalys</h2>
+          <p className="text-white/90 max-w-2xl mx-auto">
+            Vi kombinerar Bolagsverkets data, webbsökning och din hemsida för att lyfta nuläge, styrkor,
+            risker och rekommendationer. Ingen värdering – bara datadrivna insikter.
+          </p>
+        </div>
 
         {/* Key Metrics Bar */}
         {(results.keyMetrics || results.revenue || results.grossProfit) && (
