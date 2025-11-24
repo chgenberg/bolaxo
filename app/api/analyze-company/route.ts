@@ -8,14 +8,6 @@ import { scrapeAllabolag } from '@/lib/scrapers/allabolag'
 
 const ANALYSIS_TTL_MS = 1000 * 60 * 60 * 24 // 24 hours
 
-const KEY_QUESTIONS = [
-  'Vilka siffror från officiella källor sticker ut och vad betyder de för bolagets nuläge?',
-  'Hur står sig bolaget mot marknaden och konkurrenter enligt webbsökningen?',
-  'Vilka risker måste reduceras för att stärka bolaget de kommande 12 månaderna?',
-  'Vilka möjligheter och initiativ kan skapa störst värde inom 6-12 månader?',
-  'Vilka operativa förbättringar och processer bör prioriteras för att öka köparnas förtroende?'
-]
-
 interface OfficialDataSummary {
   orgNumber?: string
   companyName?: string
@@ -140,13 +132,9 @@ export async function POST(request: Request) {
         messages: [
           {
             role: 'system',
-            content: `Du är en erfaren svensk företagsanalytiker. Analysera företag baserat på webbsökning och hemsidedata. Leverera alltid strukturerad JSON på svenska.
+            content: `Du är en erfaren svensk M&A-rådgivare och företagsanalytiker som specialiserar dig på att hjälpa företagsägare förstå sina företag ur en köpares perspektiv.
 
-VIKTIGT:
-- Basera analysen på tillgänglig webbdata och hemsideinformation
-- Var tydlig med vad som är fakta vs uppskattningar
-- Fokusera på kvalitativa insikter: styrkor, möjligheter, risker, rekommendationer
-- Skriv koncist och handlingsinriktat`
+Din uppgift är att leverera värdefulla, konkreta insikter baserade på tillgänglig data. Du är ärlig, konstruktiv och undviker generiska råd. Skriv alltid på flytande svenska.`
           },
           {
             role: 'user',
@@ -332,21 +320,21 @@ function buildAnalysisPrompt({
   // Extract meaningful content from website snapshot
   let websiteAnalysis = ''
   if (websiteSnapshot) {
-    const highlights = websiteSnapshot.keyHighlights?.slice(0, 6).join(', ') || ''
+    const highlights = websiteSnapshot.keyHighlights?.slice(0, 10).join(', ') || ''
     const contacts = []
     if (websiteSnapshot.contact?.emails?.length) contacts.push(`E-post: ${websiteSnapshot.contact.emails[0]}`)
     if (websiteSnapshot.contact?.phones?.length) contacts.push(`Telefon: ${websiteSnapshot.contact.phones[0]}`)
     
     websiteAnalysis = `
-HEMSIDEDATA (${websiteSnapshot.rootDomain}):
-- Titel: ${websiteSnapshot.title || 'Ej tillganglig'}
-- Beskrivning: ${websiteSnapshot.metaDescription || 'Ej tillganglig'}
-- Huvudteman fran hemsidan: ${highlights || 'Inga identifierade'}
-- Kontaktuppgifter: ${contacts.join(', ') || 'Ej tillgangliga'}
-- Antal sidor analyserade: ${websiteSnapshot.pagesAnalyzed}
+=== HEMSIDEDATA (${websiteSnapshot.rootDomain}) ===
+Titel: ${websiteSnapshot.title || 'Ej tillgänglig'}
+Meta-beskrivning: ${websiteSnapshot.metaDescription || 'Ej tillgänglig'}
+Huvudteman: ${highlights || 'Inga identifierade'}
+Kontakt: ${contacts.join(', ') || 'Ej tillgängliga'}
+Sidor analyserade: ${websiteSnapshot.pagesAnalyzed}
 
-RATT INNEHALL FRAN HEMSIDAN:
-${websiteSnapshot.summary?.slice(0, 2000) || 'Inget innehall'}
+RÅINNEHÅLL FRÅN HEMSIDAN:
+${websiteSnapshot.summary?.slice(0, 3000) || 'Inget innehåll kunde hämtas'}
 `
   }
 
@@ -360,92 +348,137 @@ ${websiteSnapshot.summary?.slice(0, 2000) || 'Inget innehall'}
     const sources = webSearchData.sources || []
     
     webSearchAnalysis = `
-WEBBSÖKNINGSRESULTAT:
-- Verksamhetsbeskrivning: ${profile.description || 'Ej tillgänglig'}
-- Bransch: ${profile.industry || 'Ej specificerad'}
-- Kunder: ${profile.customers || 'Ej specificerade'}
-- Värdeerbjudande: ${profile.valueProp || 'Ej specificerat'}
-- Platser: ${profile.locations?.join(', ') || 'Ej specificerade'}
-- Uppskattade anställda: ${profile.estimatedEmployees || 'Okänt'}
+=== WEBBSÖKNINGSRESULTAT ===
+Verksamhet: ${profile.description || 'Ej tillgänglig'}
+Bransch: ${profile.industry || 'Okänd'}
+Målgrupp/Kunder: ${profile.customers || 'Ej specificerade'}
+Värdeerbjudande: ${profile.valueProp || 'Ej specificerat'}
+Platser: ${profile.locations?.join(', ') || 'Ej specificerade'}
+Anställda (uppskattning): ${profile.estimatedEmployees || 'Okänt'}
 
-MARKNADSSIGNALER: ${signals.join('; ') || 'Inga'}
-TILLVÄXTSIGNALER: ${growth.join('; ') || 'Inga'}
-RISKSIGNALER: ${risks.join('; ') || 'Inga'}
-AKTIVITETER: ${webSearchData.notableActivities?.join('; ') || 'Inga noterade'}
+Marknadssignaler: ${signals.join('; ') || 'Inga'}
+Tillväxtsignaler: ${growth.join('; ') || 'Inga'}
+Risksignaler: ${risks.join('; ') || 'Inga'}
+Aktiviteter: ${webSearchData.notableActivities?.join('; ') || 'Inga noterade'}
 
-KÄLLOR: ${sources.map((s: any) => s.title || s.domain).slice(0, 5).join(', ') || 'Inga'}
+Källor: ${sources.map((s: any) => s.title || s.domain).slice(0, 5).join(', ') || 'Inga'}
 `
   }
 
-  const questionsBlock = KEY_QUESTIONS.map((question, index) => `${index + 1}. ${question}`).join('\n')
+  return `Du är en erfaren svensk M&A-rådgivare och företagsanalytiker. Du ska analysera följande företag och ge ägaren en GRATIS analys som ger verkligt värde.
 
-  return `Du är en erfaren svensk företagsanalytiker. Analysera följande företag och ge en gedigen, handlingsinriktad analys.
-
-FÖRETAG: ${companyName}
-HEMSIDA: ${domain || 'Ej angiven'}
-${orgNumber ? `ORGANISATIONSNUMMER: ${orgNumber}` : ''}
+=== FÖRETAG ATT ANALYSERA ===
+Namn: ${companyName}
+Webbplats: ${domain || 'Ej angiven'}
+${orgNumber ? `Organisationsnummer: ${orgNumber}` : ''}
 
 ${websiteAnalysis}
 
 ${webSearchAnalysis}
 
-ANALYSUPPDRAG:
-Baserat på ovanstående information, skapa en djupgående analys av företaget. Fokusera på:
-1. Vad företaget faktiskt gör och erbjuder
-2. Vilka styrkor som framgår av deras kommunikation och position
-3. Vilka tillväxtmöjligheter som finns
-4. Vilka risker eller svagheter som kan identifieras
-5. Konkreta rekommendationer för att öka företagets värde
+=== DITT UPPDRAG ===
+Skapa en djupgående analys med TRE huvuddelar som ger ägaren konkret värde:
 
-NYCKELFRÅGOR ATT BESVARA (i "keyAnswers"):
-${questionsBlock}
+1. KÖPARENS ÖGON ("buyerView")
+   Analysera företaget som om du vore en potentiell köpare som gör due diligence.
+   - Vad ser du först? Vad sticker ut (positivt och negativt)?
+   - Vilka frågor skulle en seriös köpare ställa?
+   - Vad saknas i företagets presentation?
+   - Vilka varningssignaler finns?
+   - Vad är attraktivt för en köpare?
 
-INSTRUKTIONER:
-- Skriv konkret och handlingsinriktat på svenska
-- Basera analysen på tillgänglig data - spekulera inte
-- Ge minst 4-5 punkter i varje kategori (styrkor, möjligheter, risker)
-- Rekommendationerna ska vara specifika och genomförbara
-- Försäljningsplanen ska vara 10 konkreta steg
+2. DIGITAL NÄRVARO ("digitalScore")
+   Bedöm företagets digitala närvaro på en skala 0-100.
+   Basera poängen på:
+   - Webbplatsens kvalitet och professionalism (design, struktur, innehåll)
+   - Tydlighet i erbjudande och värdeproposition
+   - Kontaktinformation och tillgänglighet
+   - Kundcase/testimonials/socialt bevis
+   - SEO-grunderna (meta-beskrivning, struktur)
+   Var ärlig och kritisk. 50 är genomsnitt, 70+ är bra, 85+ är utmärkt.
 
-RETURNERA ENDAST DENNA JSON-STRUKTUR:
+3. TRE QUICK WINS ("quickWins")
+   Ge EXAKT tre konkreta åtgärder ägaren kan göra INOM EN MÅNAD för att öka företagets attraktivitet.
+   Varje quick win ska vara:
+   - Specifik (inte generisk)
+   - Baserad på vad du faktiskt ser i datan
+   - Inkludera uppskattad tidsåtgång
+   - Förklara VARFÖR det ökar värdet
+
+=== INSTRUKTIONER ===
+- Ta dig tid att tänka igenom varje del noggrant
+- Skriv på flytande svenska
+- Var ärlig och konstruktiv - sockra inte sanningen
+- Basera ALLT på faktisk data du har fått - hitta INTE på
+- Om data saknas, säg det ärligt istället för att gissa
+- Skriv utförligt - detta är huvudvärdet för användaren
+
+=== JSON-FORMAT ATT RETURNERA ===
 {
-  "summary": "2-3 meningar som sammanfattar företagets verksamhet och position",
-  "keyAnswers": [
-    { "question": "fråga från listan ovan", "answer": "detaljerat svar baserat på data" }
-  ],
-  "webInsights": [
-    "konkret insikt 1 från webbdata",
-    "konkret insikt 2 från hemsidan",
-    "konkret insikt 3 om marknaden"
-  ],
-  "strengths": [
-    "styrka 1 med förklaring",
-    "styrka 2 med förklaring"
-  ],
-  "opportunities": [
-    "möjlighet 1 med förklaring",
-    "möjlighet 2 med förklaring"
-  ],
-  "risks": [
-    "risk 1 med förklaring",
-    "risk 2 med förklaring"
-  ],
-  "marketPosition": "beskrivning av företagets position i marknaden",
-  "competitors": ["konkurrent 1", "konkurrent 2"],
-  "recommendations": [
-    "rekommendation 1 - konkret åtgärd",
-    "rekommendation 2 - konkret åtgärd"
-  ],
-  "salePreparationPlan": [
-    "1. Första steget",
-    "2. Andra steget",
-    "... upp till 10 steg"
+  "companyType": "kort beskrivning av vad företaget gör (1 mening)",
+  "buyerView": {
+    "firstImpression": "Vad en köpare ser först och tänker (2-3 meningar)",
+    "positives": [
+      "Positivt 1 med förklaring varför det är attraktivt för köpare",
+      "Positivt 2 med förklaring",
+      "Positivt 3 med förklaring"
+    ],
+    "concerns": [
+      "Orosmoment 1 som en köpare skulle reagera på",
+      "Orosmoment 2",
+      "Orosmoment 3"
+    ],
+    "questions": [
+      "Fråga 1 som en seriös köpare skulle ställa",
+      "Fråga 2",
+      "Fråga 3",
+      "Fråga 4",
+      "Fråga 5"
+    ],
+    "missingInfo": [
+      "Information som saknas 1",
+      "Information som saknas 2"
+    ],
+    "overallAssessment": "Sammanfattande bedömning ur köparens perspektiv (3-4 meningar)"
+  },
+  "digitalScore": {
+    "score": 65,
+    "breakdown": {
+      "websiteQuality": { "score": 70, "comment": "Kort motivering" },
+      "clarity": { "score": 60, "comment": "Kort motivering" },
+      "trustSignals": { "score": 50, "comment": "Kort motivering" },
+      "accessibility": { "score": 75, "comment": "Kort motivering" }
+    },
+    "summary": "Övergripande bedömning av digital närvaro (2-3 meningar)",
+    "benchmark": "Hur detta står sig mot typiska svenska SMB i branschen"
+  },
+  "quickWins": [
+    {
+      "title": "Kort titel på åtgärd 1",
+      "description": "Detaljerad beskrivning av vad som ska göras (2-3 meningar)",
+      "timeEstimate": "ca X timmar/dagar",
+      "impact": "Förklaring av varför detta ökar företagets värde (1-2 meningar)",
+      "priority": "HÖG/MEDEL/LÅG"
+    },
+    {
+      "title": "Kort titel på åtgärd 2",
+      "description": "Detaljerad beskrivning",
+      "timeEstimate": "ca X timmar/dagar",
+      "impact": "Varför det ökar värdet",
+      "priority": "HÖG/MEDEL/LÅG"
+    },
+    {
+      "title": "Kort titel på åtgärd 3",
+      "description": "Detaljerad beskrivning",
+      "timeEstimate": "ca X timmar/dagar",
+      "impact": "Varför det ökar värdet",
+      "priority": "HÖG/MEDEL/LÅG"
+    }
   ],
   "keyMetrics": {
-    "industry": "bransch baserad på data",
-    "estimatedEmployees": "antal om tillgängligt",
-    "location": "plats om tillgänglig",
-    "foundedYear": "år om tillgängligt"
+    "industry": "Bransch baserad på data",
+    "location": "Plats om känd",
+    "estimatedEmployees": "Antal om känt"
   }
 }`
 }
@@ -557,79 +590,92 @@ function createFallbackAnalysis({
   grossProfit?: string
 }) {
   const safeName = companyName?.trim() || 'Bolaget'
-  const revenueValue = parseSekValue(revenue)
-
-  const keyAnswers = KEY_QUESTIONS.map((question, index) => {
-    const answerMap: Record<number, string> = {
-      0: 'Analysen baseras på webbsökning och hemsidedata.',
-      1: 'Konkurrensposition bedöms baserat på tillgänglig webbinformation.',
-      2: 'Generella risker för svenska SMB inkluderar nyckelpersonberoende och kundkoncentration.',
-      3: 'Möjligheter inkluderar digitalisering och systematiserad försäljning.',
-      4: 'Prioritera dokumentation av processer och formaliserade kundavtal.'
-    }
-    return {
-      question,
-      answer: answerMap[index] || 'Otillräcklig data för att besvara frågan.'
-    }
-  })
-
-  const salePreparationPlan = [
-    'Kartlägg alla kundkontrakt och marginaler.',
-    'Produktifiera erbjudandet i tydliga paket.',
-    'Implementera månatlig ledningsrapport.',
-    'Säkra överlämningsplan för nyckelpersoner.',
-    'Genomför prishöjningsanalys på toppkunder.',
-    'Automatisera leadshantering med CRM.',
-    'Optimera rörelsekapitalet.',
-    'Skapa referenscase med kundresultat.',
-    'Identifiera strategiska partners.',
-    'Förbered finansiellt material.'
-  ]
-
-  const webInsights = [
-    dataSourceStatus.webSearch === 'success'
-      ? 'Webbsökning genomförd.'
-      : 'Webbsökningen gav begränsade resultat.',
-    dataSourceStatus.website === 'success'
-      ? 'Hemsida analyserad.'
-      : 'Ingen hemsida kunde analyseras.'
-  ]
+  const hasWebsite = dataSourceStatus.website === 'success'
+  const hasWebSearch = dataSourceStatus.webSearch === 'success'
 
   return {
-    summary: `${safeName} analyseras baserat på tillgänglig webbdata.`,
-    webInsights,
-    keyAnswers,
-    strengths: [
-      'Svenskt bolag med etablerad verksamhet.',
-      'Digital närvaro via hemsida.',
-      'Potential för systematisering.'
+    companyType: `${safeName} är ett svenskt företag.`,
+    buyerView: {
+      firstImpression: hasWebsite 
+        ? 'Begränsad data tillgänglig. En köpare skulle behöva mer information för att bilda sig en uppfattning.'
+        : 'Ingen hemsida hittades, vilket gör det svårt för en köpare att bilda sig en första uppfattning online.',
+      positives: [
+        'Företaget finns registrerat och har en verksamhet.',
+        hasWebsite ? 'Digital närvaro finns via webbplats.' : 'Potential att etablera digital närvaro.',
+        'Möjlighet att bygga starkare varumärke.'
+      ],
+      concerns: [
+        'Begränsad information tillgänglig för analys.',
+        !hasWebsite ? 'Avsaknad av webbplats kan ge intryck av bristande professionalism.' : 'Webbplatsen kan behöva förstärkas.',
+        'En köpare skulle behöva djupare due diligence.'
+      ],
+      questions: [
+        'Vilken är den primära affärsmodellen och kundbasen?',
+        'Hur ser omsättning och lönsamhet ut de senaste 3 åren?',
+        'Finns det nyckelpersonberoende i verksamheten?',
+        'Vilka är de största kunderna och hur lojala är de?',
+        'Vilka tillväxtmöjligheter ser ägaren?'
+      ],
+      missingInfo: [
+        'Detaljerad information om verksamheten',
+        'Finansiella nyckeltal och historik'
+      ],
+      overallAssessment: 'Med begränsad tillgänglig data är det svårt att ge en komplett bedömning. En potentiell köpare skulle behöva mer underlag för att kunna utvärdera företaget ordentligt.'
+    },
+    digitalScore: {
+      score: hasWebsite ? 40 : 20,
+      breakdown: {
+        websiteQuality: { 
+          score: hasWebsite ? 40 : 0, 
+          comment: hasWebsite ? 'Webbplats finns men kunde inte analyseras i detalj.' : 'Ingen webbplats hittades.' 
+        },
+        clarity: { 
+          score: hasWebsite ? 35 : 0, 
+          comment: 'Otillräcklig data för bedömning.' 
+        },
+        trustSignals: { 
+          score: 30, 
+          comment: 'Inga tydliga förtroendeskapande element identifierade.' 
+        },
+        accessibility: { 
+          score: hasWebsite ? 50 : 20, 
+          comment: hasWebsite ? 'Kontaktuppgifter behöver verifieras.' : 'Svårt att nå företaget online.' 
+        }
+      },
+      summary: hasWebsite 
+        ? 'Den digitala närvaron finns men behöver stärkas för att skapa förtroende hos potentiella köpare.'
+        : 'Företaget saknar tydlig digital närvaro, vilket är en betydande nackdel i dagens marknad.',
+      benchmark: 'Under genomsnittet för svenska SMB. De flesta företag i denna storlek har en fungerande webbplats med grundläggande information.'
+    },
+    quickWins: [
+      {
+        title: hasWebsite ? 'Förtydliga erbjudandet på hemsidan' : 'Skapa en enkel webbplats',
+        description: hasWebsite 
+          ? 'Se till att det inom 5 sekunder framgår vad företaget gör, för vem, och varför kunden ska välja er.'
+          : 'Skapa en enkel men professionell webbplats med företagsinfo, erbjudande och kontaktuppgifter. Använd t.ex. Squarespace eller WordPress.',
+        timeEstimate: hasWebsite ? 'ca 2-4 timmar' : 'ca 1-2 dagar',
+        impact: 'En tydlig digital närvaro är grundläggande för att en köpare ska ta företaget på allvar.',
+        priority: 'HÖG'
+      },
+      {
+        title: 'Sammanställ finansiell översikt',
+        description: 'Skapa ett enkelt dokument med omsättning, resultat och nyckeltal för de senaste 3 åren. Detta är det första en köpare frågar efter.',
+        timeEstimate: 'ca 2-3 timmar',
+        impact: 'Transparens kring finanserna bygger förtroende och snabbar på en eventuell försäljningsprocess.',
+        priority: 'HÖG'
+      },
+      {
+        title: 'Dokumentera kundbasen',
+        description: 'Lista dina 10 största kunder med ungefärlig andel av omsättningen. Identifiera eventuell kundkoncentration.',
+        timeEstimate: 'ca 1-2 timmar',
+        impact: 'Kundkoncentration är en av de vanligaste riskerna köpare tittar på. Att visa medvetenhet om detta är positivt.',
+        priority: 'MEDEL'
+      }
     ],
-    opportunities: [
-      'Paketera erbjudandet för tydligare värdeproposition.',
-      'Systematisera försäljning och marknadsföring.',
-      'Dokumentera processer för bättre skalbarhet.',
-      'Bygg starkare digitalt fotavtryck.'
-    ],
-    risks: [
-      'Nyckelpersonberoende är vanligt i svenska SMB.',
-      'Kundkoncentration kan påverka stabilitet.',
-      'Operativ komplexitet kan hämma tillväxt.'
-    ],
-    marketPosition: `${safeName} är ett svenskt bolag med digital närvaro.`,
-    competitors: [],
-    recommendations: [
-      'Dokumentera alla affärsprocesser och kundrelationer.',
-      'Bygg systematisk finansiell rapportering.',
-      'Skapa tydlig prissättningsstrategi.',
-      'Investera i CRM och säljprocesser.',
-      'Stärk värdepropositionen.'
-    ],
-    salePreparationPlan,
     keyMetrics: {
-      industry: 'Se webbanalys',
-      estimatedEmployees: 'Okänt',
+      industry: 'Okänd bransch',
       location: 'Sverige',
-      foundedYear: 'Okänt'
+      estimatedEmployees: 'Okänt'
     }
   }
 }
