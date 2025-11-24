@@ -2,12 +2,41 @@ import { NextResponse } from 'next/server'
 import { searchCompanyWithWebSearch } from '@/lib/webInsights'
 import { callOpenAIResponses, OpenAIResponseError } from '@/lib/openai-response-utils'
 import { prisma } from '@/lib/prisma'
+import { fetchBolagsverketCompanyData } from '@/lib/bolagsverket-api'
+import { fetchWebsiteSnapshot } from '@/lib/website-snapshot'
 
 const ANALYSIS_TTL_MS = 1000 * 60 * 60 * 24 // 24 hours
 
+const KEY_QUESTIONS = [
+  'Vilka siffror från Bolagsverket sticker ut och vad betyder de för en försäljning?',
+  'Hur står sig bolaget mot marknaden och konkurrenter enligt webbsökningen?',
+  'Vilka risker måste reduceras innan en försäljning kan maximera värdet?',
+  'Vilka möjligheter och initiativ kan skapa störst värde inom 6-12 månader?',
+  'Vilka operativa förbättringar och processer bör prioriteras för att öka köparnas förtroende?'
+]
+
+interface OfficialDataSummary {
+  orgNumber?: string
+  registrationDate?: string
+  legalForm?: string
+  status?: string
+  address?: string
+  employees?: number
+  industryCode?: string
+  latestRevenue?: number
+  latestGrossProfit?: number
+  annualReports?: Array<{
+    year: string
+    filingDate?: string
+    revenue?: number
+    profit?: number
+    equity?: number
+  }>
+}
+
 export async function POST(request: Request) {
   try {
-    const { companyName, domain, locale, revenue, grossProfit } = await request.json()
+    const { companyName, domain, locale, revenue, grossProfit, orgNumber } = await request.json()
 
     if (!companyName) {
       return NextResponse.json(
@@ -16,173 +45,135 @@ export async function POST(request: Request) {
       )
     }
 
-    console.log('Starting company analysis for:', companyName, domain)
+    const normalizedDomain = domain?.trim() || undefined
+    const normalizedOrgNumber = normalizeOrgNumber(orgNumber)
 
-    // First, try to get web search data
-    let webSearchData = null
-    try {
-      webSearchData = await searchCompanyWithWebSearch({
+    console.log('Starting company analysis for:', companyName, normalizedDomain, normalizedOrgNumber)
+
+    const [bolagsverketResult, webSearchResult, websiteResult] = await Promise.allSettled([
+      normalizedOrgNumber ? fetchBolagsverketCompanyData(normalizedOrgNumber) : Promise.resolve(null),
+      searchCompanyWithWebSearch({
         companyName,
-        website: domain
-      })
-    } catch (error) {
-      console.error('Web search data fetch failed:', error)
+        orgNumber: normalizedOrgNumber,
+        website: normalizedDomain
+      }),
+      normalizedDomain ? fetchWebsiteSnapshot(normalizedDomain, companyName) : Promise.resolve(null)
+    ])
+
+    const bolagsverketData =
+      bolagsverketResult.status === 'fulfilled' ? bolagsverketResult.value : null
+    if (bolagsverketResult.status === 'rejected') {
+      console.error('[ANALYZE] Bolagsverket fetch failed:', bolagsverketResult.reason)
     }
+
+    const webSearchData = webSearchResult.status === 'fulfilled' ? webSearchResult.value : null
+    if (webSearchResult.status === 'rejected') {
+      console.error('[ANALYZE] Web search fetch failed:', webSearchResult.reason)
+    }
+
+    const websiteSnapshot = websiteResult.status === 'fulfilled' ? websiteResult.value : null
+    if (websiteResult.status === 'rejected') {
+      console.error('[ANALYZE] Website snapshot failed:', websiteResult.reason)
+    }
+
+    const officialData = bolagsverketData ? buildOfficialDataSummary(bolagsverketData) : null
+    const revenueValue = officialData?.latestRevenue ?? parseSekValue(revenue)
+    const grossProfitValue = officialData?.latestGrossProfit ?? parseSekValue(grossProfit)
+
+    const analysisPrompt = buildAnalysisPrompt({
+      companyName,
+      domain: normalizedDomain,
+      orgNumber: normalizedOrgNumber,
+      revenueValue,
+      grossProfitValue,
+      webSearchData,
+      websiteSnapshot,
+      officialData
+    })
 
     const fallbackAnalysis = () =>
       createFallbackAnalysis({
         companyName,
-        revenue,
-        grossProfit
+        revenue: revenueValue?.toString() || revenue,
+        grossProfit: grossProfitValue?.toString() || grossProfit
       })
 
     let finalAnalysis: any
     let usedFallback = false
 
-    if (!webSearchData) {
+    try {
+      console.log('[ANALYZE] Starting AI analysis for:', companyName, {
+        hasWebSearch: !!webSearchData,
+        hasOfficial: !!officialData,
+        hasWebsite: !!websiteSnapshot
+      })
+      const { text } = await callOpenAIResponses({
+        model: 'gpt-4o',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
+          },
+          {
+            role: 'user',
+            content: analysisPrompt
+          }
+        ],
+        maxOutputTokens: 6500,
+        metadata: {
+          feature: 'company-analysis'
+        },
+        responseFormat: { type: 'json_object' }
+      })
+
+      finalAnalysis = JSON.parse(text || '{}')
+      console.log('[ANALYZE] AI analysis completed successfully')
+    } catch (error) {
+      if (error instanceof OpenAIResponseError) {
+        console.error(
+          '[ANALYZE] OpenAI Responses API error:',
+          error.status,
+          error.body
+        )
+      } else {
+        console.error('AI analysis failed:', error)
+      }
+      console.error('AI analysis failed, falling back to heuristic analysis')
       usedFallback = true
       finalAnalysis = fallbackAnalysis()
-    } else {
-      // Now analyze with GPT-4o via Responses API
-      const analysisPrompt = `Du agerar som världens främsta svenska business-coach och företagsvärderare.
-Du kombinerar strategisk rådgivning, operativ erfarenhet och investment banker-analys.
-Identifiera vad som faktiskt driver värde, och ge råd som en VD, CFO och M&A-rådgivare skulle betala för.
-
-Företag: ${companyName}
-${domain ? `Domän: ${domain}` : ''}
-
-Webdata:
-${JSON.stringify(webSearchData, null, 2)}
-
-${revenue ? `Omsättning förra året: ${revenue} kr` : 'Omsättning förra året: okänd'}
-${grossProfit ? `Bruttoresultat förra året: ${grossProfit} kr` : 'Bruttoresultat förra året: okänt'}
-
-Viktigt: Omsättning och bruttoresultat är två olika siffror. Använd dem aldrig som samma tal.
-- Om endast bruttoresultat finns ska du vara tydlig med att omsättningen saknas.
-- Om endast omsättning finns ska du markera att bruttoresultat saknas.
-- När du använder siffrorna i värderingen måste du ange vilket tal du baserar beräkningen på.
-
-Svara alltid på svenska och strukturera resultatet enligt nedan. Ange minst tre konkreta datapunkter per sektion.
-
-1. SAMMANFATTNING
-- 3-4 meningar som beskriver nuläget, erbjudandet och viktigaste signalerna från datan.
-- Lyft fram eventuella unika faktorer (teknik, kunder, marknadsposition).
-
-2. STYRKOR
-- Lista 4-6 styrkor. För varje styrka: beskriv varför den är viktig och vilken KPI/indikator som bevisar den.
-
-3. MÖJLIGHETER
-- Lista 4-6 utvecklingsmöjligheter eller tillväxtinitiativ.
-- Beskriv vilket steg som krävs för att fånga möjligheten och vilket värdedriv (intäkt, marginal, multipel) den påverkar.
-
-4. RISKER
-- Lista 3-5 risker. För varje risk: ange sannolikhet (låg/medel/hög), konsekvens och kort mitigering.
-
-5. MARKNADSPOSITION
-- Beskriv hur bolaget står sig mot branschen. Nämn målgrupper, vertikaler och prisläge om möjligt.
-
-6. KONKURRENTER
-- Lista identifierade konkurrenter eller substitut. För varje: ange unik skillnad/position.
-
-7. REKOMMENDATIONER
-- Ge 5-7 konkreta åtgärder som en ägare bör göra de kommande 6-12 månaderna för att höja värdet.
-- Inkludera snabb vinst ("quick win"), strategi/produkt och finansiell hygien (t.ex. rapportering, marginal).
-
-8. NYCKELDATA
-- Sammanfatta bransch, antal anställda (intervall går bra), geografi, grundandeår och andra datapunkter från källorna.
-
-9. VÄRDERINGSESTIMAT (kritisk sektion)
-- Ge ett min- och maxvärde i SEK baserat på multiplar, kassaflöden eller transaktioner i samma bransch.
-- Skriv ut vilket antagande du använde (t.ex. omsättning x multipel, EBITDA x multipel eller jämförande affärer).
-- Beskriv kort hur makro/marknadsläge påverkar värdet (t.ex. ränta, efterfrågan).
-
-Returnera som JSON enligt detta format:
-{
-  "summary": "sammanfattning",
-  "strengths": ["styrka1", "styrka2", ...],
-  "opportunities": ["möjlighet1", "möjlighet2", ...],
-  "risks": ["risk1", "risk2", ...],
-  "marketPosition": "beskrivning",
-  "competitors": ["konkurrent1", "konkurrent2", ...],
-  "recommendations": ["rekommendation1", "rekommendation2", ...],
-  "keyMetrics": {
-    "industry": "bransch om känd",
-    "estimatedEmployees": "antal eller intervall om känt",
-    "location": "huvudkontor om känt",
-    "foundedYear": "år om känt"
-  },
-  "valuation": {
-    "minValue": nummer i SEK,
-    "maxValue": nummer i SEK,
-    "methodology": "kort förklaring av beräkningsmetod"
-  }
-}`
-
-      try {
-        console.log('[ANALYZE] Starting AI analysis for:', companyName)
-        console.log('[ANALYZE] Has web search data:', !!webSearchData)
-        const { text } = await callOpenAIResponses({
-          model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content:
-                'Du är världens bästa svenska business-coach och företagsvärderare. Du kombinerar rådgivning för VD/CFO med M&A-analys och levererar alltid strukturerad JSON på svenska.'
-            },
-            {
-              role: 'user',
-              content: analysisPrompt
-            }
-          ],
-          maxOutputTokens: 6000,
-          metadata: {
-            feature: 'company-analysis'
-          },
-          responseFormat: { type: 'json_object' }
-        })
-
-        finalAnalysis = JSON.parse(text || '{}')
-        console.log('[ANALYZE] AI analysis completed successfully')
-      } catch (error) {
-        if (error instanceof OpenAIResponseError) {
-          console.error(
-            '[ANALYZE] OpenAI Responses API error:',
-            error.status,
-            error.body
-          )
-        } else {
-          console.error('AI analysis failed:', error)
-        }
-        console.error('AI analysis failed, falling back to heuristic analysis')
-        usedFallback = true
-        finalAnalysis = fallbackAnalysis()
-      }
     }
 
-    const sources = usedFallback
-      ? [
-          {
-            title: 'Bolaxo heuristisk analys',
-            url: 'https://bolaxo-production.up.railway.app/sv/analysera'
-          }
-        ]
-      : webSearchData?.sources || []
+    const sources = buildSources({
+      usedFallback,
+      webSearchData,
+      websiteSnapshot,
+      officialData
+    })
+
     const resultPayload = {
       companyName,
-      domain,
-      revenue,
-      grossProfit,
+      domain: normalizedDomain,
+      orgNumber: normalizedOrgNumber,
+      revenue: revenueValue ? revenueValue.toString() : revenue,
+      grossProfit: grossProfitValue ? grossProfitValue.toString() : grossProfit,
       ...finalAnalysis,
-      sources: sources.slice(0, 5),
+      officialData: officialData || undefined,
+      websiteInsights: websiteSnapshot || undefined,
+      sources,
       meta: {
-        source: usedFallback ? 'fallback' : 'ai'
+        source: usedFallback ? 'fallback' : 'ai',
+        hasBolagsverket: !!officialData,
+        hasWebSearch: !!webSearchData,
+        hasWebsite: !!websiteSnapshot
       }
     }
 
     const record = await (prisma as any).instantAnalysis.create({
       data: {
         companyName: companyName.trim(),
-        domain: domain?.trim(),
+        domain: normalizedDomain,
+        orgNumber: normalizedOrgNumber,
         revenue: revenue?.trim(),
         grossProfit: grossProfit?.trim(),
         locale,
@@ -204,12 +195,220 @@ Returnera som JSON enligt detta format:
   }
 }
 
+function buildAnalysisPrompt({
+  companyName,
+  domain,
+  orgNumber,
+  revenueValue,
+  grossProfitValue,
+  webSearchData,
+  websiteSnapshot,
+  officialData
+}: {
+  companyName: string
+  domain?: string
+  orgNumber?: string
+  revenueValue?: number | null
+  grossProfitValue?: number | null
+  webSearchData: any
+  websiteSnapshot: Awaited<ReturnType<typeof fetchWebsiteSnapshot>> | null
+  officialData: OfficialDataSummary | null
+}) {
+  const officialBlock = officialData
+    ? JSON.stringify(officialData, null, 2)
+    : 'Ingen verifierad Bolagsverket-data kunde hämtas.'
+  const webBlock = webSearchData
+    ? JSON.stringify(webSearchData, null, 2)
+    : 'Webbsökningen gav ingen träff eller misslyckades.'
+  const websiteBlock = websiteSnapshot?.summary
+    ? websiteSnapshot.summary
+    : 'Ingen hemsidedata kunde hämtas.'
+  const manualFigures = `
+Omsättning (senaste år): ${formatManualFigure(revenueValue)}
+Bruttoresultat (senaste år): ${formatManualFigure(grossProfitValue)}
+`
+
+  const questionsBlock = KEY_QUESTIONS.map((question, index) => `${index + 1}. ${question}`).join('\n')
+
+  return `Du agerar som världens främsta svenska business-coach och företagsvärderare.
+Du kombinerar strategisk rådgivning, operativ erfarenhet och investment banker-analys.
+Du måste väga officiella siffror från Bolagsverket tyngst, komplettera med webbsökning och hemsidesanalys och vara tydlig när data saknas.
+
+Företag: ${companyName}
+Organisationsnummer: ${orgNumber || 'okänt'}
+Domän: ${domain || 'okänd'}
+
+=== OFFENTLIG DATA (Bolagsverket) ===
+${officialBlock}
+
+=== HEMSIDA (användarens inmatning) ===
+${websiteBlock}
+
+=== WEBB-SÖK via OpenAI web_search ===
+${webBlock}
+
+=== MANUELLT INMATADE SIFFROR ===
+${manualFigures}
+
+Viktigt:
+- Referera alltid till källan när du använder siffror (Bolagsverket, webbsök, hemsida, användare).
+- Markera när data saknas eller är osäker.
+- När du använder omsättning vs bruttoresultat måste du ange vilket tal som används i värderingen.
+- Följ JSON-schemat exakt.
+
+Frågor du måste besvara i sektionen "keyAnswers":
+${questionsBlock}
+
+Krav:
+- "keyAnswers" ska innehålla exakt ${KEY_QUESTIONS.length} objekt med fälten "question" (sträng) och "answer" (sträng). Använd frågorna ovan ordagrant.
+- "salePreparationPlan" ska alltid innehålla exakt 10 konkreta och prioriterade punkter (1-2 meningar vardera) som förbättrar bolaget inför försäljning (finansiellt, kommersiellt och operationellt).
+- "recommendations" ska innehålla minst 5 strategiska åtgärder.
+- Alla texter ska vara på svenska, professionella och koncisa.
+
+Returnera som JSON enligt detta format:
+{
+  "summary": "sammanfattning",
+  "keyAnswers": [
+    { "question": "fråga 1", "answer": "svar" }
+  ],
+  "strengths": ["styrka1", "styrka2"],
+  "opportunities": ["möjlighet1"],
+  "risks": ["risk1"],
+  "marketPosition": "beskrivning",
+  "competitors": ["konkurrent1"],
+  "recommendations": ["åtgärd1"],
+  "salePreparationPlan": ["punkt1", "...punkt10"],
+  "keyMetrics": {
+    "industry": "bransch om känd",
+    "estimatedEmployees": "antal/intervall",
+    "location": "huvudkontor",
+    "foundedYear": "år"
+  },
+  "valuation": {
+    "minValue": nummer i SEK,
+    "maxValue": nummer i SEK,
+    "methodology": "kort förklaring"
+  }
+}`
+}
+
+function buildSources({
+  usedFallback,
+  webSearchData,
+  websiteSnapshot,
+  officialData
+}: {
+  usedFallback: boolean
+  webSearchData: any
+  websiteSnapshot: Awaited<ReturnType<typeof fetchWebsiteSnapshot>> | null
+  officialData: OfficialDataSummary | null
+}) {
+  const sources: Array<{ title: string; url: string }> = []
+
+  const addSource = (title: string, url?: string | null) => {
+    if (!url) return
+    if (sources.some((source) => source.url === url)) return
+    sources.push({ title, url })
+  }
+
+  if (usedFallback) {
+    return [
+      {
+        title: 'Bolaxo heuristisk analys',
+        url: 'https://bolaxo-production.up.railway.app/sv/analysera'
+      }
+    ]
+  }
+
+  if (Array.isArray(webSearchData?.sources)) {
+    webSearchData.sources.forEach((source: any) => {
+      if (source?.title && source?.url) {
+        addSource(source.title, source.url)
+      }
+    })
+  } else if (Array.isArray(webSearchData?.rawWebData?.notableSources)) {
+    webSearchData.rawWebData.notableSources.forEach((source: any) => {
+      if (source?.label && source?.url) {
+        addSource(source.label, source.url)
+      }
+    })
+  }
+
+  if (officialData) {
+    addSource('Bolagsverket', 'https://bolagsverket.se')
+  }
+
+  if (websiteSnapshot) {
+    addSource('Företagets webbplats', websiteSnapshot.canonicalUrl)
+  }
+
+  return sources.slice(0, 5)
+}
+
+function buildOfficialDataSummary(data: any): OfficialDataSummary | null {
+  if (!data) return null
+
+  const annualReports =
+    data.annualReports
+      ?.filter((report: any) => report && report.year)
+      .map((report: any) => ({
+        year: report.year?.toString(),
+        filingDate: report.filingDate,
+        revenue: toNumber(report.revenue),
+        profit: toNumber(report.profit),
+        equity: toNumber(report.equity)
+      }))
+      .sort((a: any, b: any) => parseInt(b.year) - parseInt(a.year)) || []
+
+  const latest = annualReports[0]
+
+  return {
+    orgNumber: data.orgNumber,
+    registrationDate: data.registrationDate,
+    legalForm: data.legalForm,
+    status: data.status,
+    address: data.address,
+    employees: data.employees,
+    industryCode: data.industryCode,
+    latestRevenue: latest?.revenue,
+    latestGrossProfit: typeof latest?.profit === 'number' ? latest.profit : undefined,
+    annualReports
+  }
+}
+
+function normalizeOrgNumber(value?: string | null) {
+  if (!value) return undefined
+  const digits = value.replace(/\D/g, '')
+  if (digits.length === 10) return digits
+  if (digits.length === 12) return digits.slice(-10)
+  return digits || undefined
+}
+
 function parseSekValue(value?: string) {
   if (!value) return null
   const cleaned = value.toString().replace(/[^\d.-]/g, '')
   if (!cleaned) return null
   const parsed = Number(cleaned)
   return Number.isFinite(parsed) ? parsed : null
+}
+
+function formatManualFigure(value?: number | null) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return `${value} SEK`
+  }
+  return 'saknas'
+}
+
+function toNumber(value: unknown): number | undefined {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : undefined
+  }
+  if (typeof value === 'string') {
+    const cleaned = value.replace(/\s+/g, '').replace(',', '.')
+    const parsed = Number(cleaned)
+    return Number.isFinite(parsed) ? parsed : undefined
+  }
+  return undefined
 }
 
 function createFallbackAnalysis({
@@ -264,9 +463,36 @@ function createFallbackAnalysis({
   })
 
   const valueDriverImpact = Math.round((maxValue - minValue) * 0.15)
+  const keyAnswers = KEY_QUESTIONS.map((question, index) => {
+    const answerMap: Record<number, string> = {
+      0: `Bolagets omsättning uppskattas till cirka ${revenueInMsek} MSEK och bruttomarginalen runt ${marginPercent} %, vilket signalerar en stabil bas men med utrymme att lyfta EBITDA inför en försäljning.`,
+      1: `${safeName} verkar i en nischad svensk SMB-marknad med begränsat antal etablerade konkurrenter, vilket gör tydlig positionering och paketering avgörande för att stå ut.`,
+      2: `Största riskerna är beroendet av nyckelpersoner och kundkoncentration. Utan dokumenterade processer och kontrakt blir en DD mer riskfylld och värdedrivande multiplar pressas.`,
+      3: `Tillväxtpotentialen ligger i att produktifiera erbjudandet, växla upp digital leadsgenerering och fördjupa partnerskap som kan dubbla inflödet av kvalificerade affärer.`,
+      4: `Operativt bör bolaget stärka rapportering, bygga pipeline-övervakning och formalisera kundavtal för att höja förtroendet hos köpare och underlätta överlämning.`
+    }
+    return {
+      question,
+      answer: answerMap[index] || ''
+    }
+  })
+
+  const salePreparationPlan = [
+    'Kartlägg alla kundkontrakt, marginaler och bindningstider så att köpare får transparens i due diligence.',
+    'Produktifiera erbjudandet i 2–3 paket med tydliga priser och KPI:er för att öka repetitiva intäkter.',
+    'Implementera månatlig ledningsrapport med omsättning, bruttomarginal, pipeline och kassaposition.',
+    'Säkra överlämningsplan för nyckelpersoner inklusive dokumenterade processer och utbildningsmaterial.',
+    'Genomför prishöjningsanalys på toppkunder och testa 3–5 % höjning kopplat till ökat kundvärde.',
+    'Automatisera leadshantering (CRM) och bygg en alltid-aktuell pipeline-översikt för investerare.',
+    'Optimera rörelsekapitalet genom att förhandla betalningsvillkor och införa delbetalningar för projekt.',
+    'Skapa referenscase och kvantifierade kundresultat som kan bifogas datarum inför transaktion.',
+    'Identifiera minst två strategiska partners som kan stå för 20 % av nykundsintäkterna via co-selling.',
+    'Förbered finansiellt material (3-års historik + budget) med tydlig EBITDA-brygga och scenarioanalys.'
+  ]
 
   return {
     summary: `${safeName} visar en stabil SME-profil med möjlighet att förbättra marginaler och värdeskapande genom tydligare kommersiellt fokus.`,
+    keyAnswers,
     strengths: [
       'Stadig kundbas med återkommande intäkter och låg churn jämfört med typiska svenska privatägda bolag.',
       'Hälsosam bruttomarginal driver goda kassaflöden som kan återinvesteras i tillväxt.',
@@ -299,6 +525,7 @@ function createFallbackAnalysis({
       'Bygg upp ett enkelt control tower med månatlig rapportering av ARR, churn, pipeline och cash.',
       'Planera kapitalstruktur och bankdialoger så att expansion inte begränsas av rörelsekapital.'
     ],
+    salePreparationPlan,
     keyMetrics: {
       estimatedEmployees: revenueValue ? '10-40 (estimat baserat på omsättning)' : undefined,
       industry: 'Svenska privatägda SMB',

@@ -58,21 +58,57 @@ interface CompanyTrendPoint {
 interface AnalysisResults {
   companyName: string
   domain?: string
+  orgNumber?: string
   revenue?: string
   grossProfit?: string
   summary: string
+  keyAnswers?: Array<{
+    question: string
+    answer: string
+  }>
   strengths: string[]
   opportunities: string[]
   risks: string[]
   marketPosition: string
   competitors: string[]
   recommendations: string[]
+  salePreparationPlan?: string[]
   sources: Array<{ title: string; url: string }>
   keyMetrics?: {
     estimatedEmployees?: string
     location?: string
     industry?: string
     foundedYear?: string
+  }
+  officialData?: {
+    orgNumber?: string
+    registrationDate?: string
+    legalForm?: string
+    status?: string
+    address?: string
+    employees?: number
+    industryCode?: string
+    latestRevenue?: number
+    latestGrossProfit?: number
+    annualReports?: Array<{
+      year: string
+      revenue?: number
+      profit?: number
+      equity?: number
+    }>
+  }
+  websiteInsights?: {
+    canonicalUrl?: string
+    rootDomain?: string
+    title?: string
+    metaDescription?: string
+    summary?: string
+    keyHighlights?: string[]
+    contact?: {
+      emails?: string[]
+      phones?: string[]
+    }
+    pagesAnalyzed?: number
   }
   valuation?: {
     minValue: number
@@ -238,13 +274,17 @@ export default function AnalysisResultsView() {
     return new Intl.NumberFormat('sv-SE').format(value)
   }
 
-  const tabs = [
+  const baseTabs = [
     { id: 'overview', label: 'Översikt', icon: FileText },
     { id: 'strengths', label: 'Styrkor', icon: Shield },
     { id: 'opportunities', label: 'Möjligheter', icon: TrendingUp },
     { id: 'risks', label: 'Risker', icon: AlertCircle },
     { id: 'recommendations', label: 'Rekommendationer', icon: Target }
   ]
+  if (results.keyAnswers?.length) {
+    baseTabs.splice(1, 0, { id: 'questions', label: 'Nyckelfrågor', icon: HelpCircle })
+  }
+  const tabs = baseTabs
 
   type IndustryTrendPoint = TrendPoint & { market: number }
   type CompanyTrendMappedPoint = CompanyTrendPoint & { company: number }
@@ -389,6 +429,15 @@ export default function AnalysisResultsView() {
   )
   const hasImpactChart = impactData.length > 0
   const impactChartHeight = Math.max(impactData.length * 48 + 80, 280)
+  const officialAnnualReports = results.officialData?.annualReports ?? []
+  const hasOfficialFinancials = officialAnnualReports.some(
+    (report) => report && (report.revenue || report.profit || report.equity)
+  )
+  const websiteSummaryPreview = results.websiteInsights?.summary
+    ? results.websiteInsights.summary.split('\n').slice(0, 3).join(' ')
+    : null
+  const websiteHighlights = results.websiteInsights?.keyHighlights ?? []
+  const websiteContact = results.websiteInsights?.contact
 
   const TrendTooltipContent = ({
     active,
@@ -462,9 +511,18 @@ export default function AnalysisResultsView() {
             Tillbaka
           </Link>
 
-          <h1 className="text-xl font-bold text-white">
-            Analys av {results.companyName}
-          </h1>
+          <div className="text-center text-white">
+            <h1 className="text-xl font-bold">
+              Analys av {results.companyName}
+            </h1>
+            {(results.orgNumber || results.domain) && (
+              <p className="text-sm text-blue-100 mt-1">
+                {results.orgNumber && <span>Org.nr {results.orgNumber}</span>}
+                {results.orgNumber && results.domain && <span className="mx-2">•</span>}
+                {results.domain && <span>{results.domain}</span>}
+              </p>
+            )}
+          </div>
 
           <div className="w-24" />
         </div>
@@ -608,6 +666,152 @@ export default function AnalysisResultsView() {
                 <p className="font-semibold">
                   {formatSekValue(results.grossProfit)} kr
                 </p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {results.officialData && (
+          <div className="bg-white rounded-xl p-6 mb-8 shadow-sm border border-blue-100">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
+              <div>
+                <h3 className="text-xl font-semibold text-primary-navy">
+                  Bolagsverket – officiell data
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Senaste registrerade uppgifter direkt från Bolagsverket.
+                </p>
+              </div>
+              <div className="text-sm text-gray-500">
+                {results.officialData.orgNumber && <div>Org.nr: {results.officialData.orgNumber}</div>}
+                {results.officialData.registrationDate && (
+                  <div>Registrerad: {results.officialData.registrationDate}</div>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {results.officialData.legalForm && (
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <p className="text-xs uppercase text-gray-500">Bolagsform</p>
+                  <p className="font-semibold text-primary-navy">{results.officialData.legalForm}</p>
+                </div>
+              )}
+              {results.officialData.status && (
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <p className="text-xs uppercase text-gray-500">Status</p>
+                  <p className="font-semibold text-primary-navy">{results.officialData.status}</p>
+                </div>
+              )}
+              {typeof results.officialData.employees === 'number' && (
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <p className="text-xs uppercase text-gray-500">Anställda</p>
+                  <p className="font-semibold text-primary-navy">
+                    {new Intl.NumberFormat('sv-SE').format(results.officialData.employees)}
+                  </p>
+                </div>
+              )}
+              {results.officialData.industryCode && (
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <p className="text-xs uppercase text-gray-500">SNI-kod</p>
+                  <p className="font-semibold text-primary-navy">{results.officialData.industryCode}</p>
+                </div>
+              )}
+              {results.officialData.address && (
+                <div className="p-4 bg-blue-50 rounded-lg md:col-span-2">
+                  <p className="text-xs uppercase text-gray-500">Adress</p>
+                  <p className="font-semibold text-primary-navy">{results.officialData.address}</p>
+                </div>
+              )}
+            </div>
+
+            {hasOfficialFinancials && (
+              <div className="mt-6 overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-gray-500 uppercase tracking-wide">
+                      <th className="pb-2 pr-6">År</th>
+                      <th className="pb-2 pr-6">Omsättning</th>
+                      <th className="pb-2 pr-6">Resultat</th>
+                      <th className="pb-2 pr-6">Eget kapital</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {officialAnnualReports.slice(0, 4).map((report, index) => (
+                      <tr key={`${report.year}-${index}`} className="border-t border-blue-50">
+                        <td className="py-2 pr-6 font-semibold text-primary-navy">{report.year}</td>
+                        <td className="py-2 pr-6">
+                          {typeof report.revenue === 'number'
+                            ? `${formatSekValue(report.revenue)} kr`
+                            : '—'}
+                        </td>
+                        <td className="py-2 pr-6">
+                          {typeof report.profit === 'number'
+                            ? `${formatSekValue(report.profit)} kr`
+                            : '—'}
+                        </td>
+                        <td className="py-2 pr-6">
+                          {typeof report.equity === 'number'
+                            ? `${formatSekValue(report.equity)} kr`
+                            : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {(websiteSummaryPreview || websiteHighlights.length > 0) && (
+          <div className="bg-white rounded-xl p-6 mb-8 shadow-sm border border-blue-100">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div>
+                <h3 className="text-xl font-semibold text-primary-navy">Hemsidesinsikter</h3>
+                <p className="text-sm text-gray-500">
+                  Vi analyserade den angivna domänen för att förstå erbjudande och tonalitet.
+                </p>
+              </div>
+              {results.websiteInsights?.canonicalUrl && (
+                <a
+                  href={results.websiteInsights.canonicalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-blue-600 underline flex items-center gap-1"
+                >
+                  Besök webbplats <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
+            {websiteSummaryPreview && (
+              <p className="text-gray-700 mb-4 leading-relaxed">{websiteSummaryPreview}</p>
+            )}
+            {websiteHighlights.length > 0 && (
+              <div className="mb-4">
+                <p className="text-sm font-semibold text-primary-navy mb-2">Nyckelteman</p>
+                <div className="flex flex-wrap gap-2">
+                  {websiteHighlights.slice(0, 6).map((highlight, index) => (
+                    <span key={`${highlight}-${index}`} className="px-3 py-1 bg-blue-50 rounded-full text-sm text-blue-800">
+                      {highlight}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {websiteContact && (websiteContact.emails?.length || websiteContact.phones?.length) && (
+              <div className="flex flex-wrap gap-6 text-sm text-gray-600">
+                {websiteContact.emails?.length ? (
+                  <div>
+                    <p className="font-semibold text-primary-navy">E-post</p>
+                    <p>{websiteContact.emails.join(', ')}</p>
+                  </div>
+                ) : null}
+                {websiteContact.phones?.length ? (
+                  <div>
+                    <p className="font-semibold text-primary-navy">Telefon</p>
+                    <p>{websiteContact.phones.join(', ')}</p>
+                  </div>
+                ) : null}
               </div>
             )}
           </div>
@@ -796,6 +1000,24 @@ export default function AnalysisResultsView() {
               </div>
             )}
 
+            {activeTab === 'questions' && results.keyAnswers && (
+              <div>
+                <h2 className="text-2xl font-bold text-primary-navy mb-6">
+                  Nyckelfrågor besvarade
+                </h2>
+                <div className="space-y-4">
+                  {results.keyAnswers.map((qa, index) => (
+                    <div key={index} className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                      <p className="text-sm font-semibold text-primary-navy uppercase tracking-wide">
+                        {qa.question}
+                      </p>
+                      <p className="text-gray-700 mt-2">{qa.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {activeTab === 'strengths' && (
               <div>
                 <h2 className="text-2xl font-bold text-primary-navy mb-6">
@@ -853,6 +1075,21 @@ export default function AnalysisResultsView() {
                     </div>
                   ))}
                 </div>
+
+                {results.salePreparationPlan?.length && (
+                  <div className="mt-10">
+                    <h3 className="text-xl font-semibold text-primary-navy mb-4">
+                      10-punktsplan inför försäljning
+                    </h3>
+                    <ol className="list-decimal list-inside space-y-2 text-gray-700 bg-blue-50 rounded-xl p-6 border border-blue-100">
+                      {results.salePreparationPlan.map((item, index) => (
+                        <li key={index} className="pl-2">
+                          {item}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
 
                 <div className="mt-12 p-8 bg-primary-navy rounded-2xl text-center">
                   <h3 className="text-2xl font-bold mb-4 text-white">

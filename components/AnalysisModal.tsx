@@ -14,11 +14,13 @@ const copy = {
     title: 'Analysera ditt företag',
     labels: {
       companyName: 'Företagsnamn',
-      domain: 'Domännamn (valfritt)'
+      domain: 'Domännamn (valfritt)',
+      orgNumber: 'Organisationsnummer (valfritt)'
     },
     placeholders: {
       companyName: 'T.ex. Nordisk Tech AB',
-      domain: 'T.ex. nordisktech.se'
+      domain: 'T.ex. nordisktech.se',
+      orgNumber: '556123-4567'
     },
     errors: {
       missingName: 'Vänligen ange företagsnamn',
@@ -45,11 +47,13 @@ const copy = {
     title: 'Analyze your company',
     labels: {
       companyName: 'Company name',
-      domain: 'Domain name (optional)'
+      domain: 'Domain name (optional)',
+      orgNumber: 'Organization number (optional)'
     },
     placeholders: {
       companyName: 'e.g. Nordic Tech Ltd',
-      domain: 'e.g. nordictech.com'
+      domain: 'e.g. nordictech.com',
+      orgNumber: '556123-4567'
     },
     errors: {
       missingName: 'Please enter a company name',
@@ -83,6 +87,7 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
   }, [locale])
   const [companyName, setCompanyName] = useState('')
   const [domain, setDomain] = useState('')
+  const [orgNumber, setOrgNumber] = useState('')
   const [revenue, setRevenue] = useState('')
   const [grossProfit, setGrossProfit] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -96,6 +101,13 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
   }
 
   const sanitizeSek = (value: string) => value.replace(/\D/g, '')
+  const formatOrgNumber = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, '')
+    if (!digitsOnly) return ''
+    if (digitsOnly.length <= 6) return digitsOnly
+    return `${digitsOnly.slice(0, 6)}-${digitsOnly.slice(6, 10)}`
+  }
+  const sanitizeOrgNumber = (value: string) => value.replace(/\D/g, '')
 
   const handleAnalyze = async () => {
     if (!companyName.trim()) {
@@ -126,6 +138,7 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
         body: JSON.stringify({
           companyName: companyName.trim(),
           domain: domain.trim(),
+          orgNumber: sanitizeOrgNumber(orgNumber),
           revenue: sanitizeSek(revenue),
           grossProfit: sanitizeSek(grossProfit),
           locale
@@ -201,6 +214,19 @@ export default function AnalysisModal({ onClose }: AnalysisModalProps) {
                   value={domain}
                   onChange={(e) => setDomain(e.target.value)}
                   placeholder={text.placeholders.domain}
+                  className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  {text.labels.orgNumber}
+                </label>
+                <input
+                  type="text"
+                  value={orgNumber}
+                  onChange={(e) => setOrgNumber(formatOrgNumber(e.target.value))}
+                  placeholder={text.placeholders.orgNumber}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </div>
