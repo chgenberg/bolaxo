@@ -22,6 +22,9 @@ interface CallResponsesArgs {
   metadata?: Record<string, any>
   timeoutMs?: number
   responseFormat?: TextFormatOption
+  reasoning?: {
+    effort: 'low' | 'medium' | 'high'
+  }
 }
 
 export class OpenAIResponseError extends Error {
@@ -41,7 +44,8 @@ export async function callOpenAIResponses({
   maxOutputTokens = 4000,
   metadata,
   timeoutMs = 120000,
-  responseFormat
+  responseFormat,
+  reasoning
 }: CallResponsesArgs): Promise<{ text: string; raw: any }> {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OpenAI API key not configured')
@@ -59,6 +63,8 @@ export async function callOpenAIResponses({
       ? { text: { format: responseFormat } }
       : {}
 
+  const reasoningPayload = reasoning ? { reasoning } : {}
+
   const response = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST',
     headers: {
@@ -70,7 +76,8 @@ export async function callOpenAIResponses({
       input,
       max_output_tokens: maxOutputTokens,
       metadata,
-      ...formatPayload
+      ...formatPayload,
+      ...reasoningPayload
     }),
     signal: createTimeoutSignal(timeoutMs)
   })

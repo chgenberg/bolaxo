@@ -128,7 +128,7 @@ export async function POST(request: Request) {
       })
       
       const { text } = await callOpenAIResponses({
-        model: 'gpt-4o',
+        model: 'gpt-5.1-mini',
         messages: [
           {
             role: 'system',
@@ -141,7 +141,10 @@ Din uppgift är att leverera värdefulla, konkreta insikter baserade på tillgä
             content: analysisPrompt
           }
         ],
-        maxOutputTokens: 6500,
+        maxOutputTokens: 8000,
+        reasoning: {
+          effort: 'high'
+        },
         metadata: {
           feature: 'company-analysis'
         },
