@@ -381,12 +381,12 @@ export default function HomePageContent() {
             
             <div className="relative w-full max-w-2xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden">
               {/* Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-5 text-white">
+              <div className="bg-[#1F3C58] px-6 py-5">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl sm:text-2xl font-bold">Så fungerar analysen</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">Så fungerar analysen</h2>
                   <button
                     onClick={() => setIsHowItWorksOpen(false)}
-                    className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                    className="p-2 hover:bg-white/20 rounded-full transition-colors text-white"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -408,7 +408,7 @@ export default function HomePageContent() {
                         onClick={() => setHowItWorksTab(tab.id)}
                         className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
                           howItWorksTab === tab.id
-                            ? 'text-blue-600 border-blue-600 bg-blue-50'
+                            ? 'text-[#1F3C58] border-[#1F3C58] bg-[#1F3C58]/5'
                             : 'text-gray-500 border-transparent hover:text-gray-700 hover:bg-gray-50'
                         }`}
                       >
@@ -438,7 +438,7 @@ export default function HomePageContent() {
                         const Icon = item.icon
                         return (
                           <div key={item.step} className="flex gap-4 p-4 bg-gray-50 rounded-xl">
-                            <div className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">
+                            <div className="w-10 h-10 bg-[#1F3C58] text-white rounded-xl flex items-center justify-center font-bold flex-shrink-0">
                               {item.step}
                             </div>
                             <div>
@@ -470,7 +470,7 @@ export default function HomePageContent() {
                           title: 'Webbsökning (AI)', 
                           desc: 'Nyheter, artiklar, recensioner och marknadssignaler från hela webben.',
                           badge: 'AI-driven',
-                          badgeColor: 'bg-blue-100 text-blue-700'
+                          badgeColor: 'bg-[#1F3C58]/10 text-[#1F3C58]'
                         },
                         { 
                           title: 'Din hemsida', 
@@ -512,7 +512,7 @@ export default function HomePageContent() {
                         return (
                           <div key={idx} className="flex gap-3 p-3 bg-gray-50 rounded-lg">
                             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
-                              <Icon className="w-4 h-4 text-blue-600" />
+                              <Icon className="w-4 h-4 text-[#1F3C58]" />
                             </div>
                             <div>
                               <h5 className="font-medium text-gray-900 text-sm">{item.title}</h5>
@@ -523,12 +523,12 @@ export default function HomePageContent() {
                       })}
                     </div>
 
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <div className="p-4 bg-[#1F3C58]/5 border border-[#1F3C58]/20 rounded-xl">
                       <div className="flex items-start gap-3">
-                        <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                        <Info className="w-5 h-5 text-[#1F3C58] flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-sm font-medium text-blue-900">Tips för bästa resultat</p>
-                          <p className="text-sm text-blue-700 mt-1">
+                          <p className="text-sm font-medium text-[#1F3C58]">Tips för bästa resultat</p>
+                          <p className="text-sm text-[#1F3C58]/70 mt-1">
                             Ange organisationsnummer för att få verifierad finansiell data från officiella källor.
                           </p>
                         </div>
@@ -545,7 +545,7 @@ export default function HomePageContent() {
                     setIsHowItWorksOpen(false)
                     setIsAnalysisModalOpen(true)
                   }}
-                  className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors"
+                  className="w-full bg-[#1F3C58] text-white font-semibold py-3 rounded-xl hover:bg-[#1F3C58]/90 transition-colors"
                 >
                   Starta gratis analys
                 </button>
