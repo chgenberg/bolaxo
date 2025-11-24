@@ -37,7 +37,7 @@ export const LAUNCH_CONFIG = {
   },
 
   // Hide these roles from registration (empty = show all)
-  HIDDEN_ROLES: [] as UserRole[],
+  HIDDEN_ROLES: ['broker'] as UserRole[],
 
   // Navigation items visibility
   NAVIGATION: {
