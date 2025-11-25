@@ -108,7 +108,7 @@ export default function Step2AffarsDataPage() {
         <FormSelect
           label="Vad ingår i försäljningen?"
           value={formData.vadIngår}
-          onChange={(e) => updateField('vadIngår', e.target.value)}
+          onChange={(value) => updateField('vadIngår', value)}
           options={[
             { value: 'aktier', label: 'Aktier i bolaget' },
             { value: 'inkram', label: 'Inkråm (rörelse utan bolag)' },
