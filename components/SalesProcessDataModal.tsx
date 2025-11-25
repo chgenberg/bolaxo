@@ -66,6 +66,41 @@ function MinimalSelect({
   )
 }
 
+// Helper function to format numbers with thousand separators (Swedish format: 200.000)
+const formatNumberWithSeparator = (value: string): string => {
+  // Remove all non-digit characters except comma and minus
+  const cleanValue = value.replace(/[^\d,-]/g, '')
+  
+  // If empty, return empty
+  if (!cleanValue) return ''
+  
+  // Handle negative numbers
+  const isNegative = cleanValue.startsWith('-')
+  const absoluteValue = cleanValue.replace('-', '')
+  
+  // Split by comma if there's a decimal part
+  const parts = absoluteValue.split(',')
+  const integerPart = parts[0]
+  const decimalPart = parts[1]
+  
+  // Add thousand separators (dots)
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  
+  // Reconstruct the number
+  let result = isNegative ? '-' + formattedInteger : formattedInteger
+  if (decimalPart !== undefined) {
+    result += ',' + decimalPart
+  }
+  
+  return result
+}
+
+// Helper function to parse formatted number back to plain number string
+const parseFormattedNumber = (value: string): string => {
+  // Remove thousand separators (dots) but keep comma for decimals
+  return value.replace(/\./g, '')
+}
+
 // Type definitions for each category's form data
 export interface FinancialDocData {
   revenue3Years: string // Legacy field
@@ -262,11 +297,16 @@ export default function SalesProcessDataModal({
             <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear()}</label>
             <input
               type="text"
-              value={localData.revenueByYear?.year1 || ''}
-              onChange={(e) => setLocalData({ 
-                ...localData, 
-                revenueByYear: { ...localData.revenueByYear, year1: e.target.value }
-              })}
+              value={formatNumberWithSeparator(localData.revenueByYear?.year1 || '')}
+              onChange={(e) => {
+                const rawValue = parseFormattedNumber(e.target.value)
+                const formattedValue = formatNumberWithSeparator(rawValue)
+                // Store the raw number, display formatted
+                setLocalData({ 
+                  ...localData, 
+                  revenueByYear: { ...localData.revenueByYear, year1: rawValue }
+                })
+              }}
               placeholder="0"
               className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
             />
@@ -275,11 +315,14 @@ export default function SalesProcessDataModal({
             <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 1}</label>
             <input
               type="text"
-              value={localData.revenueByYear?.year2 || ''}
-              onChange={(e) => setLocalData({ 
-                ...localData, 
-                revenueByYear: { ...localData.revenueByYear, year2: e.target.value }
-              })}
+              value={formatNumberWithSeparator(localData.revenueByYear?.year2 || '')}
+              onChange={(e) => {
+                const rawValue = parseFormattedNumber(e.target.value)
+                setLocalData({ 
+                  ...localData, 
+                  revenueByYear: { ...localData.revenueByYear, year2: rawValue }
+                })
+              }}
               placeholder="0"
               className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
             />
@@ -288,11 +331,14 @@ export default function SalesProcessDataModal({
             <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 2}</label>
             <input
               type="text"
-              value={localData.revenueByYear?.year3 || ''}
-              onChange={(e) => setLocalData({ 
-                ...localData, 
-                revenueByYear: { ...localData.revenueByYear, year3: e.target.value }
-              })}
+              value={formatNumberWithSeparator(localData.revenueByYear?.year3 || '')}
+              onChange={(e) => {
+                const rawValue = parseFormattedNumber(e.target.value)
+                setLocalData({ 
+                  ...localData, 
+                  revenueByYear: { ...localData.revenueByYear, year3: rawValue }
+                })
+              }}
               placeholder="0"
               className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
             />
@@ -310,11 +356,14 @@ export default function SalesProcessDataModal({
             <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear()}</label>
             <input
               type="text"
-              value={localData.profitByYear?.year1 || ''}
-              onChange={(e) => setLocalData({ 
-                ...localData, 
-                profitByYear: { ...localData.profitByYear, year1: e.target.value }
-              })}
+              value={formatNumberWithSeparator(localData.profitByYear?.year1 || '')}
+              onChange={(e) => {
+                const rawValue = parseFormattedNumber(e.target.value)
+                setLocalData({ 
+                  ...localData, 
+                  profitByYear: { ...localData.profitByYear, year1: rawValue }
+                })
+              }}
               placeholder="0"
               className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
             />
@@ -323,11 +372,14 @@ export default function SalesProcessDataModal({
             <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 1}</label>
             <input
               type="text"
-              value={localData.profitByYear?.year2 || ''}
-              onChange={(e) => setLocalData({ 
-                ...localData, 
-                profitByYear: { ...localData.profitByYear, year2: e.target.value }
-              })}
+              value={formatNumberWithSeparator(localData.profitByYear?.year2 || '')}
+              onChange={(e) => {
+                const rawValue = parseFormattedNumber(e.target.value)
+                setLocalData({ 
+                  ...localData, 
+                  profitByYear: { ...localData.profitByYear, year2: rawValue }
+                })
+              }}
               placeholder="0"
               className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
             />
@@ -336,11 +388,14 @@ export default function SalesProcessDataModal({
             <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 2}</label>
             <input
               type="text"
-              value={localData.profitByYear?.year3 || ''}
-              onChange={(e) => setLocalData({ 
-                ...localData, 
-                profitByYear: { ...localData.profitByYear, year3: e.target.value }
-              })}
+              value={formatNumberWithSeparator(localData.profitByYear?.year3 || '')}
+              onChange={(e) => {
+                const rawValue = parseFormattedNumber(e.target.value)
+                setLocalData({ 
+                  ...localData, 
+                  profitByYear: { ...localData.profitByYear, year3: rawValue }
+                })
+              }}
               placeholder="0"
               className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
             />
