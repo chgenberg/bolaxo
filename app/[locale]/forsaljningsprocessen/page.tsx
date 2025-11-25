@@ -495,6 +495,7 @@ export default function ForsaljningsprocessenPage() {
   const locale = useLocale()
   const [currentStep, setCurrentStep] = useState(0)
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({})
+  const [showSources, setShowSources] = useState(false)
 
   const toggleExpand = (stepId: number, itemIdx: number) => {
     const key = `${stepId}-${itemIdx}`
@@ -718,6 +719,14 @@ export default function ForsaljningsprocessenPage() {
                   Föregående
                 </button>
 
+                {/* Sources link */}
+                <button
+                  onClick={() => setShowSources(true)}
+                  className="text-xs text-gray-400 hover:text-[#1F3C58] underline transition-colors"
+                >
+                  (källor)
+                </button>
+
                 {currentStep < steps.length - 1 ? (
                   <button
                     onClick={() => {
@@ -772,6 +781,323 @@ export default function ForsaljningsprocessenPage() {
           display: none;
         }
       `}</style>
+
+      {/* Sources Modal */}
+      {showSources && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowSources(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="bg-[#1F3C58] px-6 py-5 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-white">Källor och referenser</h2>
+              <button
+                onClick={() => setShowSources(false)}
+                className="text-white/70 hover:text-white text-2xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto max-h-[calc(85vh-80px)]">
+              <p className="text-gray-600 text-sm mb-6">
+                Statistik och fakta i denna guide baseras på följande erkända källor inom M&A och företagsförsäljning:
+              </p>
+
+              {/* Category: Global M&A Reports */}
+              <div className="mb-6">
+                <h3 className="font-bold text-[#1F3C58] mb-3 pb-2 border-b border-gray-200">
+                  Globala M&A-rapporter
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.pwc.com/gx/en/services/deals/trends.html" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        PwC Global M&A Industry Trends
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Årlig rapport om globala M&A-trender, multiplar och marknadsutveckling</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www2.deloitte.com/global/en/pages/finance/articles/ma-trends.html" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Deloitte M&A Trends Report
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Kvartalsvisa analyser av M&A-aktivitet och transaktionsstrukturer</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://kpmg.com/xx/en/home/insights/2024/01/m-and-a-trends.html" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        KPMG M&A Predictor
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Prediktiv analys av M&A-marknaden och värderingsmultiplar</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.ey.com/en_gl/insights/strategy-transactions/global-m-and-a-sector-trends" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        EY Global M&A Trends
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Sektorspecifika M&A-trender och due diligence-statistik</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.bcg.com/publications/2024/m-and-a-report-dealmakers-guide" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        BCG M&A Report
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Boston Consulting Groups årliga M&A-rapport med transaktionsdata</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Category: Nordic & Swedish */}
+              <div className="mb-6">
+                <h3 className="font-bold text-[#1F3C58] mb-3 pb-2 border-b border-gray-200">
+                  Nordiska och svenska källor
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.svca.se/rapporter/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        SVCA (Swedish Private Equity & Venture Capital Association)
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Svensk statistik om PE-transaktioner, multiplar och exitvärden</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.argentum.no/en/research/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Argentum Nordic Private Equity Report
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Nordisk PE-data inklusive svenska SMB-transaktioner</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.argos.wityu.fund/mid-market-monitor/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Argos Wityu Mid-Market Monitor
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Europeisk mid-market M&A-statistik med EBITDA-multiplar</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://mergr.com/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Mergr Nordic M&A Database
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Nordisk M&A-databas med transaktionsdetaljer</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.oaklins.com/se/sv/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Oaklins Sweden M&A Reports
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Svenska M&A-trender och sektoranalyser</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Category: Due Diligence & Transaction Data */}
+              <div className="mb-6">
+                <h3 className="font-bold text-[#1F3C58] mb-3 pb-2 border-b border-gray-200">
+                  Due diligence och transaktionsdata
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.srs.se/en/transact" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        SRS Transact Nordic M&A Study
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Statistik om prisjusteringar och DD-fynd i Norden</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.cmslegalondemand.com/dealinsight" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        CMS European M&A Study
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Årlig analys av M&A-avtal, garantier och earnout-strukturer</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.aon.com/home/insights/reports/2024/ma-and-transaction-solutions-trends" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Aon M&A and Transaction Solutions
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">W&I-försäkringsstatistik och garantianspråksdata</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.dlapiper.com/en/insights/publications/global-ma-intelligence-report" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        DLA Piper Global M&A Intelligence
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Juridiska trender i M&A-avtal och tviststatistik</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Category: Academic & Research */}
+              <div className="mb-6">
+                <h3 className="font-bold text-[#1F3C58] mb-3 pb-2 border-b border-gray-200">
+                  Akademiska källor och forskning
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://hbr.org/topic/subject/mergers-and-acquisitions" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Harvard Business Review - M&A Research
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Forskningsartiklar om M&A-framgångsfaktorer och misslyckanden</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.mckinsey.com/capabilities/m-and-a/our-insights" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        McKinsey M&A Insights
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Analyser av värdeskapande i M&A och integrationsframgång</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://papers.ssrn.com/sol3/JELJOUR_Results.cfm?form_name=journalBrowse&journal_id=270666" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        SSRN M&A Research Papers
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Akademisk forskning om M&A-processer och värdering</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.handelshogskolan.se/forskning" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Handelshögskolan Stockholm - Forskning
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Svensk akademisk forskning om företagstransaktioner</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Category: Industry Associations */}
+              <div className="mb-6">
+                <h3 className="font-bold text-[#1F3C58] mb-3 pb-2 border-b border-gray-200">
+                  Branschorganisationer
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.ibba.org/research/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        IBBA (International Business Brokers Association)
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Statistik om SMB-försäljningar och förmedlardata</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.amaaonline.com/alliance-of-ma-advisors-research" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        AM&AA (Alliance of M&A Advisors)
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Middle-market M&A-trender och rådgivarperspektiv</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.investeurope.eu/research/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Invest Europe
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Europeisk PE/VC-statistik och exitdata</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Category: Data Providers */}
+              <div className="mb-6">
+                <h3 className="font-bold text-[#1F3C58] mb-3 pb-2 border-b border-gray-200">
+                  Datakällor och databaser
+                </h3>
+                <ul className="space-y-3 text-sm">
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://pitchbook.com/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        PitchBook
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Omfattande databas över PE/VC-transaktioner och värderingar</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.refinitiv.com/en/financial-data/deals-data" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Refinitiv (LSEG) Deals Intelligence
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Global M&A-transaktionsdata och marknadsanalyser</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.preqin.com/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Preqin
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Alternativa investeringsdata och PE-statistik</p>
+                    </div>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#1F3C58]">•</span>
+                    <div>
+                      <a href="https://www.bloomberg.com/professional/solution/bloomberg-terminal/" target="_blank" rel="noopener noreferrer" className="text-[#1F3C58] hover:underline font-medium">
+                        Bloomberg Terminal M&A Data
+                      </a>
+                      <p className="text-gray-500 text-xs mt-0.5">Realtids M&A-data och transaktionsanalyser</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Disclaimer */}
+              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500">
+                  <strong>Not:</strong> Statistik och procentsatser i denna guide är baserade på aggregerad data från ovanstående källor och representerar typiska värden för den nordiska och europeiska M&A-marknaden. Faktiska värden kan variera beroende på bransch, företagsstorlek, marknadsförhållanden och transaktionens specifika omständigheter. För specifika råd, konsultera alltid professionella M&A-rådgivare.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
