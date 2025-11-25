@@ -1942,71 +1942,6 @@ export default function ForsaljningsprocessenPage() {
                           </span>
                         </button>
                         
-                        {/* Fill in data button - ALWAYS VISIBLE for step 1 items */}
-                        {(() => {
-                          const modalCategory = getModalCategory(step.id, idx)
-                          if (!modalCategory) return null
-                          
-                          const status = getCategoryStatus(modalCategory)
-                          const summary = companyData.generatedSummaries[modalCategory]
-                          
-                          return (
-                            <div className="px-3 sm:px-4 pb-3 border-t border-gray-100">
-                              {/* Generated summary display */}
-                              {summary ? (
-                                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-green-700 text-sm font-medium">
-                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                      </svg>
-                                      Ifyllt & genererat
-                                    </div>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        setActiveModal(modalCategory)
-                                      }}
-                                      className="text-xs text-green-700 hover:text-green-800 underline"
-                                    >
-                                      Redigera
-                                    </button>
-                                  </div>
-                                  <p className="text-xs text-gray-600 mt-2 line-clamp-2">{summary}</p>
-                                </div>
-                              ) : (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    setActiveModal(modalCategory)
-                                  }}
-                                  className={`mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                                    status === 'filled' 
-                                      ? 'bg-amber-50 border border-amber-300 text-amber-700 hover:bg-amber-100'
-                                      : 'bg-[#1F3C58] text-white hover:bg-[#1F3C58]/90 shadow-sm'
-                                  }`}
-                                >
-                                  {status === 'filled' ? (
-                                    <>
-                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                      </svg>
-                                      Komplettera & generera sammanfattning
-                                    </>
-                                  ) : (
-                                    <>
-                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                      </svg>
-                                      Fyll i dina uppgifter
-                                    </>
-                                  )}
-                                </button>
-                              )}
-                            </div>
-                          )
-                        })()}
-                        
                         {/* Expanded content */}
                         <div 
                           className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -2015,29 +1950,74 @@ export default function ForsaljningsprocessenPage() {
                         >
                           <div className="px-3 sm:px-4 pb-4 pt-0">
                             {/* "Fyll i dina uppgifter" prompt for step 1 items */}
-                            {getModalCategory(step.id, idx) && !companyData.generatedSummaries[getModalCategory(step.id, idx)!] && (
-                              <button
-                                onClick={() => setActiveModal(getModalCategory(step.id, idx))}
-                                className="w-full mb-4 p-3 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border border-[#1F3C58]/20 rounded-lg flex items-center gap-3 hover:from-[#1F3C58]/10 hover:to-[#1F3C58]/15 transition-all group"
-                              >
-                                <div className="w-8 h-8 bg-[#1F3C58] rounded-full flex items-center justify-center flex-shrink-0">
-                                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            {(() => {
+                              const modalCategory = getModalCategory(step.id, idx)
+                              if (!modalCategory) return null
+                              
+                              const summary = companyData.generatedSummaries[modalCategory]
+                              const status = getCategoryStatus(modalCategory)
+                              
+                              if (summary) {
+                                // Show completed state
+                                return (
+                                  <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center gap-2 text-green-700 text-sm font-medium">
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Ifyllt & genererat
+                                      </div>
+                                      <button
+                                        onClick={() => setActiveModal(modalCategory)}
+                                        className="text-xs text-green-700 hover:text-green-800 underline"
+                                      >
+                                        Redigera
+                                      </button>
+                                    </div>
+                                    <p className="text-xs text-gray-600 mt-2 line-clamp-2">{summary}</p>
+                                  </div>
+                                )
+                              }
+                              
+                              // Show fill in prompt
+                              return (
+                                <button
+                                  onClick={() => setActiveModal(modalCategory)}
+                                  className={`w-full mb-4 p-3 rounded-lg flex items-center gap-3 transition-all group ${
+                                    status === 'filled'
+                                      ? 'bg-amber-50 border border-amber-200 hover:bg-amber-100'
+                                      : 'bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border border-[#1F3C58]/20 hover:from-[#1F3C58]/10 hover:to-[#1F3C58]/15'
+                                  }`}
+                                >
+                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                    status === 'filled' ? 'bg-amber-500' : 'bg-[#1F3C58]'
+                                  }`}>
+                                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                  </div>
+                                  <div className="text-left flex-1">
+                                    <span className={`block text-sm font-semibold ${
+                                      status === 'filled' ? 'text-amber-700' : 'text-[#1F3C58]'
+                                    }`}>
+                                      {status === 'filled' ? 'Komplettera & generera sammanfattning' : 'Fyll i dina uppgifter'}
+                                    </span>
+                                    <span className="block text-xs text-gray-500">
+                                      {status === 'filled' 
+                                        ? 'Du har påbörjat - klicka för att slutföra'
+                                        : 'Klicka för att fylla i information om ditt företag'
+                                      }
+                                    </span>
+                                  </div>
+                                  <svg className={`w-5 h-5 transition-colors ${
+                                    status === 'filled' ? 'text-amber-400 group-hover:text-amber-600' : 'text-[#1F3C58]/50 group-hover:text-[#1F3C58]'
+                                  }`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                   </svg>
-                                </div>
-                                <div className="text-left flex-1">
-                                  <span className="block text-sm font-semibold text-[#1F3C58] group-hover:text-[#1F3C58]/90">
-                                    Fyll i dina uppgifter
-                                  </span>
-                                  <span className="block text-xs text-gray-500">
-                                    Klicka för att fylla i information om ditt företag
-                                  </span>
-                                </div>
-                                <svg className="w-5 h-5 text-[#1F3C58]/50 group-hover:text-[#1F3C58] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                              </button>
-                            )}
+                                </button>
+                              )
+                            })()}
                             
                             <div className="pl-7 sm:pl-9 border-l-2 border-[#1F3C58]/20 ml-2.5 sm:ml-3">
                               <div className="text-gray-700 text-xs sm:text-sm leading-relaxed pl-3 sm:pl-4 mb-4 space-y-3">
