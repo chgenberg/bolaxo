@@ -755,9 +755,9 @@ export default function ForsaljningsprocessenPage() {
                   {/* Sources link */}
                   <button
                     onClick={() => setShowSources(true)}
-                    className="text-xs text-gray-400 hover:text-[#1F3C58] underline transition-colors"
+                    className="text-sm font-medium text-[#1F3C58] hover:text-[#1F3C58]/80 underline transition-colors"
                   >
-                    (källor)
+                    Källor
                   </button>
 
                   {currentStep < steps.length - 1 ? (
