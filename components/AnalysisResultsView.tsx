@@ -521,13 +521,13 @@ function QuickWinsSection({ quickWins }: { quickWins: QuickWin[] }) {
       {quickWins.map((win, idx) => (
         <div key={idx} className="border border-gray-200 rounded-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-[#1F3C58] text-white p-4">
+          <div className="bg-[#1F3C58] p-4">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-lg font-bold">
+                <span className="flex-shrink-0 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-lg font-bold text-white">
                   {idx + 1}
                 </span>
-                <h3 className="font-semibold text-lg">{win.title}</h3>
+                <h3 className="font-semibold text-lg text-white">{win.title}</h3>
               </div>
               <span className={`px-3 py-1 rounded-full text-xs font-bold ${getPriorityColor(win.priority)}`}>
                 {win.priority}
