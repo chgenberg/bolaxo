@@ -4,6 +4,26 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 
+// Type definitions
+interface StepItem {
+  title: string
+  summary: string
+  expanded: string
+  stats?: { value: string; label: string; sublabel?: string }[]
+  chart?: { data: number[]; label: string }
+  rings?: { percent: number; label: string }[]
+  timeline?: { label: string; duration: string }[]
+}
+
+interface Step {
+  id: number
+  title: string
+  subtitle: string
+  duration: string
+  fact: string
+  items: StepItem[]
+}
+
 // Hide header on this page
 const HideHeader = () => {
   useEffect(() => {
@@ -110,7 +130,7 @@ function Timeline({ items }: { items: { label: string; duration: string }[] }) {
   )
 }
 
-const steps = [
+const steps: Step[] = [
   {
     id: 1,
     title: 'Förberedelse',
