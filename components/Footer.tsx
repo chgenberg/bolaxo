@@ -78,6 +78,15 @@ export default function Footer() {
                   Försäljningsprocessen
                 </Link>
               </li>
+              <li>
+                <Link
+                  href={`/${locale}/forsaljningsprocessen/exempelrapport`}
+                  className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors flex items-center gap-1"
+                >
+                  Exempelrapport (PDF)
+                  <span className="text-[10px] bg-accent-pink/20 text-accent-pink px-1.5 py-0.5 rounded">NY</span>
+                </Link>
+              </li>
             </ul>
           </div>
 
