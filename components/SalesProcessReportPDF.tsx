@@ -556,11 +556,19 @@ export default function SalesProcessReportPDF({
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>Omsättning (3 år)</Text>
-              <Text style={styles.tableCell}>{companyData.financialDocs.revenue3Years || 'Ej angivet'}</Text>
+              <Text style={styles.tableCell}>
+                {companyData.financialDocs.revenueByYear && (companyData.financialDocs.revenueByYear.year1 || companyData.financialDocs.revenueByYear.year2 || companyData.financialDocs.revenueByYear.year3)
+                  ? `${new Date().getFullYear()}: ${companyData.financialDocs.revenueByYear.year1 || '-'} MSEK, ${new Date().getFullYear() - 1}: ${companyData.financialDocs.revenueByYear.year2 || '-'} MSEK, ${new Date().getFullYear() - 2}: ${companyData.financialDocs.revenueByYear.year3 || '-'} MSEK`
+                  : companyData.financialDocs.revenue3Years || 'Ej angivet'}
+              </Text>
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>Resultat (3 år)</Text>
-              <Text style={styles.tableCell}>{companyData.financialDocs.profit3Years || 'Ej angivet'}</Text>
+              <Text style={styles.tableCell}>
+                {companyData.financialDocs.profitByYear && (companyData.financialDocs.profitByYear.year1 || companyData.financialDocs.profitByYear.year2 || companyData.financialDocs.profitByYear.year3)
+                  ? `${new Date().getFullYear()}: ${companyData.financialDocs.profitByYear.year1 || '-'} MSEK, ${new Date().getFullYear() - 1}: ${companyData.financialDocs.profitByYear.year2 || '-'} MSEK, ${new Date().getFullYear() - 2}: ${companyData.financialDocs.profitByYear.year3 || '-'} MSEK`
+                  : companyData.financialDocs.profit3Years || 'Ej angivet'}
+              </Text>
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>Reviderade årsredovisningar</Text>

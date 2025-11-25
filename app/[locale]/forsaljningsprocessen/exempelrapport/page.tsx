@@ -35,6 +35,8 @@ const mockCompanyData: CompanyData = {
   financialDocs: {
     revenue3Years: '2023: 45 MSEK, 2022: 38 MSEK, 2021: 32 MSEK',
     profit3Years: '2023: 6,2 MSEK, 2022: 4,8 MSEK, 2021: 3,9 MSEK',
+    revenueByYear: { year1: '45', year2: '38', year3: '32' },
+    profitByYear: { year1: '6.2', year2: '4.8', year3: '3.9' },
     hasAuditedReports: true,
     hasMonthlyReports: true,
     budgetAvailable: true,
