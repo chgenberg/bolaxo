@@ -289,9 +289,6 @@ export default function ChatWidget() {
           <MessageCircle className="w-5 h-5 md:w-6 md:h-6" />
           <span className="hidden md:block font-bold">{t('button')}</span>
         </div>
-        
-        {/* Pulsing effect */}
-        <div className="absolute inset-0 rounded-full bg-navy animate-ping opacity-20" />
       </button>
     )
   }

@@ -528,27 +528,12 @@ export default function ForsaljningsprocessenPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <HideHeader />
-      {/* Pulsating dark blue background effect */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute inset-0 bg-[#1F3C58] animate-pulse-shadow-dark"
-          style={{ 
-            clipPath: 'ellipse(80% 60% at 50% 40%)',
-            opacity: 0.15
-          }}
-        />
-      </div>
 
       <div className="relative min-h-screen flex items-center justify-center px-3 sm:px-4 py-8 sm:py-16">
         {/* Main white content box */}
         <div className="w-full max-w-3xl">
-          {/* Pulsating shadow wrapper */}
+          {/* Shadow wrapper */}
           <div className="relative">
-            {/* Pulsating dark blue shadow */}
-            <div 
-              className="absolute -inset-2 sm:-inset-4 bg-[#1F3C58] rounded-2xl sm:rounded-3xl animate-pulse-shadow-dark blur-xl"
-              style={{ opacity: 0.3 }}
-            />
             
             {/* White content card */}
             <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden">
