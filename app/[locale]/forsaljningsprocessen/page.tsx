@@ -141,7 +141,7 @@ const steps: Step[] = [
       {
         title: 'Samla finansiell dokumentation',
         summary: 'Bokslut, resultatrapporter och prognoser för de senaste 3-5 åren.',
-        expanded: 'En köpare vill se en tydlig bild av företagets ekonomiska utveckling. Samla årsredovisningar, månadsrapporter, budgetar och prognoser. Se till att alla siffror är avstämda och kan förklaras. Eventuella engångsposter eller extraordinära händelser bör dokumenteras separat med förklaringar. Ju mer transparent och välorganiserad din finansiella historik är, desto snabbare går due diligence-processen och desto högre förtroende skapas hos köparen.',
+        expanded: 'En köpare vill se en tydlig bild av företagets ekonomiska utveckling. Samla årsredovisningar, månadsrapporter, budgetar och prognoser.\n\nSe till att alla siffror är avstämda och kan förklaras. Eventuella engångsposter eller extraordinära händelser bör dokumenteras separat med förklaringar.\n\nJu mer transparent och välorganiserad din finansiella historik är, desto snabbare går due diligence-processen och desto högre förtroende skapas hos köparen.',
         stats: [
           { value: '3-5 år', label: 'Finansiell historik' },
           { value: '85%', label: 'Köpare kräver bokslut' }
@@ -150,13 +150,13 @@ const steps: Step[] = [
       {
         title: 'Dokumentera affärsrelationer',
         summary: 'Alla kundkontrakt, leverantörsavtal och andra väsentliga affärsrelationer.',
-        expanded: 'Gå igenom alla aktiva avtal och kategorisera dem efter betydelse. Identifiera vilka kunder som står för störst andel av omsättningen (kundkoncentration är en vanlig riskfaktor). Kartlägg leverantörsberoendet och eventuella exklusivitetsavtal. Dokumentera även informella överenskommelser som bör formaliseras. En köpare vill förstå hur stabila intäkterna är och vilka risker som finns i avtalsportföljen.',
+        expanded: 'Gå igenom alla aktiva avtal och kategorisera dem efter betydelse. Identifiera vilka kunder som står för störst andel av omsättningen (kundkoncentration är en vanlig riskfaktor).\n\nKartlägg leverantörsberoendet och eventuella exklusivitetsavtal. Dokumentera även informella överenskommelser som bör formaliseras.\n\nEn köpare vill förstå hur stabila intäkterna är och vilka risker som finns i avtalsportföljen.',
         chart: { data: [30, 25, 15, 12, 8, 5, 5], label: 'Typisk kundkoncentration (% av omsättning per kund)' }
       },
       {
         title: 'Minimera nyckelpersonberoende',
         summary: 'Dokumentera processer och rutiner för att minska beroendet av enskilda personer.',
-        expanded: 'Nyckelpersonberoende är en av de vanligaste värdesänkande faktorerna vid företagsförsäljning. Börja med att identifiera vilka personer som är kritiska för verksamheten. Dokumentera sedan deras arbetsuppgifter, kontaktnät och beslutprocesser. Skapa manualer och rutinbeskrivningar. Överväg att bredda ansvarsfördelningen och introducera backupfunktioner. Köpare betalar premium för företag som kan drivas utan säljaren.',
+        expanded: 'Nyckelpersonberoende är en av de vanligaste värdesänkande faktorerna vid företagsförsäljning. Börja med att identifiera vilka personer som är kritiska för verksamheten.\n\nDokumentera sedan deras arbetsuppgifter, kontaktnät och beslutprocesser. Skapa manualer och rutinbeskrivningar.\n\nÖverväg att bredda ansvarsfördelningen och introducera backupfunktioner. Köpare betalar premium för företag som kan drivas utan säljaren.',
         stats: [
           { value: '-15%', label: 'Värdeminskning vid högt beroende' },
           { value: '67%', label: 'Affärer misslyckas pga nyckelperson' }
@@ -165,7 +165,7 @@ const steps: Step[] = [
       {
         title: 'Städa i balansräkningen',
         summary: 'Reglera mellanhavanden med närstående och optimera rörelsekapitalet.',
-        expanded: 'Gå igenom balansräkningen med kritiska ögon. Har företaget lån till ägare eller närstående? Dessa måste oftast regleras före försäljning. Finns det tillgångar som inte används i verksamheten (t.ex. fastigheter, bilar, konst)? Dessa kan behöva delas ut eller säljas separat. Optimera lagernivåer och kundfordringar för att visa ett sunt rörelsekapitalbehov. En "ren" balansräkning underlättar värderingen och förhandlingen.',
+        expanded: 'Gå igenom balansräkningen med kritiska ögon. Har företaget lån till ägare eller närstående? Dessa måste oftast regleras före försäljning.\n\nFinns det tillgångar som inte används i verksamheten (t.ex. fastigheter, bilar, konst)? Dessa kan behöva delas ut eller säljas separat.\n\nOptimera lagernivåer och kundfordringar för att visa ett sunt rörelsekapitalbehov. En "ren" balansräkning underlättar värderingen och förhandlingen.',
         rings: [
           { percent: 75, label: 'Reglera lån' },
           { percent: 60, label: 'Optimera lager' },
@@ -175,7 +175,7 @@ const steps: Step[] = [
       {
         title: 'Ordna juridiska dokument',
         summary: 'Bolagsordning, aktiebok, styrelsebeslut och andra formalia.',
-        expanded: 'Se till att alla bolagsdokument är uppdaterade och korrekta. Aktieboken ska vara komplett och spåra alla historiska överlåtelser. Styrelsebeslut och bolagsstämmoprotokoll ska vara signerade och arkiverade. Kontrollera att eventuella ägaravtal, optionsavtal eller bonusplaner är dokumenterade. Verifiera att bolaget har alla nödvändiga tillstånd och registreringar. Juridiska brister som upptäcks sent i processen kan försena eller till och med stoppa en affär.',
+        expanded: 'Se till att alla bolagsdokument är uppdaterade och korrekta. Aktieboken ska vara komplett och spåra alla historiska överlåtelser.\n\nStyrelsebeslut och bolagsstämmoprotokoll ska vara signerade och arkiverade. Kontrollera att eventuella ägaravtal, optionsavtal eller bonusplaner är dokumenterade.\n\nVerifiera att bolaget har alla nödvändiga tillstånd och registreringar. Juridiska brister som upptäcks sent i processen kan försena eller till och med stoppa en affär.',
         timeline: [
           { label: 'Aktiebok uppdaterad', duration: '1 vecka' },
           { label: 'Protokoll arkiverade', duration: '2 veckor' },
@@ -195,7 +195,7 @@ const steps: Step[] = [
       {
         title: 'Professionell företagsvärdering',
         summary: 'Baserad på kassaflöde, substans och jämförbara transaktioner.',
-        expanded: 'Det finns flera värderingsmetoder som kompletterar varandra. DCF-metoden (diskonterat kassaflöde) värderar framtida intjäningsförmåga. Substansvärdering fokuserar på tillgångarnas marknadsvärde. Multipelvärdering jämför med liknande transaktioner i branschen. En professionell värdering kombinerar dessa metoder och tar hänsyn till företagets specifika situation. Undvik att enbart förlita dig på enkla tumregler - varje företag är unikt.',
+        expanded: 'Det finns flera värderingsmetoder som kompletterar varandra. DCF-metoden (diskonterat kassaflöde) värderar framtida intjäningsförmåga.\n\nSubstansvärdering fokuserar på tillgångarnas marknadsvärde. Multipelvärdering jämför med liknande transaktioner i branschen.\n\nEn professionell värdering kombinerar dessa metoder och tar hänsyn till företagets specifika situation. Undvik att enbart förlita dig på enkla tumregler - varje företag är unikt.',
         stats: [
           { value: 'DCF', label: 'Kassaflödesvärdering' },
           { value: 'Multipel', label: 'Jämförande värdering' },
@@ -205,13 +205,13 @@ const steps: Step[] = [
       {
         title: 'Analysera branschens multiplar',
         summary: 'Förstå marknadstrender och köparnas förväntningar.',
-        expanded: 'Olika branscher handlas till olika multiplar av omsättning eller EBITDA. Tech-bolag kan värderas till 10x EBITDA medan traditionella tjänsteföretag kanske ligger på 4-6x. Undersök vilka transaktioner som gjorts i din bransch de senaste åren. Tänk på att multiplar varierar med konjunktur, ränteläge och tillgång på kapital. Ha realistiska förväntningar baserade på faktiska marknadstransaktioner snarare än önsketänkande.',
+        expanded: 'Olika branscher handlas till olika multiplar av omsättning eller EBITDA. Tech-bolag kan värderas till 10x EBITDA medan traditionella tjänsteföretag kanske ligger på 4-6x.\n\nUndersök vilka transaktioner som gjorts i din bransch de senaste åren. Tänk på att multiplar varierar med konjunktur, ränteläge och tillgång på kapital.\n\nHa realistiska förväntningar baserade på faktiska marknadstransaktioner snarare än önsketänkande.',
         chart: { data: [4, 5, 6, 8, 10, 12, 15], label: 'EBITDA-multiplar per bransch (Tjänst → Tech)' }
       },
       {
         title: 'Identifiera värdeskapande faktorer',
         summary: 'Tillväxtpotential, unika tillgångar och marknadsposition.',
-        expanded: 'Vad gör ditt företag unikt och attraktivt? Stark tillväxt de senaste åren motiverar en premie. Återkommande intäkter (prenumerationsmodeller, serviceavtal) värderas högre än projektbaserade intäkter. Immateriella tillgångar som varumärken, patent eller kunddata kan vara mycket värdefulla. En stark marknadsposition med inträdesbarriärer minskar risken för köparen. Dokumentera och kvantifiera dessa faktorer inför förhandlingen.',
+        expanded: 'Vad gör ditt företag unikt och attraktivt? Stark tillväxt de senaste åren motiverar en premie.\n\nÅterkommande intäkter (prenumerationsmodeller, serviceavtal) värderas högre än projektbaserade intäkter. Immateriella tillgångar som varumärken, patent eller kunddata kan vara mycket värdefulla.\n\nEn stark marknadsposition med inträdesbarriärer minskar risken för köparen. Dokumentera och kvantifiera dessa faktorer inför förhandlingen.',
         rings: [
           { percent: 90, label: 'Tillväxt' },
           { percent: 75, label: 'Återk. intäkter' },
@@ -221,7 +221,7 @@ const steps: Step[] = [
       {
         title: 'Förstå Enterprise Value vs Equity Value',
         summary: 'Hur skulder och kassa påverkar det slutliga priset.',
-        expanded: 'Enterprise Value (EV) är värdet på hela verksamheten, oavsett finansiering. Equity Value är det som tillfaller aktieägarna efter att skulder dragits av och kassa lagts till. Formeln är: Equity Value = EV - Nettoskuld. Om ditt företag har stora lån minskar köpeskillingen till dig. Om företaget har överskottskassa ökar den. Förstå också hur rörelsekapitaljusteringar fungerar - köparen vill ha en "normal" nivå vid tillträdet.',
+        expanded: 'Enterprise Value (EV) är värdet på hela verksamheten, oavsett finansiering. Equity Value är det som tillfaller aktieägarna efter att skulder dragits av och kassa lagts till.\n\nFormeln är: Equity Value = EV - Nettoskuld. Om ditt företag har stora lån minskar köpeskillingen till dig. Om företaget har överskottskassa ökar den.\n\nFörstå också hur rörelsekapitaljusteringar fungerar - köparen vill ha en "normal" nivå vid tillträdet.',
         stats: [
           { value: 'EV', label: 'Enterprise Value', sublabel: 'Totalt verksamhetsvärde' },
           { value: '−', label: 'Nettoskuld', sublabel: 'Skulder minus kassa' },
@@ -231,7 +231,7 @@ const steps: Step[] = [
       {
         title: 'Förbered prisargument',
         summary: 'Köpare värderar ofta lägre - ha tydliga argument redo.',
-        expanded: 'Det är naturligt att köpare och säljare har olika syn på värdet. Förbered dig genom att dokumentera varför ditt pris är motiverat. Använd konkreta siffror: "Våra återkommande intäkter har ökat 25% per år de senaste tre åren." Visa synergier köparen kan realisera. Ha backup-argument om köparen ifrågasätter specifika poster. Var också beredd att kompromissa på struktur (t.ex. earnout) om inte pris, för att nå en överenskommelse.',
+        expanded: 'Det är naturligt att köpare och säljare har olika syn på värdet. Förbered dig genom att dokumentera varför ditt pris är motiverat.\n\nAnvänd konkreta siffror: "Våra återkommande intäkter har ökat 25% per år de senaste tre åren." Visa synergier köparen kan realisera.\n\nHa backup-argument om köparen ifrågasätter specifika poster. Var också beredd att kompromissa på struktur (t.ex. earnout) om inte pris, för att nå en överenskommelse.',
         chart: { data: [100, 85, 75, 70, 80, 95], label: 'Typisk prisförhandling (Ägarens ask → Slutpris över tid)' }
       }
     ]
@@ -246,7 +246,7 @@ const steps: Step[] = [
       {
         title: 'Skapa teaser-dokument',
         summary: 'Väck intresse utan att avslöja företagets identitet.',
-        expanded: 'En teaser är ett 1-2 sidigt dokument som beskriver företaget anonymt. Inkludera bransch, geografisk marknad, ungefärlig omsättning och tillväxt, samt huvudsakliga styrkor. Syftet är att väcka intresse hos potentiella köpare utan att röja företagets identitet. Teasern skickas ut brett och de som visar intresse får signera ett NDA innan de får mer information. En bra teaser balanserar informationsgivning med sekretess.',
+        expanded: 'En teaser är ett 1-2 sidigt dokument som beskriver företaget anonymt. Inkludera bransch, geografisk marknad, ungefärlig omsättning och tillväxt, samt huvudsakliga styrkor.\n\nSyftet är att väcka intresse hos potentiella köpare utan att röja företagets identitet. Teasern skickas ut brett och de som visar intresse får signera ett NDA innan de får mer information.\n\nEn bra teaser balanserar informationsgivning med sekretess.',
         stats: [
           { value: '1-2', label: 'Sidor i teaser' },
           { value: '50+', label: 'Potentiella köpare' },
@@ -256,7 +256,7 @@ const steps: Step[] = [
       {
         title: 'Utveckla informationsmemorandum',
         summary: 'Detaljerad presentation med verksamhet, finansiell historik och potential.',
-        expanded: 'Informationsmemorandum (IM) är säljarens huvuddokument - ofta 30-50 sidor. Det innehåller: företagets historia och verksamhetsbeskrivning, marknadsanalys, konkurrenssituation, organisation och nyckelpersoner, finansiell historik och prognoser, samt investeringsargument. IM ska vara professionellt utformat, faktabaserat och säljande utan att överdriva. En välskriven IM sparar tid och skapar förtroende hos seriösa köpare.',
+        expanded: 'Informationsmemorandum (IM) är säljarens huvuddokument - ofta 30-50 sidor. Det innehåller: företagets historia och verksamhetsbeskrivning, marknadsanalys, konkurrenssituation, organisation och nyckelpersoner, finansiell historik och prognoser, samt investeringsargument.\n\nIM ska vara professionellt utformat, faktabaserat och säljande utan att överdriva.\n\nEn välskriven IM sparar tid och skapar förtroende hos seriösa köpare.',
         timeline: [
           { label: 'Verksamhetsbeskrivning', duration: '5-10 sidor' },
           { label: 'Marknadsanalys', duration: '5-8 sidor' },
@@ -267,7 +267,7 @@ const steps: Step[] = [
       {
         title: 'Identifiera potentiella köpare',
         summary: 'Strategiska köpare (konkurrenter, leverantörer) och finansiella (PE, family offices).',
-        expanded: 'Det finns olika typer av köpare med olika motiv. Strategiska köpare (konkurrenter, kunder, leverantörer) söker synergier och betalar ofta högre pris. Private Equity-bolag vill växa och effektivisera för att sälja vidare. Family offices har ofta längre investeringshorisont. Privatpersoner (search funds, MBI) söker ett företag att driva själva. Analysera vilken typ av köpare som passar bäst och prioritera uppsökandet därefter.',
+        expanded: 'Det finns olika typer av köpare med olika motiv. Strategiska köpare (konkurrenter, kunder, leverantörer) söker synergier och betalar ofta högre pris.\n\nPrivate Equity-bolag vill växa och effektivisera för att sälja vidare. Family offices har ofta längre investeringshorisont.\n\nPrivatpersoner (search funds, MBI) söker ett företag att driva själva. Analysera vilken typ av köpare som passar bäst och prioritera uppsökandet därefter.',
         rings: [
           { percent: 45, label: 'Strategiska' },
           { percent: 30, label: 'PE/VC' },
@@ -277,13 +277,13 @@ const steps: Step[] = [
       {
         title: 'Kontrollerad informationsprocess',
         summary: 'Stegvis informationsgivning efter signerat sekretessavtal (NDA).',
-        expanded: 'En professionell försäljningsprocess är strukturerad i faser. Först skickas teaser brett. Intressenter signerar NDA och får IM. Efter analys lämnar de indikativt bud. De mest seriösa bjuds in till management-presentation och Q&A. Därefter öppnas datarum för due diligence och slutligt bud lämnas. Denna struktur skyddar känslig information och skapar konkurrens mellan köpare.',
+        expanded: 'En professionell försäljningsprocess är strukturerad i faser. Först skickas teaser brett. Intressenter signerar NDA och får IM.\n\nEfter analys lämnar de indikativt bud. De mest seriösa bjuds in till management-presentation och Q&A.\n\nDärefter öppnas datarum för due diligence och slutligt bud lämnas. Denna struktur skyddar känslig information och skapar konkurrens mellan köpare.',
         chart: { data: [100, 40, 20, 10, 5, 3, 1], label: 'Försäljningstratt: Kontaktade → Slutlig köpare' }
       },
       {
         title: 'Skapa konkurrens mellan köpare',
         summary: 'Hantera flera köpare parallellt för att maximera värdet.',
-        expanded: 'Att ha flera intresserade köpare är den bästa förhandlingspositionen. Det skapar tidpress, minskar köparnas förhandlingsutrymme och kan driva upp priset. Var transparent om att det finns andra intressenter utan att röja detaljer. Sätt tydliga deadlines för bud och håll alla parter informerade om tidplanen. Även om du har en favorit, behåll alternativen så länge som möjligt.',
+        expanded: 'Att ha flera intresserade köpare är den bästa förhandlingspositionen. Det skapar tidpress, minskar köparnas förhandlingsutrymme och kan driva upp priset.\n\nVar transparent om att det finns andra intressenter utan att röja detaljer. Sätt tydliga deadlines för bud och håll alla parter informerade om tidplanen.\n\nÄven om du har en favorit, behåll alternativen så länge som möjligt.',
         stats: [
           { value: '+15-25%', label: 'Högre pris med konkurrens' },
           { value: '3-5', label: 'Optimalt antal budgivare' }
@@ -301,7 +301,7 @@ const steps: Step[] = [
       {
         title: 'Förbered strukturerat datarum',
         summary: 'All relevant dokumentation: finansiellt, juridiskt, kommersiellt, HR.',
-        expanded: 'Ett datarum är ett digitalt (eller fysiskt) arkiv där köparen granskar all dokumentation. Organisera materialet i tydliga mappar: bolagsdokumentation, finansiellt, juridiskt/avtal, kommersiellt, personal/HR, IT, miljö, etc. Använd en professionell datarumsplattform med spårning av vem som tittat på vad. Förbered datarum i förväg - det signalerar professionalism och sparar tid under processen.',
+        expanded: 'Ett datarum är ett digitalt (eller fysiskt) arkiv där köparen granskar all dokumentation. Organisera materialet i tydliga mappar: bolagsdokumentation, finansiellt, juridiskt/avtal, kommersiellt, personal/HR, IT, miljö, etc.\n\nAnvänd en professionell datarumsplattform med spårning av vem som tittat på vad.\n\nFörbered datarum i förväg - det signalerar professionalism och sparar tid under processen.',
         stats: [
           { value: '200-500', label: 'Dokument i typiskt datarum' },
           { value: '8-12', label: 'Huvudkategorier' }
@@ -310,7 +310,7 @@ const steps: Step[] = [
       {
         title: 'Finansiell due diligence',
         summary: 'Granskning av historisk ekonomi, intjäningskvalitet och rörelsekapital.',
-        expanded: 'Köparens finansiella rådgivare granskar bokslut, månadsrapporter och budget. De analyserar intjäningskvaliteten - är vinsten hållbar eller finns engångsposter? Rörelsekapitalbehovet normaliseras för att bestämma vilken nivå som ska finnas vid tillträdet. Skulder och eventualförpliktelser kartläggs. Förbered dig på detaljerade frågor och ha förklaringar redo för avvikelser eller ovanliga poster.',
+        expanded: 'Köparens finansiella rådgivare granskar bokslut, månadsrapporter och budget. De analyserar intjäningskvaliteten - är vinsten hållbar eller finns engångsposter?\n\nRörelsekapitalbehovet normaliseras för att bestämma vilken nivå som ska finnas vid tillträdet. Skulder och eventualförpliktelser kartläggs.\n\nFörbered dig på detaljerade frågor och ha förklaringar redo för avvikelser eller ovanliga poster.',
         rings: [
           { percent: 85, label: 'Intjäning' },
           { percent: 70, label: 'Rörelsekapital' },
@@ -320,7 +320,7 @@ const steps: Step[] = [
       {
         title: 'Juridisk due diligence',
         summary: 'Granskning av avtal, tvister, IP-rättigheter och regulatoriska frågor.',
-        expanded: 'Juristerna granskar alla väsentliga avtal: kundavtal, leverantörsavtal, anställningsavtal, hyresavtal, licensavtal. De letar efter change-of-control-klausuler som kan triggas vid försäljning. Eventuella pågående eller hotande tvister dokumenteras. Immateriella rättigheter (varumärken, patent, domäner) verifieras. Regulatoriska tillstånd och compliance kontrolleras. Juridiska problem som hittas kan påverka pris eller avtalsvillkor.',
+        expanded: 'Juristerna granskar alla väsentliga avtal: kundavtal, leverantörsavtal, anställningsavtal, hyresavtal, licensavtal. De letar efter change-of-control-klausuler som kan triggas vid försäljning.\n\nEventuella pågående eller hotande tvister dokumenteras. Immateriella rättigheter (varumärken, patent, domäner) verifieras.\n\nRegulatoriska tillstånd och compliance kontrolleras. Juridiska problem som hittas kan påverka pris eller avtalsvillkor.',
         timeline: [
           { label: 'Avtalsgranskning', duration: '2-3 veckor' },
           { label: 'IP-verifiering', duration: '1-2 veckor' },
@@ -331,13 +331,13 @@ const steps: Step[] = [
       {
         title: 'Kommersiell due diligence',
         summary: 'Analys av marknad, kunder, konkurrenter och affärsmodell.',
-        expanded: 'Den kommersiella granskningen validerar affärsplanen och marknadspotentialen. Köparen kan intervjua nyckelpersoner och ibland även kunder (med säljarens godkännande). Marknadsdata verifieras mot externa källor. Konkurrenslandskapet analyseras. Kundkoncentration och churn-risk bedöms. Syftet är att bekräfta att affärsmodellen är hållbar och att tillväxtantaganden är realistiska.',
+        expanded: 'Den kommersiella granskningen validerar affärsplanen och marknadspotentialen. Köparen kan intervjua nyckelpersoner och ibland även kunder (med säljarens godkännande).\n\nMarknadsdata verifieras mot externa källor. Konkurrenslandskapet analyseras. Kundkoncentration och churn-risk bedöms.\n\nSyftet är att bekräfta att affärsmodellen är hållbar och att tillväxtantaganden är realistiska.',
         chart: { data: [20, 35, 55, 70, 85, 90], label: 'Köparens förtroende under DD-processen (%)' }
       },
       {
         title: 'Var transparent och proaktiv',
         summary: 'Överraskningar skapar misstro och kan sänka priset.',
-        expanded: 'Den viktigaste regeln i DD: inga överraskningar. Om det finns skelett i garderoben, ta upp dem tidigt och på dina villkor. En köpare som upptäcker något som säljaren försökt dölja tappar förtroende och blir misstänksam mot allt annat. Var proaktiv med att förklara ovanliga poster eller händelser. Svara snabbt och professionellt på frågor. En smidig DD-process bygger förtroende och håller tidplanen.',
+        expanded: 'Den viktigaste regeln i DD: inga överraskningar. Om det finns skelett i garderoben, ta upp dem tidigt och på dina villkor.\n\nEn köpare som upptäcker något som säljaren försökt dölja tappar förtroende och blir misstänksam mot allt annat.\n\nVar proaktiv med att förklara ovanliga poster eller händelser. Svara snabbt och professionellt på frågor. En smidig DD-process bygger förtroende och håller tidplanen.',
         stats: [
           { value: '72h', label: 'Max svarstid på frågor' },
           { value: '0', label: 'Överraskningar (målet)' }
@@ -355,7 +355,7 @@ const steps: Step[] = [
       {
         title: 'Förhandla köpeskilling',
         summary: 'Fast belopp, tilläggsköpeskilling (earnout) baserad på framtida resultat.',
-        expanded: 'Köpeskillingen kan struktureras på olika sätt. Fast belopp vid tillträde ger säkerhet men köparen tar mer risk. Tilläggsköpeskilling (earnout) kopplar en del av priset till framtida resultat - vanligt om parterna har olika syn på värdet. Säljarrevers innebär att säljaren lånar ut en del av köpeskillingen. Fundera på vad som är viktigast för dig: maximal köpeskilling eller trygghet om kontant betalning.',
+        expanded: 'Köpeskillingen kan struktureras på olika sätt. Fast belopp vid tillträde ger säkerhet men köparen tar mer risk.\n\nTilläggsköpeskilling (earnout) kopplar en del av priset till framtida resultat - vanligt om parterna har olika syn på värdet.\n\nSäljarrevers innebär att säljaren lånar ut en del av köpeskillingen. Fundera på vad som är viktigast för dig: maximal köpeskilling eller trygghet om kontant betalning.',
         rings: [
           { percent: 70, label: 'Kontant' },
           { percent: 20, label: 'Earnout' },
@@ -365,7 +365,7 @@ const steps: Step[] = [
       {
         title: 'Definiera transaktionsstruktur',
         summary: 'Aktieöverlåtelse eller inkråmsförsäljning, skattekonsekvenser.',
-        expanded: 'Vid aktieöverlåtelse säljs aktierna och köparen tar över hela bolaget med dess historia. Vid inkråmsförsäljning säljs tillgångarna separat och köparen får ett "rent" bolag. Valet har stora skattekonsekvenser. Aktieförsäljning i fåmansbolag beskattas ofta som kapitalinkomst (delvis), medan inkråmsförsäljning kan medföra inkomstskatt i bolaget. Konsultera alltid en skatterådgivare innan du bestämmer struktur.',
+        expanded: 'Vid aktieöverlåtelse säljs aktierna och köparen tar över hela bolaget med dess historia. Vid inkråmsförsäljning säljs tillgångarna separat och köparen får ett "rent" bolag.\n\nValet har stora skattekonsekvenser. Aktieförsäljning i fåmansbolag beskattas ofta som kapitalinkomst (delvis), medan inkråmsförsäljning kan medföra inkomstskatt i bolaget.\n\nKonsultera alltid en skatterådgivare innan du bestämmer struktur.',
         stats: [
           { value: '85%', label: 'Aktieöverlåtelser' },
           { value: '15%', label: 'Inkråmsförsäljningar' }
@@ -374,13 +374,13 @@ const steps: Step[] = [
       {
         title: 'Diskutera garantier',
         summary: 'Vilka utfästelser lämnar säljaren och med vilka begränsningar?',
-        expanded: 'Garantikatalogen är ofta en het förhandlingspunkt. Köparen vill ha breda garantier om att företaget är i gott skick. Säljaren vill begränsa sitt ansvar. Typiska garantier rör: att säljaren äger aktierna, att finansiella rapporter är korrekta, att det inte finns okända tvister, att väsentliga avtal är giltiga. Garantiernas omfattning, tidsfrister och takbelopp förhandlas. Överväg en W&I-försäkring som övertar delar av garantiansvaret.',
+        expanded: 'Garantikatalogen är ofta en het förhandlingspunkt. Köparen vill ha breda garantier om att företaget är i gott skick. Säljaren vill begränsa sitt ansvar.\n\nTypiska garantier rör: att säljaren äger aktierna, att finansiella rapporter är korrekta, att det inte finns okända tvister, att väsentliga avtal är giltiga.\n\nGarantiernas omfattning, tidsfrister och takbelopp förhandlas. Överväg en W&I-försäkring som övertar delar av garantiansvaret.',
         chart: { data: [10, 15, 20, 18, 12, 8, 5], label: 'Garantianspråk över tid (% av affärer per år efter tillträde)' }
       },
       {
         title: 'Reglera övergångsperiod',
         summary: 'Ska säljaren stanna kvar? I vilken roll och hur länge?',
-        expanded: 'Många köpare vill att säljaren stannar en period för kunskapsöverföring. Detta kan vara några månader till flera år beroende på verksamheten. Definiera tydligt: vilken roll har säljaren, vilken ersättning, vilka befogenheter, hur länge? Vad händer om samarbetet inte fungerar? Konkurrensbegränsning efter övergångsperioden? En otydlig övergångsplan skapar ofta konflikter - var specifik.',
+        expanded: 'Många köpare vill att säljaren stannar en period för kunskapsöverföring. Detta kan vara några månader till flera år beroende på verksamheten.\n\nDefiniera tydligt: vilken roll har säljaren, vilken ersättning, vilka befogenheter, hur länge? Vad händer om samarbetet inte fungerar?\n\nKonkurrensbegränsning efter övergångsperioden? En otydlig övergångsplan skapar ofta konflikter - var specifik.',
         timeline: [
           { label: 'Intensiv överlämning', duration: '1-3 mån' },
           { label: 'Rådgivande roll', duration: '3-6 mån' },
@@ -391,7 +391,7 @@ const steps: Step[] = [
       {
         title: 'Villkor för tillträde',
         summary: 'Finansiering, myndighetsgodkännanden, nyckelpersoners kvarstående.',
-        expanded: 'Closing conditions är villkor som måste uppfyllas innan affären slutförs. Vanliga villkor: köparens finansiering säkras, konkurrensmyndighetens godkännande (vid större affärer), att nyckelpersoner inte sagt upp sig, att inga väsentliga negativa förändringar skett (MAC-klausul). Ju fler villkor, desto mer osäkerhet. Förhandla om vilka villkor som är rimliga och vem som bär risken om de inte uppfylls.',
+        expanded: 'Closing conditions är villkor som måste uppfyllas innan affären slutförs. Vanliga villkor: köparens finansiering säkras, konkurrensmyndighetens godkännande (vid större affärer), att nyckelpersoner inte sagt upp sig, att inga väsentliga negativa förändringar skett (MAC-klausul).\n\nJu fler villkor, desto mer osäkerhet.\n\nFörhandla om vilka villkor som är rimliga och vem som bär risken om de inte uppfylls.',
         stats: [
           { value: '95%', label: 'Affärer med villkor' },
           { value: '30-60', label: 'Dagar till tillträde' }
@@ -409,7 +409,7 @@ const steps: Step[] = [
       {
         title: 'Aktieöverlåtelseavtal (SPA)',
         summary: 'Huvudavtalet med alla överenskomna villkor.',
-        expanded: 'Share Purchase Agreement (SPA) är det centrala juridiska dokumentet. Det innehåller: parter och bakgrund, överlåtelse av aktierna, köpeskilling och betalningsvillkor, tillträdesdag och -villkor, säljarens garantier, köparens åtaganden, ersättningsansvar, tvistlösning. SPA förhandlas intensivt mellan parternas jurister. Som säljare, fokusera på de kommersiellt viktiga punkterna och låt juristerna hantera det tekniska.',
+        expanded: 'Share Purchase Agreement (SPA) är det centrala juridiska dokumentet. Det innehåller: parter och bakgrund, överlåtelse av aktierna, köpeskilling och betalningsvillkor, tillträdesdag och -villkor, säljarens garantier, köparens åtaganden, ersättningsansvar, tvistlösning.\n\nSPA förhandlas intensivt mellan parternas jurister.\n\nSom säljare, fokusera på de kommersiellt viktiga punkterna och låt juristerna hantera det tekniska.',
         stats: [
           { value: '40-80', label: 'Sidor i SPA' },
           { value: '15-25', label: 'Garantiklausuler' },
@@ -419,7 +419,7 @@ const steps: Step[] = [
       {
         title: 'Köpeskillingens betalning',
         summary: 'Kontant vid tillträde, uppskjuten betalning, säljarrevers.',
-        expanded: 'Betalningsstrukturen är en nyckelfråga. Kontant vid tillträde är enklast och säkrast för säljaren. Deponering hos tredje part (escrow) kan användas för att säkra garantiåtaganden. Uppskjuten betalning innebär att delar betalas senare - kräver säkerheter. Säljarrevers är ett lån från säljaren till köparen - medför kreditrisk. Earnout kopplar betalning till framtida resultat - kräver tydliga beräkningsregler.',
+        expanded: 'Betalningsstrukturen är en nyckelfråga. Kontant vid tillträde är enklast och säkrast för säljaren.\n\nDeponering hos tredje part (escrow) kan användas för att säkra garantiåtaganden. Uppskjuten betalning innebär att delar betalas senare - kräver säkerheter.\n\nSäljarrevers är ett lån från säljaren till köparen - medför kreditrisk. Earnout kopplar betalning till framtida resultat - kräver tydliga beräkningsregler.',
         rings: [
           { percent: 80, label: 'Vid tillträde' },
           { percent: 15, label: 'Escrow' },
@@ -429,7 +429,7 @@ const steps: Step[] = [
       {
         title: 'Garantikatalog',
         summary: 'Vilka garantier lämnar säljaren avseende företagets skick?',
-        expanded: 'Garantikatalogen är ofta en bilaga på 10-30 sidor. Den täcker typiskt: äganderätt till aktierna, bolagsdokument och organisation, finansiella rapporter, skatteförhållanden, avtal och åtaganden, anställda och pensioner, immateriella rättigheter, miljö, tvister, försäkringar. Till katalogen hör ett "disclosure letter" där säljaren anger kända undantag. Begränsningar förhandlas: takbelopp, tidsfrister, minimibelopp för anspråk.',
+        expanded: 'Garantikatalogen är ofta en bilaga på 10-30 sidor. Den täcker typiskt: äganderätt till aktierna, bolagsdokument och organisation, finansiella rapporter, skatteförhållanden, avtal och åtaganden, anställda och pensioner, immateriella rättigheter, miljö, tvister, försäkringar.\n\nTill katalogen hör ett "disclosure letter" där säljaren anger kända undantag.\n\nBegränsningar förhandlas: takbelopp, tidsfrister, minimibelopp för anspråk.',
         timeline: [
           { label: 'Generella garantier', duration: '2-3 år' },
           { label: 'Skattegarantier', duration: '5-7 år' },
@@ -440,13 +440,13 @@ const steps: Step[] = [
       {
         title: 'Tilläggsköpeskilling (earnout)',
         summary: 'Beräkningsmodeller och tvistlösning.',
-        expanded: 'Om earnout ingår krävs stor noggrannhet. Definiera exakt vilka mått som avgör utbetalning (omsättning, EBITDA, kundanskaffning?). Specificera redovisningsprinciper och hur måtten beräknas. Reglera säljarens insyn och möjlighet att påverka. Bestäm vad som händer om köparen integrerar verksamheten eller ändrar strategi. Inkludera en tydlig tvistlösningsmekanism. Dåligt skrivna earnout-klausuler är en vanlig källa till konflikter.',
+        expanded: 'Om earnout ingår krävs stor noggrannhet. Definiera exakt vilka mått som avgör utbetalning (omsättning, EBITDA, kundanskaffning?).\n\nSpecificera redovisningsprinciper och hur måtten beräknas. Reglera säljarens insyn och möjlighet att påverka.\n\nBestäm vad som händer om köparen integrerar verksamheten eller ändrar strategi. Inkludera en tydlig tvistlösningsmekanism. Dåligt skrivna earnout-klausuler är en vanlig källa till konflikter.',
         chart: { data: [0, 20, 50, 80, 100], label: 'Typisk earnout-utbetalning över tid (% efter år)' }
       },
       {
         title: 'Bilagor och sidoavtal',
         summary: 'Aktiebok, arbetsordning, fullmakter, konkurrensbegränsningar.',
-        expanded: 'Till SPA hör ofta ett batteri av bilagor och sidoavtal. Aktieboken visar ägandet. Arbetsordning för styrelse och VD-instruktion kan krävas. Fullmakter för registreringar. Konkurrensbegränsning för säljaren (vanligtvis 2-3 år). Tystnadsplikt. Eventuella anställningsavtal eller konsultavtal för övergångsperioden. Hyresavtal om säljaren äger lokalen. Se till att alla dokument är förberedda och koordinerade.',
+        expanded: 'Till SPA hör ofta ett batteri av bilagor och sidoavtal. Aktieboken visar ägandet. Arbetsordning för styrelse och VD-instruktion kan krävas.\n\nFullmakter för registreringar. Konkurrensbegränsning för säljaren (vanligtvis 2-3 år). Tystnadsplikt.\n\nEventuella anställningsavtal eller konsultavtal för övergångsperioden. Hyresavtal om säljaren äger lokalen. Se till att alla dokument är förberedda och koordinerade.',
         stats: [
           { value: '10-20', label: 'Bilagor till SPA' },
           { value: '2-3 år', label: 'Konkurrensbegränsning' }
@@ -464,7 +464,7 @@ const steps: Step[] = [
       {
         title: 'Slutlig verifiering',
         summary: 'Alla villkor för tillträde uppfyllda (closing conditions).',
-        expanded: 'Före tillträdet görs en slutlig kontroll att alla villkor är uppfyllda. Köparens finansiering är på plats. Eventuella myndighetsgodkännanden har erhållits. Inga väsentliga negativa förändringar har skett. Nyckelpersoner har bekräftat att de stannar. En "bring-down certificate" kan krävas där säljaren bekräftar att garantierna fortfarande gäller. Om något villkor inte är uppfyllt måste parterna enas om hur det hanteras.',
+        expanded: 'Före tillträdet görs en slutlig kontroll att alla villkor är uppfyllda. Köparens finansiering är på plats. Eventuella myndighetsgodkännanden har erhållits.\n\nInga väsentliga negativa förändringar har skett. Nyckelpersoner har bekräftat att de stannar.\n\nEn "bring-down certificate" kan krävas där säljaren bekräftar att garantierna fortfarande gäller. Om något villkor inte är uppfyllt måste parterna enas om hur det hanteras.',
         rings: [
           { percent: 100, label: 'Finansiering' },
           { percent: 100, label: 'Godkännanden' },
@@ -474,7 +474,7 @@ const steps: Step[] = [
       {
         title: 'Aktieöverlåtelse',
         summary: 'Uppdatering av aktiebok och registrering hos Bolagsverket.',
-        expanded: 'Vid tillträdet överlåts aktierna formellt. Säljaren signerar transportköp på aktiebreven (om fysiska). Aktieboken uppdateras med ny ägare. Anmälan görs till Bolagsverket om ändrad ägarstruktur och eventuellt ny styrelse. Om aktieägartillskott eller lån ska regleras sker detta samtidigt. Alla originaldokument överlämnas. En tillträdesprotokoll dokumenterar vad som hänt.',
+        expanded: 'Vid tillträdet överlåts aktierna formellt. Säljaren signerar transportköp på aktiebreven (om fysiska). Aktieboken uppdateras med ny ägare.\n\nAnmälan görs till Bolagsverket om ändrad ägarstruktur och eventuellt ny styrelse. Om aktieägartillskott eller lån ska regleras sker detta samtidigt.\n\nAlla originaldokument överlämnas. En tillträdesprotokoll dokumenterar vad som hänt.',
         timeline: [
           { label: 'Signera transportköp', duration: '1 timme' },
           { label: 'Uppdatera aktiebok', duration: '1 timme' },
@@ -485,7 +485,7 @@ const steps: Step[] = [
       {
         title: 'Likvidavräkning',
         summary: 'Köpeskillingen betalas mot överlämning.',
-        expanded: 'Betalningen sker normalt mot simultant tillträde - aktierna överlåts när pengarna landat på säljarens konto. En closing statement visar den slutliga köpeskillingen efter eventuella justeringar för rörelsekapital, nettoskuld och andra avtalade poster. Eventuell escrow-deponering för garantier sätts upp. Om det finns earnout bekräftas beräkningsgrunder. Parterna signerar ett completion memorandum som bekräftar tillträdet.',
+        expanded: 'Betalningen sker normalt mot simultant tillträde - aktierna överlåts när pengarna landat på säljarens konto.\n\nEn closing statement visar den slutliga köpeskillingen efter eventuella justeringar för rörelsekapital, nettoskuld och andra avtalade poster.\n\nEventuell escrow-deponering för garantier sätts upp. Om det finns earnout bekräftas beräkningsgrunder. Parterna signerar ett completion memorandum som bekräftar tillträdet.',
         stats: [
           { value: 'T+0', label: 'Betalning vid tillträde' },
           { value: '10-20%', label: 'Typisk escrow' }
@@ -494,7 +494,7 @@ const steps: Step[] = [
       {
         title: 'Praktisk överlämning',
         summary: 'Nycklar, lösenord, kundkontakter, leverantörsrelationer.',
-        expanded: 'Den praktiska överlämningen är minst lika viktig som den juridiska. Överför alla fysiska tillgångar: nycklar, fordon, utrustning. Dela digitala tillgångar: lösenord, admin-åtkomst, domäner, sociala medier. Introducera köparen för viktiga kontakter: nyckelpersonal, nyckelkunder, strategiska leverantörer. Var tillgänglig för frågor under övergångsperioden. En smidig överlämning ger gott samvete och minskar risken för tvist.',
+        expanded: 'Den praktiska överlämningen är minst lika viktig som den juridiska. Överför alla fysiska tillgångar: nycklar, fordon, utrustning.\n\nDela digitala tillgångar: lösenord, admin-åtkomst, domäner, sociala medier. Introducera köparen för viktiga kontakter: nyckelpersonal, nyckelkunder, strategiska leverantörer.\n\nVar tillgänglig för frågor under övergångsperioden. En smidig överlämning ger gott samvete och minskar risken för tvist.',
         rings: [
           { percent: 100, label: 'Fysiskt' },
           { percent: 100, label: 'Digitalt' },
@@ -504,7 +504,7 @@ const steps: Step[] = [
       {
         title: 'Övergångsperiod',
         summary: 'Stötta köparen med kunskapsöverföring.',
-        expanded: 'Under övergångsperioden hjälper säljaren köparen att ta över verksamheten. Detta kan innebära dagligt arbete på plats, tillgänglighet för frågor per telefon/mejl, eller formella utbildningspass. Dokumentera den kunskap som överförs. Var professionell även om det känns konstigt att inte längre ha kontrollen. En lyckad övergång ökar chansen att eventuell earnout betalas ut och att relationen med köparen förblir god.',
+        expanded: 'Under övergångsperioden hjälper säljaren köparen att ta över verksamheten. Detta kan innebära dagligt arbete på plats, tillgänglighet för frågor per telefon/mejl, eller formella utbildningspass.\n\nDokumentera den kunskap som överförs. Var professionell även om det känns konstigt att inte längre ha kontrollen.\n\nEn lyckad övergång ökar chansen att eventuell earnout betalas ut och att relationen med köparen förblir god.',
         chart: { data: [100, 80, 50, 30, 15, 5], label: 'Säljarens engagemang över tid (% timmar per månad)' }
       }
     ]
@@ -676,9 +676,11 @@ export default function ForsaljningsprocessenPage() {
                         >
                           <div className="px-3 sm:px-4 pb-4 pt-0">
                             <div className="pl-7 sm:pl-9 border-l-2 border-[#1F3C58]/20 ml-2.5 sm:ml-3">
-                              <p className="text-gray-700 text-xs sm:text-sm leading-relaxed pl-3 sm:pl-4 mb-4">
-                                {item.expanded}
-                              </p>
+                              <div className="text-gray-700 text-xs sm:text-sm leading-relaxed pl-3 sm:pl-4 mb-4 space-y-3">
+                                {item.expanded.split('\n\n').map((paragraph, pIdx) => (
+                                  <p key={pIdx}>{paragraph}</p>
+                                ))}
+                              </div>
                               
                               {/* Stats */}
                               {item.stats && (
@@ -723,48 +725,60 @@ export default function ForsaljningsprocessenPage() {
               </div>
 
               {/* Navigation buttons */}
-              <div className="px-4 sm:px-10 py-4 sm:py-6 border-t border-gray-100 flex items-center justify-between">
-                <button
-                  onClick={() => {
-                    setCurrentStep(Math.max(0, currentStep - 1))
-                    setExpandedItems({})
-                  }}
-                  disabled={currentStep === 0}
-                  className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    currentStep === 0
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-[#1F3C58] hover:bg-[#1F3C58]/10'
-                  }`}
-                >
-                  Föregående
-                </button>
-
-                {/* Sources link */}
-                <button
-                  onClick={() => setShowSources(true)}
-                  className="text-xs text-gray-400 hover:text-[#1F3C58] underline transition-colors"
-                >
-                  (källor)
-                </button>
-
-                {currentStep < steps.length - 1 ? (
+              <div className="px-4 sm:px-10 py-4 sm:py-6 border-t border-gray-100">
+                {/* CTA Button */}
+                <div className="flex justify-center mb-4">
+                  <Link
+                    href={`/${locale}`}
+                    className="px-6 sm:px-8 py-3 bg-[#1F3C58] text-white rounded-lg text-sm sm:text-base font-semibold animate-cta-pulse shadow-lg hover:shadow-xl transition-shadow"
+                  >
+                    Vill du sälja ditt företag? Klicka här
+                  </Link>
+                </div>
+                
+                <div className="flex items-center justify-between">
                   <button
                     onClick={() => {
-                      setCurrentStep(currentStep + 1)
+                      setCurrentStep(Math.max(0, currentStep - 1))
                       setExpandedItems({})
                     }}
-                    className="px-4 sm:px-6 py-2 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
+                    disabled={currentStep === 0}
+                    className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      currentStep === 0
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-[#1F3C58] hover:bg-[#1F3C58]/10'
+                    }`}
                   >
-                    Nästa steg
+                    Föregående
                   </button>
-                ) : (
-                  <Link
-                    href={`/${locale}/analysera`}
-                    className="px-4 sm:px-6 py-2 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
+
+                  {/* Sources link */}
+                  <button
+                    onClick={() => setShowSources(true)}
+                    className="text-xs text-gray-400 hover:text-[#1F3C58] underline transition-colors"
                   >
-                    Analysera ditt företag
-                  </Link>
-                )}
+                    (källor)
+                  </button>
+
+                  {currentStep < steps.length - 1 ? (
+                    <button
+                      onClick={() => {
+                        setCurrentStep(currentStep + 1)
+                        setExpandedItems({})
+                      }}
+                      className="px-4 sm:px-6 py-2 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
+                    >
+                      Nästa steg
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/${locale}/analysera`}
+                      className="px-4 sm:px-6 py-2 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
+                    >
+                      Analysera ditt företag
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -799,6 +813,19 @@ export default function ForsaljningsprocessenPage() {
         }
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
+        }
+      `}</style>
+      <style jsx global>{`
+        @keyframes ctaPulse {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(31, 60, 88, 0.7);
+          }
+          50% {
+            box-shadow: 0 0 0 12px rgba(31, 60, 88, 0);
+          }
+        }
+        .animate-cta-pulse {
+          animation: ctaPulse 2s infinite;
         }
       `}</style>
 
