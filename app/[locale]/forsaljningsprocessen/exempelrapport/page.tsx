@@ -1,28 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useLocale } from 'next-intl'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import { CompanyData } from '@/components/SalesProcessDataModal'
 import { FileText, Download, ArrowLeft, CheckCircle } from 'lucide-react'
-
-// Dynamically import PDF components to avoid SSR issues
-const PDFDownloadLink = dynamic(
-  () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
-  { 
-    ssr: false, 
-    loading: () => <span className="text-gray-500">Förbereder PDF...</span>
-  }
-)
-
-const SalesProcessReportPDF = dynamic(
-  () => import('@/components/SalesProcessReportPDF').then((mod) => mod.default),
-  { 
-    ssr: false,
-    loading: () => null
-  }
-)
 
 // Mockup company data
 const mockCompanyData: CompanyData = {
@@ -66,14 +48,14 @@ const mockCompanyData: CompanyData = {
     documentedProcesses: true,
     backupPersons: true,
     managementTeam: 'VD (grundare, 55 år), CFO (extern, 3 år i bolaget), CTO (delägare 15%, 8 år i bolaget), Säljchef (extern, 5 år). Stabil ledningsgrupp med tydliga ansvarsområden.',
-    transitionPlan: 'VD planerar 12-18 månaders övergång. CTO kan ta över operativt ansvar. Säljchef har alla kundrelationer dokumenterade i CRM.'
+    transitionPlan: 'VD planerar att stanna kvar 12-18 månader efter försäljning som konsult. CTO kan ta över operativt ansvar. Dokumenterade processer finns för alla kritiska funktioner.'
   },
   balanceSheet: {
-    loansToOwners: 'Lån till huvudägare: 450 TSEK (planeras regleras före försäljning). Inga övriga lån till närstående.',
-    nonOperatingAssets: 'Konst och inredning: 200 TSEK (bokfört). Ägd bil (BMW X5): 350 TSEK. Dessa kan delas ut eller säljas separat.',
-    inventoryStatus: 'Minimal lagerhållning (konsultbolag). Endast kontorsmaterial och IT-utrustning.',
-    receivablesStatus: 'Kundfordringar 30 dagar: 3,2 MSEK, 60+ dagar: 0,4 MSEK. Inga tveksamma fordringar.',
-    liabilitiesToClean: 'Upplupen semesterskuld: 2,1 MSEK (fullt finansierat). Checkräkningskredit: 1 MSEK (outnyttjad).'
+    loansToOwners: 'Skuld till ägare på 500 TSEK ska återbetalas före closing. Fordran på dotterbolag om 200 TSEK kan kvittas.',
+    nonOperatingAssets: 'Konstverk värderade till 300 TSEK. Bostadsrätt i Stockholm (marknadsvärde 2,5 MSEK) som används som representation.',
+    inventoryStatus: 'Minimalt lager (konsultbolag). Licenser och förbetalda kostnader uppgår till 400 TSEK.',
+    receivablesStatus: 'Kundfordringar 4,2 MSEK med god åldersstruktur (85% < 30 dagar). Reserv för osäkra fordringar 50 TSEK.',
+    liabilitiesToClean: 'Lån från aktieägare 500 TSEK att lösa. Semesterskuld 1,2 MSEK är normal för branschen.'
   },
   legalDocs: {
     articlesOfAssociationUpdated: true,
@@ -81,55 +63,37 @@ const mockCompanyData: CompanyData = {
     boardMinutesArchived: true,
     ownerAgreementsReviewed: true,
     permitsVerified: true,
-    pendingLegalIssues: 'Inga pågående tvister. Ett mindre försäkringsärende (15 TSEK) avslutas under Q1 2025.'
+    pendingLegalIssues: 'Inga pågående tvister. Tidigare tvist med underleverantör avslutad 2022 med förlikning (120 TSEK). Alla avtal granskade av Mannheimer Swartling 2023.'
   },
   generatedSummaries: {
-    financialDocs: 'Stabil finansiell utveckling med 40% omsättningstillväxt och förbättrad lönsamhet över tre år.',
-    businessRelations: 'Diversifierad kundbas med låg-medium koncentrationsrisk. Starka partnerskap.',
-    keyPerson: 'Väl förberedd för ägarskifte med stark ledningsgrupp och dokumenterade processer.',
-    balanceSheet: 'Ren balansräkning efter planerade justeringar. Goda kassaflöden.',
-    legalDocs: 'Alla dokument uppdaterade och i ordning. Inga väsentliga juridiska risker.'
+    financialDocs: 'Företaget visar stark finansiell historik med konsekvent tillväxt och förbättrad lönsamhet. Reviderade årsredovisningar finns tillgängliga för de senaste fem åren.',
+    businessRelations: 'Diversifierad kundbas med viss koncentration till topp-3 kunder (38%). Starka leverantörsrelationer utan kritiska beroenden.',
+    keyPerson: 'Medelstort ägarberoende med god succession planerad. Dokumenterade processer och kompetent ledningsgrupp minskar risken.',
+    balanceSheet: 'Ren balansräkning med begränsade justeringsbehov. Mindre poster att hantera före closing.',
+    legalDocs: 'Juridisk dokumentation i god ordning. Alla väsentliga dokument finns på plats och är uppdaterade.'
   }
 }
 
-// Mockup analysis result
 const mockAnalysis = {
-  executiveSummary: 'Tech Solutions AB är ett välskött IT-konsultbolag med stark tillväxt och stabil lönsamhet. Företaget uppvisar en genomsnittlig årlig tillväxt på 18% de senaste tre åren med förbättrad EBITDA-marginal. Ledningsgruppen är erfaren och väl förberedd för ett ägarskifte. De största riskerna relaterar till viss kundkoncentration och nyckelpersonberoende, men båda är hanterbara genom de åtgärder som redan påbörjats.',
-  companyOverview: 'Tech Solutions AB grundades 2010 och har utvecklats till en ledande aktör inom IT-konsulttjänster i Skandinavien. Med 50+ anställda och kontor i Stockholm och Göteborg levererar bolaget skräddarsydda lösningar till större företag. Företaget är ISO 27001-certifierat och har partnerskap med Microsoft, AWS och Salesforce.',
-  financialAnalysis: 'Omsättningen har vuxit från 32 MSEK (2021) till 45 MSEK (2023), motsvarande en CAGR på 18,6%. EBITDA-marginalen har förbättrats från 12,2% till 18,8% efter justeringar. Kassaflödet från verksamheten är starkt med låg kapitalbindning. Normaliserat resultat visar god intjäningsförmåga och tillväxtpotential.',
-  businessRelationsAnalysis: 'Kundbasen är relativt diversifierad med de tre största kunderna som står för 38% av omsättningen. Volvo Cars är största kund (18%) med ett preferred vendor-avtal till 2025. Kundrelationerna är stabila med låg churn. Partneravtalen med Microsoft och AWS ger konkurrensfördelar.',
-  keyPersonAnalysis: 'VD och grundare (55 år) är redo för succession med en planerad övergångsperiod på 12-18 månader. CTO kan ta operativt ansvar och säljchefen har dokumenterade kundrelationer. Processer och rutiner är dokumenterade. Risken är hanterbar med rätt övergångsplan.',
-  balanceSheetAnalysis: 'Balansräkningen är ren med begränsad kapitalbindning. Lån till ägare (450 TSEK) planeras regleras. Kundfordringarna är friska med minimal risk för förluster. Semesterskulden är fullt finansierad. Rörelsekapitalbehovet är lågt för ett konsultbolag.',
-  legalAnalysis: 'Alla bolagsdokument är uppdaterade och korrekt arkiverade. Inga pågående tvister av betydelse. Samtliga tillstånd och registreringar är verifierade. Immateriella rättigheter (varumärke, domäner) är registrerade. Juridisk risk bedöms som låg.',
+  executiveSummary: 'Tech Solutions AB är ett välskött IT-konsultbolag med 50+ anställda, stark tillväxt och god lönsamhet. Bolaget är väl förberett för försäljning med dokumenterade processer, en kompetent ledningsgrupp och en tydlig successionsplan. Med en normaliserad EBITDA på 8,5 MSEK och en positiv marknadsutveckling finns goda förutsättningar för en framgångsrik transaktion.',
+  companyOverview: 'Tech Solutions AB grundades 2010 och har vuxit till ett ledande IT-konsultbolag med fokus på skräddarsydda lösningar för stora och medelstora företag i Skandinavien. Bolaget är ISO 27001-certifierat och har kontor i Stockholm och Göteborg.',
+  financialAnalysis: 'Bolaget uppvisar en stark finansiell utveckling med årlig omsättningstillväxt på ca 15% de senaste tre åren. EBITDA-marginalen har förbättrats från 12% till 19% genom effektivare resursutnyttjande och bättre prissättning. Kassaflödet är stabilt positivt.',
+  businessRelationsAnalysis: 'Kundportföljen är diversifierad med viss koncentration till de tre största kunderna (38% av omsättningen). Volvo Cars IT är största kunden med 18%. Kundrelationerna är stabila med höga förnyelsegrader. Leverantörsrelationerna är goda utan kritiska beroenden.',
+  keyPersonAnalysis: 'VD och grundare är fortfarande aktivt involverad men har byggt en kompetent ledningsgrupp. CTO (delägare 15%) kan ta över det operativa ansvaret. Dokumenterade processer och tydliga ansvarsområden minskar nyckelpersonberoendet.',
+  balanceSheetAnalysis: 'Balansräkningen är övervägande ren med begränsade justeringsbehov. Mindre poster som skuld till ägare och representation i bostadsrätt behöver hanteras före closing. Kundfordringarna har god kvalitet.',
+  legalAnalysis: 'Den juridiska dokumentationen är i god ordning. Bolagsordning, aktiebok och styrelseprotokoll är uppdaterade. Alla tillstånd är verifierade. Inga pågående tvister eller kända legala risker.',
   riskAssessment: {
-    overall: 'low' as const,
-    financialRisk: 25,
-    operationalRisk: 35,
-    keyPersonRisk: 45,
-    customerRisk: 40,
-    legalRisk: 15
+    financial: 65,
+    operational: 70,
+    market: 75,
+    legal: 85
   },
-  recommendations: [
-    'Formalisera muntliga bonusavtal med senior konsulter innan försäljning',
-    'Reglera lån till ägare (450 TSEK) före transaktionen',
-    'Förläng eller förnya preferred vendor-avtalet med Volvo Cars',
-    'Dokumentera alla kundrelationer och överföringsprocesser',
-    'Överväg att dela ut eller sälja ej verksamhetskritiska tillgångar'
-  ],
-  nextSteps: [
-    'Engagera M&A-rådgivare för att leda försäljningsprocessen',
-    'Upprätta datarum med all dokumentation',
-    'Identifiera och kontakta potentiella strategiska köpare',
-    'Förbereda management-presentation och Q&A-dokument',
-    'Planera och kommunicera internt om kommande process'
-  ],
   strengths: [
-    'Stark och stabil tillväxt (18% CAGR)',
-    'Förbättrad lönsamhet med 18,8% EBITDA-marginal',
-    'Erfaren och stabil ledningsgrupp',
+    'Stark finansiell historik med konsekvent tillväxt',
     'Dokumenterade processer och rutiner',
-    'Starka partnerskap (Microsoft Gold, AWS)',
-    'Ren balansräkning och starkt kassaflöde'
+    'Kompetent ledningsgrupp med tydlig succession',
+    'Diversifierad kundbas med stabila relationer',
+    'Ren juridisk struktur utan tvister'
   ],
   weaknesses: [
     'Viss kundkoncentration (största kund 18%)',
@@ -137,7 +101,114 @@ const mockAnalysis = {
     'Informella bonusavtal behöver formaliseras',
     'Geografisk koncentration till Stockholm/Göteborg'
   ],
+  recommendations: [
+    'Formalisera bonusavtal med nyckelpersoner',
+    'Accelerera kunskapsöverföring till ledningsgrupp',
+    'Diversifiera kundportföljen ytterligare',
+    'Överväg geografisk expansion'
+  ],
   valuationFactors: 'Baserat på jämförbara transaktioner för IT-konsultbolag med liknande profil bör Tech Solutions AB kunna värderas till 6-8x normaliserat EBITDA, motsvarande 51-68 MSEK. Den starka tillväxten, förbättrade lönsamheten och väl förberedda successionen talar för övre delen av intervallet. Kundkoncentrationen och nyckelpersonberoendet kan motivera viss rabatt, men dessa risker är hanterbara.'
+}
+
+// Separate component for PDF download that handles dynamic imports
+function PDFDownloadButton({ companyData, analysis, generatedAt }: { 
+  companyData: CompanyData
+  analysis: typeof mockAnalysis
+  generatedAt: string 
+}) {
+  const [PDFComponents, setPDFComponents] = useState<{
+    PDFDownloadLink: any
+    SalesProcessReportPDF: any
+  } | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+    
+    const loadPDFComponents = async () => {
+      try {
+        // Load both modules in parallel
+        const [reactPdf, reportPdf] = await Promise.all([
+          import('@react-pdf/renderer'),
+          import('@/components/SalesProcessReportPDF')
+        ])
+        
+        if (mounted) {
+          setPDFComponents({
+            PDFDownloadLink: reactPdf.PDFDownloadLink,
+            SalesProcessReportPDF: reportPdf.default
+          })
+          setIsLoading(false)
+        }
+      } catch (err) {
+        console.error('Failed to load PDF components:', err)
+        if (mounted) {
+          setError('Kunde inte ladda PDF-komponenter')
+          setIsLoading(false)
+        }
+      }
+    }
+    
+    loadPDFComponents()
+    
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1F3C58] text-white rounded-xl font-semibold text-lg">
+        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+        Laddar PDF-komponenter...
+      </div>
+    )
+  }
+
+  if (error || !PDFComponents) {
+    return (
+      <div className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gray-400 text-white rounded-xl font-semibold text-lg cursor-not-allowed">
+        PDF ej tillgänglig
+      </div>
+    )
+  }
+
+  const { PDFDownloadLink, SalesProcessReportPDF } = PDFComponents
+
+  return (
+    <PDFDownloadLink
+      document={
+        <SalesProcessReportPDF
+          companyData={companyData}
+          analysis={analysis}
+          generatedAt={generatedAt}
+        />
+      }
+      fileName={`Exempelrapport-Försäljningsanalys-Tech-Solutions-AB.pdf`}
+      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1F3C58] text-white rounded-xl font-semibold text-lg hover:bg-[#1F3C58]/90 transition-all shadow-lg hover:shadow-xl"
+    >
+      {({ loading }: { loading: boolean }) => (
+        loading ? (
+          <>
+            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Skapar PDF...
+          </>
+        ) : (
+          <>
+            <Download className="w-5 h-5" />
+            Ladda ner exempelrapport (PDF)
+          </>
+        )
+      )}
+    </PDFDownloadLink>
+  )
 }
 
 export default function ExempelrapportPage() {
@@ -153,6 +224,21 @@ export default function ExempelrapportPage() {
     month: 'long', 
     day: 'numeric' 
   })
+
+  const reportContent = [
+    'Executive Summary',
+    'Företagsöversikt',
+    'Finansiell analys',
+    'Affärsrelationer & risker',
+    'Nyckelpersonanalys',
+    'Balansräkningsanalys',
+    'Juridisk översikt',
+    'Riskbedömning (visuell)',
+    'Styrkor & Svagheter',
+    'Värderingsfaktorer',
+    'Rekommendationer',
+    'Nästa steg'
+  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -217,24 +303,11 @@ export default function ExempelrapportPage() {
             </div>
           </div>
 
-          {/* What's included */}
+          {/* Report Contents */}
           <div className="mb-8">
             <h3 className="font-semibold text-gray-900 mb-4">Rapporten innehåller:</h3>
-            <div className="grid sm:grid-cols-2 gap-3">
-              {[
-                'Executive Summary',
-                'Företagsöversikt',
-                'Finansiell analys',
-                'Affärsrelationer & risker',
-                'Nyckelpersonanalys',
-                'Balansräkningsanalys',
-                'Juridisk översikt',
-                'Riskbedömning (visuell)',
-                'Styrkor & Svagheter',
-                'Värderingsfaktorer',
-                'Rekommendationer',
-                'Nästa steg'
-              ].map((item, idx) => (
+            <div className="grid sm:grid-cols-2 gap-2">
+              {reportContent.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-sm text-gray-700">
                   <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   {item}
@@ -245,41 +318,18 @@ export default function ExempelrapportPage() {
 
           {/* Download Button */}
           {isMounted ? (
-            <PDFDownloadLink
-              document={
-                <SalesProcessReportPDF
-                  companyData={mockCompanyData}
-                  analysis={mockAnalysis}
-                  generatedAt={generatedAt}
-                />
-              }
-              fileName={`Exempelrapport-Försäljningsanalys-Tech-Solutions-AB.pdf`}
-              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1F3C58] text-white rounded-xl font-semibold text-lg hover:bg-[#1F3C58]/90 transition-all shadow-lg hover:shadow-xl"
-            >
-              {({ loading }) => (
-                loading ? (
-                  <>
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                    </svg>
-                    Skapar PDF...
-                  </>
-                ) : (
-                  <>
-                    <Download className="w-5 h-5" />
-                    Ladda ner exempelrapport (PDF)
-                  </>
-                )
-              )}
-            </PDFDownloadLink>
+            <PDFDownloadButton 
+              companyData={mockCompanyData}
+              analysis={mockAnalysis}
+              generatedAt={generatedAt}
+            />
           ) : (
             <div className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1F3C58] text-white rounded-xl font-semibold text-lg">
               <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
-              Förbereder PDF...
+              Förbereder...
             </div>
           )}
         </div>
@@ -303,4 +353,3 @@ export default function ExempelrapportPage() {
     </div>
   )
 }
-
