@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { X, ArrowLeft, ArrowRight, CheckCircle, Info, Building, TrendingUp, FileText, Lightbulb, ImageIcon, Package, Eye, Sparkles, AlertCircle, ChevronDown, ChevronUp, Loader2, Users, Target, Calendar, Globe, Award, Shield, Clock, Zap, DollarSign, Search, MapPin, Upload, Plus, Trash2, Move } from 'lucide-react'
+import { X, ArrowLeft, ArrowRight, CheckCircle, Info, Building, TrendingUp, FileText, Lightbulb, ImageIcon, Package, Eye, Sparkles, AlertCircle, ChevronDown, ChevronUp, Loader2, Users, Target, Calendar, Globe, Award, Shield, Clock, Zap, DollarSign, Search, MapPin, Upload, Plus, Trash2, Move, BarChart3 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
@@ -16,6 +16,9 @@ import Link from 'next/link'
 import PreviewCard from './PreviewCard'
 import { formatCurrency } from '@/utils/currency'
 import Image from 'next/image'
+import IndustrySelectorModal, { INDUSTRIES, IndustryOption } from './IndustrySelectorModal'
+import IndustryAnalysisPanel from './IndustryAnalysisPanel'
+import { getQuestionsForStep, IndustryQuestion } from '@/lib/industryQuestions'
 
 // Same data structure as ImprovedValuationWizard
 interface ListingData {
@@ -92,24 +95,12 @@ interface WizardProps {
   onClose?: () => void
 }
 
-const industries = [
-  { value: 'restaurant', label: 'Restaurang & Mat' },
-  { value: 'retail', label: 'Detaljhandel' },
-  { value: 'webshop', label: 'E-handel' },
-  { value: 'saas', label: 'SaaS/Mjukvara' },
-  { value: 'services', label: 'Tjänster' },
-  { value: 'consulting', label: 'Konsulting' },
-  { value: 'manufacturing', label: 'Tillverkning' },
-  { value: 'construction', label: 'Bygg & Anläggning' },
-  { value: 'transport', label: 'Transport & Logistik' },
-  { value: 'health', label: 'Hälsa & Vård' },
-  { value: 'education', label: 'Utbildning' },
-  { value: 'realestate', label: 'Fastigheter' },
-  { value: 'finance', label: 'Finans & Försäkring' },
-  { value: 'media', label: 'Media & Reklam' },
-  { value: 'tech', label: 'Teknologi' },
-  { value: 'other', label: 'Övrigt' }
-]
+// Industries are now imported from IndustrySelectorModal
+// Map the new industry options for display
+const getIndustryLabel = (industryId: string): string => {
+  const industry = INDUSTRIES.find(i => i.id === industryId)
+  return industry?.label || industryId
+}
 
 const EMPLOYEE_RANGES = [
   { value: '1', label: '1 anställd' },
@@ -177,6 +168,11 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   const formRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  // Show industry selector first
+  const [showIndustrySelector, setShowIndustrySelector] = useState(true)
+  const [selectedIndustry, setSelectedIndustry] = useState<IndustryOption | null>(null)
+  const [showAnalysisPanel, setShowAnalysisPanel] = useState(false)
+  
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isEnriching, setIsEnriching] = useState(false)
@@ -190,6 +186,95 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   const lastFetchedListingInsightsFor = useRef<string | null>(null)
   const [listingInsights, setListingInsights] = useState<any>(null)
   const [listingInsightsStatus, setListingInsightsStatus] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle')
+
+  // Handle industry selection from modal
+  const handleIndustrySelect = (industry: IndustryOption) => {
+    setSelectedIndustry(industry)
+    setShowIndustrySelector(false)
+    // Also update the data with the industry
+    setData(prev => ({ ...prev, industry: industry.id }))
+  }
+
+  // Get industry-specific questions for current step
+  const getStepIndustryQuestions = (step: number): IndustryQuestion[] => {
+    if (!selectedIndustry) return []
+    return getQuestionsForStep(selectedIndustry.id, step)
+  }
+
+  // Render industry-specific question field
+  const renderIndustryQuestion = (question: IndustryQuestion) => {
+    const value = (data as any)[question.key] || ''
+    
+    switch (question.type) {
+      case 'currency':
+        return (
+          <FormFieldCurrency
+            key={question.key}
+            label={question.label}
+            value={value}
+            onChange={(val) => updateData(question.key as keyof ListingData, val)}
+            placeholder={question.placeholder}
+            helpText={question.helpText}
+            tooltip={question.tooltip}
+          />
+        )
+      case 'percent':
+        return (
+          <FormFieldPercent
+            key={question.key}
+            label={question.label}
+            value={value}
+            onChange={(val) => updateData(question.key as keyof ListingData, val)}
+            placeholder={question.placeholder}
+            helpText={question.helpText}
+            tooltip={question.tooltip}
+          />
+        )
+      case 'select':
+        return (
+          <ModernSelect
+            key={question.key}
+            label={question.label}
+            options={question.options || []}
+            value={value}
+            onChange={(val) => updateData(question.key as keyof ListingData, val)}
+            helperText={question.helpText}
+          />
+        )
+      case 'textarea':
+        return (
+          <FormTextarea
+            key={question.key}
+            label={question.label}
+            value={value}
+            onChange={(e) => updateData(question.key as keyof ListingData, e.target.value)}
+            placeholder={question.placeholder}
+            rows={3}
+          />
+        )
+      case 'number':
+        return (
+          <FormField
+            key={question.key}
+            label={question.label}
+            value={value}
+            onValueChange={(val) => updateData(question.key as keyof ListingData, val)}
+            placeholder={question.placeholder}
+            type="number"
+          />
+        )
+      default:
+        return (
+          <FormField
+            key={question.key}
+            label={question.label}
+            value={value}
+            onValueChange={(val) => updateData(question.key as keyof ListingData, val)}
+            placeholder={question.placeholder}
+          />
+        )
+    }
+  }
   
   const [data, setData] = useState<ListingData>({
     email: user?.email || '',
@@ -264,7 +349,8 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
       case 1:
         if (!data.email) newErrors.email = 'E-post krävs'
         if (!data.companyName) newErrors.companyName = 'Företagsnamn krävs'
-        if (!data.industry) newErrors.industry = 'Bransch krävs'
+        // Industry is selected via modal before step 1
+        if (!selectedIndustry) newErrors.industry = 'Bransch krävs'
         break
       case 2:
         if (!data.revenue) newErrors.revenue = 'Omsättning krävs'
@@ -570,15 +656,15 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
 
   // Generate title suggestion based on inputs
   useEffect(() => {
-    if (data.industry && data.revenue) {
-      const industryLabel = industries.find(i => i.value === data.industry)?.label || data.industry
+    if (selectedIndustry && data.revenue) {
+      const industryLabel = selectedIndustry.label
       const revenueMSEK = Math.round(Number(data.revenue) / 1000000)
       
       if (revenueMSEK > 0 && !data.anonymousTitle) {
         updateData('anonymousTitle', `${industryLabel} med ${revenueMSEK} MSEK i omsättning`)
       }
     }
-  }, [data.industry, data.revenue])
+  }, [selectedIndustry, data.revenue])
 
   const handleImageUpload = async (files: FileList) => {
     setUploadingImages(true)
@@ -713,6 +799,55 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               <h2 className="text-2xl font-bold text-primary-navy mb-2">Grundläggande information</h2>
               <p className="text-gray-600">Låt oss börja med det mest grundläggande om ditt företag</p>
             </div>
+
+            {/* Selected industry badge */}
+            {selectedIndustry && (
+              <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${selectedIndustry.gradient}`}>
+                    <div className="text-white">
+                      {selectedIndustry.icon}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wider">Vald bransch</p>
+                    <p className="font-semibold text-gray-900">{selectedIndustry.label}</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowIndustrySelector(true)}
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Ändra
+                </button>
+              </div>
+            )}
+
+            {/* GPT Analysis CTA */}
+            {selectedIndustry && data.companyName && (
+              <div className="bg-gradient-to-r from-purple-50 via-blue-50 to-indigo-50 rounded-xl p-5 border border-purple-100">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <BarChart3 className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1">Branschanalys med GPT</h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Kör en AI-driven analys av ditt företag med web search, dokumentuppladdning och få en professionell PDF-rapport.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setShowAnalysisPanel(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-lg hover:shadow-md transition-all text-sm"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      Starta branschanalys
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             
             <FormField
               label="Din e-postadress"
@@ -746,16 +881,6 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               placeholder="AB Exempel"
               required
               error={errors.companyName}
-            />
-            
-            <ModernSelect
-              label="Bransch"
-              options={industries}
-              value={data.industry}
-              onChange={(value) => updateData('industry', value)}
-              required
-              error={errors.industry}
-              helperText="Välj den bransch som bäst beskriver er verksamhet"
             />
             
             {!user && (
@@ -792,6 +917,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         )
 
       case 2:
+        const step2IndustryQuestions = getStepIndustryQuestions(2)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -849,10 +975,24 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               placeholder="0"
               helpText="(Omsättning - Direkta kostnader) / Omsättning"
             />
+
+            {/* Industry-specific questions for step 2 */}
+            {step2IndustryQuestions.length > 0 && (
+              <>
+                <hr className="my-6 border-gray-200" />
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-medium text-blue-800">
+                    ✨ Branschspecifika frågor för {selectedIndustry?.label}
+                  </p>
+                </div>
+                {step2IndustryQuestions.map(renderIndustryQuestion)}
+              </>
+            )}
           </div>
         )
 
       case 3:
+        const step3IndustryQuestions = getStepIndustryQuestions(3)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -897,6 +1037,19 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               placeholder="0"
               helpText="Alla andra löpande kostnader"
             />
+
+            {/* Industry-specific questions for step 3 */}
+            {step3IndustryQuestions.length > 0 && (
+              <>
+                <hr className="my-6 border-gray-200" />
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-medium text-blue-800">
+                    ✨ Branschspecifika kostnader för {selectedIndustry?.label}
+                  </p>
+                </div>
+                {step3IndustryQuestions.map(renderIndustryQuestion)}
+              </>
+            )}
             
             <div className="bg-blue-50 p-4 rounded-lg mb-6">
               <p className="text-sm text-blue-800">
@@ -907,6 +1060,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         )
 
       case 4:
+        const step4IndustryQuestions = getStepIndustryQuestions(4)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -972,10 +1126,24 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                 helpText="Summa av alla skulder"
               />
             </div>
+
+            {/* Industry-specific questions for step 4 */}
+            {step4IndustryQuestions.length > 0 && (
+              <>
+                <hr className="my-6 border-gray-200" />
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-medium text-blue-800">
+                    ✨ Branschspecifika tillgångar för {selectedIndustry?.label}
+                  </p>
+                </div>
+                {step4IndustryQuestions.map(renderIndustryQuestion)}
+              </>
+            )}
           </div>
         )
 
       case 5:
+        const step5IndustryQuestions = getStepIndustryQuestions(5)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -1025,10 +1193,24 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onChange={(value) => updateData('averageOrderValue', value)}
               placeholder="0"
             />
+
+            {/* Industry-specific questions for step 5 */}
+            {step5IndustryQuestions.length > 0 && (
+              <>
+                <hr className="my-6 border-gray-200" />
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-medium text-blue-800">
+                    ✨ Branschspecifika kundfrågor för {selectedIndustry?.label}
+                  </p>
+                </div>
+                {step5IndustryQuestions.map(renderIndustryQuestion)}
+              </>
+            )}
           </div>
         )
 
       case 6:
+        const step6IndustryQuestions = getStepIndustryQuestions(6)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -1067,6 +1249,19 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               placeholder="Lista era huvudsakliga konkurrenter"
               rows={2}
             />
+
+            {/* Industry-specific questions for step 6 */}
+            {step6IndustryQuestions.length > 0 && (
+              <>
+                <hr className="my-6 border-gray-200" />
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-medium text-blue-800">
+                    ✨ Branschspecifika marknadsfrågor för {selectedIndustry?.label}
+                  </p>
+                </div>
+                {step6IndustryQuestions.map(renderIndustryQuestion)}
+              </>
+            )}
 
             {listingInsightsStatus === 'loading' && (
               <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800">
@@ -1182,6 +1377,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
         )
 
       case 7:
+        const step7IndustryQuestions = getStepIndustryQuestions(7)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -1236,10 +1432,24 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               onValueChange={(value) => updateData('address', value)}
               placeholder="Gatuadress, Postnummer Ort"
             />
+
+            {/* Industry-specific questions for step 7 */}
+            {step7IndustryQuestions.length > 0 && (
+              <>
+                <hr className="my-6 border-gray-200" />
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-medium text-blue-800">
+                    ✨ Branschspecifika risker för {selectedIndustry?.label}
+                  </p>
+                </div>
+                {step7IndustryQuestions.map(renderIndustryQuestion)}
+              </>
+            )}
           </div>
         )
 
       case 8:
+        const step8IndustryQuestions = getStepIndustryQuestions(8)
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
@@ -1289,6 +1499,19 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
               placeholder="T.ex. 10"
               type="number"
             />
+
+            {/* Industry-specific questions for step 8 */}
+            {step8IndustryQuestions.length > 0 && (
+              <>
+                <hr className="my-6 border-gray-200" />
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-medium text-blue-800">
+                    ✨ Branschspecifika framtidsfrågor för {selectedIndustry?.label}
+                  </p>
+                </div>
+                {step8IndustryQuestions.map(renderIndustryQuestion)}
+              </>
+            )}
             
             <hr className="my-8" />
             
@@ -1463,6 +1686,32 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
   }
 
   const isCurrentStepValid = Object.keys(getStepErrors(currentStep)).length === 0
+
+  // Show industry selector modal first
+  if (showIndustrySelector) {
+    return (
+      <IndustrySelectorModal
+        onSelect={handleIndustrySelect}
+        onClose={onClose}
+      />
+    )
+  }
+
+  // Show industry analysis panel
+  if (showAnalysisPanel && selectedIndustry) {
+    return (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <IndustryAnalysisPanel
+          industry={selectedIndustry}
+          companyName={data.companyName}
+          orgNumber={data.orgNumber}
+          website={data.website}
+          formData={data}
+          onClose={() => setShowAnalysisPanel(false)}
+        />
+      </div>
+    )
+  }
 
   if (showPreview) {
     return (
@@ -1763,7 +2012,7 @@ export default function ImprovedListingWizard({ onClose }: WizardProps) {
                     <div>
                       <dt className="text-gray-600">Bransch:</dt>
                       <dd className="font-medium">
-                        {industries.find(i => i.value === data.industry)?.label}
+                        {selectedIndustry?.label || getIndustryLabel(data.industry)}
                       </dd>
                     </div>
                     <div>
