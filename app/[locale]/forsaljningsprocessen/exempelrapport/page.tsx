@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -133,6 +134,12 @@ const mockAnalysis = {
 
 export default function ExempelrapportPage() {
   const locale = useLocale()
+  const [isMounted, setIsMounted] = useState(false)
+  
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  
   const generatedAt = new Date().toLocaleDateString('sv-SE', { 
     year: 'numeric', 
     month: 'long', 
@@ -229,34 +236,44 @@ export default function ExempelrapportPage() {
           </div>
 
           {/* Download Button */}
-          <PDFDownloadLink
-            document={
-              <SalesProcessReportPDF
-                companyData={mockCompanyData}
-                analysis={mockAnalysis}
-                generatedAt={generatedAt}
-              />
-            }
-            fileName={`Exempelrapport-Försäljningsanalys-Tech-Solutions-AB.pdf`}
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1F3C58] text-white rounded-xl font-semibold text-lg hover:bg-[#1F3C58]/90 transition-all shadow-lg hover:shadow-xl"
-          >
-            {({ loading }) => (
-              loading ? (
-                <>
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  Skapar PDF...
-                </>
-              ) : (
-                <>
-                  <Download className="w-5 h-5" />
-                  Ladda ner exempelrapport (PDF)
-                </>
-              )
-            )}
-          </PDFDownloadLink>
+          {isMounted ? (
+            <PDFDownloadLink
+              document={
+                <SalesProcessReportPDF
+                  companyData={mockCompanyData}
+                  analysis={mockAnalysis}
+                  generatedAt={generatedAt}
+                />
+              }
+              fileName={`Exempelrapport-Försäljningsanalys-Tech-Solutions-AB.pdf`}
+              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1F3C58] text-white rounded-xl font-semibold text-lg hover:bg-[#1F3C58]/90 transition-all shadow-lg hover:shadow-xl"
+            >
+              {({ loading }) => (
+                loading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Skapar PDF...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-5 h-5" />
+                    Ladda ner exempelrapport (PDF)
+                  </>
+                )
+              )}
+            </PDFDownloadLink>
+          ) : (
+            <div className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1F3C58] text-white rounded-xl font-semibold text-lg">
+              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Förbereder PDF...
+            </div>
+          )}
         </div>
 
         {/* CTA */}
