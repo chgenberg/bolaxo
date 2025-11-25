@@ -1948,7 +1948,7 @@ export default function ForsaljningsprocessenPage() {
                             isExpanded ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'
                           }`}
                         >
-                          <div className="px-3 sm:px-4 pb-4 pt-0">
+                          <div className="px-3 sm:px-4 pb-4 pt-4 mt-2 border-t border-gray-100">
                             {/* "Fyll i dina uppgifter" prompt for step 1 items */}
                             {(() => {
                               const modalCategory = getModalCategory(step.id, idx)
