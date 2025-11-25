@@ -255,16 +255,16 @@ export default function ExempelrapportPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Header */}
-      <div className="bg-[#1F3C58] text-white py-12">
+      <div className="bg-[#1F3C58] py-12">
         <div className="max-w-4xl mx-auto px-4">
           <Link 
             href={`/${locale}/forsaljningsprocessen`}
             className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-6 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Tillbaka till Försäljningsprocessen
+            <ArrowLeft className="w-4 h-4 text-white" />
+            <span className="text-white/70 hover:text-white">Tillbaka till Försäljningsprocessen</span>
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
             Exempelrapport: Försäljningsanalys
           </h1>
           <p className="text-white/80 text-lg">
