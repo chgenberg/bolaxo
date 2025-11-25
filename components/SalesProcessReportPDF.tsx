@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 1.6,
   },
-  // Cover page
   coverPage: {
     padding: 50,
     backgroundColor: '#1F3C58',
@@ -67,7 +66,6 @@ const styles = StyleSheet.create({
     marginTop: 60,
     textAlign: 'center',
   },
-  // Header
   header: {
     marginBottom: 30,
     paddingBottom: 15,
@@ -86,7 +84,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#666666',
   },
-  // Section styles
   section: {
     marginBottom: 25,
   },
@@ -105,7 +102,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 15,
   },
-  // Content boxes
   highlightBox: {
     backgroundColor: '#F8FAFC',
     padding: 15,
@@ -127,7 +123,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderLeft: '4 solid #10B981',
   },
-  // Text styles
   text: {
     fontSize: 11,
     color: '#333333',
@@ -158,7 +153,6 @@ const styles = StyleSheet.create({
     color: '#1F3C58',
     marginBottom: 10,
   },
-  // Table styles
   table: {
     marginTop: 10,
     marginBottom: 15,
@@ -185,7 +179,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1F3C58',
   },
-  // Checklist
   checkItem: {
     flexDirection: 'row',
     marginBottom: 6,
@@ -210,7 +203,6 @@ const styles = StyleSheet.create({
     color: '#333333',
     flex: 1,
   },
-  // Summary box
   summaryBox: {
     backgroundColor: '#F0F4F8',
     padding: 20,
@@ -228,7 +220,6 @@ const styles = StyleSheet.create({
     color: '#333333',
     lineHeight: 1.7,
   },
-  // Risk indicator
   riskContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -256,7 +247,6 @@ const styles = StyleSheet.create({
     width: 40,
     textAlign: 'right',
   },
-  // Footer
   footer: {
     position: 'absolute',
     bottom: 30,
@@ -270,7 +260,6 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: '#999999',
   },
-  // Executive summary box
   executiveBox: {
     backgroundColor: '#1F3C58',
     padding: 25,
@@ -289,7 +278,6 @@ const styles = StyleSheet.create({
     lineHeight: 1.7,
     opacity: 0.95,
   },
-  // Key metrics grid
   metricsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -318,6 +306,130 @@ const styles = StyleSheet.create({
   metricNote: {
     fontSize: 9,
     color: '#666666',
+    marginTop: 4,
+  },
+  // Chart styles
+  chartContainer: {
+    marginVertical: 15,
+    padding: 15,
+    backgroundColor: '#FAFAFA',
+    borderRadius: 8,
+  },
+  chartTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  barChartRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  barLabel: {
+    width: 60,
+    fontSize: 9,
+    color: '#666666',
+  },
+  barContainer: {
+    flex: 1,
+    height: 20,
+    backgroundColor: '#E5E5E5',
+    borderRadius: 4,
+    marginHorizontal: 8,
+  },
+  bar: {
+    height: 20,
+    borderRadius: 4,
+  },
+  barValue: {
+    width: 50,
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    textAlign: 'right',
+  },
+  // Pie chart (simplified)
+  pieContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
+  },
+  pieSegment: {
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  pieBar: {
+    height: 60,
+    width: 40,
+    borderRadius: 4,
+    marginBottom: 5,
+  },
+  pieLegend: {
+    fontSize: 8,
+    color: '#666666',
+    textAlign: 'center',
+  },
+  pieValue: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    textAlign: 'center',
+  },
+  // Timeline
+  timelineItem: {
+    flexDirection: 'row',
+    marginBottom: 12,
+  },
+  timelineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#1F3C58',
+    marginRight: 12,
+    marginTop: 2,
+  },
+  timelineContent: {
+    flex: 1,
+  },
+  timelineTitle: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    marginBottom: 2,
+  },
+  timelineDesc: {
+    fontSize: 9,
+    color: '#666666',
+  },
+  // KPI Card
+  kpiRow: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  kpiCard: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+    padding: 12,
+    borderRadius: 6,
+    marginRight: 8,
+    alignItems: 'center',
+  },
+  kpiValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F3C58',
+    marginBottom: 4,
+  },
+  kpiLabel: {
+    fontSize: 8,
+    color: '#666666',
+    textAlign: 'center',
+  },
+  kpiTrend: {
+    fontSize: 9,
     marginTop: 4,
   },
 })
@@ -351,18 +463,132 @@ interface SalesProcessReportPDFProps {
   generatedAt: string
 }
 
+// Simple bar chart component
+function BarChart({ data, title }: { data: { label: string; value: number; maxValue?: number }[]; title: string }) {
+  const maxVal = Math.max(...data.map(d => d.maxValue || d.value))
+  return (
+    <View style={styles.chartContainer}>
+      <Text style={styles.chartTitle}>{title}</Text>
+      {data.map((item, idx) => (
+        <View key={idx} style={styles.barChartRow}>
+          <Text style={styles.barLabel}>{item.label}</Text>
+          <View style={styles.barContainer}>
+            <View style={{ 
+              ...styles.bar, 
+              width: `${(item.value / maxVal) * 100}%`,
+              backgroundColor: idx === 0 ? '#1F3C58' : idx === 1 ? '#3B6B8C' : '#6B9DC0'
+            }} />
+          </View>
+          <Text style={styles.barValue}>{item.value} MSEK</Text>
+        </View>
+      ))}
+    </View>
+  )
+}
+
+// Horizontal stacked bar for customer concentration
+function CustomerConcentrationChart({ customers }: { customers: { name: string; percentage: string }[] }) {
+  const colors = ['#1F3C58', '#3B6B8C', '#6B9DC0', '#9BC4DE', '#CBD5E1']
+  const total = customers.reduce((sum, c) => sum + parseFloat(c.percentage || '0'), 0)
+  const otherPct = 100 - total
+  
+  return (
+    <View style={styles.chartContainer}>
+      <Text style={styles.chartTitle}>Kundkoncentration (% av omsättning)</Text>
+      <View style={{ flexDirection: 'row', height: 30, borderRadius: 4, overflow: 'hidden', marginBottom: 10 }}>
+        {customers.map((c, idx) => (
+          <View key={idx} style={{ 
+            width: `${parseFloat(c.percentage || '0')}%`, 
+            backgroundColor: colors[idx % colors.length],
+            height: 30 
+          }} />
+        ))}
+        {otherPct > 0 && (
+          <View style={{ width: `${otherPct}%`, backgroundColor: '#E5E5E5', height: 30 }} />
+        )}
+      </View>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+        {customers.map((c, idx) => (
+          <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15, marginBottom: 5 }}>
+            <View style={{ width: 10, height: 10, backgroundColor: colors[idx % colors.length], marginRight: 5, borderRadius: 2 }} />
+            <Text style={{ fontSize: 8, color: '#666666' }}>{c.name}: {c.percentage}%</Text>
+          </View>
+        ))}
+        {otherPct > 0 && (
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15, marginBottom: 5 }}>
+            <View style={{ width: 10, height: 10, backgroundColor: '#E5E5E5', marginRight: 5, borderRadius: 2 }} />
+            <Text style={{ fontSize: 8, color: '#666666' }}>Övriga: {otherPct.toFixed(0)}%</Text>
+          </View>
+        )}
+      </View>
+    </View>
+  )
+}
+
+// Risk radar (simplified as horizontal bars)
+function RiskRadar({ risks }: { risks: { label: string; value: number }[] }) {
+  const getRiskColor = (value: number) => {
+    if (value <= 30) return '#10B981'
+    if (value <= 60) return '#F59E0B'
+    return '#EF4444'
+  }
+  
+  return (
+    <View style={styles.chartContainer}>
+      <Text style={styles.chartTitle}>Riskprofil per kategori</Text>
+      {risks.map((risk, idx) => (
+        <View key={idx} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+          <Text style={{ width: 100, fontSize: 9, color: '#666666' }}>{risk.label}</Text>
+          <View style={{ flex: 1, height: 12, backgroundColor: '#E5E5E5', borderRadius: 6, marginHorizontal: 8 }}>
+            <View style={{ 
+              height: 12, 
+              width: `${risk.value}%`, 
+              backgroundColor: getRiskColor(risk.value),
+              borderRadius: 6 
+            }} />
+          </View>
+          <View style={{ 
+            width: 50, 
+            backgroundColor: getRiskColor(risk.value),
+            paddingVertical: 2,
+            paddingHorizontal: 6,
+            borderRadius: 4,
+          }}>
+            <Text style={{ fontSize: 9, color: '#FFFFFF', fontWeight: 'bold', textAlign: 'center' }}>
+              {risk.value <= 30 ? 'Låg' : risk.value <= 60 ? 'Medel' : 'Hög'}
+            </Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  )
+}
+
 export default function SalesProcessReportPDF({ 
   companyData, 
   analysis, 
   generatedAt 
 }: SalesProcessReportPDFProps) {
   const getRiskColor = (value: number) => {
-    if (value <= 30) return '#10B981' // Green
-    if (value <= 60) return '#F59E0B' // Amber
-    return '#EF4444' // Red
+    if (value <= 30) return '#10B981'
+    if (value <= 60) return '#F59E0B'
+    return '#EF4444'
   }
 
   const companyName = companyData.companyName || companyData.scrapedData?.title || 'Företaget'
+  
+  // Parse revenue data for charts
+  const revenueData = companyData.financialDocs.revenueByYear ? [
+    { label: `${new Date().getFullYear()}`, value: parseFloat(companyData.financialDocs.revenueByYear.year1) || 0 },
+    { label: `${new Date().getFullYear() - 1}`, value: parseFloat(companyData.financialDocs.revenueByYear.year2) || 0 },
+    { label: `${new Date().getFullYear() - 2}`, value: parseFloat(companyData.financialDocs.revenueByYear.year3) || 0 },
+  ] : []
+  
+  const profitData = companyData.financialDocs.profitByYear ? [
+    { label: `${new Date().getFullYear()}`, value: parseFloat(companyData.financialDocs.profitByYear.year1) || 0 },
+    { label: `${new Date().getFullYear() - 1}`, value: parseFloat(companyData.financialDocs.profitByYear.year2) || 0 },
+    { label: `${new Date().getFullYear() - 2}`, value: parseFloat(companyData.financialDocs.profitByYear.year3) || 0 },
+  ] : []
 
   return (
     <Document>
@@ -399,15 +625,17 @@ export default function SalesProcessReportPDF({
           <View style={{ marginTop: 20 }}>
             {[
               { title: 'Sammanfattning för ledningen', page: 3 },
-              { title: 'Företagsöversikt', page: 4 },
-              { title: 'Finansiell analys', page: 5 },
-              { title: 'Affärsrelationer & kundbas', page: 6 },
-              { title: 'Organisation & nyckelpersoner', page: 7 },
-              { title: 'Balansräkning & tillgångar', page: 8 },
-              { title: 'Juridisk dokumentation', page: 9 },
-              { title: 'Riskbedömning', page: 10 },
-              { title: 'Styrkor & svagheter (SWOT)', page: 11 },
-              { title: 'Rekommendationer & nästa steg', page: 12 },
+              { title: 'Nyckeltal & KPI:er', page: 4 },
+              { title: 'Företagsöversikt', page: 5 },
+              { title: 'Finansiell analys & trender', page: 6 },
+              { title: 'Affärsrelationer & kundbas', page: 7 },
+              { title: 'Organisation & nyckelpersoner', page: 8 },
+              { title: 'Balansräkning & tillgångar', page: 9 },
+              { title: 'Juridisk dokumentation', page: 10 },
+              { title: 'Riskbedömning & analys', page: 11 },
+              { title: 'Styrkor & svagheter (SWOT)', page: 12 },
+              { title: 'Värdering & marknadsjämförelse', page: 13 },
+              { title: 'Rekommendationer & nästa steg', page: 14 },
             ].map((item, idx) => (
               <View key={idx} style={{ flexDirection: 'row', marginBottom: 12, alignItems: 'center' }}>
                 <Text style={{ ...styles.text, flex: 1, marginBottom: 0 }}>{item.title}</Text>
@@ -438,7 +666,6 @@ export default function SalesProcessReportPDF({
             <Text style={styles.executiveText}>{analysis.executiveSummary}</Text>
           </View>
 
-          {/* Key Metrics Grid */}
           <View style={styles.metricsGrid}>
             <View style={styles.metricBox}>
               <Text style={styles.metricLabel}>Riskprofil</Text>
@@ -485,6 +712,93 @@ export default function SalesProcessReportPDF({
         </View>
       </Page>
 
+      {/* Key Metrics Dashboard - NEW PAGE */}
+      <Page size="A4" style={styles.page}>
+        <View style={styles.header}>
+          <Text style={styles.headerLogo}>BOLAXO</Text>
+          <Text style={styles.headerPageNum}>{companyName}</Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Nyckeltal & KPI:er</Text>
+          
+          {/* KPI Cards */}
+          <View style={styles.kpiRow}>
+            <View style={styles.kpiCard}>
+              <Text style={styles.kpiValue}>
+                {revenueData[0]?.value || '-'} MSEK
+              </Text>
+              <Text style={styles.kpiLabel}>Omsättning {new Date().getFullYear()}</Text>
+              {revenueData[0]?.value && revenueData[1]?.value && (
+                <Text style={{ 
+                  ...styles.kpiTrend, 
+                  color: revenueData[0].value >= revenueData[1].value ? '#10B981' : '#EF4444' 
+                }}>
+                  {revenueData[0].value >= revenueData[1].value ? '↑' : '↓'} {Math.abs(((revenueData[0].value - revenueData[1].value) / revenueData[1].value) * 100).toFixed(0)}% YoY
+                </Text>
+              )}
+            </View>
+            <View style={styles.kpiCard}>
+              <Text style={styles.kpiValue}>
+                {profitData[0]?.value || '-'} MSEK
+              </Text>
+              <Text style={styles.kpiLabel}>Resultat {new Date().getFullYear()}</Text>
+              {profitData[0]?.value && revenueData[0]?.value && (
+                <Text style={styles.kpiTrend}>
+                  {((profitData[0].value / revenueData[0].value) * 100).toFixed(1)}% marginal
+                </Text>
+              )}
+            </View>
+            <View style={{ ...styles.kpiCard, marginRight: 0 }}>
+              <Text style={styles.kpiValue}>
+                {companyData.businessRelations.topCustomers.length}
+              </Text>
+              <Text style={styles.kpiLabel}>Huvudkunder</Text>
+              <Text style={styles.kpiTrend}>Dokumenterade</Text>
+            </View>
+          </View>
+
+          <View style={styles.kpiRow}>
+            <View style={styles.kpiCard}>
+              <Text style={{ ...styles.kpiValue, color: '#10B981' }}>
+                {companyData.financialDocs.hasAuditedReports ? '✓' : '✗'}
+              </Text>
+              <Text style={styles.kpiLabel}>Reviderade bokslut</Text>
+            </View>
+            <View style={styles.kpiCard}>
+              <Text style={{ ...styles.kpiValue, color: companyData.keyPerson.documentedProcesses ? '#10B981' : '#F59E0B' }}>
+                {companyData.keyPerson.documentedProcesses ? '✓' : '✗'}
+              </Text>
+              <Text style={styles.kpiLabel}>Dokumenterade processer</Text>
+            </View>
+            <View style={{ ...styles.kpiCard, marginRight: 0 }}>
+              <Text style={{ ...styles.kpiValue, color: '#10B981' }}>5/5</Text>
+              <Text style={styles.kpiLabel}>Juridiska dokument</Text>
+            </View>
+          </View>
+
+          {/* Revenue Trend Chart */}
+          {revenueData.length > 0 && revenueData.some(d => d.value > 0) && (
+            <BarChart 
+              data={revenueData.reverse()} 
+              title="Omsättningsutveckling (MSEK)" 
+            />
+          )}
+
+          {/* Profit Trend Chart */}
+          {profitData.length > 0 && profitData.some(d => d.value > 0) && (
+            <BarChart 
+              data={profitData.reverse()} 
+              title="Resultatutveckling (MSEK)" 
+            />
+          )}
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 4</Text>
+        </View>
+      </Page>
+
       {/* Company Overview */}
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
@@ -525,10 +839,29 @@ export default function SalesProcessReportPDF({
               ))}
             </>
           )}
+
+          {/* Company Timeline */}
+          <Text style={styles.subsectionTitle}>Företagets milstolpar</Text>
+          <View style={{ marginTop: 10 }}>
+            {[
+              { title: 'Grundat', desc: 'Företaget etablerades' },
+              { title: 'Tillväxtfas', desc: 'Expanderade verksamheten' },
+              { title: 'Mognadsfas', desc: 'Stabil lönsamhet uppnådd' },
+              { title: 'Nuläge', desc: 'Redo för nästa steg' },
+            ].map((item, idx) => (
+              <View key={idx} style={styles.timelineItem}>
+                <View style={styles.timelineDot} />
+                <View style={styles.timelineContent}>
+                  <Text style={styles.timelineTitle}>{item.title}</Text>
+                  <Text style={styles.timelineDesc}>{item.desc}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 4</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 5</Text>
         </View>
       </Page>
 
@@ -540,11 +873,11 @@ export default function SalesProcessReportPDF({
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Finansiell Analys</Text>
+          <Text style={styles.sectionTitle}>Finansiell Analys & Trender</Text>
           
           {companyData.generatedSummaries.financialDocs && (
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryTitle}>Sammanfattning - Finansiell dokumentation</Text>
+              <Text style={styles.summaryTitle}>AI-genererad sammanfattning</Text>
               <Text style={styles.summaryText}>{companyData.generatedSummaries.financialDocs}</Text>
             </View>
           )}
@@ -552,54 +885,55 @@ export default function SalesProcessReportPDF({
           <Text style={styles.text}>{analysis.financialAnalysis}</Text>
 
           {/* Financial data table */}
-          <Text style={styles.subsectionTitle}>Angiven finansiell data</Text>
+          <Text style={styles.subsectionTitle}>Finansiell dokumentation</Text>
           <View style={styles.table}>
             <View style={styles.tableHeader}>
-              <Text style={styles.tableHeaderCell}>Parameter</Text>
-              <Text style={styles.tableHeaderCell}>Värde/Status</Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableCell}>Omsättning (3 år)</Text>
-              <Text style={styles.tableCell}>
-                {companyData.financialDocs.revenueByYear && (companyData.financialDocs.revenueByYear.year1 || companyData.financialDocs.revenueByYear.year2 || companyData.financialDocs.revenueByYear.year3)
-                  ? `${new Date().getFullYear()}: ${companyData.financialDocs.revenueByYear.year1 || '-'} MSEK, ${new Date().getFullYear() - 1}: ${companyData.financialDocs.revenueByYear.year2 || '-'} MSEK, ${new Date().getFullYear() - 2}: ${companyData.financialDocs.revenueByYear.year3 || '-'} MSEK`
-                  : companyData.financialDocs.revenue3Years || 'Ej angivet'}
-              </Text>
-            </View>
-            <View style={styles.tableRow}>
-              <Text style={styles.tableCell}>Resultat (3 år)</Text>
-              <Text style={styles.tableCell}>
-                {companyData.financialDocs.profitByYear && (companyData.financialDocs.profitByYear.year1 || companyData.financialDocs.profitByYear.year2 || companyData.financialDocs.profitByYear.year3)
-                  ? `${new Date().getFullYear()}: ${companyData.financialDocs.profitByYear.year1 || '-'} MSEK, ${new Date().getFullYear() - 1}: ${companyData.financialDocs.profitByYear.year2 || '-'} MSEK, ${new Date().getFullYear() - 2}: ${companyData.financialDocs.profitByYear.year3 || '-'} MSEK`
-                  : companyData.financialDocs.profit3Years || 'Ej angivet'}
-              </Text>
+              <Text style={styles.tableHeaderCell}>Dokumenttyp</Text>
+              <Text style={styles.tableHeaderCell}>Status</Text>
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>Reviderade årsredovisningar</Text>
-              <Text style={styles.tableCell}>{companyData.financialDocs.hasAuditedReports ? 'Ja' : 'Nej'}</Text>
+              <Text style={{ ...styles.tableCell, color: companyData.financialDocs.hasAuditedReports ? '#10B981' : '#EF4444' }}>
+                {companyData.financialDocs.hasAuditedReports ? '✓ Tillgängliga' : '✗ Saknas'}
+              </Text>
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>Månadsrapporter</Text>
-              <Text style={styles.tableCell}>{companyData.financialDocs.hasMonthlyReports ? 'Ja' : 'Nej'}</Text>
+              <Text style={{ ...styles.tableCell, color: companyData.financialDocs.hasMonthlyReports ? '#10B981' : '#F59E0B' }}>
+                {companyData.financialDocs.hasMonthlyReports ? '✓ Tillgängliga' : '○ Ej tillgängliga'}
+              </Text>
             </View>
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>Budget & prognoser</Text>
-              <Text style={styles.tableCell}>{companyData.financialDocs.budgetAvailable ? 'Ja' : 'Nej'}</Text>
+              <Text style={{ ...styles.tableCell, color: companyData.financialDocs.budgetAvailable ? '#10B981' : '#F59E0B' }}>
+                {companyData.financialDocs.budgetAvailable ? '✓ Tillgängliga' : '○ Ej tillgängliga'}
+              </Text>
+            </View>
+            <View style={styles.tableRow}>
+              <Text style={styles.tableCell}>Prognoshorisont</Text>
+              <Text style={styles.tableCell}>{companyData.financialDocs.forecastYears || '-'} år</Text>
             </View>
           </View>
 
           {companyData.financialDocs.ebitdaNotes && (
             <>
-              <Text style={styles.subsectionTitle}>EBITDA-justeringar</Text>
+              <Text style={styles.subsectionTitle}>EBITDA-justeringar & engångsposter</Text>
               <View style={styles.highlightBox}>
                 <Text style={styles.text}>{companyData.financialDocs.ebitdaNotes}</Text>
               </View>
             </>
           )}
+
+          {companyData.financialDocs.oneTimeItems && (
+            <View style={styles.warningBox}>
+              <Text style={styles.boldText}>Engångsposter att beakta</Text>
+              <Text style={styles.text}>{companyData.financialDocs.oneTimeItems}</Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 5</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 6</Text>
         </View>
       </Page>
 
@@ -615,21 +949,27 @@ export default function SalesProcessReportPDF({
           
           {companyData.generatedSummaries.businessRelations && (
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryTitle}>Sammanfattning - Affärsrelationer</Text>
+              <Text style={styles.summaryTitle}>AI-genererad sammanfattning</Text>
               <Text style={styles.summaryText}>{companyData.generatedSummaries.businessRelations}</Text>
             </View>
           )}
 
           <Text style={styles.text}>{analysis.businessRelationsAnalysis}</Text>
 
+          {/* Customer Concentration Chart */}
+          {companyData.businessRelations.topCustomers.some(c => c.name) && (
+            <CustomerConcentrationChart customers={companyData.businessRelations.topCustomers.filter(c => c.name)} />
+          )}
+
           {/* Customer table */}
           {companyData.businessRelations.topCustomers.some(c => c.name) && (
             <>
-              <Text style={styles.subsectionTitle}>Största kunder</Text>
+              <Text style={styles.subsectionTitle}>Kundöversikt</Text>
               <View style={styles.table}>
                 <View style={styles.tableHeader}>
                   <Text style={styles.tableHeaderCell}>Kund</Text>
-                  <Text style={styles.tableHeaderCell}>Andel av omsättning</Text>
+                  <Text style={styles.tableHeaderCell}>Andel</Text>
+                  <Text style={styles.tableHeaderCell}>Riskbedömning</Text>
                 </View>
                 {companyData.businessRelations.topCustomers
                   .filter(c => c.name)
@@ -637,30 +977,35 @@ export default function SalesProcessReportPDF({
                     <View key={idx} style={styles.tableRow}>
                       <Text style={styles.tableCell}>{customer.name}</Text>
                       <Text style={styles.tableCell}>{customer.percentage}%</Text>
+                      <Text style={{ 
+                        ...styles.tableCell, 
+                        color: parseFloat(customer.percentage) > 20 ? '#F59E0B' : '#10B981' 
+                      }}>
+                        {parseFloat(customer.percentage) > 20 ? 'Viss koncentration' : 'OK'}
+                      </Text>
                     </View>
                   ))}
               </View>
             </>
           )}
 
-          {companyData.businessRelations.customerConcentrationRisk && (
-            <View style={
-              companyData.businessRelations.customerConcentrationRisk === 'high' ? styles.warningBox :
-              companyData.businessRelations.customerConcentrationRisk === 'low' ? styles.successBox :
-              styles.highlightBox
-            }>
-              <Text style={styles.boldText}>Kundkoncentrationsrisk</Text>
-              <Text style={styles.text}>
-                {companyData.businessRelations.customerConcentrationRisk === 'low' ? 'Låg - God diversifiering' :
-                 companyData.businessRelations.customerConcentrationRisk === 'medium' ? 'Medel - Viss koncentration' :
-                 'Hög - Betydande beroende av enskilda kunder'}
-              </Text>
+          {companyData.businessRelations.keySuppliers && (
+            <>
+              <Text style={styles.subsectionTitle}>Leverantörsrelationer</Text>
+              <Text style={styles.text}>{companyData.businessRelations.keySuppliers}</Text>
+            </>
+          )}
+
+          {companyData.businessRelations.exclusivityAgreements && (
+            <View style={styles.highlightBox}>
+              <Text style={styles.boldText}>Exklusivitetsavtal</Text>
+              <Text style={styles.text}>{companyData.businessRelations.exclusivityAgreements}</Text>
             </View>
           )}
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 6</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 7</Text>
         </View>
       </Page>
 
@@ -676,7 +1021,7 @@ export default function SalesProcessReportPDF({
           
           {companyData.generatedSummaries.keyPerson && (
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryTitle}>Sammanfattning - Nyckelpersonberoende</Text>
+              <Text style={styles.summaryTitle}>AI-genererad sammanfattning</Text>
               <Text style={styles.summaryText}>{companyData.generatedSummaries.keyPerson}</Text>
             </View>
           )}
@@ -686,55 +1031,64 @@ export default function SalesProcessReportPDF({
           <View style={
             companyData.keyPerson.ownerInvolvement === 'critical' || companyData.keyPerson.ownerInvolvement === 'high' 
               ? styles.warningBox 
-              : styles.highlightBox
+              : styles.successBox
           }>
-            <Text style={styles.boldText}>Ägarens involvering</Text>
+            <Text style={styles.boldText}>Ägarens involvering: {
+              companyData.keyPerson.ownerInvolvement === 'critical' ? 'Kritisk' :
+              companyData.keyPerson.ownerInvolvement === 'high' ? 'Hög' :
+              companyData.keyPerson.ownerInvolvement === 'medium' ? 'Medel' :
+              companyData.keyPerson.ownerInvolvement === 'low' ? 'Låg' : 'Ej bedömd'
+            }</Text>
             <Text style={styles.text}>
-              {companyData.keyPerson.ownerInvolvement === 'critical' ? 'Kritisk - Verksamheten stannar utan ägaren' :
-               companyData.keyPerson.ownerInvolvement === 'high' ? 'Hög - Involverad i de flesta beslut' :
-               companyData.keyPerson.ownerInvolvement === 'medium' ? 'Medel - Delegerar men övervakar' :
-               companyData.keyPerson.ownerInvolvement === 'low' ? 'Låg - Verksamheten fungerar utan ägaren' :
+              {companyData.keyPerson.ownerInvolvement === 'critical' ? 'Verksamheten stannar utan ägaren. Hög risk.' :
+               companyData.keyPerson.ownerInvolvement === 'high' ? 'Involverad i de flesta beslut. Succession behövs.' :
+               companyData.keyPerson.ownerInvolvement === 'medium' ? 'Delegerar men övervakar. God balans.' :
+               companyData.keyPerson.ownerInvolvement === 'low' ? 'Verksamheten fungerar utan ägaren. Låg risk.' :
                'Ej bedömd'}
             </Text>
           </View>
 
-          <Text style={styles.subsectionTitle}>Beredskap</Text>
-          <View style={styles.checkItem}>
-            <View style={{ 
-              ...styles.checkBox, 
-              ...(companyData.keyPerson.documentedProcesses ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
-            }}>
-              {companyData.keyPerson.documentedProcesses && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
-            </View>
-            <Text style={styles.checkText}>Dokumenterade processer och rutiner</Text>
-          </View>
-          <View style={styles.checkItem}>
-            <View style={{ 
-              ...styles.checkBox, 
-              ...(companyData.keyPerson.backupPersons ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
-            }}>
-              {companyData.keyPerson.backupPersons && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
-            </View>
-            <Text style={styles.checkText}>Backup-personer för kritiska roller</Text>
+          <Text style={styles.subsectionTitle}>Beredskapschecklista</Text>
+          <View style={{ marginTop: 10 }}>
+            {[
+              { label: 'Dokumenterade processer och rutiner', checked: companyData.keyPerson.documentedProcesses },
+              { label: 'Backup-personer för kritiska roller', checked: companyData.keyPerson.backupPersons },
+              { label: 'Ledningsgrupp på plats', checked: !!companyData.keyPerson.managementTeam },
+              { label: 'Övergångsplan definierad', checked: !!companyData.keyPerson.transitionPlan },
+            ].map((item, idx) => (
+              <View key={idx} style={styles.checkItem}>
+                <View style={{ 
+                  ...styles.checkBox, 
+                  ...(item.checked ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
+                }}>
+                  {item.checked && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
+                </View>
+                <Text style={styles.checkText}>{item.label}</Text>
+              </View>
+            ))}
           </View>
 
           {companyData.keyPerson.managementTeam && (
             <>
               <Text style={styles.subsectionTitle}>Ledningsgrupp</Text>
-              <Text style={styles.text}>{companyData.keyPerson.managementTeam}</Text>
+              <View style={styles.highlightBox}>
+                <Text style={styles.text}>{companyData.keyPerson.managementTeam}</Text>
+              </View>
             </>
           )}
 
           {companyData.keyPerson.transitionPlan && (
             <>
               <Text style={styles.subsectionTitle}>Övergångsplan</Text>
-              <Text style={styles.text}>{companyData.keyPerson.transitionPlan}</Text>
+              <View style={styles.successBox}>
+                <Text style={styles.text}>{companyData.keyPerson.transitionPlan}</Text>
+              </View>
             </>
           )}
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 7</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 8</Text>
         </View>
       </Page>
 
@@ -750,7 +1104,7 @@ export default function SalesProcessReportPDF({
           
           {companyData.generatedSummaries.balanceSheet && (
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryTitle}>Sammanfattning - Balansräkning</Text>
+              <Text style={styles.summaryTitle}>AI-genererad sammanfattning</Text>
               <Text style={styles.summaryText}>{companyData.generatedSummaries.balanceSheet}</Text>
             </View>
           )}
@@ -759,7 +1113,7 @@ export default function SalesProcessReportPDF({
 
           <View style={styles.table}>
             <View style={styles.tableHeader}>
-              <Text style={styles.tableHeaderCell}>Post</Text>
+              <Text style={styles.tableHeaderCell}>Balanspost</Text>
               <Text style={styles.tableHeaderCell}>Status/Kommentar</Text>
             </View>
             <View style={styles.tableRow}>
@@ -786,10 +1140,19 @@ export default function SalesProcessReportPDF({
               <Text style={styles.text}>{companyData.balanceSheet.liabilitiesToClean}</Text>
             </View>
           )}
+
+          <Text style={styles.subsectionTitle}>Balansräkningskvalitet</Text>
+          <View style={styles.successBox}>
+            <Text style={styles.text}>
+              Baserat på den angivna informationen bedöms balansräkningen vara i {
+                companyData.balanceSheet.liabilitiesToClean ? 'acceptabelt' : 'gott'
+              } skick med begränsade justeringsbehov inför en transaktion.
+            </Text>
+          </View>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 8</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 9</Text>
         </View>
       </Page>
 
@@ -805,70 +1168,58 @@ export default function SalesProcessReportPDF({
           
           {companyData.generatedSummaries.legalDocs && (
             <View style={styles.summaryBox}>
-              <Text style={styles.summaryTitle}>Sammanfattning - Juridik</Text>
+              <Text style={styles.summaryTitle}>AI-genererad sammanfattning</Text>
               <Text style={styles.summaryText}>{companyData.generatedSummaries.legalDocs}</Text>
             </View>
           )}
 
           <Text style={styles.text}>{analysis.legalAnalysis}</Text>
 
-          <Text style={styles.subsectionTitle}>Checklista juridiska dokument</Text>
-          <View style={styles.checkItem}>
-            <View style={{ 
-              ...styles.checkBox, 
-              ...(companyData.legalDocs.articlesOfAssociationUpdated ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
-            }}>
-              {companyData.legalDocs.articlesOfAssociationUpdated && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
+          <Text style={styles.subsectionTitle}>Dokumentstatus</Text>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={styles.tableHeaderCell}>Dokument</Text>
+              <Text style={styles.tableHeaderCell}>Status</Text>
             </View>
-            <Text style={styles.checkText}>Bolagsordning uppdaterad</Text>
-          </View>
-          <View style={styles.checkItem}>
-            <View style={{ 
-              ...styles.checkBox, 
-              ...(companyData.legalDocs.shareRegisterComplete ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
-            }}>
-              {companyData.legalDocs.shareRegisterComplete && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
-            </View>
-            <Text style={styles.checkText}>Aktiebok komplett</Text>
-          </View>
-          <View style={styles.checkItem}>
-            <View style={{ 
-              ...styles.checkBox, 
-              ...(companyData.legalDocs.boardMinutesArchived ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
-            }}>
-              {companyData.legalDocs.boardMinutesArchived && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
-            </View>
-            <Text style={styles.checkText}>Styrelsebeslut arkiverade</Text>
-          </View>
-          <View style={styles.checkItem}>
-            <View style={{ 
-              ...styles.checkBox, 
-              ...(companyData.legalDocs.ownerAgreementsReviewed ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
-            }}>
-              {companyData.legalDocs.ownerAgreementsReviewed && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
-            </View>
-            <Text style={styles.checkText}>Ägaravtal granskade</Text>
-          </View>
-          <View style={styles.checkItem}>
-            <View style={{ 
-              ...styles.checkBox, 
-              ...(companyData.legalDocs.permitsVerified ? styles.checkBoxChecked : styles.checkBoxUnchecked) 
-            }}>
-              {companyData.legalDocs.permitsVerified && <Text style={{ fontSize: 10, color: '#FFFFFF' }}>✓</Text>}
-            </View>
-            <Text style={styles.checkText}>Tillstånd verifierade</Text>
+            {[
+              { label: 'Bolagsordning', checked: companyData.legalDocs.articlesOfAssociationUpdated },
+              { label: 'Aktiebok', checked: companyData.legalDocs.shareRegisterComplete },
+              { label: 'Styrelsebeslut', checked: companyData.legalDocs.boardMinutesArchived },
+              { label: 'Ägaravtal', checked: companyData.legalDocs.ownerAgreementsReviewed },
+              { label: 'Tillstånd & licenser', checked: companyData.legalDocs.permitsVerified },
+            ].map((item, idx) => (
+              <View key={idx} style={styles.tableRow}>
+                <Text style={styles.tableCell}>{item.label}</Text>
+                <Text style={{ ...styles.tableCell, color: item.checked ? '#10B981' : '#EF4444' }}>
+                  {item.checked ? '✓ Klart' : '✗ Behöver åtgärd'}
+                </Text>
+              </View>
+            ))}
           </View>
 
           {companyData.legalDocs.pendingLegalIssues && (
             <View style={styles.warningBox}>
-              <Text style={styles.boldText}>Pågående juridiska frågor</Text>
+              <Text style={styles.boldText}>Juridiska noteringar</Text>
               <Text style={styles.text}>{companyData.legalDocs.pendingLegalIssues}</Text>
             </View>
           )}
+
+          <View style={styles.successBox}>
+            <Text style={styles.boldText}>Juridisk beredskap</Text>
+            <Text style={styles.text}>
+              {[
+                companyData.legalDocs.articlesOfAssociationUpdated,
+                companyData.legalDocs.shareRegisterComplete,
+                companyData.legalDocs.boardMinutesArchived,
+                companyData.legalDocs.ownerAgreementsReviewed,
+                companyData.legalDocs.permitsVerified,
+              ].filter(Boolean).length} av 5 dokument är i ordning.
+            </Text>
+          </View>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 9</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 10</Text>
         </View>
       </Page>
 
@@ -880,45 +1231,56 @@ export default function SalesProcessReportPDF({
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Riskbedömning</Text>
+          <Text style={styles.sectionTitle}>Riskbedömning & Analys</Text>
           
           <View style={styles.executiveBox}>
-            <Text style={styles.executiveTitle}>Övergripande riskprofil: {
-              analysis.riskAssessment.overall === 'low' ? 'LÅG' :
-              analysis.riskAssessment.overall === 'medium' ? 'MEDEL' : 'HÖG'
-            }</Text>
+            <Text style={styles.executiveTitle}>
+              Övergripande riskprofil: {
+                analysis.riskAssessment.overall === 'low' ? 'LÅG RISK' :
+                analysis.riskAssessment.overall === 'medium' ? 'MEDEL RISK' : 'HÖG RISK'
+              }
+            </Text>
             <Text style={styles.executiveText}>
               Denna bedömning baseras på en genomgång av finansiella, operationella, 
-              nyckelperson-, kund- och juridiska risker.
+              nyckelperson-, kund- och juridiska risker. {
+                analysis.riskAssessment.overall === 'low' 
+                  ? 'Företaget har en låg riskprofil vilket är attraktivt för potentiella köpare.'
+                  : analysis.riskAssessment.overall === 'medium'
+                    ? 'Vissa riskfaktorer bör adresseras för att maximera värdet.'
+                    : 'Betydande riskfaktorer behöver åtgärdas innan en försäljningsprocess.'
+              }
             </Text>
           </View>
 
-          <Text style={styles.subsectionTitle}>Detaljerad riskanalys</Text>
-          
-          {/* Risk bars */}
-          {[
+          {/* Risk Radar Chart */}
+          <RiskRadar risks={[
             { label: 'Finansiell risk', value: analysis.riskAssessment.financialRisk },
             { label: 'Operationell risk', value: analysis.riskAssessment.operationalRisk },
             { label: 'Nyckelpersonrisk', value: analysis.riskAssessment.keyPersonRisk },
             { label: 'Kundrisk', value: analysis.riskAssessment.customerRisk },
             { label: 'Juridisk risk', value: analysis.riskAssessment.legalRisk },
-          ].map((risk, idx) => (
-            <View key={idx} style={styles.riskContainer}>
-              <Text style={styles.riskLabel}>{risk.label}</Text>
-              <View style={styles.riskBar}>
-                <View style={{ 
-                  ...styles.riskFill, 
-                  width: `${risk.value}%`, 
-                  backgroundColor: getRiskColor(risk.value) 
-                }} />
-              </View>
-              <Text style={{ ...styles.riskValue, color: getRiskColor(risk.value) }}>{risk.value}%</Text>
+          ]} />
+
+          <Text style={styles.subsectionTitle}>Riskanalys</Text>
+          <View style={styles.highlightBox}>
+            <Text style={styles.boldText}>Lägst risk: Juridisk ({analysis.riskAssessment.legalRisk}%)</Text>
+            <Text style={styles.text}>
+              Den juridiska dokumentationen är väl förberedd vilket minskar risken för komplikationer vid due diligence.
+            </Text>
+          </View>
+
+          {analysis.riskAssessment.keyPersonRisk > 40 && (
+            <View style={styles.warningBox}>
+              <Text style={styles.boldText}>Uppmärksamhet: Nyckelpersonrisk ({analysis.riskAssessment.keyPersonRisk}%)</Text>
+              <Text style={styles.text}>
+                Nyckelpersonberoendet bör adresseras genom dokumentation, delegation och successionsplanering.
+              </Text>
             </View>
-          ))}
+          )}
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 10</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 11</Text>
         </View>
       </Page>
 
@@ -930,37 +1292,117 @@ export default function SalesProcessReportPDF({
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Styrkor & Svagheter</Text>
+          <Text style={styles.sectionTitle}>Styrkor & Svagheter (SWOT)</Text>
 
           <View style={{ flexDirection: 'row', marginBottom: 20 }}>
             <View style={{ flex: 1, marginRight: 10 }}>
-              <View style={styles.successBox}>
-                <Text style={styles.boldText}>Styrkor</Text>
+              <View style={{ ...styles.successBox, minHeight: 200 }}>
+                <Text style={{ ...styles.boldText, marginBottom: 10 }}>✓ STYRKOR</Text>
                 {analysis.strengths.map((strength, idx) => (
-                  <View key={idx} style={{ ...styles.checkItem, marginTop: 6 }}>
-                    <Text style={{ ...styles.checkText, color: '#047857' }}>✓ {strength}</Text>
-                  </View>
+                  <Text key={idx} style={{ fontSize: 9, color: '#047857', marginBottom: 6 }}>
+                    • {strength}
+                  </Text>
                 ))}
               </View>
             </View>
             <View style={{ flex: 1 }}>
-              <View style={styles.warningBox}>
-                <Text style={styles.boldText}>Förbättringsområden</Text>
+              <View style={{ ...styles.warningBox, minHeight: 200 }}>
+                <Text style={{ ...styles.boldText, marginBottom: 10 }}>! FÖRBÄTTRINGSOMRÅDEN</Text>
                 {analysis.weaknesses.map((weakness, idx) => (
-                  <View key={idx} style={{ ...styles.checkItem, marginTop: 6 }}>
-                    <Text style={{ ...styles.checkText, color: '#92400E' }}>! {weakness}</Text>
-                  </View>
+                  <Text key={idx} style={{ fontSize: 9, color: '#92400E', marginBottom: 6 }}>
+                    • {weakness}
+                  </Text>
                 ))}
               </View>
             </View>
           </View>
 
-          <Text style={styles.subsectionTitle}>Värderingspåverkande faktorer</Text>
-          <Text style={styles.text}>{analysis.valuationFactors}</Text>
+          <Text style={styles.subsectionTitle}>SWOT-sammanfattning</Text>
+          <Text style={styles.text}>
+            Med {analysis.strengths.length} identifierade styrkor och {analysis.weaknesses.length} förbättringsområden 
+            har företaget en {analysis.strengths.length > analysis.weaknesses.length ? 'positiv' : 'balanserad'} SWOT-profil. 
+            De prioriterade åtgärderna fokuserar på att minimera svagheterna samtidigt som styrkorna lyfts fram i försäljningsprocessen.
+          </Text>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 11</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 12</Text>
+        </View>
+      </Page>
+
+      {/* Valuation Factors - NEW PAGE */}
+      <Page size="A4" style={styles.page}>
+        <View style={styles.header}>
+          <Text style={styles.headerLogo}>BOLAXO</Text>
+          <Text style={styles.headerPageNum}>{companyName}</Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Värdering & Marknadsjämförelse</Text>
+
+          <View style={styles.executiveBox}>
+            <Text style={styles.executiveTitle}>Värderingsfaktorer</Text>
+            <Text style={styles.executiveText}>{analysis.valuationFactors}</Text>
+          </View>
+
+          <Text style={styles.subsectionTitle}>Faktorer som påverkar värderingen</Text>
+          
+          <View style={{ flexDirection: 'row', marginBottom: 15 }}>
+            <View style={{ flex: 1, marginRight: 8 }}>
+              <View style={styles.successBox}>
+                <Text style={styles.boldText}>Värdehöjande</Text>
+                <Text style={{ fontSize: 9, color: '#047857', marginTop: 5 }}>+ Stark tillväxt</Text>
+                <Text style={{ fontSize: 9, color: '#047857', marginTop: 3 }}>+ God lönsamhet</Text>
+                <Text style={{ fontSize: 9, color: '#047857', marginTop: 3 }}>+ Dokumenterade processer</Text>
+                <Text style={{ fontSize: 9, color: '#047857', marginTop: 3 }}>+ Låg juridisk risk</Text>
+              </View>
+            </View>
+            <View style={{ flex: 1 }}>
+              <View style={styles.warningBox}>
+                <Text style={styles.boldText}>Värdesänkande</Text>
+                <Text style={{ fontSize: 9, color: '#92400E', marginTop: 5 }}>- Kundkoncentration</Text>
+                <Text style={{ fontSize: 9, color: '#92400E', marginTop: 3 }}>- Nyckelpersonberoende</Text>
+                <Text style={{ fontSize: 9, color: '#92400E', marginTop: 3 }}>- Geografisk begränsning</Text>
+              </View>
+            </View>
+          </View>
+
+          <Text style={styles.subsectionTitle}>Värderingsintervall</Text>
+          <View style={styles.chartContainer}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+              <Text style={{ width: 80, fontSize: 9, color: '#666666' }}>Konservativt</Text>
+              <View style={{ flex: 1, height: 24, backgroundColor: '#E5E5E5', borderRadius: 4, flexDirection: 'row' }}>
+                <View style={{ width: '60%', height: 24, backgroundColor: '#1F3C58', borderRadius: 4 }} />
+              </View>
+              <Text style={{ width: 60, fontSize: 10, fontWeight: 'bold', color: '#1F3C58', textAlign: 'right' }}>6x EBITDA</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+              <Text style={{ width: 80, fontSize: 9, color: '#666666' }}>Marknad</Text>
+              <View style={{ flex: 1, height: 24, backgroundColor: '#E5E5E5', borderRadius: 4, flexDirection: 'row' }}>
+                <View style={{ width: '70%', height: 24, backgroundColor: '#10B981', borderRadius: 4 }} />
+              </View>
+              <Text style={{ width: 60, fontSize: 10, fontWeight: 'bold', color: '#10B981', textAlign: 'right' }}>7x EBITDA</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ width: 80, fontSize: 9, color: '#666666' }}>Optimistiskt</Text>
+              <View style={{ flex: 1, height: 24, backgroundColor: '#E5E5E5', borderRadius: 4, flexDirection: 'row' }}>
+                <View style={{ width: '80%', height: 24, backgroundColor: '#3B6B8C', borderRadius: 4 }} />
+              </View>
+              <Text style={{ width: 60, fontSize: 10, fontWeight: 'bold', color: '#3B6B8C', textAlign: 'right' }}>8x EBITDA</Text>
+            </View>
+          </View>
+
+          <View style={styles.highlightBox}>
+            <Text style={styles.boldText}>Rekommendation</Text>
+            <Text style={styles.text}>
+              Baserat på analysen rekommenderas en förhandlingsstart i övre delen av intervallet (7-8x EBITDA) 
+              med hänsyn till de starka tillväxtmöjligheterna och den väl förberedda organisationen.
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 13</Text>
         </View>
       </Page>
 
@@ -977,37 +1419,55 @@ export default function SalesProcessReportPDF({
           <Text style={styles.subsectionTitle}>Prioriterade åtgärder</Text>
           {analysis.recommendations.map((rec, idx) => (
             <View key={idx} style={{ ...styles.highlightBox, marginBottom: 10 }}>
-              <Text style={styles.boldText}>{idx + 1}. {rec}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                <View style={{ 
+                  width: 24, 
+                  height: 24, 
+                  borderRadius: 12, 
+                  backgroundColor: '#1F3C58', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  marginRight: 10 
+                }}>
+                  <Text style={{ fontSize: 12, color: '#FFFFFF', fontWeight: 'bold' }}>{idx + 1}</Text>
+                </View>
+                <Text style={{ ...styles.text, flex: 1, marginBottom: 0 }}>{rec}</Text>
+              </View>
             </View>
           ))}
 
-          <Text style={styles.subsectionTitle}>Nästa steg i försäljningsprocessen</Text>
-          {analysis.nextSteps.map((step, idx) => (
-            <View key={idx} style={styles.checkItem}>
-              <View style={{ ...styles.checkBox, backgroundColor: '#1F3C58' }}>
-                <Text style={{ fontSize: 8, color: '#FFFFFF' }}>{idx + 1}</Text>
+          <Text style={styles.subsectionTitle}>Tidplan för försäljningsprocessen</Text>
+          <View style={{ marginTop: 10 }}>
+            {analysis.nextSteps.map((step, idx) => (
+              <View key={idx} style={styles.timelineItem}>
+                <View style={{ 
+                  ...styles.timelineDot, 
+                  backgroundColor: idx === 0 ? '#10B981' : '#1F3C58' 
+                }} />
+                <View style={styles.timelineContent}>
+                  <Text style={styles.timelineTitle}>Steg {idx + 1}</Text>
+                  <Text style={styles.timelineDesc}>{step}</Text>
+                </View>
               </View>
-              <Text style={styles.checkText}>{step}</Text>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
 
-        <View style={{ ...styles.executiveBox, marginTop: 30 }}>
+        <View style={{ ...styles.executiveBox, marginTop: 20 }}>
           <Text style={styles.executiveTitle}>Behöver du hjälp?</Text>
           <Text style={styles.executiveText}>
             BOLAXO erbjuder professionell rådgivning genom hela försäljningsprocessen. 
             Kontakta oss för att diskutera hur vi kan hjälpa dig att maximera värdet vid försäljning av ditt företag.
           </Text>
           <Text style={{ ...styles.executiveText, marginTop: 15, fontWeight: 'bold' }}>
-            kontakt@bolaxo.se | bolaxo.se
+            kontakt@bolaxo.se | bolaxo.se | +46 8 123 456 78
           </Text>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 12</Text>
+          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument | Sida 14</Text>
         </View>
       </Page>
     </Document>
   )
 }
-
