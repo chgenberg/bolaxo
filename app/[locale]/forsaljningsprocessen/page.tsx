@@ -559,9 +559,9 @@ export default function ForsaljningsprocessenPage() {
                 </div>
               </div>
 
-              {/* Step navigation - scrollable on mobile */}
-              <div className="px-4 sm:px-10 py-3 sm:py-4 border-b border-gray-100 overflow-x-auto scrollbar-hide">
-                <div className="flex gap-1.5 sm:gap-2 min-w-max">
+              {/* Step navigation - centered with spacing */}
+              <div className="px-4 sm:px-10 py-4 sm:py-5 border-b border-gray-100">
+                <div className="flex justify-center gap-3 sm:gap-4">
                   {steps.map((s, idx) => (
                     <button
                       key={s.id}
@@ -569,11 +569,11 @@ export default function ForsaljningsprocessenPage() {
                         setCurrentStep(idx)
                         setExpandedItems({})
                       }}
-                      className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                      className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full text-sm sm:text-base font-semibold transition-all flex items-center justify-center ${
                         idx === currentStep
-                          ? 'bg-[#1F3C58] text-white'
+                          ? 'bg-[#1F3C58] text-white shadow-lg'
                           : idx < currentStep
-                            ? 'bg-[#1F3C58]/10 text-[#1F3C58]'
+                            ? 'bg-[#1F3C58]/20 text-[#1F3C58]'
                             : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
                       }`}
                     >
@@ -583,8 +583,8 @@ export default function ForsaljningsprocessenPage() {
                 </div>
               </div>
 
-              {/* Step content */}
-              <div className="px-4 sm:px-10 py-6 sm:py-10">
+              {/* Step content - min height for consistency */}
+              <div className="px-4 sm:px-10 py-6 sm:py-10 min-h-[500px] sm:min-h-[600px]">
                 <div className="mb-4 sm:mb-6">
                   <div className="flex items-center gap-3 sm:gap-4 mb-2">
                     <span className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-[#1F3C58] text-white rounded-full flex items-center justify-center text-base sm:text-lg font-bold">
