@@ -1775,6 +1775,31 @@ export default function ForsaljningsprocessenPage() {
                           }`}
                         >
                           <div className="px-3 sm:px-4 pb-4 pt-0">
+                            {/* "Fyll i dina uppgifter" prompt for step 1 items */}
+                            {getModalCategory(step.id, idx) && !companyData.generatedSummaries[getModalCategory(step.id, idx)!] && (
+                              <button
+                                onClick={() => setActiveModal(getModalCategory(step.id, idx))}
+                                className="w-full mb-4 p-3 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border border-[#1F3C58]/20 rounded-lg flex items-center gap-3 hover:from-[#1F3C58]/10 hover:to-[#1F3C58]/15 transition-all group"
+                              >
+                                <div className="w-8 h-8 bg-[#1F3C58] rounded-full flex items-center justify-center flex-shrink-0">
+                                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
+                                </div>
+                                <div className="text-left flex-1">
+                                  <span className="block text-sm font-semibold text-[#1F3C58] group-hover:text-[#1F3C58]/90">
+                                    Fyll i dina uppgifter
+                                  </span>
+                                  <span className="block text-xs text-gray-500">
+                                    Klicka för att fylla i information om ditt företag
+                                  </span>
+                                </div>
+                                <svg className="w-5 h-5 text-[#1F3C58]/50 group-hover:text-[#1F3C58] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                              </button>
+                            )}
+                            
                             <div className="pl-7 sm:pl-9 border-l-2 border-[#1F3C58]/20 ml-2.5 sm:ml-3">
                               <div className="text-gray-700 text-xs sm:text-sm leading-relaxed pl-3 sm:pl-4 mb-4 space-y-3">
                                 {item.expanded.split('\n\n').map((paragraph, pIdx) => (

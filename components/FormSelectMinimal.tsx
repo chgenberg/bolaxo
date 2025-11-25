@@ -41,7 +41,6 @@ const FormSelectMinimal = forwardRef<HTMLSelectElement, FormSelectMinimalProps>(
     const selectedOption = options.find(opt => opt.value === value)
 
     const handleSelect = (optionValue: string) => {
-      // Create synthetic event to match onChange interface
       const syntheticEvent = {
         target: {
           value: optionValue,
@@ -55,12 +54,12 @@ const FormSelectMinimal = forwardRef<HTMLSelectElement, FormSelectMinimalProps>(
 
     return (
       <div className={className} ref={dropdownRef}>
-        <label className="flex items-center space-x-2 text-sm font-medium text-text-dark mb-2">
+        <label className="flex items-center gap-1.5 text-xs uppercase tracking-wider text-gray-500 mb-1.5 font-medium">
           <span>{label}</span>
-          {required && <span className="text-error">*</span>}
+          {required && <span className="text-rose-400">*</span>}
           {tooltip && (
             <Tooltip content={tooltip}>
-              <Info className="h-4 w-4 text-text-gray hover:text-primary-blue transition-colors" />
+              <Info className="h-3.5 w-3.5 text-gray-400 hover:text-gray-600 transition-colors cursor-help" />
             </Tooltip>
           )}
         </label>
@@ -87,47 +86,68 @@ const FormSelectMinimal = forwardRef<HTMLSelectElement, FormSelectMinimalProps>(
             type="button"
             onClick={() => setIsOpen(!isOpen)}
             className={`
-              w-full px-4 py-3 text-left bg-white border-2 rounded-xl shadow-sm
-              transition-all duration-200 flex items-center justify-between
-              ${error ? 'border-error' : isOpen ? 'border-primary-navy' : 'border-primary-navy/30'}
-              ${isOpen ? 'shadow-lg' : 'hover:border-primary-navy/50'}
-              focus:outline-none focus:ring-2 focus:ring-primary-navy/20
+              w-full px-0 py-2.5 text-left bg-transparent
+              border-b transition-all duration-300
+              ${error 
+                ? 'border-rose-400' 
+                : isOpen 
+                  ? 'border-gray-900' 
+                  : 'border-gray-200 hover:border-gray-400'
+              }
+              focus:outline-none
+              flex items-center justify-between
             `}
           >
-            <span className={selectedOption ? 'text-text-dark' : 'text-text-gray'}>
+            <span className={`text-sm ${selectedOption ? 'text-gray-900' : 'text-gray-400'}`}>
               {selectedOption ? selectedOption.label : placeholder}
             </span>
-            <ChevronDown className={`w-4 h-4 text-text-gray transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown 
+              className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+            />
           </button>
 
           {/* Dropdown options */}
-          {isOpen && (
-            <div className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden animate-in">
-              <div className="max-h-60 overflow-y-auto py-1">
-                {options.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => handleSelect(option.value)}
-                    className={`
-                      w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors
-                      flex items-center justify-between group
-                      ${value === option.value ? 'bg-blue-50 text-primary-blue' : 'text-text-dark'}
-                    `}
-                  >
-                    <span className="font-medium">{option.label}</span>
-                    {value === option.value && (
-                      <Check className="w-4 h-4 text-primary-blue" />
-                    )}
-                  </button>
-                ))}
-              </div>
+          <div 
+            className={`
+              absolute z-50 w-full mt-1 bg-white overflow-hidden
+              border border-gray-100 rounded-md
+              shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)]
+              transition-all duration-200 origin-top
+              ${isOpen 
+                ? 'opacity-100 scale-y-100 translate-y-0' 
+                : 'opacity-0 scale-y-95 -translate-y-1 pointer-events-none'
+              }
+            `}
+          >
+            <div className="max-h-56 overflow-y-auto">
+              {options.map((option, index) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => handleSelect(option.value)}
+                  className={`
+                    w-full px-3 py-2.5 text-left transition-colors duration-150
+                    flex items-center justify-between
+                    ${value === option.value ? 'bg-gray-50' : 'hover:bg-gray-50/50'}
+                    ${index !== options.length - 1 ? 'border-b border-gray-50' : ''}
+                  `}
+                >
+                  <span className={`text-sm ${value === option.value ? 'text-gray-900 font-medium' : 'text-gray-700'}`}>
+                    {option.label}
+                  </span>
+                  <div className={`w-4 h-4 flex items-center justify-center transition-opacity duration-150 ${
+                    value === option.value ? 'opacity-100' : 'opacity-0'
+                  }`}>
+                    <Check className="w-3.5 h-3.5 text-gray-900" strokeWidth={2.5} />
+                  </div>
+                </button>
+              ))}
             </div>
-          )}
+          </div>
         </div>
         
         {error && (
-          <p className="text-sm text-error animate-fade-in mt-1">{error}</p>
+          <p className="text-xs text-rose-500 mt-1.5">{error}</p>
         )}
       </div>
     )

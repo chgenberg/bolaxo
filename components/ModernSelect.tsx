@@ -68,11 +68,11 @@ export default function ModernSelect({
   }, [isOpen, searchable])
 
   return (
-    <div className={`${className}`} ref={selectRef}>
+    <div className={className} ref={selectRef}>
       {label && (
-        <label className="block text-sm font-medium text-gray-900 mb-2">
+        <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1.5 font-medium">
           {label}
-          {required && <span className="text-pink-500 ml-1">*</span>}
+          {required && <span className="text-rose-400 ml-0.5">*</span>}
         </label>
       )}
       
@@ -81,112 +81,129 @@ export default function ModernSelect({
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           className={`
-            w-full px-4 py-3.5 text-left
-            bg-white rounded-xl
-            transition-all duration-200 ease-out
+            w-full px-0 py-2.5 text-left
+            bg-transparent
+            border-b transition-all duration-300 ease-out
             ${isOpen 
-              ? 'shadow-lg border-2 border-primary-navy ring-4 ring-primary-navy/10' 
-              : 'shadow-md border border-gray-200 hover:shadow-lg hover:border-gray-300'
+              ? 'border-gray-900' 
+              : error 
+                ? 'border-rose-400' 
+                : 'border-gray-200 hover:border-gray-400'
             }
-            ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10' : ''}
             focus:outline-none
             flex items-center justify-between
             group
           `}
         >
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-2.5">
             {selectedOption?.icon && (
-              <div className="text-gray-500 group-hover:text-gray-700 transition-colors">
+              <span className="text-gray-400 group-hover:text-gray-600 transition-colors">
                 {selectedOption.icon}
-              </div>
+              </span>
             )}
-            <span className={`${selectedOption ? 'text-gray-900' : 'text-gray-500'} font-medium`}>
+            <span className={`text-sm ${selectedOption ? 'text-gray-900' : 'text-gray-400'}`}>
               {selectedOption ? selectedOption.label : placeholder}
             </span>
           </div>
           
           <ChevronDown 
-            className={`w-5 h-5 text-gray-400 transition-all duration-200 ${
-              isOpen ? 'transform rotate-180 text-primary-navy' : 'group-hover:text-gray-600'
+            className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+              isOpen ? 'rotate-180' : ''
             }`}
           />
         </button>
 
         {error && (
-          <p className="mt-2 text-sm text-red-600">{error}</p>
+          <p className="mt-1.5 text-xs text-rose-500">{error}</p>
         )}
 
         {helperText && !error && (
-          <p className="mt-2 text-sm text-gray-500">{helperText}</p>
+          <p className="mt-1.5 text-xs text-gray-400">{helperText}</p>
         )}
 
-        {isOpen && (
-          <div className="absolute z-50 w-full mt-2 bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-100">
-            {searchable && (
-              <div className="p-3 border-b border-gray-100">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Sök..."
-                    className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-navy/20 focus:border-primary-navy"
-                  />
-                </div>
+        <div 
+          className={`
+            absolute z-50 w-full mt-1 bg-white overflow-hidden
+            border border-gray-100 rounded-md
+            shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)]
+            transition-all duration-200 origin-top
+            ${isOpen 
+              ? 'opacity-100 scale-y-100 translate-y-0' 
+              : 'opacity-0 scale-y-95 -translate-y-1 pointer-events-none'
+            }
+          `}
+        >
+          {searchable && (
+            <div className="p-2 border-b border-gray-50">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Sök..."
+                  className="w-full pl-8 pr-3 py-1.5 text-sm bg-gray-50 rounded 
+                           border-0 focus:outline-none focus:bg-gray-100 
+                           placeholder:text-gray-300 transition-colors"
+                />
+              </div>
+            </div>
+          )}
+          
+          <div className="max-h-56 overflow-auto">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option, index) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(option.value)
+                    setIsOpen(false)
+                    setSearchQuery('')
+                  }}
+                  className={`
+                    w-full px-3 py-2.5 text-left
+                    transition-colors duration-150
+                    flex items-center gap-2.5
+                    ${option.value === value 
+                      ? 'bg-gray-50' 
+                      : 'hover:bg-gray-50/50'
+                    }
+                    ${index !== filteredOptions.length - 1 ? 'border-b border-gray-50' : ''}
+                  `}
+                >
+                  {option.icon && (
+                    <span className={`${option.value === value ? 'text-gray-700' : 'text-gray-400'}`}>
+                      {option.icon}
+                    </span>
+                  )}
+                  
+                  <div className="flex-1 min-w-0">
+                    <span className={`text-sm block ${option.value === value ? 'text-gray-900 font-medium' : 'text-gray-700'}`}>
+                      {option.label}
+                    </span>
+                    {option.description && (
+                      <span className="text-xs text-gray-400 block mt-0.5 truncate">
+                        {option.description}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className={`w-4 h-4 flex items-center justify-center transition-opacity duration-150 ${
+                    option.value === value ? 'opacity-100' : 'opacity-0'
+                  }`}>
+                    <Check className="w-3.5 h-3.5 text-gray-900" strokeWidth={2.5} />
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="px-3 py-6 text-center text-sm text-gray-400">
+                Inga resultat
               </div>
             )}
-            
-            <div className="max-h-72 overflow-auto py-1">
-              {filteredOptions.length > 0 ? (
-                filteredOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => {
-                      onChange(option.value)
-                      setIsOpen(false)
-                      setSearchQuery('')
-                    }}
-                    className={`
-                      w-full px-4 py-3 text-left
-                      transition-all duration-150
-                      flex items-start space-x-3
-                      hover:bg-gray-50
-                      ${option.value === value ? 'bg-pink-50' : ''}
-                    `}
-                  >
-                    {option.icon && (
-                      <div className={`mt-0.5 ${option.value === value ? 'text-pink-600' : 'text-gray-400'}`}>
-                        {option.icon}
-                      </div>
-                    )}
-                    
-                    <div className="flex-1">
-                      <div className={`font-medium ${option.value === value ? 'text-pink-900' : 'text-gray-900'}`}>
-                        {option.label}
-                      </div>
-                      {option.description && (
-                        <div className="text-sm text-gray-500 mt-0.5">
-                          {option.description}
-                        </div>
-                      )}
-                    </div>
-                    
-                    {option.value === value && (
-                      <Check className="w-5 h-5 text-pink-600 flex-shrink-0 mt-0.5" />
-                    )}
-                  </button>
-                ))
-              ) : (
-                <div className="px-4 py-8 text-center text-gray-500">
-                  Inga resultat hittades
-                </div>
-              )}
-            </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

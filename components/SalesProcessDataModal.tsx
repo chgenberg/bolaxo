@@ -1,6 +1,70 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { ChevronDown, Check } from 'lucide-react'
+
+// Minimal inline select component
+function MinimalSelect({ 
+  value, 
+  onChange, 
+  options, 
+  placeholder = 'Välj...' 
+}: { 
+  value: string
+  onChange: (value: string) => void
+  options: { value: string; label: string }[]
+  placeholder?: string 
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+  
+  const selected = options.find(o => o.value === value)
+  
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-full px-0 py-2.5 text-left bg-transparent border-b transition-all duration-300 flex items-center justify-between ${
+          isOpen ? 'border-gray-900' : 'border-gray-200 hover:border-gray-400'
+        }`}
+      >
+        <span className={`text-sm ${selected ? 'text-gray-900' : 'text-gray-400'}`}>
+          {selected?.label || placeholder}
+        </span>
+        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      
+      <div className={`absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-md shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] transition-all duration-200 origin-top ${
+        isOpen ? 'opacity-100 scale-y-100' : 'opacity-0 scale-y-95 pointer-events-none'
+      }`}>
+        <div className="max-h-48 overflow-y-auto">
+          {options.map((option, idx) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => { onChange(option.value); setIsOpen(false) }}
+              className={`w-full px-3 py-2.5 text-left text-sm transition-colors flex items-center justify-between ${
+                value === option.value ? 'bg-gray-50 text-gray-900 font-medium' : 'text-gray-700 hover:bg-gray-50/50'
+              } ${idx !== options.length - 1 ? 'border-b border-gray-50' : ''}`}
+            >
+              <span>{option.label}</span>
+              {value === option.value && <Check className="w-3.5 h-3.5 text-gray-900" strokeWidth={2.5} />}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // Type definitions for each category's form data
 export interface FinancialDocData {
@@ -245,20 +309,20 @@ export default function SalesProcessDataModal({
 
       {/* Forecast years */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1.5 font-medium">
           Antal år med prognoser framåt
         </label>
-        <select
+        <MinimalSelect
           value={localData.forecastYears}
-          onChange={(e) => setLocalData({ ...localData, forecastYears: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3C58] focus:border-transparent text-sm"
-        >
-          <option value="">Välj...</option>
-          <option value="0">Inga prognoser</option>
-          <option value="1">1 år</option>
-          <option value="2">2 år</option>
-          <option value="3">3 år eller mer</option>
-        </select>
+          onChange={(value) => setLocalData({ ...localData, forecastYears: value })}
+          placeholder="Välj..."
+          options={[
+            { value: '0', label: 'Inga prognoser' },
+            { value: '1', label: '1 år' },
+            { value: '2', label: '2 år' },
+            { value: '3', label: '3 år eller mer' }
+          ]}
+        />
       </div>
 
       {/* EBITDA notes */}
@@ -340,19 +404,19 @@ export default function SalesProcessDataModal({
 
       {/* Customer concentration risk */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1.5 font-medium">
           Bedömd kundkoncentrationsrisk
         </label>
-        <select
+        <MinimalSelect
           value={localData.customerConcentrationRisk}
-          onChange={(e) => setLocalData({ ...localData, customerConcentrationRisk: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3C58] focus:border-transparent text-sm"
-        >
-          <option value="">Välj...</option>
-          <option value="low">Låg (ingen kund &gt;10% av oms.)</option>
-          <option value="medium">Medel (1-2 kunder står för 15-30%)</option>
-          <option value="high">Hög (en kund &gt;30% av oms.)</option>
-        </select>
+          onChange={(value) => setLocalData({ ...localData, customerConcentrationRisk: value })}
+          placeholder="Välj..."
+          options={[
+            { value: 'low', label: 'Låg (ingen kund >10% av oms.)' },
+            { value: 'medium', label: 'Medel (1-2 kunder står för 15-30%)' },
+            { value: 'high', label: 'Hög (en kund >30% av oms.)' }
+          ]}
+        />
       </div>
 
       {/* Key suppliers */}
@@ -403,20 +467,20 @@ export default function SalesProcessDataModal({
     <div className="space-y-6">
       {/* Owner involvement */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-xs uppercase tracking-wider text-gray-500 mb-1.5 font-medium">
           Hur kritiskt är ägaren för den dagliga verksamheten?
         </label>
-        <select
+        <MinimalSelect
           value={localData.ownerInvolvement}
-          onChange={(e) => setLocalData({ ...localData, ownerInvolvement: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3C58] focus:border-transparent text-sm"
-        >
-          <option value="">Välj...</option>
-          <option value="critical">Kritiskt - verksamheten stannar utan mig</option>
-          <option value="high">Högt - jag är involverad i de flesta beslut</option>
-          <option value="medium">Medel - jag delegerar men övervakar</option>
-          <option value="low">Lågt - verksamheten fungerar utan mig</option>
-        </select>
+          onChange={(value) => setLocalData({ ...localData, ownerInvolvement: value })}
+          placeholder="Välj..."
+          options={[
+            { value: 'critical', label: 'Kritiskt - verksamheten stannar utan mig' },
+            { value: 'high', label: 'Högt - jag är involverad i de flesta beslut' },
+            { value: 'medium', label: 'Medel - jag delegerar men övervakar' },
+            { value: 'low', label: 'Lågt - verksamheten fungerar utan mig' }
+          ]}
+        />
       </div>
 
       {/* Checkboxes */}
