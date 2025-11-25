@@ -5,11 +5,20 @@ import Link from 'next/link'
 import { useLocale } from 'next-intl'
 
 // Type definitions
+interface TipContent {
+  title: string
+  description: string
+  tips: string[]
+  examples: { title: string; content: string }[]
+  commonMistakes?: string[]
+  sources: { name: string; url: string }[]
+}
+
 interface StepItem {
   title: string
   summary: string
   expanded: string
-  stats?: { value: string; label: string; sublabel?: string }[]
+  stats?: { value: string; label: string; sublabel?: string; tipKey?: string }[]
   chart?: { data: number[]; label: string }
   rings?: { percent: number; label: string }[]
   timeline?: { label: string; duration: string }[]
@@ -22,6 +31,401 @@ interface Step {
   duration: string
   fact: string
   items: StepItem[]
+}
+
+// Comprehensive tips database
+const TIPS_DATABASE: Record<string, TipContent> = {
+  'finansiell-historik': {
+    title: 'Finansiell historik: 3-5 år',
+    description: 'En köpare förväntar sig att kunna granska minst 3-5 års finansiell historik för att förstå företagets ekonomiska utveckling och stabilitet.',
+    tips: [
+      'Samla årsredovisningar för de senaste 3-5 åren i original (undertecknade)',
+      'Förbered månadsrapporter som visar säsongsvariationer och trender',
+      'Dokumentera alla engångsposter separat med tydliga förklaringar',
+      'Skapa en brygga mellan bokfört resultat och justerat EBITDA',
+      'Ha koll på skillnaden mellan redovisat och normaliserat resultat',
+      'Förbered prognoser för kommande 2-3 år med tydliga antaganden'
+    ],
+    examples: [
+      {
+        title: 'Exempel på EBITDA-brygga',
+        content: 'Redovisat resultat: 2 500 TSEK\n+ Ägarens marknadsmässiga lön utöver bokförd: +400 TSEK\n+ Engångskostnad flytt: +150 TSEK\n- Privata kostnader bokförda i bolaget: -80 TSEK\n= Justerat EBITDA: 2 970 TSEK\n\nDenna typ av brygga hjälper köparen förstå den verkliga intjäningsförmågan.'
+      },
+      {
+        title: 'Checklista för finansiell dokumentation',
+        content: '□ Årsredovisningar (3-5 år)\n□ Månadsrapporter (12-24 månader)\n□ Budgetar och prognoser\n□ Skattekontoutdrag\n□ Momsdeklarationer\n□ Kundreskontra\n□ Leverantörsreskontra\n□ Bankkontoutdrag\n□ Låneavtal\n□ Leasingavtal'
+      }
+    ],
+    commonMistakes: [
+      'Att inte kunna förklara stora avvikelser mellan år',
+      'Sakna dokumentation för engångsposter',
+      'Blanda privata och företagskostnader utan att dokumentera',
+      'Glömma att normalisera ägarens lön'
+    ],
+    sources: [
+      { name: 'Deloitte - Planera för en lyckad företagsförsäljning', url: 'https://www.deloitte.com/se/sv/services/deloitte-private/perspectives/planera-for-en-lyckad-foretagsforsaljning.html' },
+      { name: 'PwC - M&A Due Diligence Guide', url: 'https://www.pwc.com/gx/en/services/deals/trends.html' }
+    ]
+  },
+  'kopare-krav-bokslut': {
+    title: 'Varför 85% av köpare kräver bokslut',
+    description: 'Det är standard i M&A-världen att köpare begär fullständiga bokslut. Utan dessa anses företaget inte vara "sale-ready".',
+    tips: [
+      'Se till att alla bokslut är reviderade av auktoriserad revisor',
+      'Årsredovisningen ska vara komplett med förvaltningsberättelse',
+      'Inkludera noter som förklarar redovisningsprinciper',
+      'Ha tillhörande revisorsberättelser tillgängliga',
+      'Förbered dig på att förklara alla väsentliga poster'
+    ],
+    examples: [
+      {
+        title: 'Vad köparen letar efter i bokslutet',
+        content: '• Omsättningstillväxt och stabilitet\n• Bruttomarginal och dess utveckling\n• EBITDA-marginal\n• Rörelsekapitalets utveckling\n• Skuldsättningsgrad\n• Kassaflöde från rörelsen\n• Beroende av enskilda kunder/leverantörer\n• Säsongsvariationer'
+      },
+      {
+        title: 'Röda flaggor köparen ser upp för',
+        content: '⚠️ Oregelbundna intäktsmönster utan förklaring\n⚠️ Krympande marginaler\n⚠️ Stora mellanhavanden med närstående\n⚠️ Anmärkningar i revisionsberättelsen\n⚠️ Försenade eller ofullständiga bokslut\n⚠️ Stora förändringar i redovisningsprinciper'
+      }
+    ],
+    sources: [
+      { name: 'EY - Global M&A Trends', url: 'https://www.ey.com/en_gl/insights/strategy-transactions/global-m-and-a-sector-trends' },
+      { name: 'SVCA - Riktlinjer för PE-transaktioner', url: 'https://www.svca.se/rapporter/' }
+    ]
+  },
+  'teaser-sidor': {
+    title: 'Teaser-dokument: 1-2 sidor',
+    description: 'En teaser är det första dokumentet potentiella köpare ser. Det ska väcka intresse utan att avslöja för mycket känslig information.',
+    tips: [
+      'Håll dokumentet till max 2 A4-sidor',
+      'Använd professionell design och layout',
+      'Inkludera inte företagets namn - använd beskrivande titel',
+      'Fokusera på de 3-5 starkaste säljargumenten',
+      'Inkludera grundläggande nyckeltal utan exakta siffror (t.ex. "omsättning 20-30 MSEK")',
+      'Avsluta med tydlig call-to-action'
+    ],
+    examples: [
+      {
+        title: 'Exempel på teaser-struktur',
+        content: '📄 SIDA 1:\n\n"Ledande nordisk aktör inom industriell automation"\n\nVerksamhetsöversikt:\n• Etablerat 2008, huvudkontor i Göteborg\n• Utvecklar och säljer automationslösningar\n• 45 anställda, omsättning 35-45 MSEK\n• Stark tillväxt de senaste 5 åren\n\nInvesteringsargument:\n✓ Återkommande intäkter (65% av omsättning)\n✓ Patentskyddad teknologi\n✓ Diversifierad kundbas (ingen kund >15%)\n✓ Erfaren ledningsgrupp\n\n📄 SIDA 2:\n\nFinansiell översikt (MSEK):\n• Omsättning: 35-45\n• EBITDA-marginal: 15-20%\n• Tillväxt senaste 3 år: 12% årligen\n\nTransaktionsstruktur:\n• 100% aktieöverlåtelse\n• Ägarna tillgängliga för övergångsperiod\n\nKontakt: [Rådgivarens namn och kontaktinfo]'
+      },
+      {
+        title: 'Vanliga rubriker i teaser',
+        content: '• Investeringsmöjlighet\n• Verksamhetsöversikt\n• Marknadsposition\n• Finansiell översikt\n• Investeringsargument\n• Tillväxtmöjligheter\n• Transaktionsstruktur\n• Nästa steg'
+      }
+    ],
+    commonMistakes: [
+      'Avslöja företagets namn för tidigt',
+      'Inkludera för detaljerad finansiell information',
+      'Glömma att inkludera kontaktinformation',
+      'Använda oprofessionell design',
+      'Skriva för långt och detaljerat'
+    ],
+    sources: [
+      { name: 'Deloitte - M&A Transaction Services', url: 'https://www.deloitte.com/se/sv/services/deloitte-private/perspectives/planera-for-en-lyckad-foretagsforsaljning.html' },
+      { name: 'Bayswater - Försäljningsprocessen', url: 'https://bayswater.se/processen' }
+    ]
+  },
+  'potentiella-kopare': {
+    title: 'Identifiera 50+ potentiella köpare',
+    description: 'En bred lista med potentiella köpare skapar konkurrens och ökar chansen att hitta rätt köpare till rätt pris.',
+    tips: [
+      'Kategorisera köpare i strategiska, finansiella och privata',
+      'Använd branschdatabaser och LinkedIn för research',
+      'Inkludera internationella köpare om relevant',
+      'Rangordna köpare efter sannolikhet och attraktivitet',
+      'Ha "Plan B"-köpare redo om förstahandsvalet faller',
+      'Överväg konkurrenter, kunder, leverantörer som strategiska köpare'
+    ],
+    examples: [
+      {
+        title: 'Kategorier av köpare',
+        content: '🏢 STRATEGISKA KÖPARE (ofta högst pris):\n• Konkurrenter som vill växa\n• Företag i angränsande branscher\n• Kunder som vill integrera bakåt\n• Leverantörer som vill integrera framåt\n• Internationella aktörer som vill in på marknaden\n\n💼 FINANSIELLA KÖPARE:\n• Private Equity-bolag\n• Family Offices\n• Venture Capital (för tillväxtbolag)\n• Investeringsfonder\n\n👤 PRIVATA KÖPARE:\n• Search Funds\n• MBI-kandidater (Management Buy-In)\n• Förmögna privatpersoner\n• Serieentreprenörer'
+      },
+      {
+        title: 'Exempel på köparlista-struktur',
+        content: '| Köpare | Typ | Rationale | Prioritet |\n|--------|-----|-----------|----------|\n| Nordic Tech AB | Strategisk | Konkurrent, vill växa | Hög |\n| Growth Capital Partners | PE | Branschfokus | Hög |\n| German Industrial GmbH | Strategisk | Nordisk expansion | Medel |\n| Family Office X | Finansiell | Generalist | Låg |'
+      }
+    ],
+    sources: [
+      { name: 'SVCA - Swedish Private Equity', url: 'https://www.svca.se/rapporter/' },
+      { name: 'Mergr - Nordic M&A Database', url: 'https://mergr.com/' },
+      { name: 'Argos Wityu - Mid-Market Monitor', url: 'https://www.argos.wityu.fund/mid-market-monitor/' }
+    ]
+  },
+  'svarsfrekvens': {
+    title: 'Svarsfrekvens: 10-15%',
+    description: 'En svarsfrekvens på 10-15% är normal vid utskick av teasers. Det innebär att av 50 kontaktade köpare kan du förvänta dig 5-8 seriöst intresserade.',
+    tips: [
+      'Personalisera varje utskick - undvik massutskick',
+      'Ring efter 3-5 dagar för att följa upp',
+      'Ha en strukturerad uppföljningsprocess',
+      'Dokumentera alla kontakter i ett CRM eller kalkylblad',
+      'Var beredd på att justera pitch baserat på feedback',
+      'Tajma utskick till början av veckan (tisdag-onsdag)'
+    ],
+    examples: [
+      {
+        title: 'Exempel på uppföljningsschema',
+        content: 'Dag 1: Skicka teaser via e-post\nDag 3-5: Uppföljningssamtal\nDag 10: Påminnelse via e-post (om inget svar)\nDag 14: Sista uppföljningssamtal\nDag 21: Avsluta kontakt eller arkivera\n\nTips: Håll tonen professionell men inte påträngande. "Jag ville säkerställa att du mottagit informationen och höra om det finns intresse att diskutera vidare."'
+      },
+      {
+        title: 'Förväntad konverteringstratt',
+        content: '100 identifierade köpare\n↓\n50 kontaktade med teaser\n↓\n5-8 visar intresse (10-15%)\n↓\n4-6 signerar NDA\n↓\n3-4 får Informationsmemorandum\n↓\n2-3 lämnar indikativt bud\n↓\n1-2 går vidare till DD\n↓\n1 slutför köpet'
+      }
+    ],
+    sources: [
+      { name: 'IBBA - Business Broker Statistics', url: 'https://www.ibba.org/research/' },
+      { name: 'AM&AA - M&A Advisor Research', url: 'https://www.amaaonline.com/alliance-of-ma-advisors-research' }
+    ]
+  },
+  'im-sidor': {
+    title: 'Informationsmemorandum: 30-50 sidor',
+    description: 'Informationsmemorandum (IM) är det detaljerade säljdokumentet som delas efter signerat NDA. Det är ditt viktigaste verktyg för att övertyga köparen.',
+    tips: [
+      'Använd professionell grafisk design',
+      'Inkludera en exekutiv sammanfattning på 2-3 sidor',
+      'Var ärlig - överdrifter upptäcks vid due diligence',
+      'Använd diagram och grafik för att visualisera data',
+      'Inkludera marknadsanalys från oberoende källor',
+      'Ha en tydlig investeringstes',
+      'Beskriv tillväxtmöjligheter konkret'
+    ],
+    examples: [
+      {
+        title: 'Typisk IM-struktur',
+        content: '1. EXEKUTIV SAMMANFATTNING (3-5 sidor)\n   • Investeringsargument\n   • Finansiell översikt\n   • Transaktionsöversikt\n\n2. FÖRETAGET (8-10 sidor)\n   • Historia och milstolpar\n   • Verksamhetsbeskrivning\n   • Produkter/tjänster\n   • Geografisk närvaro\n\n3. MARKNADEN (5-8 sidor)\n   • Marknadsstorlek och tillväxt\n   • Trender och drivkrafter\n   • Konkurrenslandskap\n   • Positionering\n\n4. ORGANISATION (3-5 sidor)\n   • Ledningsgrupp\n   • Organisationsstruktur\n   • Nyckelpersoner\n   • Kultur och värderingar\n\n5. FINANSIELLT (8-12 sidor)\n   • Historiska resultat\n   • Nyckeltal och KPIer\n   • Prognoser\n   • Kapitalbehov\n\n6. RISKER OCH MÖJLIGHETER (3-5 sidor)\n   • Tillväxtmöjligheter\n   • Synergipotential\n   • Riskfaktorer\n\n7. TRANSAKTION (2-3 sidor)\n   • Transaktionsstruktur\n   • Tidplan\n   • Kontaktinformation'
+      }
+    ],
+    sources: [
+      { name: 'McKinsey - M&A Best Practices', url: 'https://www.mckinsey.com/capabilities/m-and-a/our-insights' },
+      { name: 'Oaklins Sweden', url: 'https://www.oaklins.com/se/sv/' }
+    ]
+  },
+  'nyckelperson-vardeminskning': {
+    title: 'Värdeminskning: -15% vid nyckelpersonberoende',
+    description: 'Högt beroende av ägaren eller enskilda nyckelpersoner är en av de vanligaste värdesänkande faktorerna vid företagsförsäljning.',
+    tips: [
+      'Börja delegera ansvar minst 12 månader före försäljning',
+      'Dokumentera alla processer och rutiner i manualer',
+      'Bygg en stark andraledsnivå',
+      'Överväg incitamentsprogram för nyckelpersoner',
+      'Formalisera kundrelationer så de inte är personberoende',
+      'Säkerställ att någon annan kan ta över direkt vid behov'
+    ],
+    examples: [
+      {
+        title: 'Värderingspåverkan av nyckelpersonberoende',
+        content: 'Lågt beroende (ägaren kan lämna direkt):\nMultipel: 5-6x EBITDA\nPremie: +10-15%\n\nMedelberoende (3-6 mån övergång):\nMultipel: 4-5x EBITDA\nNeutralt\n\nHögt beroende (12+ mån övergång krävs):\nMultipel: 3-4x EBITDA\nAvdrag: -15-25%\n\nKritiskt beroende (verksamheten stannar utan ägaren):\nOftast ingen affär möjlig, eller kraftigt reducerat pris med lång earnout.'
+      },
+      {
+        title: 'Checklista: Minska nyckelpersonberoende',
+        content: '□ Dokumentera alla arbetsprocesser\n□ Skapa backup för varje nyckelroll\n□ Delegera kundrelationer\n□ Implementera CRM-system\n□ Bygg ledningsgrupp med mandat\n□ Träna efterträdare\n□ Skapa incitamentsprogram\n□ Formalisera leverantörsavtal\n□ Dokumentera prissättningsmodeller\n□ Säkerställ att IT-system inte är personberoende'
+      }
+    ],
+    sources: [
+      { name: 'Harvard Business Review - M&A Research', url: 'https://hbr.org/topic/subject/mergers-and-acquisitions' },
+      { name: 'EY - Key Person Risk in M&A', url: 'https://www.ey.com/en_gl/insights/strategy-transactions/global-m-and-a-sector-trends' }
+    ]
+  },
+  'affarer-misslyckas-nyckelperson': {
+    title: '67% av affärer misslyckas pga nyckelpersonberoende',
+    description: 'Nyckelpersonberoende är en av de främsta orsakerna till att företagsförsäljningar misslyckas eller får betydligt lägre pris än förväntat.',
+    tips: [
+      'Identifiera vilka personer som är "mission critical"',
+      'Skapa retention-avtal med nyckelpersoner före försäljning',
+      'Dokumentera alla kundrelationer i CRM',
+      'Se till att flera personer kan varje kritisk process',
+      'Överväg stay-bonus för nyckelpersoner efter tillträdet'
+    ],
+    examples: [
+      {
+        title: 'Varför affärer misslyckas - statistik',
+        content: '🔴 Nyckelpersonberoende: 67%\n   • Ägaren har alla kundrelationer\n   • Ingen dokumentation av processer\n   • Ledningsgrupp saknas\n\n🔴 Finansiella problem: 45%\n   • Fallande resultat under processen\n   • Dolda skulder upptäcks\n   • Oförklarliga engångsposter\n\n🔴 Övervärdering: 38%\n   • Orealistiska prisförväntningar\n   • Ignorerar marknadsmultiplar\n   • Emotionellt värde vs marknadsvärde\n\n🔴 Kulturkrock: 25%\n   • Inkompatibla organisationskulturer\n   • Ledningsgruppens motstånd\n   • Strategiska meningsskiljaktigheter'
+      },
+      {
+        title: 'Retention-avtal för nyckelpersoner',
+        content: 'Ett retention-avtal kan inkludera:\n\n• Stay-bonus: X månaders lön om personen stannar Y månader efter tillträde\n• Aktie-/optionsprogram: Del av köpeskillingen\n• Karriärmöjligheter: Tydlig roll i det nya bolaget\n• Konkurrensklausul: Med rimlig ersättning\n\nTypisk stay-bonus: 25-100% av årslön\nTypisk bindningstid: 12-24 månader'
+      }
+    ],
+    sources: [
+      { name: 'BCG - M&A Report', url: 'https://www.bcg.com/publications/2024/m-and-a-report-dealmakers-guide' },
+      { name: 'McKinsey - Why M&A Deals Fail', url: 'https://www.mckinsey.com/capabilities/m-and-a/our-insights' }
+    ]
+  },
+  'datarum-dokument': {
+    title: 'Datarum: 200-500 dokument',
+    description: 'Ett virtuellt datarum (VDR) innehåller all dokumentation som köparen behöver för sin due diligence-granskning.',
+    tips: [
+      'Använd en professionell VDR-plattform (Intralinks, Merrill, Ansarada)',
+      'Organisera i tydliga mappar och undermappar',
+      'Namnge filer konsekvent och sökbart',
+      'Förbered Q&A-process för köparens frågor',
+      'Spåra vem som läst vad (signalerar intresse)',
+      'Lägg till dokument successivt, inte allt på en gång'
+    ],
+    examples: [
+      {
+        title: 'Typisk mappstruktur i datarum',
+        content: '📁 1. BOLAGSINFORMATION\n   ├── Bolagsordning\n   ├── Aktiebok\n   ├── Styrelsebeslut\n   └── Bolagsstämmoprotokoll\n\n📁 2. FINANSIELLT\n   ├── Årsredovisningar\n   ├── Månadsrapporter\n   ├── Budgetar\n   └── Revisions-PM\n\n📁 3. JURIDISKT/AVTAL\n   ├── Kundavtal\n   ├── Leverantörsavtal\n   ├── Anställningsavtal\n   └── Fastigheter/Hyresavtal\n\n📁 4. SKATT\n   ├── Skattedeklarationer\n   ├── Momsredovisning\n   └── Skattekontoutdrag\n\n📁 5. PERSONAL/HR\n   ├── Organisationsschema\n   ├── Anställningsvillkor\n   ├── Pensionsplaner\n   └── Kollektivavtal\n\n📁 6. IP/IT\n   ├── Patent\n   ├── Varumärken\n   ├── IT-system\n   └── Licensavtal\n\n📁 7. FÖRSÄKRINGAR\n   └── Alla försäkringsbrev\n\n📁 8. MILJÖ\n   └── Tillstånd och rapporter'
+      },
+      {
+        title: 'Namnkonvention för filer',
+        content: 'Använd konsekvent namngivning:\n\n[Kategori]_[Dokumenttyp]_[År/Period]_[Version]\n\nExempel:\nFIN_Årsredovisning_2023_Final.pdf\nAVT_Kundavtal_XYZ_AB_2022.pdf\nHR_Anställningsavtal_Mall_v3.docx\nIT_Systemöversikt_Q4_2023.xlsx'
+      }
+    ],
+    sources: [
+      { name: 'Intralinks - Virtual Data Room Best Practices', url: 'https://www.intralinks.com/' },
+      { name: 'DLA Piper - M&A Due Diligence', url: 'https://www.dlapiper.com/en/insights/publications/global-ma-intelligence-report' }
+    ]
+  },
+  'dd-kategorier': {
+    title: 'Due Diligence: 8-12 huvudkategorier',
+    description: 'En komplett due diligence täcker alla väsentliga aspekter av verksamheten, uppdelat i logiska kategorier.',
+    tips: [
+      'Förbered varje kategori systematiskt',
+      'Utse en ansvarig person för varje kategori',
+      'Ha svaren redo på förväntade frågor',
+      'Var proaktiv med att flagga kända problem',
+      'Planera för att DD tar 4-8 veckor'
+    ],
+    examples: [
+      {
+        title: 'De 12 vanligaste DD-kategorierna',
+        content: '1. FINANSIELL DD\n   Bokslut, prognoser, rörelsekapital, skulder\n\n2. SKATTE-DD\n   Skatteskulder, tvister, strukturer, risker\n\n3. JURIDISK DD\n   Avtal, tvister, bolagshandlingar, IP\n\n4. KOMMERSIELL DD\n   Marknad, kunder, konkurrenter, affärsmodell\n\n5. HR/PERSONAL DD\n   Anställda, löner, pension, nyckelpersoner\n\n6. IT/TEKNIK DD\n   System, säkerhet, teknikskuld, licenser\n\n7. OPERATIONS DD\n   Processer, leveranskedja, kapacitet\n\n8. MILJÖ DD\n   Tillstånd, risker, åtaganden\n\n9. FÖRSÄKRINGS DD\n   Täckning, skador, premiehistorik\n\n10. FASTIGHETS DD\n    Hyresavtal, ägande, skick\n\n11. REGULATORISK DD\n    Tillstånd, compliance, branschkrav\n\n12. ESG DD\n    Hållbarhet, socialt ansvar, styrning'
+      }
+    ],
+    sources: [
+      { name: 'KPMG - Due Diligence Guide', url: 'https://kpmg.com/xx/en/home/insights/2024/01/m-and-a-trends.html' },
+      { name: 'CMS - European M&A Study', url: 'https://www.cmslegalondemand.com/dealinsight' }
+    ]
+  },
+  'prisjustering-dd': {
+    title: '40% av affärer får prisjusteringar efter DD',
+    description: 'Det är vanligt att köpeskillingen justeras efter due diligence. Förbered dig på detta och minimera överraskningarna.',
+    tips: [
+      'Var transparent från början - dolda problem kostar mer',
+      'Gör en intern "säljsides-DD" innan du går ut',
+      'Förbered förklaringar till alla avvikelser',
+      'Ha alternativa lösningar redo (garantier, escrow, earnout)',
+      'Sätt inte priset för högt från början'
+    ],
+    examples: [
+      {
+        title: 'Typiska orsaker till prisjustering',
+        content: '⬇️ VANLIGA PRISAVDRAG:\n• Rörelsekapital lägre än normalt: -5-10%\n• Dolda skulder upptäcks: Krona för krona\n• Kund säger upp avtal: Värderas\n• Nyckelperson avgår: -5-15%\n• Miljöproblem: Betydande\n• Skatteskuld: Krona för krona\n• IT-teknikskuld: -2-5%\n\n⬆️ SÄLLSYNTA PRISHÖJNINGAR:\n• Bättre resultat än väntat under DD\n• Nya kontrakt signeras\n• Konkurrent bjuder högre'
+      },
+      {
+        title: 'Typisk förhandlingsstruktur efter DD',
+        content: 'SITUATION: DD avslöjar 2 MSEK i oväntade kostnader\n\nALTERNATIV 1: Prisavdrag\nPris minskas med 2 MSEK\n\nALTERNATIV 2: Escrow\n2 MSEK i escrow, frigörs om problemet inte materialiseras\n\nALTERNATIV 3: Garanti\nSäljaren lämnar specifik garanti som täcker risken\n\nALTERNATIV 4: Delat ansvar\nParterna delar risken 50/50'
+      }
+    ],
+    sources: [
+      { name: 'SRS Transact - Nordic M&A Study', url: 'https://www.srs.se/en/transact' },
+      { name: 'Aon - M&A Claims Study', url: 'https://www.aon.com/home/insights/reports/2024/ma-and-transaction-solutions-trends' }
+    ]
+  },
+  'earnout-struktur': {
+    title: '65% inkluderar tilläggsköpeskilling (earnout)',
+    description: 'Earnout är ett sätt att överbrygga värderingsgapet mellan köpare och säljare genom att koppla en del av priset till framtida resultat.',
+    tips: [
+      'Definiera tydliga mätbara mål (EBITDA, omsättning, kunder)',
+      'Specificera beräkningsmetod exakt',
+      'Reglera säljarens inflytande under earnout-perioden',
+      'Inkludera acceleration-klausuler vid ägarbyte',
+      'Håll earnout-andelen rimlig (20-30% av total köpeskilling)',
+      'Begränsa earnout-perioden till max 2-3 år'
+    ],
+    examples: [
+      {
+        title: 'Exempel på earnout-struktur',
+        content: 'DEAL: Köpeskilling 50 MSEK\n\nStruktur:\n• Kontant vid tillträde: 35 MSEK (70%)\n• Earnout år 1: Max 7,5 MSEK (15%)\n• Earnout år 2: Max 7,5 MSEK (15%)\n\nEarnout-villkor:\n• Baseras på EBITDA vs budget\n• 100% av target = 100% utbetalning\n• 90% av target = 50% utbetalning\n• <85% av target = 0 utbetalning\n• >110% av target = 125% utbetalning (cap)\n\nSäljaren stannar som rådgivare under earnout-perioden.'
+      },
+      {
+        title: 'Vanliga earnout-mått',
+        content: '📊 FINANSIELLA MÅTT:\n• EBITDA (vanligast)\n• Omsättning\n• Bruttovinst\n• Kassaflöde\n\n📈 OPERATIONELLA MÅTT:\n• Antal kunder\n• Customer retention\n• Nya kontrakt\n• Produktlanseringar\n\n⚠️ UNDVIK:\n• För komplexa formler\n• Subjektiva mått\n• Mått säljaren inte kan påverka'
+      }
+    ],
+    sources: [
+      { name: 'CMS - European M&A Study (Earnout trends)', url: 'https://www.cmslegalondemand.com/dealinsight' },
+      { name: 'SRS Acqusom - Earnout Statistik', url: 'https://www.srs.se/en/transact' }
+    ]
+  },
+  'spa-sidor': {
+    title: 'SPA (Aktieöverlåtelseavtal): 40-80 sidor',
+    description: 'Share Purchase Agreement (SPA) är det juridiska huvudavtalet vid aktieöverlåtelse. Det reglerar alla aspekter av transaktionen.',
+    tips: [
+      'Anlita erfaren M&A-jurist',
+      'Fokusera på de kommersiellt viktiga punkterna',
+      'Läs och förstå garantikatalogen noga',
+      'Förhandla tak och golv för garantiansvar',
+      'Överväg W&I-försäkring för att begränsa ansvar',
+      'Se till att bilagor är kompletta'
+    ],
+    examples: [
+      {
+        title: 'Typisk SPA-struktur',
+        content: '1. DEFINITIONER (2-5 sidor)\n   Alla centrala begrepp definieras\n\n2. ÖVERLÅTELSE (1-2 sidor)\n   Aktier överlåts från säljare till köpare\n\n3. KÖPESKILLING (3-5 sidor)\n   Belopp, betalning, justeringar\n\n4. TILLTRÄDE (2-3 sidor)\n   Datum, villkor, genomförande\n\n5. SÄLJARENS GARANTIER (15-25 sidor)\n   Omfattande garantikatalog\n\n6. KÖPARENS ÅTAGANDEN (2-3 sidor)\n   Köparens förpliktelser\n\n7. ANSVARSBEGRÄNSNINGAR (3-5 sidor)\n   Tak, golv, tidsfrister\n\n8. ÖVRIGA BESTÄMMELSER (5-10 sidor)\n   Sekretess, tvister, tillämplig lag\n\nBILAGOR (10-20+ sidor)\n   Disclosure letter, garantikatalog, etc.'
+      },
+      {
+        title: 'Viktiga förhandlingspunkter i SPA',
+        content: '💰 KÖPESKILLING:\n• Locked box vs completion accounts\n• Rörelsekapitaljustering\n• Nettoskuldsdefinition\n\n⚖️ GARANTIER:\n• Omfattning och undantag\n• "Best knowledge" vs absolut\n• Takbelopp (ofta 20-50% av pris)\n• Golvbelopp (de minimis)\n• Tidsfrister (2-7 år beroende på typ)\n\n🛡️ SKYDD:\n• Escrow-belopp och period\n• W&I-försäkring\n• Specific indemnities'
+      }
+    ],
+    sources: [
+      { name: 'DLA Piper - Global M&A Intelligence', url: 'https://www.dlapiper.com/en/insights/publications/global-ma-intelligence-report' },
+      { name: 'CMS - European M&A Study', url: 'https://www.cmslegalondemand.com/dealinsight' }
+    ]
+  },
+  'garantiklausuler': {
+    title: 'SPA innehåller 15-25 garantiklausuler',
+    description: 'Garantiklausulerna är en av de mest förhandlade delarna av SPA. De avgör säljarens ansvar om det visar sig att information var felaktig.',
+    tips: [
+      'Läs varje garanti noga och förstå innebörden',
+      'Kvalificera garantier med "så vitt säljaren vet"',
+      'Upprätta disclosure letter med alla undantag',
+      'Förhandla rimliga tak och tidsfrister',
+      'Överväg W&I-försäkring'
+    ],
+    examples: [
+      {
+        title: 'Vanliga garantityper',
+        content: '📋 BOLAGSGARANTIER:\n• Säljaren äger aktierna\n• Inga andra rättigheter till aktierna\n• Bolaget är korrekt bildat\n\n💼 FINANSIELLA GARANTIER:\n• Bokslut ger rättvisande bild\n• Inga dolda skulder\n• Korrekta skatter\n\n📄 AVTALSGARANTIER:\n• Väsentliga avtal är giltiga\n• Inga avtalsbrott\n• Inga change-of-control-klausuler\n\n👥 PERSONALGARANTIER:\n• Korrekta anställningsvillkor\n• Inga pågående tvister\n• Pensionsåtaganden korrekt redovisade\n\n⚖️ TVISTGARANTIER:\n• Inga pågående rättstvister\n• Inga hotande krav\n• Inga regulatoriska utredningar'
+      },
+      {
+        title: 'Typiska begränsningar',
+        content: 'TAKBELOPP (Cap):\n• Generellt tak: 20-50% av köpeskilling\n• Skattegarantier: Ofta obegränsade\n• Äganderätt: Ofta obegränsade\n\nGOLVBELOPP (De minimis):\n• Enskilt krav: >0,1-0,5% av köpeskilling\n• Aggregerat: >1-2% innan ansvar uppstår\n\nTIDSFRISTER:\n• Generella garantier: 18-24 månader\n• Skattegarantier: 5-7 år\n• Äganderätt: Obegränsat\n• Miljö: 5-10 år'
+      }
+    ],
+    sources: [
+      { name: 'CMS - European M&A Study', url: 'https://www.cmslegalondemand.com/dealinsight' },
+      { name: 'Aon - W&I Insurance Market', url: 'https://www.aon.com/home/insights/reports/2024/ma-and-transaction-solutions-trends' }
+    ]
+  },
+  'konkurrens-kopare': {
+    title: '+15-25% högre pris med konkurrens',
+    description: 'Att ha flera intresserade köpare som konkurrerar är det bästa sättet att maximera köpeskillingen.',
+    tips: [
+      'Kontakta aldrig bara en köpare',
+      'Skapa tidpress med tydliga deadlines',
+      'Kommunicera att det finns andra intressenter (utan detaljer)',
+      'Behåll alternativ så länge som möjligt',
+      'Låt köpare veta att det finns en "reservation price"'
+    ],
+    examples: [
+      {
+        title: 'Hur konkurrens driver upp priset',
+        content: 'SCENARIO A: En köpare\n• Initial bewertung: 40 MSEK\n• Slutpris: 38 MSEK (-5%)\n• Köparen dikterar villkor\n• Lång process, många krav\n\nSCENARIO B: Tre köpare\n• Initiala bud: 38-42 MSEK\n• Andra rundan: 42-48 MSEK\n• Slutpris: 46 MSEK (+15%)\n• Bättre villkor för säljaren\n• Snabbare process'
+      },
+      {
+        title: 'Strategier för att skapa konkurrens',
+        content: '✅ GÖR:\n• Sätt tydlig deadline för bud\n• Håll parallella processer\n• Ge alla köpare samma information\n• Kommunicera intresse från andra\n• Var beredd att gå vidare med #2\n\n❌ UNDVIK:\n• Berätta exakt vilka som budar\n• Ge olika information till olika köpare\n• Visa desperation\n• Acceptera första budet direkt'
+      }
+    ],
+    sources: [
+      { name: 'Harvard Business Review - Auction Theory in M&A', url: 'https://hbr.org/topic/subject/mergers-and-acquisitions' },
+      { name: 'McKinsey - Creating Value in M&A', url: 'https://www.mckinsey.com/capabilities/m-and-a/our-insights' }
+    ]
+  }
 }
 
 // Hide header on this page
@@ -61,13 +465,142 @@ function MiniBarChart({ data, label }: { data: number[]; label: string }) {
   )
 }
 
-// Statistic highlight component
-function StatHighlight({ value, label, sublabel }: { value: string; label: string; sublabel?: string }) {
+// Statistic highlight component - now clickable
+function StatHighlight({ value, label, sublabel, tipKey, onTipClick }: { 
+  value: string; 
+  label: string; 
+  sublabel?: string;
+  tipKey?: string;
+  onTipClick?: (tipKey: string) => void;
+}) {
+  const hasTip = tipKey && TIPS_DATABASE[tipKey]
+  
   return (
-    <div className="bg-[#1F3C58]/5 border border-[#1F3C58]/10 rounded-lg p-3 text-center">
+    <div 
+      className={`bg-[#1F3C58]/5 border border-[#1F3C58]/10 rounded-lg p-3 text-center transition-all ${
+        hasTip ? 'cursor-pointer hover:bg-[#1F3C58]/10 hover:border-[#1F3C58]/30 hover:shadow-md' : ''
+      }`}
+      onClick={() => hasTip && onTipClick && onTipClick(tipKey)}
+    >
       <div className="text-2xl sm:text-3xl font-bold text-[#1F3C58]">{value}</div>
       <div className="text-xs text-gray-600 mt-1">{label}</div>
       {sublabel && <div className="text-[10px] text-gray-400 mt-0.5">{sublabel}</div>}
+      {hasTip && (
+        <div className="text-[10px] text-[#1F3C58] mt-2 flex items-center justify-center gap-1">
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Klicka för tips
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Tips Modal Component
+function TipsModal({ tipKey, onClose }: { tipKey: string; onClose: () => void }) {
+  const tip = TIPS_DATABASE[tipKey]
+  if (!tip) return null
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Modal Header */}
+        <div className="bg-[#1F3C58] px-6 py-5 flex items-center justify-between">
+          <h2 className="text-lg sm:text-xl font-bold text-white pr-4">{tip.title}</h2>
+          <button
+            onClick={onClose}
+            className="text-white/70 hover:text-white text-2xl leading-none flex-shrink-0"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+          {/* Description */}
+          <p className="text-gray-700 mb-6 leading-relaxed">{tip.description}</p>
+
+          {/* Tips Section */}
+          <div className="mb-6">
+            <h3 className="font-bold text-[#1F3C58] mb-3 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              Praktiska tips
+            </h3>
+            <ul className="space-y-2">
+              {tip.tips.map((t, idx) => (
+                <li key={idx} className="flex gap-2 text-sm text-gray-700">
+                  <span className="text-[#1F3C58] mt-1">✓</span>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Examples Section */}
+          {tip.examples.map((example, idx) => (
+            <div key={idx} className="mb-6">
+              <h3 className="font-bold text-[#1F3C58] mb-3 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {example.title}
+              </h3>
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono leading-relaxed">
+                  {example.content}
+                </pre>
+              </div>
+            </div>
+          ))}
+
+          {/* Common Mistakes */}
+          {tip.commonMistakes && tip.commonMistakes.length > 0 && (
+            <div className="mb-6">
+              <h3 className="font-bold text-red-600 mb-3 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                Vanliga misstag att undvika
+              </h3>
+              <ul className="space-y-2">
+                {tip.commonMistakes.map((mistake, idx) => (
+                  <li key={idx} className="flex gap-2 text-sm text-gray-700">
+                    <span className="text-red-500 mt-1">✗</span>
+                    <span>{mistake}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Sources */}
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h3 className="font-bold text-[#1F3C58] mb-3 text-sm">Källor</h3>
+            <div className="space-y-2">
+              {tip.sources.map((source, idx) => (
+                <a 
+                  key={idx}
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-sm text-[#1F3C58] hover:underline"
+                >
+                  • {source.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -143,8 +676,8 @@ const steps: Step[] = [
         summary: 'Bokslut, resultatrapporter och prognoser för de senaste 3-5 åren.',
         expanded: 'En köpare vill se en tydlig bild av företagets ekonomiska utveckling. Samla årsredovisningar, månadsrapporter, budgetar och prognoser.\n\nSe till att alla siffror är avstämda och kan förklaras. Eventuella engångsposter eller extraordinära händelser bör dokumenteras separat med förklaringar.\n\nJu mer transparent och välorganiserad din finansiella historik är, desto snabbare går due diligence-processen och desto högre förtroende skapas hos köparen.',
         stats: [
-          { value: '3-5 år', label: 'Finansiell historik' },
-          { value: '85%', label: 'Köpare kräver bokslut' }
+          { value: '3-5 år', label: 'Finansiell historik', tipKey: 'finansiell-historik' },
+          { value: '85%', label: 'Köpare kräver bokslut', tipKey: 'kopare-krav-bokslut' }
         ]
       },
       {
@@ -158,8 +691,8 @@ const steps: Step[] = [
         summary: 'Dokumentera processer och rutiner för att minska beroendet av enskilda personer.',
         expanded: 'Nyckelpersonberoende är en av de vanligaste värdesänkande faktorerna vid företagsförsäljning. Börja med att identifiera vilka personer som är kritiska för verksamheten.\n\nDokumentera sedan deras arbetsuppgifter, kontaktnät och beslutprocesser. Skapa manualer och rutinbeskrivningar.\n\nÖverväg att bredda ansvarsfördelningen och introducera backupfunktioner. Köpare betalar premium för företag som kan drivas utan säljaren.',
         stats: [
-          { value: '-15%', label: 'Värdeminskning vid högt beroende' },
-          { value: '67%', label: 'Affärer misslyckas pga nyckelperson' }
+          { value: '-15%', label: 'Värdeminskning vid högt beroende', tipKey: 'nyckelperson-vardeminskning' },
+          { value: '67%', label: 'Affärer misslyckas pga nyckelperson', tipKey: 'affarer-misslyckas-nyckelperson' }
         ]
       },
       {
@@ -248,9 +781,9 @@ const steps: Step[] = [
         summary: 'Väck intresse utan att avslöja företagets identitet.',
         expanded: 'En teaser är ett 1-2 sidigt dokument som beskriver företaget anonymt. Inkludera bransch, geografisk marknad, ungefärlig omsättning och tillväxt, samt huvudsakliga styrkor.\n\nSyftet är att väcka intresse hos potentiella köpare utan att röja företagets identitet. Teasern skickas ut brett och de som visar intresse får signera ett NDA innan de får mer information.\n\nEn bra teaser balanserar informationsgivning med sekretess.',
         stats: [
-          { value: '1-2', label: 'Sidor i teaser' },
-          { value: '50+', label: 'Potentiella köpare' },
-          { value: '10-15%', label: 'Svarsfrekvens' }
+          { value: '1-2', label: 'Sidor i teaser', tipKey: 'teaser-sidor' },
+          { value: '50+', label: 'Potentiella köpare', tipKey: 'potentiella-kopare' },
+          { value: '10-15%', label: 'Svarsfrekvens', tipKey: 'svarsfrekvens' }
         ]
       },
       {
@@ -285,7 +818,7 @@ const steps: Step[] = [
         summary: 'Hantera flera köpare parallellt för att maximera värdet.',
         expanded: 'Att ha flera intresserade köpare är den bästa förhandlingspositionen. Det skapar tidpress, minskar köparnas förhandlingsutrymme och kan driva upp priset.\n\nVar transparent om att det finns andra intressenter utan att röja detaljer. Sätt tydliga deadlines för bud och håll alla parter informerade om tidplanen.\n\nÄven om du har en favorit, behåll alternativen så länge som möjligt.',
         stats: [
-          { value: '+15-25%', label: 'Högre pris med konkurrens' },
+          { value: '+15-25%', label: 'Högre pris med konkurrens', tipKey: 'konkurrens-kopare' },
           { value: '3-5', label: 'Optimalt antal budgivare' }
         ]
       }
@@ -303,8 +836,8 @@ const steps: Step[] = [
         summary: 'All relevant dokumentation: finansiellt, juridiskt, kommersiellt, HR.',
         expanded: 'Ett datarum är ett digitalt (eller fysiskt) arkiv där köparen granskar all dokumentation. Organisera materialet i tydliga mappar: bolagsdokumentation, finansiellt, juridiskt/avtal, kommersiellt, personal/HR, IT, miljö, etc.\n\nAnvänd en professionell datarumsplattform med spårning av vem som tittat på vad.\n\nFörbered datarum i förväg - det signalerar professionalism och sparar tid under processen.',
         stats: [
-          { value: '200-500', label: 'Dokument i typiskt datarum' },
-          { value: '8-12', label: 'Huvudkategorier' }
+          { value: '200-500', label: 'Dokument i typiskt datarum', tipKey: 'datarum-dokument' },
+          { value: '8-12', label: 'Huvudkategorier', tipKey: 'dd-kategorier' }
         ]
       },
       {
@@ -411,8 +944,8 @@ const steps: Step[] = [
         summary: 'Huvudavtalet med alla överenskomna villkor.',
         expanded: 'Share Purchase Agreement (SPA) är det centrala juridiska dokumentet. Det innehåller: parter och bakgrund, överlåtelse av aktierna, köpeskilling och betalningsvillkor, tillträdesdag och -villkor, säljarens garantier, köparens åtaganden, ersättningsansvar, tvistlösning.\n\nSPA förhandlas intensivt mellan parternas jurister.\n\nSom säljare, fokusera på de kommersiellt viktiga punkterna och låt juristerna hantera det tekniska.',
         stats: [
-          { value: '40-80', label: 'Sidor i SPA' },
-          { value: '15-25', label: 'Garantiklausuler' },
+          { value: '40-80', label: 'Sidor i SPA', tipKey: 'spa-sidor' },
+          { value: '15-25', label: 'Garantiklausuler', tipKey: 'garantiklausuler' },
           { value: '10-20', label: 'Bilagor' }
         ]
       },
@@ -516,6 +1049,7 @@ export default function ForsaljningsprocessenPage() {
   const [currentStep, setCurrentStep] = useState(0)
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({})
   const [showSources, setShowSources] = useState(false)
+  const [selectedTip, setSelectedTip] = useState<string | null>(null)
 
   const toggleExpand = (stepId: number, itemIdx: number) => {
     const key = `${stepId}-${itemIdx}`
@@ -671,7 +1205,14 @@ export default function ForsaljningsprocessenPage() {
                               {item.stats && (
                                 <div className={`pl-3 sm:pl-4 grid gap-2 sm:gap-3 ${item.stats.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
                                   {item.stats.map((stat, statIdx) => (
-                                    <StatHighlight key={statIdx} {...stat} />
+                                    <StatHighlight 
+                                      key={statIdx} 
+                                      value={stat.value}
+                                      label={stat.label}
+                                      sublabel={stat.sublabel}
+                                      tipKey={stat.tipKey}
+                                      onTipClick={(tipKey) => setSelectedTip(tipKey)}
+                                    />
                                   ))}
                                 </div>
                               )}
@@ -813,6 +1354,11 @@ export default function ForsaljningsprocessenPage() {
           animation: ctaPulse 2s infinite;
         }
       `}</style>
+
+      {/* Tips Modal */}
+      {selectedTip && (
+        <TipsModal tipKey={selectedTip} onClose={() => setSelectedTip(null)} />
+      )}
 
       {/* Sources Modal */}
       {showSources && (
