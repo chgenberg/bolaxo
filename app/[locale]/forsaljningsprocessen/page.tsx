@@ -1984,35 +1984,29 @@ export default function ForsaljningsprocessenPage() {
                               return (
                                 <button
                                   onClick={() => setActiveModal(modalCategory)}
-                                  className={`w-full mb-4 p-3 rounded-lg flex items-center gap-3 transition-all group ${
+                                  className={`w-full mb-4 p-4 rounded-xl flex items-center gap-3 transition-all group shadow-md hover:shadow-lg ${
                                     status === 'filled'
-                                      ? 'bg-amber-50 border border-amber-200 hover:bg-amber-100'
-                                      : 'bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border border-[#1F3C58]/20 hover:from-[#1F3C58]/10 hover:to-[#1F3C58]/15'
+                                      ? 'bg-amber-500 hover:bg-amber-600'
+                                      : 'bg-[#1F3C58] hover:bg-[#2a4d6e]'
                                   }`}
                                 >
-                                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                                    status === 'filled' ? 'bg-amber-500' : 'bg-[#1F3C58]'
-                                  }`}>
-                                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                   </div>
                                   <div className="text-left flex-1">
-                                    <span className={`block text-sm font-semibold ${
-                                      status === 'filled' ? 'text-amber-700' : 'text-[#1F3C58]'
-                                    }`}>
+                                    <span className="block text-sm font-semibold text-white">
                                       {status === 'filled' ? 'Komplettera & generera sammanfattning' : 'Fyll i dina uppgifter'}
                                     </span>
-                                    <span className="block text-xs text-gray-500">
+                                    <span className="block text-xs text-white/70">
                                       {status === 'filled' 
                                         ? 'Du har påbörjat - klicka för att slutföra'
                                         : 'Klicka för att fylla i information om ditt företag'
                                       }
                                     </span>
                                   </div>
-                                  <svg className={`w-5 h-5 transition-colors ${
-                                    status === 'filled' ? 'text-amber-400 group-hover:text-amber-600' : 'text-[#1F3C58]/50 group-hover:text-[#1F3C58]'
-                                  }`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <svg className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                   </svg>
                                 </button>
