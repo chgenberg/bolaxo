@@ -1454,23 +1454,37 @@ export default function ForsaljningsprocessenPage() {
     return hasData ? 'filled' : 'empty'
   }
 
-  // Check if a step is completed (all items have data filled or generated)
+  // Check if a step is completed (all items have data GENERATED - not just filled)
   const isStepCompleted = (stepIdx: number): boolean => {
     const stepData = steps[stepIdx]
     if (!stepData) return false
     
-    // Step 1 (Förberedelse) - check all 5 categories
+    // Step 1 (Förberedelse) - check all 5 categories must be GENERATED
     if (stepIdx === 0) {
       const categories: ModalCategory[] = ['financialDocs', 'businessRelations', 'keyPerson', 'balanceSheet', 'legalDocs']
       return categories.every(cat => {
         const status = getCategoryStatus(cat)
-        return status === 'filled' || status === 'generated'
+        return status === 'generated' // Only generated counts as complete
       })
     }
     
-    // For other steps, consider them completed if user has visited them
-    // (since they don't have data entry)
+    // For other steps, only mark complete if step 1 is done and user has passed this step
+    if (!isStepCompleted(0)) return false
     return currentStep > stepIdx
+  }
+  
+  // Check if a step is in progress (at least one item has data but not all complete)
+  const isStepInProgress = (stepIdx: number): boolean => {
+    if (stepIdx === 0) {
+      const categories: ModalCategory[] = ['financialDocs', 'businessRelations', 'keyPerson', 'balanceSheet', 'legalDocs']
+      const hasAnyData = categories.some(cat => {
+        const status = getCategoryStatus(cat)
+        return status === 'filled' || status === 'generated'
+      })
+      const allComplete = isStepCompleted(stepIdx)
+      return hasAnyData && !allComplete
+    }
+    return false
   }
 
   const progress = ((currentStep + 1) / steps.length) * 100
@@ -1736,6 +1750,7 @@ export default function ForsaljningsprocessenPage() {
                 <div className="flex justify-center gap-3 sm:gap-4">
                   {steps.map((s, idx) => {
                     const completed = isStepCompleted(idx)
+                    const inProgress = isStepInProgress(idx)
                     return (
                       <button
                         key={s.id}
@@ -1747,12 +1762,16 @@ export default function ForsaljningsprocessenPage() {
                           idx === currentStep
                             ? completed 
                               ? 'bg-green-600 text-white shadow-lg ring-2 ring-green-300'
-                              : 'bg-[#1F3C58] text-white shadow-lg'
+                              : inProgress
+                                ? 'bg-amber-500 text-white shadow-lg ring-2 ring-amber-300'
+                                : 'bg-[#1F3C58] text-white shadow-lg'
                             : completed
                               ? 'bg-green-500 text-white shadow-md'
-                              : idx < currentStep
-                                ? 'bg-[#1F3C58]/20 text-[#1F3C58]'
-                                : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                              : inProgress
+                                ? 'bg-amber-400 text-white shadow-md'
+                                : idx < currentStep
+                                  ? 'bg-[#1F3C58]/20 text-[#1F3C58]'
+                                  : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
                         }`}
                       >
                         {completed ? (
@@ -1775,7 +1794,9 @@ export default function ForsaljningsprocessenPage() {
                     <span className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-base sm:text-lg font-bold transition-colors ${
                       isStepCompleted(currentStep) 
                         ? 'bg-green-500 text-white' 
-                        : 'bg-[#1F3C58] text-white'
+                        : isStepInProgress(currentStep)
+                          ? 'bg-amber-400 text-white'
+                          : 'bg-[#1F3C58] text-white'
                     }`}>
                       {isStepCompleted(currentStep) ? (
                         <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -1786,10 +1807,19 @@ export default function ForsaljningsprocessenPage() {
                       )}
                     </span>
                     <div>
-                      <h2 className={`text-lg sm:text-2xl font-bold ${isStepCompleted(currentStep) ? 'text-green-600' : 'text-[#1F3C58]'}`}>
+                      <h2 className={`text-lg sm:text-2xl font-bold ${
+                        isStepCompleted(currentStep) 
+                          ? 'text-green-600' 
+                          : isStepInProgress(currentStep)
+                            ? 'text-amber-600'
+                            : 'text-[#1F3C58]'
+                      }`}>
                         {step.title}
                         {isStepCompleted(currentStep) && (
                           <span className="ml-2 text-sm font-normal text-green-500">✓ Klart</span>
+                        )}
+                        {isStepInProgress(currentStep) && !isStepCompleted(currentStep) && (
+                          <span className="ml-2 text-sm font-normal text-amber-500">⏳ Pågår</span>
                         )}
                       </h2>
                       <p className="text-gray-500 text-xs sm:text-sm">{step.subtitle}</p>
@@ -1976,6 +2006,10 @@ export default function ForsaljningsprocessenPage() {
                     const key = `${step.id}-${idx}`
                     const isExpanded = expandedItems[key]
                     
+                    // Get status for this item if it's in step 1
+                    const modalCategory = getModalCategory(step.id, idx)
+                    const itemStatus = modalCategory ? getCategoryStatus(modalCategory) : 'empty'
+                    
                     return (
                       <div 
                         key={idx} 
@@ -1989,11 +2023,36 @@ export default function ForsaljningsprocessenPage() {
                           onClick={() => toggleExpand(step.id, idx)}
                           className="w-full flex items-start gap-2 sm:gap-3 p-3 sm:p-4 text-left hover:bg-gray-50 transition-colors"
                         >
-                          <span className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-[#1F3C58]/10 text-[#1F3C58] rounded-full flex items-center justify-center text-[10px] sm:text-xs font-medium mt-0.5">
-                            {idx + 1}
+                          {/* Status indicator with number */}
+                          <span className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-medium mt-0.5 transition-colors ${
+                            itemStatus === 'generated'
+                              ? 'bg-green-500 text-white'
+                              : itemStatus === 'filled'
+                                ? 'bg-amber-400 text-white'
+                                : 'bg-[#1F3C58]/10 text-[#1F3C58]'
+                          }`}>
+                            {itemStatus === 'generated' ? (
+                              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              idx + 1
+                            )}
                           </span>
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-[#1F3C58] text-sm sm:text-base mb-0.5 sm:mb-1">{item.title}</h3>
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-semibold text-[#1F3C58] text-sm sm:text-base mb-0.5 sm:mb-1">{item.title}</h3>
+                              {/* Status badge */}
+                              {modalCategory && itemStatus !== 'empty' && (
+                                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                                  itemStatus === 'generated'
+                                    ? 'bg-green-100 text-green-700'
+                                    : 'bg-amber-100 text-amber-700'
+                                }`}>
+                                  {itemStatus === 'generated' ? 'Klar' : 'Påbörjad'}
+                                </span>
+                              )}
+                            </div>
                             <p className="text-gray-600 text-xs sm:text-sm leading-relaxed">{item.summary}</p>
                           </div>
                           {/* Arrow */}

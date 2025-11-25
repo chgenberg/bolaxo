@@ -269,8 +269,11 @@ export default function ExempelrapportPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      {/* Spacer for fixed header */}
+      <div className="h-20 sm:h-24" />
+      
       {/* Header */}
-      <div className="bg-[#1F3C58] py-12">
+      <div className="bg-[#1F3C58] py-12 sm:py-16">
         <div className="max-w-4xl mx-auto px-4">
           <Link 
             href={`/${locale}/forsaljningsprocessen`}
@@ -289,7 +292,7 @@ export default function ExempelrapportPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
         {/* Info Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
           <div className="flex items-start gap-4 mb-6">
