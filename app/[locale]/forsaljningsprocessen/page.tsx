@@ -1157,6 +1157,13 @@ export default function ForsaljningsprocessenPage() {
   const [scrapeError, setScrapeError] = useState<string | null>(null)
   const [scrapeSuccess, setScrapeSuccess] = useState(false)
   
+  // Document upload state
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  const [isAnalyzingDocs, setIsAnalyzingDocs] = useState(false)
+  const [docAnalysisError, setDocAnalysisError] = useState<string | null>(null)
+  const [docAnalysisSuccess, setDocAnalysisSuccess] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  
   // Modal state
   const [activeModal, setActiveModal] = useState<ModalCategory | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -1214,6 +1221,105 @@ export default function ForsaljningsprocessenPage() {
     } finally {
       setIsScrapingUrl(false)
     }
+  }
+
+  // Handle document upload and analysis
+  const handleFileUpload = async (files: FileList | File[]) => {
+    const fileArray = Array.from(files)
+    const validFiles = fileArray.filter(file => {
+      const ext = file.name.toLowerCase()
+      return ext.endsWith('.pdf') || ext.endsWith('.docx') || ext.endsWith('.doc') || 
+             ext.endsWith('.xlsx') || ext.endsWith('.xls') || ext.endsWith('.txt') || ext.endsWith('.csv')
+    })
+    
+    if (validFiles.length === 0) {
+      setDocAnalysisError('Inga giltiga filer. Stödda format: PDF, Word, Excel, TXT, CSV')
+      return
+    }
+    
+    setUploadedFiles(prev => [...prev, ...validFiles])
+  }
+
+  const handleAnalyzeDocuments = async () => {
+    if (uploadedFiles.length === 0) return
+    
+    setIsAnalyzingDocs(true)
+    setDocAnalysisError(null)
+    setDocAnalysisSuccess(false)
+    
+    try {
+      const formData = new FormData()
+      uploadedFiles.forEach(file => formData.append('files', file))
+      
+      const response = await fetch('/api/analyze-documents', {
+        method: 'POST',
+        body: formData
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Kunde inte analysera dokumenten')
+      }
+      
+      if (data.success && data.analysis) {
+        const analysis = data.analysis
+        
+        // Update company data with extracted information
+        setCompanyData(prev => ({
+          ...prev,
+          companyName: analysis.companyName || prev.companyName,
+          financialDocs: {
+            ...prev.financialDocs,
+            revenue3Years: analysis.financialDocs?.revenue3Years || prev.financialDocs.revenue3Years,
+            profit3Years: analysis.financialDocs?.profit3Years || prev.financialDocs.profit3Years,
+            forecastYears: analysis.financialDocs?.forecastYears || prev.financialDocs.forecastYears,
+            ebitdaNotes: analysis.financialDocs?.ebitdaNotes || prev.financialDocs.ebitdaNotes,
+            oneTimeItems: analysis.financialDocs?.oneTimeItems || prev.financialDocs.oneTimeItems
+          },
+          businessRelations: {
+            ...prev.businessRelations,
+            topCustomers: analysis.businessRelations?.topCustomers?.length > 0 
+              ? analysis.businessRelations.topCustomers 
+              : prev.businessRelations.topCustomers,
+            customerConcentrationRisk: analysis.businessRelations?.customerConcentrationRisk || prev.businessRelations.customerConcentrationRisk,
+            keySuppliers: analysis.businessRelations?.keySuppliers || prev.businessRelations.keySuppliers,
+            exclusivityAgreements: analysis.businessRelations?.exclusivityAgreements || prev.businessRelations.exclusivityAgreements,
+            informalAgreements: analysis.businessRelations?.informalAgreements || prev.businessRelations.informalAgreements
+          },
+          keyPerson: {
+            ...prev.keyPerson,
+            ownerInvolvement: analysis.keyPerson?.ownerInvolvement || prev.keyPerson.ownerInvolvement,
+            managementTeam: analysis.keyPerson?.managementTeam || prev.keyPerson.managementTeam,
+            transitionPlan: analysis.keyPerson?.transitionPlan || prev.keyPerson.transitionPlan
+          },
+          balanceSheet: {
+            ...prev.balanceSheet,
+            loansToOwners: analysis.balanceSheet?.loansToOwners || prev.balanceSheet.loansToOwners,
+            nonOperatingAssets: analysis.balanceSheet?.nonOperatingAssets || prev.balanceSheet.nonOperatingAssets,
+            inventoryStatus: analysis.balanceSheet?.inventoryStatus || prev.balanceSheet.inventoryStatus,
+            receivablesStatus: analysis.balanceSheet?.receivablesStatus || prev.balanceSheet.receivablesStatus,
+            liabilitiesToClean: analysis.balanceSheet?.liabilitiesToClean || prev.balanceSheet.liabilitiesToClean
+          },
+          legalDocs: {
+            ...prev.legalDocs,
+            pendingLegalIssues: analysis.legalDocs?.pendingLegalIssues || prev.legalDocs.pendingLegalIssues
+          }
+        }))
+        
+        setDocAnalysisSuccess(true)
+        setTimeout(() => setDocAnalysisSuccess(false), 5000)
+      }
+    } catch (error) {
+      console.error('Document analysis error:', error)
+      setDocAnalysisError(error instanceof Error ? error.message : 'Ett fel uppstod')
+    } finally {
+      setIsAnalyzingDocs(false)
+    }
+  }
+
+  const removeFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index))
   }
 
   // Save category data
@@ -1440,6 +1546,139 @@ export default function ForsaljningsprocessenPage() {
                         ))}
                       </div>
                     )}
+                  </div>
+                )}
+              </div>
+
+              {/* Document Upload Section */}
+              <div className="px-4 sm:px-10 py-5 bg-white border-b border-gray-100">
+                <div className="flex items-center gap-2 mb-3">
+                  <svg className="w-5 h-5 text-[#1F3C58]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <h3 className="font-semibold text-[#1F3C58] text-sm">Ladda upp dokument</h3>
+                </div>
+                <p className="text-xs text-gray-600 mb-3">
+                  Ladda upp bokslut, avtal, organisationsscheman eller andra dokument. AI:n analyserar och fyller i uppgifterna automatiskt.
+                </p>
+                
+                {/* Dropzone */}
+                <div
+                  onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={(e) => {
+                    e.preventDefault()
+                    setIsDragging(false)
+                    if (e.dataTransfer.files) handleFileUpload(e.dataTransfer.files)
+                  }}
+                  className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer ${
+                    isDragging 
+                      ? 'border-[#1F3C58] bg-[#1F3C58]/5' 
+                      : 'border-gray-200 hover:border-[#1F3C58]/50 hover:bg-gray-50'
+                  }`}
+                >
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv"
+                    onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="flex flex-col items-center gap-2">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
+                      isDragging ? 'bg-[#1F3C58] text-white' : 'bg-gray-100 text-gray-400'
+                    }`}>
+                      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-700">
+                        {isDragging ? 'Släpp filerna här' : 'Dra och släpp filer här'}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        eller klicka för att välja • PDF, Word, Excel, TXT
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Uploaded files list */}
+                {uploadedFiles.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-medium text-gray-700">{uploadedFiles.length} fil(er) valda</p>
+                      <button
+                        onClick={() => setUploadedFiles([])}
+                        className="text-xs text-gray-500 hover:text-red-500 transition-colors"
+                      >
+                        Ta bort alla
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {uploadedFiles.map((file, idx) => (
+                        <div 
+                          key={idx}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full text-xs"
+                        >
+                          <svg className="w-3.5 h-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <span className="text-gray-700 max-w-[120px] truncate">{file.name}</span>
+                          <button
+                            onClick={() => removeFile(idx)}
+                            className="text-gray-400 hover:text-red-500 transition-colors"
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Analyze button */}
+                    <button
+                      onClick={handleAnalyzeDocuments}
+                      disabled={isAnalyzingDocs}
+                      className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-3 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      {isAnalyzingDocs ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          Analyserar dokument... (kan ta 30-60 sek)
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          </svg>
+                          Analysera och fyll i uppgifter automatiskt
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                {/* Error message */}
+                {docAnalysisError && (
+                  <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-xs text-red-600">{docAnalysisError}</p>
+                  </div>
+                )}
+
+                {/* Success message */}
+                {docAnalysisSuccess && (
+                  <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center gap-2 text-green-700">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-xs font-medium">Dokument analyserade! Uppgifterna har fyllts i under respektive kategori.</p>
+                    </div>
                   </div>
                 )}
               </div>
