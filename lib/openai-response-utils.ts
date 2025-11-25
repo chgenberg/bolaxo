@@ -23,8 +23,9 @@ interface CallResponsesArgs {
   timeoutMs?: number
   responseFormat?: TextFormatOption
   reasoning?: {
-    effort: 'low' | 'medium' | 'high'
+    effort: 'none' | 'low' | 'medium' | 'high'
   }
+  textVerbosity?: 'low' | 'medium' | 'high'
 }
 
 export class OpenAIResponseError extends Error {
@@ -45,7 +46,8 @@ export async function callOpenAIResponses({
   metadata,
   timeoutMs = 120000,
   responseFormat,
-  reasoning
+  reasoning,
+  textVerbosity
 }: CallResponsesArgs): Promise<{ text: string; raw: any }> {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OpenAI API key not configured')
@@ -58,12 +60,22 @@ export async function callOpenAIResponses({
       : [{ type: 'text', text: message.content }]
   }))
 
-  const formatPayload =
-    responseFormat && typeof responseFormat === 'object'
-      ? { text: { format: responseFormat } }
-      : {}
+  // For gpt-5.1 models with reasoning, we use text.format and text.verbosity
+  const isGpt5Model = model.startsWith('gpt-5')
+  
+  // Build text object for gpt-5.1
+  const textPayload: Record<string, any> = {}
+  if (responseFormat && typeof responseFormat === 'object') {
+    textPayload.format = responseFormat
+  }
+  if (textVerbosity) {
+    textPayload.verbosity = textVerbosity
+  }
 
   const reasoningPayload = reasoning ? { reasoning } : {}
+
+  // For gpt-5.1 with reasoning enabled (not "none"), don't send max_output_tokens
+  const useMaxTokens = !isGpt5Model || !reasoning || reasoning.effort === 'none'
 
   const response = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST',
@@ -74,9 +86,9 @@ export async function callOpenAIResponses({
     body: JSON.stringify({
       model,
       input,
-      max_output_tokens: maxOutputTokens,
+      ...(useMaxTokens ? { max_output_tokens: maxOutputTokens } : {}),
       metadata,
-      ...formatPayload,
+      ...(Object.keys(textPayload).length > 0 ? { text: textPayload } : {}),
       ...reasoningPayload
     }),
     signal: createTimeoutSignal(timeoutMs)

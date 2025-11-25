@@ -65,12 +65,12 @@ JSON-schema (måste följas exakt):
 ${schema}`
 
   const payload = {
-    model: 'gpt-5.1-mini',
+    model: 'gpt-5.1',
     instructions,
     input: inputBlock,
     tools: [{ type: 'web_search' }],
-    max_output_tokens: maxOutputTokens,
-    reasoning: { effort: 'medium' }
+    reasoning: { effort: 'medium' },
+    text: { verbosity: 'high' }
   }
 
   let lastError: unknown = null
