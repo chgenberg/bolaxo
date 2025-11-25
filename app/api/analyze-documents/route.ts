@@ -1,58 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { extractTextFromDocument } from '@/lib/universal-document-reader'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
-
-// Dynamic import for server-side only modules
-async function extractTextFromPDF(buffer: Buffer): Promise<string> {
-  const pdfParse = (await import('pdf-parse')).default
-  const data = await pdfParse(buffer)
-  return data.text
-}
-
-async function extractTextFromWord(buffer: Buffer): Promise<string> {
-  const mammoth = await import('mammoth')
-  const result = await mammoth.extractRawText({ buffer })
-  return result.value
-}
-
-async function extractTextFromExcel(buffer: Buffer): Promise<string> {
-  const XLSX = await import('xlsx')
-  const workbook = XLSX.read(buffer, { type: 'buffer' })
-  let text = ''
-  
-  for (const sheetName of workbook.SheetNames) {
-    const sheet = workbook.Sheets[sheetName]
-    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][]
-    text += `\n--- ${sheetName} ---\n`
-    for (const row of json) {
-      if (row && row.length > 0) {
-        text += row.join(' | ') + '\n'
-      }
-    }
-  }
-  
-  return text
-}
-
-async function extractTextFromFile(file: File): Promise<string> {
-  const buffer = Buffer.from(await file.arrayBuffer())
-  const fileName = file.name.toLowerCase()
-  
-  if (fileName.endsWith('.pdf')) {
-    return extractTextFromPDF(buffer)
-  } else if (fileName.endsWith('.docx') || fileName.endsWith('.doc')) {
-    return extractTextFromWord(buffer)
-  } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-    return extractTextFromExcel(buffer)
-  } else if (fileName.endsWith('.txt') || fileName.endsWith('.csv')) {
-    return buffer.toString('utf-8')
-  }
-  
-  throw new Error(`Unsupported file type: ${fileName}`)
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,8 +21,9 @@ export async function POST(request: NextRequest) {
     
     for (const file of files) {
       try {
-        const text = await extractTextFromFile(file)
-        extractedTexts.push(`\n=== Dokument: ${file.name} ===\n${text}`)
+        const buffer = Buffer.from(await file.arrayBuffer())
+        const result = await extractTextFromDocument(buffer, file.name, file.type)
+        extractedTexts.push(`\n=== Dokument: ${file.name} ===\n${result.text}`)
         fileNames.push(file.name)
       } catch (error) {
         console.error(`Error extracting ${file.name}:`, error)
@@ -169,4 +122,3 @@ Var noggrann och extrahera så mycket relevant information som möjligt. Om info
     }, { status: 500 })
   }
 }
-
