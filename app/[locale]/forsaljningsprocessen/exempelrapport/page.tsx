@@ -76,38 +76,50 @@ const mockCompanyData: CompanyData = {
 
 const mockAnalysis = {
   executiveSummary: 'Tech Solutions AB är ett välskött IT-konsultbolag med 50+ anställda, stark tillväxt och god lönsamhet. Bolaget är väl förberett för försäljning med dokumenterade processer, en kompetent ledningsgrupp och en tydlig successionsplan. Med en normaliserad EBITDA på 8,5 MSEK och en positiv marknadsutveckling finns goda förutsättningar för en framgångsrik transaktion.',
-  companyOverview: 'Tech Solutions AB grundades 2010 och har vuxit till ett ledande IT-konsultbolag med fokus på skräddarsydda lösningar för stora och medelstora företag i Skandinavien. Bolaget är ISO 27001-certifierat och har kontor i Stockholm och Göteborg.',
-  financialAnalysis: 'Bolaget uppvisar en stark finansiell utveckling med årlig omsättningstillväxt på ca 15% de senaste tre åren. EBITDA-marginalen har förbättrats från 12% till 19% genom effektivare resursutnyttjande och bättre prissättning. Kassaflödet är stabilt positivt.',
-  businessRelationsAnalysis: 'Kundportföljen är diversifierad med viss koncentration till de tre största kunderna (38% av omsättningen). Volvo Cars IT är största kunden med 18%. Kundrelationerna är stabila med höga förnyelsegrader. Leverantörsrelationerna är goda utan kritiska beroenden.',
-  keyPersonAnalysis: 'VD och grundare är fortfarande aktivt involverad men har byggt en kompetent ledningsgrupp. CTO (delägare 15%) kan ta över det operativa ansvaret. Dokumenterade processer och tydliga ansvarsområden minskar nyckelpersonberoendet.',
-  balanceSheetAnalysis: 'Balansräkningen är övervägande ren med begränsade justeringsbehov. Mindre poster som skuld till ägare och representation i bostadsrätt behöver hanteras före closing. Kundfordringarna har god kvalitet.',
-  legalAnalysis: 'Den juridiska dokumentationen är i god ordning. Bolagsordning, aktiebok och styrelseprotokoll är uppdaterade. Alla tillstånd är verifierade. Inga pågående tvister eller kända legala risker.',
+  companyOverview: 'Tech Solutions AB grundades 2010 och har vuxit till ett ledande IT-konsultbolag med fokus på skräddarsydda lösningar för stora och medelstora företag i Skandinavien. Bolaget är ISO 27001-certifierat och har kontor i Stockholm och Göteborg. Med över 50 anställda och en årsomsättning på 45 MSEK har bolaget etablerat sig som en pålitlig partner för digital transformation.',
+  financialAnalysis: 'Bolaget uppvisar en stark finansiell utveckling med årlig omsättningstillväxt på ca 15% de senaste tre åren. EBITDA-marginalen har förbättrats från 12% till 19% genom effektivare resursutnyttjande och bättre prissättning. Kassaflödet är stabilt positivt med god likviditet.',
+  businessRelationsAnalysis: 'Kundportföljen är diversifierad med viss koncentration till de tre största kunderna (38% av omsättningen). Volvo Cars IT är största kunden med 18%. Kundrelationerna är stabila med höga förnyelsegrader på över 90%. Leverantörsrelationerna är goda utan kritiska beroenden.',
+  keyPersonAnalysis: 'VD och grundare är fortfarande aktivt involverad men har byggt en kompetent ledningsgrupp. CTO (delägare 15%) kan ta över det operativa ansvaret. Dokumenterade processer och tydliga ansvarsområden minskar nyckelpersonberoendet betydligt.',
+  balanceSheetAnalysis: 'Balansräkningen är övervägande ren med begränsade justeringsbehov. Mindre poster som skuld till ägare (500 TSEK) och representation i bostadsrätt behöver hanteras före closing. Kundfordringarna har god kvalitet med 85% under 30 dagar.',
+  legalAnalysis: 'Den juridiska dokumentationen är i god ordning. Bolagsordning, aktiebok och styrelseprotokoll är uppdaterade och arkiverade. Alla tillstånd är verifierade. Inga pågående tvister eller kända legala risker. ISO 27001-certifiering gäller till 2026.',
   riskAssessment: {
-    financial: 65,
-    operational: 70,
-    market: 75,
-    legal: 85
+    overall: 'low' as const,
+    financialRisk: 25,
+    operationalRisk: 35,
+    keyPersonRisk: 45,
+    customerRisk: 40,
+    legalRisk: 15
   },
   strengths: [
-    'Stark finansiell historik med konsekvent tillväxt',
-    'Dokumenterade processer och rutiner',
-    'Kompetent ledningsgrupp med tydlig succession',
-    'Diversifierad kundbas med stabila relationer',
-    'Ren juridisk struktur utan tvister'
+    'Stark finansiell historik med 15% årlig tillväxt de senaste 3 åren',
+    'Dokumenterade processer och ISO 27001-certifiering',
+    'Kompetent ledningsgrupp med tydlig successionsplan',
+    'Diversifierad kundbas med stabila och långa kundrelationer',
+    'Ren juridisk struktur utan pågående tvister',
+    'God likviditet och positivt kassaflöde'
   ],
   weaknesses: [
-    'Viss kundkoncentration (största kund 18%)',
-    'Nyckelpersonberoende av VD/grundare',
-    'Informella bonusavtal behöver formaliseras',
+    'Viss kundkoncentration (största kund 18% av omsättningen)',
+    'Nyckelpersonberoende av VD/grundare i kundrelationer',
+    'Informella bonusavtal med tre seniorkonsulter behöver formaliseras',
     'Geografisk koncentration till Stockholm/Göteborg'
   ],
   recommendations: [
-    'Formalisera bonusavtal med nyckelpersoner',
-    'Accelerera kunskapsöverföring till ledningsgrupp',
-    'Diversifiera kundportföljen ytterligare',
-    'Överväg geografisk expansion'
+    'Formalisera bonusavtal med nyckelpersoner innan försäljningsprocess',
+    'Accelerera kunskapsöverföring från VD till övrig ledning',
+    'Diversifiera kundportföljen genom att minska beroende av topp-3 kunder',
+    'Överväg geografisk expansion till Malmö/Norrland',
+    'Dokumentera alla informella kundavtal'
   ],
-  valuationFactors: 'Baserat på jämförbara transaktioner för IT-konsultbolag med liknande profil bör Tech Solutions AB kunna värderas till 6-8x normaliserat EBITDA, motsvarande 51-68 MSEK. Den starka tillväxten, förbättrade lönsamheten och väl förberedda successionen talar för övre delen av intervallet. Kundkoncentrationen och nyckelpersonberoendet kan motivera viss rabatt, men dessa risker är hanterbara.'
+  nextSteps: [
+    'Slutför finansiell due diligence-förberedelse (2-4 veckor)',
+    'Uppdatera värderingsunderlag med senaste kvartalsdata',
+    'Engagera M&A-rådgivare för processplanering',
+    'Förbered teaser och informationsmemorandum',
+    'Identifiera potentiella strategiska och finansiella köpare',
+    'Planera management-presentationer'
+  ],
+  valuationFactors: 'Baserat på jämförbara transaktioner för IT-konsultbolag med liknande profil bör Tech Solutions AB kunna värderas till 6-8x normaliserat EBITDA, motsvarande 51-68 MSEK. Den starka tillväxten, förbättrade lönsamheten och väl förberedda successionen talar för övre delen av intervallet. Kundkoncentrationen och nyckelpersonberoendet kan motivera viss rabatt, men dessa risker är hanterbara. Rekommenderad utgångspunkt för förhandling: 60 MSEK.'
 }
 
 // Separate component for PDF download that handles dynamic imports
