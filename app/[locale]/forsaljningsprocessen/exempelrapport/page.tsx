@@ -10,12 +10,18 @@ import { FileText, Download, ArrowLeft, CheckCircle } from 'lucide-react'
 // Dynamically import PDF components to avoid SSR issues
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
-  { ssr: false, loading: () => <span className="text-gray-500">Förbereder PDF...</span> }
+  { 
+    ssr: false, 
+    loading: () => <span className="text-gray-500">Förbereder PDF...</span>
+  }
 )
 
 const SalesProcessReportPDF = dynamic(
-  () => import('@/components/SalesProcessReportPDF'),
-  { ssr: false }
+  () => import('@/components/SalesProcessReportPDF').then((mod) => mod.default),
+  { 
+    ssr: false,
+    loading: () => null
+  }
 )
 
 // Mockup company data

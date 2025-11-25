@@ -12,12 +12,18 @@ import SalesProcessDataModal, {
 // Dynamically import PDF components to avoid SSR issues
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
-  { ssr: false, loading: () => <span>Förbereder PDF...</span> }
+  { 
+    ssr: false, 
+    loading: () => <span>Förbereder PDF...</span>
+  }
 )
 
 const SalesProcessReportPDF = dynamic(
-  () => import('@/components/SalesProcessReportPDF'),
-  { ssr: false }
+  () => import('@/components/SalesProcessReportPDF').then((mod) => mod.default),
+  { 
+    ssr: false,
+    loading: () => null
+  }
 )
 
 type ModalCategory = 'financialDocs' | 'businessRelations' | 'keyPerson' | 'balanceSheet' | 'legalDocs'

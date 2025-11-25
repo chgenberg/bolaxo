@@ -1,16 +1,20 @@
-'use client'
-
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
 import { CompanyData } from './SalesProcessDataModal'
 
-// Register fonts
-Font.register({
-  family: 'Helvetica',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxP.ttf', fontWeight: 'normal' },
-    { src: 'https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 'bold' },
-  ],
-})
+// Register fonts - only on client side
+if (typeof window !== 'undefined') {
+  try {
+    Font.register({
+      family: 'Helvetica',
+      fonts: [
+        { src: 'https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxP.ttf', fontWeight: 'normal' },
+        { src: 'https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmWUlfBBc9.ttf', fontWeight: 'bold' },
+      ],
+    })
+  } catch (e) {
+    // Font already registered or error - ignore
+  }
+}
 
 const styles = StyleSheet.create({
   page: {
