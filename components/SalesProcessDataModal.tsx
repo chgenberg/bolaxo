@@ -68,8 +68,10 @@ function MinimalSelect({
 
 // Type definitions for each category's form data
 export interface FinancialDocData {
-  revenue3Years: string
-  profit3Years: string
+  revenue3Years: string // Legacy field
+  profit3Years: string // Legacy field
+  revenueByYear: { year1: string; year2: string; year3: string }
+  profitByYear: { year1: string; year2: string; year3: string }
   hasAuditedReports: boolean
   hasMonthlyReports: boolean
   budgetAvailable: boolean
@@ -146,6 +148,8 @@ export const initialCompanyData: CompanyData = {
   financialDocs: {
     revenue3Years: '',
     profit3Years: '',
+    revenueByYear: { year1: '', year2: '', year3: '' },
+    profitByYear: { year1: '', year2: '', year3: '' },
     hasAuditedReports: false,
     hasMonthlyReports: false,
     budgetAvailable: false,
@@ -248,31 +252,99 @@ export default function SalesProcessDataModal({
 
   const renderFinancialDocsForm = () => (
     <div className="space-y-6">
-      {/* Revenue & Profit */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Omsättning senaste 3 åren (MSEK)
-          </label>
-          <input
-            type="text"
-            value={localData.revenue3Years}
-            onChange={(e) => setLocalData({ ...localData, revenue3Years: e.target.value })}
-            placeholder="t.ex. 2021: 15, 2022: 18, 2023: 22"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3C58] focus:border-transparent text-sm"
-          />
+      {/* Revenue by year */}
+      <div>
+        <label className="block text-xs uppercase tracking-wider text-gray-500 mb-3 font-medium">
+          Omsättning senaste 3 åren (MSEK)
+        </label>
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear()}</label>
+            <input
+              type="text"
+              value={localData.revenueByYear?.year1 || ''}
+              onChange={(e) => setLocalData({ 
+                ...localData, 
+                revenueByYear: { ...localData.revenueByYear, year1: e.target.value }
+              })}
+              placeholder="0"
+              className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 1}</label>
+            <input
+              type="text"
+              value={localData.revenueByYear?.year2 || ''}
+              onChange={(e) => setLocalData({ 
+                ...localData, 
+                revenueByYear: { ...localData.revenueByYear, year2: e.target.value }
+              })}
+              placeholder="0"
+              className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 2}</label>
+            <input
+              type="text"
+              value={localData.revenueByYear?.year3 || ''}
+              onChange={(e) => setLocalData({ 
+                ...localData, 
+                revenueByYear: { ...localData.revenueByYear, year3: e.target.value }
+              })}
+              placeholder="0"
+              className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
+            />
+          </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Resultat senaste 3 åren (MSEK)
-          </label>
-          <input
-            type="text"
-            value={localData.profit3Years}
-            onChange={(e) => setLocalData({ ...localData, profit3Years: e.target.value })}
-            placeholder="t.ex. 2021: 1.5, 2022: 2.0, 2023: 2.8"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3C58] focus:border-transparent text-sm"
-          />
+      </div>
+
+      {/* Profit by year */}
+      <div>
+        <label className="block text-xs uppercase tracking-wider text-gray-500 mb-3 font-medium">
+          Resultat senaste 3 åren (MSEK)
+        </label>
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear()}</label>
+            <input
+              type="text"
+              value={localData.profitByYear?.year1 || ''}
+              onChange={(e) => setLocalData({ 
+                ...localData, 
+                profitByYear: { ...localData.profitByYear, year1: e.target.value }
+              })}
+              placeholder="0"
+              className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 1}</label>
+            <input
+              type="text"
+              value={localData.profitByYear?.year2 || ''}
+              onChange={(e) => setLocalData({ 
+                ...localData, 
+                profitByYear: { ...localData.profitByYear, year2: e.target.value }
+              })}
+              placeholder="0"
+              className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">{new Date().getFullYear() - 2}</label>
+            <input
+              type="text"
+              value={localData.profitByYear?.year3 || ''}
+              onChange={(e) => setLocalData({ 
+                ...localData, 
+                profitByYear: { ...localData.profitByYear, year3: e.target.value }
+              })}
+              placeholder="0"
+              className="w-full px-3 py-2.5 border-b border-gray-200 focus:border-gray-900 focus:outline-none text-sm bg-transparent transition-colors"
+            />
+          </div>
         </div>
       </div>
 
