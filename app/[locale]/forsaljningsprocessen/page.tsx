@@ -1,8 +1,49 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
+import dynamic from 'next/dynamic'
+import SalesProcessDataModal, { 
+  CompanyData, 
+  initialCompanyData 
+} from '@/components/SalesProcessDataModal'
+
+// Dynamically import PDF components to avoid SSR issues
+const PDFDownloadLink = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
+  { ssr: false, loading: () => <span>Förbereder PDF...</span> }
+)
+
+const SalesProcessReportPDF = dynamic(
+  () => import('@/components/SalesProcessReportPDF'),
+  { ssr: false }
+)
+
+type ModalCategory = 'financialDocs' | 'businessRelations' | 'keyPerson' | 'balanceSheet' | 'legalDocs'
+
+interface AnalysisResult {
+  executiveSummary: string
+  companyOverview: string
+  financialAnalysis: string
+  businessRelationsAnalysis: string
+  keyPersonAnalysis: string
+  balanceSheetAnalysis: string
+  legalAnalysis: string
+  riskAssessment: {
+    overall: 'low' | 'medium' | 'high'
+    financialRisk: number
+    operationalRisk: number
+    keyPersonRisk: number
+    customerRisk: number
+    legalRisk: number
+  }
+  recommendations: string[]
+  nextSteps: string[]
+  strengths: string[]
+  weaknesses: string[]
+  valuationFactors: string
+}
 
 // Type definitions
 interface TipContent {
@@ -1041,6 +1082,64 @@ const steps: Step[] = [
         chart: { data: [100, 80, 50, 30, 15, 5], label: 'Säljarens engagemang över tid (% timmar per månad)' }
       }
     ]
+  },
+  {
+    id: 8,
+    title: 'Komplett Analys',
+    subtitle: 'Generera din professionella rapport',
+    duration: 'Några minuter',
+    fact: 'En väl förberedd försäljningsdokumentation kan öka försäljningspriset med 15-25%.',
+    items: [
+      {
+        title: 'Sammanställ all information',
+        summary: 'AI-driven analys av allt du har fyllt i under processens gång.',
+        expanded: 'Baserat på all information du har angett i de tidigare stegen skapar vi en omfattande analys av ditt företag ur en köpares perspektiv.\n\nAnalysen inkluderar en riskbedömning, styrkor och svagheter, samt konkreta rekommendationer för att maximera värdet vid försäljning.\n\nRapporten är ett professionellt dokument du kan använda som underlag i samtal med potentiella köpare eller M&A-rådgivare.',
+        stats: [
+          { value: '12', label: 'Sidor i rapporten' },
+          { value: '5', label: 'Riskområden analyserade' },
+          { value: 'AI', label: 'Driven analys' }
+        ]
+      },
+      {
+        title: 'Riskbedömning',
+        summary: 'Identifiering av finansiella, operationella och juridiska risker.',
+        expanded: 'Vi analyserar fem huvudsakliga riskområden: finansiell risk, operationell risk, nyckelpersonrisk, kundrisk och juridisk risk.\n\nVarje område bedöms på en skala och du får en övergripande riskprofil som hjälper dig förstå hur en köpare kommer att se på ditt företag.\n\nRiskbedömningen baseras på branschstandarder och M&A-praxis.',
+        rings: [
+          { percent: 100, label: 'Finansiell' },
+          { percent: 100, label: 'Operationell' },
+          { percent: 100, label: 'Juridisk' }
+        ]
+      },
+      {
+        title: 'Styrkor & svagheter',
+        summary: 'SWOT-inspirerad analys av ditt företags position.',
+        expanded: 'Vi identifierar de faktorer som gör ditt företag attraktivt för köpare och de områden som kan påverka värderingen negativt.\n\nGenomen att förstå dessa kan du fokusera dina förberedelser på rätt saker och presentera företaget på bästa sätt.\n\nAnalysen är baserad på den specifika information du har angett - inte generiska mallar.',
+        stats: [
+          { value: '5+', label: 'Styrkor identifierade' },
+          { value: '4+', label: 'Förbättringsområden' }
+        ]
+      },
+      {
+        title: 'Rekommendationer',
+        summary: 'Konkreta åtgärder för att maximera värdet.',
+        expanded: 'Baserat på analysen ger vi dig prioriterade rekommendationer för vad du bör fokusera på innan du går ut i en försäljningsprocess.\n\nVarje rekommendation är konkret och baserad på din specifika situation.\n\nVi inkluderar också nästa steg i försäljningsprocessen för att hjälpa dig framåt.',
+        timeline: [
+          { label: 'Prioriterade åtgärder', duration: '1-3 mån' },
+          { label: 'Förberedande dokumentation', duration: '2-4 mån' },
+          { label: 'Redo för marknaden', duration: '3-6 mån' }
+        ]
+      },
+      {
+        title: 'Ladda ner PDF-rapport',
+        summary: 'En professionell 12-sidig rapport att spara och dela.',
+        expanded: 'Din kompletta analys sammanställs i en snygg PDF-rapport med BOLAXO:s professionella design.\n\nRapporten innehåller alla analyser, diagram, checklistor och rekommendationer.\n\nDetta är ett konfidentiellt dokument som du kan dela med rådgivare, styrelse eller potentiella köpare efter eget val.',
+        stats: [
+          { value: 'PDF', label: 'Format' },
+          { value: '12', label: 'Sidor' },
+          { value: '∞', label: 'Spara för alltid' }
+        ]
+      }
+    ]
   }
 ]
 
@@ -1050,10 +1149,192 @@ export default function ForsaljningsprocessenPage() {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({})
   const [showSources, setShowSources] = useState(false)
   const [selectedTip, setSelectedTip] = useState<string | null>(null)
+  
+  // Company data state
+  const [companyData, setCompanyData] = useState<CompanyData>(initialCompanyData)
+  const [urlInput, setUrlInput] = useState('')
+  const [isScrapingUrl, setIsScrapingUrl] = useState(false)
+  const [scrapeError, setScrapeError] = useState<string | null>(null)
+  const [scrapeSuccess, setScrapeSuccess] = useState(false)
+  
+  // Modal state
+  const [activeModal, setActiveModal] = useState<ModalCategory | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
+  
+  // Complete analysis state
+  const [completeAnalysis, setCompleteAnalysis] = useState<AnalysisResult | null>(null)
+  const [isGeneratingAnalysis, setIsGeneratingAnalysis] = useState(false)
+  const [analysisError, setAnalysisError] = useState<string | null>(null)
+  const [showPdfReady, setShowPdfReady] = useState(false)
+
+  // Scrape URL function
+  const handleScrapeUrl = async () => {
+    if (!urlInput.trim()) return
+    
+    setIsScrapingUrl(true)
+    setScrapeError(null)
+    setScrapeSuccess(false)
+    
+    try {
+      const response = await fetch('/api/scrape-company-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          url: urlInput,
+          companyName: companyData.companyName || undefined
+        })
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Kunde inte skrapa URL')
+      }
+      
+      if (data.success) {
+        setCompanyData(prev => ({
+          ...prev,
+          websiteUrl: urlInput,
+          companyName: data.combined?.companyName || prev.companyName,
+          scrapedData: {
+            title: data.website?.title,
+            description: data.combined?.description,
+            highlights: data.website?.highlights,
+            contact: data.website?.contact
+          }
+        }))
+        setScrapeSuccess(true)
+        setTimeout(() => setScrapeSuccess(false), 3000)
+      } else {
+        setScrapeError('Kunde inte hitta information på den angivna URL:en')
+      }
+    } catch (error) {
+      console.error('Scrape error:', error)
+      setScrapeError(error instanceof Error ? error.message : 'Ett fel uppstod')
+    } finally {
+      setIsScrapingUrl(false)
+    }
+  }
+
+  // Save category data
+  const handleSaveCategory = useCallback((category: ModalCategory, data: any) => {
+    setCompanyData(prev => ({
+      ...prev,
+      [category]: data
+    }))
+  }, [])
+
+  // Generate summary for category
+  const handleGenerateSummary = useCallback(async (category: ModalCategory) => {
+    setIsGenerating(true)
+    
+    try {
+      const response = await fetch('/api/generate-sales-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          category,
+          categoryData: companyData[category],
+          scrapedData: { combined: companyData.scrapedData },
+          companyName: companyData.companyName
+        })
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Kunde inte generera sammanfattning')
+      }
+      
+      setCompanyData(prev => ({
+        ...prev,
+        generatedSummaries: {
+          ...prev.generatedSummaries,
+          [category]: data.summary
+        }
+      }))
+      
+      setActiveModal(null)
+    } catch (error) {
+      console.error('Generate error:', error)
+      alert(error instanceof Error ? error.message : 'Ett fel uppstod')
+    } finally {
+      setIsGenerating(false)
+    }
+  }, [companyData])
+
+  // Generate complete analysis for PDF
+  const handleGenerateCompleteAnalysis = useCallback(async () => {
+    setIsGeneratingAnalysis(true)
+    setAnalysisError(null)
+    
+    try {
+      const response = await fetch('/api/generate-complete-analysis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ companyData })
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Kunde inte generera analys')
+      }
+      
+      setCompleteAnalysis(data.analysis)
+      setShowPdfReady(true)
+    } catch (error) {
+      console.error('Complete analysis error:', error)
+      setAnalysisError(error instanceof Error ? error.message : 'Ett fel uppstod')
+    } finally {
+      setIsGeneratingAnalysis(false)
+    }
+  }, [companyData])
+
+  // Check if enough data has been filled in
+  const hasEnoughDataForAnalysis = () => {
+    const summaries = Object.values(companyData.generatedSummaries).filter(Boolean)
+    return summaries.length >= 2 || companyData.scrapedData !== null
+  }
 
   const toggleExpand = (stepId: number, itemIdx: number) => {
     const key = `${stepId}-${itemIdx}`
     setExpandedItems(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  // Map step items to modal categories
+  const getModalCategory = (stepId: number, itemIdx: number): ModalCategory | null => {
+    if (stepId === 1) {
+      // Förberedelse-steget
+      switch (itemIdx) {
+        case 0: return 'financialDocs' // Samla finansiell dokumentation
+        case 1: return 'businessRelations' // Dokumentera affärsrelationer
+        case 2: return 'keyPerson' // Minimera nyckelpersonberoende
+        case 3: return 'balanceSheet' // Städa i balansräkningen
+        case 4: return 'legalDocs' // Ordna juridiska dokument
+        default: return null
+      }
+    }
+    return null
+  }
+
+  const getCategoryStatus = (category: ModalCategory): 'empty' | 'filled' | 'generated' => {
+    if (companyData.generatedSummaries[category]) return 'generated'
+    
+    const data = companyData[category]
+    if (!data) return 'empty'
+    
+    // Check if any meaningful data has been entered
+    const hasData = Object.values(data).some(val => {
+      if (typeof val === 'boolean') return val
+      if (typeof val === 'string') return val.trim().length > 0
+      if (Array.isArray(val)) return val.some((item: any) => 
+        typeof item === 'object' ? Object.values(item).some(v => typeof v === 'string' && v.trim().length > 0) : item
+      )
+      return false
+    })
+    
+    return hasData ? 'filled' : 'empty'
   }
 
   const progress = ((currentStep + 1) / steps.length) * 100
@@ -1079,6 +1360,88 @@ export default function ForsaljningsprocessenPage() {
                 <p className="text-white/70 text-xs sm:text-base">
                   Steg för steg guide till att sälja ditt företag
                 </p>
+              </div>
+
+              {/* URL Input Section */}
+              <div className="px-4 sm:px-10 py-5 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border-b border-[#1F3C58]/10">
+                <div className="flex items-center gap-2 mb-3">
+                  <svg className="w-5 h-5 text-[#1F3C58]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                  <h3 className="font-semibold text-[#1F3C58] text-sm">Börja med ditt företag</h3>
+                </div>
+                <p className="text-xs text-gray-600 mb-3">
+                  Ange din företagshemsida så hämtar vi automatiskt information som hjälper dig fylla i uppgifterna.
+                </p>
+                <div className="flex gap-2">
+                  <div className="flex-1 relative">
+                    <input
+                      type="url"
+                      value={urlInput}
+                      onChange={(e) => setUrlInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleScrapeUrl()}
+                      placeholder="https://mittforetag.se"
+                      className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3C58] focus:border-transparent text-sm pr-10"
+                    />
+                    {scrapeSuccess && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={handleScrapeUrl}
+                    disabled={isScrapingUrl || !urlInput.trim()}
+                    className="px-4 py-2.5 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 whitespace-nowrap"
+                  >
+                    {isScrapingUrl ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                        Hämtar...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Hämta info
+                      </>
+                    )}
+                  </button>
+                </div>
+                {scrapeError && (
+                  <p className="text-xs text-red-500 mt-2">{scrapeError}</p>
+                )}
+                {companyData.scrapedData && (
+                  <div className="mt-3 p-3 bg-white rounded-lg border border-[#1F3C58]/20">
+                    <div className="flex items-center gap-2 text-xs text-green-600 mb-2">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Information hämtad!
+                    </div>
+                    {companyData.scrapedData.title && (
+                      <p className="text-sm font-medium text-gray-800">{companyData.scrapedData.title}</p>
+                    )}
+                    {companyData.scrapedData.description && (
+                      <p className="text-xs text-gray-600 mt-1 line-clamp-2">{companyData.scrapedData.description}</p>
+                    )}
+                    {companyData.scrapedData.highlights && companyData.scrapedData.highlights.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {companyData.scrapedData.highlights.slice(0, 4).map((highlight, idx) => (
+                          <span key={idx} className="px-2 py-0.5 bg-[#1F3C58]/10 text-[#1F3C58] rounded text-[10px]">
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Progress bar */}
@@ -1150,6 +1513,159 @@ export default function ForsaljningsprocessenPage() {
                   </div>
                 </div>
 
+                {/* Special UI for Step 8 - Complete Analysis */}
+                {step.id === 8 && (
+                  <div className="mb-6 p-6 bg-gradient-to-br from-[#1F3C58] to-[#2D5A7B] rounded-xl text-white">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold">Generera din kompletta rapport</h3>
+                        <p className="text-white/70 text-sm">AI-driven analys baserad på all din data</p>
+                      </div>
+                    </div>
+                    
+                    {/* Progress indicator */}
+                    <div className="mb-4 p-4 bg-white/10 rounded-lg">
+                      <p className="text-sm font-medium mb-3">Din framgång i processen:</p>
+                      <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${companyData.scrapedData ? 'bg-green-500' : 'bg-white/30'}`}>
+                            {companyData.scrapedData ? '✓' : '○'}
+                          </span>
+                          <span className={companyData.scrapedData ? 'text-white' : 'text-white/50'}>Webbplats skrapad</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${companyData.generatedSummaries.financialDocs ? 'bg-green-500' : 'bg-white/30'}`}>
+                            {companyData.generatedSummaries.financialDocs ? '✓' : '○'}
+                          </span>
+                          <span className={companyData.generatedSummaries.financialDocs ? 'text-white' : 'text-white/50'}>Finansiell info</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${companyData.generatedSummaries.businessRelations ? 'bg-green-500' : 'bg-white/30'}`}>
+                            {companyData.generatedSummaries.businessRelations ? '✓' : '○'}
+                          </span>
+                          <span className={companyData.generatedSummaries.businessRelations ? 'text-white' : 'text-white/50'}>Affärsrelationer</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${companyData.generatedSummaries.keyPerson ? 'bg-green-500' : 'bg-white/30'}`}>
+                            {companyData.generatedSummaries.keyPerson ? '✓' : '○'}
+                          </span>
+                          <span className={companyData.generatedSummaries.keyPerson ? 'text-white' : 'text-white/50'}>Nyckelpersoner</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${companyData.generatedSummaries.balanceSheet ? 'bg-green-500' : 'bg-white/30'}`}>
+                            {companyData.generatedSummaries.balanceSheet ? '✓' : '○'}
+                          </span>
+                          <span className={companyData.generatedSummaries.balanceSheet ? 'text-white' : 'text-white/50'}>Balansräkning</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs ${companyData.generatedSummaries.legalDocs ? 'bg-green-500' : 'bg-white/30'}`}>
+                            {companyData.generatedSummaries.legalDocs ? '✓' : '○'}
+                          </span>
+                          <span className={companyData.generatedSummaries.legalDocs ? 'text-white' : 'text-white/50'}>Juridik</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {!hasEnoughDataForAnalysis() && (
+                      <div className="mb-4 p-3 bg-amber-500/20 border border-amber-400/30 rounded-lg">
+                        <p className="text-sm text-amber-100">
+                          💡 Tips: Gå tillbaka till steg 1 och fyll i uppgifter för minst 2 kategorier för bästa resultat.
+                        </p>
+                      </div>
+                    )}
+                    
+                    {analysisError && (
+                      <div className="mb-4 p-3 bg-red-500/20 border border-red-400/30 rounded-lg">
+                        <p className="text-sm text-red-100">{analysisError}</p>
+                      </div>
+                    )}
+                    
+                    {!completeAnalysis ? (
+                      <button
+                        onClick={handleGenerateCompleteAnalysis}
+                        disabled={isGeneratingAnalysis}
+                        className="w-full py-4 bg-white text-[#1F3C58] rounded-lg font-bold text-lg hover:bg-gray-100 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                      >
+                        {isGeneratingAnalysis ? (
+                          <>
+                            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            Genererar analys... (kan ta 30-60 sek)
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            Generera komplett analys
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="p-4 bg-green-500/20 border border-green-400/30 rounded-lg">
+                          <div className="flex items-center gap-2 text-green-100 font-medium mb-2">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Analys klar!
+                          </div>
+                          <p className="text-sm text-green-100/80">{completeAnalysis.executiveSummary.slice(0, 200)}...</p>
+                        </div>
+                        
+                        <PDFDownloadLink
+                          document={
+                            <SalesProcessReportPDF
+                              companyData={companyData}
+                              analysis={completeAnalysis}
+                              generatedAt={new Date().toLocaleDateString('sv-SE', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                              })}
+                            />
+                          }
+                          fileName={`Försäljningsanalys-${companyData.companyName || 'Företag'}-${new Date().toISOString().split('T')[0]}.pdf`}
+                          className="w-full py-4 bg-white text-[#1F3C58] rounded-lg font-bold text-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-3"
+                        >
+                          {({ loading }) => (
+                            loading ? (
+                              <>
+                                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                </svg>
+                                Skapar PDF...
+                              </>
+                            ) : (
+                              <>
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Ladda ner PDF-rapport (12 sidor)
+                              </>
+                            )
+                          )}
+                        </PDFDownloadLink>
+                        
+                        <button
+                          onClick={() => setCompleteAnalysis(null)}
+                          className="w-full py-2 text-white/70 hover:text-white text-sm transition-colors"
+                        >
+                          Generera ny analys
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="space-y-2 sm:space-y-3">
                   {step.items.map((item, idx) => {
                     const key = `${step.id}-${idx}`
@@ -1186,6 +1702,71 @@ export default function ForsaljningsprocessenPage() {
                             </svg>
                           </span>
                         </button>
+                        
+                        {/* Fill in data button - ALWAYS VISIBLE for step 1 items */}
+                        {(() => {
+                          const modalCategory = getModalCategory(step.id, idx)
+                          if (!modalCategory) return null
+                          
+                          const status = getCategoryStatus(modalCategory)
+                          const summary = companyData.generatedSummaries[modalCategory]
+                          
+                          return (
+                            <div className="px-3 sm:px-4 pb-3 border-t border-gray-100">
+                              {/* Generated summary display */}
+                              {summary ? (
+                                <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-green-700 text-sm font-medium">
+                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                      </svg>
+                                      Ifyllt & genererat
+                                    </div>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        setActiveModal(modalCategory)
+                                      }}
+                                      className="text-xs text-green-700 hover:text-green-800 underline"
+                                    >
+                                      Redigera
+                                    </button>
+                                  </div>
+                                  <p className="text-xs text-gray-600 mt-2 line-clamp-2">{summary}</p>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    setActiveModal(modalCategory)
+                                  }}
+                                  className={`mt-3 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                                    status === 'filled' 
+                                      ? 'bg-amber-50 border border-amber-300 text-amber-700 hover:bg-amber-100'
+                                      : 'bg-[#1F3C58] text-white hover:bg-[#1F3C58]/90 shadow-sm'
+                                  }`}
+                                >
+                                  {status === 'filled' ? (
+                                    <>
+                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                      </svg>
+                                      Komplettera & generera sammanfattning
+                                    </>
+                                  ) : (
+                                    <>
+                                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                      </svg>
+                                      Fyll i dina uppgifter
+                                    </>
+                                  )}
+                                </button>
+                              )}
+                            </div>
+                          )
+                        })()}
                         
                         {/* Expanded content */}
                         <div 
@@ -1235,19 +1816,19 @@ export default function ForsaljningsprocessenPage() {
                                 </div>
                               )}
                               
-                              {/* Timeline */}
-                              {item.timeline && (
-                                <div className="pl-3 sm:pl-4">
-                                  <Timeline items={item.timeline} />
+{/* Timeline */}
+                                              {item.timeline && (
+                                                <div className="pl-3 sm:pl-4">
+                                                  <Timeline items={item.timeline} />
+                                                </div>
+                                              )}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )
+                                  })}
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
               </div>
 
               {/* Navigation buttons */}
@@ -1358,6 +1939,19 @@ export default function ForsaljningsprocessenPage() {
       {/* Tips Modal */}
       {selectedTip && (
         <TipsModal tipKey={selectedTip} onClose={() => setSelectedTip(null)} />
+      )}
+
+      {/* Company Data Modal */}
+      {activeModal && (
+        <SalesProcessDataModal
+          category={activeModal}
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          data={companyData}
+          onSave={handleSaveCategory}
+          onGenerate={handleGenerateSummary}
+          isGenerating={isGenerating}
+        />
       )}
 
       {/* Sources Modal */}
