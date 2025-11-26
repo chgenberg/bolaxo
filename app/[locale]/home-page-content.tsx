@@ -64,8 +64,8 @@ export default function HomePageContent() {
               Utforska bolag till salu
               <span className="text-xs bg-navy/20 px-2 py-0.5 rounded-full">kommer snart</span>
             </Link>
-          </div>
-          
+            </div>
+            
           {/* Secondary Links */}
           <div className="flex flex-wrap gap-6 justify-center">
             <Link 
@@ -102,7 +102,7 @@ export default function HomePageContent() {
           <div className="text-center mb-16">
             <span className="inline-block text-sm font-bold text-navy/60 uppercase tracking-widest mb-4">
               Våra tjänster
-            </span>
+              </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-navy">
               Allt du behöver för en lyckad affär
             </h2>
@@ -113,9 +113,9 @@ export default function HomePageContent() {
             <Link href={`/${locale}/salja/skapa-annons`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <FileText className="w-7 h-7 group-hover:scale-110 transition-transform" />
+                  <FileText className="w-7 h-7 text-white group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Sälja via annons</h3>
+                <h3 className="text-xl font-bold mb-4 text-white">Sälja via annons</h3>
                 <p className="text-white/80 leading-relaxed">
                   Bolaxo blir annonstorget där du kan paketera och publicera din försäljning.
                 </p>
@@ -130,9 +130,9 @@ export default function HomePageContent() {
             <Link href={`/${locale}/investerarprofil`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Search className="w-7 h-7 group-hover:scale-110 transition-transform" />
+                  <Search className="w-7 h-7 text-white group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Hitta rätt bolag</h3>
+                <h3 className="text-xl font-bold mb-4 text-white">Hitta rätt bolag</h3>
                 <p className="text-white/80 leading-relaxed">
                   Avancerade filter med fler KPI:er än bara omsättning, bransch och lönsamhet.
                 </p>
@@ -140,16 +140,16 @@ export default function HomePageContent() {
                   <span className="text-sm font-medium">Skapa investerarprofil</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
                 </div>
-              </div>
+            </div>
             </Link>
             
             {/* Card 3 */}
             <Link href={`/${locale}/sanitycheck`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <BarChart3 className="w-7 h-7 group-hover:scale-110 transition-transform" />
+                  <BarChart3 className="w-7 h-7 text-white group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Få insikter om ditt bolag</h3>
+                <h3 className="text-xl font-bold mb-4 text-white">Få insikter om ditt bolag</h3>
                 <p className="text-white/80 leading-relaxed">
                   Gratis tempmätning först – djupare analys och värderingsspann mot betalning.
                 </p>
@@ -158,7 +158,7 @@ export default function HomePageContent() {
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
                 </div>
               </div>
-            </Link>
+              </Link>
           </div>
         </div>
       </section>
@@ -212,26 +212,26 @@ export default function HomePageContent() {
             <Link href={`/${locale}/saljarprofil`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Building2 className="w-8 h-8 group-hover:scale-110 transition-transform" />
+                  <Building2 className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Jag vill sälja mitt bolag</h3>
+                <h3 className="text-xl font-bold mb-4 text-white">Jag vill sälja mitt bolag</h3>
                 <p className="text-white/80 leading-relaxed">
                   Skapa din säljarprofil för att nå rätt köpare och mäklare.
                 </p>
                 <div className="mt-8 flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
                   <span className="text-sm font-medium">Skapa säljarprofil</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
-                </div>
-              </div>
+                  </div>
+                  </div>
             </Link>
             
             {/* Köpa */}
             <Link href={`/${locale}/investerarprofil`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Briefcase className="w-8 h-8 group-hover:scale-110 transition-transform" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Jag vill köpa bolag</h3>
+                  <Briefcase className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
+                  </div>
+                <h3 className="text-xl font-bold mb-4 text-white">Jag vill köpa bolag</h3>
                 <p className="text-white/80 leading-relaxed">
                   Skapa din investerarprofil och få matchningar med rätt bolag.
                 </p>
@@ -239,16 +239,16 @@ export default function HomePageContent() {
                   <span className="text-sm font-medium">Skapa investerarprofil</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
                 </div>
-              </div>
+                  </div>
             </Link>
             
             {/* Rådgivare */}
             <Link href={`/${locale}/kontakt`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <UserCheck className="w-8 h-8 group-hover:scale-110 transition-transform" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Jag är rådgivare/mäklare</h3>
+                  <UserCheck className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
+                  </div>
+                <h3 className="text-xl font-bold mb-4 text-white">Jag är rådgivare/mäklare</h3>
                 <p className="text-white/80 leading-relaxed">
                   SME Sales Automation Kit för struktur, scoring och white label-rapporter.
                 </p>
@@ -256,7 +256,7 @@ export default function HomePageContent() {
                   <span className="text-sm font-medium">Kontakta oss</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
                 </div>
-              </div>
+          </div>
             </Link>
           </div>
         </div>
@@ -279,10 +279,10 @@ export default function HomePageContent() {
             <Link href={`/${locale}/sanitycheck`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Zap className="w-7 h-7 group-hover:scale-110 transition-transform" />
+                  <Zap className="w-7 h-7 text-white group-hover:scale-110 transition-transform" />
                 </div>
                 <div className="flex items-center gap-3 mb-4">
-                  <h3 className="text-xl font-bold">Freemium</h3>
+                  <h3 className="text-xl font-bold text-white">Freemium</h3>
                   <span className="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">Gratis</span>
                 </div>
                 <p className="text-white/80 leading-relaxed">
@@ -312,9 +312,9 @@ export default function HomePageContent() {
                   <span className="text-xs bg-emerald-500 text-white px-3 py-1 rounded-full font-semibold">Populär</span>
                 </div>
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Target className="w-7 h-7 group-hover:scale-110 transition-transform" />
+                  <Target className="w-7 h-7 text-white group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Bas</h3>
+                <h3 className="text-xl font-bold mb-4 text-white">Bas</h3>
                 <p className="text-white/80 leading-relaxed">
                   Full sanitycheck, SWOT och indikativt värderingsspann.
                 </p>
@@ -336,16 +336,16 @@ export default function HomePageContent() {
                   <span className="text-sm font-medium">Se priser</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
                 </div>
-              </div>
+                  </div>
             </Link>
             
             {/* Premium */}
             <Link href={`/${locale}/priser`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl animate-pulse-box-navy cursor-pointer">
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Crown className="w-7 h-7 group-hover:scale-110 transition-transform" />
+                  <Crown className="w-7 h-7 text-white group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-xl font-bold mb-4">Premium</h3>
+                <h3 className="text-xl font-bold mb-4 text-white">Premium</h3>
                 <p className="text-white/80 leading-relaxed">
                   Bas + fördjupade mallar, pitchdeck/teaser-stöd och mer guidning.
                 </p>
@@ -367,8 +367,8 @@ export default function HomePageContent() {
                   <span className="text-sm font-medium">Se priser</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
                 </div>
-              </div>
-            </Link>
+                </div>
+              </Link>
           </div>
           
           {/* Disclaimer */}
@@ -392,7 +392,7 @@ export default function HomePageContent() {
               Hur Bolaxo skiljer sig från traditionella företagsmäklare
             </h2>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             {/* Idag */}
             <div className="bg-white border-2 border-gray-200 p-8 rounded-3xl">
@@ -414,7 +414,7 @@ export default function HomePageContent() {
                 <li className="flex items-start gap-4">
                   <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-gray-500 text-sm">2</span>
-                  </div>
+                    </div>
                   <p className="text-gray-600">
                     Mycket manuell insamling, svårt att se helheten.
                   </p>
@@ -464,7 +464,7 @@ export default function HomePageContent() {
                   </p>
                 </li>
               </ul>
-            </div>
+          </div>
           </div>
         </div>
       </section>
@@ -482,7 +482,7 @@ export default function HomePageContent() {
             <p className="text-gray-600 max-w-2xl mx-auto">
               Börja gratis och uppgradera när du är redo. Inga dolda procent på köpeskillingen.
             </p>
-          </div>
+        </div>
           
           <div className="grid md:grid-cols-3 gap-6 mb-10">
             {/* Freemium */}
@@ -571,10 +571,10 @@ export default function HomePageContent() {
                 <div className="flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
                   <span className="text-sm font-medium">Se vad som ingår</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
-                </div>
-              </div>
+                            </div>
+                          </div>
             </Link>
-          </div>
+                  </div>
           
           <div className="text-center">
             <Link
@@ -585,8 +585,8 @@ export default function HomePageContent() {
               Se alla priser & funktioner
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
-          </div>
-        </div>
+                    </div>
+                  </div>
       </section>
 
       {/* KUNSKAPSBANK Section */}
@@ -602,23 +602,23 @@ export default function HomePageContent() {
             <p className="text-gray-600 max-w-2xl mx-auto">
               Checklistor, mallar och guider som hjälper dig genom hela försäljningsprocessen.
             </p>
-          </div>
-          
+                    </div>
+
           <div className="grid md:grid-cols-3 gap-6 mb-10">
             <Link href={`/${locale}/kunskapsbank`} className="group">
               <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-xl hover:border-navy/20 transition-all duration-300 cursor-pointer h-full">
                 <div className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-navy/20 transition-colors">
                   <CheckCircle2 className="w-6 h-6 text-navy group-hover:scale-110 transition-transform" />
-                </div>
+                        </div>
                 <h3 className="font-bold text-navy mb-2">Checklistor</h3>
                 <p className="text-sm text-gray-600">12-månaders förberedelser, DD-checklista och överlämningsplan.</p>
-              </div>
+                      </div>
             </Link>
             <Link href={`/${locale}/kunskapsbank`} className="group">
               <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-xl hover:border-navy/20 transition-all duration-300 cursor-pointer h-full">
                 <div className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-navy/20 transition-colors">
                   <FileText className="w-6 h-6 text-navy group-hover:scale-110 transition-transform" />
-                </div>
+                    </div>
                 <h3 className="font-bold text-navy mb-2">Mallar</h3>
                 <p className="text-sm text-gray-600">Exit-plan, teaser & IM-mallar, NDA-formulär och mer.</p>
               </div>
@@ -627,13 +627,13 @@ export default function HomePageContent() {
               <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-xl hover:border-navy/20 transition-all duration-300 cursor-pointer h-full">
                 <div className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-navy/20 transition-colors">
                   <BookOpen className="w-6 h-6 text-navy group-hover:scale-110 transition-transform" />
-                </div>
+                  </div>
                 <h3 className="font-bold text-navy mb-2">Guider</h3>
                 <p className="text-sm text-gray-600">Värdering, sekretess, skatteplanering och mycket mer.</p>
               </div>
             </Link>
-          </div>
-          
+              </div>
+
           <div className="text-center">
             <Link
               href={`/${locale}/kunskapsbank`}
@@ -643,8 +643,8 @@ export default function HomePageContent() {
               Utforska kunskapsbanken
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
-          </div>
-        </div>
+              </div>
+            </div>
       </section>
 
       {/* Final CTA */}
