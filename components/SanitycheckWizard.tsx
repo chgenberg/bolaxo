@@ -1013,8 +1013,8 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                         : 'bg-white/10 text-white hover:bg-white/20'
                     }`}
                   >
-                    <h4 className="font-bold mb-1">{opt.label}</h4>
-                    <p className={`text-sm mb-2 ${state.upgradeChoice === opt.id ? 'text-navy/70' : 'text-white/60'}`}>
+                    <h4 className={`font-bold mb-1 ${state.upgradeChoice === opt.id ? 'text-navy' : 'text-white'}`}>{opt.label}</h4>
+                    <p className={`text-sm mb-2 ${state.upgradeChoice === opt.id ? 'text-navy/70' : 'text-white/80'}`}>
                       {opt.desc}
                     </p>
                     {opt.price && (
