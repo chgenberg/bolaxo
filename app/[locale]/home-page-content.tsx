@@ -34,9 +34,9 @@ export default function HomePageContent() {
       <section className="pt-32 pb-24 px-4">
         <div className="max-w-5xl mx-auto text-center">
           {/* Main Headline */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-navy leading-tight mb-8">
-            Sälj, köp och sanitychecka företag
-            <span className="block mt-2 text-navy/70">– på ett trovärdigt och transparent sätt.</span>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-navy leading-tight mb-8">
+            Sälj, köp och sanitychecka företag –
+            <span className="block text-navy/70">på ett trovärdigt och transparent sätt.</span>
           </h1>
           
           {/* Intro Text */}
@@ -170,7 +170,7 @@ export default function HomePageContent() {
             <span className="inline-block text-sm font-bold text-white/60 uppercase tracking-widest mb-4">
               Trygghet & kompetens
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-white">
               Bolaxo är en del av AIFM
             </h2>
             <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto">
@@ -434,9 +434,9 @@ export default function HomePageContent() {
             <div className="bg-navy text-white p-8 rounded-3xl animate-pulse-box-navy">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                  <Sparkles className="w-6 h-6" />
+                  <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold">Med Bolaxo</h3>
+                <h3 className="text-xl font-bold text-white">Med Bolaxo</h3>
               </div>
               <ul className="space-y-6">
                 <li className="flex items-start gap-4">
@@ -651,7 +651,7 @@ export default function HomePageContent() {
       <section className="py-24 px-4">
         <div className="max-w-3xl mx-auto">
           <div className="bg-navy text-white p-10 md:p-16 rounded-3xl text-center animate-pulse-box-navy">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-white">
               Redo att komma igång?
             </h2>
             <p className="text-lg text-white/80 mb-10 max-w-xl mx-auto">
