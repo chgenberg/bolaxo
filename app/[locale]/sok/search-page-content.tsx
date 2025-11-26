@@ -172,7 +172,7 @@ export default function SearchPageContent() {
     }
 
     fetchListings()
-    loadSavedFilters()
+    // Removed loadSavedFilters() - start with no filters so all companies are visible
   }, [profileChecked, user?.id])
 
   const applyFilters = () => {
