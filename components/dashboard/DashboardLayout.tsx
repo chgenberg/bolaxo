@@ -37,6 +37,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     if (isSeller(userRole)) {
       return [
         { label: t('menu.overview'), href: `/${locale}/dashboard`, icon: LayoutDashboard },
+        { label: t('menu.sellerProfile'), href: `/${locale}/dashboard/seller-profile`, icon: UserCircle },
         { label: t('menu.myListings'), href: `/${locale}/dashboard/listings`, icon: Building, badge: 3 },
         { label: t('menu.matchedBuyers'), href: `/${locale}/dashboard/matches`, icon: Users, badge: 12 },
         { label: t('menu.ndaRequests'), href: `/${locale}/dashboard/ndas`, icon: Shield, badge: 5 },

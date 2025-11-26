@@ -45,6 +45,7 @@ model User {
   premiumValuations    PremiumValuation[]
   listings             Listing[]
   buyerProfile         BuyerProfile?
+  sellerProfile        SellerProfile?
   savedListings        SavedListing[]
   sentMessages         Message[]         @relation("SentMessages")
   receivedMessages     Message[]         @relation("ReceivedMessages")
@@ -509,6 +510,46 @@ model BuyerProfile {
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
   lastSearchAt          DateTime?
+  
+  @@index([userId])
+  @@index([profileComplete])
+}
+
+model SellerProfile {
+  id                    String    @id @default(cuid())
+  userId                String    @unique
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // ===== STEP 1: Basic Info =====
+  phone                 String?
+  country               String?   @default("Sverige")
+  city                  String?
+  sellerType            String?   // privatperson, holdingbolag, maklare
+  orgId                 String?   // Org number or personal ID
+  website               String?
+  linkedin              String?
+  
+  // ===== STEP 2: Seller Profile & Background =====
+  sellerDescription     String?   @db.Text  // Kort beskrivning av säljaren
+  situationText         String?   @db.Text  // Beskriv bolaget och situationen
+  
+  // ===== STEP 3: Geographic Focus =====
+  regions               String[]  // Array of regions: Stockholm, Göteborg, etc or "Hela Sverige"
+  
+  // ===== STEP 4: Industry & Company Type =====
+  branches              String[]  // Array of industries
+  companyStatus         Int[]     // Array of status IDs (1-8 for sale reasons)
+  
+  // ===== STEP 5: Verification =====
+  verificationMethod    String?   // "magic-link" or "bankid"
+  verifiedAt            DateTime?
+  
+  // Profile completion
+  profileComplete       Boolean   @default(false)
+  
+  // Timestamps
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
   
   @@index([userId])
   @@index([profileComplete])

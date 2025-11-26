@@ -207,17 +207,17 @@ export default function HomePageContent() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {/* Sälja */}
-            <Link href={`/${locale}/salja`} className="group">
+            <Link href={`/${locale}/saljarprofil`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] animate-pulse-box-navy">
                 <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
                   <Building2 className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold mb-4">Jag vill sälja mitt bolag</h3>
                 <p className="text-white/80 leading-relaxed">
-                  Sanitycheck, värderingsspann och hjälp att paketera annonsen.
+                  Skapa din säljarprofil för att nå rätt köpare och mäklare.
                 </p>
                 <div className="mt-8 flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
-                  <span className="text-sm font-medium">Kom igång</span>
+                  <span className="text-sm font-medium">Skapa säljarprofil</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
