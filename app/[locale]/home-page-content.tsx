@@ -31,8 +31,66 @@ export default function HomePageContent() {
   return (
     <main className="bg-gray-100 min-h-screen">
       {/* HERO SECTION */}
-      <section className="pt-32 pb-24 px-4">
-        <div className="max-w-5xl mx-auto text-center">
+      <section className="pt-32 pb-24 px-4 relative overflow-hidden">
+        {/* Animated wave background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Wave layer 1 */}
+          <div 
+            className="absolute w-[200%] h-full opacity-[0.03]"
+            style={{
+              background: 'repeating-linear-gradient(90deg, transparent, transparent 50px, #1e3a5f 50px, #1e3a5f 100px)',
+              animation: 'wave-slide 20s linear infinite',
+              transform: 'skewY(-3deg) translateY(-10%)'
+            }}
+          />
+          {/* Wave layer 2 */}
+          <div 
+            className="absolute w-[200%] h-full opacity-[0.02]"
+            style={{
+              background: 'repeating-linear-gradient(90deg, transparent, transparent 80px, #1e3a5f 80px, #1e3a5f 160px)',
+              animation: 'wave-slide 25s linear infinite reverse',
+              transform: 'skewY(2deg) translateY(10%)'
+            }}
+          />
+          {/* Subtle gradient waves */}
+          <svg className="absolute w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 600">
+            <defs>
+              <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#1e3a5f" stopOpacity="0.03" />
+                <stop offset="50%" stopColor="#1e3a5f" stopOpacity="0.06" />
+                <stop offset="100%" stopColor="#1e3a5f" stopOpacity="0.03" />
+              </linearGradient>
+            </defs>
+            <path 
+              d="M0,100 C320,200 420,0 740,100 C1060,200 1380,0 1440,100 L1440,600 L0,600 Z" 
+              fill="url(#wave-gradient)"
+              style={{ animation: 'wave-motion 8s ease-in-out infinite' }}
+            />
+            <path 
+              d="M0,150 C280,50 520,250 740,150 C960,50 1200,250 1440,150 L1440,600 L0,600 Z" 
+              fill="url(#wave-gradient)"
+              style={{ animation: 'wave-motion 10s ease-in-out infinite reverse' }}
+            />
+          </svg>
+        </div>
+
+        {/* Floating dots animation */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-navy/10 rounded-full"
+              style={{
+                left: `${15 + i * 15}%`,
+                top: `${20 + (i % 3) * 25}%`,
+                animation: `float-dot ${4 + i}s ease-in-out infinite`,
+                animationDelay: `${i * 0.5}s`
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="max-w-5xl mx-auto text-center relative z-10">
           {/* Main Headline */}
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-navy leading-tight mb-8">
             Sälj, köp och sanitychecka företag –
@@ -366,7 +424,7 @@ export default function HomePageContent() {
                 <div className="mt-6 flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
                   <span className="text-sm font-medium">Se priser</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-2" />
-                </div>
+                  </div>
                 </div>
               </Link>
           </div>
@@ -552,8 +610,8 @@ export default function HomePageContent() {
                 <span className="inline-block px-3 py-1 bg-white/20 text-white/90 text-xs font-semibold rounded-full mb-4">
                   Steg 3
                 </span>
-                <h3 className="text-xl font-bold mb-2">Premium</h3>
-                <div className="text-2xl font-bold mb-4">Fast + success fee</div>
+                <h3 className="text-xl font-bold mb-2 text-white">Premium</h3>
+                <div className="text-2xl font-bold mb-4 text-white">Fast + success fee</div>
                 <ul className="space-y-2 text-sm text-white/80 mb-6">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-emerald-400" />
