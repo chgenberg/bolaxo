@@ -339,6 +339,13 @@ interface AnalysisResult {
   strengths: string[]
   weaknesses: string[]
   valuationFactors: string
+  industrySpecific?: {
+    typicalMultiples?: string
+    keyValueDrivers?: string[]
+    commonRisks?: string[]
+    buyerTypes?: string
+    dueDiligenceFocus?: string[]
+  }
 }
 
 interface SalesProcessReportPDFProps {
@@ -415,6 +422,11 @@ export default function SalesProcessReportPDF({
         <Text style={styles.coverSubtitle}>En komplett genomgång av ditt företag</Text>
         <View style={{ marginTop: 30 }}>
           <Text style={styles.coverCompanyName}>{companyName}</Text>
+          {companyData.industry && (
+            <Text style={{ ...styles.coverSubtitle, fontSize: 14, marginBottom: 8, opacity: 0.9 }}>
+              {companyData.industry.label}
+            </Text>
+          )}
           {companyData.orgNumber && (
             <Text style={{ ...styles.coverSubtitle, fontSize: 12 }}>Org.nr: {companyData.orgNumber}</Text>
           )}
@@ -432,6 +444,14 @@ export default function SalesProcessReportPDF({
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Sammanfattning</Text>
+          {companyData.industry && (
+            <View style={{ backgroundColor: '#F0F4F8', padding: 8, borderRadius: 4, marginBottom: 10, flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ backgroundColor: '#1F3C58', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 4 }}>
+                <Text style={{ fontSize: 9, color: '#FFFFFF', fontWeight: 'bold' }}>{companyData.industry.label}</Text>
+              </View>
+              <Text style={{ fontSize: 8, color: '#666666', marginLeft: 8 }}>Branschspecifik analys</Text>
+            </View>
+          )}
           <View style={styles.executiveBox}>
             <Text style={styles.executiveTitle}>Övergripande bedömning</Text>
             <Text style={styles.executiveText}>{analysis.executiveSummary}</Text>
@@ -771,11 +791,86 @@ export default function SalesProcessReportPDF({
         </View>
       </Page>
 
-      {/* Page 7: Recommendations + Next Steps */}
+      {/* Page 7: Industry Specific (if available) */}
+      {analysis.industrySpecific && companyData.industry && (
+        <Page size="A4" style={styles.page}>
+          <View style={styles.header}>
+            <Text style={styles.headerLogo}>BOLAXO</Text>
+            <Text style={styles.headerPageNum}>{companyName} | Sida 7</Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Branschspecifik Analys: {companyData.industry.label}</Text>
+            
+            {analysis.industrySpecific.typicalMultiples && (
+              <View style={styles.highlightBox}>
+                <Text style={styles.boldText}>Typiska värderingsmultiplar</Text>
+                <Text style={styles.text}>{analysis.industrySpecific.typicalMultiples}</Text>
+              </View>
+            )}
+
+            {analysis.industrySpecific.buyerTypes && (
+              <View style={{ marginTop: 10 }}>
+                <Text style={styles.subsectionTitle}>Typiska köpare</Text>
+                <Text style={styles.text}>{analysis.industrySpecific.buyerTypes}</Text>
+              </View>
+            )}
+
+            <View style={styles.twoColumn}>
+              <View style={styles.column}>
+                {analysis.industrySpecific.keyValueDrivers && analysis.industrySpecific.keyValueDrivers.length > 0 && (
+                  <>
+                    <Text style={styles.subsectionTitle}>Branschens värdedrivare</Text>
+                    <View style={styles.successBox}>
+                      {analysis.industrySpecific.keyValueDrivers.map((driver, idx) => (
+                        <Text key={idx} style={{ fontSize: 8, color: '#047857', marginTop: 2 }}>✓ {driver}</Text>
+                      ))}
+                    </View>
+                  </>
+                )}
+              </View>
+              <View style={styles.column}>
+                {analysis.industrySpecific.commonRisks && analysis.industrySpecific.commonRisks.length > 0 && (
+                  <>
+                    <Text style={styles.subsectionTitle}>Branschspecifika risker</Text>
+                    <View style={styles.warningBox}>
+                      {analysis.industrySpecific.commonRisks.map((risk, idx) => (
+                        <Text key={idx} style={{ fontSize: 8, color: '#92400E', marginTop: 2 }}>! {risk}</Text>
+                      ))}
+                    </View>
+                  </>
+                )}
+              </View>
+            </View>
+
+            {analysis.industrySpecific.dueDiligenceFocus && analysis.industrySpecific.dueDiligenceFocus.length > 0 && (
+              <View style={{ marginTop: 10 }}>
+                <Text style={styles.subsectionTitle}>Due Diligence-fokus för branschen</Text>
+                <View style={styles.highlightBox}>
+                  {analysis.industrySpecific.dueDiligenceFocus.map((focus, idx) => (
+                    <View key={idx} style={{ flexDirection: 'row', marginBottom: 4 }}>
+                      <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#1F3C58', alignItems: 'center', justifyContent: 'center', marginRight: 8 }}>
+                        <Text style={{ fontSize: 9, color: '#FFF', fontWeight: 'bold' }}>{idx + 1}</Text>
+                      </View>
+                      <Text style={{ ...styles.text, flex: 1, marginTop: 2 }}>{focus}</Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+
+          <View style={styles.footer}>
+            <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument</Text>
+          </View>
+        </Page>
+      )}
+
+      {/* Page 8: Recommendations + Next Steps */}
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>BOLAXO</Text>
-          <Text style={styles.headerPageNum}>{companyName} | Sida 7</Text>
+          <Text style={styles.headerPageNum}>{companyName} | Sida {analysis.industrySpecific && companyData.industry ? 8 : 7}</Text>
         </View>
 
         <View style={styles.section}>

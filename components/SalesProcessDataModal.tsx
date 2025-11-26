@@ -152,6 +152,10 @@ export interface CompanyData {
   websiteUrl: string
   companyName: string
   orgNumber: string
+  industry?: {
+    id: string
+    label: string
+  }
   scrapedData: {
     title?: string
     description?: string
@@ -179,6 +183,7 @@ export const initialCompanyData: CompanyData = {
   websiteUrl: '',
   companyName: '',
   orgNumber: '',
+  industry: undefined,
   scrapedData: null,
   financialDocs: {
     revenue3Years: '',

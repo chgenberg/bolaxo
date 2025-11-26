@@ -1166,6 +1166,14 @@ export default function ForsaljningsprocessenPage() {
   const handleIndustrySelect = (industry: IndustryOption) => {
     setSelectedIndustry(industry)
     setShowIndustrySelector(false)
+    // Also update companyData with industry
+    setCompanyData(prev => ({
+      ...prev,
+      industry: {
+        id: industry.id,
+        label: industry.label
+      }
+    }))
   }
   
   useEffect(() => {

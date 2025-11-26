@@ -23,6 +23,10 @@ export async function POST(request: Request) {
           role: 'system',
           content: `Du är en senior svensk M&A-rådgivare med 20+ års erfarenhet av att hjälpa företagsägare att förbereda och genomföra företagsförsäljningar.
 
+${companyData.industry ? `Du är SPECIALIST på försäljning av företag inom branschen "${companyData.industry.label}". 
+Du förstår de specifika värdedrivare, risker och branschmultiplar som gäller för denna bransch.
+Anpassa ALL din analys och alla rekommendationer till branschens särdrag.` : ''}
+
 Din uppgift är att skapa en omfattande, professionell analys som kan användas som underlag för en företagsförsäljning. Rapporten ska vara:
 
 1. KONKRET - Baserad på den specifika information som tillhandahållits
@@ -30,6 +34,7 @@ Din uppgift är att skapa en omfattande, professionell analys som kan användas 
 3. ÄRLIG - Identifiera både styrkor och svagheter ärligt
 4. HANDLINGSORIENTERAD - Ge konkreta rekommendationer
 5. UTFÖRLIG - Varje sektion ska vara välskriven och informativ
+${companyData.industry ? `6. BRANSCHSPECIFIK - Anpassad till branschen ${companyData.industry.label}` : ''}
 
 Skriv alltid på flytande svenska. Använd professionellt affärsspråk men undvik onödig jargong.`
         },
@@ -71,13 +76,21 @@ Skriv alltid på flytande svenska. Använd professionellt affärsspråk men undv
 
 function buildAnalysisPrompt(companyData: any): string {
   const companyName = companyData.companyName || companyData.scrapedData?.title || 'Företaget'
+  const industryInfo = companyData.industry 
+    ? `
+BRANSCH: ${companyData.industry.label}
+BRANSCH-ID: ${companyData.industry.id}
+
+OBS: Anpassa hela analysen till denna specifika bransch. Använd relevanta branschmultiplar, 
+identifiera branschspecifika risker och värdedrivare, och ge branschanpassade rekommendationer.`
+    : ''
   
   return `Skapa en omfattande försäljningsförberedande analys för följande företag.
 
 === FÖRETAGSINFORMATION ===
 Företagsnamn: ${companyName}
 Webbplats: ${companyData.websiteUrl || 'Ej angiven'}
-Organisationsnummer: ${companyData.orgNumber || 'Ej angivet'}
+Organisationsnummer: ${companyData.orgNumber || 'Ej angivet'}${industryInfo}
 
 ${companyData.scrapedData ? `
 FRÅN WEBBSKRAPNING:
@@ -200,7 +213,15 @@ Returnera följande JSON-struktur:
     "Nästa steg 5"
   ],
   
-  "valuationFactors": "En sammanfattning på 4-6 meningar om faktorer som påverkar företagets värdering positivt och negativt baserat på analysen."
+  "valuationFactors": "En sammanfattning på 4-6 meningar om faktorer som påverkar företagets värdering positivt och negativt baserat på analysen.",
+  
+  "industrySpecific": {
+    "typicalMultiples": "Typiska värderingsmultiplar för branschen (t.ex. 3-5x EBITDA, 1x omsättning)",
+    "keyValueDrivers": ["Branschspecifik värdedrivare 1", "Värdedrivare 2", "Värdedrivare 3"],
+    "commonRisks": ["Branschspecifik risk 1", "Risk 2", "Risk 3"],
+    "buyerTypes": "Vilka typer av köpare som typiskt är intresserade av denna typ av bolag",
+    "dueDiligenceFocus": ["DD-fokusområde 1 för branschen", "Fokusområde 2", "Fokusområde 3"]
+  }
 }`
 }
 
