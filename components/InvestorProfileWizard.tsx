@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { 
   ArrowRight, 
   ArrowLeft,
@@ -19,11 +19,12 @@ import {
   Handshake,
   Shield,
   Sparkles,
-  Check
+  Check,
+  Loader2
 } from 'lucide-react'
 
 // Types
-interface WizardState {
+export interface WizardState {
   // Step 1 - Grunduppgifter
   name: string
   email: string
@@ -187,11 +188,126 @@ function isStepComplete(state: WizardState, stepId: number): boolean {
 interface InvestorProfileWizardProps {
   isDemo?: boolean
   onComplete?: (data: WizardState) => void
+  initialData?: Partial<WizardState>
+  userEmail?: string
+  userName?: string
 }
 
-export default function InvestorProfileWizard({ isDemo = false, onComplete }: InvestorProfileWizardProps) {
-  const [state, setState] = useState<WizardState>(initialState)
+// Helper to convert DB profile to wizard state
+function profileToWizardState(profile: any, user?: any): Partial<WizardState> {
+  if (!profile) return {}
+  
+  return {
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: profile.phone || '',
+    country: profile.country || 'Sverige',
+    city: profile.city || '',
+    buyerType: profile.buyerType || '',
+    orgNo: profile.orgNo || '',
+    website: profile.website || '',
+    linkedin: profile.linkedin || '',
+    investorDescription: profile.investorDescription || '',
+    targetTypeText: profile.targetTypeText || '',
+    regions: profile.preferredRegions || [],
+    branches: profile.preferredIndustries || [],
+    companyStatus: profile.companyStatus || [],
+    turnoverMin: profile.revenueMin ? String(profile.revenueMin / 1000000) : '',
+    turnoverMax: profile.revenueMax ? String(profile.revenueMax / 1000000) : '',
+    ebitdaMin: profile.ebitdaMin ? String(profile.ebitdaMin / 1000000) : '',
+    ebitdaMax: profile.ebitdaMax ? String(profile.ebitdaMax / 1000000) : '',
+    employeesMin: profile.employeeCountMin ? String(profile.employeeCountMin) : '',
+    employeesMax: profile.employeeCountMax ? String(profile.employeeCountMax) : '',
+    priceMin: profile.priceMin ? String(profile.priceMin / 1000000) : '',
+    priceMax: profile.priceMax ? String(profile.priceMax / 1000000) : '',
+    investMin: profile.investMin ? String(profile.investMin) : '',
+    investMax: profile.investMax ? String(profile.investMax) : '',
+    profitabilityLevels: profile.profitabilityLevels || [],
+    ownership: profile.ownership || [],
+    situations: profile.situations || [],
+    ownerStay: profile.ownerStay || '',
+    earnOut: profile.earnOut || '',
+    takeOverLoans: profile.takeOverLoans || '',
+    verificationMethod: profile.verificationMethod || ''
+  }
+}
+
+export default function InvestorProfileWizard({ 
+  isDemo = false, 
+  onComplete,
+  initialData,
+  userEmail,
+  userName
+}: InvestorProfileWizardProps) {
+  const [state, setState] = useState<WizardState>({
+    ...initialState,
+    email: userEmail || '',
+    name: userName || '',
+    ...initialData
+  })
   const [activeStep, setActiveStep] = useState(1)
+  const [isLoading, setIsLoading] = useState(!isDemo)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState<string | null>(null)
+
+  // Load existing profile data
+  useEffect(() => {
+    if (isDemo) return
+    
+    async function loadProfile() {
+      try {
+        const res = await fetch('/api/investor-profile')
+        if (res.ok) {
+          const data = await res.json()
+          if (data.profile || data.user) {
+            const loadedState = profileToWizardState(data.profile, data.user)
+            setState(prev => ({ ...prev, ...loadedState }))
+            // Set active step based on completed steps
+            if (data.profile?.completedSteps) {
+              setActiveStep(Math.min(data.profile.completedSteps + 1, 8))
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    loadProfile()
+  }, [isDemo])
+
+  // Save profile to API
+  const saveProfile = useCallback(async (showMessage = true) => {
+    if (isDemo) return
+    
+    setIsSaving(true)
+    try {
+      const res = await fetch('/api/investor-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...state,
+          completedSteps: activeStep,
+          profileComplete: activeStep === 8 && isStepComplete(state, 8)
+        })
+      })
+      
+      if (res.ok && showMessage) {
+        setSaveMessage('Profil sparad!')
+        setTimeout(() => setSaveMessage(null), 3000)
+      }
+    } catch (error) {
+      console.error('Error saving profile:', error)
+      if (showMessage) {
+        setSaveMessage('Fel vid sparning')
+        setTimeout(() => setSaveMessage(null), 3000)
+      }
+    } finally {
+      setIsSaving(false)
+    }
+  }, [state, activeStep, isDemo])
 
   const completionMap = useMemo(() => {
     const map: Record<number, boolean> = {}
@@ -220,8 +336,13 @@ export default function InvestorProfileWizard({ isDemo = false, onComplete }: In
     })
   }
 
-  const goNext = () => {
+  const goNext = async () => {
+    // Save current step before moving
+    await saveProfile(false)
+    
     if (activeStep === stepMeta.length) {
+      // Final save with completion flag
+      await saveProfile(true)
       if (onComplete) {
         onComplete(state)
       }
@@ -230,8 +351,22 @@ export default function InvestorProfileWizard({ isDemo = false, onComplete }: In
     }
   }
 
-  const goPrev = () => {
+  const goPrev = async () => {
+    // Save current step before moving
+    await saveProfile(false)
     setActiveStep(s => Math.max(1, s - 1))
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-navy mx-auto mb-4" />
+          <p className="text-gray-600">Laddar din investerarprofil...</p>
+        </div>
+      </div>
+    )
   }
 
   const renderStepContent = () => {
@@ -785,8 +920,21 @@ export default function InvestorProfileWizard({ isDemo = false, onComplete }: In
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="font-bold text-navy tracking-wider">BOLAXO</div>
-          <div className="text-sm text-gray-500">
-            Investerarprofil · {completedCount} av {stepMeta.length} steg klara
+          <div className="flex items-center gap-4">
+            {saveMessage && (
+              <span className={`text-sm font-medium ${saveMessage.includes('Fel') ? 'text-red-600' : 'text-emerald-600'}`}>
+                {saveMessage}
+              </span>
+            )}
+            {isSaving && (
+              <span className="flex items-center gap-2 text-sm text-gray-500">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Sparar...
+              </span>
+            )}
+            <div className="text-sm text-gray-500">
+              Investerarprofil · {completedCount} av {stepMeta.length} steg klara
+            </div>
           </div>
         </div>
       </div>

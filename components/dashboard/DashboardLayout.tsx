@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { 
   LayoutDashboard, Building, FileText, MessageSquare, BarChart3, 
   Settings, Users, TrendingUp, Shield, Calendar, FolderOpen,
-  LogOut, ChevronLeft, Bell, Search, Plus, Menu, X
+  LogOut, ChevronLeft, Bell, Search, Plus, Menu, X, UserCircle
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTranslations, useLocale } from 'next-intl'
@@ -50,6 +50,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     } else if (isBuyer(userRole)) {
       return [
         { label: t('menu.overview'), href: `/${locale}/dashboard`, icon: LayoutDashboard },
+        { label: t('menu.investorProfile'), href: `/${locale}/dashboard/investor-profile`, icon: UserCircle },
         { label: t('menu.searchProfile'), href: `/${locale}/dashboard/search-profile`, icon: Search },
         { label: t('menu.savedItems'), href: `/${locale}/dashboard/saved`, icon: Building, badge: 12 },
         { label: t('menu.ndaStatus'), href: `/${locale}/dashboard/nda-status`, icon: Shield, badge: 4 },

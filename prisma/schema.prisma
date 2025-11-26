@@ -437,39 +437,62 @@ model BuyerProfile {
   userId                String    @unique
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  // Region preferences
+  // ===== STEP 1: Basic Info =====
+  phone                 String?
+  country               String?   @default("Sverige")
+  city                  String?
+  buyerType             String?   // privatperson, ab, investeringsbolag, pe-fond, industriell
+  orgNo                 String?
+  website               String?
+  linkedin              String?
+  
+  // ===== STEP 2: Investor Profile =====
+  investorDescription   String?   @db.Text  // Kort beskrivning av investeraren
+  targetTypeText        String?   @db.Text  // Vilken typ av bolag letar du efter
+  
+  // ===== STEP 3: Geographic Focus =====
   preferredRegions      String[]  // Array of regions: Stockholm, Göteborg, etc or "Hela Sverige"
   
-  // Industry preferences  
+  // ===== STEP 4: Industry & Company Type =====
   preferredIndustries   String[]  // Array of industries including custom ones
+  companyStatus         Int[]     // Array of status IDs (1-8 from wizard)
   
-  // Financial criteria
-  revenueMin            Int?      // Min omsättning i SEK
+  // ===== STEP 5: Size & KPIs =====
+  revenueMin            Int?      // Min omsättning i SEK (MSEK * 1000000)
   revenueMax            Int?      // Max omsättning i SEK
   ebitdaMin             Int?      // Min EBITDA i SEK
   ebitdaMax             Int?      // Max EBITDA i SEK
-  priceMin              Int?      // Min pris i SEK
+  employeeCountMin      Int?      // Min antal anställda
+  employeeCountMax      Int?      // Max antal anställda
+  priceMin              Int?      // Min pris i SEK (enterprise value)
   priceMax              Int?      // Max pris i SEK
+  investMin             Int?      // Min investering i SEK
+  investMax             Int?      // Max investering i SEK
+  profitabilityLevels   String[]  // Array: "Lönsamt bolag", "Svagt lönsamt", "Förlustbolag"
   
-  // Investment type
+  // ===== STEP 6: Ownership & Role =====
+  ownership             String[]  // Array: "100 % (helägare)", "Majoritet (50–99 %)"
+  
+  // ===== STEP 7: Deal Preferences =====
+  situations            String[]  // Array: "Generationsskifte", "Tillväxtkapital", etc
+  ownerStay             String?   // "Gärna kvar operativt", "Gärna kvar i styrelse", "Helst lämnar"
+  earnOut               String?   // "Ja" or "Nej"
+  takeOverLoans         String?   // "Ja" or "Nej"
+  
+  // ===== STEP 8: Verification =====
+  verificationMethod    String?   // "magic-link" or "bankid"
+  verifiedAt            DateTime?
+  
+  // ===== Legacy fields (keep for backwards compatibility) =====
   investmentType        String?   // full_acquisition, partnership, equity_stake, turnaround
   profitabilityPreference String? // profitable, turnaround, either
-  
-  // Buyer information
-  buyerType             String?   // individual, company, private_equity, strategic
   investmentExperience  String?   // first_time, experienced, professional
   financingReady        Boolean   @default(false)
   timeframe             String?   // immediate, 3_months, 6_months, 12_months
-  
-  // Additional preferences
-  employeeCountMin      Int?      // Min antal anställda
-  employeeCountMax      Int?      // Max antal anställda
-  preferredEmployeeRanges String[] // Array of preferred employee ranges: ['1-5', '6-10', etc]
-  preferredWhySelling   String[]  // Array of preferred reasons for sale: ['pension', 'fokus', etc]
+  preferredEmployeeRanges String[] // Array of preferred employee ranges
+  preferredWhySelling   String[]  // Array of preferred reasons for sale
   companyAgeMin         Int?      // Min företagsålder i år
   ownerInvolvement      String?   // active, passive, either
-  
-  // Free text preferences
   additionalCriteria    String?   // Fri text för extra kriterier
   dealBreakers          String?   // Vad är absoluta nej
   
@@ -478,12 +501,17 @@ model BuyerProfile {
   smsAlerts             Boolean   @default(false)
   alertFrequency        String    @default("daily") // instant, daily, weekly
   
+  // Profile completion
+  profileComplete       Boolean   @default(false)
+  completedSteps        Int       @default(0)
+  
   // Timestamps
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
   lastSearchAt          DateTime?
   
   @@index([userId])
+  @@index([profileComplete])
 }
 
 model NDARequest {
