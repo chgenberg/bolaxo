@@ -1869,48 +1869,6 @@ export default function ForsaljningsprocessenPage() {
                 </div>
               </div>
 
-              {/* Step navigation - centered with spacing */}
-              <div className="px-4 sm:px-10 py-4 sm:py-5 border-b border-gray-100">
-                <div className="flex justify-center gap-3 sm:gap-4">
-                  {industrySteps.map((s, idx) => {
-                    const completed = isStepCompleted(idx)
-                    const inProgress = isStepInProgress(idx)
-                    return (
-                      <button
-                        key={s.id}
-                        onClick={() => {
-                          setCurrentStep(idx)
-                          setExpandedItems({})
-                        }}
-                        className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full text-sm sm:text-base font-semibold transition-all flex items-center justify-center ${
-                          idx === currentStep
-                            ? completed 
-                              ? 'bg-green-600 text-white shadow-lg ring-2 ring-green-300'
-                              : inProgress
-                                ? 'bg-amber-500 text-white shadow-lg ring-2 ring-amber-300'
-                                : 'bg-[#1F3C58] text-white shadow-lg'
-                            : completed
-                              ? 'bg-green-500 text-white shadow-md'
-                              : inProgress
-                                ? 'bg-amber-400 text-white shadow-md'
-                                : idx < currentStep
-                                  ? 'bg-[#1F3C58]/20 text-[#1F3C58]'
-                                  : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
-                        }`}
-                      >
-                        {completed ? (
-                          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        ) : (
-                          idx + 1
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-
               {/* Step content - min height for consistency */}
               <div className="px-4 sm:px-10 py-6 sm:py-10 min-h-[500px] sm:min-h-[600px]">
                 <div className="mb-4 sm:mb-6">
