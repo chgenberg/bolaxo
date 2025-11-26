@@ -55,6 +55,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     href: '/om-oss',
     dropdown: [
       { label: t('footer.contact'), href: '/kontakt' },
+      { label: 'Kunskapsbank', href: '/kunskapsbank' },
     ]
   })
 

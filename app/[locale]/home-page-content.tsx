@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { 
   ArrowRight, 
   CheckCircle, 
+  CheckCircle2,
   TrendingUp,
   Shield,
   Target,
@@ -20,7 +21,8 @@ import {
   Crown,
   Clock,
   FileCheck,
-  HandshakeIcon
+  HandshakeIcon,
+  BookOpen
 } from 'lucide-react'
 
 export default function HomePageContent() {
@@ -451,6 +453,58 @@ export default function HomePageContent() {
                 </li>
               </ul>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* KUNSKAPSBANK Section */}
+      <section className="py-24 px-4 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="inline-block text-sm font-bold text-navy/60 uppercase tracking-widest mb-4">
+              RESURSER
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-navy mb-4">
+              Kunskapsbank – guider för hela resan
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Checklistor, mallar och guider som hjälper dig genom hela försäljningsprocessen.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center mb-4">
+                <CheckCircle2 className="w-6 h-6 text-navy" />
+              </div>
+              <h3 className="font-bold text-navy mb-2">Checklistor</h3>
+              <p className="text-sm text-gray-600">12-månaders förberedelser, DD-checklista och överlämningsplan.</p>
+            </div>
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center mb-4">
+                <FileText className="w-6 h-6 text-navy" />
+              </div>
+              <h3 className="font-bold text-navy mb-2">Mallar</h3>
+              <p className="text-sm text-gray-600">Exit-plan, teaser & IM-mallar, NDA-formulär och mer.</p>
+            </div>
+            <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-navy/10 rounded-xl flex items-center justify-center mb-4">
+                <BookOpen className="w-6 h-6 text-navy" />
+              </div>
+              <h3 className="font-bold text-navy mb-2">Guider</h3>
+              <p className="text-sm text-gray-600">Värdering, sekretess, skatteplanering och mycket mer.</p>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <Link
+              href={`/${locale}/kunskapsbank`}
+              className="group inline-flex items-center gap-2 bg-navy text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 hover:bg-navy/90"
+            >
+              <BookOpen className="w-5 h-5" />
+              Utforska kunskapsbanken
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
           </div>
         </div>
       </section>
