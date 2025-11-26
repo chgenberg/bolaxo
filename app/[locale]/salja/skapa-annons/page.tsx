@@ -1,10 +1,10 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import ListingWizard from '@/components/ListingWizard'
+import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 
-export default function SaljaStartPageContent() {
+export default function SkapaAnnonsPage() {
   const router = useRouter()
   const locale = useLocale()
 

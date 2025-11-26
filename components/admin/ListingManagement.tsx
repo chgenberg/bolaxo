@@ -150,6 +150,8 @@ export default function ListingManagement() {
       case 'draft': return 'bg-gray-100 text-gray-800'
       case 'paused': return 'bg-yellow-100 text-yellow-800'
       case 'sold': return 'bg-blue-100 text-blue-800'
+      case 'pending_approval': return 'bg-orange-100 text-orange-800'
+      case 'rejected': return 'bg-red-100 text-red-800'
       default: return 'bg-gray-100 text-gray-800'
     }
   }
@@ -194,10 +196,12 @@ export default function ListingManagement() {
           onChange={(value) => handleFilterChange('status', value)}
           options={[
             { value: '', label: 'Alla status' },
+            { value: 'pending_approval', label: 'Väntar på godkännande' },
             { value: 'active', label: 'Aktiv' },
             { value: 'draft', label: 'Utkast' },
             { value: 'paused', label: 'Pausad' },
-            { value: 'sold', label: 'Såld' }
+            { value: 'sold', label: 'Såld' },
+            { value: 'rejected', label: 'Nekad' }
           ]}
           placeholder="Välj status"
         />
@@ -350,7 +354,25 @@ export default function ListingManagement() {
                     </button>
                     {activeMenu === listing.id && (
                       <div className="absolute right-0 mt-1 bg-white rounded-lg border border-gray-200 shadow-lg z-50 min-w-[180px]">
-                        {listing.status !== 'active' && (
+                        {/* Approve/Reject for pending listings */}
+                        {listing.status === 'pending_approval' && (
+                          <>
+                            <button
+                              onClick={() => handleStatusChange(listing.id, 'active')}
+                              className="w-full text-left px-4 py-2 text-sm text-green-700 hover:bg-green-50 flex items-center gap-2 font-medium"
+                            >
+                              <Check className="w-3 h-3" /> Godkänn annons
+                            </button>
+                            <button
+                              onClick={() => handleStatusChange(listing.id, 'rejected')}
+                              className="w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-red-50 flex items-center gap-2 font-medium"
+                            >
+                              <X className="w-3 h-3" /> Neka annons
+                            </button>
+                            <div className="border-t border-gray-200 my-1" />
+                          </>
+                        )}
+                        {listing.status !== 'active' && listing.status !== 'pending_approval' && (
                           <button
                             onClick={() => handleStatusChange(listing.id, 'active')}
                             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
@@ -358,7 +380,7 @@ export default function ListingManagement() {
                             <Check className="w-3 h-3" /> Aktivera
                           </button>
                         )}
-                        {listing.status !== 'paused' && (
+                        {listing.status !== 'paused' && listing.status !== 'pending_approval' && (
                           <button
                             onClick={() => handleStatusChange(listing.id, 'paused')}
                             className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2"
@@ -366,12 +388,14 @@ export default function ListingManagement() {
                             <Clock className="w-3 h-3" /> Pausa
                           </button>
                         )}
-                        <button
-                          onClick={() => handleStatusChange(listing.id, 'sold')}
-                          className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
-                        >
-                          Mark as Sold
-                        </button>
+                        {listing.status !== 'pending_approval' && (
+                          <button
+                            onClick={() => handleStatusChange(listing.id, 'sold')}
+                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50"
+                          >
+                            Mark as Sold
+                          </button>
+                        )}
                         <div className="border-t border-gray-200 my-1" />
                         <button
                           onClick={() => handleDelete(listing.id)}
