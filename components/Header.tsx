@@ -25,6 +25,17 @@ interface NavItem {
 const getNavigation = (t: (key: string) => string): NavItem[] => {
   const baseNav: NavItem[] = [
     {
+      label: 'Översikt',
+      dropdown: [
+        { label: 'Sanitycheck & Värdering', href: '/sanitycheck' },
+        { label: 'Investerarprofil', href: '/investerarprofil' },
+        { label: 'Säljarprofil', href: '/saljarprofil' },
+        { label: 'Skapa annons', href: '/salja/skapa-annons' },
+        { label: 'Kunskapsbank', href: '/kunskapsbank' },
+        { label: 'Prismodeller', href: '/priser' },
+      ]
+    },
+    {
       label: t('header.forSellers'),
       dropdown: [
         { label: t('footer.freeValuation'), href: '/vardering' },

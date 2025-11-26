@@ -68,7 +68,7 @@ export default function PriserPage() {
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Välj rätt nivå för din företagsförsäljning
-          </h1>
+            </h1>
           <p className="text-xl text-white/80 max-w-2xl">
             Börja gratis med en light-värdering och uppgradera när du är redo att publicera annons,
             matchas mot investerare och få personlig rådgivning.
@@ -109,7 +109,7 @@ export default function PriserPage() {
             ))}
           </div>
         </div>
-      </div>
+                  </div>
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -117,20 +117,20 @@ export default function PriserPage() {
         {activeTab === 'overview' && (
           <div className="space-y-12">
             {/* Pricing Cards */}
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-6 items-stretch">
               {/* Freemium */}
-              <div className="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-shadow">
+              <div className="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-shadow flex flex-col h-full">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full uppercase tracking-wider">
                     Steg 1 · Testa gratis
                   </span>
-                </div>
+                  </div>
                 <h3 className="text-2xl font-bold text-navy mb-2">Freemium</h3>
                 <div className="text-3xl font-bold text-navy mb-4">0 kr</div>
                 <p className="text-gray-600 text-sm mb-6">
                   För dig som vill testa och förstå möjligheterna utan kostnad.
                 </p>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 mb-8 flex-grow">
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <span>Sanity check / light-värdering</span>
@@ -150,14 +150,14 @@ export default function PriserPage() {
                 </ul>
                 <button
                   onClick={() => setActiveTab('freemium')}
-                  className="w-full py-3 px-6 bg-white text-navy font-semibold rounded-full border-2 border-navy/20 hover:border-navy/40 transition-colors"
+                  className="w-full py-3 px-6 bg-white text-navy font-semibold rounded-full border-2 border-navy/20 hover:border-navy/40 transition-colors mt-auto"
                 >
                   Utforska Freemium
-                </button>
+                    </button>
               </div>
 
               {/* Bas */}
-              <div className="bg-white rounded-2xl p-8 border-2 border-emerald-500 hover:shadow-xl transition-shadow relative">
+              <div className="bg-white rounded-2xl p-8 border-2 border-emerald-500 hover:shadow-xl transition-shadow relative flex flex-col h-full">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="px-4 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full uppercase">
                     Rekommenderad
@@ -166,14 +166,14 @@ export default function PriserPage() {
                 <div className="flex items-center gap-2 mb-4">
                   <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full uppercase tracking-wider">
                     Steg 2 · Rekommenderad start
-                  </span>
-                </div>
+                      </span>
+                    </div>
                 <h3 className="text-2xl font-bold text-navy mb-2">Bas</h3>
                 <div className="text-3xl font-bold text-navy mb-4">Fast pris per annons</div>
                 <p className="text-gray-600 text-sm mb-6">
                   För dig som vill göra jobbet själv – med stöd i plattformen.
                 </p>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 mb-8 flex-grow">
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <span>Full annons-wizard & publicering</span>
@@ -193,14 +193,14 @@ export default function PriserPage() {
                 </ul>
                 <button
                   onClick={() => setActiveTab('bas')}
-                  className="w-full py-3 px-6 bg-navy text-white font-semibold rounded-full hover:bg-navy/90 transition-colors"
+                  className="w-full py-3 px-6 bg-navy text-white font-semibold rounded-full hover:bg-navy/90 transition-colors mt-auto"
                 >
                   Se vad som ingår i Bas
                 </button>
               </div>
 
               {/* Premium */}
-              <div className="bg-navy text-white rounded-2xl p-8 hover:shadow-xl transition-shadow">
+              <div className="bg-navy text-white rounded-2xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="px-3 py-1 bg-white/20 text-white/90 text-xs font-semibold rounded-full uppercase tracking-wider">
                     Steg 3 · Mest stöd
@@ -211,7 +211,7 @@ export default function PriserPage() {
                 <p className="text-white/70 text-sm mb-6">
                   För dig som vill ha en rådgivare med i processen.
                 </p>
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 mb-8 flex-grow">
                   <li className="flex items-start gap-2 text-sm text-white/90">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span>Allt i Bas</span>
@@ -231,7 +231,7 @@ export default function PriserPage() {
                 </ul>
                 <button
                   onClick={() => setActiveTab('premium')}
-                  className="w-full py-3 px-6 bg-white text-navy font-semibold rounded-full hover:bg-white/90 transition-colors"
+                  className="w-full py-3 px-6 bg-white text-navy font-semibold rounded-full hover:bg-white/90 transition-colors mt-auto"
                 >
                   Utforska Premium
                 </button>
@@ -484,7 +484,7 @@ export default function PriserPage() {
                 För dig som vill ha en erfaren partner vid din sida genom processen – från första annonsutkast
                 till kvalificering av köpare och struktur på affären.
               </p>
-            </div>
+        </div>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-navy text-white rounded-2xl p-8">
@@ -591,8 +591,8 @@ export default function PriserPage() {
                       {faq.answer}
                     </div>
                   )}
-                </div>
-              ))}
+              </div>
+            ))}
             </div>
           </div>
         )}
