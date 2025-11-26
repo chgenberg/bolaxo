@@ -97,8 +97,8 @@ export default function InvestorProfileDashboardPage() {
         <InvestorProfileWizard 
           isDemo={false} 
           onComplete={handleComplete}
-          userEmail={user?.email}
-          userName={user?.name}
+          userEmail={user?.email ?? undefined}
+          userName={user?.name ?? undefined}
         />
       </div>
     )
