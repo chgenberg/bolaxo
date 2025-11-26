@@ -20,8 +20,129 @@ import {
   Shield,
   Sparkles,
   Check,
-  Loader2
+  Loader2,
+  ChevronDown
 } from 'lucide-react'
+
+// Format number with thousand separators (Swedish format: 1.000.000)
+function formatNumber(value: string): string {
+  const num = value.replace(/\D/g, '')
+  if (!num) return ''
+  return Number(num).toLocaleString('sv-SE')
+}
+
+// Parse formatted number back to raw number string
+function parseFormattedNumber(value: string): string {
+  return value.replace(/\./g, '').replace(/\s/g, '')
+}
+
+// Custom minimalist dropdown component
+function MinimalDropdown({ 
+  value, 
+  onChange, 
+  options, 
+  placeholder,
+  label
+}: { 
+  value: string
+  onChange: (val: string) => void
+  options: { value: string; label: string }[]
+  placeholder: string
+  label?: string 
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const selectedOption = options.find(o => o.value === value)
+
+  return (
+    <div className="relative">
+      {label && <label className="block text-sm font-medium text-white/80 mb-2">{label}</label>}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-left flex items-center justify-between transition-all duration-200 hover:bg-white/15 focus:outline-none focus:border-white/40"
+      >
+        <span className={selectedOption ? 'text-white' : 'text-white/40'}>
+          {selectedOption ? selectedOption.label : placeholder}
+        </span>
+        <ChevronDown className={`w-4 h-4 text-white/60 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      
+      {isOpen && (
+        <>
+          <div 
+            className="fixed inset-0 z-10" 
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute z-20 w-full mt-2 bg-navy border border-white/20 rounded-xl shadow-xl overflow-hidden max-h-60 overflow-y-auto">
+            {options.map(option => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange(option.value)
+                  setIsOpen(false)
+                }}
+                className={`w-full px-4 py-3 text-left transition-colors duration-150 ${
+                  value === option.value 
+                    ? 'bg-white/20 text-white' 
+                    : 'text-white/80 hover:bg-white/10'
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// Formatted number input component
+function FormattedNumberInput({
+  value,
+  onChange,
+  placeholder,
+  suffix
+}: {
+  value: string
+  onChange: (val: string) => void
+  placeholder: string
+  suffix?: string
+}) {
+  const [displayValue, setDisplayValue] = useState(value ? formatNumber(value) : '')
+
+  useEffect(() => {
+    if (value) {
+      setDisplayValue(formatNumber(value))
+    } else {
+      setDisplayValue('')
+    }
+  }, [value])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = parseFormattedNumber(e.target.value)
+    onChange(rawValue)
+    setDisplayValue(formatNumber(rawValue))
+  }
+
+  return (
+    <div className="relative">
+      <input
+        type="text"
+        value={displayValue}
+        onChange={handleChange}
+        placeholder={placeholder}
+        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+      />
+      {suffix && displayValue && (
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 text-sm">
+          {suffix}
+        </span>
+      )}
+    </div>
+  )
+}
 
 // Types
 export interface WizardState {
@@ -421,19 +542,19 @@ export default function InvestorProfileWizard({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Typ av köpare *</label>
-                <select
+                <MinimalDropdown
+                  label="Typ av köpare *"
                   value={state.buyerType}
-                  onChange={e => updateField("buyerType", e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-white/40 transition-colors"
-                >
-                  <option value="" className="text-gray-900">Välj typ</option>
-                  <option value="privatperson" className="text-gray-900">Privatperson</option>
-                  <option value="ab" className="text-gray-900">Aktiebolag</option>
-                  <option value="investeringsbolag" className="text-gray-900">Investeringsbolag / Family office</option>
-                  <option value="pe-fond" className="text-gray-900">Private equity / fond</option>
-                  <option value="industriell" className="text-gray-900">Industriell köpare</option>
-                </select>
+                  onChange={(val) => updateField("buyerType", val)}
+                  options={[
+                    { value: "privatperson", label: "Privatperson" },
+                    { value: "ab", label: "Aktiebolag" },
+                    { value: "investeringsbolag", label: "Investeringsbolag / Family office" },
+                    { value: "pe-fond", label: "Private equity / fond" },
+                    { value: "industriell", label: "Industriell köpare" }
+                  ]}
+                  placeholder="Välj typ"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Organisationsnummer</label>
@@ -602,97 +723,79 @@ export default function InvestorProfileWizard({
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Omsättningsintervall (MSEK) *</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Min"
                     value={state.turnoverMin}
-                    onChange={e => updateField("turnoverMin", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("turnoverMin", val)}
                   />
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Max"
                     value={state.turnoverMax}
-                    onChange={e => updateField("turnoverMax", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("turnoverMax", val)}
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">EBITDA-intervall (MSEK)</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Min"
                     value={state.ebitdaMin}
-                    onChange={e => updateField("ebitdaMin", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("ebitdaMin", val)}
                   />
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Max"
                     value={state.ebitdaMax}
-                    onChange={e => updateField("ebitdaMax", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("ebitdaMax", val)}
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Antal anställda</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Min"
                     value={state.employeesMin}
-                    onChange={e => updateField("employeesMin", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("employeesMin", val)}
                   />
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Max"
                     value={state.employeesMax}
-                    onChange={e => updateField("employeesMax", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("employeesMax", val)}
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Prislapp / Enterprise value (MSEK)</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Min"
                     value={state.priceMin}
-                    onChange={e => updateField("priceMin", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("priceMin", val)}
                   />
-                  <input
-                    type="number"
+                  <FormattedNumberInput
                     placeholder="Max"
                     value={state.priceMax}
-                    onChange={e => updateField("priceMax", e.target.value)}
-                    className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
+                    onChange={(val) => updateField("priceMax", val)}
                   />
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Minsta investering (SEK) *</label>
-                <input
-                  type="number"
+                <FormattedNumberInput
                   value={state.investMin}
-                  onChange={e => updateField("investMin", e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
-                  placeholder="1 000 000"
+                  onChange={(val) => updateField("investMin", val)}
+                  placeholder="1.000.000"
+                  suffix="kr"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Högsta investering (SEK) *</label>
-                <input
-                  type="number"
+                <FormattedNumberInput
                   value={state.investMax}
-                  onChange={e => updateField("investMax", e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40"
-                  placeholder="50 000 000"
+                  onChange={(val) => updateField("investMax", val)}
+                  placeholder="50.000.000"
+                  suffix="kr"
                 />
               </div>
             </div>

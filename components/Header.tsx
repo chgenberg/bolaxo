@@ -30,6 +30,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
         { label: t('footer.freeValuation'), href: '/vardering' },
         { label: t('footer.howItWorks'), href: '/salja' },
         { label: t('footer.startSelling'), href: '/salja/start' },
+        { label: 'Välj rätt nivå', href: '/priser' },
       ]
     },
     {

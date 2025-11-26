@@ -457,6 +457,108 @@ export default function HomePageContent() {
         </div>
       </section>
 
+      {/* PRISMODELLER Section */}
+      <section className="py-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="inline-block text-sm font-bold text-navy/60 uppercase tracking-widest mb-4">
+              PRISMODELLER
+            </span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-navy mb-4">
+              Välj rätt nivå för din företagsförsäljning
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Börja gratis och uppgradera när du är redo. Inga dolda procent på köpeskillingen.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {/* Freemium */}
+            <div className="bg-white p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-shadow">
+              <span className="inline-block px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full mb-4">
+                Steg 1
+              </span>
+              <h3 className="text-xl font-bold text-navy mb-2">Freemium</h3>
+              <div className="text-2xl font-bold text-navy mb-4">0 kr</div>
+              <ul className="space-y-2 text-sm text-gray-600 mb-6">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Light-värdering
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Kunskapsbank
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Spara säljprofil
+                </li>
+              </ul>
+            </div>
+
+            {/* Bas */}
+            <div className="bg-white p-8 rounded-2xl border-2 border-emerald-500 hover:shadow-lg transition-shadow relative">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">
+                Rekommenderad
+              </span>
+              <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full mb-4">
+                Steg 2
+              </span>
+              <h3 className="text-xl font-bold text-navy mb-2">Bas</h3>
+              <div className="text-2xl font-bold text-navy mb-4">Fast pris</div>
+              <ul className="space-y-2 text-sm text-gray-600 mb-6">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Full annons-wizard
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Avancerad matchning
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Datarum & dashboard
+                </li>
+              </ul>
+            </div>
+
+            {/* Premium */}
+            <div className="bg-navy text-white p-8 rounded-2xl hover:shadow-lg transition-shadow">
+              <span className="inline-block px-3 py-1 bg-white/20 text-white/90 text-xs font-semibold rounded-full mb-4">
+                Steg 3
+              </span>
+              <h3 className="text-xl font-bold mb-2">Premium</h3>
+              <div className="text-2xl font-bold mb-4">Fast + success fee</div>
+              <ul className="space-y-2 text-sm text-white/80 mb-6">
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  Allt i Bas
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  Personlig rådgivare
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  Premium-exponering
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <Link
+              href={`/${locale}/priser`}
+              className="group inline-flex items-center gap-2 bg-navy text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 hover:bg-navy/90"
+            >
+              <BarChart3 className="w-5 h-5" />
+              Se alla priser & funktioner
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* KUNSKAPSBANK Section */}
       <section className="py-24 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
