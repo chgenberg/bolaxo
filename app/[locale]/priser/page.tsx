@@ -64,11 +64,11 @@ export default function PriserPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Hero */}
-      <section className="bg-navy text-white py-16">
+      <section className="bg-navy text-white pt-32 pb-16">
         <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
             Välj rätt nivå för din företagsförsäljning
-            </h1>
+          </h1>
           <p className="text-xl text-white/80 max-w-2xl">
             Börja gratis med en light-värdering och uppgradera när du är redo att publicera annons,
             matchas mot investerare och få personlig rådgivning.
