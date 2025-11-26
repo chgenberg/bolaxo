@@ -8,6 +8,7 @@ import SalesProcessDataModal, {
   CompanyData, 
   initialCompanyData 
 } from '@/components/SalesProcessDataModal'
+import IndustrySelectorModal, { INDUSTRIES, IndustryOption } from '@/components/IndustrySelectorModal'
 
 // Dynamically import PDF components to avoid SSR issues
 const PDFDownloadLink = dynamic(
@@ -1157,6 +1158,15 @@ export default function ForsaljningsprocessenPage() {
   const [selectedTip, setSelectedTip] = useState<string | null>(null)
   const [isMounted, setIsMounted] = useState(false)
   
+  // Industry selector state
+  const [showIndustrySelector, setShowIndustrySelector] = useState(true)
+  const [selectedIndustry, setSelectedIndustry] = useState<IndustryOption | null>(null)
+  
+  const handleIndustrySelect = (industry: IndustryOption) => {
+    setSelectedIndustry(industry)
+    setShowIndustrySelector(false)
+  }
+  
   useEffect(() => {
     setIsMounted(true)
   }, [])
@@ -1490,6 +1500,19 @@ export default function ForsaljningsprocessenPage() {
   const progress = ((currentStep + 1) / steps.length) * 100
   const step = steps[currentStep]
 
+  // Show industry selector first
+  if (showIndustrySelector) {
+    return (
+      <div className="min-h-screen bg-gray-100">
+        <HideHeader />
+        <IndustrySelectorModal
+          onSelect={handleIndustrySelect}
+          onClose={() => setShowIndustrySelector(false)}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <HideHeader />
@@ -1511,6 +1534,32 @@ export default function ForsaljningsprocessenPage() {
                   Steg för steg guide till att sälja ditt företag
                 </p>
               </div>
+
+              {/* Selected Industry Badge */}
+              {selectedIndustry && (
+                <div className="px-4 sm:px-10 py-4 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border-b border-[#1F3C58]/10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${selectedIndustry.gradient}`}>
+                        <div className="text-white">
+                          {selectedIndustry.icon}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500 uppercase tracking-wider">Vald bransch</p>
+                        <p className="font-semibold text-[#1F3C58]">{selectedIndustry.label}</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowIndustrySelector(true)}
+                      className="text-sm text-[#1F3C58] hover:text-[#1F3C58]/80 font-medium"
+                    >
+                      Ändra
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* URL Input Section */}
               <div className="px-4 sm:px-10 py-5 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border-b border-[#1F3C58]/10">
