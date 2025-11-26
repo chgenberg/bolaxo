@@ -216,10 +216,10 @@ export default function IndustrySelectorModal({ onSelect, onClose }: IndustrySel
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-gradient-to-br from-slate-50 to-gray-100 rounded-3xl max-w-6xl w-full shadow-2xl my-8 overflow-hidden">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div className="bg-gradient-to-br from-slate-50 to-gray-100 rounded-3xl max-w-6xl w-full shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-primary-navy via-blue-900 to-indigo-900 px-8 py-10 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-primary-navy via-blue-900 to-indigo-900 px-8 py-8 flex-shrink-0 overflow-hidden">
           {/* Decorative background elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
@@ -255,8 +255,8 @@ export default function IndustrySelectorModal({ onSelect, onClose }: IndustrySel
         </div>
 
         {/* Industry Grid */}
-        <div className="p-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="p-6 overflow-y-auto flex-1 min-h-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {INDUSTRIES.map((industry) => {
               const isSelected = selectedIndustry === industry.id
               const isHovered = hoveredIndustry === industry.id
@@ -268,31 +268,31 @@ export default function IndustrySelectorModal({ onSelect, onClose }: IndustrySel
                   onMouseEnter={() => setHoveredIndustry(industry.id)}
                   onMouseLeave={() => setHoveredIndustry(null)}
                   className={`
-                    relative group text-left p-5 rounded-2xl border-2 transition-all duration-300 transform
+                    relative group text-left p-4 rounded-xl border-2 transition-all duration-200
                     ${isSelected 
-                      ? `border-transparent bg-gradient-to-br ${industry.gradient} text-white shadow-xl scale-[1.02]` 
-                      : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-lg hover:scale-[1.02]'
+                      ? 'border-[#1F3C58] bg-[#1F3C58] text-white shadow-lg' 
+                      : 'border-gray-200 bg-white hover:border-[#1F3C58]/30 hover:shadow-md'
                     }
                   `}
                 >
                   {/* Selected indicator */}
                   {isSelected && (
-                    <div className="absolute top-3 right-3">
-                      <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
-                        <CheckCircle className={`w-4 h-4 ${industry.color}`} />
+                    <div className="absolute top-2 right-2">
+                      <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-md">
+                        <CheckCircle className="w-4 h-4 text-[#1F3C58]" />
                       </div>
                     </div>
                   )}
                   
                   {/* Icon */}
                   <div className={`
-                    w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300
+                    w-11 h-11 rounded-lg flex items-center justify-center mb-3 transition-all duration-200
                     ${isSelected 
                       ? 'bg-white/20' 
-                      : `bg-gradient-to-br ${industry.gradient} bg-opacity-10`
+                      : 'bg-[#1F3C58]'
                     }
                   `}>
-                    <div className={isSelected ? 'text-white' : industry.color}>
+                    <div className="text-white">
                       {industry.icon}
                     </div>
                   </div>
@@ -307,8 +307,8 @@ export default function IndustrySelectorModal({ onSelect, onClose }: IndustrySel
                   
                   {/* Hover effect line */}
                   <div className={`
-                    absolute bottom-0 left-0 right-0 h-1 rounded-b-2xl transition-all duration-300
-                    bg-gradient-to-r ${industry.gradient}
+                    absolute bottom-0 left-0 right-0 h-1 rounded-b-xl transition-all duration-200
+                    bg-[#1F3C58]
                     ${isSelected ? 'opacity-0' : isHovered ? 'opacity-100' : 'opacity-0'}
                   `} />
                 </button>
@@ -318,7 +318,7 @@ export default function IndustrySelectorModal({ onSelect, onClose }: IndustrySel
         </div>
 
         {/* Footer */}
-        <div className="px-8 py-6 bg-white border-t border-gray-100">
+        <div className="px-8 py-5 bg-white border-t border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-500">
               {selectedIndustry 
@@ -333,16 +333,16 @@ export default function IndustrySelectorModal({ onSelect, onClose }: IndustrySel
               onClick={handleContinue}
               disabled={!selectedIndustry}
               className={`
-                group flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg
-                transition-all duration-300 transform
+                group flex items-center gap-3 px-6 py-3 rounded-lg font-bold
+                transition-all duration-200
                 ${selectedIndustry 
-                  ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:shadow-xl hover:scale-105 cursor-pointer' 
+                  ? 'bg-[#1F3C58] text-white hover:bg-[#2a4d6e] cursor-pointer' 
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 }
               `}
             >
               Fortsätt till frågorna
-              <ArrowRight className={`w-5 h-5 transition-transform duration-300 ${selectedIndustry ? 'group-hover:translate-x-1' : ''}`} />
+              <ArrowRight className={`w-5 h-5 transition-transform duration-200 ${selectedIndustry ? 'group-hover:translate-x-1' : ''}`} />
             </button>
           </div>
         </div>
