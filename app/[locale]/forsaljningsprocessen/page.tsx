@@ -9,6 +9,7 @@ import SalesProcessDataModal, {
   initialCompanyData 
 } from '@/components/SalesProcessDataModal'
 import IndustrySelectorModal, { INDUSTRIES, IndustryOption } from '@/components/IndustrySelectorModal'
+import { getIndustrySteps, type IndustryStep } from '@/lib/industrySalesSteps'
 
 // Dynamically import PDF components to avoid SSR issues
 const PDFDownloadLink = dynamic(
@@ -1497,8 +1498,13 @@ export default function ForsaljningsprocessenPage() {
     return false
   }
 
-  const progress = ((currentStep + 1) / steps.length) * 100
-  const step = steps[currentStep]
+  // Get industry-specific steps if industry is selected
+  const industrySteps = selectedIndustry 
+    ? getIndustrySteps(selectedIndustry.id, steps as IndustryStep[])
+    : steps
+  
+  const progress = ((currentStep + 1) / industrySteps.length) * 100
+  const step = industrySteps[currentStep]
 
   // Show industry selector first
   if (showIndustrySelector) {
@@ -1780,7 +1786,7 @@ export default function ForsaljningsprocessenPage() {
               <div className="px-4 sm:px-10 py-3 sm:py-4 border-b border-gray-100">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs sm:text-sm font-medium text-[#1F3C58]">
-                    Steg {currentStep + 1} av {steps.length}
+                    Steg {currentStep + 1} av {industrySteps.length}
                   </span>
                   <span className="text-xs sm:text-sm text-gray-500">
                     {Math.round(progress)}%
@@ -1797,7 +1803,7 @@ export default function ForsaljningsprocessenPage() {
               {/* Step navigation - centered with spacing */}
               <div className="px-4 sm:px-10 py-4 sm:py-5 border-b border-gray-100">
                 <div className="flex justify-center gap-3 sm:gap-4">
-                  {steps.map((s, idx) => {
+                  {industrySteps.map((s, idx) => {
                     const completed = isStepCompleted(idx)
                     const inProgress = isStepInProgress(idx)
                     return (
@@ -2279,7 +2285,7 @@ export default function ForsaljningsprocessenPage() {
                     Källor
                   </button>
 
-                  {currentStep < steps.length - 1 ? (
+                  {currentStep < industrySteps.length - 1 ? (
                     <button
                       onClick={() => {
                         setCurrentStep(currentStep + 1)
