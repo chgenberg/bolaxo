@@ -42,14 +42,14 @@ export default function HomePageContent() {
                 className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain"
               />
             </div>
-
+            
             {/* Content - Right side */}
             <div className="flex-1 text-center md:text-left">
               {/* Main Headline */}
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-navy leading-tight mb-6">
-                Sälj, köp och sanitychecka företag –
+                Sälj, köp och sanitychecka företag
                 <span className="block text-navy/70">på ett trovärdigt och transparent sätt.</span>
-              </h1>
+            </h1>
               
               {/* Intro Text */}
               <p className="text-lg md:text-xl text-gray-700 max-w-2xl mb-8 leading-relaxed">
