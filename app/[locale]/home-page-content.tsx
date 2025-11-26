@@ -32,30 +32,33 @@ export default function HomePageContent() {
     <main className="bg-gray-100 min-h-screen">
       {/* HERO SECTION */}
       <section className="pt-32 pb-24 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Mascot */}
-          <div className="flex justify-center mb-8">
-            <img 
-              src="/Home/maskot.png" 
-              alt="Bolaxo maskot" 
-              className="w-32 h-32 md:w-40 md:h-40 object-contain"
-            />
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Mascot - Left side */}
+            <div className="flex-shrink-0">
+              <img 
+                src="/Home/maskot.png" 
+                alt="Bolaxo maskot" 
+                className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain"
+              />
+            </div>
 
-          {/* Main Headline */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-navy leading-tight mb-8">
-            Sälj, köp och sanitychecka företag –
-            <span className="block text-navy/70">på ett trovärdigt och transparent sätt.</span>
-          </h1>
-          
-          {/* Intro Text */}
-          <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-12 leading-relaxed">
-            Bolaxo (en del av AIFM) hjälper ägare, köpare och rådgivare genom hela resan: 
-            från första tempmätning till annonsering och matchning. <strong>Inga success fees</strong> – bara tydliga paket.
-          </p>
-          
-          {/* Primary CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            {/* Content - Right side */}
+            <div className="flex-1 text-center md:text-left">
+              {/* Main Headline */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-navy leading-tight mb-6">
+                Sälj, köp och sanitychecka företag –
+                <span className="block text-navy/70">på ett trovärdigt och transparent sätt.</span>
+              </h1>
+              
+              {/* Intro Text */}
+              <p className="text-lg md:text-xl text-gray-700 max-w-2xl mb-8 leading-relaxed">
+                Bolaxo (en del av AIFM) hjälper ägare, köpare och rådgivare genom hela resan: 
+                från första tempmätning till annonsering och matchning. <strong>Inga success fees</strong> – bara tydliga paket.
+              </p>
+              
+              {/* Primary CTAs */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start mb-8">
             <Link
               href={`/${locale}/sanitycheck`}
               className="group relative inline-flex items-center justify-center gap-3 bg-navy text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:scale-105 animate-pulse-box"
@@ -75,32 +78,34 @@ export default function HomePageContent() {
             </Link>
             </div>
             
-          {/* Secondary Links */}
-          <div className="flex flex-wrap gap-6 justify-center">
-            <Link 
-              href={`/${locale}/saljarprofil`}
-              className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2 group"
-            >
-              <Building2 className="w-4 h-4" />
-              Sälja företag
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link 
-              href={`/${locale}/investerarprofil`}
-              className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2 group"
-            >
-              <Briefcase className="w-4 h-4" />
-              Köpa företag
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link 
-              href={`/${locale}/sanitycheck`}
-              className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2 group"
-            >
-              <BarChart3 className="w-4 h-4" />
-              Sanitycheck &amp; värderingsspann
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+              {/* Secondary Links */}
+              <div className="flex flex-wrap gap-6 justify-center md:justify-start">
+                <Link 
+                  href={`/${locale}/saljarprofil`}
+                  className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2 group"
+                >
+                  <Building2 className="w-4 h-4" />
+                  Sälja företag
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link 
+                  href={`/${locale}/investerarprofil`}
+                  className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2 group"
+                >
+                  <Briefcase className="w-4 h-4" />
+                  Köpa företag
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link 
+                  href={`/${locale}/sanitycheck`}
+                  className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2 group"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  Sanitycheck &amp; värderingsspann
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
