@@ -1531,49 +1531,129 @@ export default function ForsaljningsprocessenPage() {
     <div className="min-h-screen bg-gray-100">
       <HideHeader />
 
-      <div className="relative min-h-screen flex items-center justify-center px-3 sm:px-4 py-8 sm:py-16">
-        {/* Main white content box */}
-        <div className="w-full max-w-3xl">
-          {/* Shadow wrapper */}
-          <div className="relative">
-            
-            {/* White content card */}
-            <div className="relative bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden">
-              {/* Header */}
-              <div className="bg-[#1F3C58] px-4 sm:px-10 py-6 sm:py-10">
-                <h1 className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
-                  Försäljningsprocessen
-                </h1>
-                <p className="text-white/70 text-xs sm:text-base">
-                  Steg för steg guide till att sälja ditt företag
-                </p>
+      <div className="relative min-h-screen px-3 sm:px-4 py-8 sm:py-12">
+        {/* Top header bar */}
+        <div className="max-w-6xl mx-auto mb-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-[#1F3C58]">BOLAXO</h1>
+            <div className="text-sm text-gray-500">
+              Försäljningsprocess · {currentStep + 1} av {industrySteps.length} steg klara
+            </div>
+          </div>
+        </div>
+
+        {/* Main layout with sidebar */}
+        <div className="max-w-6xl mx-auto flex gap-6">
+          {/* Left Sidebar - Steps Navigation */}
+          <div className="hidden lg:block w-72 flex-shrink-0">
+            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+              <h2 className="text-lg font-bold text-[#1F3C58] mb-2">Försäljningsprocessen</h2>
+              <p className="text-xs text-gray-500 mb-6">Vi använder informationen för att matcha dig med rätt köpare.</p>
+              
+              {/* Step List */}
+              <div className="space-y-1">
+                {industrySteps.map((s, idx) => {
+                  const isActive = currentStep === idx
+                  const isCompleted = idx < currentStep
+                  
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => setCurrentStep(idx)}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                        isActive 
+                          ? 'bg-[#1F3C58] text-white' 
+                          : isCompleted
+                            ? 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                            : 'text-gray-500 hover:bg-gray-50'
+                      }`}
+                    >
+                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
+                        isActive 
+                          ? 'bg-white/20 text-white' 
+                          : isCompleted 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-gray-200 text-gray-500'
+                      }`}>
+                        {isCompleted ? (
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          idx + 1
+                        )}
+                      </span>
+                      <span className={`text-sm font-medium truncate ${isActive ? 'text-white' : ''}`}>
+                        {s.title}
+                      </span>
+                    </button>
+                  )
+                })}
               </div>
 
               {/* Selected Industry Badge */}
               {selectedIndustry && (
-                <div className="px-4 sm:px-10 py-4 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border-b border-[#1F3C58]/10">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${selectedIndustry.gradient}`}>
-                        <div className="text-white">
-                          {selectedIndustry.icon}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wider">Vald bransch</p>
-                        <p className="font-semibold text-[#1F3C58]">{selectedIndustry.label}</p>
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#1F3C58]">
+                      <div className="text-white text-sm">
+                        {selectedIndustry.icon}
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowIndustrySelector(true)}
-                      className="text-sm text-[#1F3C58] hover:text-[#1F3C58]/80 font-medium"
-                    >
-                      Ändra
-                    </button>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] text-gray-400 uppercase tracking-wider">Bransch</p>
+                      <p className="text-sm font-medium text-[#1F3C58] truncate">{selectedIndustry.label}</p>
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowIndustrySelector(true)}
+                    className="text-xs text-[#1F3C58] hover:underline"
+                  >
+                    Ändra bransch
+                  </button>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          <div className="flex-1 min-w-0">
+            {/* Mobile step indicator */}
+            <div className="lg:hidden mb-4 flex items-center gap-2 overflow-x-auto pb-2">
+              {industrySteps.map((s, idx) => {
+                const isActive = currentStep === idx
+                const isCompleted = idx < currentStep
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setCurrentStep(idx)}
+                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                      isActive 
+                        ? 'bg-[#1F3C58] text-white' 
+                        : isCompleted
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-200 text-gray-500'
+                    }`}
+                  >
+                    {isCompleted ? '✓' : idx + 1}
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* White content card */}
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              {/* Step Header */}
+              <div className="bg-[#1F3C58] px-6 py-5">
+                <div className="flex items-center gap-3 mb-1">
+                  <span className="px-2 py-0.5 bg-white/20 rounded text-xs text-white/80">
+                    Steg {currentStep + 1}
+                  </span>
+                </div>
+                <h2 className="text-xl font-bold text-white">{step.title}</h2>
+                <p className="text-white/70 text-sm">{step.subtitle}</p>
+              </div>
 
               {/* URL Input Section */}
               <div className="px-4 sm:px-10 py-5 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border-b border-[#1F3C58]/10">
@@ -2258,17 +2338,7 @@ export default function ForsaljningsprocessenPage() {
               </div>
 
               {/* Navigation buttons */}
-              <div className="px-4 sm:px-10 py-4 sm:py-6 border-t border-gray-100">
-                {/* CTA Button */}
-                <div className="flex justify-center mb-4">
-                  <Link
-                    href={`/${locale}`}
-                    className="px-6 sm:px-8 py-3 bg-[#1F3C58] text-white rounded-lg text-sm sm:text-base font-semibold animate-cta-pulse shadow-lg hover:shadow-xl transition-shadow"
-                  >
-                    Vill du sälja ditt företag? Klicka här
-                  </Link>
-                </div>
-                
+              <div className="px-6 py-4 border-t border-gray-100 bg-gray-50">
                 <div className="flex items-center justify-between">
                   <button
                     onClick={() => {
@@ -2276,21 +2346,16 @@ export default function ForsaljningsprocessenPage() {
                       setExpandedItems({})
                     }}
                     disabled={currentStep === 0}
-                    className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
                       currentStep === 0
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-[#1F3C58] hover:bg-[#1F3C58]/10'
+                        ? 'text-gray-300 border-gray-200 cursor-not-allowed'
+                        : 'text-[#1F3C58] border-[#1F3C58]/20 hover:bg-[#1F3C58]/5'
                     }`}
                   >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
                     Föregående
-                  </button>
-
-                  {/* Sources link */}
-                  <button
-                    onClick={() => setShowSources(true)}
-                    className="text-sm font-medium text-[#1F3C58] hover:text-[#1F3C58]/80 underline transition-colors"
-                  >
-                    Källor
                   </button>
 
                   {currentStep < industrySteps.length - 1 ? (
@@ -2299,32 +2364,49 @@ export default function ForsaljningsprocessenPage() {
                         setCurrentStep(currentStep + 1)
                         setExpandedItems({})
                       }}
-                      className="px-4 sm:px-6 py-2 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
+                      className="flex items-center gap-2 px-5 py-2.5 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
                     >
                       Nästa steg
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
                     </button>
                   ) : (
                     <Link
                       href={`/${locale}/analysera`}
-                      className="px-4 sm:px-6 py-2 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
+                      className="flex items-center gap-2 px-5 py-2.5 bg-[#1F3C58] text-white rounded-lg text-sm font-medium hover:bg-[#1F3C58]/90 transition-all"
                     >
                       Analysera ditt företag
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
                     </Link>
                   )}
+                </div>
+                
+                {/* Step progress indicator */}
+                <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
+                  <button
+                    onClick={() => setShowSources(true)}
+                    className="hover:text-[#1F3C58] underline transition-colors"
+                  >
+                    Källor
+                  </button>
+                  <span>{currentStep + 1} av {industrySteps.length} steg klara</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Back to home link */}
-          <div className="mt-6 sm:mt-8 text-center">
-            <Link
-              href={`/${locale}`}
-              className="text-[#1F3C58]/70 hover:text-[#1F3C58] text-xs sm:text-sm underline"
-            >
-              Tillbaka till startsidan
-            </Link>
-          </div>
+        {/* Back to home link */}
+        <div className="max-w-6xl mx-auto mt-6 text-center">
+          <Link
+            href={`/${locale}`}
+            className="text-[#1F3C58]/70 hover:text-[#1F3C58] text-xs sm:text-sm underline"
+          >
+            Tillbaka till startsidan
+          </Link>
         </div>
       </div>
 
