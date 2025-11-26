@@ -472,6 +472,396 @@ export const INDUSTRY_STEPS_DATA: IndustryStepsData = {
         ]
       }
     }
+  },
+
+  'el-vvs-installation': {
+    stepOverrides: {
+      1: {
+        fact: 'Installationsbolag med serviceavtal och certifieringar värderas 25-40% högre.',
+        items: [
+          {
+            title: 'Dokumentera behörigheter och certifieringar',
+            summary: 'Auktorisationer, certifikat och behörig personal.',
+            expanded: 'Installationsbranschen kräver specifika behörigheter. Dokumentera: företagets auktorisationer, antal certifierade montörer per område, certifikatens giltighetstid.\n\nFör elinstallation: Elsäkerhetsverkets auktorisation och anmälda elinstallatörer. För VVS: certifieringar för kyl, värme, sanitet.\n\nKöpare vill veta att verksamheten kan fortsätta - säkerställ att behörigheter inte är knutna enbart till ägaren.',
+            stats: [
+              { value: '100%', label: 'Certifierade montörer' },
+              { value: '3-5x', label: 'Typisk EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg serviceavtal och återkommande intäkter',
+            summary: 'Servicekontrakt med fastighetsägare och företag.',
+            expanded: 'Serviceavtal är guld värda. Dokumentera: alla pågående serviceavtal, avtalsvärde och löptid, förnyelserad och kundretention.\n\nVisa intäktsfördelning mellan projekt (nyinstallation/ombyggnad) och service. Hög andel service (>40%) ger stabilitet och värderas positivt.\n\nIdentifiera möjligheter att öka serviceandelen innan försäljning.'
+          },
+          {
+            title: 'Inventera fordon, verktyg och lager',
+            summary: 'Servicebilar, specialverktyg och materialförråd.',
+            expanded: 'Installationsbolag har ofta betydande fordonsflotta och verktygspark. Dokumentera: servicebilar med årsmodell och skick, specialverktyg och mätutrustning, lager av material.\n\nSeparera ägda vs leasade fordon. Visa underhållshistorik och planerade byten.\n\nEtt välskött lager och moderna verktyg signalerar professionalism.'
+          }
+        ]
+      },
+      2: {
+        fact: 'El/VVS-bolag värderas ofta till 3-5x EBITDA med premium för serviceavtal.',
+        items: [
+          {
+            title: 'Värdering av installationsbolag',
+            summary: 'Baserat på återkommande service och personalstyrka.',
+            expanded: 'Multiplar: 3-5x EBITDA är vanligt, högre med stark serviceandel. Värdet påverkas av: andel återkommande intäkter, certifierad personal som stannar, fordons- och verktygsvärde.\n\nPersonalbrist i branschen gör att bolag med stabil personalstyrka värderas högre. Visa låg personalomsättning.\n\nKöpare i branschen söker ofta geografisk expansion eller kompletterande kompetens.'
+          }
+        ]
+      }
+    }
+  },
+
+  'stad-facility-services': {
+    stepOverrides: {
+      1: {
+        fact: 'Städbolag med fleråriga offentliga avtal får 30-40% värderingspremium.',
+        items: [
+          {
+            title: 'Dokumentera kontraktsportfölj och löptider',
+            summary: 'Alla städavtal med värde, löptid och förlängningsvillkor.',
+            expanded: 'Städbolag värderas på kontraktsportföljen. Dokumentera: varje kontrakt med årsvärde och marginaler, återstående löptid och förlängningsoptioner, uppsägningsvillkor och ändringsklausuler.\n\nSärskilj offentliga avtal (ofta stabila men lägre marginal) från privata. Visa kontraktens geografiska spridning.\n\nEn diversifierad portfölj med långa löptider är attraktiv.',
+            stats: [
+              { value: '3-5 år', label: 'Typisk avtalslängd' },
+              { value: '5-10%', label: 'Normal städmarginal' }
+            ]
+          },
+          {
+            title: 'Kartlägg personalstruktur och arbetsrätt',
+            summary: 'Anställda, scheman och kollektivavtal.',
+            expanded: 'Städbranschen är personalintensiv. Dokumentera: antal anställda per avtalstyp (heltid/deltid/tim), schemaläggning och överlappning, kollektivavtalstillhörighet.\n\nVid verksamhetsövergång (LAS 6b§) kan personal följa med automatiskt. Förstå konsekvenserna och förbered köparen.\n\nVisa personalomsättning - hög turnover är vanligt men kostsamt.'
+          },
+          {
+            title: 'Visa kvalitetssystem och kundnöjdhet',
+            summary: 'Kvalitetsmätningar, reklamationer och kundbetyg.',
+            expanded: 'Professionella städbolag har kvalitetssystem. Dokumentera: rutiner för kvalitetskontroll, reklamationsstatistik, kundnöjdhetsmätningar.\n\nVisa eventuella certifieringar (ISO, miljömärkning) och hur de påverkar möjligheten att vinna upphandlingar.\n\nEtt starkt kvalitetsrykte motiverar premium vid försäljning.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Städbolag värderas ofta till 3-5x EBITDA eller 0.5-1x omsättning.',
+        items: [
+          {
+            title: 'Värdering av städ/facility-bolag',
+            summary: 'Baserat på kontraktsvärde och personalstabilitet.',
+            expanded: 'Multiplar: 3-5x EBITDA eller 0.5-1x omsättning. Faktorer som höjer värdet: långa kontrakt, diversifierad kundbas, låg personalomsättning, kompletterande tjänster.\n\nStorleken spelar roll - större bolag får ofta högre multiplar pga skalfördelar.\n\nKonsolidering i branschen gör att kedjor ofta är köpare.'
+          }
+        ]
+      }
+    }
+  },
+
+  'lager-logistik-3pl': {
+    stepOverrides: {
+      1: {
+        fact: 'Logistikbolag med automatisering och techintegration värderas 30-50% högre.',
+        items: [
+          {
+            title: 'Dokumentera kundavtal och volymer',
+            summary: 'Kontrakterade volymer, prissättning och marginal per kund.',
+            expanded: 'Logistikbolag lever på kundkontrakt. Dokumentera: varje kund med volym (pallar, ordrar, etc.), prissättning och marginal, avtalslängd och volymgarantier.\n\nVisa säsongsvariationer och kapacitetsutnyttjande. Hur mycket outnyttjad kapacitet finns?\n\nKundkoncentration är kritiskt - diversifierad kundbas minskar risken.',
+            stats: [
+              { value: '80-90%', label: 'God beläggningsgrad' },
+              { value: '3-5x', label: 'Typisk EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg lokaler och hyresavtal',
+            summary: 'Lageryta, hyresvillkor och möjlighet till expansion.',
+            expanded: 'Lagerutrymme är grunden. Dokumentera: total yta och layout, hyra per kvm och utveckling, återstående avtalstid och förlängningsoptioner.\n\nÄr hyresavtalet överlåtbart? Finns expansionsmöjligheter i samma fastighet?\n\nVisa investeringar i lagerutrustning: hyllor, truckar, automationslösningar.'
+          },
+          {
+            title: 'Visa WMS och systemintegration',
+            summary: 'Lagersystem, kundintegration och automation.',
+            expanded: 'Modern logistik kräver bra IT. Dokumentera: WMS (Warehouse Management System) och dess funktioner, integration mot kunders affärssystem, automationsgrad (pick-to-light, sortering, etc.).\n\nVisa hur effektiva ni är: ordrar per timme, plockprecision, leveranssäkerhet.\n\nTeknikförsprång är en konkurrensfördel som höjer värdet.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Logistikbolag värderas ofta till 4-7x EBITDA med premium för automation.',
+        items: [
+          {
+            title: 'Värdering av logistikverksamhet',
+            summary: 'Baserat på kontraktsvärde, effektivitet och teknik.',
+            expanded: 'Multiplar: 4-7x EBITDA är vanligt för väletablerade aktörer. Premium för: hög automatiseringsgrad, långa kundkontrakt, modern IT-infrastruktur.\n\nVärdet påverkas av hyressituation - ägd fastighet värderas separat. E-handelns tillväxt driver efterfrågan på logistikbolag.\n\nKöpare söker ofta geografisk komplettering eller specialistkompetens.'
+          }
+        ]
+      }
+    }
+  },
+
+  'grossist-partihandel': {
+    stepOverrides: {
+      1: {
+        fact: 'Grossister med exklusiva agenturer och stabil marginal värderas 20-35% högre.',
+        items: [
+          {
+            title: 'Dokumentera leverantörsavtal och agenturer',
+            summary: 'Agenturavtal, exklusivitet och villkor.',
+            expanded: 'Leverantörsrelationer är ofta det viktigaste värdet. Dokumentera: alla leverantörsavtal med villkor, eventuella exklusiva agenturer, inköpsrabatter och bonusar.\n\nKontrollera om agenturerna är överlåtbara vid försäljning. Varnas: om avtal är knutna till person/ägare kan de sägas upp.\n\nVisa leverantörsportföljens diversifiering och beroendegrad.',
+            stats: [
+              { value: '15-25%', label: 'Typisk bruttomarginal' },
+              { value: '3-5x', label: 'EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg kundstock och kreditexponering',
+            summary: 'Kundfordringar, kredittider och betalningshistorik.',
+            expanded: 'Grossistverksamhet innebär ofta kreditexponering. Dokumentera: kundstock med omsättning och kredittid, kundfordringar och åldersfördelning, kreditförluster historiskt.\n\nVisa betalningsrutiner och hur ni hanterar sena betalare. En sund kredithantering minskar köparens risk.\n\nKundkoncentration är en vanlig fråga - diversifierad kundbas är positivt.'
+          },
+          {
+            title: 'Inventera lager och rörelsekapitalbehov',
+            summary: 'Lagervärde, omsättningshastighet och kapitalbindning.',
+            expanded: 'Lager binder kapital. Dokumentera: totalt lagervärde och fördelning, lageromsättningshastighet per kategori, inkurant lager och nedskrivningsbehov.\n\nVisa rörelsekapitalcykeln: dagar lager + dagar kundfordringar - dagar leverantörsskuld.\n\nEffektiv lagerhantering och snabb omsättning indikerar bra verksamhet.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Grossister värderas ofta till 3-5x EBITDA justerat för rörelsekapital.',
+        items: [
+          {
+            title: 'Värdering av grossist/partihandel',
+            summary: 'Baserat på marginal, leverantörsavtal och kapitaleffektivitet.',
+            expanded: 'Multiplar: 3-5x EBITDA är vanligt, men justeras för rörelsekapitalbehov. En grossist med högt lagervärde värderas ofta lägre.\n\nNyckeltal att visa: bruttomarginal, EBITDA-marginal, lageromsättning, ROCE (Return on Capital Employed).\n\nExklusiva agenturer för starka varumärken kan motivera premium.'
+          }
+        ]
+      }
+    }
+  },
+
+  'latt-tillverkning-verkstad': {
+    stepOverrides: {
+      1: {
+        fact: 'Verkstäder med modern maskinpark och ISO-certifiering får 25-35% premium.',
+        items: [
+          {
+            title: 'Dokumentera maskinpark och kapacitet',
+            summary: 'Maskiner, ålder, underhåll och kapacitetsutnyttjande.',
+            expanded: 'Maskinparken är ofta den största tillgången. Dokumentera: varje maskin med typ, årsmodell, kapacitet, bokfört vs marknadsvärde.\n\nVisa underhållshistorik och planerade investeringar. Hur gammalt är genomsnittet? Finns det flaskhalsar?\n\nBeräkna kapacitetsutnyttjande - outnyttjad kapacitet kan vara tillväxtpotential.',
+            stats: [
+              { value: '70-85%', label: 'God kapacitetsutnyttjande' },
+              { value: '3-5x', label: 'Typisk EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg orderstock och kundbas',
+            summary: 'Pågående ordrar, ramavtal och kundspridning.',
+            expanded: 'Visa framtida intäkter. Dokumentera: orderstock med leveranstider, ramavtal och deras värde, kundkoncentration och branschspridning.\n\nHur stor andel är engångsordrar vs återkommande? Visa orderingång över tid och trender.\n\nEn stabil orderbok 3-6 månader framåt ger köparen trygghet.'
+          },
+          {
+            title: 'Visa kvalitetssystem och certifieringar',
+            summary: 'ISO-certifiering, kvalitetskontroll och spårbarhet.',
+            expanded: 'Certifieringar öppnar dörrar. Dokumentera: ISO 9001, eventuella branschspecifika certifieringar, kvalitetskontrollrutiner.\n\nVisa reklamationsstatistik och hur kvalitetsproblem hanteras. Kunder inom fordon/flyg kräver ofta avancerad spårbarhet.\n\nCertifieringar är dyra att bygga upp - en tillgång för köparen.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Tillverkande bolag värderas ofta till 3-5x EBITDA plus maskiner.',
+        items: [
+          {
+            title: 'Värdering av verkstad/tillverkning',
+            summary: 'Baserat på maskinvärde, orderstock och marginaler.',
+            expanded: 'Värdering kombinerar ofta EBITDA-multipel (3-5x) med separat maskinvärdering. Maskiner kan vara värda mer eller mindre än bokfört.\n\nFaktorer som höjer värdet: modern maskinpark, hög specialisering, långa kundrelationer, export.\n\nFaktorer som sänker: gammalt maskineri, beroende av få kunder, låg automatisering.'
+          }
+        ]
+      }
+    }
+  },
+
+  'fastighetsservice-forvaltning': {
+    stepOverrides: {
+      1: {
+        fact: 'Fastighetsförvaltare med digitala system och långa avtal värderas 30-40% högre.',
+        items: [
+          {
+            title: 'Dokumentera förvaltningsuppdrag och avtal',
+            summary: 'Förvaltade fastigheter, arvoden och avtalslängder.',
+            expanded: 'Förvaltningsuppdrag är grunden. Dokumentera: antal förvaltade fastigheter/BRF:er, arvode per fastighet och total omsättning, avtalslängder och uppsägningstider.\n\nVisa portföljens sammansättning: BRF, hyresfastigheter, kommersiella fastigheter. Geografisk spridning?\n\nLånga avtal (3-5 år) med automatisk förlängning är attraktiva.',
+            stats: [
+              { value: '3-5 år', label: 'Typisk avtalslängd' },
+              { value: '4-6x', label: 'EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg tjänsteportfölj och marginal',
+            summary: 'Vilka tjänster erbjuds och vad är marginalen per tjänst?',
+            expanded: 'Fastighetsförvaltning kan inkludera många tjänster. Dokumentera: grundförvaltning (ekonomi, administration), teknisk förvaltning, fastighetsskötsel, felanmälan.\n\nVisa marginal per tjänstekategori. Vissa tjänster kan vara mer lönsamma - finns potential att sälja mer till befintliga kunder?\n\nKomplementära tjänster ökar kundvärdet och gör det svårare att byta leverantör.'
+          },
+          {
+            title: 'Visa teknisk plattform och digitalisering',
+            summary: 'Förvaltningssystem, kundportal och automation.',
+            expanded: 'Modern förvaltning kräver bra system. Dokumentera: huvudsystem för förvaltning, kundportaler och digitala verktyg, integrationer och automation.\n\nVisa hur effektiva ni är: antal fastigheter per förvaltare, svarstider, kundnöjdhet.\n\nDigitala verktyg är en konkurrensfördel - visar skalbarhet.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Fastighetsförvaltare värderas ofta till 0.8-1.2x omsättning eller 4-6x EBITDA.',
+        items: [
+          {
+            title: 'Värdering av förvaltningsbolag',
+            summary: 'Baserat på avtalsvärde och kundretention.',
+            expanded: 'Multiplar: 0.8-1.2x omsättning eller 4-6x EBITDA. Premium för: långa avtal, hög kundretention, diversifierad portfölj, moderna system.\n\nFörvaltning är attraktivt pga stabila, återkommande intäkter. Konsolidering sker - större aktörer köper lokala förvaltare.\n\nÖvergångsperiod är ofta viktig för att bibehålla kundrelationer.'
+          }
+        ]
+      }
+    }
+  },
+
+  'event-konferens-upplevelser': {
+    stepOverrides: {
+      1: {
+        fact: 'Eventbolag med återkommande företagskunder och egna lokaler värderas 25-40% högre.',
+        items: [
+          {
+            title: 'Dokumentera kundbas och bokningshistorik',
+            summary: 'Återkommande kunder, genomsnittligt eventvärde och säsongsmönster.',
+            expanded: 'Eventbranschen lever på bokningar. Dokumentera: kundlista med bokningshistorik, genomsnittligt ordervärde per event, andel återkommande kunder.\n\nVisa säsongsvariationer - när är högsäsong? Hur hanteras lågsäsong?\n\nÅterkommande företagskunder (årliga konferenser, kick-offs) är värdefulla.',
+            stats: [
+              { value: '>40%', label: 'Bra återkommande-andel' },
+              { value: '2-4x', label: 'Typisk EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg lokaler och leverantörsnätverk',
+            summary: 'Egna vs hyrda lokaler, preferensavtal med leverantörer.',
+            expanded: 'Lokal är ofta nyckeln. Dokumentera: egna lokaler (hyresavtal, kapacitet), samarbeten med venues, leverantörsnätverk (catering, teknik, underhållning).\n\nVisa preferensavtal som ger er fördelar. Unika lokaler eller exklusiva samarbeten är konkurrensfördelar.\n\nOm ni hyr lokaler - hur ser hyresavtalen ut? Överlåtbara?'
+          },
+          {
+            title: 'Visa referenscase och varumärke',
+            summary: 'Tidigare event, utmärkelser och marknadsposition.',
+            expanded: 'Rykte är viktigt. Dokumentera: referenscase med bilder och beskrivningar, eventuella utmärkelser och nomineringar, pressklipp och recensioner.\n\nVisa er nisch eller specialisering - vad gör er unika? Stora event eller intima arrangemang?\n\nEtt starkt varumärke i branschen motiverar premium vid försäljning.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Eventbolag värderas ofta till 2-4x EBITDA, högre med egna lokaler.',
+        items: [
+          {
+            title: 'Värdering av eventverksamhet',
+            summary: 'Baserat på kundbas, lokaltillgång och rykte.',
+            expanded: 'Multiplar: 2-4x EBITDA är vanligt, men varierar stort. Faktorer som höjer värdet: egna/långsiktiga lokaler, stark återkommande kundbas, känt varumärke.\n\nEventbranschen är cyklisk och påverkades hårt av pandemin. Visa återhämtning och framtidsutsikter.\n\nKöpare kan vara konkurrenter, hotell/venue-ägare eller investerare.'
+          }
+        ]
+      }
+    }
+  },
+
+  'utbildning-kurser-edtech': {
+    stepOverrides: {
+      1: {
+        fact: 'Utbildningsbolag med digitalt innehåll och B2B-kunder värderas 30-50% högre.',
+        items: [
+          {
+            title: 'Dokumentera kursportfölj och IP',
+            summary: 'Kurser, utbildningsmaterial och immateriella rättigheter.',
+            expanded: 'Kursmaterial är ofta huvudtillgången. Dokumentera: komplett kurskatalog med priser, vem som äger materialet (IP), hur ofta innehåll uppdateras.\n\nSkilj på: egenutvecklade kurser, licensierade material, utbildarledda vs självstudier.\n\nDigitalt, skalbart material (e-learning) värderas högre än fysiska kurser.',
+            stats: [
+              { value: '4-8x', label: 'Premium för digital (ARR)' },
+              { value: '3-5x', label: 'Traditionell EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg kundtyper och intäktsströmmar',
+            summary: 'B2B vs B2C, engångsköp vs prenumeration.',
+            expanded: 'Olika kundtyper har olika värde. Dokumentera: andel B2B (företag) vs B2C (privatpersoner), engångsköp vs prenumeration/licenser, intäkt per kundtyp.\n\nB2B med fleråriga avtal är mest attraktivt. Visa återköpsgrad och kundretention.\n\nStatliga/kommunala avtal (Arbetsförmedlingen, regioner) kan ge stabilitet.'
+          },
+          {
+            title: 'Visa utbildare och kvalitetssäkring',
+            summary: 'Instruktörsbas, certifieringar och kursutvärderingar.',
+            expanded: 'Kvalitet är avgörande. Dokumentera: antal utbildare (anställda vs frilans), deras bakgrund och certifieringar, systematiska kursutvärderingar.\n\nVisa NPS eller kundnöjdhet. Hur hanteras utbildarkvalitet och uppdatering av kompetens?\n\nCertifieringar från branschorgan eller myndigheter är värdefulla.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Utbildningsbolag värderas till 3-5x EBITDA, edtech till 4-8x ARR.',
+        items: [
+          {
+            title: 'Värdering av utbildning/edtech',
+            summary: 'Baserat på skalbarhet, innehåll och kundbas.',
+            expanded: 'Multiplar varierar stort: traditionella utbildare 3-5x EBITDA, edtech-bolag med recurring revenue 4-8x ARR.\n\nNyckelfaktorer: äganderätt till innehåll, skalbarhet (digitalt >> fysiskt), kundbas (B2B >> B2C).\n\nDigitaliseringen driver konsolidering - globala aktörer söker lokalt innehåll.'
+          }
+        ]
+      }
+    }
+  },
+
+  'bilverkstad-fordonsservice': {
+    stepOverrides: {
+      1: {
+        fact: 'Verkstäder med märkesauktorisation och flotteavtal värderas 30-40% högre.',
+        items: [
+          {
+            title: 'Dokumentera märkesauktorisation och avtal',
+            summary: 'Auktorisation, garantiarbeten och bonusmodeller.',
+            expanded: 'Märkesauktorisation är värdefull. Dokumentera: vilka märken ni är auktoriserade för, avtalens löptid och villkor, garantiarbetens andel av omsättningen.\n\nVisa bonusmodeller från importörer och hur ni presterar. Auktorisation kan vara svår att överföra - verifiera villkoren.\n\nFristående verkstäder (Mekonomen, etc.) har annan dynamik.',
+            stats: [
+              { value: '15-25%', label: 'Garantiarbetens andel' },
+              { value: '3-5x', label: 'Typisk EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg kundbas och flotteavtal',
+            summary: 'Privatkunder, företag och leasingbolag.',
+            expanded: 'Kundsammansättningen påverkar värdet. Dokumentera: andel privatpersoner vs företag, flotteavtal med bilpooler/leasingbolag, försäkringssamarbeten.\n\nVisa kundretention och genomsnittligt kundvärde. Flotteavtal ger stabilitet men ofta lägre marginal.\n\nDigital bokning och CRM-system visar professionalism.'
+          },
+          {
+            title: 'Inventera utrustning och lokaler',
+            summary: 'Lyftar, diagnosutrustning och verkstadsyta.',
+            expanded: 'Utrustningen är avgörande. Dokumentera: antal lyftar och deras skick, diagnosutrustning (märkesspecifik vs universal), specialverktyg.\n\nHyresavtal för lokalen: löptid, villkor, överlåtbarhet. Är ytan tillräcklig för framtida tillväxt?\n\nMiljökrav på verkstäder skärps - visa att ni är compliant.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Bilverkstäder värderas ofta till 3-5x EBITDA plus utrustning.',
+        items: [
+          {
+            title: 'Värdering av bilverkstad',
+            summary: 'Baserat på auktorisation, kundbas och utrustning.',
+            expanded: 'Multiplar: 3-5x EBITDA är vanligt, plus separat värdering av utrustning och eventuell fastighet.\n\nPremium för: märkesauktorisation, stabila flotteavtal, modern utrustning, bra läge.\n\nElbilstrenden påverkar - verkstäder som investerat i el/hybrid-kompetens är attraktiva.'
+          }
+        ]
+      }
+    }
+  },
+
+  'jord-skog-tradgard-gronyteskotsel': {
+    stepOverrides: {
+      1: {
+        fact: 'Grönyteföretag med kommunala avtal och modern maskinpark värderas 25-35% högre.',
+        items: [
+          {
+            title: 'Dokumentera skötselavtal och kontrakt',
+            summary: 'Kommunala avtal, privata kontrakt och säsongsmönster.',
+            expanded: 'Avtal driver värdet. Dokumentera: alla skötselavtal med värde och löptid, fördelning kommunalt/privat, säsongsvariationer i intäkter.\n\nVisa hur ni hanterar säsong - vinterunderhåll? Julgranar? Snöröjning?\n\nKommunala avtal kräver ofta upphandling - visa track record i upphandlingar.',
+            stats: [
+              { value: '3-5 år', label: 'Typisk avtalslängd kommun' },
+              { value: '3-4x', label: 'EBITDA-multipel' }
+            ]
+          },
+          {
+            title: 'Kartlägg maskinpark och fordon',
+            summary: 'Traktorer, gräsklippare, transportfordon.',
+            expanded: 'Maskinparken är ofta värdefull. Dokumentera: komplett lista med årsmodell och skick, underhållshistorik, ägda vs leasade maskiner.\n\nSpecialmaskiner (stubbar, trädfällning) kan vara svåra att ersätta. Planerade investeringar?\n\nVisa kostnader för underhåll och bränsle - effektivitet är viktigt.'
+          },
+          {
+            title: 'Visa personalstruktur och kompetens',
+            summary: 'Säsongsanställda, fast personal och certifieringar.',
+            expanded: 'Branschen är säsongsberoende. Dokumentera: fast vs säsongsanställd personal, återkommande säsongsarbetare, certifieringar (motorsåg, bekämpningsmedel).\n\nVisa hur ni hanterar säsongstoppar och variationer. Arbetsmiljö och säkerhetsrutiner.\n\nLåg personalomsättning bland fast personal är positivt.'
+          }
+        ]
+      },
+      2: {
+        fact: 'Grönyte/skötselföretag värderas ofta till 3-4x EBITDA plus maskiner.',
+        items: [
+          {
+            title: 'Värdering av grönyteföretag',
+            summary: 'Baserat på avtalsvärde, maskinpark och personalstabilitet.',
+            expanded: 'Multiplar: 3-4x EBITDA är vanligt, plus marknadsvärde på maskinpark. Säsongsvariation påverkar - visa normaliserat resultat.\n\nPremium för: långa kommunala avtal, diversifierade tjänster (sommar + vinter), modern utrustning.\n\nKöpare kan vara konkurrenter som vill expandera geografiskt eller branschkonsoliderare.'
+          }
+        ]
+      }
+    }
   }
 }
 
