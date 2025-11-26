@@ -1554,28 +1554,32 @@ export default function ForsaljningsprocessenPage() {
               <div className="space-y-1">
                 {industrySteps.map((s, idx) => {
                   const isActive = currentStep === idx
-                  const isCompleted = idx < currentStep
+                  const completed = isStepCompleted(idx)
+                  const inProgress = isStepInProgress(idx)
+                  
+                  // Color logic: Active = dark blue, Completed = green, In Progress = gold, Default = gray
+                  const getButtonStyle = () => {
+                    if (isActive) return 'bg-[#1F3C58] text-white'
+                    if (completed) return 'bg-green-50 text-green-700 hover:bg-green-100'
+                    if (inProgress) return 'bg-amber-50 text-amber-700 hover:bg-amber-100'
+                    return 'text-gray-500 hover:bg-gray-50'
+                  }
+                  
+                  const getCircleStyle = () => {
+                    if (isActive) return 'bg-white/20 text-white'
+                    if (completed) return 'bg-green-500 text-white'
+                    if (inProgress) return 'bg-amber-400 text-white'
+                    return 'bg-gray-200 text-gray-500'
+                  }
                   
                   return (
                     <button
                       key={s.id}
                       onClick={() => setCurrentStep(idx)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
-                        isActive 
-                          ? 'bg-[#1F3C58] text-white' 
-                          : isCompleted
-                            ? 'bg-gray-50 text-gray-700 hover:bg-gray-100'
-                            : 'text-gray-500 hover:bg-gray-50'
-                      }`}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${getButtonStyle()}`}
                     >
-                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
-                        isActive 
-                          ? 'bg-white/20 text-white' 
-                          : isCompleted 
-                            ? 'bg-green-500 text-white' 
-                            : 'bg-gray-200 text-gray-500'
-                      }`}>
-                        {isCompleted ? (
+                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${getCircleStyle()}`}>
+                        {completed ? (
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
@@ -1619,29 +1623,6 @@ export default function ForsaljningsprocessenPage() {
 
           {/* Main Content Area */}
           <div className="flex-1 min-w-0">
-            {/* Mobile step indicator */}
-            <div className="lg:hidden mb-4 flex items-center gap-2 overflow-x-auto pb-2">
-              {industrySteps.map((s, idx) => {
-                const isActive = currentStep === idx
-                const isCompleted = idx < currentStep
-                return (
-                  <button
-                    key={s.id}
-                    onClick={() => setCurrentStep(idx)}
-                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
-                      isActive 
-                        ? 'bg-[#1F3C58] text-white' 
-                        : isCompleted
-                          ? 'bg-green-500 text-white'
-                          : 'bg-gray-200 text-gray-500'
-                    }`}
-                  >
-                    {isCompleted ? '✓' : idx + 1}
-                  </button>
-                )
-              })}
-            </div>
-
             {/* White content card */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               {/* Step Header */}
