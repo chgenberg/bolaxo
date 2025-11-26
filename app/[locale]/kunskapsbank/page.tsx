@@ -157,7 +157,7 @@ export default function KunskapsbankPage() {
             <span className="text-white/60 text-sm font-medium uppercase tracking-wider">Kunskapsbank</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
             Guider för hela resan
           </h1>
           <p className="text-xl text-white/80 max-w-2xl leading-relaxed">
