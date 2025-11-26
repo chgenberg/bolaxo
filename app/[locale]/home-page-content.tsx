@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useLocale } from 'next-intl'
 import Link from 'next/link'
 import { 
@@ -23,10 +22,8 @@ import {
   FileCheck,
   HandshakeIcon
 } from 'lucide-react'
-import AnalysisModal from '@/components/AnalysisModal'
 
 export default function HomePageContent() {
-  const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false)
   const locale = useLocale()
 
   return (
@@ -48,14 +45,14 @@ export default function HomePageContent() {
           
           {/* Primary CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <button
-              onClick={() => setIsAnalysisModalOpen(true)}
+            <Link
+              href={`/${locale}/sanitycheck`}
               className="group relative inline-flex items-center justify-center gap-3 bg-navy text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:scale-105 animate-pulse-box"
             >
               <Sparkles className="w-5 h-5" />
               Starta gratis sanitycheck
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
+            </Link>
             
             <Link
               href={`/${locale}/sok`}
@@ -86,7 +83,7 @@ export default function HomePageContent() {
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link 
-              href={`/${locale}/vardering`}
+              href={`/${locale}/sanitycheck`}
               className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2"
             >
               <BarChart3 className="w-4 h-4" />
@@ -145,7 +142,7 @@ export default function HomePageContent() {
             </Link>
             
             {/* Card 3 */}
-            <Link href={`/${locale}/vardering`} className="group">
+            <Link href={`/${locale}/sanitycheck`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] animate-pulse-box-navy">
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
                   <BarChart3 className="w-7 h-7" />
@@ -155,7 +152,7 @@ export default function HomePageContent() {
                   Gratis tempmätning först – djupare analys och värderingsspann mot betalning.
                 </p>
                 <div className="mt-6 flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
-                  <span className="text-sm font-medium">Läs mer</span>
+                  <span className="text-sm font-medium">Starta nu</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
@@ -277,7 +274,7 @@ export default function HomePageContent() {
           
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {/* Freemium */}
-            <Link href={`/${locale}/vardering`} className="group">
+            <Link href={`/${locale}/sanitycheck`} className="group">
               <div className="h-full bg-navy text-white p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] animate-pulse-box-navy">
                 <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
                   <Zap className="w-7 h-7" />
@@ -468,25 +465,20 @@ export default function HomePageContent() {
             <p className="text-lg text-white/80 mb-10 max-w-xl mx-auto">
               Starta med en gratis sanitycheck och få en första bild av var ditt företag står.
             </p>
-            <button
-              onClick={() => setIsAnalysisModalOpen(true)}
+            <Link
+              href={`/${locale}/sanitycheck`}
               className="group inline-flex items-center justify-center gap-3 bg-white text-navy font-bold py-4 px-10 rounded-2xl text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
               <Sparkles className="w-5 h-5" />
               Starta gratis sanitycheck
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </button>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Spacer for footer */}
       <div className="h-16"></div>
-
-      {/* Analysis Modal */}
-      {isAnalysisModalOpen && (
-        <AnalysisModal onClose={() => setIsAnalysisModalOpen(false)} />
-      )}
     </main>
   )
 }
