@@ -219,39 +219,30 @@ export default function IndustrySelectorModal({ onSelect, onClose }: IndustrySel
     <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
       <div className="bg-gradient-to-br from-slate-50 to-gray-100 rounded-3xl max-w-6xl w-full shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-primary-navy via-blue-900 to-indigo-900 px-8 py-8 flex-shrink-0 overflow-hidden">
-          {/* Decorative background elements */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-            <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent" />
+        <div className="bg-[#1F3C58] px-8 py-8 flex-shrink-0">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-white/10 rounded-xl">
+                <Building className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-white/60 text-sm font-medium uppercase tracking-wider">Steg 0 av 8</span>
+            </div>
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group"
+              >
+                <X className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
+              </button>
+            )}
           </div>
           
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white/10 rounded-xl backdrop-blur-sm">
-                  <Building className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-white/60 text-sm font-medium uppercase tracking-wider">Steg 0 av 8</span>
-              </div>
-              {onClose && (
-                <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group"
-                >
-                  <X className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
-                </button>
-              )}
-            </div>
-            
-            <h1 className="text-4xl font-black text-white mb-3 tracking-tight">
-              Vilken bransch verkar ditt företag i?
-            </h1>
-            <p className="text-lg text-white/70 max-w-2xl">
-              Välj den kategori som bäst beskriver er verksamhet. Detta hjälper oss ställa rätt frågor och ge dig en mer träffsäker värdering.
-            </p>
-          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Vilken bransch verkar ditt företag i?
+          </h1>
+          <p className="text-base text-white/70 max-w-2xl">
+            Välj den kategori som bäst beskriver er verksamhet. Detta hjälper oss ställa rätt frågor och ge dig en mer träffsäker värdering.
+          </p>
         </div>
 
         {/* Industry Grid */}
