@@ -18,8 +18,11 @@ import {
   Check,
   Loader2,
   Download,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  ChevronDown
 } from 'lucide-react'
+import { INDUSTRIES } from './IndustrySelectorModal'
 
 // Types
 export interface SanitycheckState {
@@ -250,6 +253,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false)
+  const [showIndustryModal, setShowIndustryModal] = useState(false)
 
   const completionMap = useMemo(() => {
     const map: Record<number, boolean> = {}
@@ -447,13 +451,16 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
               </div>
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Bransch</label>
-                <input
-                  type="text"
-                  value={state.industry}
-                  onChange={e => updateField("industry", e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
-                  placeholder="IT-konsult, E-handel, etc."
-                />
+                <button
+                  type="button"
+                  onClick={() => setShowIndustryModal(true)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-left text-white focus:outline-none focus:border-white/40 transition-colors flex items-center justify-between hover:bg-white/15"
+                >
+                  <span className={state.industry ? 'text-white' : 'text-white/40'}>
+                    {state.industry || 'Välj bransch...'}
+                  </span>
+                  <ChevronDown className="w-5 h-5 text-white/60" />
+                </button>
               </div>
             </div>
 
@@ -1273,6 +1280,115 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
           </div>
         </div>
       </div>
+
+      {/* Industry Selector Modal */}
+      {showIndustryModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-slate-50 to-gray-100 rounded-3xl max-w-6xl w-full shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+            {/* Header */}
+            <div className="bg-navy px-8 py-8 flex-shrink-0">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-white/10 rounded-xl">
+                    <Building2 className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-white/60 text-sm font-medium uppercase tracking-wider">Välj bransch</span>
+                </div>
+                <button
+                  onClick={() => setShowIndustryModal(false)}
+                  className="p-2 hover:bg-white/10 rounded-xl transition-all duration-200 group"
+                >
+                  <X className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
+                </button>
+              </div>
+              
+              <h2 className="text-3xl font-bold text-white mb-2">
+                Vilken bransch verkar ditt företag i?
+              </h2>
+              <p className="text-base text-white/70 max-w-2xl">
+                Välj den kategori som bäst beskriver er verksamhet.
+              </p>
+            </div>
+
+            {/* Industry Grid */}
+            <div className="p-6 overflow-y-auto flex-1 min-h-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {INDUSTRIES.map((industry) => {
+                  const isSelected = state.industry === industry.label
+                  
+                  return (
+                    <button
+                      key={industry.id}
+                      onClick={() => {
+                        updateField("industry", industry.label)
+                        setShowIndustryModal(false)
+                      }}
+                      className={`
+                        relative group text-left p-4 rounded-xl border-2 transition-all duration-200
+                        ${isSelected 
+                          ? 'border-navy bg-navy text-white shadow-lg' 
+                          : 'border-gray-200 bg-white hover:border-navy/30 hover:shadow-md'
+                        }
+                      `}
+                    >
+                      {/* Selected indicator */}
+                      {isSelected && (
+                        <div className="absolute top-2 right-2">
+                          <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-md">
+                            <CheckCircle className="w-4 h-4 text-navy" />
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Icon */}
+                      <div className={`
+                        w-11 h-11 rounded-lg flex items-center justify-center mb-3 transition-all duration-200
+                        ${isSelected 
+                          ? 'bg-white/20' 
+                          : 'bg-navy'
+                        }
+                      `}>
+                        <div className="text-white">
+                          {industry.icon}
+                        </div>
+                      </div>
+                      
+                      {/* Content */}
+                      <h3 className={`font-bold text-sm mb-1 ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                        {industry.label}
+                      </h3>
+                      <p className={`text-xs leading-relaxed ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
+                        {industry.description}
+                      </p>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-8 py-5 bg-white border-t border-gray-100 flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-gray-500">
+                  {state.industry 
+                    ? <span className="text-gray-900 font-medium">
+                        Vald bransch: {state.industry}
+                      </span>
+                    : 'Klicka på en bransch för att välja'
+                  }
+                </p>
+                
+                <button
+                  onClick={() => setShowIndustryModal(false)}
+                  className="px-6 py-3 bg-navy text-white font-bold rounded-lg hover:bg-navy/90 transition-colors"
+                >
+                  Stäng
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
