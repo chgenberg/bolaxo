@@ -669,14 +669,14 @@ export default function HomePageContent() {
               Redo att komma igång?
             </h2>
             <p className="text-lg text-white/80 mb-10 max-w-xl mx-auto">
-              Starta med en gratis sanitycheck och få en första bild av var ditt företag står.
+              Börja med en värderingskoll utan kostnad och se hur ditt bolag står sig.
             </p>
             <Link
               href={`/${locale}/sanitycheck`}
               className="group inline-flex items-center justify-center gap-3 bg-white text-navy font-bold py-4 px-10 rounded-2xl text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
               <Sparkles className="w-5 h-5" />
-              Starta gratis sanitycheck
+              Starta värderingskoll utan kostnad
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>

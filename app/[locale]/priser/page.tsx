@@ -220,8 +220,8 @@ export default function PriserPage() {
                     Steg 3 · Mest stöd
                   </span>
                 </div>
-                <h3 className="text-2xl font-bold mb-2">Premium</h3>
-                <div className="text-3xl font-bold mb-4">Fast pris + ev. låg success fee</div>
+                <h3 className="text-2xl font-bold mb-2 text-white">Premium</h3>
+                <div className="text-3xl font-bold mb-4 text-white">Bas + rådgivare 45 min inkluderat</div>
                 <p className="text-white/70 text-sm mb-6">
                   För dig som vill ha en rådgivare med i processen.
                 </p>
@@ -547,9 +547,6 @@ export default function PriserPage() {
                     </div>
                   </li>
                 </ul>
-                <p className="text-sm text-white/60 mt-6 p-4 bg-white/10 rounded-xl">
-                  Pris: högre fast avgift + eventuellt en låg success fee vid genomförd affär – fortfarande långt under traditionella mäklarupplägg.
-                </p>
               </div>
 
               <div className="bg-white rounded-2xl p-8 border border-gray-200">

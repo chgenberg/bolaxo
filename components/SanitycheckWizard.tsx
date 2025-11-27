@@ -137,6 +137,7 @@ const whySellOptions = [
   "Söker tillväxtpartner",
   "Vill göra exit",
   "Vill frigöra tid/kapital",
+  "Strategisk avyttring",
   "Annat"
 ]
 
@@ -248,6 +249,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false)
 
   const completionMap = useMemo(() => {
     const map: Record<number, boolean> = {}
@@ -306,6 +308,45 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
       setIsAnalyzing(false)
     }
   }, [state])
+
+  const generatePdf = useCallback(async () => {
+    if (!analysisResult) return
+    
+    setIsGeneratingPdf(true)
+    
+    try {
+      const res = await fetch('/api/sanitycheck-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyName: state.companyName,
+          orgNumber: state.orgNumber,
+          industry: state.industry,
+          website: state.website,
+          analysisResult,
+          formData: state
+        })
+      })
+      
+      if (!res.ok) {
+        throw new Error('PDF-genereringen misslyckades')
+      }
+      
+      const blob = await res.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `sanitycheck-${state.companyName.replace(/[^a-zA-Z0-9åäöÅÄÖ\s]/g, '').replace(/\s+/g, '-')}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Kunde inte generera PDF')
+    } finally {
+      setIsGeneratingPdf(false)
+    }
+  }, [analysisResult, state])
 
   const goNext = async () => {
     if (activeStep === 10 && !analysisResult) {
@@ -977,11 +1018,88 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                     ))}
                   </div>
                 </div>
+
+                {/* Download PDF Button */}
+                <div className="flex justify-center pt-4">
+                  <button
+                    onClick={generatePdf}
+                    disabled={isGeneratingPdf}
+                    className="relative group px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700"
+                  >
+                    {/* Pulsing shadow effect */}
+                    {!isGeneratingPdf && (
+                      <span className="absolute inset-0 rounded-2xl bg-emerald-500 animate-ping opacity-20" />
+                    )}
+                    <span className="relative flex items-center gap-3">
+                      {isGeneratingPdf ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Genererar PDF...
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-5 h-5" />
+                          Ladda ner rapport (PDF)
+                        </>
+                      )}
+                    </span>
+                  </button>
+                </div>
               </>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-white/60">Fyll i steg 1-10 för att få din analys.</p>
-                <p className="text-white/40 text-sm mt-2">Du har fyllt i {mainStepsComplete} av 10 steg.</p>
+              <div className="flex flex-col items-center justify-center py-16">
+                <div className="bg-white/10 rounded-2xl p-8 text-center max-w-md">
+                  <Sparkles className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">Redo att generera din rapport?</h3>
+                  <p className="text-white/60 mb-6">
+                    {mainStepsComplete < 10 
+                      ? `Fyll i resterande ${10 - mainStepsComplete} steg för att få din fullständiga analys.`
+                      : 'Klicka på knappen nedan för att skapa din personliga sanitycheck-rapport.'
+                    }
+                  </p>
+                  
+                  <button
+                    onClick={runAnalysis}
+                    disabled={mainStepsComplete < 10 || isAnalyzing}
+                    className={`
+                      relative group px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300
+                      ${mainStepsComplete >= 10 
+                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 cursor-pointer'
+                        : 'bg-white/20 text-white/50 cursor-not-allowed'
+                      }
+                    `}
+                  >
+                    {/* Pulsing shadow effect */}
+                    {mainStepsComplete >= 10 && !isAnalyzing && (
+                      <span className="absolute inset-0 rounded-2xl bg-emerald-500 animate-ping opacity-25" />
+                    )}
+                    <span className="relative flex items-center gap-3">
+                      {isAnalyzing ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Analyserar...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5" />
+                          Generera rapport
+                        </>
+                      )}
+                    </span>
+                  </button>
+                  
+                  {mainStepsComplete < 10 && (
+                    <div className="mt-4 flex items-center justify-center gap-2">
+                      <div className="w-full bg-white/10 rounded-full h-2">
+                        <div 
+                          className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${(mainStepsComplete / 10) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-white/60 text-sm whitespace-nowrap">{mainStepsComplete}/10</span>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -1059,7 +1177,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="font-bold text-navy tracking-wider">BOLAXO</div>
           <div className="text-sm text-gray-500">
-            Sanitycheck & värderingsspann · {completedCount} av {stepMeta.length} steg klara
+            Värderingskoll · {completedCount} av {stepMeta.length} steg klara
           </div>
         </div>
       </div>
@@ -1069,8 +1187,8 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
           {/* Sidebar */}
           <div className="lg:w-72 flex-shrink-0">
             <div className="bg-white rounded-2xl p-6 border border-gray-200 lg:sticky lg:top-24">
-              <h3 className="font-semibold text-navy mb-1">Sanitycheck & värdering</h3>
-              <p className="text-sm text-gray-500 mb-6">Gå igenom stegen för att få din analys och ett indikativt värderingsspann.</p>
+              <h3 className="font-semibold text-navy mb-1">Snabb genomlysning & indikativ värdering</h3>
+              <p className="text-sm text-gray-500 mb-6">Här gör du en snabb genomlysning av bolaget. Dina svar ger både en uppskattning av hur redo ni är att sälja och en indikativ bild av vad företaget kan vara värt.</p>
               
               <div className="space-y-1">
                 {stepMeta.map(step => {

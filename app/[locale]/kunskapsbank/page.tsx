@@ -250,7 +250,7 @@ export default function KunskapsbankPage() {
                   </span>
                 </div>
                 <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Nivå</span>
-                <h3 className="text-lg font-bold mt-1 mb-2">Premium</h3>
+                <h3 className="text-lg font-bold mt-1 mb-2 text-white">Premium</h3>
                 <p className="text-sm font-medium text-white/90 mb-4">Bas + rådgivare 45 min inkluderat.</p>
                 <ul className="space-y-2 text-sm text-white/80">
                   <li className="flex items-start gap-2">
@@ -433,7 +433,7 @@ export default function KunskapsbankPage() {
                   className="inline-flex items-center gap-2 px-6 py-3 bg-navy text-white font-semibold rounded-full hover:bg-navy/90 transition-colors"
                 >
                   <Sparkles className="w-5 h-5" />
-                  Starta gratis sanitycheck
+                  Starta värderingskoll utan kostnad
                 </Link>
                 <Link 
                   href={`/${locale}/salja/start`}

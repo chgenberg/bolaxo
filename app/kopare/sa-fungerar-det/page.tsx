@@ -14,7 +14,6 @@ export default function BuyerInfoPage() {
       title: 'Profil & bevakningar',
       shortTitle: 'Profil & bevakningar',
       description: 'Logga in med BankID och fyll i din profil. Sätt bevakningar och få mail/push när nya matchningar dyker upp.',
-      time: '5-10 min',
       icon: <User className="w-6 h-6" />,
       detailedTitle: 'Skapa en trovärdig köparprofil',
       detailedDescription: 'Logga in med BankID och fyll i din profil med branscher, storlek och finansiering. Lägg gärna till LinkedIn, kort investeringspitch och vad du söker. Mer profilinfo ger högre trovärdighet och fler säljare släpper in dig.',
@@ -24,7 +23,6 @@ export default function BuyerInfoPage() {
       title: 'Sök & intresseanmäl',
       shortTitle: 'Sök & intresseanmäl',
       description: 'Filtrera på bransch, region, omsättning, pris. Skicka intresseanmälan på relevanta objekt.',
-      time: 'Löpande',
       icon: <Search className="w-6 h-6" />,
       detailedTitle: 'Hitta rätt objekt',
       detailedDescription: 'Filtrera på bransch, region, omsättning, pris, antal anställda, verifiering och anledning till försäljning. Skicka intresseanmälan på relevanta objekt och få svar direkt i plattformen.',
@@ -34,7 +32,6 @@ export default function BuyerInfoPage() {
       title: 'NDA',
       shortTitle: 'NDA',
       description: 'Begär access och signera NDA med BankID. Säljaren är anonym tills NDA är godkänd.',
-      time: '2-5 dagar',
       icon: <Shield className="w-6 h-6" />,
       detailedTitle: 'Signera NDA och få full access',
       detailedDescription: 'Begär access och signera NDA med BankID. Säljaren är anonym tills NDA är godkänd. Efter godkännande ser du utökad info och kan ställa frågor direkt till säljaren.',
@@ -44,7 +41,6 @@ export default function BuyerInfoPage() {
       title: 'Q&A, shortlist & datarum',
       shortTitle: 'Datarum & DD',
       description: 'Ställ frågor i säker chat. Jämför nyckeltal sida-vid-sida. Få access till datarum.',
-      time: 'Efter behov',
       icon: <ChartBar className="w-6 h-6" />,
       detailedTitle: 'Granska och analysera',
       detailedDescription: 'Ställ frågor i säker chat. Lägg objekt i shortlist och jämför nyckeltal sida-vid-sida. Få behörighetsstyrd access till datarum med versionshistorik, vattenmärkning och aktivitetslogg.',
@@ -54,7 +50,6 @@ export default function BuyerInfoPage() {
       title: 'LOI & tillträde',
       shortTitle: 'LOI & tillträde',
       description: 'Skicka indikativt bud (LOI) via vår mall. Följ milstolpsplan: DD → avtal → tillträde.',
-      time: '60-90 dagar',
       icon: <Building2 className="w-6 h-6" />,
       detailedTitle: 'Från bud till tillträde',
       detailedDescription: 'Skicka indikativt bud (LOI) via vår mall med pris, villkor och tidslinje. Följ milstolpsplan: DD → avtal → tillträde. Behöver du stöd? Vi matchar dig med jurist/revisor i slutskedet.',
@@ -90,7 +85,7 @@ export default function BuyerInfoPage() {
                 Skapa köparprofil
               </Link>
               <Link href="/sok" className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary-navy font-bold rounded-lg hover:bg-gray-50 transition-all text-base sm:text-lg border-2 border-primary-navy">
-                Sätt bevakning (gratis)
+                Sätt bevakning
               </Link>
             </div>
           </div>
@@ -143,10 +138,7 @@ export default function BuyerInfoPage() {
                         
                         {/* Title */}
                         <div className="text-center">
-                          <div className="font-bold text-sm mb-1">{item.shortTitle}</div>
-                          <div className={`text-xs ${activeStep === item.step ? 'text-white/80' : 'text-gray-600'}`}>
-                            {item.time}
-                          </div>
+                          <div className="font-bold text-sm">{item.shortTitle}</div>
                         </div>
                       </div>
                     </button>
@@ -165,10 +157,7 @@ export default function BuyerInfoPage() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-3">{steps[activeStep - 1].detailedTitle}</h3>
-                    <span className="inline-block bg-primary-navy/10 text-primary-navy px-4 py-2 rounded-lg text-sm font-semibold mb-4">
-                      {steps[activeStep - 1].time}
-                    </span>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4">{steps[activeStep - 1].detailedTitle}</h3>
                     <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
                       {steps[activeStep - 1].detailedDescription}
                     </p>

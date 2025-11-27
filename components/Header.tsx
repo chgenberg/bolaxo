@@ -27,7 +27,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     {
       label: 'Översikt',
       dropdown: [
-        { label: 'Sanitycheck & Värdering', href: '/sanitycheck' },
+        { label: 'Värderingskoll', href: '/sanitycheck' },
         { label: 'Investerarprofil', href: '/investerarprofil' },
         { label: 'Säljarprofil', href: '/saljarprofil' },
         { label: 'Skapa annons', href: '/salja/skapa-annons' },
@@ -42,7 +42,8 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
       dropdown: [
         { label: t('footer.freeValuation'), href: '/sanitycheck' },
         { label: t('footer.howItWorks'), href: '/salja' },
-        { label: t('footer.startSelling'), href: '/salja/start' },
+        { label: 'Skapa annons', href: '/salja/start' },
+        { label: 'Säljarprofil', href: '/saljarprofil' },
         { label: 'Välj rätt nivå', href: '/priser' },
       ]
     },
@@ -52,6 +53,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
         { label: t('footer.searchCompany'), href: '/sok' },
         { label: t('footer.howItWorks'), href: '/kopare/sa-fungerar-det' },
         { label: t('footer.buyerSignup'), href: '/kopare/start' },
+        { label: 'Investerarprofil', href: '/investerarprofil' },
       ]
     },
   ]

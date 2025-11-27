@@ -82,7 +82,7 @@ export default function SaljaInfoPage() {
                   href={`/${locale}/sanitycheck`}
                   className="group inline-flex items-center justify-center gap-3 bg-primary-navy/10 text-primary-navy font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:bg-primary-navy/20 border-2 border-primary-navy/20"
                 >
-                  Gratis värdering
+                  Starta värderingskoll utan kostnad
                 </Link>
               </div>
             </div>
