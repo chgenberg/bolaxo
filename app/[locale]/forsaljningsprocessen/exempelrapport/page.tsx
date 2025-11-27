@@ -253,12 +253,23 @@ export default function ExempelrapportPage() {
   })
 
   const reportContent = [
+    'Innehållsförteckning',
     'Sammanfattning & Nyckeltal',
-    'Företagsöversikt & Finansiell analys',
-    'Affärsrelationer & Organisation',
-    'Balansräkning & Juridik',
-    'Riskbedömning & SWOT',
-    'Rekommendationer & Nästa steg'
+    'Övergripande Bedömning',
+    'Företagsöversikt',
+    'Finansiell Analys (3 sidor)',
+    'Affärsrelationer & Kunder (2 sidor)',
+    'Organisation & Ledning (2 sidor)',
+    'Balansräkning (2 sidor)',
+    'Juridisk Dokumentation (2 sidor)',
+    'Riskbedömning (2 sidor)',
+    'SWOT-Analys',
+    'Branschspecifik Analys',
+    'Värderingsfaktorer',
+    'Rekommendationer',
+    'Handlingsplan & Tidslinje',
+    'Nästa Steg & Kontakt',
+    'Bilagor & Ansvarsfriskrivning'
   ]
 
   return (
@@ -295,7 +306,7 @@ export default function ExempelrapportPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">
-                Komplett 7-sidig PDF-rapport
+                Komplett 24-sidig PDF-rapport
               </h2>
               <p className="text-gray-600">
                 Denna exempelrapport visar hur din försäljningsanalys kommer att se ut 
