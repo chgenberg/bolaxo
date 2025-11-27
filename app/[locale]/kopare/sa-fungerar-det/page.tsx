@@ -16,7 +16,6 @@ export default function BuyerInfoPage() {
       title: t('steps.step1.title'),
       shortTitle: t('steps.step1.shortTitle'),
       description: t('steps.step1.description'),
-      time: t('steps.step1.time'),
       icon: <User className="w-6 h-6" />,
       detailedTitle: t('steps.step1.detailedTitle'),
       detailedDescription: t('steps.step1.detailedDescription'),
@@ -26,7 +25,6 @@ export default function BuyerInfoPage() {
       title: t('steps.step2.title'),
       shortTitle: t('steps.step2.shortTitle'),
       description: t('steps.step2.description'),
-      time: t('steps.step2.time'),
       icon: <Search className="w-6 h-6" />,
       detailedTitle: t('steps.step2.detailedTitle'),
       detailedDescription: t('steps.step2.detailedDescription'),
@@ -36,7 +34,6 @@ export default function BuyerInfoPage() {
       title: t('steps.step3.title'),
       shortTitle: t('steps.step3.shortTitle'),
       description: t('steps.step3.description'),
-      time: t('steps.step3.time'),
       icon: <Shield className="w-6 h-6" />,
       detailedTitle: t('steps.step3.detailedTitle'),
       detailedDescription: t('steps.step3.detailedDescription'),
@@ -46,7 +43,6 @@ export default function BuyerInfoPage() {
       title: t('steps.step4.title'),
       shortTitle: t('steps.step4.shortTitle'),
       description: t('steps.step4.description'),
-      time: t('steps.step4.time'),
       icon: <ChartBar className="w-6 h-6" />,
       detailedTitle: t('steps.step4.detailedTitle'),
       detailedDescription: t('steps.step4.detailedDescription'),
@@ -56,7 +52,6 @@ export default function BuyerInfoPage() {
       title: t('steps.step5.title'),
       shortTitle: t('steps.step5.shortTitle'),
       description: t('steps.step5.description'),
-      time: t('steps.step5.time'),
       icon: <Building2 className="w-6 h-6" />,
       detailedTitle: t('steps.step5.detailedTitle'),
       detailedDescription: t('steps.step5.detailedDescription'),
@@ -148,10 +143,7 @@ export default function BuyerInfoPage() {
                         
                         {/* Title */}
                         <div className="text-center">
-                          <div className="font-bold text-sm mb-1">{item.shortTitle}</div>
-                          <div className={`text-xs ${activeStep === item.step ? 'text-white/80' : 'text-gray-600'}`}>
-                            {item.time}
-                          </div>
+                          <div className="font-bold text-sm">{item.shortTitle}</div>
                         </div>
                       </div>
                     </button>
@@ -170,10 +162,7 @@ export default function BuyerInfoPage() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-3">{steps[activeStep - 1].detailedTitle}</h3>
-                    <span className="inline-block bg-primary-navy/10 text-primary-navy px-4 py-2 rounded-lg text-sm font-semibold mb-4">
-                      {steps[activeStep - 1].time}
-                    </span>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-primary-navy mb-4">{steps[activeStep - 1].detailedTitle}</h3>
                     <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
                       {steps[activeStep - 1].detailedDescription}
                     </p>
