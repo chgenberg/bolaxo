@@ -292,7 +292,7 @@ export default function ExempelrapportPage() {
             {/* Mascot - Left side */}
             <div className="flex-shrink-0">
               <img 
-                src="/Maskots/maskot6.png" 
+                src="/Maskots/maskot4.png" 
                 alt="Bolaxo maskot" 
                 className="w-36 h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain"
               />
@@ -385,9 +385,9 @@ export default function ExempelrapportPage() {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-[#1F3C58] to-[#2D5A7B] rounded-2xl p-8 text-white text-center">
-          <h3 className="text-2xl font-bold mb-3">Vill du skapa din egen rapport?</h3>
-          <p className="text-white/80 mb-6">
+        <div className="bg-[#1F3C58] rounded-2xl p-8 text-white text-center">
+          <h3 className="text-2xl font-bold mb-3 text-white">Vill du skapa din egen rapport?</h3>
+          <p className="text-white mb-6">
             Gå till försäljningsprocessen och fyll i uppgifter om ditt företag för att generera 
             en skräddarsydd analysrapport.
           </p>
