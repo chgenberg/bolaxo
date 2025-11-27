@@ -1166,11 +1166,6 @@ export default function SalesProcessReportPDF({
         </View>
       </Page>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 BOLAXO AB | Konfidentiellt dokument</Text>
-        </View>
-      </Page>
-
       {/* Page 16: Risk Assessment - Overview */}
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
