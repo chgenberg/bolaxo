@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import SalesProcessDataModal, { 
   CompanyData, 
   initialCompanyData 
@@ -1532,12 +1533,33 @@ export default function ForsaljningsprocessenPage() {
       <HideHeader />
 
       <div className="relative min-h-screen px-3 sm:px-4 py-8 sm:py-12">
-        {/* Top header bar */}
+        {/* Top header bar with mascot */}
         <div className="max-w-6xl mx-auto mb-6">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-[#1F3C58]">BOLAXO</h1>
-            <div className="text-sm text-gray-500">
-              Försäljningsprocess · {currentStep + 1} av {industrySteps.length} steg klara
+            <div className="flex items-center gap-6">
+              <h1 className="text-2xl font-bold text-[#1F3C58]">BOLAXO</h1>
+              {selectedIndustry && (
+                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-[#1F3C58]/5 rounded-xl">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#1F3C58] text-white">
+                    {selectedIndustry.icon}
+                  </div>
+                  <span className="text-sm font-medium text-[#1F3C58]">{selectedIndustry.label}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-500">
+                Försäljningsprocess · {currentStep + 1} av {industrySteps.length} steg klara
+              </div>
+              <div className="hidden lg:block">
+                <Image
+                  src="/Maskots/maskot6.png"
+                  alt="Bolaxo maskot"
+                  width={80}
+                  height={80}
+                  className="object-contain"
+                />
+              </div>
             </div>
           </div>
         </div>
