@@ -1350,64 +1350,6 @@ export default function SalesProcessReportPDF({
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Branschspecifik Analys{companyData.industry ? `: ${companyData.industry.label}` : ''}</Text>
-            
-            {analysis.industrySpecific.typicalMultiples && (
-              <View style={styles.highlightBox}>
-                <Text style={styles.boldText}>Typiska värderingsmultiplar</Text>
-                <Text style={styles.text}>{analysis.industrySpecific.typicalMultiples}</Text>
-              </View>
-            )}
-
-            {analysis.industrySpecific.buyerTypes && (
-              <View style={{ marginTop: 10 }}>
-                <Text style={styles.subsectionTitle}>Typiska köpare</Text>
-                <Text style={styles.text}>{analysis.industrySpecific.buyerTypes}</Text>
-              </View>
-            )}
-
-            <View style={styles.twoColumn}>
-              <View style={styles.column}>
-                {analysis.industrySpecific.keyValueDrivers && analysis.industrySpecific.keyValueDrivers.length > 0 && (
-                  <>
-                    <Text style={styles.subsectionTitle}>Branschens värdedrivare</Text>
-                    <View style={styles.successBox}>
-                      {analysis.industrySpecific.keyValueDrivers.map((driver, idx) => (
-                        <Text key={idx} style={{ fontSize: 8, color: '#047857', marginTop: 2 }}>✓ {driver}</Text>
-                      ))}
-                    </View>
-                  </>
-                )}
-              </View>
-              <View style={styles.column}>
-                {analysis.industrySpecific.commonRisks && analysis.industrySpecific.commonRisks.length > 0 && (
-                  <>
-                    <Text style={styles.subsectionTitle}>Branschspecifika risker</Text>
-                    <View style={styles.warningBox}>
-                      {analysis.industrySpecific.commonRisks.map((risk, idx) => (
-                        <Text key={idx} style={{ fontSize: 8, color: '#92400E', marginTop: 2 }}>! {risk}</Text>
-                      ))}
-                    </View>
-                  </>
-                )}
-              </View>
-            </View>
-
-            {analysis.industrySpecific.dueDiligenceFocus && analysis.industrySpecific.dueDiligenceFocus.length > 0 && (
-              <View style={{ marginTop: 10 }}>
-                <Text style={styles.subsectionTitle}>Due Diligence-fokus för branschen</Text>
-                <View style={styles.highlightBox}>
-                  {analysis.industrySpecific.dueDiligenceFocus.map((focus, idx) => (
-                    <View key={idx} style={{ flexDirection: 'row', marginBottom: 4 }}>
-                      <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#1F3C58', alignItems: 'center', justifyContent: 'center', marginRight: 8 }}>
-                        <Text style={{ fontSize: 9, color: '#FFF', fontWeight: 'bold' }}>{idx + 1}</Text>
-                      </View>
-                      <Text style={{ ...styles.text, flex: 1, marginTop: 2 }}>{focus}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-            )}
-          </View>
 
           {!analysis.industrySpecific && (
             <View style={styles.highlightBox}>
