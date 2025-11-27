@@ -614,14 +614,14 @@ export default function PriserPage() {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Redo att komma igång?</h2>
           <p className="text-white/80 mb-8">
-            Börja gratis med en sanitycheck och se hur ditt bolag står sig.
+            Börja med en värderingskoll utan kostnad och se hur ditt bolag står sig.
           </p>
           <Link
             href={`/${locale}/sanitycheck`}
             className="inline-flex items-center gap-2 px-8 py-4 bg-white text-navy font-bold rounded-full hover:bg-white/90 transition-colors"
           >
             <Sparkles className="w-5 h-5" />
-            Starta gratis sanitycheck
+            Starta värderingskoll utan kostnad
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
