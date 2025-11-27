@@ -502,7 +502,7 @@ export default function PriserPage() {
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-navy text-white rounded-2xl p-8">
-                <h3 className="text-xl font-bold mb-6">Det här ingår i Premium</h3>
+                <h3 className="text-xl font-bold mb-6 text-white">Det här ingår i Premium</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
