@@ -1658,7 +1658,8 @@ export default function ForsaljningsprocessenPage() {
                 <p className="text-white/70 text-sm">{step.subtitle}</p>
               </div>
 
-              {/* URL Input Section */}
+              {/* URL Input Section - Only on step 1 */}
+              {currentStep === 0 && (
               <div className="px-4 sm:px-10 py-5 bg-gradient-to-r from-[#1F3C58]/5 to-[#1F3C58]/10 border-b border-[#1F3C58]/10">
                 <div className="flex items-center gap-2 mb-3">
                   <svg className="w-5 h-5 text-[#1F3C58]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1872,6 +1873,7 @@ export default function ForsaljningsprocessenPage() {
                   </div>
                 )}
               </div>
+              )}
 
               {/* Progress bar */}
               <div className="px-4 sm:px-10 py-3 sm:py-4 border-b border-gray-100">
