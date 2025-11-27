@@ -279,7 +279,7 @@ export default function ExempelrapportPage() {
       
       {/* Header */}
       <div className="bg-[#1F3C58] py-12 sm:py-16">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-5xl mx-auto px-4">
           <Link 
             href={`/${locale}/forsaljningsprocessen`}
             className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-6 transition-colors"
@@ -287,12 +287,27 @@ export default function ExempelrapportPage() {
             <ArrowLeft className="w-4 h-4 text-white" />
             <span className="text-white/70 hover:text-white">Tillbaka till Försäljningsprocessen</span>
           </Link>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
-            Exempelrapport: Försäljningsanalys
-          </h1>
-          <p className="text-white/80 text-lg">
-            Se hur en komplett försäljningsanalysrapport ser ut med ifyllda uppgifter
-          </p>
+          
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Mascot - Left side */}
+            <div className="flex-shrink-0">
+              <img 
+                src="/Maskots/maskot6.png" 
+                alt="Bolaxo maskot" 
+                className="w-36 h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 object-contain"
+              />
+            </div>
+
+            {/* Content - Right side */}
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
+                Exempelrapport: Försäljningsanalys
+              </h1>
+              <p className="text-white/80 text-lg">
+                Se hur en komplett försäljningsanalysrapport ser ut med ifyllda uppgifter
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 

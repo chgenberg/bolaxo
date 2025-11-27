@@ -66,26 +66,40 @@ export default function PriserPage() {
       {/* Hero */}
       <section className="bg-navy text-white pt-32 pb-16">
         <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-            Välj rätt nivå för din företagsförsäljning
-          </h1>
-          <p className="text-xl text-white/80 max-w-2xl">
-            Börja gratis med en light-värdering och uppgradera när du är redo att publicera annons,
-            matchas mot investerare och få personlig rådgivning.
-          </p>
-          <div className="flex flex-wrap gap-3 mt-8">
-            <span className="px-4 py-2 bg-white text-navy font-semibold rounded-full text-sm">
-              Freemium → Bas → Premium
-            </span>
-            <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
-              Sänkt tröskel
-            </span>
-            <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
-              Mer stöd för varje steg
-            </span>
-            <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
-              Inga dolda procent
-            </span>
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Content - Left side */}
+            <div className="flex-1 text-center md:text-left order-2 md:order-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-white">
+                Välj rätt nivå för din företagsförsäljning
+            </h1>
+              <p className="text-lg md:text-xl text-white/80 max-w-2xl">
+                Börja gratis med en light-värdering och uppgradera när du är redo att publicera annons,
+                matchas mot investerare och få personlig rådgivning.
+              </p>
+              <div className="flex flex-wrap gap-3 mt-8 justify-center md:justify-start">
+                <span className="px-4 py-2 bg-white text-navy font-semibold rounded-full text-sm">
+                  Freemium → Bas → Premium
+                </span>
+                <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
+                  Sänkt tröskel
+                </span>
+                <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
+                  Mer stöd för varje steg
+                </span>
+                <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
+                  Inga dolda procent
+                </span>
+              </div>
+            </div>
+
+            {/* Mascot - Right side */}
+            <div className="flex-shrink-0 order-1 md:order-2">
+              <img 
+                src="/Maskots/maskot5.png" 
+                alt="Bolaxo maskot" 
+                className="w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain"
+              />
+            </div>
           </div>
         </div>
       </section>
