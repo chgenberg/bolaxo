@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { CheckCircle, Lock, User, Search, Shield, ChartBar, Building2, Key, Eye, FileText, MessagesSquare, BarChart3, Target } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
 
@@ -65,37 +64,39 @@ export default function BuyerInfoPage() {
   ], [t])
 
   return (
-    <main className="bg-neutral-white">
-      {/* Hero Section with Background Image */}
-      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-24 md:pt-20 lg:pt-16">
-        {/* Background Image - Only in hero */}
-        <div className="absolute left-0 right-0 top-24 md:top-20 lg:top-16 bottom-0 z-0">
-          <Image 
-            src="/1.png" 
-            alt="Köparprocess" 
-            fill
-            className="object-cover object-top"
-            style={{ objectPosition: 'center top' }}
-            priority
-          />
-        </div>
+    <main className="bg-gray-100">
+      {/* Hero Section */}
+      <section className="pt-32 pb-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Mascot - Left side */}
+            <div className="flex-shrink-0">
+              <img 
+                src="/Home/maskot3.png" 
+                alt="Bolaxo maskot" 
+                className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain"
+              />
+            </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 w-full">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 sm:py-24 md:py-32">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-4 sm:mb-6">
-              {t('heroTitle')}
-            </h1>
-            <p className="text-lg sm:text-xl text-primary-navy/80 max-w-3xl mx-auto">
-              {t('heroSubtitle')}
-            </p>
-            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href={`/${locale}/registrera`} className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-primary-navy text-white font-bold rounded-lg hover:bg-primary-navy/90 transition-all text-base sm:text-lg shadow-lg hover:shadow-xl">
-                {t('createProfileButton')}
-              </Link>
-              <Link href={`/${locale}/sok`} className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary-navy font-bold rounded-lg hover:bg-gray-50 transition-all text-base sm:text-lg border-2 border-primary-navy">
-                {t('watchButton')}
-              </Link>
+            {/* Content - Right side */}
+            <div className="flex-1 text-center md:text-left">
+              <span className="inline-block text-sm font-bold text-primary-navy/60 uppercase tracking-widest mb-4">
+                Köparprocess
+              </span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-navy leading-tight mb-6">
+                {t('heroTitle')}
+              </h1>
+              <p className="text-lg md:text-xl text-gray-700 max-w-2xl mb-8 leading-relaxed">
+                {t('heroSubtitle')}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Link href={`/${locale}/registrera`} className="group inline-flex items-center justify-center gap-3 bg-primary-navy text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                  {t('createProfileButton')}
+                </Link>
+                <Link href={`/${locale}/sok`} className="group inline-flex items-center justify-center gap-3 bg-primary-navy/10 text-primary-navy font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:bg-primary-navy/20 border-2 border-primary-navy/20">
+                  {t('watchButton')}
+                </Link>
+              </div>
             </div>
           </div>
         </div>

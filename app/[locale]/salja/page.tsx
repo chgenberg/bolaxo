@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { CheckCircle, ArrowRight, Shield, TrendingUp, Users, FileText } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
 
@@ -55,30 +54,47 @@ export default function SaljaInfoPage() {
   ], [t])
 
   return (
-    <main className="bg-neutral-white">
-      {/* Hero Section with Background Image */}
-      <section className="relative min-h-screen flex items-center bg-cover bg-center pt-24 md:pt-20 lg:pt-16">
-        {/* Background Image - Only in hero */}
-        <div className="absolute left-0 right-0 top-24 md:top-20 lg:top-16 bottom-0 z-0">
-          <Image 
-            src="/2.png" 
-            alt="Säljprocess" 
-            fill
-            className="object-cover object-top"
-            style={{ objectPosition: 'center top' }}
-            priority
-          />
-        </div>
+    <main className="bg-gray-100">
+      {/* Hero Section */}
+      <section className="pt-32 pb-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            {/* Content - Left side */}
+            <div className="flex-1 text-center md:text-left order-2 md:order-1">
+              <span className="inline-block text-sm font-bold text-primary-navy/60 uppercase tracking-widest mb-4">
+                Säljprocess
+              </span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-navy leading-tight mb-6">
+                {t('heroTitle')}
+              </h1>
+              <p className="text-lg md:text-xl text-gray-700 max-w-2xl mb-8 leading-relaxed">
+                {t('heroSubtitle')}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Link
+                  href={`/${locale}/salja/skapa-annons`}
+                  className="group inline-flex items-center justify-center gap-3 bg-primary-navy text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                >
+                  Skapa annons
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                </Link>
+                <Link
+                  href={`/${locale}/sanitycheck`}
+                  className="group inline-flex items-center justify-center gap-3 bg-primary-navy/10 text-primary-navy font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:bg-primary-navy/20 border-2 border-primary-navy/20"
+                >
+                  Gratis värdering
+                </Link>
+              </div>
+            </div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 w-full">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-16 sm:py-24 md:py-32">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-primary-navy mb-4 sm:mb-6 uppercase">
-              {t('heroTitle')}
-            </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-primary-navy leading-relaxed px-4 sm:px-0">
-              {t('heroSubtitle')}
-            </p>
+            {/* Mascot - Right side */}
+            <div className="flex-shrink-0 order-1 md:order-2">
+              <img 
+                src="/Home/maskot2.png" 
+                alt="Bolaxo maskot" 
+                className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain"
+              />
+            </div>
           </div>
         </div>
       </section>
