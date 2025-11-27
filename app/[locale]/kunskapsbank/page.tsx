@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import { 
   BookOpen, 
@@ -150,20 +151,33 @@ export default function KunskapsbankPage() {
       {/* Hero Section */}
       <section className="bg-navy text-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
-              <BookOpen className="w-6 h-6" />
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="lg:w-2/3">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
+                  <BookOpen className="w-6 h-6" />
+                </div>
+                <span className="text-white/60 text-sm font-medium uppercase tracking-wider">Kunskapsbank</span>
+              </div>
+              
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Guider för hela resan
+              </h1>
+              <p className="text-xl text-white/80 max-w-2xl leading-relaxed">
+                Checklistor, mallar och guider. De flesta material laddas ner via e-post så att vi kan följa upp smart.
+                Det du ser här är Freemium-nivån – samma logik som i plattformen, men i PDF-form.
+              </p>
             </div>
-            <span className="text-white/60 text-sm font-medium uppercase tracking-wider">Kunskapsbank</span>
+            <div className="lg:w-1/3 flex justify-center lg:justify-end">
+              <Image
+                src="/Maskots/maskot7.png"
+                alt="Bolaxo maskot"
+                width={280}
+                height={280}
+                className="object-contain"
+              />
+            </div>
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-            Guider för hela resan
-          </h1>
-          <p className="text-xl text-white/80 max-w-2xl leading-relaxed">
-            Checklistor, mallar och guider. De flesta material laddas ner via e-post så att vi kan följa upp smart.
-            Det du ser här är Freemium-nivån – samma logik som i plattformen, men i PDF-form.
-          </p>
         </div>
       </section>
 
