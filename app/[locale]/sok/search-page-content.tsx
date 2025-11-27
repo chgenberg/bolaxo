@@ -196,12 +196,17 @@ export default function SearchPageContent() {
         filtered = filtered.filter(obj => filters.categories.includes(obj.type))
       }
 
-      // Price range filter
+      // Price range filter - only apply if user has changed from defaults
       const [minPrice, maxPrice] = filters.priceRange
-      filtered = filtered.filter(obj => {
-        const price = obj.price || obj.priceMin
-        return price >= minPrice && price <= maxPrice
-      })
+      const isPriceFilterActive = minPrice > 0 || maxPrice < 150000000
+      if (isPriceFilterActive) {
+        filtered = filtered.filter(obj => {
+          const price = obj.price || obj.priceMin || 0
+          // If price is 0 or undefined, don't filter out
+          if (!price && price !== 0) return true
+          return price >= minPrice && price <= maxPrice
+        })
+      }
 
       // Revenue range filter
       if (filters.revenueRange) {
