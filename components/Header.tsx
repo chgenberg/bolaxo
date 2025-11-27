@@ -33,6 +33,8 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
         { label: 'Skapa annons', href: '/salja/skapa-annons' },
         { label: 'Kunskapsbank', href: '/kunskapsbank' },
         { label: 'Prismodeller', href: '/priser' },
+        { label: 'Försäljningsprocessen', href: '/forsaljningsprocessen' },
+        { label: 'Exempelrapport (PDF)', href: '/forsaljningsprocessen/exempelrapport' },
       ]
     },
     {
