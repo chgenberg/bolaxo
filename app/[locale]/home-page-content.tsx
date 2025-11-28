@@ -46,9 +46,9 @@ export default function HomePageContent() {
             {/* Content - Right side */}
             <div className="flex-1 text-center md:text-left">
               {/* Main Headline */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-navy leading-tight mb-6">
-                Sälj, köp och sanitychecka företag
-                <span className="block text-navy/70">på ett trovärdigt och transparent sätt.</span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] xl:text-5xl font-bold text-navy leading-tight mb-6">
+                <span className="lg:whitespace-nowrap">Sälj, köp och sanitychecka företag</span>
+                <span className="block text-navy/70 lg:whitespace-nowrap">på ett trovärdigt och transparent sätt.</span>
             </h1>
               
               {/* Intro Text */}
