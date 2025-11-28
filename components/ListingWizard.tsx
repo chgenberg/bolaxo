@@ -252,8 +252,8 @@ const initialState: ListingWizardState = {
     region: true,
     employees: true
   },
-  detailsVisibility: "approved-buyers",
-  contactFlow: "platform-chat",
+  detailsVisibility: "",
+  contactFlow: "",
   publishVerification: "",
   packageType: ""
 }
