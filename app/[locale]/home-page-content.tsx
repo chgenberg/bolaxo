@@ -100,7 +100,7 @@ export default function HomePageContent() {
                   className="text-navy font-semibold hover:text-navy/70 transition-colors flex items-center gap-2 group"
                 >
                   <BarChart3 className="w-4 h-4" />
-                  Sanitycheck &amp; värderingsspann
+                  Snabb genomlysning &amp; indikativ värdering
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
