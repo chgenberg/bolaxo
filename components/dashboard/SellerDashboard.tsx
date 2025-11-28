@@ -201,7 +201,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
               </span>
             </div>
             
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">{company.anonymousTitle}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-2 text-white">{company.anonymousTitle}</h1>
             <p className="text-white/80 mb-4 max-w-2xl">{company.description}</p>
             
             <div className="flex flex-wrap gap-4 text-sm">
