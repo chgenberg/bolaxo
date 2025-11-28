@@ -27,6 +27,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     {
       label: 'Översikt',
       dropdown: [
+        { label: 'Bolag till salu', href: '/sok' },
         { label: 'Värderingskoll', href: '/sanitycheck' },
         { label: 'Investerarprofil', href: '/investerarprofil' },
         { label: 'Säljarprofil', href: '/saljarprofil' },
@@ -40,19 +41,15 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     {
       label: t('header.forSellers'),
       dropdown: [
-        { label: t('footer.freeValuation'), href: '/sanitycheck' },
         { label: t('footer.howItWorks'), href: '/salja' },
-        { label: 'Skapa annons', href: '/salja/start' },
         { label: 'Säljarprofil', href: '/saljarprofil' },
-        { label: 'Välj rätt nivå', href: '/priser' },
+        { label: 'Skapa annons', href: '/salja/start' },
       ]
     },
     {
       label: t('header.forBuyers'),
       dropdown: [
-        { label: t('footer.searchCompany'), href: '/sok' },
         { label: t('footer.howItWorks'), href: '/kopare/sa-fungerar-det' },
-        { label: t('footer.buyerSignup'), href: '/kopare/start' },
         { label: 'Investerarprofil', href: '/investerarprofil' },
       ]
     },
@@ -71,7 +68,15 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
     href: '/om-oss',
     dropdown: [
       { label: t('footer.contact'), href: '/kontakt' },
-      { label: 'Kunskapsbank', href: '/kunskapsbank' },
+    ]
+  })
+
+  // Add Dashboard section for quick login
+  baseNav.push({
+    label: 'Dashboard',
+    dropdown: [
+      { label: 'Köpare', href: '/auto-login/buyer' },
+      { label: 'Säljare', href: '/auto-login/seller' },
     ]
   })
 
@@ -111,7 +116,7 @@ export default function Header() {
 
   // Helper function to add locale prefix to paths
   const getLocalizedPath = (path: string) => {
-    if (path.startsWith('/admin') || path.startsWith('/api')) {
+    if (path.startsWith('/admin') || path.startsWith('/api') || path.startsWith('/auto-login')) {
       return path
     }
     return `/${locale}${path}`
