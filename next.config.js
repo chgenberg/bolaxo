@@ -1,9 +1,14 @@
 const createNextIntlPlugin = require('next-intl/plugin')
+const path = require('path')
 
 const withNextIntl = createNextIntlPlugin('./i18n.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Include pdfkit font files in the build
+  outputFileTracingIncludes: {
+    '/api/sanitycheck-pdf': ['./node_modules/pdfkit/js/data/**/*'],
+  },
   reactStrictMode: true,
   trailingSlash: false, // Ensure URLs don't have trailing slashes
   eslint: {
@@ -11,7 +16,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   // Exclude ESM-only packages from server-side bundling
-  serverExternalPackages: ['@react-pdf/renderer'],
+  serverExternalPackages: ['@react-pdf/renderer', 'pdfkit'],
   experimental: {
     // Handle ESM packages properly
     esmExternals: 'loose',
@@ -62,6 +67,12 @@ const nextConfig = {
           require.resolve('./lib/webpack-file-polyfill.js')
         )
       )
+      
+      // Handle pdfkit AFM font files
+      config.module.rules.push({
+        test: /\.afm$/,
+        type: 'asset/source',
+      })
     }
     return config
   },
