@@ -26,28 +26,29 @@ export interface SanitycheckPdfData {
   formData: Record<string, unknown>
 }
 
-// Color palette
+// BOLAXO Color palette - primarily dark navy
 const COLORS = {
   navy: '#0A1628',
   navyLight: '#1a2d4a',
+  navyMedium: '#142238',
+  white: '#FFFFFF',
+  offWhite: '#F8FAFC',
+  // Accent colors
   emerald: '#10B981',
   emeraldLight: '#D1FAE5',
-  emeraldDark: '#059669',
   amber: '#F59E0B',
   amberLight: '#FEF3C7',
   red: '#EF4444',
   redLight: '#FEE2E2',
   blue: '#3B82F6',
   blueLight: '#DBEAFE',
-  purple: '#8B5CF6',
-  purpleLight: '#EDE9FE',
+  // Grays
   gray: '#6B7280',
   grayLight: '#F3F4F6',
   grayDark: '#374151',
-  white: '#FFFFFF'
 }
 
-// Demo financial data for the mockup
+// Demo data
 const DEMO_FINANCIALS = {
   revenue: [32, 42, 52, 58],
   ebitda: [6.4, 8.4, 10.4, 11.6],
@@ -61,30 +62,28 @@ const DEMO_FINANCIALS = {
   }
 }
 
-// Demo category scores
-const DEMO_SCORES = {
-  categories: [
-    { name: 'Finansiell styrka', score: 78 },
-    { name: 'Marknad & kunder', score: 72 },
-    { name: 'Organisation', score: 68 },
-    { name: 'Processer & system', score: 75 },
-    { name: 'Tillväxtpotential', score: 82 },
-    { name: 'Säljberedskap', score: 65 }
-  ]
-}
+const DEMO_SCORES = [
+  { name: 'Finansiell styrka', score: 78 },
+  { name: 'Marknad & kunder', score: 72 },
+  { name: 'Organisation', score: 68 },
+  { name: 'Processer & system', score: 75 },
+  { name: 'Tillväxtpotential', score: 82 },
+  { name: 'Säljberedskap', score: 65 }
+]
 
 export async function generateSanitycheckPDF(data: SanitycheckPdfData): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     try {
       const doc = new PDFDocument({
         size: 'A4',
-        margins: { top: 40, bottom: 40, left: 50, right: 50 },
+        margins: { top: 40, bottom: 50, left: 50, right: 50 },
         bufferPages: true,
+        autoFirstPage: true,
         info: {
-          Title: `Sanitycheck & Värdering - ${data.companyName}`,
+          Title: `Värderingsrapport - ${data.companyName}`,
           Author: 'BOLAXO',
           Subject: 'Företagsanalys och indikativ värdering',
-          Creator: 'BOLAXO Sanitycheck Platform'
+          Creator: 'BOLAXO Sanitycheck'
         }
       })
 
@@ -94,57 +93,44 @@ export async function generateSanitycheckPDF(data: SanitycheckPdfData): Promise<
       doc.on('error', reject)
 
       const pageWidth = doc.page.width
-      const contentWidth = pageWidth - 100
+      const pageHeight = doc.page.height
+      const margin = 50
+      const contentWidth = pageWidth - margin * 2
 
-      // === PAGE 1: COVER ===
-      drawCoverPage(doc, data, pageWidth)
+      // ===== PAGE 1: COVER =====
+      drawCoverPage(doc, data, pageWidth, pageHeight, margin)
 
-      // === PAGE 2: EXECUTIVE SUMMARY ===
+      // ===== PAGE 2: SUMMARY & SCORES =====
       doc.addPage()
-      drawExecutiveSummary(doc, data, pageWidth, contentWidth)
+      drawSummaryPage(doc, data, pageWidth, margin, contentWidth)
 
-      // === PAGE 3: FINANCIAL OVERVIEW ===
+      // ===== PAGE 3: SWOT ANALYSIS =====
       doc.addPage()
-      drawFinancialOverview(doc, data, pageWidth, contentWidth)
+      drawSwotPage(doc, data, pageWidth, margin, contentWidth)
 
-      // === PAGE 4: SWOT ANALYSIS ===
+      // ===== PAGE 4: VALUATION & RECOMMENDATIONS =====
       doc.addPage()
-      drawSwotAnalysis(doc, data, pageWidth, contentWidth)
+      drawValuationPage(doc, data, pageWidth, pageHeight, margin, contentWidth)
 
-      // === PAGE 5: VALUATION ===
-      doc.addPage()
-      drawValuationSection(doc, data, pageWidth, contentWidth)
-
-      // === PAGE 6: RECOMMENDATIONS & NEXT STEPS ===
-      doc.addPage()
-      drawRecommendationsAndNextSteps(doc, data, pageWidth, contentWidth)
-
-      // Add page numbers and footer
-      const pages = doc.bufferedPageRange()
-      for (let i = 0; i < pages.count; i++) {
+      // Add page numbers
+      const range = doc.bufferedPageRange()
+      for (let i = 0; i < range.count; i++) {
         doc.switchToPage(i)
         
-        // Page number
-        doc.fontSize(9)
-           .fillColor(COLORS.gray)
-           .text(
-             `Sida ${i + 1} av ${pages.count}`,
-             50,
-             doc.page.height - 30,
-             { align: 'right', width: contentWidth }
-           )
-        
-        // Footer line
+        // Skip page number on cover
         if (i > 0) {
-          doc.moveTo(50, doc.page.height - 45)
-             .lineTo(pageWidth - 50, doc.page.height - 45)
-             .strokeColor(COLORS.grayLight)
-             .lineWidth(0.5)
-             .stroke()
+          doc.fontSize(9)
+             .fillColor(COLORS.gray)
+             .text(
+               `${i + 1} / ${range.count}`,
+               margin,
+               pageHeight - 35,
+               { align: 'right', width: contentWidth }
+             )
           
           doc.fontSize(8)
              .fillColor(COLORS.gray)
-             .text('BOLAXO | Konfidentiellt', 50, doc.page.height - 30)
+             .text('BOLAXO | Konfidentiellt', margin, pageHeight - 35)
         }
       }
 
@@ -155,376 +141,272 @@ export async function generateSanitycheckPDF(data: SanitycheckPdfData): Promise<
   })
 }
 
-function drawCoverPage(doc: PDFKit.PDFDocument, data: SanitycheckPdfData, pageWidth: number): void {
-  // Full navy header
-  doc.rect(0, 0, pageWidth, 320)
-     .fill(COLORS.navy)
+function drawCoverPage(
+  doc: PDFKit.PDFDocument, 
+  data: SanitycheckPdfData, 
+  pageWidth: number, 
+  pageHeight: number,
+  margin: number
+): void {
+  // Full page navy background
+  doc.rect(0, 0, pageWidth, pageHeight).fill(COLORS.navy)
 
-  // Decorative gradient overlay effect (simulated with rectangles)
-  doc.rect(0, 0, pageWidth, 320)
-     .fillOpacity(0.1)
-     .fill(COLORS.blue)
-     .fillOpacity(1)
+  // Decorative diagonal stripe
+  doc.save()
+  doc.moveTo(pageWidth - 200, 0)
+     .lineTo(pageWidth, 0)
+     .lineTo(pageWidth, 120)
+     .lineTo(pageWidth - 280, 120)
+     .closePath()
+     .fill(COLORS.navyLight)
+  doc.restore()
 
   // Logo
-  doc.fontSize(36)
-     .fillColor(COLORS.white)
-     .text('BOLAXO', 50, 50)
-
-  // Subtitle
-  doc.fontSize(12)
-     .fillColor(COLORS.white)
-     .opacity(0.6)
-     .text('SANITYCHECK & VÄRDERINGSRAPPORT', 50, 95)
-     .opacity(1)
-
-  // Company name
   doc.fontSize(42)
      .fillColor(COLORS.white)
-     .text(data.companyName, 50, 150, { width: pageWidth - 100 })
+     .text('BOLAXO', margin, 60)
 
-  // Metadata row
-  const metaY = 230
+  // Subtitle line
+  doc.fontSize(11)
+     .fillColor(COLORS.white)
+     .opacity(0.5)
+     .text('VÄRDERINGSRAPPORT', margin, 115)
+     .opacity(1)
+
+  // Green accent line
+  doc.rect(margin, 140, 60, 4).fill(COLORS.emerald)
+
+  // Company name
+  doc.fontSize(36)
+     .fillColor(COLORS.white)
+     .text(data.companyName, margin, 170, { width: pageWidth - margin * 2 })
+
+  // Metadata
+  const metaY = 250
+  const metaSpacing = 150
+
   const metaItems = [
-    { label: 'Org.nr', value: data.orgNumber || 'N/A' },
-    { label: 'Bransch', value: data.industry || 'N/A' },
-    { label: 'Genererad', value: new Date(data.generatedAt).toLocaleDateString('sv-SE') }
+    { label: 'ORG.NR', value: data.orgNumber || 'N/A' },
+    { label: 'BRANSCH', value: data.industry || 'N/A' },
+    { label: 'GENERERAD', value: new Date(data.generatedAt).toLocaleDateString('sv-SE') }
   ]
-  
+
   metaItems.forEach((item, i) => {
-    const x = 50 + i * 170
-    doc.fontSize(10)
+    const x = margin + i * metaSpacing
+    doc.fontSize(9)
        .fillColor(COLORS.white)
        .opacity(0.5)
-       .text(item.label.toUpperCase(), x, metaY)
+       .text(item.label, x, metaY)
        .opacity(1)
-       .fontSize(13)
+       .fontSize(12)
        .text(item.value, x, metaY + 16)
   })
 
-  // Large score display
-  const scoreY = 400
-  const scoreColor = data.score >= 70 ? COLORS.emerald : data.score >= 50 ? COLORS.amber : COLORS.red
-  
-  // Score background circle
+  // Large score circle
   const centerX = pageWidth / 2
-  doc.circle(centerX, scoreY, 90)
-     .fill(COLORS.grayLight)
-  
-  // Progress ring (outer)
-  doc.circle(centerX, scoreY, 80)
-     .lineWidth(12)
-     .strokeColor(scoreColor)
-     .fillOpacity(0)
+  const scoreY = 450
+  const scoreColor = data.score >= 70 ? COLORS.emerald : data.score >= 50 ? COLORS.amber : COLORS.red
+
+  // Outer ring
+  doc.circle(centerX, scoreY, 85)
+     .lineWidth(8)
+     .strokeColor(COLORS.navyLight)
      .stroke()
-  
-  // Inner white circle
-  doc.circle(centerX, scoreY, 65)
-     .fill(COLORS.white)
+
+  // Score ring
+  doc.circle(centerX, scoreY, 85)
+     .lineWidth(8)
+     .strokeColor(scoreColor)
+     .stroke()
+
+  // Inner circle
+  doc.circle(centerX, scoreY, 70)
+     .fill(COLORS.navyMedium)
 
   // Score number
   doc.fontSize(56)
-     .fillColor(COLORS.navy)
-     .text(data.score.toString(), centerX - 50, scoreY - 30, { width: 100, align: 'center' })
+     .fillColor(COLORS.white)
+     .text(data.score.toString(), centerX - 45, scoreY - 25, { width: 90, align: 'center' })
 
-  doc.fontSize(14)
-     .fillColor(COLORS.gray)
-     .text('poäng', centerX - 50, scoreY + 35, { width: 100, align: 'center' })
+  doc.fontSize(12)
+     .fillColor(COLORS.white)
+     .opacity(0.6)
+     .text('POÄNG', centerX - 45, scoreY + 35, { width: 90, align: 'center' })
+     .opacity(1)
 
   // Score label
   const scoreLabel = data.score >= 70 ? 'Hög säljberedskap' : data.score >= 50 ? 'Måttlig säljberedskap' : 'Kräver förbättring'
-  doc.fontSize(20)
-     .fillColor(COLORS.navy)
-     .text(scoreLabel, 50, scoreY + 110, { align: 'center', width: pageWidth - 100 })
+  doc.fontSize(18)
+     .fillColor(COLORS.white)
+     .text(scoreLabel, margin, scoreY + 110, { align: 'center', width: pageWidth - margin * 2 })
 
   // Summary text
-  doc.fontSize(12)
-     .fillColor(COLORS.gray)
-     .text(data.summary, 70, scoreY + 150, {
+  doc.fontSize(11)
+     .fillColor(COLORS.white)
+     .opacity(0.7)
+     .text(data.summary, margin + 40, scoreY + 150, {
        align: 'center',
-       width: pageWidth - 140,
+       width: pageWidth - margin * 2 - 80,
        lineGap: 5
      })
-
-  // Bottom decorative element
-  doc.rect(50, doc.page.height - 100, pageWidth - 100, 3)
-     .fill(COLORS.emerald)
+     .opacity(1)
 
   // Footer
-  doc.fontSize(10)
-     .fillColor(COLORS.gray)
-     .text('Detta dokument är konfidentiellt och avsett endast för mottagaren.', 50, doc.page.height - 70, {
+  doc.fontSize(9)
+     .fillColor(COLORS.white)
+     .opacity(0.4)
+     .text('Detta dokument är konfidentiellt och avsett endast för mottagaren.', margin, pageHeight - 50, {
        align: 'center',
-       width: pageWidth - 100
+       width: pageWidth - margin * 2
      })
+     .opacity(1)
 }
 
-function drawExecutiveSummary(doc: PDFKit.PDFDocument, data: SanitycheckPdfData, pageWidth: number, contentWidth: number): void {
+function drawSummaryPage(
+  doc: PDFKit.PDFDocument,
+  data: SanitycheckPdfData,
+  pageWidth: number,
+  margin: number,
+  contentWidth: number
+): void {
+  let y = 50
+
   // Header
-  drawSectionHeader(doc, 'Sammanfattning', 50, 50)
+  doc.fontSize(24).fillColor(COLORS.navy).text('Sammanfattning', margin, y)
+  doc.rect(margin, y + 32, 50, 3).fill(COLORS.emerald)
+  y += 60
 
-  let yPos = 100
-
-  // Key metrics in a grid
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Nyckeltal i korthet', 50, yPos)
-
-  yPos += 30
+  // Key metrics boxes
+  doc.fontSize(13).fillColor(COLORS.navy).text('Nyckeltal', margin, y)
+  y += 25
 
   const metrics = [
-    { label: 'Säljberedskapspoäng', value: `${data.score}/100`, color: data.score >= 70 ? COLORS.emerald : COLORS.amber, icon: '📊' },
-    { label: 'Värderingsspann', value: `${data.valuationRange.min}-${data.valuationRange.max} MSEK`, color: COLORS.blue, icon: '💰' },
-    { label: 'Multipel (EBITDA)', value: `${data.valuationRange.multipleMin}x-${data.valuationRange.multipleMax}x`, color: COLORS.purple, icon: '📈' },
-    { label: 'Identifierade styrkor', value: `${data.swot.strengths.length} st`, color: COLORS.emerald, icon: '✓' }
+    { label: 'Säljberedskap', value: `${data.score}/100`, color: data.score >= 70 ? COLORS.emerald : COLORS.amber },
+    { label: 'Värderingsspann', value: `${data.valuationRange.min}-${data.valuationRange.max} MSEK`, color: COLORS.navy },
+    { label: 'EBITDA-multipel', value: `${data.valuationRange.multipleMin}x-${data.valuationRange.multipleMax}x`, color: COLORS.navy },
+    { label: 'Styrkor identifierade', value: `${data.swot.strengths.length} st`, color: COLORS.emerald }
   ]
 
-  const boxWidth = (contentWidth - 20) / 2
-  const boxHeight = 75
+  const boxWidth = (contentWidth - 30) / 2
+  const boxHeight = 65
 
-  metrics.forEach((metric, i) => {
-    const x = 50 + (i % 2) * (boxWidth + 20)
-    const y = yPos + Math.floor(i / 2) * (boxHeight + 15)
+  metrics.forEach((m, i) => {
+    const x = margin + (i % 2) * (boxWidth + 30)
+    const boxY = y + Math.floor(i / 2) * (boxHeight + 12)
 
-    // Box
-    doc.roundedRect(x, y, boxWidth, boxHeight, 8)
-       .fill(COLORS.grayLight)
+    doc.roundedRect(x, boxY, boxWidth, boxHeight, 6).fill(COLORS.grayLight)
+    doc.rect(x, boxY, 4, boxHeight).fill(m.color)
 
-    // Color accent
-    doc.roundedRect(x, y, 5, boxHeight, 3)
-       .fill(metric.color)
-
-    // Content
-    doc.fontSize(24)
-       .fillColor(COLORS.navy)
-       .text(metric.value, x + 20, y + 15, { width: boxWidth - 30 })
-
-    doc.fontSize(11)
-       .fillColor(COLORS.gray)
-       .text(metric.label, x + 20, y + 48)
+    doc.fontSize(22).fillColor(COLORS.navy).text(m.value, x + 16, boxY + 12, { width: boxWidth - 24 })
+    doc.fontSize(10).fillColor(COLORS.gray).text(m.label, x + 16, boxY + 42)
   })
 
-  yPos += 210
+  y += boxHeight * 2 + 40
 
-  // Category scores visualization
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Poäng per kategori', 50, yPos)
+  // Category scores
+  doc.fontSize(13).fillColor(COLORS.navy).text('Poäng per kategori', margin, y)
+  y += 25
 
-  yPos += 25
-
-  DEMO_SCORES.categories.forEach((cat, i) => {
-    const barWidth = (cat.score / 100) * (contentWidth - 150)
+  DEMO_SCORES.forEach((cat, i) => {
+    const barMaxWidth = contentWidth - 160
+    const barWidth = (cat.score / 100) * barMaxWidth
     const barColor = cat.score >= 75 ? COLORS.emerald : cat.score >= 60 ? COLORS.amber : COLORS.red
 
-    // Label
-    doc.fontSize(10)
-       .fillColor(COLORS.grayDark)
-       .text(cat.name, 50, yPos + i * 35)
-
-    // Background bar
-    doc.roundedRect(180, yPos + i * 35 - 2, contentWidth - 180, 18, 4)
-       .fill(COLORS.grayLight)
-
-    // Progress bar
-    doc.roundedRect(180, yPos + i * 35 - 2, barWidth, 18, 4)
-       .fill(barColor)
-
-    // Score value
-    doc.fontSize(10)
-       .fillColor(COLORS.navy)
-       .text(`${cat.score}%`, pageWidth - 80, yPos + i * 35)
+    doc.fontSize(10).fillColor(COLORS.grayDark).text(cat.name, margin, y + i * 32)
+    doc.roundedRect(margin + 130, y + i * 32, barMaxWidth, 16, 4).fill(COLORS.grayLight)
+    doc.roundedRect(margin + 130, y + i * 32, barWidth, 16, 4).fill(barColor)
+    doc.fontSize(10).fillColor(COLORS.navy).text(`${cat.score}%`, margin + 130 + barMaxWidth + 10, y + i * 32 + 2)
   })
 
-  yPos += 240
+  y += DEMO_SCORES.length * 32 + 30
 
-  // About section
-  doc.roundedRect(50, yPos, contentWidth, 100, 8)
-     .fill(COLORS.navyLight)
-     .fillOpacity(0.05)
-     .fill(COLORS.grayLight)
+  // Financial charts - Revenue
+  doc.fontSize(13).fillColor(COLORS.navy).text('Omsättning (MSEK)', margin, y)
+  y += 20
 
-  doc.fontSize(12)
-     .fillColor(COLORS.navy)
-     .text('Om denna analys', 70, yPos + 20)
+  const chartHeight = 100
+  const barSpacing = 55
+  const maxRev = Math.max(...DEMO_FINANCIALS.revenue)
 
-  doc.fontSize(10)
-     .fillColor(COLORS.gray)
-     .text(
-       'Denna rapport är baserad på en AI-driven analys av företagets nyckelområden. ' +
-       'Resultaten ger en indikation på säljberedskap och potentiellt värde, men ersätter inte ' +
-       'en fullständig due diligence eller professionell värdering.',
-       70, yPos + 42,
-       { width: contentWidth - 40, lineGap: 4 }
-     )
-}
+  DEMO_FINANCIALS.revenue.forEach((val, i) => {
+    const barH = (val / maxRev) * chartHeight
+    const x = margin + i * barSpacing
+    const barY = y + chartHeight - barH
 
-function drawFinancialOverview(doc: PDFKit.PDFDocument, data: SanitycheckPdfData, pageWidth: number, contentWidth: number): void {
-  drawSectionHeader(doc, 'Finansiell översikt', 50, 50)
-
-  let yPos = 100
-
-  // Revenue chart (bar chart simulation)
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Omsättningsutveckling (MSEK)', 50, yPos)
-
-  yPos += 30
-
-  const chartHeight = 150
-  const chartWidth = contentWidth / 2 - 30
-  const barWidth = 40
-  const maxValue = Math.max(...DEMO_FINANCIALS.revenue)
-
-  // Draw bars
-  DEMO_FINANCIALS.revenue.forEach((value, i) => {
-    const barHeight = (value / maxValue) * (chartHeight - 30)
-    const x = 50 + i * (barWidth + 25)
-    const y = yPos + chartHeight - barHeight
-
-    // Bar
-    doc.roundedRect(x, y, barWidth, barHeight, 4)
-       .fill(COLORS.blue)
-
-    // Value on top
-    doc.fontSize(10)
-       .fillColor(COLORS.navy)
-       .text(value.toString(), x, y - 18, { width: barWidth, align: 'center' })
-
-    // Year label
-    doc.fontSize(9)
-       .fillColor(COLORS.gray)
-       .text(DEMO_FINANCIALS.years[i], x, yPos + chartHeight + 5, { width: barWidth, align: 'center' })
+    doc.roundedRect(x, barY, 35, barH, 3).fill(COLORS.navy)
+    doc.fontSize(9).fillColor(COLORS.navy).text(val.toString(), x, barY - 14, { width: 35, align: 'center' })
+    doc.fontSize(8).fillColor(COLORS.gray).text(DEMO_FINANCIALS.years[i], x, y + chartHeight + 4, { width: 35, align: 'center' })
   })
 
-  // EBITDA chart
-  const ebitdaStartX = pageWidth / 2 + 20
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('EBITDA-utveckling (MSEK)', ebitdaStartX, yPos - 30)
+  // EBITDA chart next to it
+  const ebitdaX = margin + 260
+  doc.fontSize(13).fillColor(COLORS.navy).text('EBITDA (MSEK)', ebitdaX, y - 20)
 
   const maxEbitda = Math.max(...DEMO_FINANCIALS.ebitda)
 
-  DEMO_FINANCIALS.ebitda.forEach((value, i) => {
-    const barHeight = (value / maxEbitda) * (chartHeight - 30)
-    const x = ebitdaStartX + i * (barWidth + 25)
-    const y = yPos + chartHeight - barHeight
+  DEMO_FINANCIALS.ebitda.forEach((val, i) => {
+    const barH = (val / maxEbitda) * chartHeight
+    const x = ebitdaX + i * barSpacing
+    const barY = y + chartHeight - barH
 
-    // Bar
-    doc.roundedRect(x, y, barWidth, barHeight, 4)
-       .fill(COLORS.emerald)
-
-    // Value
-    doc.fontSize(10)
-       .fillColor(COLORS.navy)
-       .text(value.toFixed(1), x, y - 18, { width: barWidth, align: 'center' })
-
-    // Year
-    doc.fontSize(9)
-       .fillColor(COLORS.gray)
-       .text(DEMO_FINANCIALS.years[i], x, yPos + chartHeight + 5, { width: barWidth, align: 'center' })
+    doc.roundedRect(x, barY, 35, barH, 3).fill(COLORS.emerald)
+    doc.fontSize(9).fillColor(COLORS.navy).text(val.toFixed(1), x, barY - 14, { width: 35, align: 'center' })
+    doc.fontSize(8).fillColor(COLORS.gray).text(DEMO_FINANCIALS.years[i], x, y + chartHeight + 4, { width: 35, align: 'center' })
   })
 
-  yPos += chartHeight + 50
+  y += chartHeight + 50
 
-  // Margin indicators
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Marginalanalys', 50, yPos)
-
-  yPos += 30
-
-  const margins = [
-    { label: 'Bruttomarginal', value: DEMO_FINANCIALS.margins.gross, color: COLORS.emerald },
-    { label: 'Rörelsemarginal', value: DEMO_FINANCIALS.margins.operating, color: COLORS.blue },
-    { label: 'Nettomarginal', value: DEMO_FINANCIALS.margins.net, color: COLORS.purple }
-  ]
-
-  margins.forEach((margin, i) => {
-    const x = 50 + i * ((contentWidth - 40) / 3 + 20)
-    const circleRadius = 45
-
-    // Background circle
-    doc.circle(x + circleRadius, yPos + circleRadius, circleRadius)
-       .fill(COLORS.grayLight)
-
-    // Progress arc (simplified as filled portion)
-    doc.circle(x + circleRadius, yPos + circleRadius, circleRadius - 8)
-       .lineWidth(10)
-       .strokeColor(margin.color)
-       .stroke()
-
-    // Inner circle
-    doc.circle(x + circleRadius, yPos + circleRadius, circleRadius - 18)
-       .fill(COLORS.white)
-
-    // Value
-    doc.fontSize(18)
-       .fillColor(COLORS.navy)
-       .text(`${margin.value}%`, x, yPos + circleRadius - 8, { width: circleRadius * 2, align: 'center' })
-
-    // Label
-    doc.fontSize(10)
-       .fillColor(COLORS.gray)
-       .text(margin.label, x, yPos + circleRadius * 2 + 15, { width: circleRadius * 2, align: 'center' })
-  })
-
-  yPos += 160
-
-  // KPI boxes
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Nyckel-KPIer', 50, yPos)
-
-  yPos += 25
+  // KPIs row
+  doc.fontSize(13).fillColor(COLORS.navy).text('Nyckel-KPIer', margin, y)
+  y += 20
 
   const kpis = [
-    { label: 'Återkommande intäkter', value: `${DEMO_FINANCIALS.kpis.recurringRevenue}%`, desc: 'av total omsättning' },
-    { label: 'Kundretention', value: `${DEMO_FINANCIALS.kpis.customerRetention}%`, desc: 'årlig retention' },
-    { label: 'Medarbetare', value: DEMO_FINANCIALS.kpis.employeeCount.toString(), desc: 'heltidsanställda' },
-    { label: 'Snitt kontraktsvärde', value: `${DEMO_FINANCIALS.kpis.avgContractValue}k`, desc: 'SEK/år' }
+    { label: 'Återkommande intäkter', value: `${DEMO_FINANCIALS.kpis.recurringRevenue}%` },
+    { label: 'Kundretention', value: `${DEMO_FINANCIALS.kpis.customerRetention}%` },
+    { label: 'Medarbetare', value: DEMO_FINANCIALS.kpis.employeeCount.toString() },
+    { label: 'Snitt avtal (kSEK)', value: DEMO_FINANCIALS.kpis.avgContractValue.toString() }
   ]
 
-  const kpiBoxWidth = (contentWidth - 30) / 4
+  const kpiWidth = (contentWidth - 30) / 4
 
   kpis.forEach((kpi, i) => {
-    const x = 50 + i * (kpiBoxWidth + 10)
-
-    doc.roundedRect(x, yPos, kpiBoxWidth, 80, 6)
-       .fill(COLORS.grayLight)
-
-    doc.fontSize(22)
-       .fillColor(COLORS.navy)
-       .text(kpi.value, x + 10, yPos + 15, { width: kpiBoxWidth - 20, align: 'center' })
-
-    doc.fontSize(9)
-       .fillColor(COLORS.gray)
-       .text(kpi.label, x + 5, yPos + 48, { width: kpiBoxWidth - 10, align: 'center' })
-
-    doc.fontSize(8)
-       .fillColor(COLORS.gray)
-       .text(kpi.desc, x + 5, yPos + 62, { width: kpiBoxWidth - 10, align: 'center' })
+    const x = margin + i * (kpiWidth + 10)
+    doc.roundedRect(x, y, kpiWidth, 55, 4).fill(COLORS.grayLight)
+    doc.fontSize(18).fillColor(COLORS.navy).text(kpi.value, x + 8, y + 10, { width: kpiWidth - 16, align: 'center' })
+    doc.fontSize(8).fillColor(COLORS.gray).text(kpi.label, x + 4, y + 36, { width: kpiWidth - 8, align: 'center' })
   })
 }
 
-function drawSwotAnalysis(doc: PDFKit.PDFDocument, data: SanitycheckPdfData, pageWidth: number, contentWidth: number): void {
-  drawSectionHeader(doc, 'SWOT-analys', 50, 50)
+function drawSwotPage(
+  doc: PDFKit.PDFDocument,
+  data: SanitycheckPdfData,
+  pageWidth: number,
+  margin: number,
+  contentWidth: number
+): void {
+  let y = 50
+
+  // Header
+  doc.fontSize(24).fillColor(COLORS.navy).text('SWOT-analys', margin, y)
+  doc.rect(margin, y + 32, 50, 3).fill(COLORS.emerald)
+  y += 60
 
   const boxWidth = (contentWidth - 20) / 2
-  const boxHeight = 280
-  const startY = 100
+  const boxHeight = 300
 
-  // Strengths
-  drawSwotBox(doc, 50, startY, boxWidth, boxHeight, 'Styrkor', data.swot.strengths, COLORS.emerald, COLORS.emeraldLight, '✓')
+  // Strengths - Green
+  drawSwotBox(doc, margin, y, boxWidth, boxHeight, 'Styrkor', data.swot.strengths, COLORS.emerald, COLORS.emeraldLight)
 
-  // Weaknesses
-  drawSwotBox(doc, 60 + boxWidth, startY, boxWidth, boxHeight, 'Svagheter', data.swot.weaknesses, COLORS.amber, COLORS.amberLight, '!')
+  // Weaknesses - Amber
+  drawSwotBox(doc, margin + boxWidth + 20, y, boxWidth, boxHeight, 'Svagheter', data.swot.weaknesses, COLORS.amber, COLORS.amberLight)
 
-  // Opportunities
-  drawSwotBox(doc, 50, startY + boxHeight + 20, boxWidth, boxHeight, 'Möjligheter', data.swot.opportunities, COLORS.blue, COLORS.blueLight, '↗')
+  y += boxHeight + 20
 
-  // Threats
-  drawSwotBox(doc, 60 + boxWidth, startY + boxHeight + 20, boxWidth, boxHeight, 'Hot', data.swot.threats, COLORS.red, COLORS.redLight, '⚠')
+  // Opportunities - Blue
+  drawSwotBox(doc, margin, y, boxWidth, boxHeight, 'Möjligheter', data.swot.opportunities, COLORS.blue, COLORS.blueLight)
+
+  // Threats - Red
+  drawSwotBox(doc, margin + boxWidth + 20, y, boxWidth, boxHeight, 'Hot', data.swot.threats, COLORS.red, COLORS.redLight)
 }
 
 function drawSwotBox(
@@ -536,274 +418,113 @@ function drawSwotBox(
   title: string,
   items: string[],
   accentColor: string,
-  bgColor: string,
-  icon: string
+  bgColor: string
 ): void {
-  // Background with rounded corners
-  doc.roundedRect(x, y, width, height, 10)
-     .fill(bgColor)
+  // Background
+  doc.roundedRect(x, y, width, height, 8).fill(bgColor)
 
   // Top accent bar
-  doc.roundedRect(x, y, width, 6, 3)
-     .fill(accentColor)
-
-  // Icon circle
-  doc.circle(x + 30, y + 35, 15)
-     .fill(accentColor)
+  doc.rect(x, y, width, 5).fill(accentColor)
 
   // Title
-  doc.fontSize(16)
-     .fillColor(accentColor)
-     .text(title, x + 55, y + 27)
+  doc.fontSize(14).fillColor(accentColor).text(title, x + 15, y + 20)
 
-  // Items with bullets
-  let itemY = y + 65
-  items.forEach((item, i) => {
-    if (itemY < y + height - 25) {
-      // Bullet
-      doc.circle(x + 25, itemY + 6, 4)
-         .fill(accentColor)
-
-      // Text
-      doc.fontSize(10)
-         .fillColor(COLORS.navy)
-         .text(item, x + 40, itemY, { width: width - 55, lineGap: 3 })
-
-      const textHeight = doc.heightOfString(item, { width: width - 55 })
-      itemY += Math.max(textHeight + 15, 35)
+  // Items
+  let itemY = y + 50
+  items.forEach((item) => {
+    if (itemY < y + height - 30) {
+      doc.circle(x + 20, itemY + 5, 3).fill(accentColor)
+      doc.fontSize(10).fillColor(COLORS.navy).text(item, x + 32, itemY, { width: width - 50, lineGap: 3 })
+      const textH = doc.heightOfString(item, { width: width - 50 })
+      itemY += Math.max(textH + 12, 28)
     }
   })
 }
 
-function drawValuationSection(doc: PDFKit.PDFDocument, data: SanitycheckPdfData, pageWidth: number, contentWidth: number): void {
-  drawSectionHeader(doc, 'Indikativ värdering', 50, 50)
+function drawValuationPage(
+  doc: PDFKit.PDFDocument,
+  data: SanitycheckPdfData,
+  pageWidth: number,
+  pageHeight: number,
+  margin: number,
+  contentWidth: number
+): void {
+  let y = 50
 
-  let yPos = 100
+  // Header
+  doc.fontSize(24).fillColor(COLORS.navy).text('Värdering & Nästa steg', margin, y)
+  doc.rect(margin, y + 32, 50, 3).fill(COLORS.emerald)
+  y += 60
 
   // Main valuation box
-  doc.roundedRect(50, yPos, contentWidth, 200, 12)
-     .fill(COLORS.navy)
+  doc.roundedRect(margin, y, contentWidth, 140, 10).fill(COLORS.navy)
 
-  // Decorative element
-  doc.roundedRect(50, yPos, 8, 200, 4)
-     .fill(COLORS.emerald)
+  // Green accent
+  doc.rect(margin, y, 6, 140).fill(COLORS.emerald)
 
   // Value range
-  doc.fontSize(12)
-     .fillColor(COLORS.white)
-     .opacity(0.6)
-     .text('UPPSKATTAT VÄRDERINGSSPANN', 80, yPos + 30)
-     .opacity(1)
+  doc.fontSize(10).fillColor(COLORS.white).opacity(0.5).text('UPPSKATTAT VÄRDERINGSSPANN', margin + 25, y + 20).opacity(1)
+  doc.fontSize(42).fillColor(COLORS.white).text(`${data.valuationRange.min} – ${data.valuationRange.max}`, margin + 25, y + 40)
+  doc.fontSize(16).fillColor(COLORS.white).opacity(0.7).text('MSEK', margin + 25, y + 90).opacity(1)
 
-  doc.fontSize(52)
-     .fillColor(COLORS.white)
-     .text(`${data.valuationRange.min} – ${data.valuationRange.max}`, 80, yPos + 55)
-
-  doc.fontSize(24)
-     .fillColor(COLORS.white)
-     .opacity(0.8)
-     .text('MSEK', 80, yPos + 115)
-     .opacity(1)
-
-  // Multiple box
-  const multipleBoxX = pageWidth - 200
-  doc.roundedRect(multipleBoxX, yPos + 30, 130, 80, 8)
-     .fill(COLORS.white)
-     .fillOpacity(0.1)
-     .fill(COLORS.navyLight)
-
-  doc.fontSize(10)
-     .fillColor(COLORS.white)
-     .opacity(0.6)
-     .text('MULTIPEL', multipleBoxX + 10, yPos + 45)
-     .opacity(1)
-
-  doc.fontSize(24)
-     .fillColor(COLORS.emerald)
-     .text(`${data.valuationRange.multipleMin}x - ${data.valuationRange.multipleMax}x`, multipleBoxX + 10, yPos + 65)
-
-  doc.fontSize(10)
-     .fillColor(COLORS.white)
-     .opacity(0.6)
-     .text('EBITDA', multipleBoxX + 10, yPos + 95)
-     .opacity(1)
-
-  // Enterprise value indicator bar
-  doc.fontSize(10)
-     .fillColor(COLORS.white)
-     .opacity(0.6)
-     .text('Värderingsspann visualisering', 80, yPos + 155)
-     .opacity(1)
+  // Multiple badge
+  const badgeX = pageWidth - margin - 120
+  doc.roundedRect(badgeX, y + 25, 100, 60, 6).fill(COLORS.navyLight)
+  doc.fontSize(9).fillColor(COLORS.white).opacity(0.5).text('MULTIPEL', badgeX + 10, y + 35).opacity(1)
+  doc.fontSize(18).fillColor(COLORS.emerald).text(`${data.valuationRange.multipleMin}x-${data.valuationRange.multipleMax}x`, badgeX + 10, y + 52)
 
   // Range bar
-  doc.roundedRect(80, yPos + 170, contentWidth - 80, 12, 6)
-     .fill(COLORS.white)
-     .fillOpacity(0.2)
+  doc.roundedRect(margin + 25, y + 115, contentWidth - 60, 10, 5).fillOpacity(0.2).fill(COLORS.white).fillOpacity(1)
+  doc.roundedRect(margin + 25 + (contentWidth - 60) * 0.25, y + 115, (contentWidth - 60) * 0.5, 10, 5).fill(COLORS.emerald)
 
-  const rangeStart = 0.3
-  const rangeEnd = 0.7
-  doc.roundedRect(80 + (contentWidth - 80) * rangeStart, yPos + 170, (contentWidth - 80) * (rangeEnd - rangeStart), 12, 6)
-     .fill(COLORS.emerald)
-
-  yPos += 230
+  y += 160
 
   // Valuation basis
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Värderingsgrund', 50, yPos)
+  doc.fontSize(12).fillColor(COLORS.navy).text('Värderingsgrund', margin, y)
+  y += 18
+  doc.fontSize(10).fillColor(COLORS.gray).text(data.valuationRange.basis, margin, y, { width: contentWidth, lineGap: 4 })
+  y += 50
 
-  yPos += 25
+  // Recommendations
+  doc.fontSize(14).fillColor(COLORS.navy).text('Prioriterade åtgärder', margin, y)
+  y += 25
 
-  doc.fontSize(11)
-     .fillColor(COLORS.gray)
-     .text(data.valuationRange.basis, 50, yPos, {
-       width: contentWidth,
-       lineGap: 5
-     })
-
-  yPos += 80
-
-  // Methodology boxes
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Värderingsmetodik', 50, yPos)
-
-  yPos += 25
-
-  const methods = [
-    { title: 'Multipelvärdering', desc: 'Baserat på EBITDA-multiplar för jämförbara transaktioner i branschen' },
-    { title: 'DCF-indikation', desc: 'Diskonterade kassaflöden med hänsyn till tillväxtpotential' },
-    { title: 'Tillgångsvärdering', desc: 'Bedömning av immateriella tillgångar och kundportfölj' }
-  ]
-
-  const methodBoxWidth = (contentWidth - 20) / 3
-
-  methods.forEach((method, i) => {
-    const x = 50 + i * (methodBoxWidth + 10)
-
-    doc.roundedRect(x, yPos, methodBoxWidth, 90, 6)
-       .fill(COLORS.grayLight)
-
-    doc.fontSize(11)
-       .fillColor(COLORS.navy)
-       .text(method.title, x + 12, yPos + 15, { width: methodBoxWidth - 24 })
-
-    doc.fontSize(9)
-       .fillColor(COLORS.gray)
-       .text(method.desc, x + 12, yPos + 35, { width: methodBoxWidth - 24, lineGap: 3 })
+  data.recommendations.slice(0, 5).forEach((rec, i) => {
+    // Number circle
+    doc.circle(margin + 12, y + 8, 12).fill(COLORS.navy)
+    doc.fontSize(10).fillColor(COLORS.white).text((i + 1).toString(), margin + 6, y + 3, { width: 12, align: 'center' })
+    
+    // Text
+    doc.fontSize(10).fillColor(COLORS.grayDark).text(rec, margin + 35, y, { width: contentWidth - 50, lineGap: 3 })
+    const h = doc.heightOfString(rec, { width: contentWidth - 50 })
+    y += Math.max(h + 12, 32)
   })
 
-  yPos += 120
+  y += 15
 
-  // Disclaimer
-  doc.roundedRect(50, yPos, contentWidth, 80, 8)
-     .fill(COLORS.amberLight)
+  // Pitchdeck slides
+  doc.fontSize(12).fillColor(COLORS.navy).text('Pitchdeck-struktur', margin, y)
+  y += 20
 
-  doc.fontSize(11)
-     .fillColor(COLORS.amber)
-     .text('⚠ Viktig information', 70, yPos + 15)
+  const slideW = (contentWidth - 30) / 4
 
-  doc.fontSize(10)
-     .fillColor(COLORS.grayDark)
-     .text(
-       'Detta värderingsspann är indikativt och baserat på tillgänglig information. En faktisk värdering ' +
-       'kräver fullständig due diligence och detaljerad analys av finansiella rapporter, kontrakt och marknadsfaktorer.',
-       70, yPos + 35,
-       { width: contentWidth - 40, lineGap: 3 }
-     )
-}
-
-function drawRecommendationsAndNextSteps(doc: PDFKit.PDFDocument, data: SanitycheckPdfData, pageWidth: number, contentWidth: number): void {
-  drawSectionHeader(doc, 'Rekommendationer', 50, 50)
-
-  let yPos = 100
-
-  // Priority actions
-  doc.fontSize(12)
-     .fillColor(COLORS.gray)
-     .text('Prioriterade åtgärder för att maximera värdet vid en försäljning:', 50, yPos, { width: contentWidth })
-
-  yPos += 35
-
-  data.recommendations.forEach((rec, i) => {
-    // Number badge
-    doc.circle(70, yPos + 12, 16)
-       .fill(COLORS.emerald)
-
-    doc.fontSize(12)
-       .fillColor(COLORS.white)
-       .text((i + 1).toString(), 62, yPos + 6, { width: 16, align: 'center' })
-
-    // Recommendation text
-    doc.fontSize(11)
-       .fillColor(COLORS.navy)
-       .text(rec, 100, yPos + 3, { width: contentWidth - 70, lineGap: 4 })
-
-    const textHeight = doc.heightOfString(rec, { width: contentWidth - 70 })
-    yPos += Math.max(textHeight + 20, 45)
+  data.pitchdeckSlides.slice(0, 8).forEach((slide, i) => {
+    const sx = margin + (i % 4) * (slideW + 10)
+    const sy = y + Math.floor(i / 4) * 38
+    doc.roundedRect(sx, sy, slideW, 30, 4).fill(COLORS.grayLight)
+    doc.fontSize(8).fillColor(COLORS.navy).text(`${i + 1}. ${slide}`, sx + 6, sy + 10, { width: slideW - 12 })
   })
 
-  yPos += 20
+  y += Math.ceil(Math.min(data.pitchdeckSlides.length, 8) / 4) * 38 + 25
 
-  // Pitchdeck structure
-  doc.fontSize(14)
-     .fillColor(COLORS.navy)
-     .text('Föreslagen pitchdeck-struktur', 50, yPos)
-
-  yPos += 25
-
-  const slideWidth = (contentWidth - 40) / 4
-
-  data.pitchdeckSlides.forEach((slide, i) => {
-    const x = 50 + (i % 4) * (slideWidth + 10)
-    const y = yPos + Math.floor(i / 4) * 50
-
-    doc.roundedRect(x, y, slideWidth, 40, 6)
-       .fill(COLORS.grayLight)
-
-    doc.fontSize(9)
-       .fillColor(COLORS.navy)
-       .text(`${i + 1}. ${slide}`, x + 8, y + 13, { width: slideWidth - 16 })
-  })
-
-  yPos += Math.ceil(data.pitchdeckSlides.length / 4) * 50 + 30
-
-  // Next steps CTA
-  doc.roundedRect(50, yPos, contentWidth, 120, 12)
-     .fill(COLORS.navy)
-
-  doc.fontSize(18)
-     .fillColor(COLORS.white)
-     .text('Redo att ta nästa steg?', 70, yPos + 25)
-
-  doc.fontSize(11)
-     .fillColor(COLORS.white)
-     .opacity(0.8)
-     .text(
-       'Uppgradera till ett premiumpaket för att få tillgång till professionella mallar, ' +
-       'pitchdeck-stöd, personlig rådgivning och matchning med kvalificerade köpare.',
-       70, yPos + 55,
-       { width: contentWidth - 40, lineGap: 4 }
-     )
-     .opacity(1)
-
-  // CTA button (simulated)
-  doc.roundedRect(70, yPos + 90, 180, 35, 6)
-     .fill(COLORS.emerald)
-
-  doc.fontSize(11)
-     .fillColor(COLORS.white)
-     .text('Kontakta oss: bolaxo.se', 70, yPos + 100, { width: 180, align: 'center' })
-}
-
-function drawSectionHeader(doc: PDFKit.PDFDocument, title: string, x: number, y: number): void {
-  doc.fontSize(26)
-     .fillColor(COLORS.navy)
-     .text(title, x, y)
-
-  doc.moveTo(x, y + 35)
-     .lineTo(x + 80, y + 35)
-     .strokeColor(COLORS.emerald)
-     .lineWidth(4)
-     .stroke()
+  // CTA box
+  if (y < pageHeight - 120) {
+    doc.roundedRect(margin, y, contentWidth, 80, 8).fill(COLORS.navy)
+    doc.fontSize(14).fillColor(COLORS.white).text('Redo att ta nästa steg?', margin + 20, y + 18)
+    doc.fontSize(10).fillColor(COLORS.white).opacity(0.7)
+       .text('Kontakta oss för personlig rådgivning och matchning med kvalificerade köpare.', margin + 20, y + 40, { width: contentWidth - 40 })
+       .opacity(1)
+    doc.roundedRect(margin + 20, y + 60, 140, 28, 4).fill(COLORS.emerald)
+    doc.fontSize(10).fillColor(COLORS.white).text('bolaxo.se', margin + 20, y + 68, { width: 140, align: 'center' })
+  }
 }
