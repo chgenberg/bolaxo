@@ -2,9 +2,11 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 export default function AutoLoginSellerPage() {
   const router = useRouter()
+  const locale = useLocale()
 
   useEffect(() => {
     // Auto-login as seller
@@ -23,9 +25,9 @@ export default function AutoLoginSellerPage() {
     const token = `dev-token-${sellerUser.id}-${Date.now()}`
     localStorage.setItem('dev-auth-token', token)
 
-    // Redirect to seller dashboard
-    router.push('/salja')
-  }, [router])
+    // Redirect to seller dashboard with locale
+    router.push(`/${locale}/salja`)
+  }, [router, locale])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100">
@@ -36,4 +38,3 @@ export default function AutoLoginSellerPage() {
     </div>
   )
 }
-

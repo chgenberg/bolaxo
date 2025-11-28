@@ -2,9 +2,11 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 export default function AutoLoginBuyerPage() {
   const router = useRouter()
+  const locale = useLocale()
 
   useEffect(() => {
     // Auto-login as buyer
@@ -23,9 +25,9 @@ export default function AutoLoginBuyerPage() {
     const token = `dev-token-${buyerUser.id}-${Date.now()}`
     localStorage.setItem('dev-auth-token', token)
 
-    // Redirect to buyer dashboard
-    router.push('/kopare')
-  }, [router])
+    // Redirect to buyer dashboard with locale
+    router.push(`/${locale}/kopare`)
+  }, [router, locale])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -36,4 +38,3 @@ export default function AutoLoginBuyerPage() {
     </div>
   )
 }
-

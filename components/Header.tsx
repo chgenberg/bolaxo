@@ -116,7 +116,7 @@ export default function Header() {
 
   // Helper function to add locale prefix to paths
   const getLocalizedPath = (path: string) => {
-    if (path.startsWith('/admin') || path.startsWith('/api') || path.startsWith('/auto-login')) {
+    if (path.startsWith('/admin') || path.startsWith('/api')) {
       return path
     }
     return `/${locale}${path}`
