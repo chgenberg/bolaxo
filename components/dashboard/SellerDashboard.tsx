@@ -140,7 +140,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <div className="w-12 h-12 border-4 border-primary-blue border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <div className="w-12 h-12 border-4 border-primary-navy border-t-transparent rounded-full animate-spin mx-auto"></div>
       </div>
     )
   }
@@ -320,22 +320,22 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Link 
             href={`/${locale}/salja/sme-kit`} 
-            className="bg-gradient-to-br from-pink-50 to-pink-100 border border-pink-200 p-5 rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 group"
+            className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-5 rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 group"
           >
-            <FileText className="w-8 h-8 text-pink-600 mb-3" />
+            <FileText className="w-8 h-8 text-primary-navy mb-3" />
             <p className="font-semibold text-primary-navy">SME Kit</p>
             <p className="text-xs text-gray-600 mt-1">Förbered försäljning</p>
-            <ChevronRight className="w-4 h-4 text-pink-400 mt-2 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-primary-navy mt-2 group-hover:translate-x-1 transition-transform" />
           </Link>
           
           <Link 
             href={`/${locale}/salja/heat-map/${company.id}`} 
-            className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-5 rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 group"
+            className="bg-gradient-to-br from-indigo-50 to-indigo-100 border border-indigo-200 p-5 rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 group"
           >
-            <BarChart3 className="w-8 h-8 text-blue-600 mb-3" />
+            <BarChart3 className="w-8 h-8 text-indigo-600 mb-3" />
             <p className="font-semibold text-primary-navy">Heat Map</p>
             <p className="text-xs text-gray-600 mt-1">Se köparengagemang</p>
-            <ChevronRight className="w-4 h-4 text-blue-400 mt-2 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-indigo-600 mt-2 group-hover:translate-x-1 transition-transform" />
           </Link>
           
           <Link 
@@ -345,17 +345,17 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
             <HelpCircle className="w-8 h-8 text-green-600 mb-3" />
             <p className="font-semibold text-primary-navy">Q&A Center</p>
             <p className="text-xs text-gray-600 mt-1">Svara på frågor</p>
-            <ChevronRight className="w-4 h-4 text-green-400 mt-2 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-green-600 mt-2 group-hover:translate-x-1 transition-transform" />
           </Link>
           
           <Link 
             href={`/${locale}/salja/earnout/${company.id}`} 
-            className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-5 rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 group"
+            className="bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 p-5 rounded-xl hover:shadow-lg transition-all hover:-translate-y-0.5 group"
           >
-            <Target className="w-8 h-8 text-purple-600 mb-3" />
+            <Target className="w-8 h-8 text-amber-600 mb-3" />
             <p className="font-semibold text-primary-navy">Earnout</p>
             <p className="text-xs text-gray-600 mt-1">Spåra KPI</p>
-            <ChevronRight className="w-4 h-4 text-purple-400 mt-2 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-4 h-4 text-amber-600 mt-2 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
@@ -366,7 +366,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
         <div className="bg-white p-6 rounded-xl border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-text-dark flex items-center gap-2">
-              <Shield className="w-5 h-5 text-primary-blue" />
+              <Shield className="w-5 h-5 text-primary-navy" />
               NDA-förfrågningar
             </h2>
             <span className="text-sm text-text-gray">
@@ -382,7 +382,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
           ) : (
             <div className="space-y-3">
               {pendingNDAs.slice(0, 4).map((nda) => (
-                <div key={nda.id} className="border border-gray-200 rounded-lg p-4 hover:border-primary-blue/30 transition-colors">
+                <div key={nda.id} className="border border-gray-200 rounded-lg p-4 hover:border-primary-navy/30 transition-colors">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
@@ -422,7 +422,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
               {pendingNDAs.length > 4 && (
                 <Link 
                   href={`/${locale}/salja/nda-requests`}
-                  className="block text-center text-sm text-primary-blue hover:underline py-2"
+                  className="block text-center text-sm text-primary-navy hover:underline py-2"
                 >
                   Visa alla {pendingNDAs.length} förfrågningar →
                 </Link>
@@ -435,7 +435,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
         <div className="bg-white p-6 rounded-xl border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-text-dark flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-primary-blue" />
+              <MessageSquare className="w-5 h-5 text-primary-navy" />
               Senaste frågor
             </h2>
             <span className="text-sm text-text-gray">
@@ -456,7 +456,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
                   className={`border rounded-lg p-4 transition-colors ${
                     msg.read 
                       ? 'border-gray-200 bg-white' 
-                      : 'border-l-4 border-l-primary-blue border-gray-200 bg-blue-50/50'
+                      : 'border-l-4 border-l-primary-navy border-gray-200 bg-blue-50/50'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-2">
@@ -472,7 +472,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
               ))}
               <Link 
                 href={`/${locale}/kopare/qa/${company.id}`}
-                className="block text-center text-sm text-primary-blue hover:underline py-2"
+                className="block text-center text-sm text-primary-navy hover:underline py-2"
               >
                 Gå till Q&A Center →
               </Link>
@@ -487,7 +487,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
           <h2 className="text-lg font-bold text-text-dark">Köparengagemang</h2>
           <Link 
             href={`/${locale}/salja/heat-map/${company.id}`}
-            className="text-sm text-primary-blue hover:underline"
+            className="text-sm text-primary-navy hover:underline"
           >
             Visa detaljerad analys →
           </Link>
