@@ -120,6 +120,59 @@ interface AnalysisResult {
   pitchdeckSlides: string[]
 }
 
+// Demo analysis result for investor presentations
+const DEMO_ANALYSIS_RESULT: AnalysisResult = {
+  score: 72,
+  swot: {
+    strengths: [
+      "Stark återkommande intäktsmodell med hög kundlojalitet",
+      "Erfaren ledningsgrupp med tydlig rollfördelning",
+      "Dokumenterade processer och moderna system",
+      "God lönsamhet med stabilt kassaflöde"
+    ],
+    weaknesses: [
+      "Viss kundkoncentration på de tre största kunderna",
+      "Beroende av nuvarande VD för kundrelationer",
+      "Behov av uppdaterad teknisk dokumentation"
+    ],
+    opportunities: [
+      "Stark marknadstillväxt inom segmentet",
+      "Möjlighet till geografisk expansion",
+      "Potential för produktutveckling och nya tjänster",
+      "Synergieffekter vid strategiskt förvärv"
+    ],
+    threats: [
+      "Ökande konkurrens från större aktörer",
+      "Konjunkturkänslighet i kundsegmentet",
+      "Regulatoriska förändringar kan påverka branschen"
+    ]
+  },
+  valuationRange: {
+    min: 25,
+    max: 40,
+    multipleMin: 4.5,
+    multipleMax: 7.0,
+    basis: "Baserat på branschspecifika multiplar för SaaS/tjänsteföretag med god tillväxt och stabil lönsamhet. Värderingen tar hänsyn till återkommande intäkter, kundkoncentration och ägaroberoende."
+  },
+  summary: "Bolaget visar god säljberedskap med starka återkommande intäkter och en erfaren organisation. Vissa förbättringsområden finns kring dokumentation och kundkoncentration som kan adresseras för att maximera värdet.",
+  recommendations: [
+    "Dokumentera överlämningsplan för VD-funktionen",
+    "Diversifiera kundbasen för att minska koncentrationsrisk",
+    "Uppdatera teknisk dokumentation och systemlandskap",
+    "Förbered datarum med finansiella rapporter och kundavtal",
+    "Utveckla en tydlig equity story och tillväxtplan"
+  ],
+  pitchdeckSlides: [
+    "Executive Summary",
+    "Marknad & Position",
+    "Affärsmodell",
+    "Finansiell historik",
+    "Tillväxtstrategi",
+    "Team & Organisation",
+    "Investment Highlights"
+  ]
+}
+
 const stepMeta = [
   { id: 1, title: "Bolagsöversikt & syfte", icon: Building2 },
   { id: 2, title: "Ägarberoende & ledning", icon: Users },
@@ -318,15 +371,21 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
     
     setIsGeneratingPdf(true)
     
+    // Use demo data if no company name is provided
+    const companyName = state.companyName || 'Exempelföretag AB'
+    const orgNumber = state.orgNumber || '556123-4567'
+    const industry = state.industry || 'Teknologi / SaaS'
+    const website = state.website || 'www.exempel.se'
+    
     try {
       const res = await fetch('/api/sanitycheck-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          companyName: state.companyName,
-          orgNumber: state.orgNumber,
-          industry: state.industry,
-          website: state.website,
+          companyName,
+          orgNumber,
+          industry,
+          website,
           analysisResult,
           formData: state
         })
@@ -340,7 +399,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `sanitycheck-${state.companyName.replace(/[^a-zA-Z0-9åäöÅÄÖ\s]/g, '').replace(/\s+/g, '-')}.pdf`
+      a.download = `sanitycheck-${companyName.replace(/[^a-zA-Z0-9åäöÅÄÖ\s]/g, '').replace(/\s+/g, '-')}.pdf`
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)
@@ -1065,35 +1124,50 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                     }
                   </p>
                   
-                  <button
-                    onClick={runAnalysis}
-                    disabled={mainStepsComplete < 10 || isAnalyzing}
-                    className={`
-                      relative group px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300
-                      ${mainStepsComplete >= 10 
-                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 cursor-pointer'
-                        : 'bg-white/20 text-white/50 cursor-not-allowed'
-                      }
-                    `}
-                  >
-                    {/* Pulsing shadow effect */}
-                    {mainStepsComplete >= 10 && !isAnalyzing && (
-                      <span className="absolute inset-0 rounded-2xl bg-emerald-500 animate-ping opacity-25" />
-                    )}
-                    <span className="relative flex items-center gap-3">
-                      {isAnalyzing ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin" />
-                          Analyserar...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-5 h-5" />
-                          Generera rapport
-                        </>
+                  <div className="flex flex-col gap-3">
+                    <button
+                      onClick={runAnalysis}
+                      disabled={mainStepsComplete < 10 || isAnalyzing}
+                      className={`
+                        relative group px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300
+                        ${mainStepsComplete >= 10 
+                          ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 cursor-pointer'
+                          : 'bg-white/20 text-white/50 cursor-not-allowed'
+                        }
+                      `}
+                    >
+                      {/* Pulsing shadow effect */}
+                      {mainStepsComplete >= 10 && !isAnalyzing && (
+                        <span className="absolute inset-0 rounded-2xl bg-emerald-500 animate-ping opacity-25" />
                       )}
-                    </span>
-                  </button>
+                      <span className="relative flex items-center gap-3">
+                        {isAnalyzing ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            Analyserar...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-5 h-5" />
+                            Generera rapport
+                          </>
+                        )}
+                      </span>
+                    </button>
+                    
+                    {/* Demo PDF Download Button */}
+                    <button
+                      onClick={() => {
+                        setAnalysisResult(DEMO_ANALYSIS_RESULT)
+                      }}
+                      className="px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 bg-white/10 text-white hover:bg-white/20 border border-white/20"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        Visa exempelrapport
+                      </span>
+                    </button>
+                  </div>
                   
                   {mainStepsComplete < 10 && (
                     <div className="mt-4 flex items-center justify-center gap-2">
