@@ -1,11 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 
 export default function AutoLoginBuyerPage() {
-  const router = useRouter()
   const locale = useLocale()
 
   useEffect(() => {
@@ -25,9 +23,9 @@ export default function AutoLoginBuyerPage() {
     const token = `dev-token-${buyerUser.id}-${Date.now()}`
     localStorage.setItem('dev-auth-token', token)
 
-    // Redirect to buyer dashboard with locale
-    router.push(`/${locale}/kopare`)
-  }, [router, locale])
+    // Use window.location for hard redirect to force auth context to re-read localStorage
+    window.location.href = `/${locale}/dashboard`
+  }, [locale])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
