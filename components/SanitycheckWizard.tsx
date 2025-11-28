@@ -1163,9 +1163,22 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
 
             {analysisResult && (
               <div className="flex gap-4 mt-8">
-                <button className="flex items-center gap-2 px-6 py-3 bg-white text-navy font-semibold rounded-xl hover:bg-white/90 transition-colors">
-                  <Download className="w-5 h-5" />
-                  Ladda ner PDF-rapport
+                <button 
+                  onClick={generatePdf}
+                  disabled={isGeneratingPdf}
+                  className="flex items-center gap-2 px-6 py-3 bg-white text-navy font-semibold rounded-xl hover:bg-white/90 transition-colors disabled:opacity-50"
+                >
+                  {isGeneratingPdf ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Genererar...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-5 h-5" />
+                      Ladda ner PDF-rapport
+                    </>
+                  )}
                 </button>
               </div>
             )}
