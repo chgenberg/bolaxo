@@ -29,13 +29,10 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
       dropdown: [
         { label: 'Bolag till salu', href: '/sok' },
         { label: 'Värderingskoll', href: '/sanitycheck' },
-        { label: 'Investerarprofil', href: '/investerarprofil' },
-        { label: 'Säljarprofil', href: '/saljarprofil' },
-        { label: 'Skapa annons', href: '/salja/skapa-annons' },
         { label: 'Kunskapsbank', href: '/kunskapsbank' },
         { label: 'Prismodeller', href: '/priser' },
         { label: 'Försäljningsprocessen', href: '/forsaljningsprocessen' },
-        { label: 'Exempelrapport (PDF)', href: '/forsaljningsprocessen/exempelrapport' },
+        { label: 'Exempelrapport', href: '/forsaljningsprocessen/exempelrapport' },
       ]
     },
     {

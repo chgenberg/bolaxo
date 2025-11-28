@@ -47,7 +47,7 @@ export default function HomePageContent() {
             <div className="flex-1 text-center md:text-left">
               {/* Main Headline */}
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] xl:text-5xl font-bold text-navy leading-tight mb-6">
-                <span className="lg:whitespace-nowrap">Sälj, köp och sanitychecka företag</span>
+                <span className="lg:whitespace-nowrap">Sälj, köp och värdera företag</span>
                 <span className="block text-navy/70 lg:whitespace-nowrap">på ett trovärdigt och transparent sätt.</span>
             </h1>
               
@@ -64,7 +64,7 @@ export default function HomePageContent() {
               className="group relative inline-flex items-center justify-center gap-3 bg-navy text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 hover:scale-105 animate-pulse-box"
             >
               <Sparkles className="w-5 h-5" />
-              Starta gratis sanitycheck
+              Starta värderingskoll utan kostnad
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Link>
             
@@ -74,7 +74,6 @@ export default function HomePageContent() {
             >
               <Search className="w-5 h-5" />
               Utforska bolag till salu
-              <span className="text-xs bg-navy/20 px-2 py-0.5 rounded-full">kommer snart</span>
             </Link>
             </div>
             
