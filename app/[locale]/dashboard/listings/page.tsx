@@ -53,16 +53,17 @@ export default function ListingsPage() {
   const [loading, setLoading] = useState(true)
   const [showNDAPanel, setShowNDAPanel] = useState(false)
 
-  // Fetch real data from API
+  // Fetch real data from API - only run once when userId is available
+  const userId = user?.id
   useEffect(() => {
+    if (!userId) return
+    
     const fetchListings = async () => {
-      if (!user) return
-      
       try {
         setLoading(true)
         const response = await fetch('/api/seller/listings', {
           headers: {
-            'x-user-id': user.id
+            'x-user-id': userId
           }
         })
 
@@ -102,7 +103,7 @@ export default function ListingsPage() {
     }
 
     fetchListings()
-  }, [user])
+  }, [userId, showError])
 
   const handleListingAction = async (listingId: string, action: 'pause' | 'resume' | 'delete') => {
     if (!user) return

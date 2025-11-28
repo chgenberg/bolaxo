@@ -50,10 +50,7 @@ export default function SellerDashboard({ userId }: SellerDashboardProps) {
 
   useEffect(() => {
     fetchSellerData()
-
-    // Poll for updates every 15 seconds
-    const interval = setInterval(fetchSellerData, 15000)
-    return () => clearInterval(interval)
+    // Removed polling - data fetches once on mount
   }, [userId])
 
   const fetchSellerData = async () => {
