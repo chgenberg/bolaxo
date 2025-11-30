@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
 import { generateReferralCode } from '@/lib/referral'
 import { isSeller, isBuyer } from '@/lib/user-roles'
+import { sendWelcomeEmail } from '@/lib/email'
 
 const prisma = new PrismaClient()
 
@@ -60,6 +61,9 @@ export async function GET(request: Request) {
       referralCode = await generateReferralCode()
     }
 
+    // Check if this is the first verification (welcome email should only be sent once)
+    const isFirstVerification = !user.verified
+    
     // Uppdatera användare
     await prisma.user.update({
       where: { id: user.id },
@@ -71,6 +75,22 @@ export async function GET(request: Request) {
         referralCode: referralCode,
       }
     })
+    
+    // Send welcome email on first verification
+    if (isFirstVerification) {
+      try {
+        await sendWelcomeEmail(
+          user.email,
+          user.name || 'där',
+          user.role,
+          baseUrl
+        )
+        console.log(' [MAGIC LINK VERIFY] Welcome email sent to:', user.email)
+      } catch (emailError) {
+        console.error('X [MAGIC LINK VERIFY] Failed to send welcome email:', emailError)
+        // Don't fail verification if welcome email fails
+      }
+    }
 
     // Bestäm rätt destination baserat på roll - redirect till overview-sidan
     // Support for multiple roles (e.g., "seller,buyer")

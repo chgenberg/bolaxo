@@ -885,3 +885,856 @@ export async function sendMatchNotificationEmail(
   })
 }
 
+/**
+ * Send welcome email after successful registration/verification
+ */
+export async function sendWelcomeEmail(
+  email: string,
+  name: string,
+  role: string,
+  baseUrl: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  const dashboardUrl = `${baseUrl}/dashboard`
+  
+  const isSeller = role.includes('seller')
+  const isBuyer = role.includes('buyer')
+  
+  let roleSpecificContent = ''
+  let ctaText = 'Gå till Dashboard'
+  let ctaUrl = dashboardUrl
+  
+  if (isSeller) {
+    roleSpecificContent = `
+      <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #22c55e;">
+        <h3 style="margin: 0 0 10px 0; color: #065f46; font-size: 16px;">Som säljare kan du:</h3>
+        <ul style="margin: 0; padding-left: 20px; color: #374151; font-size: 14px; line-height: 1.8;">
+          <li>Skapa en professionell annons för ditt företag</li>
+          <li>Få en AI-driven värdering</li>
+          <li>Hantera NDA-förfrågningar från kvalificerade köpare</li>
+          <li>Kommunicera säkert med intressenter</li>
+        </ul>
+      </div>
+    `
+    ctaText = 'Skapa din första annons'
+    ctaUrl = `${baseUrl}/salja`
+  } else if (isBuyer) {
+    roleSpecificContent = `
+      <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3b82f6;">
+        <h3 style="margin: 0 0 10px 0; color: #1e40af; font-size: 16px;">Som köpare kan du:</h3>
+        <ul style="margin: 0; padding-left: 20px; color: #374151; font-size: 14px; line-height: 1.8;">
+          <li>Skapa en köparprofil med dina preferenser</li>
+          <li>Få AI-matchade förslag på företag</li>
+          <li>Begära NDA för att se detaljerad information</li>
+          <li>Kommunicera direkt med säljare</li>
+        </ul>
+      </div>
+    `
+    ctaText = 'Skapa din köparprofil'
+    ctaUrl = `${baseUrl}/dashboard/profile`
+  }
+  
+  return sendEmail({
+    to: email,
+    subject: 'Välkommen till BOLAXO - Din resa börjar här!',
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                    <p style="color: #94a3b8; margin: 10px 0 0 0; font-size: 14px;">
+                      Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
+                      Välkommen till BOLAXO! 🎉
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${name},
+                    </p>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Ditt konto är nu verifierat och redo att användas! Vi är glada att ha dig med på Sveriges ledande plattform för företagsöverlåtelser.
+                    </p>
+                    
+                    ${roleSpecificContent}
+                    
+                    <!-- Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 20px 0;">
+                          <a href="${ctaUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            ${ctaText}
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <!-- Help section -->
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                      <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 0;">
+                        <strong>Behöver du hjälp?</strong> Besök vår <a href="${baseUrl}/hjalp" style="color: #1F3C58;">hjälpcentral</a> eller kontakta oss på <a href="mailto:support@bolaxo.com" style="color: #1F3C58;">support@bolaxo.com</a>
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                      Verifierade uppgifter • NDA innan detaljer • Kvalificerade köpare
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+    fromName: 'BOLAXO',
+    from: 'noreply@bolaxo.com'
+  })
+}
+
+/**
+ * Send payment confirmation email
+ */
+export async function sendPaymentConfirmationEmail(
+  email: string,
+  name: string,
+  amount: number,
+  currency: string,
+  packageName: string,
+  invoiceUrl: string | null,
+  baseUrl: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  const formattedAmount = new Intl.NumberFormat('sv-SE', { 
+    style: 'currency', 
+    currency: currency || 'SEK' 
+  }).format(amount)
+  
+  return sendEmail({
+    to: email,
+    subject: `Betalning bekräftad - ${packageName}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                      <div style="display: inline-block; background-color: #f0fdf4; border-radius: 50%; padding: 15px;">
+                        <span style="font-size: 40px;">✓</span>
+                      </div>
+                    </div>
+                    
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600; text-align: center;">
+                      Betalning bekräftad!
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${name},
+                    </p>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Tack för din betalning! Din beställning har bekräftats.
+                    </p>
+                    
+                    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Paket:</td>
+                          <td style="padding: 8px 0; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${packageName}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">Belopp:</td>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${formattedAmount}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">Datum:</td>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${new Date().toLocaleDateString('sv-SE')}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    
+                    ${invoiceUrl ? `
+                    <!-- Invoice Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 20px 0;">
+                          <a href="${invoiceUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Ladda ner kvitto
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0;">
+                      Om du har frågor om din betalning, kontakta oss på <a href="mailto:faktura@bolaxo.com" style="color: #1F3C58;">faktura@bolaxo.com</a>
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+    fromName: 'BOLAXO Faktura',
+    from: 'faktura@bolaxo.com'
+  })
+}
+
+/**
+ * Send invoice reminder email
+ */
+export async function sendInvoiceReminderEmail(
+  email: string,
+  name: string,
+  amount: number,
+  currency: string,
+  dueDate: Date,
+  invoiceNumber: string,
+  paymentUrl: string,
+  baseUrl: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  const formattedAmount = new Intl.NumberFormat('sv-SE', { 
+    style: 'currency', 
+    currency: currency || 'SEK' 
+  }).format(amount)
+  
+  const formattedDueDate = dueDate.toLocaleDateString('sv-SE')
+  const daysUntilDue = Math.ceil((dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+  
+  const urgencyStyle = daysUntilDue <= 0 
+    ? 'background-color: #fef2f2; border-left: 4px solid #ef4444;'
+    : daysUntilDue <= 3
+    ? 'background-color: #fffbeb; border-left: 4px solid #f59e0b;'
+    : 'background-color: #f9fafb; border-left: 4px solid #1F3C58;'
+  
+  const urgencyText = daysUntilDue <= 0
+    ? 'Fakturan har förfallit till betalning.'
+    : daysUntilDue === 1
+    ? 'Fakturan förfaller imorgon.'
+    : `Fakturan förfaller om ${daysUntilDue} dagar.`
+  
+  return sendEmail({
+    to: email,
+    subject: daysUntilDue <= 0 
+      ? `Påminnelse: Förfallen faktura ${invoiceNumber}`
+      : `Påminnelse: Faktura ${invoiceNumber} förfaller ${formattedDueDate}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
+                      Betalningspåminnelse
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${name},
+                    </p>
+                    
+                    <div style="${urgencyStyle} padding: 20px; border-radius: 8px; margin: 20px 0;">
+                      <p style="margin: 0; color: #374151; font-size: 14px; font-weight: 500;">${urgencyText}</p>
+                    </div>
+                    
+                    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Fakturanummer:</td>
+                          <td style="padding: 8px 0; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${invoiceNumber}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">Belopp:</td>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${formattedAmount}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">Förfallodatum:</td>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${formattedDueDate}</td>
+                        </tr>
+                      </table>
+                    </div>
+                    
+                    <!-- Payment Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 20px 0;">
+                          <a href="${paymentUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Betala nu
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0;">
+                      Om du redan har betalat, vänligen ignorera detta meddelande. Vid frågor, kontakta oss på <a href="mailto:faktura@bolaxo.com" style="color: #1F3C58;">faktura@bolaxo.com</a>
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+    fromName: 'BOLAXO Faktura',
+    from: 'faktura@bolaxo.com'
+  })
+}
+
+/**
+ * Send NDA pending reminder email to seller
+ */
+export async function sendNDAPendingReminderEmail(
+  sellerEmail: string,
+  sellerName: string,
+  pendingCount: number,
+  oldestPendingDays: number,
+  dashboardUrl: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  return sendEmail({
+    to: sellerEmail,
+    subject: `Du har ${pendingCount} väntande NDA-förfrågan${pendingCount > 1 ? 'ar' : ''}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
+                      Vänta inte för länge! ⏰
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${sellerName},
+                    </p>
+                    
+                    <div style="background-color: #fffbeb; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+                      <p style="margin: 0; color: #374151; font-size: 16px;">
+                        Du har <strong>${pendingCount} väntande NDA-förfrågan${pendingCount > 1 ? 'ar' : ''}</strong> som väntar på ditt svar.
+                        ${oldestPendingDays > 2 ? `<br><br>Den äldsta har väntat i <strong>${oldestPendingDays} dagar</strong>.` : ''}
+                      </p>
+                    </div>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Snabba svar ökar chansen att hitta rätt köpare. Köpare uppskattar säljare som svarar snabbt!
+                    </p>
+                    
+                    <!-- Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 20px 0;">
+                          <a href="${dashboardUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Granska NDA-förfrågningar
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+    fromName: 'BOLAXO',
+    from: 'noreply@bolaxo.com'
+  })
+}
+
+/**
+ * Send weekly digest email
+ */
+export async function sendWeeklyDigestEmail(
+  email: string,
+  name: string,
+  role: string,
+  stats: {
+    newMatches?: number
+    newListings?: number
+    pendingNDAs?: number
+    unreadMessages?: number
+    profileViews?: number
+  },
+  topMatches: Array<{
+    title: string
+    matchScore: number
+    industry: string
+    listingId: string
+  }>,
+  baseUrl: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  const isBuyer = role.includes('buyer')
+  const dashboardUrl = `${baseUrl}/dashboard`
+  
+  let statsHtml = ''
+  if (stats.newMatches && stats.newMatches > 0) {
+    statsHtml += `<li style="margin-bottom: 8px;"><strong>${stats.newMatches}</strong> nya matchningar</li>`
+  }
+  if (stats.newListings && stats.newListings > 0) {
+    statsHtml += `<li style="margin-bottom: 8px;"><strong>${stats.newListings}</strong> nya objekt</li>`
+  }
+  if (stats.pendingNDAs && stats.pendingNDAs > 0) {
+    statsHtml += `<li style="margin-bottom: 8px;"><strong>${stats.pendingNDAs}</strong> väntande NDA-förfrågningar</li>`
+  }
+  if (stats.unreadMessages && stats.unreadMessages > 0) {
+    statsHtml += `<li style="margin-bottom: 8px;"><strong>${stats.unreadMessages}</strong> olästa meddelanden</li>`
+  }
+  if (stats.profileViews && stats.profileViews > 0) {
+    statsHtml += `<li style="margin-bottom: 8px;"><strong>${stats.profileViews}</strong> visningar av din annons</li>`
+  }
+  
+  let matchesHtml = ''
+  if (topMatches.length > 0) {
+    matchesHtml = `
+      <h3 style="color: #1F3C58; margin: 30px 0 15px 0; font-size: 18px; font-weight: 600;">
+        ${isBuyer ? 'Toppmatchar för dig' : 'Intresserade köpare'}
+      </h3>
+    `
+    topMatches.forEach(match => {
+      matchesHtml += `
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #1F3C58;">
+          <p style="margin: 0 0 5px 0; font-weight: 600; color: #1F3C58; font-size: 15px;">${match.title}</p>
+          <p style="margin: 0; color: #6b7280; font-size: 13px;">
+            ${match.industry} • Matchningspoäng: <strong>${match.matchScore}%</strong>
+          </p>
+        </div>
+      `
+    })
+  }
+  
+  return sendEmail({
+    to: email,
+    subject: `Din veckosammanfattning från BOLAXO`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                    <p style="color: #94a3b8; margin: 10px 0 0 0; font-size: 14px;">
+                      Veckosammanfattning
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600;">
+                      Hej ${name}! 👋
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Här är din veckosammanfattning från BOLAXO:
+                    </p>
+                    
+                    ${statsHtml ? `
+                    <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #22c55e;">
+                      <h3 style="margin: 0 0 10px 0; color: #065f46; font-size: 16px;">Denna vecka:</h3>
+                      <ul style="margin: 0; padding-left: 20px; color: #374151; font-size: 14px;">
+                        ${statsHtml}
+                      </ul>
+                    </div>
+                    ` : `
+                    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                      <p style="margin: 0; color: #6b7280; font-size: 14px;">Inga nya händelser denna vecka, men håll utkik!</p>
+                    </div>
+                    `}
+                    
+                    ${matchesHtml}
+                    
+                    <!-- Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 30px 0 20px 0;">
+                          <a href="${dashboardUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Gå till Dashboard
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 10px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                    <p style="color: #9ca3af; font-size: 11px; margin: 0;">
+                      <a href="${baseUrl}/installningar/notifikationer" style="color: #6b7280;">Hantera email-inställningar</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+    fromName: 'BOLAXO',
+    from: 'noreply@bolaxo.com'
+  })
+}
+
+/**
+ * Send transaction milestone email
+ */
+export async function sendTransactionMilestoneEmail(
+  email: string,
+  name: string,
+  listingTitle: string,
+  milestone: 'nda_signed' | 'loi_submitted' | 'loi_accepted' | 'dd_started' | 'dd_completed' | 'spa_signed' | 'deal_closed',
+  transactionId: string,
+  baseUrl: string
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  const transactionUrl = `${baseUrl}/transaktion/${transactionId}`
+  
+  const milestoneConfig: Record<string, { title: string; message: string; icon: string; color: string }> = {
+    nda_signed: {
+      title: 'NDA Signerad',
+      message: 'NDA har signerats och du kan nu se all information om företaget.',
+      icon: '📝',
+      color: '#3b82f6'
+    },
+    loi_submitted: {
+      title: 'LOI Skickad',
+      message: 'Ditt indikativa bud (LOI) har skickats till säljaren för granskning.',
+      icon: '📤',
+      color: '#8b5cf6'
+    },
+    loi_accepted: {
+      title: 'LOI Godkänd!',
+      message: 'Grattis! Säljaren har godkänt ditt indikativa bud. Due Diligence kan nu påbörjas.',
+      icon: '🎉',
+      color: '#22c55e'
+    },
+    dd_started: {
+      title: 'Due Diligence Påbörjad',
+      message: 'Due Diligence-processen har startats. Alla dokument finns i datarummet.',
+      icon: '🔍',
+      color: '#f59e0b'
+    },
+    dd_completed: {
+      title: 'Due Diligence Klar',
+      message: 'Due Diligence har slutförts. Nästa steg är att färdigställa köpeavtalet (SPA).',
+      icon: '✅',
+      color: '#22c55e'
+    },
+    spa_signed: {
+      title: 'Köpeavtal Signerat',
+      message: 'Köpeavtalet (SPA) har signerats av båda parter. Affären närmar sig slutförande!',
+      icon: '✍️',
+      color: '#22c55e'
+    },
+    deal_closed: {
+      title: 'Affären Avslutad! 🎊',
+      message: 'Grattis! Affären är nu officiellt avslutad. Tack för att du använde BOLAXO!',
+      icon: '🏆',
+      color: '#22c55e'
+    }
+  }
+  
+  const config = milestoneConfig[milestone] || {
+    title: 'Uppdatering',
+    message: 'Det har skett en uppdatering i din transaktion.',
+    icon: '📌',
+    color: '#1F3C58'
+  }
+  
+  return sendEmail({
+    to: email,
+    subject: `${config.icon} ${config.title} - ${listingTitle}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                      <span style="font-size: 48px;">${config.icon}</span>
+                    </div>
+                    
+                    <h2 style="color: ${config.color}; margin: 0 0 20px 0; font-size: 24px; font-weight: 600; text-align: center;">
+                      ${config.title}
+                    </h2>
+                    
+                    <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                      Hej ${name},
+                    </p>
+                    
+                    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid ${config.color};">
+                      <p style="margin: 0 0 10px 0; font-weight: 600; color: #1F3C58; font-size: 16px;">${listingTitle}</p>
+                      <p style="margin: 0; color: #374151; font-size: 14px;">${config.message}</p>
+                    </div>
+                    
+                    <!-- Button -->
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td align="center" style="padding: 20px 0;">
+                          <a href="${transactionUrl}" style="display: inline-block; background-color: #1F3C58; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px;">
+                            Se transaktionen
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+    fromName: 'BOLAXO',
+    from: 'noreply@bolaxo.com'
+  })
+}
+
+/**
+ * Send test email (for admin testing)
+ */
+export async function sendTestEmail(
+  email: string,
+  testType: string = 'basic'
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  return sendEmail({
+    to: email,
+    subject: `[TEST] BOLAXO Email Test - ${testType}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background-color: #f9fafb;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- Header -->
+                <tr>
+                  <td style="background-color: #1F3C58; padding: 40px 30px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                      BOLAXO
+                    </h1>
+                  </td>
+                </tr>
+                
+                <!-- Content -->
+                <tr>
+                  <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                      <span style="font-size: 48px;">🧪</span>
+                    </div>
+                    
+                    <h2 style="color: #1F3C58; margin: 0 0 20px 0; font-size: 24px; font-weight: 600; text-align: center;">
+                      Test Email
+                    </h2>
+                    
+                    <div style="background-color: #f0fdf4; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #22c55e;">
+                      <p style="margin: 0; color: #065f46; font-size: 16px; font-weight: 600;">
+                        ✓ Email-systemet fungerar!
+                      </p>
+                    </div>
+                    
+                    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Testtyp:</td>
+                          <td style="padding: 8px 0; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${testType}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">Tidpunkt:</td>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">${new Date().toLocaleString('sv-SE')}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">Provider:</td>
+                          <td style="padding: 8px 0; border-top: 1px solid #e5e7eb; color: #1F3C58; font-size: 14px; font-weight: 600; text-align: right;">Brevo (Sendinblue)</td>
+                        </tr>
+                      </table>
+                    </div>
+                    
+                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0; text-align: center;">
+                      Detta är ett testmail skickat från BOLAXO admin.
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="padding: 30px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+                    <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">
+                      <strong style="color: #1F3C58;">BOLAXO</strong> © 2025 | Sveriges moderna marknadsplats för företagsöverlåtelser
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+    fromName: 'BOLAXO Test',
+    from: 'noreply@bolaxo.com'
+  })
+}
+

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
+import { sendLOINotificationEmail } from '@/lib/email'
+import { createNotification } from '@/lib/notifications'
 
 const prisma = new PrismaClient()
 
@@ -83,6 +85,12 @@ export async function POST(request: NextRequest) {
       proposedClosingDate.setDate(proposedClosingDate.getDate() + (ddScope === 'extended' ? 60 : 30))
     }
 
+    // Get buyer info for email
+    const buyer = await prisma.user.findUnique({
+      where: { id: buyerId },
+      select: { name: true, email: true }
+    })
+
     // Create LOI
     const loi = await prisma.lOI.create({
       data: {
@@ -97,6 +105,33 @@ export async function POST(request: NextRequest) {
         status: 'proposed', // Buyer has proposed, waiting for seller approval
         expiresAt,
       }
+    })
+
+    // Send email notification to seller
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+    const listingTitle = listing.companyName || listing.anonymousTitle || 'Objektet'
+    
+    try {
+      await sendLOINotificationEmail(
+        listing.user.email,
+        listing.user.name || 'Säljare',
+        buyer?.name || 'Intresserad köpare',
+        listingTitle,
+        loi.id,
+        baseUrl
+      )
+    } catch (emailError) {
+      console.error('Failed to send LOI notification email:', emailError)
+      // Don't fail the request if email fails
+    }
+
+    // Create in-app notification for seller
+    await createNotification({
+      userId: sellerId,
+      type: 'loi',
+      title: 'Ny LOI mottagen',
+      message: `${buyer?.name || 'En köpare'} har skickat en LOI för ${listingTitle}.`,
+      listingId
     })
 
     return NextResponse.json({ loi }, { status: 201 })

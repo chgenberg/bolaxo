@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { cookies } from 'next/headers'
+import { sendTransactionMilestoneEmail, sendLOIApprovalEmail } from '@/lib/email'
+import { createNotification } from '@/lib/notifications'
 
 const prisma = new PrismaClient()
 
@@ -229,6 +231,43 @@ export async function POST(
             milestones: true,
             payments: true
           }
+        })
+
+        // Send email notifications to buyer
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+        const listingTitle = loi.listing.companyName || loi.listing.anonymousTitle || 'Objektet'
+        
+        try {
+          // Send LOI approval email
+          await sendLOIApprovalEmail(
+            loi.buyer.email,
+            loi.buyer.name || 'Köpare',
+            listingTitle,
+            transaction.id,
+            baseUrl
+          )
+          
+          // Send transaction milestone email
+          await sendTransactionMilestoneEmail(
+            loi.buyer.email,
+            loi.buyer.name || 'Köpare',
+            listingTitle,
+            'loi_accepted',
+            transaction.id,
+            baseUrl
+          )
+        } catch (emailError) {
+          console.error('Failed to send LOI approval emails:', emailError)
+          // Don't fail the request if email fails
+        }
+
+        // Create in-app notification for buyer
+        await createNotification({
+          userId: buyerId,
+          type: 'loi',
+          title: 'LOI Godkänd!',
+          message: `Din LOI för ${listingTitle} har godkänts. Transaktionen har skapats!`,
+          listingId
         })
 
         return NextResponse.json({
