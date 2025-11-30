@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { verifyAdminToken } from '@/lib/admin-auth'
 import { 
   sendTestEmail,
@@ -40,10 +39,9 @@ type EmailType = keyof typeof EMAIL_TYPES
  */
 export async function GET(request: NextRequest) {
   try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get('adminToken')?.value
+    const adminToken = await verifyAdminToken(request)
     
-    if (!token || !verifyAdminToken(token)) {
+    if (!adminToken || adminToken.role !== 'admin') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
@@ -66,10 +64,9 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = await cookies()
-    const token = cookieStore.get('adminToken')?.value
+    const adminToken = await verifyAdminToken(request)
     
-    if (!token || !verifyAdminToken(token)) {
+    if (!adminToken || adminToken.role !== 'admin') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
