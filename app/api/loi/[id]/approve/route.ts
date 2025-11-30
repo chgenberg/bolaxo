@@ -264,7 +264,7 @@ export async function POST(
         // Create in-app notification for buyer
         await createNotification({
           userId: buyerId,
-          type: 'loi',
+          type: 'system',
           title: 'LOI Godkänd!',
           message: `Din LOI för ${listingTitle} har godkänts. Transaktionen har skapats!`,
           listingId

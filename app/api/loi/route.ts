@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
     // Create in-app notification for seller
     await createNotification({
       userId: sellerId,
-      type: 'loi',
+      type: 'system',
       title: 'Ny LOI mottagen',
       message: `${buyer?.name || 'En köpare'} har skickat en LOI för ${listingTitle}.`,
       listingId
