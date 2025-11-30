@@ -253,23 +253,16 @@ export default function ExempelrapportPage() {
   })
 
   const reportContent = [
-    'Innehållsförteckning',
-    'Sammanfattning & Nyckeltal',
-    'Övergripande Bedömning',
-    'Företagsöversikt',
-    'Finansiell Analys (3 sidor)',
-    'Affärsrelationer & Kunder (2 sidor)',
-    'Organisation & Ledning (2 sidor)',
-    'Balansräkning (2 sidor)',
-    'Juridisk Dokumentation (2 sidor)',
-    'Riskbedömning (2 sidor)',
-    'SWOT-Analys',
-    'Branschspecifik Analys',
-    'Värderingsfaktorer',
-    'Rekommendationer',
-    'Handlingsplan & Tidslinje',
-    'Nästa Steg & Kontakt',
-    'Bilagor & Ansvarsfriskrivning'
+    'Framsida med företagsinfo',
+    'Verkställande Sammanfattning & Riskprofil',
+    'Företagsöversikt & Finansiell Utveckling',
+    'Affärsrelationer & Kundanalys',
+    'Organisation & Nyckelpersoner',
+    'Balansräkning & Juridisk Status',
+    'Riskbedömning & SWOT-analys',
+    'Branschanalys & Värderingsfaktorer',
+    'Prioriterade Rekommendationer',
+    'Handlingsplan & Nästa Steg'
   ]
 
   return (
@@ -313,7 +306,7 @@ export default function ExempelrapportPage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
-        {/* Info Card */}
+          {/* Info Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
           <div className="flex items-start gap-4 mb-6">
             <div className="w-14 h-14 bg-[#1F3C58]/10 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -321,11 +314,12 @@ export default function ExempelrapportPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">
-                Komplett 24-sidig PDF-rapport
+                Kompakt & Professionell PDF-rapport
               </h2>
               <p className="text-gray-600">
                 Denna exempelrapport visar hur din försäljningsanalys kommer att se ut 
-                när du har fyllt i alla uppgifter i försäljningsprocessen.
+                när du har fyllt i alla uppgifter i försäljningsprocessen. 10 sidor 
+                fullpackade med analys och insikter - utan tomma ytor.
               </p>
             </div>
           </div>
