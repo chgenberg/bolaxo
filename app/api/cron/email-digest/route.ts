@@ -226,24 +226,35 @@ async function getTopMatchesForUser(userId: string, role: string) {
     const matchLogs = await prisma.buyerMatchLog.findMany({
       where: { buyerId: userId },
       orderBy: { score: 'desc' },
-      take: 3,
-      include: {
-        listing: {
-          select: {
-            id: true,
-            anonymousTitle: true,
-            industry: true
-          }
-        }
+      take: 3
+    })
+    
+    if (matchLogs.length === 0) {
+      return []
+    }
+    
+    // Get listing details separately
+    const listingIds = matchLogs.map(log => log.listingId)
+    const listings = await prisma.listing.findMany({
+      where: { id: { in: listingIds } },
+      select: {
+        id: true,
+        anonymousTitle: true,
+        industry: true
       }
     })
     
-    return matchLogs.map(log => ({
-      title: log.listing.anonymousTitle || 'Företag',
-      matchScore: log.score,
-      industry: log.listing.industry || 'Okänd bransch',
-      listingId: log.listingId
-    }))
+    const listingMap = new Map(listings.map(l => [l.id, l]))
+    
+    return matchLogs.map(log => {
+      const listing = listingMap.get(log.listingId)
+      return {
+        title: listing?.anonymousTitle || 'Företag',
+        matchScore: log.score,
+        industry: listing?.industry || 'Okänd bransch',
+        listingId: log.listingId
+      }
+    })
   }
   
   // For sellers, return empty array (they see interested buyers differently)
