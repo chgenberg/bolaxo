@@ -24,16 +24,13 @@ function decrypt(encrypted: Buffer, ivHex: string): Buffer {
 
 // Verify user has access to transaction
 async function verifyTransactionAccess(transactionId: string, userId: string): Promise<{ allowed: boolean; role: string | null }> {
+  // Get transaction
   const transaction = await prisma.transaction.findUnique({
     where: { id: transactionId },
     select: {
       buyerId: true,
       sellerId: true,
-      advisorId: true,
-      teamMembers: {
-        where: { OR: [{ email: userId }, { userId: userId }] },
-        select: { permissions: true }
-      }
+      advisorId: true
     }
   })
 
@@ -46,8 +43,16 @@ async function verifyTransactionAccess(transactionId: string, userId: string): P
   if (transaction.sellerId === userId) return { allowed: true, role: 'seller' }
   if (transaction.advisorId === userId) return { allowed: true, role: 'advisor' }
   
-  // Check if user is a team member
-  if (transaction.teamMembers.length > 0) {
+  // Check if user is a team member (separate query since no direct relation)
+  const teamMember = await prisma.teamMember.findFirst({
+    where: {
+      transactionId,
+      OR: [{ userId }, { email: userId }],
+      status: 'ACCEPTED'
+    }
+  })
+
+  if (teamMember) {
     return { allowed: true, role: 'team_member' }
   }
 

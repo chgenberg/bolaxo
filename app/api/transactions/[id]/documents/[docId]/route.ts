@@ -10,11 +10,7 @@ async function verifyTransactionAccess(transactionId: string, userId: string): P
       select: {
         buyerId: true,
         sellerId: true,
-        advisorId: true,
-        teamMembers: {
-          where: { OR: [{ email: userId }, { userId: userId }] },
-          select: { permissions: true }
-        }
+        advisorId: true
       }
     }),
     prisma.user.findUnique({
@@ -33,7 +29,16 @@ async function verifyTransactionAccess(transactionId: string, userId: string): P
   if (transaction.sellerId === userId) return { allowed: true, role: 'seller', userName }
   if (transaction.advisorId === userId) return { allowed: true, role: 'advisor', userName }
   
-  if (transaction.teamMembers.length > 0) {
+  // Check if user is a team member (separate query since no direct relation)
+  const teamMember = await prisma.teamMember.findFirst({
+    where: {
+      transactionId,
+      OR: [{ userId }, { email: userId }],
+      status: 'ACCEPTED'
+    }
+  })
+
+  if (teamMember) {
     return { allowed: true, role: 'team_member', userName }
   }
 
