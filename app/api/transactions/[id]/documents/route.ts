@@ -276,11 +276,11 @@ export async function POST(
     return NextResponse.json({
       document: {
         id: document.id,
-        name: document.fileName,
-        size: document.fileSize / (1024 * 1024),
+        name: document.fileName || 'Okänt dokument',
+        size: (document.fileSize || 0) / (1024 * 1024),
         uploadedAt: document.createdAt.toISOString(),
-        uploadedBy: document.uploadedByName,
-        type: document.mimeType,
+        uploadedBy: document.uploadedByName || 'Okänd',
+        type: document.mimeType || 'application/octet-stream',
         encrypted: true,
         status: document.status
       }
