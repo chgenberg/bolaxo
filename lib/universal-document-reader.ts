@@ -83,7 +83,7 @@ function detectFormat(mimeType: string, fileName: string): DocumentExtractionRes
 }
 
 /**
- * Extract text from PDF with OCR fallback for scanned documents
+ * Extract text from PDF with warning for scanned documents
  */
 async function extractFromPDF(buffer: Buffer): Promise<DocumentExtractionResult> {
   try {
@@ -107,101 +107,25 @@ async function extractFromPDF(buffer: Buffer): Promise<DocumentExtractionResult>
       }
     }
     
-    // PDF appears to be scanned/image-based, try OCR
-    console.log('[PDF] Text extraction yielded minimal text, attempting OCR...')
-    const ocrResult = await extractTextWithOCR(buffer, pdf.numpages || 1)
+    // PDF appears to be scanned/image-based
+    console.log('[PDF] Text extraction yielded minimal text - document may be scanned')
     
-    if (ocrResult.text.trim().length > text.trim().length) {
-      return {
-        text: ocrResult.text,
-        format: 'pdf',
-        pages: pdf.numpages || 0,
-        confidence: ocrResult.confidence,
-        metadata: {
-          pages: pdf.numpages,
-          producedBy: pdf.info?.Producer || 'Unknown',
-          createdAt: pdf.info?.CreationDate,
-          extractionMethod: 'ocr',
-          ocrLanguage: 'swe+eng'
-        }
-      }
-    }
-    
-    // Return whatever text we got
     return {
-      text: text || ocrResult.text,
+      text: text || '',
       format: 'pdf',
       pages: pdf.numpages || 0,
-      confidence: 0.5,
+      confidence: 0.3,
       metadata: {
         pages: pdf.numpages,
         producedBy: pdf.info?.Producer || 'Unknown',
         createdAt: pdf.info?.CreationDate,
-        extractionMethod: 'mixed',
-        warning: 'Limited text extraction - document may be image-based'
+        extractionMethod: 'text',
+        warning: 'Dokumentet verkar vara skannat. För bästa resultat, exportera som bild (JPG/PNG) och ladda upp igen.'
       }
     }
   } catch (error) {
     console.error('PDF extraction error:', error)
     throw error
-  }
-}
-
-/**
- * Extract text from PDF using OCR (for scanned documents)
- */
-async function extractTextWithOCR(pdfBuffer: Buffer, pageCount: number): Promise<{ text: string; confidence: number }> {
-  try {
-    // Convert PDF pages to images using pdf-to-png-converter
-    const { pdfToPng } = await import('pdf-to-png-converter')
-    
-    // Convert first few pages (limit to avoid timeout)
-    const maxPages = Math.min(pageCount, 5)
-    const pngPages = await pdfToPng(pdfBuffer, {
-      disableFontFace: true,
-      useSystemFonts: true,
-      viewportScale: 2.0, // Higher resolution for better OCR
-      pagesToProcess: Array.from({ length: maxPages }, (_, i) => i + 1)
-    })
-    
-    let fullText = ''
-    let totalConfidence = 0
-    let processedPages = 0
-    
-    // Process each page with Tesseract OCR
-    for (const page of pngPages) {
-      try {
-        console.log(`[OCR] Processing page ${page.pageNumber}...`)
-        
-        const result = await Tesseract.recognize(
-          page.content, // PNG buffer
-          'swe+eng', // Swedish + English language
-          {
-            logger: () => {} // Suppress logging
-          }
-        )
-        
-        if (result.data.text) {
-          fullText += `\n--- Sida ${page.pageNumber} ---\n${result.data.text}`
-          totalConfidence += result.data.confidence
-          processedPages++
-        }
-      } catch (pageError) {
-        console.error(`[OCR] Error processing page ${page.pageNumber}:`, pageError)
-      }
-    }
-    
-    const avgConfidence = processedPages > 0 ? totalConfidence / processedPages / 100 : 0
-    
-    console.log(`[OCR] Completed: ${processedPages} pages, avg confidence: ${(avgConfidence * 100).toFixed(1)}%`)
-    
-    return {
-      text: fullText.trim(),
-      confidence: Math.max(0.6, avgConfidence) // Minimum 60% confidence for OCR
-    }
-  } catch (error) {
-    console.error('[OCR] Failed to extract text with OCR:', error)
-    return { text: '', confidence: 0 }
   }
 }
 
