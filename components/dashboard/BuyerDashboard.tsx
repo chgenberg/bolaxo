@@ -134,7 +134,7 @@ export default function BuyerDashboard({ userId }: BuyerDashboardProps) {
               <span className="w-2 h-2 bg-mint rounded-full animate-pulse"></span>
               Köpare Dashboard
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">Välkommen tillbaka! 👋</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3 text-white">Välkommen tillbaka! 👋</h1>
             <p className="text-white/70 max-w-xl text-lg">
               Här hittar du dina sparade objekt, NDA-status och rekommenderade företag baserat på dina preferenser.
             </p>
