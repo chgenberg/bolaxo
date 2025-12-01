@@ -832,20 +832,35 @@ export default function InvestorProfileWizard({
             
             <div>
               <label className="block text-sm font-medium text-white/80 mb-4">Önskad ägarandel *</label>
-              <div className="flex flex-wrap gap-3">
-                {["100 % (helägare)", "Majoritet (50–99 %)"].map(opt => (
+              <div className="space-y-3">
+                {[
+                  { value: "100 % (helägare)", description: "Jag vill äga hela bolaget." },
+                  { value: "Majoritet (50–99 %)", description: "Jag vill ha kontrollerande majoritetsägande." },
+                  { value: "Minoritet (under 50 %)", description: "Jag vill kunna investera en mindre andel än 50 %, där grundare fortsatt har en majoritet." }
+                ].map(opt => (
                   <button
-                    key={opt}
+                    key={opt.value}
                     type="button"
-                    onClick={() => toggleInArray("ownership", opt)}
-                    className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
-                      state.ownership.includes(opt)
-                        ? 'bg-white text-navy'
-                        : 'bg-white/10 text-white/80 hover:bg-white/20'
+                    onClick={() => toggleInArray("ownership", opt.value)}
+                    className={`w-full text-left p-4 rounded-xl transition-all duration-200 ${
+                      state.ownership.includes(opt.value)
+                        ? 'bg-white/20 border border-white/30'
+                        : 'bg-white/5 border border-white/10 hover:bg-white/10'
                     }`}
                   >
-                    {state.ownership.includes(opt) && <Check className="w-4 h-4 inline mr-2" />}
-                    {opt}
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        state.ownership.includes(opt.value)
+                          ? 'border-white bg-white'
+                          : 'border-white/40'
+                      }`}>
+                        {state.ownership.includes(opt.value) && <Check className="w-3 h-3 text-navy" />}
+                      </div>
+                      <div>
+                        <div className="font-medium text-white">{opt.value}</div>
+                        <div className="text-sm text-white/60">{opt.description}</div>
+                      </div>
+                    </div>
                   </button>
                 ))}
               </div>
