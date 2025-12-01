@@ -1260,11 +1260,13 @@ export default function ForsaljningsprocessenPage() {
     const validFiles = fileArray.filter(file => {
       const ext = file.name.toLowerCase()
       return ext.endsWith('.pdf') || ext.endsWith('.docx') || ext.endsWith('.doc') || 
-             ext.endsWith('.xlsx') || ext.endsWith('.xls') || ext.endsWith('.txt') || ext.endsWith('.csv')
+             ext.endsWith('.xlsx') || ext.endsWith('.xls') || ext.endsWith('.txt') || ext.endsWith('.csv') ||
+             ext.endsWith('.jpg') || ext.endsWith('.jpeg') || ext.endsWith('.png') || 
+             ext.endsWith('.gif') || ext.endsWith('.webp') || ext.endsWith('.tiff') || ext.endsWith('.tif')
     })
     
     if (validFiles.length === 0) {
-      setDocAnalysisError('Inga giltiga filer. Stödda format: PDF, Word, Excel, TXT, CSV')
+      setDocAnalysisError('Inga giltiga filer. Stödda format: PDF, Word, Excel, TXT, CSV, bilder (JPG, PNG)')
       return
     }
     
@@ -1774,7 +1776,7 @@ export default function ForsaljningsprocessenPage() {
                   <input
                     type="file"
                     multiple
-                    accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.jpg,.jpeg,.png,.gif,.webp,.tiff,.tif"
                     onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
@@ -1791,7 +1793,7 @@ export default function ForsaljningsprocessenPage() {
                         {isDragging ? 'Släpp filerna här' : 'Dra och släpp filer här'}
                       </p>
                       <p className="text-xs text-gray-500 mt-1">
-                        eller klicka för att välja • PDF, Word, Excel, TXT
+                        eller klicka för att välja • PDF, Word, Excel, TXT, bilder
                       </p>
                     </div>
                   </div>

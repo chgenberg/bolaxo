@@ -1,6 +1,7 @@
 import type { Readable } from 'stream'
 import * as XLSX from 'xlsx'
 import * as mammoth from 'mammoth'
+import Tesseract from 'tesseract.js'
 
 // pdf-parse is CommonJS, need to import correctly
 const getPdfParse = () => {
@@ -8,9 +9,12 @@ const getPdfParse = () => {
   return mod.default || mod
 }
 
+// Minimum text length to consider a PDF as having readable text
+const MIN_TEXT_LENGTH_FOR_VALID_PDF = 100
+
 export interface DocumentExtractionResult {
   text: string
-  format: 'pdf' | 'excel' | 'word' | 'powerpoint' | 'text' | 'unknown'
+  format: 'pdf' | 'excel' | 'word' | 'powerpoint' | 'text' | 'image' | 'unknown'
   pages?: number
   sheets?: string[]
   confidence: number
@@ -41,6 +45,8 @@ export async function extractTextFromDocument(
         return await extractFromPowerPoint(buffer)
       case 'text':
         return extractFromText(buffer)
+      case 'image':
+        return await extractFromImage(buffer, fileName)
       default:
         return {
           text: buffer.toString('utf8'),
@@ -62,6 +68,7 @@ function detectFormat(mimeType: string, fileName: string): DocumentExtractionRes
   if (mimeType.includes('word') || mimeType.includes('wordprocessingml')) return 'word'
   if (mimeType.includes('presentation') || mimeType.includes('officedocument.presentationml')) return 'powerpoint'
   if (mimeType.includes('text') || mimeType.includes('plain')) return 'text'
+  if (mimeType.includes('image/')) return 'image'
 
   // Filename extension detection
   const ext = fileName.toLowerCase().split('.').pop()
@@ -70,12 +77,13 @@ function detectFormat(mimeType: string, fileName: string): DocumentExtractionRes
   if (['doc', 'docx'].includes(ext || '')) return 'word'
   if (['ppt', 'pptx'].includes(ext || '')) return 'powerpoint'
   if (['txt', 'md'].includes(ext || '')) return 'text'
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff', 'tif'].includes(ext || '')) return 'image'
 
   return 'unknown'
 }
 
 /**
- * Extract text from PDF
+ * Extract text from PDF with OCR fallback for scanned documents
  */
 async function extractFromPDF(buffer: Buffer): Promise<DocumentExtractionResult> {
   try {
@@ -83,20 +91,117 @@ async function extractFromPDF(buffer: Buffer): Promise<DocumentExtractionResult>
     const pdf = await pdfParseFunc(buffer)
     const text = pdf.text || ''
     
+    // If we got enough text, return it directly
+    if (text.trim().length >= MIN_TEXT_LENGTH_FOR_VALID_PDF) {
+      return {
+        text,
+        format: 'pdf',
+        pages: pdf.numpages || 0,
+        confidence: 0.95,
+        metadata: {
+          pages: pdf.numpages,
+          producedBy: pdf.info?.Producer || 'Unknown',
+          createdAt: pdf.info?.CreationDate,
+          extractionMethod: 'text'
+        }
+      }
+    }
+    
+    // PDF appears to be scanned/image-based, try OCR
+    console.log('[PDF] Text extraction yielded minimal text, attempting OCR...')
+    const ocrResult = await extractTextWithOCR(buffer, pdf.numpages || 1)
+    
+    if (ocrResult.text.trim().length > text.trim().length) {
+      return {
+        text: ocrResult.text,
+        format: 'pdf',
+        pages: pdf.numpages || 0,
+        confidence: ocrResult.confidence,
+        metadata: {
+          pages: pdf.numpages,
+          producedBy: pdf.info?.Producer || 'Unknown',
+          createdAt: pdf.info?.CreationDate,
+          extractionMethod: 'ocr',
+          ocrLanguage: 'swe+eng'
+        }
+      }
+    }
+    
+    // Return whatever text we got
     return {
-      text,
+      text: text || ocrResult.text,
       format: 'pdf',
       pages: pdf.numpages || 0,
-      confidence: 0.95,
+      confidence: 0.5,
       metadata: {
         pages: pdf.numpages,
         producedBy: pdf.info?.Producer || 'Unknown',
-        createdAt: pdf.info?.CreationDate
+        createdAt: pdf.info?.CreationDate,
+        extractionMethod: 'mixed',
+        warning: 'Limited text extraction - document may be image-based'
       }
     }
   } catch (error) {
     console.error('PDF extraction error:', error)
     throw error
+  }
+}
+
+/**
+ * Extract text from PDF using OCR (for scanned documents)
+ */
+async function extractTextWithOCR(pdfBuffer: Buffer, pageCount: number): Promise<{ text: string; confidence: number }> {
+  try {
+    // Convert PDF pages to images using pdf-to-png-converter
+    const { pdfToPng } = await import('pdf-to-png-converter')
+    
+    // Convert first few pages (limit to avoid timeout)
+    const maxPages = Math.min(pageCount, 5)
+    const pngPages = await pdfToPng(pdfBuffer, {
+      disableFontFace: true,
+      useSystemFonts: true,
+      viewportScale: 2.0, // Higher resolution for better OCR
+      pagesToProcess: Array.from({ length: maxPages }, (_, i) => i + 1)
+    })
+    
+    let fullText = ''
+    let totalConfidence = 0
+    let processedPages = 0
+    
+    // Process each page with Tesseract OCR
+    for (const page of pngPages) {
+      try {
+        console.log(`[OCR] Processing page ${page.pageNumber}...`)
+        
+        const result = await Tesseract.recognize(
+          page.content, // PNG buffer
+          'swe+eng', // Swedish + English language
+          {
+            logger: () => {} // Suppress logging
+          }
+        )
+        
+        if (result.data.text) {
+          fullText += `\n--- Sida ${page.pageNumber} ---\n${result.data.text}`
+          totalConfidence += result.data.confidence
+          processedPages++
+        }
+      } catch (pageError) {
+        console.error(`[OCR] Error processing page ${page.pageNumber}:`, pageError)
+      }
+    }
+    
+    const avgConfidence = processedPages > 0 ? totalConfidence / processedPages / 100 : 0
+    
+    console.log(`[OCR] Completed: ${processedPages} pages, avg confidence: ${(avgConfidence * 100).toFixed(1)}%`)
+    
+    return {
+      text: fullText.trim(),
+      confidence: Math.max(0.6, avgConfidence) // Minimum 60% confidence for OCR
+    }
+  } catch (error) {
+    console.error('[OCR] Failed to extract text with OCR:', error)
+    return { text: '', confidence: 0 }
   }
 }
 
@@ -224,6 +329,42 @@ function extractFromText(buffer: Buffer): DocumentExtractionResult {
       characterCount: text.length,
       lineCount: text.split('\n').length
     }
+  }
+}
+
+/**
+ * Extract text from image files using OCR
+ */
+async function extractFromImage(buffer: Buffer, fileName: string): Promise<DocumentExtractionResult> {
+  try {
+    console.log(`[OCR] Processing image: ${fileName}`)
+    
+    const result = await Tesseract.recognize(
+      buffer,
+      'swe+eng', // Swedish + English
+      {
+        logger: () => {} // Suppress verbose logging
+      }
+    )
+    
+    const text = result.data.text || ''
+    const confidence = result.data.confidence / 100
+    
+    console.log(`[OCR] Image processed: ${text.length} chars, confidence: ${(confidence * 100).toFixed(1)}%`)
+    
+    return {
+      text,
+      format: 'image',
+      confidence: Math.max(0.6, confidence),
+      metadata: {
+        extractionMethod: 'ocr',
+        ocrLanguage: 'swe+eng',
+        originalFileName: fileName
+      }
+    }
+  } catch (error) {
+    console.error('[OCR] Image extraction error:', error)
+    throw new Error(`Failed to extract text from image: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 

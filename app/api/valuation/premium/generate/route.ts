@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const { text } = await callOpenAIResponses({
-        model: 'gpt-4o',
+        model: 'gpt-5.1',
         messages: [
           {
             role: 'system',

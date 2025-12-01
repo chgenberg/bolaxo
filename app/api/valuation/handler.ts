@@ -251,13 +251,13 @@ async function handleValuationRequest(request: Request) {
     console.log('[VALUATION] Industry:', data.industry)
     console.log('[VALUATION] Revenue:', data.exactRevenue)
     console.log('[VALUATION] Insights included:', !!webInsights)
-    console.log('[VALUATION] Calling OpenAI Responses API with model: gpt-4o')
+    console.log('[VALUATION] Calling OpenAI Responses API with model: gpt-5.1')
     
     let rawContent = ''
     
     try {
       const { text } = await callOpenAIResponses({
-        model: 'gpt-4o',
+        model: 'gpt-5.1',
         messages: [
           { role: 'system', content: buildSystemPrompt(context) },
           { role: 'user', content: buildUserPrompt(context) }
