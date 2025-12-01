@@ -305,13 +305,25 @@ const HELP_TEXTS = {
     title: "EBITDA-stabilitet",
     content: "EBITDA (resultat före räntor, skatt, avskrivningar) är det vanligaste måttet för värdering. Stabil eller växande EBITDA de senaste 3 åren ger bäst multipel."
   },
+  ebitdaComment: {
+    title: "EBITDA-kommentar",
+    content: "Beskriv eventuella engångsposter, säsongsvariationer eller andra faktorer som påverkat EBITDA. Normaliserade siffror är viktiga för värderingen."
+  },
   cashflowMatchScale: {
     title: "Kassaflöde",
     content: "Hur väl speglar kassaflödet den redovisade lönsamheten? Stora avvikelser kan indikera kvalitetsproblem i resultatet."
   },
+  cashflowComment: {
+    title: "Kassaflödeskommentar",
+    content: "Beskriv kassaflödesmönster, investeringsbehov och eventuella skillnader mellan bokförd vinst och faktiskt kassaflöde."
+  },
   workingCapitalScale: {
     title: "Rörelsekapital",
     content: "Hur mycket kapital binds i kundfordringar, lager och leverantörsskulder? Högt rörelsekapitalbehov kan påverka köpeskillingen."
+  },
+  workingCapitalComment: {
+    title: "Rörelsekapitalkommentar",
+    content: "Beskriv säsongsvariationer i rörelsekapital, betalningstider från kunder och till leverantörer, samt lageromsättningshastighet."
   },
   debtComment: {
     title: "Skuldsättning",
@@ -454,8 +466,11 @@ export interface SanitycheckState {
   revenueDocs: string
   // Step 4 - Lönsamhet & kassaflöde
   ebitdaStabilityScale: string
+  ebitdaComment: string
   cashflowMatchScale: string
+  cashflowComment: string
   workingCapitalScale: string
+  workingCapitalComment: string
   debtComment: string
   financialDocs: string
   // Step 5 - Kundbas & marknad
@@ -624,8 +639,11 @@ const initialState: SanitycheckState = {
   pricingText: "",
   revenueDocs: "",
   ebitdaStabilityScale: "",
+  ebitdaComment: "",
   cashflowMatchScale: "",
+  cashflowComment: "",
   workingCapitalScale: "",
+  workingCapitalComment: "",
   debtComment: "",
   financialDocs: "",
   concentrationPercent: "",
@@ -1143,20 +1161,88 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
               <p className="text-white/70">Lönsamhet, kassaflöde och rörelsekapital ur en köpares perspektiv.</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
+            {/* EBITDA */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-emerald-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">EBITDA & Lönsamhet</h3>
+              </div>
               {renderScalePills("ebitdaStabilityScale", "Stabilitet i EBITDA de senaste 3 åren *", "ebitdaStabilityScale")}
-              {renderScalePills("cashflowMatchScale", "Hur väl speglar kassaflödet lönsamheten? *", "cashflowMatchScale")}
-              {renderScalePills("workingCapitalScale", "Rörelsekapitalnivå i förhållande till omsättning *", "workingCapitalScale")}
-              {renderDocumentQuestion("financialDocs", "Bokslut, månadsrapporter och prognoser är sammanställda", "Ladda upp finansiella dokument")}
+              <div>
+                <LabelWithHelp label="Kommentar kring EBITDA" helpContent={HELP_TEXTS.ebitdaComment.content} helpTitle={HELP_TEXTS.ebitdaComment.title} />
+                <textarea
+                  value={state.ebitdaComment}
+                  onChange={e => updateField("ebitdaComment", e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[80px]"
+                  placeholder="T.ex. engångsposter, säsongsvariationer, normaliserad EBITDA..."
+                />
+              </div>
             </div>
 
-            <div>
-              <LabelWithHelp label="Kommentar kring lån, skulder och eventuella covenants" helpContent={HELP_TEXTS.debtComment.content} helpTitle={HELP_TEXTS.debtComment.title} required />
-              <textarea
-                value={state.debtComment}
-                onChange={e => updateField("debtComment", e.target.value)}
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[100px]"
-              />
+            {/* Kassaflöde */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-blue-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Kassaflöde</h3>
+              </div>
+              {renderScalePills("cashflowMatchScale", "Hur väl speglar kassaflödet lönsamheten? *", "cashflowMatchScale")}
+              <div>
+                <LabelWithHelp label="Kommentar kring kassaflöde" helpContent={HELP_TEXTS.cashflowComment.content} helpTitle={HELP_TEXTS.cashflowComment.title} />
+                <textarea
+                  value={state.cashflowComment}
+                  onChange={e => updateField("cashflowComment", e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[80px]"
+                  placeholder="T.ex. investeringsbehov, skillnad mellan vinst och kassaflöde..."
+                />
+              </div>
+            </div>
+
+            {/* Rörelsekapital */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                  <Target className="w-4 h-4 text-amber-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Rörelsekapital</h3>
+              </div>
+              {renderScalePills("workingCapitalScale", "Rörelsekapitalnivå i förhållande till omsättning *", "workingCapitalScale")}
+              <div>
+                <LabelWithHelp label="Kommentar kring rörelsekapital" helpContent={HELP_TEXTS.workingCapitalComment.content} helpTitle={HELP_TEXTS.workingCapitalComment.title} />
+                <textarea
+                  value={state.workingCapitalComment}
+                  onChange={e => updateField("workingCapitalComment", e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[80px]"
+                  placeholder="T.ex. säsongsvariationer, betalningstider, lageromsättning..."
+                />
+              </div>
+            </div>
+
+            {/* Skuldsättning */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-rose-500/20 rounded-lg flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-rose-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Skuldsättning</h3>
+              </div>
+              <div>
+                <LabelWithHelp label="Kommentar kring lån, skulder och eventuella covenants" helpContent={HELP_TEXTS.debtComment.content} helpTitle={HELP_TEXTS.debtComment.title} required />
+                <textarea
+                  value={state.debtComment}
+                  onChange={e => updateField("debtComment", e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[100px]"
+                  placeholder="T.ex. banklån, checkräkningskredit, leasing, covenants..."
+                />
+              </div>
+            </div>
+
+            {/* Dokument */}
+            <div className="border-t border-white/10 pt-6">
+              {renderDocumentQuestion("financialDocs", "Bokslut, månadsrapporter och prognoser är sammanställda", "Ladda upp finansiella dokument")}
             </div>
           </div>
         )
