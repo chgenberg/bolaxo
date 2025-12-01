@@ -329,6 +329,26 @@ const HELP_TEXTS = {
     title: "Skuldsättning",
     content: "Beskriv era lån, checkräkningskrediter och eventuella finansiella villkor (covenants). Skulder påverkar ofta köpeskillingen."
   },
+  hasSharesInOtherCompanies: {
+    title: "Aktieinnehav",
+    content: "Äger bolaget aktier i andra företag, t.ex. dotterbolag, intressebolag eller finansiella placeringar? Dessa kan påverka värderingen."
+  },
+  sharesIncludedInValuation: {
+    title: "Inkludera i värdering",
+    content: "Ska aktieinnehaven följa med vid försäljningen och inkluderas i den indikativa värderingen, eller ska de delas ut/säljas separat innan?"
+  },
+  sharesDescription: {
+    title: "Beskrivning av aktieinnehav",
+    content: "Beskriv vilka aktier som ägs, deras bokförda värde och uppskattade marknadsvärde. Ange även om det finns aktieägaravtal."
+  },
+  hasExcessValueInAssets: {
+    title: "Övervärden i tillgångar",
+    content: "Finns det tillgångar som är bokförda till ett lägre värde än marknadsvärdet? T.ex. fastigheter, maskiner eller varumärken."
+  },
+  excessValueDescription: {
+    title: "Beskrivning av övervärden",
+    content: "Beskriv vilka tillgångar som har övervärden, deras bokförda värde och uppskattade marknadsvärde."
+  },
 
   // Step 5 - Kundbas
   totalCustomers: {
@@ -493,6 +513,12 @@ export interface SanitycheckState {
   workingCapitalComment: string
   debtComment: string
   financialDocs: string
+  // Övriga tillgångar
+  hasSharesInOtherCompanies: string
+  sharesIncludedInValuation: string
+  sharesDescription: string
+  hasExcessValueInAssets: string
+  excessValueDescription: string
   // Step 5 - Kundbas & marknad
   totalCustomers: string
   concentrationPercent: string
@@ -671,6 +697,11 @@ const initialState: SanitycheckState = {
   workingCapitalComment: "",
   debtComment: "",
   financialDocs: "",
+  hasSharesInOtherCompanies: "",
+  sharesIncludedInValuation: "",
+  sharesDescription: "",
+  hasExcessValueInAssets: "",
+  excessValueDescription: "",
   totalCustomers: "",
   concentrationPercent: "",
   stabilityPercent: "",
@@ -1268,6 +1299,128 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                   placeholder="T.ex. banklån, checkräkningskredit, leasing, covenants..."
                 />
               </div>
+            </div>
+
+            {/* Övriga tillgångar */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-purple-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Övriga tillgångar</h3>
+              </div>
+              
+              {/* Aktieinnehav */}
+              <div className="space-y-3">
+                <div>
+                  <div className="flex items-center mb-3">
+                    <span className="text-sm font-medium text-white/80">Äger bolaget aktier i andra företag?</span>
+                    <HelpTooltip content={HELP_TEXTS.hasSharesInOtherCompanies.content} title={HELP_TEXTS.hasSharesInOtherCompanies.title} />
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {["Ja", "Nej"].map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => updateField("hasSharesInOtherCompanies", opt)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                          state.hasSharesInOtherCompanies === opt
+                            ? 'bg-white text-navy'
+                            : 'bg-white/10 text-white/80 hover:bg-white/20'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {state.hasSharesInOtherCompanies === "Ja" && (
+                  <div className="pl-4 border-l-2 border-purple-500/30 space-y-4 animate-in slide-in-from-top-2 duration-300">
+                    <div>
+                      <div className="flex items-center mb-3">
+                        <span className="text-sm font-medium text-white/80">Ska aktierna inkluderas i värderingen?</span>
+                        <HelpTooltip content={HELP_TEXTS.sharesIncludedInValuation.content} title={HELP_TEXTS.sharesIncludedInValuation.title} />
+                      </div>
+                      <div className="flex gap-2 flex-wrap">
+                        {["Ja, inkludera", "Nej, delas ut separat", "Osäkert"].map(opt => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => updateField("sharesIncludedInValuation", opt)}
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                              state.sharesIncludedInValuation === opt
+                                ? 'bg-white text-navy'
+                                : 'bg-white/10 text-white/80 hover:bg-white/20'
+                            }`}
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <LabelWithHelp label="Beskriv aktieinnehaven" helpContent={HELP_TEXTS.sharesDescription.content} helpTitle={HELP_TEXTS.sharesDescription.title} />
+                      <textarea
+                        value={state.sharesDescription}
+                        onChange={e => updateField("sharesDescription", e.target.value)}
+                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[80px]"
+                        placeholder="T.ex. 100% i Dotterbolag AB (bokfört 500 tkr, marknadsvärde ca 2 MSEK)..."
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Övervärden i materiella tillgångar */}
+              <div className="space-y-3 pt-4 border-t border-white/10">
+                <div>
+                  <div className="flex items-center mb-3">
+                    <span className="text-sm font-medium text-white/80">Finns övervärden i materiella anläggningstillgångar?</span>
+                    <HelpTooltip content={HELP_TEXTS.hasExcessValueInAssets.content} title={HELP_TEXTS.hasExcessValueInAssets.title} />
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {["Ja", "Nej", "Vet ej"].map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => updateField("hasExcessValueInAssets", opt)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                          state.hasExcessValueInAssets === opt
+                            ? 'bg-white text-navy'
+                            : 'bg-white/10 text-white/80 hover:bg-white/20'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {state.hasExcessValueInAssets === "Ja" && (
+                  <div className="pl-4 border-l-2 border-purple-500/30 animate-in slide-in-from-top-2 duration-300">
+                    <LabelWithHelp label="Beskriv övervärden i tillgångar" helpContent={HELP_TEXTS.excessValueDescription.content} helpTitle={HELP_TEXTS.excessValueDescription.title} />
+                    <textarea
+                      value={state.excessValueDescription}
+                      onChange={e => updateField("excessValueDescription", e.target.value)}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[80px]"
+                      placeholder="T.ex. Fastighet bokförd till 3 MSEK, marknadsvärde ca 8 MSEK..."
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Info box about valuation impact */}
+              {(state.hasSharesInOtherCompanies === "Ja" || state.hasExcessValueInAssets === "Ja") && (
+                <div className="mt-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/30">
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-purple-400/90">
+                      Övriga tillgångar kan väsentligt påverka den indikativa värderingen. Se till att dessa värderas separat vid en försäljningsprocess.
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Dokument */}
