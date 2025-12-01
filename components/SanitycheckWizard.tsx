@@ -331,6 +331,10 @@ const HELP_TEXTS = {
   },
 
   // Step 5 - Kundbas
+  totalCustomers: {
+    title: "Totalt antal kunder",
+    content: "Fler kunder innebär lägre risk för köparen. <10 kunder = hög risk, 10-50 = medel, 50-200 = låg, >200 = mycket låg koncentrationsrisk."
+  },
   concentrationPercent: {
     title: "Kundkoncentration",
     content: "Hur stor andel av intäkterna kommer från de 3-5 största kunderna? >30% på en kund anses som hög risk och kan sänka värderingen."
@@ -474,6 +478,7 @@ export interface SanitycheckState {
   debtComment: string
   financialDocs: string
   // Step 5 - Kundbas & marknad
+  totalCustomers: string
   concentrationPercent: string
   stabilityPercent: string
   marketPositionText: string
@@ -646,6 +651,7 @@ const initialState: SanitycheckState = {
   workingCapitalComment: "",
   debtComment: "",
   financialDocs: "",
+  totalCustomers: "",
   concentrationPercent: "",
   stabilityPercent: "",
   marketPositionText: "",
@@ -1248,6 +1254,14 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
         )
 
       case 5:
+        // Calculate customer risk level
+        const customerCount = parseInt(state.totalCustomers) || 0
+        const customerRisk = customerCount === 0 ? null : 
+          customerCount < 10 ? { level: 'high', label: 'Hög risk', color: 'rose', description: 'Mycket få kunder ökar beroendet betydligt' } :
+          customerCount < 50 ? { level: 'medium', label: 'Medel risk', color: 'amber', description: 'Viss kundkoncentration, men hanterbar' } :
+          customerCount < 200 ? { level: 'low', label: 'Låg risk', color: 'emerald', description: 'God spridning av kundbasen' } :
+          { level: 'verylow', label: 'Mycket låg risk', color: 'emerald', description: 'Utmärkt diversifiering av kundbasen' }
+
         return (
           <div className="space-y-6">
             <div>
@@ -1255,29 +1269,83 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
               <p className="text-white/70">Kundbas, kundkoncentration och marknadsposition.</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <LabelWithHelp label="Kundkoncentration - andel på toppkunder (%)" helpContent={HELP_TEXTS.concentrationPercent.content} helpTitle={HELP_TEXTS.concentrationPercent.title} required />
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={state.concentrationPercent}
-                  onChange={e => updateField("concentrationPercent", e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
-                />
+            {/* Antal kunder med riskindikator */}
+            <div className="bg-white/5 rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                  <Users className="w-4 h-4 text-blue-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Kundportfölj</h3>
               </div>
-              <div>
-                <LabelWithHelp label="Kundstabilitet - andel återkommande kunder (%)" helpContent={HELP_TEXTS.stabilityPercent.content} helpTitle={HELP_TEXTS.stabilityPercent.title} required />
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={state.stabilityPercent}
-                  onChange={e => updateField("stabilityPercent", e.target.value)}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
-                />
+              
+              <div className="grid md:grid-cols-3 gap-4">
+                <div>
+                  <LabelWithHelp label="Totalt antal kunder" helpContent={HELP_TEXTS.totalCustomers.content} helpTitle={HELP_TEXTS.totalCustomers.title} required />
+                  <input
+                    type="number"
+                    min="0"
+                    value={state.totalCustomers}
+                    onChange={e => updateField("totalCustomers", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="Ange antal"
+                  />
+                </div>
+                <div>
+                  <LabelWithHelp label="Andel på toppkunder (%)" helpContent={HELP_TEXTS.concentrationPercent.content} helpTitle={HELP_TEXTS.concentrationPercent.title} required />
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={state.concentrationPercent}
+                    onChange={e => updateField("concentrationPercent", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="Top 3-5 kunder"
+                  />
+                </div>
+                <div>
+                  <LabelWithHelp label="Återkommande kunder (%)" helpContent={HELP_TEXTS.stabilityPercent.content} helpTitle={HELP_TEXTS.stabilityPercent.title} required />
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={state.stabilityPercent}
+                    onChange={e => updateField("stabilityPercent", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="Årlig retention"
+                  />
+                </div>
               </div>
+
+              {/* Risk indicator */}
+              {customerRisk && (
+                <div className={`mt-4 p-3 rounded-lg border ${
+                  customerRisk.color === 'rose' ? 'bg-rose-500/10 border-rose-500/30' :
+                  customerRisk.color === 'amber' ? 'bg-amber-500/10 border-amber-500/30' :
+                  'bg-emerald-500/10 border-emerald-500/30'
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      customerRisk.color === 'rose' ? 'bg-rose-500' :
+                      customerRisk.color === 'amber' ? 'bg-amber-500' :
+                      'bg-emerald-500'
+                    }`} />
+                    <span className={`text-sm font-medium ${
+                      customerRisk.color === 'rose' ? 'text-rose-400' :
+                      customerRisk.color === 'amber' ? 'text-amber-400' :
+                      'text-emerald-400'
+                    }`}>
+                      Kundkoncentrationsrisk: {customerRisk.label}
+                    </span>
+                  </div>
+                  <p className={`text-xs mt-1 ${
+                    customerRisk.color === 'rose' ? 'text-rose-400/70' :
+                    customerRisk.color === 'amber' ? 'text-amber-400/70' :
+                    'text-emerald-400/70'
+                  }`}>
+                    {customerRisk.description}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div>
