@@ -393,6 +393,14 @@ const HELP_TEXTS = {
     title: "Betalningsanmärkningar",
     content: "Finns det betalningsanmärkningar, skatteskulder eller kronofogdeärenden? Dessa är allvarliga röda flaggor för köpare."
   },
+  taxesPaidOnTime: {
+    title: "Skatter och avgifter",
+    content: "Är moms, arbetsgivaravgifter, preliminärskatt och andra skatter betalda i tid? Skatteskulder är ett allvarligt problem vid due diligence."
+  },
+  taxDeclarationsApproved: {
+    title: "Inkomstdeklarationer",
+    content: "Är bolagets inkomstdeklarationer inskickade och godkända av Skatteverket? Pågående granskningar eller omprövningar bör redovisas."
+  },
   disputes: {
     title: "Tvister",
     content: "Finns pågående eller hotande rättsliga tvister, konflikter med kunder/leverantörer eller garantiärenden?"
@@ -400,6 +408,14 @@ const HELP_TEXTS = {
   policiesScale: {
     title: "Policyer & compliance",
     content: "Har ni dokumenterade policyer för GDPR, informationssäkerhet, AML och andra regelverk som påverkar er bransch?"
+  },
+  itSecurityScale: {
+    title: "IT-säkerhet",
+    content: "Hur väl skyddat är bolaget mot cyberattacker? Inkluderar brandväggar, backup-rutiner, tvåfaktorsautentisering, kryptering och incidenthantering."
+  },
+  itSecurityComment: {
+    title: "IT-säkerhetskommentar",
+    content: "Beskriv era IT-säkerhetsrutiner: backup-lösningar, lösenordspolicyer, säkerhetsutbildning för personal, samt eventuella incidenter."
   },
   riskSummaryText: {
     title: "Risksammanfattning",
@@ -502,8 +518,12 @@ export interface SanitycheckState {
   processDocs: string
   // Step 8 - Risk & compliance
   creditIssues: string
+  taxesPaidOnTime: string
+  taxDeclarationsApproved: string
   disputes: string
   policiesScale: string
+  itSecurityScale: string
+  itSecurityComment: string
   riskSummaryText: string
   riskDocs: string
   // Step 9 - Tillväxt & potential
@@ -672,8 +692,12 @@ const initialState: SanitycheckState = {
   bottlenecksComment: "",
   processDocs: "",
   creditIssues: "",
+  taxesPaidOnTime: "",
+  taxDeclarationsApproved: "",
   disputes: "",
   policiesScale: "",
+  itSecurityScale: "",
+  itSecurityComment: "",
   riskSummaryText: "",
   riskDocs: "",
   growthInitiativesText: "",
@@ -1447,40 +1471,160 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
               <p className="text-white/70">Juridisk, finansiell och operativ risk.</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <div className="flex items-center mb-3">
-                  <span className="text-sm font-medium text-white/80">Finns betalningsanmärkningar/skulder? *</span>
-                  <HelpTooltip content={HELP_TEXTS.creditIssues.content} title={HELP_TEXTS.creditIssues.title} />
+            {/* Finansiell risk */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-rose-500/20 rounded-lg flex items-center justify-center">
+                  <AlertTriangle className="w-4 h-4 text-rose-400" />
                 </div>
-                <div className="flex gap-3">
-                  {["Ja", "Nej", "Vet ej"].map(opt => (
-                    <button
-                      key={opt}
-                      type="button"
-                      onClick={() => updateField("creditIssues", opt)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                        state.creditIssues === opt
-                          ? 'bg-white text-navy'
-                          : 'bg-white/10 text-white/80 hover:bg-white/20'
-                      }`}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
+                <h3 className="text-lg font-semibold text-white">Finansiell risk</h3>
               </div>
-              {renderYesNo("disputes", "Finns kända tvister eller konflikter? *", "disputes")}
-              {renderScalePills("policiesScale", "Dokumenterade policyer (GDPR, säkerhet, AML) *", "policiesScale")}
-              {renderDocumentQuestion("riskDocs", "Risk- eller revisionsrapporter är sammanställda", "Ladda upp riskrapporter")}
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <div className="flex items-center mb-3">
+                    <span className="text-sm font-medium text-white/80">Finns betalningsanmärkningar/skulder? *</span>
+                    <HelpTooltip content={HELP_TEXTS.creditIssues.content} title={HELP_TEXTS.creditIssues.title} />
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {["Ja", "Nej", "Vet ej"].map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => updateField("creditIssues", opt)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                          state.creditIssues === opt
+                            ? 'bg-white text-navy'
+                            : 'bg-white/10 text-white/80 hover:bg-white/20'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {renderYesNo("disputes", "Finns kända tvister eller konflikter? *", "disputes")}
+              </div>
             </div>
 
-            <div>
+            {/* Skatter & deklarationer */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                  <FileText className="w-4 h-4 text-amber-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Skatter & deklarationer</h3>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <div className="flex items-center mb-3">
+                    <span className="text-sm font-medium text-white/80">Är skatter och avgifter betalda i tid? *</span>
+                    <HelpTooltip content={HELP_TEXTS.taxesPaidOnTime.content} title={HELP_TEXTS.taxesPaidOnTime.title} />
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {["Ja", "Nej", "Delvis"].map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => updateField("taxesPaidOnTime", opt)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                          state.taxesPaidOnTime === opt
+                            ? 'bg-white text-navy'
+                            : 'bg-white/10 text-white/80 hover:bg-white/20'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center mb-3">
+                    <span className="text-sm font-medium text-white/80">Inkomstdeklarationer inskickade och godkända? *</span>
+                    <HelpTooltip content={HELP_TEXTS.taxDeclarationsApproved.content} title={HELP_TEXTS.taxDeclarationsApproved.title} />
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {["Ja", "Nej", "Pågående granskning"].map(opt => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => updateField("taxDeclarationsApproved", opt)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                          state.taxDeclarationsApproved === opt
+                            ? 'bg-white text-navy'
+                            : 'bg-white/10 text-white/80 hover:bg-white/20'
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Warning if issues */}
+              {(state.taxesPaidOnTime === "Nej" || state.taxesPaidOnTime === "Delvis" || state.taxDeclarationsApproved === "Nej" || state.taxDeclarationsApproved === "Pågående granskning") && (
+                <div className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-amber-400/90">
+                      Skatteproblem upptäcks alltid i due diligence. Se till att ha en tydlig plan för att lösa eventuella eftersläpningar innan försäljningsprocessen startar.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* IT-säkerhet */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-blue-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">IT-säkerhet</h3>
+              </div>
+              
+              {renderScalePills("itSecurityScale", "Hur väl skyddat är bolaget mot cyberattacker? *", "itSecurityScale")}
+              
+              <div>
+                <LabelWithHelp label="Beskriv era IT-säkerhetsrutiner" helpContent={HELP_TEXTS.itSecurityComment.content} helpTitle={HELP_TEXTS.itSecurityComment.title} />
+                <textarea
+                  value={state.itSecurityComment}
+                  onChange={e => updateField("itSecurityComment", e.target.value)}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[80px]"
+                  placeholder="T.ex. backup-rutiner, brandvägg, 2FA, kryptering, säkerhetsutbildning..."
+                />
+              </div>
+            </div>
+
+            {/* Policyer & compliance */}
+            <div className="bg-white/5 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-4 h-4 text-emerald-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Policyer & compliance</h3>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  {renderScalePills("policiesScale", "Dokumenterade policyer (GDPR, säkerhet, AML) *", "policiesScale")}
+                </div>
+                <div>
+                  {renderDocumentQuestion("riskDocs", "Risk- eller revisionsrapporter är sammanställda", "Ladda upp riskrapporter")}
+                </div>
+              </div>
+            </div>
+
+            {/* Risksammanfattning */}
+            <div className="border-t border-white/10 pt-6">
               <LabelWithHelp label="Sammanfattning av de viktigaste riskerna" helpContent={HELP_TEXTS.riskSummaryText.content} helpTitle={HELP_TEXTS.riskSummaryText.title} required />
               <textarea
                 value={state.riskSummaryText}
                 onChange={e => updateField("riskSummaryText", e.target.value)}
                 className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors min-h-[100px]"
+                placeholder="Summera de viktigaste riskerna ur en köpares perspektiv..."
               />
             </div>
           </div>
