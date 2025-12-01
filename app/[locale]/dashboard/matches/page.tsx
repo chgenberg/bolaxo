@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
-import { TrendingUp, Users, Target, AlertCircle } from 'lucide-react'
+import { TrendingUp, Users, Target, Sparkles, MessageSquare, MapPin, Building2, DollarSign } from 'lucide-react'
 import Link from 'next/link'
 
 interface Match {
@@ -28,7 +28,6 @@ export default function MatchesPage() {
 
   useEffect(() => {
     if (!user) return
-
     const fetchMatches = async () => {
       try {
         const response = await fetch(`/api/matches?sellerId=${user.id}`)
@@ -42,7 +41,6 @@ export default function MatchesPage() {
         setLoading(false)
       }
     }
-
     fetchMatches()
   }, [user])
 
@@ -51,168 +49,176 @@ export default function MatchesPage() {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   })
 
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return { bg: 'bg-green-50', text: 'text-green-900', bar: 'bg-green-500' }
-    if (score >= 60) return { bg: 'bg-primary-navy/10', text: 'text-primary-navy', bar: 'bg-primary-navy' }
-    return { bg: 'bg-yellow-50', text: 'text-yellow-900', bar: 'bg-yellow-500' }
-  }
+  const tabs = [
+    { value: 'score', label: 'Högsta matchning' },
+    { value: 'recent', label: 'Senaste' }
+  ]
 
   return (
     <DashboardLayout>
-      <div className="max-w-6xl mx-auto">
+      <div className="space-y-6">
         {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-primary-navy flex items-center gap-2 sm:gap-3 uppercase">
-            <Target className="w-7 h-7 sm:w-8 sm:h-8 text-accent-pink" />
+        <div>
+          <h1 className="text-2xl font-bold text-navy flex items-center gap-2">
+            <Target className="w-6 h-6 text-coral" />
             Matchade köpare
           </h1>
-          <p className="text-sm text-gray-600 mt-2">
-            Köpare som matchar din annons
-          </p>
+          <p className="text-graphite/70 mt-1">Köpare som matchar din annons</p>
         </div>
 
-        {/* Stats - Responsive grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 hover:border-accent-pink/30 transition-colors">
-            <div className="flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">Högkvalitet</p>
-                <p className="text-2xl sm:text-3xl font-bold text-primary-navy mt-1 sm:mt-2">
-                  {matches.filter(m => m.matchScore >= 80).length}
-                </p>
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="bg-white p-6 rounded-2xl border border-sand/50 hover:shadow-lg transition-all group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-mint/30 to-sky/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-6 h-6 text-mint" />
               </div>
-              <TrendingUp className="w-6 h-6 sm:w-8 sm:w-10 sm:h-10 text-primary-navy opacity-20 flex-shrink-0" />
             </div>
+            <p className="text-3xl font-bold text-navy mb-1">{matches.filter(m => m.matchScore >= 80).length}</p>
+            <p className="text-sm text-graphite/70">Hög matchning (80%+)</p>
           </div>
 
-          <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 hover:border-accent-pink/30 transition-colors sm:col-span-2 md:col-span-1">
-            <div className="flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-xs sm:text-sm text-gray-600 font-semibold uppercase">Genomsnitt</p>
-                <p className="text-2xl sm:text-3xl font-bold text-primary-navy mt-1 sm:mt-2">
-                  {matches.length > 0
-                    ? Math.round(
-                        matches.reduce((sum, m) => sum + m.matchScore, 0) / matches.length
-                      )
-                    : 0}
-                  %
-                </p>
+          <div className="bg-white p-6 rounded-2xl border border-sand/50 hover:shadow-lg transition-all group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-rose/30 to-coral/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Users className="w-6 h-6 text-rose" />
               </div>
-              <Target className="w-6 h-6 sm:w-8 sm:w-10 sm:h-10 text-accent-pink opacity-20 flex-shrink-0" />
             </div>
+            <p className="text-3xl font-bold text-navy mb-1">{matches.length}</p>
+            <p className="text-sm text-graphite/70">Totala matchningar</p>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border border-sand/50 hover:shadow-lg transition-all group col-span-2 lg:col-span-1">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-sky/30 to-mint/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Target className="w-6 h-6 text-sky" />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-navy mb-1">
+              {matches.length > 0 ? Math.round(matches.reduce((sum, m) => sum + m.matchScore, 0) / matches.length) : 0}%
+            </p>
+            <p className="text-sm text-graphite/70">Genomsnittlig matchning</p>
           </div>
         </div>
 
-        {/* Sort - Mobile optimized */}
-        <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
-          <button
-            onClick={() => setSortBy('score')}
-            className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all ${
-              sortBy === 'score'
-                ? 'bg-primary-navy text-white'
-                : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            Högsta
-          </button>
-          <button
-            onClick={() => setSortBy('recent')}
-            className={`px-4 py-2 rounded-lg font-semibold text-sm sm:text-base transition-all ${
-              sortBy === 'recent'
-                ? 'bg-primary-navy text-white'
-                : 'bg-white text-gray-700 border border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            Senaste
-          </button>
+        {/* Tabs */}
+        <div className="flex gap-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setSortBy(tab.value as 'score' | 'recent')}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
+                sortBy === tab.value ? 'bg-navy text-white' : 'text-graphite hover:bg-sand/30'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* Matches List */}
         {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block w-6 h-6 sm:w-8 border-4 border-primary-navy/20 border-t-primary-navy rounded-full animate-spin" />
+          <div className="bg-white rounded-2xl border border-sand/50 p-12 text-center">
+            <div className="w-12 h-12 bg-sand/30 rounded-xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <Sparkles className="w-6 h-6 text-graphite/40" />
+            </div>
+            <p className="text-graphite/60">Laddar matchningar...</p>
           </div>
         ) : matches.length === 0 ? (
-          <div className="bg-white rounded-lg p-6 sm:p-12 text-center border border-gray-200">
-            <AlertCircle className="w-6 h-6 sm:w-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Inga matchningar än</h3>
-            <p className="text-xs sm:text-sm text-gray-600">
-              Köpare kommer att registrera sig snart.
-            </p>
+          <div className="bg-white rounded-2xl border border-sand/50 p-12 text-center">
+            <div className="w-16 h-16 bg-sand/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Users className="w-8 h-8 text-graphite/40" />
+            </div>
+            <h3 className="text-lg font-semibold text-navy mb-2">Inga matchningar än</h3>
+            <p className="text-graphite/60">Köpare kommer att registrera sig snart</p>
           </div>
         ) : (
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-4">
             {sortedMatches.map((match) => {
-              const scoreColor = getScoreColor(match.matchScore)
+              const isHighMatch = match.matchScore >= 80
+              const isMediumMatch = match.matchScore >= 60 && match.matchScore < 80
+              
               return (
                 <div
                   key={match.id}
-                  className={`${scoreColor.bg} rounded-lg p-4 sm:p-6 border border-gray-200 hover:shadow-md transition-shadow`}
+                  className={`bg-white rounded-2xl border p-6 hover:shadow-lg transition-all ${
+                    isHighMatch ? 'border-mint/50 bg-mint/5' : isMediumMatch ? 'border-sky/50 bg-sky/5' : 'border-sand/50'
+                  }`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-3 sm:gap-4 md:gap-6">
-                    <div className="flex-1 min-w-0">
-                      <h3 className={`text-base sm:text-lg font-semibold ${scoreColor.text} mb-1 truncate`}>
-                        {match.buyerName || 'Anonym köpare'}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 truncate">{match.buyerEmail}</p>
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <h3 className="text-lg font-bold text-navy mb-1">{match.buyerName || 'Anonym köpare'}</h3>
+                          <p className="text-sm text-graphite/60">{match.buyerEmail}</p>
+                        </div>
+                        <div className={`px-4 py-2 rounded-full font-bold text-lg ${
+                          isHighMatch ? 'bg-mint/30 text-navy' : isMediumMatch ? 'bg-sky/30 text-navy' : 'bg-sand/50 text-navy'
+                        }`}>
+                          {match.matchScore}%
+                        </div>
+                      </div>
 
                       {/* Match Score Bar */}
-                      <div className="mb-4 sm:mb-4">
-                        <div className="flex items-center justify-between gap-2 mb-2">
-                          <span className="text-xs sm:text-sm font-medium text-gray-700">Matchning</span>
-                          <span className={`text-base sm:text-lg font-bold ${scoreColor.text}`}>
-                            {match.matchScore}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div className="mb-4">
+                        <div className="w-full bg-sand/30 rounded-full h-2">
                           <div
-                            className={`h-2 rounded-full ${scoreColor.bar}`}
+                            className={`h-2 rounded-full transition-all ${
+                              isHighMatch ? 'bg-mint' : isMediumMatch ? 'bg-sky' : 'bg-coral'
+                            }`}
                             style={{ width: `${match.matchScore}%` }}
                           />
                         </div>
                       </div>
 
-                      {/* Match Details - Mobile responsive */}
-                      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
-                        <div className="min-w-0">
-                          <p className="text-gray-600 text-xs mb-1">Regioner</p>
-                          <p className="font-medium text-gray-900 truncate">
-                            {match.regions.join(', ') || 'Sverige'}
+                      {/* Match Details */}
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div className="bg-sand/20 rounded-xl p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <MapPin className="w-4 h-4 text-sky" />
+                            <span className="text-xs text-graphite/60">Regioner</span>
+                          </div>
+                          <p className="text-sm font-medium text-navy truncate">{match.regions.join(', ') || 'Sverige'}</p>
+                        </div>
+                        <div className="bg-sand/20 rounded-xl p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Building2 className="w-4 h-4 text-rose" />
+                            <span className="text-xs text-graphite/60">Branscher</span>
+                          </div>
+                          <p className="text-sm font-medium text-navy truncate">{match.industries.slice(0, 2).join(', ')}</p>
+                        </div>
+                        <div className="bg-sand/20 rounded-xl p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <DollarSign className="w-4 h-4 text-mint" />
+                            <span className="text-xs text-graphite/60">Pris</span>
+                          </div>
+                          <p className="text-sm font-medium text-navy">
+                            {(match.priceRange.min / 1_000_000).toFixed(0)}-{(match.priceRange.max / 1_000_000).toFixed(0)}M
                           </p>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-gray-600 text-xs mb-1">Branscher</p>
-                          <p className="font-medium text-gray-900 truncate">
-                            {match.industries.slice(0, 1).join(', ')}
-                          </p>
-                        </div>
-                        <div className="hidden sm:block min-w-0">
-                          <p className="text-gray-600 text-xs mb-1">Pris</p>
-                          <p className="font-medium text-gray-900">
-                            {(match.priceRange.min / 1_000_000).toFixed(0)}-
-                            {(match.priceRange.max / 1_000_000).toFixed(0)}M
-                          </p>
-                        </div>
-                        <div className="hidden lg:block min-w-0">
-                          <p className="text-gray-600 text-xs mb-1">Omsättning</p>
-                          <p className="font-medium text-gray-900">
-                            {(match.revenueRange.min / 1_000_000).toFixed(0)}-
-                            {(match.revenueRange.max / 1_000_000).toFixed(0)}M
+                        <div className="bg-sand/20 rounded-xl p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <TrendingUp className="w-4 h-4 text-coral" />
+                            <span className="text-xs text-graphite/60">Omsättning</span>
+                          </div>
+                          <p className="text-sm font-medium text-navy">
+                            {(match.revenueRange.min / 1_000_000).toFixed(0)}-{(match.revenueRange.max / 1_000_000).toFixed(0)}M
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Actions - Mobile optimized */}
-                    <div className="flex flex-row sm:flex-col gap-2 sm:gap-2 flex-shrink-0 w-full sm:w-auto">
-                      <button className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-primary-navy text-white rounded-lg font-medium hover:bg-primary-navy/90 transition-colors text-xs sm:text-sm min-h-10 sm:min-h-auto">
+                    {/* Actions */}
+                    <div className="flex lg:flex-col gap-2">
+                      <button className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-navy text-white text-sm rounded-full font-medium hover:bg-navy/90 transition-colors">
+                        <MessageSquare className="w-4 h-4" />
                         Kontakta
                       </button>
                       <Link
                         href={`/dashboard/listings/${match.listingId}`}
-                        className="flex-1 sm:flex-none px-3 sm:px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-white border border-gray-300 text-gray-900 rounded-lg font-medium hover:bg-neutral-white transition-colors text-xs sm:text-sm text-center min-h-10 sm:min-h-auto inline-flex items-center justify-center"
+                        className="flex-1 lg:flex-none inline-flex items-center justify-center px-5 py-2.5 bg-sand/30 text-navy text-sm rounded-full font-medium hover:bg-sand/50 transition-colors"
                       >
-                        Annons
+                        Se annons
                       </Link>
                     </div>
                   </div>

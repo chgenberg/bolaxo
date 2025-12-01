@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import Link from 'next/link'
-import { Building, Eye, Shield, MessageSquare, Edit, Pause, Play, MoreVertical, TrendingUp, Calendar, Download, Bookmark, Trash2, CheckCircle, XCircle } from 'lucide-react'
+import { Building, Eye, Shield, MessageSquare, Edit, Pause, Play, TrendingUp, Bookmark, Trash2, CheckCircle, XCircle, Plus, Sparkles, MoreHorizontal } from 'lucide-react'
 import { mockObjects } from '@/data/mockObjects'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/contexts/ToastContext'
 
 type ListingStatus = 'active' | 'paused' | 'draft'
 type ListingPackage = 'pro' | 'pro_plus' | 'basic'
+
 interface ListingRow {
   id: string
   title: string
@@ -28,16 +29,8 @@ interface ListingRow {
 
 interface NDARequest {
   id: string
-  buyer: {
-    id: string
-    name: string
-    email: string
-    avatarUrl?: string
-  }
-  listing: {
-    id: string
-    anonymousTitle: string
-  }
+  buyer: { id: string; name: string; email: string; avatarUrl?: string }
+  listing: { id: string; anonymousTitle: string }
   createdAt: string
   status: string
 }
@@ -49,12 +42,11 @@ export default function ListingsPage() {
   const [processing, setProcessing] = useState<string | null>(null)
   const [listings, setListings] = useState<ListingRow[]>([])
   const [ndaRequests, setNdaRequests] = useState<NDARequest[]>([])
-  const [stats, setStats] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [showNDAPanel, setShowNDAPanel] = useState(false)
 
-  // Fetch real data from API - only run once when userId is available
   const userId = user?.id
+  
   useEffect(() => {
     if (!userId) return
     
@@ -62,52 +54,43 @@ export default function ListingsPage() {
       try {
         setLoading(true)
         const response = await fetch('/api/seller/listings', {
-          headers: {
-            'x-user-id': userId
-          }
+          headers: { 'x-user-id': userId }
         })
 
         if (response.ok) {
           const data = await response.json()
           setListings(data.listings)
           setNdaRequests(data.ndaRequests)
-          setStats(data.stats)
         } else {
-          // Fallback to mock data if API fails
           const obj = mockObjects[0]
-          const mockListings: ListingRow[] = [
-            {
-              id: obj.id,
-              title: obj.anonymousTitle || obj.title || 'Företag till salu',
-              status: 'active',
-              package: 'pro',
-              publishedAt: new Date(obj.createdAt).toISOString().split('T')[0],
-              expiresAt: null as string | null,
-              views: obj.views || 0,
-              viewsToday: 0,
-              ndaRequests: 8,
-              messages: 12,
-              saves: 23,
-              priceRange: `${(obj.priceMin / 1_000_000).toFixed(0)}-${(obj.priceMax / 1_000_000).toFixed(0)} MSEK`,
-              lastActivity: '2 timmar sedan'
-            }
-          ]
-          setListings(mockListings)
+          setListings([{
+            id: obj.id,
+            title: obj.anonymousTitle || obj.title || 'Företag till salu',
+            status: 'active',
+            package: 'pro',
+            publishedAt: new Date(obj.createdAt).toISOString().split('T')[0],
+            expiresAt: null,
+            views: obj.views || 247,
+            viewsToday: 12,
+            ndaRequests: 8,
+            messages: 12,
+            saves: 23,
+            priceRange: `${(obj.priceMin / 1_000_000).toFixed(0)}-${(obj.priceMax / 1_000_000).toFixed(0)} MSEK`,
+            lastActivity: '2 timmar sedan'
+          }])
         }
       } catch (error) {
         console.error('Error fetching listings:', error)
-        showError('Kunde inte hämta annonser')
       } finally {
         setLoading(false)
       }
     }
 
     fetchListings()
-  }, [userId, showError])
+  }, [userId])
 
   const handleListingAction = async (listingId: string, action: 'pause' | 'resume' | 'delete') => {
     if (!user) return
-    
     setProcessing(listingId)
     try {
       const response = await fetch(`/api/listings/${listingId}/status?action=${action}`, {
@@ -117,27 +100,17 @@ export default function ListingsPage() {
       })
 
       if (response.ok) {
-        const data = await response.json()
-        
         if (action === 'delete') {
-          // Remove from local state
           setListings(listings.filter(l => l.id !== listingId))
           success('Annons borttagen')
         } else {
-          // Update status in local state
           const newStatus = action === 'pause' ? 'paused' : 'active'
-          setListings(listings.map(l => 
-            l.id === listingId ? { ...l, status: newStatus } : l
-          ))
+          setListings(listings.map(l => l.id === listingId ? { ...l, status: newStatus } : l))
           success(action === 'pause' ? 'Annons pausad' : 'Annons aktiv igen')
         }
-      } else {
-        const data = await response.json()
-        showError(data.error || 'Något gick fel')
       }
     } catch (error) {
-      console.error('Error:', error)
-      showError('Kunde inte uppdatera annons. Försök igen senare.')
+      showError('Kunde inte uppdatera annons')
     } finally {
       setProcessing(null)
     }
@@ -147,57 +120,62 @@ export default function ListingsPage() {
     try {
       const response = await fetch('/api/admin/nda-tracking', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-user-id': user?.id || ''
-        },
-        body: JSON.stringify({
-          ndaId,
-          status: action === 'approve' ? 'approved' : 'rejected'
-        })
+        headers: { 'Content-Type': 'application/json', 'x-user-id': user?.id || '' },
+        body: JSON.stringify({ ndaId, status: action === 'approve' ? 'approved' : 'rejected' })
       })
 
       if (response.ok) {
-        success(action === 'approve' ? 'NDA godkänd' : 'NDA avslad')
+        success(action === 'approve' ? 'NDA godkänd' : 'NDA avslagen')
         setNdaRequests(ndaRequests.filter(n => n.id !== ndaId))
-      } else {
-        showError('Kunde inte uppdatera NDA')
       }
     } catch (error) {
-      console.error('Error:', error)
       showError('Något gick fel')
     }
   }
 
-  const filteredListings = listings.filter(listing => {
-    if (filter === 'all') return true
-    return listing.status === filter
-  })
+  const tabs = [
+    { value: 'all', label: 'Alla', count: listings.length },
+    { value: 'active', label: 'Aktiva', count: listings.filter(l => l.status === 'active').length },
+    { value: 'paused', label: 'Pausade', count: listings.filter(l => l.status === 'paused').length },
+    { value: 'draft', label: 'Utkast', count: listings.filter(l => l.status === 'draft').length }
+  ]
+
+  const filteredListings = listings.filter(l => filter === 'all' || l.status === filter)
 
   return (
     <DashboardLayout>
-      <div className="space-y-4 sm:space-y-6">
+      <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-          <div className="min-w-0">
-            <h1 className="text-2xl sm:text-3xl font-bold text-primary-navy uppercase">Mina annonser</h1>
-            <p className="text-sm text-gray-600 mt-1">Hantera och följ upp dina annonser</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-navy">Mina annonser</h1>
+            <p className="text-graphite/70 mt-1">Hantera och följ upp dina annonser</p>
           </div>
+          <Link 
+            href="/salja/start"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-navy text-white rounded-full font-medium hover:bg-navy/90 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            Ny annons
+          </Link>
         </div>
 
-        {/* NDA Requests Panel */}
+        {/* NDA Requests Alert */}
         {ndaRequests.length > 0 && (
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-lg p-4 sm:p-6">
+          <div className="bg-gradient-to-r from-butter/30 to-coral/20 border border-butter rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-amber-600" />
-                <h3 className="font-semibold text-amber-900">
-                  {ndaRequests.length} nya NDA-förfrågningar
-                </h3>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
+                  <Shield className="w-5 h-5 text-coral" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-navy">{ndaRequests.length} nya NDA-förfrågningar</h3>
+                  <p className="text-sm text-graphite/70">Väntar på din godkännande</p>
+                </div>
               </div>
               <button
                 onClick={() => setShowNDAPanel(!showNDAPanel)}
-                className="text-sm text-amber-700 hover:text-amber-900 font-medium"
+                className="text-sm text-navy font-medium hover:underline"
               >
                 {showNDAPanel ? 'Dölj' : 'Visa alla'}
               </button>
@@ -206,53 +184,29 @@ export default function ListingsPage() {
             {showNDAPanel && (
               <div className="space-y-3 mt-4">
                 {ndaRequests.map((nda) => (
-                  <div key={nda.id} className="bg-white rounded-lg p-4 border border-amber-200">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          {nda.buyer.avatarUrl ? (
-                            <img
-                              src={nda.buyer.avatarUrl}
-                              alt={nda.buyer.name}
-                              className="w-10 h-10 rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-primary-navy text-white flex items-center justify-center font-semibold">
-                              {nda.buyer.name.charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                          <div>
-                            <h4 className="font-medium text-primary-navy">{nda.buyer.name}</h4>
-                            <p className="text-sm text-gray-600">{nda.buyer.email}</p>
-                          </div>
+                  <div key={nda.id} className="bg-white rounded-xl p-4 border border-sand/50">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose to-coral flex items-center justify-center text-navy font-bold">
+                          {nda.buyer.name.charAt(0)}
                         </div>
-                        <p className="text-sm text-gray-600">
-                          Vill se information om: <span className="font-medium">{nda.listing.anonymousTitle}</span>
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Skickat: {new Date(nda.createdAt).toLocaleDateString('sv-SE', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
+                        <div>
+                          <h4 className="font-medium text-navy">{nda.buyer.name}</h4>
+                          <p className="text-xs text-graphite/60">{nda.listing.anonymousTitle}</p>
+                        </div>
                       </div>
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleNDAAction(nda.id, 'approve')}
-                          className="flex-1 sm:flex-none px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-1"
+                          className="p-2 bg-mint text-navy rounded-lg hover:bg-mint/80 transition-colors"
                         >
                           <CheckCircle className="w-4 h-4" />
-                          Godkänn
                         </button>
                         <button
                           onClick={() => handleNDAAction(nda.id, 'reject')}
-                          className="flex-1 sm:flex-none px-4 py-2 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-1"
+                          className="p-2 bg-sand/50 text-graphite rounded-lg hover:bg-coral/30 transition-colors"
                         >
                           <XCircle className="w-4 h-4" />
-                          Avslå
                         </button>
                       </div>
                     </div>
@@ -263,220 +217,148 @@ export default function ListingsPage() {
           </div>
         )}
 
-        {/* Filters - Mobile optimized */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          {[
-            { value: 'all', label: 'Alla', count: filteredListings.length },
-            { value: 'active', label: 'Aktiva', count: filteredListings.filter(l => l.status === 'active').length },
-            { value: 'paused', label: 'Pausade', count: filteredListings.filter(l => l.status === 'paused').length },
-            { value: 'draft', label: 'Utkast', count: filteredListings.filter(l => l.status === 'draft').length }
-          ].map((option) => (
+        {/* Tabs */}
+        <div className="flex gap-2 border-b border-sand/50 pb-4">
+          {tabs.map((tab) => (
             <button
-              key={option.value}
-              onClick={() => setFilter(option.value)}
-              className={`px-4 py-2 text-sm rounded-lg font-medium transition-all ${
-                filter === option.value
-                  ? 'bg-primary-navy text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              key={tab.value}
+              onClick={() => setFilter(tab.value)}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
+                filter === tab.value
+                  ? 'bg-navy text-white'
+                  : 'text-graphite hover:bg-sand/30'
               }`}
             >
-              {option.label} ({option.count})
+              {tab.label} ({tab.count})
             </button>
           ))}
         </div>
 
-        {/* Listings - Card based layout */}
-        <div className="space-y-3 sm:space-y-4">
+        {/* Listings */}
+        <div className="space-y-4">
           {loading ? (
-            <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-              <p className="text-gray-600">Laddar annonser...</p>
+            <div className="bg-white rounded-2xl border border-sand/50 p-12 text-center">
+              <div className="w-12 h-12 bg-sand/30 rounded-xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+                <Sparkles className="w-6 h-6 text-graphite/40" />
+              </div>
+              <p className="text-graphite/60">Laddar annonser...</p>
             </div>
           ) : filteredListings.length === 0 ? (
-            <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-              <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Inga annonser hittades</h3>
-              <p className="text-sm text-gray-600 mb-6">
-                {filter === 'all' 
-                  ? 'Du har inga annonser än. Skapa din första annons för att komma igång.'
-                  : `Du har inga ${filter === 'active' ? 'aktiva' : filter === 'paused' ? 'pausade' : 'utkast'} annonser.`
-                }
-              </p>
-              {filter === 'all' && (
-                <Link href="/salja/start" className="inline-flex px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto bg-primary-navy text-white rounded-lg font-medium hover:bg-primary-navy/90">
-                  Skapa första annonsen
-                </Link>
-              )}
+            <div className="bg-white rounded-2xl border border-sand/50 p-12 text-center">
+              <div className="w-16 h-16 bg-sand/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Building className="w-8 h-8 text-graphite/40" />
+              </div>
+              <h3 className="text-lg font-semibold text-navy mb-2">Inga annonser</h3>
+              <p className="text-graphite/60 mb-6">Skapa din första annons för att komma igång</p>
+              <Link href="/salja/start" className="inline-flex items-center gap-2 px-5 py-2.5 bg-navy text-white rounded-full font-medium">
+                <Plus className="w-4 h-4" />
+                Skapa annons
+              </Link>
             </div>
           ) : (
             filteredListings.map((listing) => (
-              <div key={listing.id} className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6 hover:border-accent-pink/30 transition-colors">
-                {/* Header row - Mobile optimized */}
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4">
-                  <div className="flex-1 min-w-0">
-                    {/* Title and status badges */}
-                    <div className="flex flex-wrap items-center gap-2 mb-3">
-                      <h3 className="text-base sm:text-lg font-bold text-primary-navy truncate uppercase">{listing.title}</h3>
-                      <span className={`px-2 py-1 text-xs font-bold rounded-full whitespace-nowrap uppercase ${
-                        listing.status === 'active' 
-                          ? 'bg-green-100 text-green-700'
-                          : listing.status === 'paused'
-                          ? 'bg-amber-100 text-amber-700'
-                          : 'bg-gray-100 text-gray-700'
+              <div key={listing.id} className="bg-white rounded-2xl border border-sand/50 p-6 hover:shadow-lg hover:border-navy/10 transition-all">
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-lg font-bold text-navy">{listing.title}</h3>
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                        listing.status === 'active' ? 'bg-mint/30 text-navy' :
+                        listing.status === 'paused' ? 'bg-butter/50 text-navy' : 'bg-sand/50 text-graphite'
                       }`}>
                         {listing.status === 'active' ? 'Aktiv' : listing.status === 'paused' ? 'Pausad' : 'Utkast'}
                       </span>
-                      <span className={`px-2 py-1 text-xs font-bold rounded-full uppercase ${
-                        listing.package === 'pro_plus'
-                          ? 'bg-primary-navy/10 text-primary-navy'
-                          : listing.package === 'pro'
-                          ? 'bg-accent-pink/10 text-accent-pink'
-                          : 'bg-gray-100 text-gray-700'
+                      <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                        listing.package === 'pro_plus' ? 'bg-navy/10 text-navy' :
+                        listing.package === 'pro' ? 'bg-rose/30 text-navy' : 'bg-sand/50 text-graphite'
                       }`}>
                         {listing.package === 'pro_plus' ? 'Pro+' : listing.package === 'pro' ? 'Pro' : 'Basic'}
                       </span>
                     </div>
-
-                    {/* Metrics - Responsive grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4">
-                      <div>
-                        <p className="text-xs text-gray-600 mb-1">Visningar</p>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <Eye className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                          <span className="text-sm font-medium text-gray-900">{listing.views.toLocaleString('sv-SE')}</span>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-600 mb-1">NDA</p>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <Shield className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                          <span className="text-sm font-medium text-gray-900 truncate">{listing.ndaRequests || 0}</span>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-600 mb-1">Meddelanden</p>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <MessageSquare className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                          <span className="text-sm font-medium text-gray-900 truncate">{listing.messages || 0}</span>
-                        </div>
-                      </div>
-                      <div className="hidden sm:block">
-                        <p className="text-xs text-gray-600 mb-1">Sparningar</p>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <Bookmark className="w-4 h-4 text-gray-600 flex-shrink-0" />
-                          <span className="text-sm font-medium text-gray-900 truncate">{listing.saves || 0}</span>
-                        </div>
-                      </div>
-                      <div className="hidden lg:block">
-                        <p className="text-xs text-gray-600 mb-1">Pris</p>
-                        <span className="text-sm font-medium text-blue-600">{listing.priceRange}</span>
-                      </div>
-                      <div className="hidden lg:block">
-                        <p className="text-xs text-gray-600 mb-1">Konvertering</p>
-                        <span className="text-sm font-medium text-gray-900">
-                          {listing.views > 0 ? ((listing.ndaRequests / listing.views) * 100).toFixed(1) : '0'}%
-                        </span>
-                      </div>
-                    </div>
+                    <p className="text-sm text-graphite/60">
+                      Publicerad {listing.publishedAt} • Senast: {listing.lastActivity}
+                    </p>
                   </div>
+                  <p className="text-lg font-bold text-navy">{listing.priceRange}</p>
+                </div>
 
-                  {/* Action Buttons - Mobile optimized */}
-                  <div className="flex items-center gap-1 sm:gap-2 mt-3 sm:mt-0 flex-shrink-0">
-                    <Link 
-                      href={`/objekt/${listing.id}`}
-                      className="p-2 hover:bg-accent-pink/10 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
-                      title="Visa annons"
-                    >
-                      <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
+                {/* Stats */}
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-4">
+                  <div className="bg-sand/20 rounded-xl p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Eye className="w-4 h-4 text-sky" />
+                      <span className="text-xs text-graphite/60">Visningar</span>
+                    </div>
+                    <p className="text-lg font-bold text-navy">{listing.views}</p>
+                  </div>
+                  <div className="bg-sand/20 rounded-xl p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Shield className="w-4 h-4 text-mint" />
+                      <span className="text-xs text-graphite/60">NDA</span>
+                    </div>
+                    <p className="text-lg font-bold text-navy">{listing.ndaRequests}</p>
+                  </div>
+                  <div className="bg-sand/20 rounded-xl p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <MessageSquare className="w-4 h-4 text-rose" />
+                      <span className="text-xs text-graphite/60">Meddelanden</span>
+                    </div>
+                    <p className="text-lg font-bold text-navy">{listing.messages}</p>
+                  </div>
+                  <div className="bg-sand/20 rounded-xl p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Bookmark className="w-4 h-4 text-coral" />
+                      <span className="text-xs text-graphite/60">Sparningar</span>
+                    </div>
+                    <p className="text-lg font-bold text-navy">{listing.saves}</p>
+                  </div>
+                  <div className="bg-sand/20 rounded-xl p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <TrendingUp className="w-4 h-4 text-navy" />
+                      <span className="text-xs text-graphite/60">Konvertering</span>
+                    </div>
+                    <p className="text-lg font-bold text-navy">
+                      {listing.views > 0 ? ((listing.ndaRequests / listing.views) * 100).toFixed(1) : '0'}%
+                    </p>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center justify-between pt-4 border-t border-sand/30">
+                  <div className="flex items-center gap-2">
+                    <Link href={`/objekt/${listing.id}`} className="p-2 hover:bg-sand/30 rounded-lg transition-colors" title="Visa">
+                      <Eye className="w-5 h-5 text-graphite" />
                     </Link>
-                    <Link 
-                      href={`/dashboard/analytics`}
-                      className="p-2 hover:bg-accent-pink/10 rounded-lg transition-colors min-h-10 w-10 flex items-center justify-center"
-                      title="Analytics"
-                    >
-                      <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
+                    <Link href={`/salja/redigera/${listing.id}`} className="p-2 hover:bg-sand/30 rounded-lg transition-colors" title="Redigera">
+                      <Edit className="w-5 h-5 text-graphite" />
                     </Link>
-                    
-                    {/* Pause/Resume */}
+                    <Link href="/dashboard/analytics" className="p-2 hover:bg-sand/30 rounded-lg transition-colors" title="Analytics">
+                      <TrendingUp className="w-5 h-5 text-graphite" />
+                    </Link>
                     {listing.status === 'active' ? (
-                      <button
-                        onClick={() => handleListingAction(listing.id, 'pause')}
-                        disabled={processing === listing.id}
-                        className="p-2 hover:bg-primary-navy/10 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
-                        title="Pausa annons"
-                      >
-                        <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-primary-navy" />
+                      <button onClick={() => handleListingAction(listing.id, 'pause')} disabled={processing === listing.id} className="p-2 hover:bg-butter/30 rounded-lg transition-colors" title="Pausa">
+                        <Pause className="w-5 h-5 text-graphite" />
                       </button>
                     ) : listing.status === 'paused' ? (
-                      <button
-                        onClick={() => handleListingAction(listing.id, 'resume')}
-                        disabled={processing === listing.id}
-                        className="p-2 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
-                        title="Aktivera annons"
-                      >
-                        <Play className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                      <button onClick={() => handleListingAction(listing.id, 'resume')} disabled={processing === listing.id} className="p-2 hover:bg-mint/30 rounded-lg transition-colors" title="Aktivera">
+                        <Play className="w-5 h-5 text-mint" />
                       </button>
                     ) : null}
-                    
-                    {/* Delete */}
-                    <button
-                      onClick={() => {
-                        if (confirm('Är du säker?')) {
-                          handleListingAction(listing.id, 'delete')
-                        }
-                      }}
-                      disabled={processing === listing.id}
-                      className="p-2 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 min-h-10 w-10 flex items-center justify-center"
-                      title="Ta bort annons"
-                    >
-                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
+                    <button onClick={() => confirm('Är du säker?') && handleListingAction(listing.id, 'delete')} disabled={processing === listing.id} className="p-2 hover:bg-coral/30 rounded-lg transition-colors" title="Ta bort">
+                      <Trash2 className="w-5 h-5 text-coral" />
                     </button>
                   </div>
-                </div>
-
-                {/* Footer info - Mobile optimized */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs text-gray-600 mt-3 sm:mt-0 pt-3 sm:pt-0 sm:border-t sm:border-gray-100 sm:pt-3">
-                  {listing.publishedAt && (
-                    <>
-                      <span className="whitespace-nowrap">Publ: {new Date(listing.publishedAt).toLocaleDateString('sv-SE')}</span>
-                      <span className="hidden sm:inline">•</span>
-                    </>
+                  {listing.messages > 0 && (
+                    <Link href={`/salja/chat?listingId=${listing.id}`} className="inline-flex items-center gap-2 px-4 py-2 bg-navy text-white text-sm rounded-full hover:bg-navy/90 transition-colors">
+                      <MessageSquare className="w-4 h-4" />
+                      {listing.messages} meddelanden
+                    </Link>
                   )}
-                  <span className="whitespace-nowrap">Senast: {listing.lastActivity}</span>
                 </div>
-
-                     {/* Quick actions bar - Mobile */}
-                     {listing.status === 'active' && (
-                       <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                         <Link 
-                           href={`/objekt/${listing.id}`}
-                           className="text-sm text-blue-600 hover:underline"
-                         >
-                           Visa annons →
-                         </Link>
-                         <Link 
-                           href={`/dashboard/analytics`}
-                           className="text-sm text-blue-600 hover:underline hidden sm:block"
-                         >
-                           Analys
-                         </Link>
-                         {listing.messages > 0 && (
-                           <Link 
-                             href={`/salja/chat?listingId=${listing.id}`}
-                             className="text-sm bg-primary-navy text-white px-3 py-1 rounded-lg hover:bg-primary-navy/90 inline-flex items-center gap-1"
-                           >
-                             <MessageSquare className="w-3 h-3" />
-                             {listing.messages} meddelanden
-                           </Link>
-                         )}
-                       </div>
-                     )}
               </div>
             ))
           )}
         </div>
-
-        {/* Empty state */}
-        {/* The empty state block is now handled by the loading/filteredListings.length === 0 case */}
       </div>
     </DashboardLayout>
   )

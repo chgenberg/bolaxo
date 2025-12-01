@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import InvestorProfileWizard from '@/components/InvestorProfileWizard'
 import { useAuth } from '@/contexts/AuthContext'
-import { ArrowLeft, CheckCircle, Edit2, MapPin, Building2, BarChart3, Users, Handshake, Shield, Loader2 } from 'lucide-react'
-import Link from 'next/link'
+import { ArrowLeft, CheckCircle, Edit2, MapPin, Building2, BarChart3, Users, Handshake, Shield, Loader2, Sparkles, ChevronRight } from 'lucide-react'
 
 interface ProfileData {
   id: string
@@ -40,20 +39,15 @@ export default function InvestorProfileDashboardPage() {
   const [showWizard, setShowWizard] = useState(false)
   const [profile, setProfile] = useState<ProfileData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState('overview')
 
   const fetchProfile = async () => {
-    if (!user) {
-      setLoading(false)
-      return
-    }
-    
+    if (!user) { setLoading(false); return }
     try {
       const res = await fetch('/api/investor-profile')
       if (res.ok) {
         const data = await res.json()
-        if (data.profile) {
-          setProfile(data.profile)
-        }
+        if (data.profile) setProfile(data.profile)
       }
     } catch (error) {
       console.error('Error checking profile:', error)
@@ -62,12 +56,9 @@ export default function InvestorProfileDashboardPage() {
     }
   }
 
-  useEffect(() => {
-    fetchProfile()
-  }, [user])
+  useEffect(() => { fetchProfile() }, [user])
 
-  const handleComplete = async (data: any) => {
-    // Wizard auto-saves, so just refresh profile and close wizard
+  const handleComplete = async () => {
     await fetchProfile()
     setShowWizard(false)
   }
@@ -76,7 +67,12 @@ export default function InvestorProfileDashboardPage() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-8 h-8 animate-spin text-navy" />
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-rose to-coral rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <Sparkles className="w-8 h-8 text-navy" />
+            </div>
+            <p className="text-graphite/70">Laddar profil...</p>
+          </div>
         </div>
       </DashboardLayout>
     )
@@ -84,288 +80,244 @@ export default function InvestorProfileDashboardPage() {
 
   if (showWizard) {
     return (
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-cream">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <button
-            onClick={() => setShowWizard(false)}
-            className="flex items-center gap-2 text-gray-600 hover:text-navy transition-colors mb-4"
-          >
+          <button onClick={() => setShowWizard(false)} className="flex items-center gap-2 text-graphite hover:text-navy transition-colors mb-4">
             <ArrowLeft className="w-4 h-4" />
             Tillbaka till dashboard
           </button>
         </div>
-        <InvestorProfileWizard 
-          isDemo={false} 
-          onComplete={handleComplete}
-          userEmail={user?.email ?? undefined}
-          userName={user?.name ?? undefined}
-        />
+        <InvestorProfileWizard isDemo={false} onComplete={handleComplete} userEmail={user?.email ?? undefined} userName={user?.name ?? undefined} />
       </div>
     )
   }
 
-  // No profile yet - show CTA
+  // No profile yet
   if (!profile || !profile.profileComplete) {
     return (
       <DashboardLayout>
         <div className="max-w-4xl mx-auto">
           <div className="text-center py-12">
-            <div className="w-20 h-20 bg-navy/10 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-navy" />
+            <div className="w-20 h-20 bg-gradient-to-br from-sky/30 to-mint/30 rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <Users className="w-10 h-10 text-navy" />
             </div>
             <h1 className="text-2xl font-bold text-navy mb-4">
               {profile ? 'Slutför din investerarprofil' : 'Skapa din investerarprofil'}
             </h1>
-            <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+            <p className="text-graphite/70 mb-8 max-w-xl mx-auto">
               {profile 
                 ? `Du har fyllt i ${profile.completedSteps || 0} av 8 steg. Slutför profilen för att få bättre matchningar.`
-                : 'Genom att skapa en investerarprofil kan säljare och mäklare hitta dig enklare. Du får också bättre matchningar baserat på dina preferenser.'
-              }
+                : 'Genom att skapa en investerarprofil kan säljare och mäklare hitta dig enklare.'}
             </p>
-            <button
-              onClick={() => setShowWizard(true)}
-              className="bg-navy text-white px-8 py-4 rounded-xl font-semibold hover:bg-navy/90 transition-colors"
-            >
-              {profile ? 'Fortsätt med din profil' : 'Kom igång med din profil'}
+            <button onClick={() => setShowWizard(true)} className="inline-flex items-center gap-2 px-8 py-4 bg-navy text-white rounded-full font-semibold hover:shadow-lg transition-all group">
+              {profile ? 'Fortsätt med din profil' : 'Kom igång'}
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
           
-          {/* Benefits */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
-                <CheckCircle className="w-6 h-6 text-emerald-600" />
+          <div className="grid md:grid-cols-3 gap-4 mt-12">
+            {[
+              { icon: CheckCircle, color: 'mint', title: 'Bättre matchningar', desc: 'Få notiser om bolag som matchar dina kriterier' },
+              { icon: Edit2, color: 'sky', title: 'Syns för säljare', desc: 'Låt säljare och mäklare hitta dig' },
+              { icon: Shield, color: 'rose', title: 'Verifierad profil', desc: 'Verifiera dig med BankID för högre trovärdighet' },
+            ].map((item, i) => (
+              <div key={i} className="bg-white p-6 rounded-2xl border border-sand/50">
+                <div className={`w-12 h-12 bg-${item.color}/20 rounded-xl flex items-center justify-center mb-4`}>
+                  <item.icon className={`w-6 h-6 text-${item.color}`} />
+                </div>
+                <h3 className="font-semibold text-navy mb-2">{item.title}</h3>
+                <p className="text-sm text-graphite/70">{item.desc}</p>
               </div>
-              <h3 className="font-semibold text-navy mb-2">Bättre matchningar</h3>
-              <p className="text-sm text-gray-600">
-                Få notiser om bolag som matchar dina exakta kriterier.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                <Edit2 className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Syns för säljare</h3>
-              <p className="text-sm text-gray-600">
-                Låt säljare och mäklare hitta dig baserat på vad du söker.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-                <Shield className="w-6 h-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold text-navy mb-2">Verifierad profil</h3>
-              <p className="text-sm text-gray-600">
-                Verifiera dig med BankID för högre trovärdighet.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </DashboardLayout>
     )
   }
 
-  // User has complete profile - show summary
+  const tabs = [
+    { id: 'overview', label: 'Översikt' },
+    { id: 'criteria', label: 'Kriterier' },
+    { id: 'preferences', label: 'Preferenser' },
+  ]
+
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-navy">Min investerarprofil</h1>
-            <p className="text-gray-600">Hantera dina investeringspreferenser</p>
+            <p className="text-graphite/70 mt-1">Hantera dina investeringspreferenser</p>
           </div>
-          <button
-            onClick={() => setShowWizard(true)}
-            className="flex items-center gap-2 bg-navy text-white px-4 py-2 rounded-lg hover:bg-navy/90 transition-colors"
-          >
+          <button onClick={() => setShowWizard(true)} className="inline-flex items-center gap-2 px-5 py-2.5 bg-navy text-white rounded-full font-medium hover:bg-navy/90 transition-all">
             <Edit2 className="w-4 h-4" />
-            Redigera profil
+            Redigera
           </button>
         </div>
 
-        {/* Profile Summary Cards */}
-        <div className="space-y-6">
-          {/* Verification Status */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  profile.verificationMethod === 'bankid' && profile.verifiedAt
-                    ? 'bg-emerald-100'
-                    : 'bg-amber-100'
-                }`}>
-                  <Shield className={`w-5 h-5 ${
-                    profile.verificationMethod === 'bankid' && profile.verifiedAt
-                      ? 'text-emerald-600'
-                      : 'text-amber-600'
-                  }`} />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-navy">Verifieringsstatus</h3>
-                  <p className="text-sm text-gray-600">
-                    {profile.verificationMethod === 'bankid' && profile.verifiedAt
-                      ? 'Verifierad med BankID'
-                      : profile.verificationMethod === 'magic-link'
-                      ? 'Verifierad via e-post'
-                      : 'Ej verifierad'
-                    }
-                  </p>
-                </div>
+        {/* Verification Status */}
+        <div className={`p-5 rounded-2xl border ${
+          profile.verificationMethod === 'bankid' && profile.verifiedAt
+            ? 'bg-mint/10 border-mint/30'
+            : 'bg-butter/20 border-butter/50'
+        }`}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                profile.verificationMethod === 'bankid' && profile.verifiedAt ? 'bg-mint/30' : 'bg-butter/50'
+              }`}>
+                <Shield className={`w-5 h-5 ${profile.verificationMethod === 'bankid' && profile.verifiedAt ? 'text-mint' : 'text-butter'}`} />
               </div>
-              {profile.verificationMethod === 'bankid' && profile.verifiedAt && (
-                <span className="inline-flex items-center gap-1 text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full">
-                  <CheckCircle className="w-3 h-3" />
-                  BankID
-                </span>
-              )}
+              <div>
+                <h3 className="font-semibold text-navy">
+                  {profile.verificationMethod === 'bankid' && profile.verifiedAt ? 'Verifierad med BankID' : 'Ej verifierad'}
+                </h3>
+                <p className="text-sm text-graphite/70">
+                  {profile.verificationMethod === 'magic-link' ? 'Verifierad via e-post' : 'Verifiera för högre trovärdighet'}
+                </p>
+              </div>
             </div>
+            {profile.verificationMethod === 'bankid' && profile.verifiedAt && (
+              <span className="px-3 py-1 bg-mint/30 text-navy text-xs font-medium rounded-full flex items-center gap-1">
+                <CheckCircle className="w-3 h-3" />
+                BankID
+              </span>
+            )}
           </div>
+        </div>
 
-          {/* Geographic Focus */}
-          {profile.preferredRegions?.length > 0 && (
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <div className="flex items-center gap-3 mb-4">
-                <MapPin className="w-5 h-5 text-navy" />
-                <h3 className="font-semibold text-navy">Geografisk inriktning</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {profile.preferredRegions.map(region => (
-                  <span key={region} className="bg-navy/10 text-navy px-3 py-1 rounded-full text-sm">
-                    {region}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Tabs */}
+        <div className="flex gap-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2.5 text-sm font-medium rounded-full transition-all ${
+                activeTab === tab.id ? 'bg-navy text-white' : 'text-graphite hover:bg-sand/30'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-          {/* Industries */}
-          {profile.preferredIndustries?.length > 0 && (
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <div className="flex items-center gap-3 mb-4">
-                <Building2 className="w-5 h-5 text-navy" />
-                <h3 className="font-semibold text-navy">Branscher</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {profile.preferredIndustries.slice(0, 8).map(industry => (
-                  <span key={industry} className="bg-navy/10 text-navy px-3 py-1 rounded-full text-sm">
-                    {industry}
-                  </span>
-                ))}
-                {profile.preferredIndustries.length > 8 && (
-                  <span className="text-gray-500 text-sm">
-                    +{profile.preferredIndustries.length - 8} fler
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Financial Criteria */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-center gap-3 mb-4">
-              <BarChart3 className="w-5 h-5 text-navy" />
-              <h3 className="font-semibold text-navy">Finansiella kriterier</h3>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              {(profile.revenueMin || profile.revenueMax) && (
+        {/* Content */}
+        <div className="bg-white rounded-2xl border border-sand/50 p-6 space-y-6">
+          {activeTab === 'overview' && (
+            <>
+              {profile.preferredRegions?.length > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500">Omsättning</p>
-                  <p className="font-medium text-navy">
+                  <div className="flex items-center gap-2 mb-3">
+                    <MapPin className="w-5 h-5 text-sky" />
+                    <h3 className="font-semibold text-navy">Geografisk inriktning</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.preferredRegions.map(region => (
+                      <span key={region} className="bg-sky/20 text-navy px-3 py-1.5 rounded-full text-sm font-medium">{region}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {profile.preferredIndustries?.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Building2 className="w-5 h-5 text-rose" />
+                    <h3 className="font-semibold text-navy">Branscher</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.preferredIndustries.slice(0, 8).map(industry => (
+                      <span key={industry} className="bg-rose/20 text-navy px-3 py-1.5 rounded-full text-sm font-medium">{industry}</span>
+                    ))}
+                    {profile.preferredIndustries.length > 8 && (
+                      <span className="text-graphite/60 text-sm">+{profile.preferredIndustries.length - 8} fler</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {profile.investorDescription && (
+                <div>
+                  <h3 className="font-semibold text-navy mb-2">Om dig som investerare</h3>
+                  <p className="text-graphite/70 bg-sand/20 p-4 rounded-xl">{profile.investorDescription}</p>
+                </div>
+              )}
+            </>
+          )}
+
+          {activeTab === 'criteria' && (
+            <div className="grid md:grid-cols-2 gap-6">
+              {(profile.revenueMin || profile.revenueMax) && (
+                <div className="bg-sand/20 p-4 rounded-xl">
+                  <p className="text-sm text-graphite/60 mb-1">Omsättning</p>
+                  <p className="text-lg font-bold text-navy">
                     {profile.revenueMin ? `${profile.revenueMin / 1000000}` : '0'} - {profile.revenueMax ? `${profile.revenueMax / 1000000}` : '∞'} MSEK
                   </p>
                 </div>
               )}
               {(profile.ebitdaMin || profile.ebitdaMax) && (
-                <div>
-                  <p className="text-sm text-gray-500">EBITDA</p>
-                  <p className="font-medium text-navy">
+                <div className="bg-sand/20 p-4 rounded-xl">
+                  <p className="text-sm text-graphite/60 mb-1">EBITDA</p>
+                  <p className="text-lg font-bold text-navy">
                     {profile.ebitdaMin ? `${profile.ebitdaMin / 1000000}` : '0'} - {profile.ebitdaMax ? `${profile.ebitdaMax / 1000000}` : '∞'} MSEK
                   </p>
                 </div>
               )}
               {(profile.investMin || profile.investMax) && (
-                <div>
-                  <p className="text-sm text-gray-500">Investering</p>
-                  <p className="font-medium text-navy">
+                <div className="bg-sand/20 p-4 rounded-xl">
+                  <p className="text-sm text-graphite/60 mb-1">Investering</p>
+                  <p className="text-lg font-bold text-navy">
                     {profile.investMin?.toLocaleString('sv-SE')} - {profile.investMax?.toLocaleString('sv-SE')} SEK
                   </p>
                 </div>
               )}
               {profile.profitabilityLevels?.length > 0 && (
-                <div>
-                  <p className="text-sm text-gray-500">Lönsamhet</p>
-                  <p className="font-medium text-navy">
-                    {profile.profitabilityLevels.join(', ')}
-                  </p>
+                <div className="bg-sand/20 p-4 rounded-xl">
+                  <p className="text-sm text-graphite/60 mb-1">Lönsamhet</p>
+                  <p className="font-medium text-navy">{profile.profitabilityLevels.join(', ')}</p>
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Ownership & Role */}
-          {profile.ownership?.length > 0 && (
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <div className="flex items-center gap-3 mb-4">
-                <Users className="w-5 h-5 text-navy" />
-                <h3 className="font-semibold text-navy">Ägarandel & roll</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {profile.ownership.map(own => (
-                  <span key={own} className="bg-navy/10 text-navy px-3 py-1 rounded-full text-sm">
-                    {own}
-                  </span>
-                ))}
-              </div>
-            </div>
           )}
 
-          {/* Deal Preferences */}
-          <div className="bg-white p-6 rounded-xl border border-gray-200">
-            <div className="flex items-center gap-3 mb-4">
-              <Handshake className="w-5 h-5 text-navy" />
-              <h3 className="font-semibold text-navy">Deal-preferenser</h3>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              {profile.situations?.length > 0 && (
+          {activeTab === 'preferences' && (
+            <div className="space-y-6">
+              {profile.ownership?.length > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500">Intressanta situationer</p>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {profile.situations.map(sit => (
-                      <span key={sit} className="text-sm text-navy">{sit}</span>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Users className="w-5 h-5 text-mint" />
+                    <h3 className="font-semibold text-navy">Ägarandel & roll</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.ownership.map(own => (
+                      <span key={own} className="bg-mint/20 text-navy px-3 py-1.5 rounded-full text-sm font-medium">{own}</span>
                     ))}
                   </div>
                 </div>
               )}
-              {profile.ownerStay && (
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-sand/20 p-4 rounded-xl">
+                  <p className="text-sm text-graphite/60 mb-1">Ägare kvar</p>
+                  <p className="font-medium text-navy">{profile.ownerStay || 'Ej angett'}</p>
+                </div>
+                <div className="bg-sand/20 p-4 rounded-xl">
+                  <p className="text-sm text-graphite/60 mb-1">Öppen för earn-out</p>
+                  <p className="font-medium text-navy">{profile.earnOut || 'Ej angett'}</p>
+                </div>
+                <div className="bg-sand/20 p-4 rounded-xl">
+                  <p className="text-sm text-graphite/60 mb-1">Ta över lån/leasing</p>
+                  <p className="font-medium text-navy">{profile.takeOverLoans || 'Ej angett'}</p>
+                </div>
+              </div>
+
+              {profile.targetTypeText && (
                 <div>
-                  <p className="text-sm text-gray-500">Ägare kvar</p>
-                  <p className="font-medium text-navy">{profile.ownerStay}</p>
+                  <h3 className="font-semibold text-navy mb-2">Vad du letar efter</h3>
+                  <p className="text-graphite/70 bg-sand/20 p-4 rounded-xl">{profile.targetTypeText}</p>
                 </div>
               )}
-              <div>
-                <p className="text-sm text-gray-500">Öppen för earn-out</p>
-                <p className="font-medium text-navy">{profile.earnOut || 'Ej angett'}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Ta över lån/leasing</p>
-                <p className="font-medium text-navy">{profile.takeOverLoans || 'Ej angett'}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Investor Description */}
-          {profile.investorDescription && (
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <h3 className="font-semibold text-navy mb-3">Om dig som investerare</h3>
-              <p className="text-gray-600">{profile.investorDescription}</p>
-            </div>
-          )}
-
-          {/* Target Description */}
-          {profile.targetTypeText && (
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
-              <h3 className="font-semibold text-navy mb-3">Vad du letar efter</h3>
-              <p className="text-gray-600">{profile.targetTypeText}</p>
             </div>
           )}
         </div>
@@ -373,4 +325,3 @@ export default function InvestorProfileDashboardPage() {
     </DashboardLayout>
   )
 }
-
