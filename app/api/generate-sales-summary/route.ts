@@ -132,7 +132,7 @@ export async function POST(request: Request) {
     })
 
     const { text } = await callOpenAIResponses({
-      model: 'gpt-4.1-mini',
+      model: 'gpt-5-mini',
       messages: [
         {
           role: 'system',

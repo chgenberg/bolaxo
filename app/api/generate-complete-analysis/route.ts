@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const prompt = buildAnalysisPrompt(companyData)
 
     const { text } = await callOpenAIResponses({
-      model: 'gpt-4.1',
+      model: 'gpt-5.1',
       messages: [
         {
           role: 'system',
