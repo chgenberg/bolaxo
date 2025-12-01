@@ -76,18 +76,26 @@ export default function HelpTooltip({
     }
   }, [isOpen])
 
-  const positionClasses = {
-    top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
-    bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
-    left: 'right-full top-1/2 -translate-y-1/2 mr-2',
-    right: 'left-full top-1/2 -translate-y-1/2 ml-2'
+  // Use inline styles to avoid Tailwind translate jump
+  const positionStyles: Record<string, React.CSSProperties> = {
+    top: { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: '0.5rem' },
+    bottom: { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: '0.5rem' },
+    left: { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: '0.5rem' },
+    right: { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: '0.5rem' }
+  }
+
+  const arrowStyles: Record<string, React.CSSProperties> = {
+    top: { top: '100%', left: '50%', transform: 'translateX(-50%)' },
+    bottom: { bottom: '100%', left: '50%', transform: 'translateX(-50%)' },
+    left: { left: '100%', top: '50%', transform: 'translateY(-50%)' },
+    right: { right: '100%', top: '50%', transform: 'translateY(-50%)' }
   }
 
   const arrowClasses = {
-    top: 'top-full left-1/2 -translate-x-1/2 border-l-transparent border-r-transparent border-b-transparent',
-    bottom: 'bottom-full left-1/2 -translate-x-1/2 border-l-transparent border-r-transparent border-t-transparent',
-    left: 'left-full top-1/2 -translate-y-1/2 border-t-transparent border-b-transparent border-r-transparent',
-    right: 'right-full top-1/2 -translate-y-1/2 border-t-transparent border-b-transparent border-l-transparent'
+    top: 'border-l-transparent border-r-transparent border-b-transparent',
+    bottom: 'border-l-transparent border-r-transparent border-t-transparent',
+    left: 'border-t-transparent border-b-transparent border-r-transparent',
+    right: 'border-t-transparent border-b-transparent border-l-transparent'
   }
 
   const bgClass = variant === 'dark' 
@@ -125,9 +133,9 @@ export default function HelpTooltip({
           className={`
             absolute z-50 w-64 sm:w-72 p-4 rounded-xl border
             ${bgClass}
-            ${positionClasses[position]}
           `}
           style={{
+            ...positionStyles[position],
             animation: 'tooltipFadeIn 0.15s ease-out forwards'
           }}
         >
@@ -163,6 +171,7 @@ export default function HelpTooltip({
               ${arrowClasses[position]}
               ${arrowBorderClass}
             `}
+            style={arrowStyles[position]}
           />
         </div>
       )}
