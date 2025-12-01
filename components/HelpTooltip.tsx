@@ -3,6 +3,29 @@
 import { useState, useRef, useEffect } from 'react'
 import { HelpCircle, X } from 'lucide-react'
 
+// CSS keyframes for smooth fade-in without position shift
+const tooltipStyles = `
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+`
+
+// Inject styles once
+if (typeof document !== 'undefined') {
+  const styleId = 'help-tooltip-styles'
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style')
+    style.id = styleId
+    style.textContent = tooltipStyles
+    document.head.appendChild(style)
+  }
+}
+
 interface HelpTooltipProps {
   content: string
   title?: string
@@ -103,10 +126,9 @@ export default function HelpTooltip({
             absolute z-50 w-64 sm:w-72 p-4 rounded-xl border
             ${bgClass}
             ${positionClasses[position]}
-            animate-in fade-in-0 zoom-in-95 duration-200
           `}
           style={{
-            animationFillMode: 'forwards'
+            animation: 'tooltipFadeIn 0.15s ease-out forwards'
           }}
         >
           {/* Close button on mobile */}
