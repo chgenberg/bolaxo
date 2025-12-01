@@ -135,7 +135,7 @@ export async function GET(
     }
 
     // Log download
-    await logAccess(transactionId, docId, userId, 'laddade ner', access.role!, document.fileName)
+    await logAccess(transactionId, docId, userId, 'laddade ner', access.role!, document.fileName || 'Okänt dokument')
 
     // In production:
     // 1. Decrypt file from S3
@@ -218,7 +218,7 @@ export async function DELETE(
     })
 
     // Log deletion
-    await logAccess(transactionId, docId, userId, 'raderade', access.role!, document.fileName)
+    await logAccess(transactionId, docId, userId, 'raderade', access.role!, document.fileName || 'Okänt dokument')
 
     // In production: Also delete from S3
 
