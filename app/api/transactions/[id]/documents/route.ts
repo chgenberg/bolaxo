@@ -141,11 +141,11 @@ export async function GET(
     // Transform for frontend
     const safeDocuments = documents.map(doc => ({
       id: doc.id,
-      name: doc.fileName,
-      size: doc.fileSize / (1024 * 1024), // Convert to MB
+      name: doc.fileName || 'Okänt dokument',
+      size: (doc.fileSize || 0) / (1024 * 1024), // Convert to MB
       uploadedAt: doc.createdAt.toISOString(),
-      uploadedBy: doc.uploadedByName || doc.uploadedBy,
-      type: doc.mimeType,
+      uploadedBy: doc.uploadedByName || doc.uploadedBy || 'Okänd',
+      type: doc.mimeType || 'application/octet-stream',
       encrypted: true,
       status: doc.status
     }))
