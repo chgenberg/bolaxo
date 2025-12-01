@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
 import Link from 'next/link'
-import { Building, MapPin, TrendingUp, Calendar, Bookmark, Eye, MessageSquare, MoreVertical, Filter } from 'lucide-react'
+import { Building, MapPin, TrendingUp, Calendar, Bookmark, Eye, MessageSquare, MoreVertical, Filter, Sparkles, Heart, ArrowUpRight, ChevronRight, Users, DollarSign } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { getSavedListings } from '@/lib/api-client'
 
@@ -142,6 +142,7 @@ export default function SavedListingsPage() {
     if (filter === 'new_activity') return listing.hasNewActivity
     return true
   })
+  
   useEffect(() => {
     const load = async () => {
       if (!user) return
@@ -156,9 +157,9 @@ export default function SavedListingsPage() {
   const getNDABadge = (status: string) => {
     switch (status) {
       case 'approved':
-        return <span className="px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700">NDA godkänd</span>
+        return <span className="px-3 py-1 text-xs rounded-full bg-mint/30 text-navy font-medium">NDA godkänd</span>
       case 'pending':
-        return <span className="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700">NDA väntar</span>
+        return <span className="px-3 py-1 text-xs rounded-full bg-butter/50 text-navy font-medium">NDA väntar</span>
       default:
         return null
     }
@@ -166,60 +167,82 @@ export default function SavedListingsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-primary-navy">Sparade objekt</h1>
-            <p className="text-sm text-gray-600 mt-1">Objekt du följer och är intresserad av</p>
+        <div className="relative bg-gradient-to-br from-navy via-navy/95 to-sky/30 rounded-3xl p-8 md:p-10 text-white overflow-hidden">
+          {/* Background decorations */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-rose/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-sky/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
+          
+          <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-3 py-1.5 rounded-full text-sm mb-4">
+                <Heart className="w-4 h-4 text-rose" />
+                Dina favoriter
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold mb-2">Sparade objekt</h1>
+              <p className="text-white/70">Objekt du följer och är intresserad av</p>
+            </div>
+            <Link 
+              href="/sok" 
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-navy font-semibold rounded-full hover:bg-rose hover:shadow-lg transition-all group"
+            >
+              Hitta fler objekt
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </Link>
           </div>
-          <Link href="/sok" className="btn-secondary">
-            Hitta fler objekt
-          </Link>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
-              <span className="text-xs text-accent-pink font-medium">+2</span>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white p-6 rounded-2xl border border-sand/50 hover:shadow-lg transition-all group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-rose/30 to-coral/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Bookmark className="w-6 h-6 text-rose" />
+              </div>
+              <span className="text-xs font-medium text-mint bg-mint/20 px-2 py-1 rounded-full">+2</span>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">{savedListings.length}</p>
-            <p className="text-xs text-gray-600">Sparade objekt</p>
+            <p className="text-3xl font-bold text-navy">{savedListings.length}</p>
+            <p className="text-sm text-graphite/70">Sparade objekt</p>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
+          <div className="bg-white p-6 rounded-2xl border border-sand/50 hover:shadow-lg transition-all group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-mint/30 to-sky/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Eye className="w-6 h-6 text-mint" />
+              </div>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
+            <p className="text-3xl font-bold text-navy">
               {savedListings.filter(l => l.ndaStatus === 'approved').length}
             </p>
-            <p className="text-xs text-gray-600">Med godkänd NDA</p>
+            <p className="text-sm text-graphite/70">Med godkänd NDA</p>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
+          <div className="bg-white p-6 rounded-2xl border border-sand/50 hover:shadow-lg transition-all group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-sky/30 to-mint/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-6 h-6 text-sky" />
+              </div>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
+            <p className="text-3xl font-bold text-navy">
               {savedListings.filter(l => l.matchScore >= 85).length}
             </p>
-            <p className="text-xs text-gray-600">Hög matchning (85%+)</p>
+            <p className="text-sm text-graphite/70">Hög matchning (85%+)</p>
           </div>
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <div className="flex items-center justify-between mb-2">
-              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-accent-pink" />
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+          <div className="bg-white p-6 rounded-2xl border border-sand/50 hover:shadow-lg transition-all group">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-coral/30 to-rose/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <MessageSquare className="w-6 h-6 text-coral" />
+              </div>
+              <span className="w-2.5 h-2.5 bg-coral rounded-full animate-pulse"></span>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-primary-navy">
+            <p className="text-3xl font-bold text-navy">
               {savedListings.filter(l => l.hasNewActivity).length}
             </p>
-            <p className="text-xs text-gray-600">Ny aktivitet</p>
+            <p className="text-sm text-graphite/70">Ny aktivitet</p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {[
             { value: 'all', label: 'Alla' },
             { value: 'nda_approved', label: 'NDA godkänd' },
@@ -229,10 +252,10 @@ export default function SavedListingsPage() {
             <button
               key={option.value}
               onClick={() => setFilter(option.value)}
-              className={`px-3 sm:px-3 sm:px-4 py-2 min-h-10 sm:min-h-auto text-sm rounded-lg transition-colors ${
+              className={`px-4 py-2.5 text-sm rounded-full font-medium transition-all ${
                 filter === option.value
-                  ? 'bg-primary-navy text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-navy text-white shadow-md'
+                  : 'bg-white text-graphite border border-sand/50 hover:border-navy/20 hover:bg-sand/20'
               }`}
             >
               {option.label}
@@ -243,90 +266,99 @@ export default function SavedListingsPage() {
         {/* Saved listings */}
         <div className="space-y-4">
           {filteredListings.map((listing) => (
-            <div key={listing.id} className="bg-white rounded-xl border border-gray-200 p-6">
+            <div key={listing.id} className="bg-white rounded-2xl border border-sand/50 p-6 hover:shadow-lg hover:border-navy/10 transition-all">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   {/* Header */}
-                  <div className="flex items-start justify-between mb-3">
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
                     <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg font-semibold text-primary-navy">{listing.title}</h3>
+                      <div className="flex flex-wrap items-center gap-3 mb-2">
+                        <h3 className="text-lg font-bold text-navy">{listing.title}</h3>
                         {listing.hasNewActivity && (
-                          <span className="px-2 py-0.5 text-xs rounded-full bg-red-100 text-red-700">
+                          <span className="px-3 py-1 text-xs rounded-full bg-coral/30 text-navy font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 bg-coral rounded-full animate-pulse"></span>
                             Ny aktivitet
                           </span>
                         )}
                         {getNDABadge(listing.ndaStatus)}
                       </div>
-                      <p className="text-sm text-gray-600">{listing.description}</p>
+                      <p className="text-sm text-graphite/70">{listing.description}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right flex-shrink-0">
                       <div className="flex items-center justify-end gap-2 mb-1">
-                        <span className="text-sm text-gray-600">Match:</span>
-                        <span className="text-lg font-semibold text-accent-pink">{listing.matchScore}%</span>
+                        <span className="text-sm text-graphite/70">Match:</span>
+                        <span className={`text-lg font-bold ${
+                          listing.matchScore >= 85 ? 'text-mint' : listing.matchScore >= 70 ? 'text-sky' : 'text-graphite'
+                        }`}>{listing.matchScore}%</span>
                       </div>
-                      <p className="text-xs text-gray-600">Sparad {new Date(listing.savedAt).toLocaleDateString('sv-SE')}</p>
+                      <p className="text-xs text-graphite/50">Sparad {new Date(listing.savedAt).toLocaleDateString('sv-SE')}</p>
                     </div>
                   </div>
 
                   {/* Details */}
-                  <div className="grid grid-cols-2 md:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4">
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Bransch</p>
-                      <div className="flex items-center gap-1">
-                        <Building className="w-4 h-4 text-gray-600" />
-                        <span className="text-sm font-medium text-primary-navy">{listing.category}</span>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
+                    <div className="bg-sand/20 rounded-xl p-3">
+                      <p className="text-xs text-graphite/60 mb-1">Bransch</p>
+                      <div className="flex items-center gap-1.5">
+                        <Building className="w-4 h-4 text-navy" />
+                        <span className="text-sm font-medium text-navy">{listing.category}</span>
                       </div>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Plats</p>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4 text-gray-600" />
-                        <span className="text-sm font-medium text-primary-navy">{listing.location}</span>
+                    <div className="bg-sand/20 rounded-xl p-3">
+                      <p className="text-xs text-graphite/60 mb-1">Plats</p>
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-4 h-4 text-navy" />
+                        <span className="text-sm font-medium text-navy">{listing.location}</span>
                       </div>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Omsättning</p>
-                      <span className="text-sm font-medium text-primary-navy">{listing.revenue}</span>
+                    <div className="bg-sand/20 rounded-xl p-3">
+                      <p className="text-xs text-graphite/60 mb-1">Omsättning</p>
+                      <span className="text-sm font-medium text-navy">{listing.revenue}</span>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Anställda</p>
-                      <span className="text-sm font-medium text-primary-navy">{listing.employees}</span>
+                    <div className="bg-sand/20 rounded-xl p-3">
+                      <p className="text-xs text-graphite/60 mb-1">Anställda</p>
+                      <div className="flex items-center gap-1.5">
+                        <Users className="w-4 h-4 text-navy" />
+                        <span className="text-sm font-medium text-navy">{listing.employees}</span>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Prisintervall</p>
-                      <span className="text-sm font-medium text-accent-pink">{listing.price}</span>
+                    <div className="bg-rose/20 rounded-xl p-3">
+                      <p className="text-xs text-graphite/60 mb-1">Prisintervall</p>
+                      <div className="flex items-center gap-1.5">
+                        <DollarSign className="w-4 h-4 text-rose" />
+                        <span className="text-sm font-bold text-navy">{listing.price}</span>
+                      </div>
                     </div>
                   </div>
 
                   {/* Notes */}
                   {listing.notes && (
-                    <div className="bg-amber-50 rounded-lg p-3 mb-4">
-                      <p className="text-sm text-amber-900">
-                        <strong>Dina anteckningar:</strong> {listing.notes}
+                    <div className="bg-butter/30 rounded-xl p-4 mb-4">
+                      <p className="text-sm text-navy">
+                        <span className="font-semibold">Dina anteckningar:</span> {listing.notes}
                       </p>
                     </div>
                   )}
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-xs text-gray-600">
-                      <span className="flex items-center gap-1">
-                        <Eye className="w-3 h-3" />
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-4 border-t border-sand/30">
+                    <div className="flex items-center gap-4 text-xs text-graphite/60">
+                      <span className="flex items-center gap-1.5">
+                        <Eye className="w-3.5 h-3.5" />
                         Senast visad {new Date(listing.lastViewed).toLocaleDateString('sv-SE')}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <Link
                         href={`/objekt/${listing.id}`}
-                        className="btn-primary text-sm"
+                        className="px-5 py-2.5 text-sm bg-navy text-white rounded-full font-medium hover:bg-navy/90 transition-colors"
                       >
                         Visa objekt
                       </Link>
                       {listing.ndaStatus === 'approved' && (
                         <Link
                           href={`/kopare/chat?peerId=${listing.sellerId}&listingId=${listing.id}`}
-                          className="px-3 py-1.5 text-sm bg-primary-navy text-white hover:bg-primary-navy/90 rounded-lg transition-colors flex items-center gap-1"
+                          className="px-5 py-2.5 text-sm bg-sky/20 text-navy rounded-full font-medium hover:bg-sky/30 transition-colors flex items-center gap-2"
                         >
                           <MessageSquare className="w-4 h-4" />
                           Chatta med säljare
@@ -337,8 +369,8 @@ export default function SavedListingsPage() {
                 </div>
 
                 {/* Actions menu */}
-                <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-4">
-                  <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+                <button className="p-2.5 hover:bg-sand/30 rounded-xl transition-colors ml-4 hidden md:block">
+                  <MoreVertical className="w-5 h-5 text-graphite/50" />
                 </button>
               </div>
             </div>
@@ -347,17 +379,21 @@ export default function SavedListingsPage() {
 
         {/* Empty state */}
         {filteredListings.length === 0 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-            <Bookmark className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-primary-navy mb-2">Inga sparade objekt</h3>
-            <p className="text-sm text-gray-600 mb-6">
+          <div className="bg-white rounded-2xl border border-sand/50 p-12 text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-sand to-rose/20 rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <Bookmark className="w-10 h-10 text-navy/30" />
+            </div>
+            <h3 className="text-xl font-bold text-navy mb-2">Inga sparade objekt</h3>
+            <p className="text-graphite/70 mb-6 max-w-md mx-auto">
               {filter === 'all' 
-                ? 'Du har inte sparat några objekt än.'
-                : 'Inga objekt matchar ditt filter.'
+                ? 'Du har inte sparat några objekt än. Utforska vår marknadsplats för att hitta spännande möjligheter.'
+                : 'Inga objekt matchar ditt filter. Prova att ändra filtret för att se fler resultat.'
               }
             </p>
-            <Link href="/sok" className="btn-primary inline-flex items-center">
+            <Link href="/sok" className="inline-flex items-center gap-2 px-6 py-3 bg-navy text-white rounded-full font-medium hover:shadow-lg transition-all group">
+              <Sparkles className="w-4 h-4" />
               Sök objekt
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         )}
@@ -365,3 +401,4 @@ export default function SavedListingsPage() {
     </DashboardLayout>
   )
 }
+

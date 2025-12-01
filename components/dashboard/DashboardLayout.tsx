@@ -6,7 +6,8 @@ import { usePathname } from 'next/navigation'
 import { 
   LayoutDashboard, Building, FileText, MessageSquare, BarChart3, 
   Settings, Users, TrendingUp, Shield, Calendar, FolderOpen,
-  LogOut, ChevronLeft, Bell, Search, Plus, Menu, X, UserCircle
+  LogOut, ChevronLeft, Bell, Search, Plus, Menu, X, UserCircle,
+  Sparkles
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTranslations, useLocale } from 'next-intl'
@@ -77,58 +78,63 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const menuItems = getMenuItems()
 
   return (
-    <div className="min-h-screen bg-neutral-white flex relative">
+    <div className="min-h-screen bg-cream flex relative">
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden" 
+          className="fixed inset-0 bg-navy/40 backdrop-blur-sm z-40 lg:hidden" 
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
       
       {/* Sidebar */}
       <aside className={`
-        ${collapsed ? 'w-20' : 'w-64'} 
-        bg-neutral-off-white border-r border-gray-200 
+        ${collapsed ? 'w-20' : 'w-72'} 
+        bg-white border-r border-sand/50 
         transition-all duration-300 flex flex-col
         fixed lg:relative inset-y-0 left-0 z-50
         transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
+        shadow-lg lg:shadow-none
       `}>
         {/* Logo */}
-        <div className="p-4 sm:p-6 border-b border-gray-200">
+        <div className="p-5 border-b border-sand/30">
           <div className="flex items-center justify-between">
-            <Link href={`/${locale}/dashboard`} className={`font-bold text-xl sm:text-2xl text-primary-navy ${collapsed ? 'hidden' : ''}`}>
-              BOLAXO
+            <Link href={`/${locale}/dashboard`} className={`flex items-center gap-2 ${collapsed ? 'hidden' : ''}`}>
+              <div className="w-10 h-10 bg-gradient-to-br from-navy to-sky rounded-xl flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-bold text-xl text-navy tracking-tight">BOLAXO</span>
             </Link>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCollapsed(!collapsed)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors hidden lg:block"
+                className="p-2 hover:bg-sand/30 rounded-xl transition-colors hidden lg:block"
               >
-                <ChevronLeft className={`w-5 h-5 transition-transform text-primary-navy ${collapsed ? 'rotate-180' : ''}`} />
+                <ChevronLeft className={`w-5 h-5 transition-transform text-navy ${collapsed ? 'rotate-180' : ''}`} />
               </button>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+                className="p-2 hover:bg-sand/30 rounded-xl transition-colors lg:hidden"
               >
-                <X className="w-5 h-5 text-primary-navy" />
+                <X className="w-5 h-5 text-navy" />
               </button>
             </div>
           </div>
         </div>
 
         {/* User info */}
-        <div className="p-3 sm:p-4 border-b border-gray-200">
+        <div className="p-4 border-b border-sand/30">
           <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-            <div className="w-8 sm:w-10 h-8 sm:h-10 bg-primary-navy rounded-full flex items-center justify-center text-white font-semibold text-sm sm:text-base">
+            <div className="w-11 h-11 bg-gradient-to-br from-rose to-coral rounded-xl flex items-center justify-center text-navy font-bold text-lg shadow-sm">
               {user?.name?.[0] || user?.email?.[0] || 'U'}
             </div>
             {!collapsed && (
-              <div className="flex-1">
-                <div className="font-medium text-xs sm:text-sm text-primary-navy truncate">
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-sm text-navy truncate">
                   {user?.name || user?.email}
                 </div>
-                <div className="text-xs text-gray-600">
+                <div className="text-xs text-graphite/70 flex items-center gap-1">
+                  <span className="w-2 h-2 bg-mint rounded-full"></span>
                   {isSeller(user?.role || '') ? t('roles.seller') : isBuyer(user?.role || '') ? t('roles.buyer') : t('roles.broker')}
                 </div>
               </div>
@@ -137,7 +143,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 sm:p-4 overflow-y-auto">
+        <nav className="flex-1 p-3 overflow-y-auto">
           <ul className="space-y-1">
             {menuItems.map((item) => {
               const isActive = pathname === item.href
@@ -146,19 +152,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <Link
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg transition-all ${
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-200 ${
                       isActive 
-                        ? 'bg-primary-navy/10 text-primary-navy font-medium' 
-                        : 'text-gray-600 hover:bg-gray-100 hover:text-primary-navy'
+                        ? 'bg-gradient-to-r from-navy to-navy/90 text-white shadow-md' 
+                        : 'text-graphite hover:bg-sand/40 hover:text-navy'
                     }`}
                   >
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <item.icon className="w-4 sm:w-5 h-4 sm:h-5" />
-                      {!collapsed && <span className="text-xs sm:text-sm font-medium">{item.label}</span>}
+                    <div className="flex items-center gap-3">
+                      <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : ''}`} />
+                      {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
                     </div>
-                    {!collapsed && item.badge && (
-                      <span className={`text-xs px-1.5 sm:px-2 py-0.5 rounded-full font-semibold ${
-                        isActive ? 'bg-primary-navy text-white' : 'bg-gray-200 text-primary-navy'
+                    {!collapsed && item.badge !== undefined && item.badge > 0 && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-rose/50 text-navy'
                       }`}>
                         {item.badge}
                       </span>
@@ -171,15 +177,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </nav>
 
         {/* Bottom actions */}
-        <div className="p-3 sm:p-4 border-t border-gray-200">
+        <div className="p-3 border-t border-sand/30">
           <button
             onClick={logout}
-            className={`flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 text-gray-600 hover:text-primary-navy hover:bg-gray-100 rounded-lg transition-all w-full ${
+            className={`flex items-center gap-3 px-3 py-2.5 text-graphite hover:text-coral hover:bg-coral/10 rounded-xl transition-all w-full ${
               collapsed ? 'justify-center' : ''
             }`}
           >
-            <LogOut className="w-4 sm:w-5 h-4 sm:h-5" />
-            {!collapsed && <span className="text-xs sm:text-sm font-medium">{t('logout')}</span>}
+            <LogOut className="w-5 h-5" />
+            {!collapsed && <span className="text-sm font-medium">{t('logout')}</span>}
           </button>
         </div>
       </aside>
@@ -187,46 +193,57 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Main content */}
       <div className="flex-1 flex flex-col lg:ml-0">
         {/* Top bar */}
-        <header className="bg-neutral-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
+        <header className="bg-white/80 backdrop-blur-md border-b border-sand/30 px-4 sm:px-6 py-4 sticky top-0 z-30">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+                className="p-2 hover:bg-sand/30 rounded-xl transition-colors lg:hidden"
               >
-                <Menu className="w-5 h-5 text-primary-navy" />
+                <Menu className="w-5 h-5 text-navy" />
               </button>
-              <h1 className="text-base sm:text-lg md:text-xl font-bold text-primary-navy uppercase">
-                {menuItems.find(item => item.href === pathname)?.label || t('defaultTitle')}
-              </h1>
+              <div>
+                <h1 className="text-lg md:text-xl font-bold text-navy">
+                  {menuItems.find(item => item.href === pathname)?.label || t('defaultTitle')}
+                </h1>
+                <p className="text-sm text-graphite/60 hidden sm:block">
+                  {new Date().toLocaleDateString('sv-SE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                </p>
+              </div>
             </div>
             
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Quick actions based on role */}
               {isSeller(user?.role || '') && (
-                <Link href={`/${locale}/salja/start`} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
+                <Link 
+                  href={`/${locale}/salja/start`} 
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-navy to-navy/90 text-white font-medium rounded-full hover:shadow-lg transition-all text-sm"
+                >
                   <Plus className="w-4 h-4" />
                   <span className="hidden sm:inline">{t('quickActions.newListing')}</span>
                 </Link>
               )}
               {isBuyer(user?.role || '') && (
-                <Link href={`/${locale}/sok`} className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-navy text-white font-semibold rounded-lg hover:bg-primary-navy/90 hover:shadow-md transition-shadow text-sm sm:text-base">
+                <Link 
+                  href={`/${locale}/sok`} 
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-navy to-navy/90 text-white font-medium rounded-full hover:shadow-lg transition-all text-sm"
+                >
                   <Search className="w-4 h-4" />
                   <span className="hidden sm:inline">{t('quickActions.searchCompanies')}</span>
                 </Link>
               )}
               
               {/* Notifications */}
-              <button className="relative p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <Bell className="w-4 sm:w-5 h-4 sm:h-5 text-gray-600" />
-                <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-1.5 sm:w-2 h-1.5 sm:h-2 bg-primary-navy rounded-full"></span>
+              <button className="relative p-2.5 hover:bg-sand/30 rounded-xl transition-colors">
+                <Bell className="w-5 h-5 text-graphite" />
+                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-coral rounded-full border-2 border-white"></span>
               </button>
             </div>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 sm:p-6 overflow-auto bg-neutral-white">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto">
           {children}
         </main>
       </div>
