@@ -65,14 +65,21 @@ function HelpTooltip({ content, title }: { content: string; title?: string }) {
 
       {isOpen && (
         <div 
-          className="absolute z-50 w-64 sm:w-72 p-4 rounded-xl border bg-gray-900/95 backdrop-blur-sm text-white border-white/20 shadow-2xl bottom-full left-1/2 -translate-x-1/2 mb-2"
-          style={{ animation: 'fadeIn 0.15s ease-out' }}
+          className="absolute z-50 w-64 sm:w-72 p-4 rounded-xl border bg-gray-900/95 backdrop-blur-sm text-white border-white/20 shadow-2xl bottom-full mb-2"
+          style={{ 
+            left: '50%',
+            transform: 'translateX(-50%)',
+            opacity: 1
+          }}
         >
           {title && (
             <h4 className="font-semibold text-sm mb-1.5 text-white">{title}</h4>
           )}
           <p className="text-sm leading-relaxed text-white/80">{content}</p>
-          <div className="absolute w-0 h-0 border-[6px] top-full left-1/2 -translate-x-1/2 border-l-transparent border-r-transparent border-b-transparent border-t-gray-900/95" />
+          <div 
+            className="absolute w-0 h-0 border-[6px] top-full border-l-transparent border-r-transparent border-b-transparent border-t-gray-900/95"
+            style={{ left: '50%', transform: 'translateX(-50%)' }}
+          />
         </div>
       )}
     </div>
