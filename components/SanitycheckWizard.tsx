@@ -301,6 +301,22 @@ const HELP_TEXTS = {
   },
 
   // Step 4 - Lönsamhet
+  annualRevenue: {
+    title: "Årsomsättning",
+    content: "Ange bolagets senaste helårs nettoomsättning i MSEK. Detta är grunden för omsättningsbaserade multiplar och jämförelser."
+  },
+  revenueGrowth: {
+    title: "Omsättningstillväxt",
+    content: "Ange den årliga tillväxttakten i procent (CAGR senaste 3 åren). Hög tillväxt (>15%) ger ofta högre multiplar."
+  },
+  ebitda: {
+    title: "EBITDA",
+    content: "Resultat före räntor, skatt, av- och nedskrivningar i MSEK. Det vanligaste måttet för företagsvärdering. Ange normaliserad EBITDA (justerat för engångsposter)."
+  },
+  ebitdaMargin: {
+    title: "EBITDA-marginal",
+    content: "EBITDA dividerat med omsättning i procent. God marginal varierar per bransch: SaaS >20%, tjänster 15-20%, tillverkning 10-15%."
+  },
   ebitdaStabilityScale: {
     title: "EBITDA-stabilitet",
     content: "EBITDA (resultat före räntor, skatt, avskrivningar) är det vanligaste måttet för värdering. Stabil eller växande EBITDA de senaste 3 åren ger bäst multipel."
@@ -308,6 +324,14 @@ const HELP_TEXTS = {
   ebitdaComment: {
     title: "EBITDA-kommentar",
     content: "Beskriv eventuella engångsposter, säsongsvariationer eller andra faktorer som påverkat EBITDA. Normaliserade siffror är viktiga för värderingen."
+  },
+  totalDebt: {
+    title: "Total skuld",
+    content: "Summan av räntebärande skulder i MSEK (banklån, checkkredit, finansiell leasing). Skulder dras normalt från företagsvärdet vid köp."
+  },
+  netDebt: {
+    title: "Nettoskuld",
+    content: "Räntebärande skulder minus likvida medel i MSEK. Negativt värde (nettokassa) adderas till värdet, positivt dras av."
   },
   cashflowMatchScale: {
     title: "Kassaflöde",
@@ -505,6 +529,10 @@ export interface SanitycheckState {
   pricingText: string
   revenueDocs: string
   // Step 4 - Lönsamhet & kassaflöde
+  annualRevenue: string
+  revenueGrowth: string
+  ebitda: string
+  ebitdaMargin: string
   ebitdaStabilityScale: string
   ebitdaComment: string
   cashflowMatchScale: string
@@ -512,6 +540,8 @@ export interface SanitycheckState {
   workingCapitalScale: string
   workingCapitalComment: string
   debtComment: string
+  totalDebt: string
+  netDebt: string
   financialDocs: string
   // Övriga tillgångar
   hasSharesInOtherCompanies: string
@@ -689,6 +719,10 @@ const initialState: SanitycheckState = {
   otherProductShare: "",
   pricingText: "",
   revenueDocs: "",
+  annualRevenue: "",
+  revenueGrowth: "",
+  ebitda: "",
+  ebitdaMargin: "",
   ebitdaStabilityScale: "",
   ebitdaComment: "",
   cashflowMatchScale: "",
@@ -696,6 +730,8 @@ const initialState: SanitycheckState = {
   workingCapitalScale: "",
   workingCapitalComment: "",
   debtComment: "",
+  totalDebt: "",
+  netDebt: "",
   financialDocs: "",
   hasSharesInOtherCompanies: "",
   sharesIncludedInValuation: "",
@@ -1215,20 +1251,139 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
         )
 
       case 4:
+        // Calculate EBITDA margin if both values exist
+        const revenue = parseFloat(state.annualRevenue) || 0
+        const ebitdaVal = parseFloat(state.ebitda) || 0
+        const calculatedMargin = revenue > 0 && ebitdaVal > 0 ? ((ebitdaVal / revenue) * 100).toFixed(1) : null
+
         return (
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-bold text-white mb-2">4. Lönsamhet & kassaflöde</h2>
               <p className="text-white/70">Lönsamhet, kassaflöde och rörelsekapital ur en köpares perspektiv.</p>
             </div>
+
+            {/* Finansiella nyckeltal - VIKTIGT för värdering */}
+            <div className="bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-xl p-5 border border-emerald-500/30">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Finansiella nyckeltal</h3>
+                  <p className="text-xs text-white/60">Dessa siffror används för att beräkna den indikativa värderingen</p>
+                </div>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <LabelWithHelp label="Årsomsättning (MSEK)" helpContent={HELP_TEXTS.annualRevenue.content} helpTitle={HELP_TEXTS.annualRevenue.title} required />
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={state.annualRevenue}
+                    onChange={e => updateField("annualRevenue", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="T.ex. 25.5"
+                  />
+                </div>
+                <div>
+                  <LabelWithHelp label="Omsättningstillväxt (%)" helpContent={HELP_TEXTS.revenueGrowth.content} helpTitle={HELP_TEXTS.revenueGrowth.title} />
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={state.revenueGrowth}
+                    onChange={e => updateField("revenueGrowth", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="T.ex. 12 (CAGR senaste 3 år)"
+                  />
+                </div>
+                <div>
+                  <LabelWithHelp label="EBITDA (MSEK)" helpContent={HELP_TEXTS.ebitda.content} helpTitle={HELP_TEXTS.ebitda.title} required />
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={state.ebitda}
+                    onChange={e => updateField("ebitda", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="T.ex. 4.2 (normaliserad)"
+                  />
+                </div>
+                <div>
+                  <LabelWithHelp label="EBITDA-marginal (%)" helpContent={HELP_TEXTS.ebitdaMargin.content} helpTitle={HELP_TEXTS.ebitdaMargin.title} />
+                  <div className="relative">
+                    <input
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      max="100"
+                      value={state.ebitdaMargin || (calculatedMargin || "")}
+                      onChange={e => updateField("ebitdaMargin", e.target.value)}
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                      placeholder="Beräknas automatiskt"
+                    />
+                    {calculatedMargin && !state.ebitdaMargin && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-emerald-400">
+                        Auto: {calculatedMargin}%
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Skuldsättning för equity value */}
+              <div className="grid md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-white/10">
+                <div>
+                  <LabelWithHelp label="Räntebärande skulder (MSEK)" helpContent={HELP_TEXTS.totalDebt.content} helpTitle={HELP_TEXTS.totalDebt.title} />
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={state.totalDebt}
+                    onChange={e => updateField("totalDebt", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="T.ex. 3.0"
+                  />
+                </div>
+                <div>
+                  <LabelWithHelp label="Nettoskuld (MSEK)" helpContent={HELP_TEXTS.netDebt.content} helpTitle={HELP_TEXTS.netDebt.title} />
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={state.netDebt}
+                    onChange={e => updateField("netDebt", e.target.value)}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+                    placeholder="T.ex. 1.5 (negativt = nettokassa)"
+                  />
+                </div>
+              </div>
+
+              {/* Info om värdering */}
+              {revenue > 0 && ebitdaVal > 0 && (
+                <div className="mt-4 p-3 rounded-lg bg-white/10 border border-white/20">
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm text-white font-medium">Indikativ beräkning</p>
+                      <p className="text-xs text-white/70 mt-1">
+                        Baserat på {ebitdaVal} MSEK EBITDA och branschmultiplar kan företagsvärdet (EV) 
+                        preliminärt uppskattas till {(ebitdaVal * 4).toFixed(1)}-{(ebitdaVal * 7).toFixed(1)} MSEK.
+                        {parseFloat(state.netDebt) > 0 && ` Justerat för nettoskuld: ${(ebitdaVal * 4 - parseFloat(state.netDebt)).toFixed(1)}-${(ebitdaVal * 7 - parseFloat(state.netDebt)).toFixed(1)} MSEK.`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             
-            {/* EBITDA */}
+            {/* EBITDA kvalitet */}
             <div className="bg-white/5 rounded-xl p-5 space-y-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-4 h-4 text-emerald-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-white">EBITDA & Lönsamhet</h3>
+                <h3 className="text-lg font-semibold text-white">EBITDA-kvalitet</h3>
               </div>
               {renderScalePills("ebitdaStabilityScale", "Stabilitet i EBITDA de senaste 3 åren *", "ebitdaStabilityScale")}
               <div>
