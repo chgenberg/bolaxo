@@ -336,7 +336,7 @@ export async function analyzeDocument(documentContent: string, documentType: key
 
   try {
     const { text } = await callOpenAIResponses({
-      model: 'gpt-5-mini',
+      model: 'gpt-4o-mini',
       messages: messages as any,
       maxOutputTokens: 4000,
       metadata: {

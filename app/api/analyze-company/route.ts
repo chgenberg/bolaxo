@@ -128,7 +128,7 @@ export async function POST(request: Request) {
       })
       
       const { text } = await callOpenAIResponses({
-        model: 'gpt-5.1',
+        model: 'gpt-4o',
         messages: [
           {
             role: 'system',

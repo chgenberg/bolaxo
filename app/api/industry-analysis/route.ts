@@ -221,7 +221,7 @@ Var kritisk och källkritisk. Ange endast fakta du kan verifiera.
 Svara ALLTID med giltig JSON enligt schemat i instruktionerna.`
 
     const payload = {
-      model: 'gpt-5.1',
+      model: 'gpt-4o',
       instructions: systemPrompt,
       input: analysisPrompt,
       tools: [{ type: 'web_search' }],

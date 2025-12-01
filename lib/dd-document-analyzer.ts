@@ -273,7 +273,7 @@ Analysera nu och returnera JSON-svaret:
 `
 
     const { text: analysisText } = await callOpenAIResponses({
-      model: 'gpt-5-mini',
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
@@ -382,7 +382,7 @@ Extrahera följande och returnera som JSON:
 `
 
     const { text } = await callOpenAIResponses({
-      model: 'gpt-5-mini',
+      model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',

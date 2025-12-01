@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server'
 import { fetchWebsiteSnapshot } from '@/lib/website-snapshot'
 import { searchCompanyWithWebSearch } from '@/lib/webInsights'
 
+// Railway has ~30s timeout, we need to finish within that
+const MAX_TOTAL_TIME_MS = 25000
+
 export async function POST(request: Request) {
+  const startTime = Date.now()
+  
   try {
     const { url, companyName } = await request.json()
 
@@ -15,26 +20,54 @@ export async function POST(request: Request) {
 
     console.log('[SCRAPE] Starting URL scrape for:', url, companyName)
 
-    // Fetch data from both website scraping and GPT web search in parallel
-    const [websiteResult, webSearchResult] = await Promise.allSettled([
-      fetchWebsiteSnapshot(url, companyName),
-      searchCompanyWithWebSearch({
-        companyName: companyName || '',
-        website: url
-      })
-    ])
+    // Create a timeout promise
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), MAX_TOTAL_TIME_MS)
+    })
 
-    // Process website snapshot
-    const websiteData = websiteResult.status === 'fulfilled' ? websiteResult.value : null
-    if (websiteResult.status === 'rejected') {
-      console.error('[SCRAPE] Website snapshot failed:', websiteResult.reason)
+    // Race against timeout - only do website scraping for speed
+    // Web search takes too long and can cause timeouts
+    const websitePromise = fetchWebsiteSnapshot(url, companyName)
+    
+    let websiteData = null
+    let webSearchData = null
+    
+    try {
+      // First try to get website data quickly
+      websiteData = await Promise.race([websitePromise, timeoutPromise])
+      console.log('[SCRAPE] Website snapshot completed in', Date.now() - startTime, 'ms')
+      
+      // Only do web search if we have time left (at least 10 seconds)
+      const timeRemaining = MAX_TOTAL_TIME_MS - (Date.now() - startTime)
+      if (timeRemaining > 10000 && companyName) {
+        try {
+          const webSearchPromise = searchCompanyWithWebSearch({
+            companyName: companyName || '',
+            website: url
+          })
+          webSearchData = await Promise.race([
+            webSearchPromise, 
+            new Promise<null>((resolve) => setTimeout(() => resolve(null), timeRemaining - 2000))
+          ])
+          console.log('[SCRAPE] Web search completed in', Date.now() - startTime, 'ms')
+        } catch (webSearchError) {
+          console.error('[SCRAPE] Web search failed (non-critical):', webSearchError)
+        }
+      }
+    } catch (error) {
+      console.error('[SCRAPE] Website scrape failed:', error)
     }
 
-    // Process web search data
-    const webSearchData = webSearchResult.status === 'fulfilled' ? webSearchResult.value : null
-    if (webSearchResult.status === 'rejected') {
-      console.error('[SCRAPE] Web search failed:', webSearchResult.reason)
+    // If we got no data at all, return error
+    if (!websiteData && !webSearchData) {
+      console.log('[SCRAPE] No data retrieved, returning error')
+      return NextResponse.json(
+        { success: false, error: 'Kunde inte hämta information från URL:en' },
+        { status: 200 }
+      )
     }
+
+    console.log('[SCRAPE] Total time:', Date.now() - startTime, 'ms')
 
     // Combine the data
     const result = {

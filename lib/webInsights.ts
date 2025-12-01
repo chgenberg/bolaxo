@@ -1,6 +1,6 @@
 import { createTimeoutSignal } from '@/lib/scrapers/abort-helper'
 
-const WEB_INSIGHTS_TIMEOUT_MS = 60000
+const WEB_INSIGHTS_TIMEOUT_MS = 25000
 const WEB_INSIGHTS_MAX_ATTEMPTS = 2
 const WEB_INSIGHTS_SNIPPET_LENGTH = 800
 
