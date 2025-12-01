@@ -79,13 +79,16 @@ const statusOptions = [
   { id: 5, title: "Flytt/ändrad livssituation", text: "Ägaren byter stad/land eller livsstil." },
   { id: 6, title: "Kompetensväxling behövs", text: "Bolaget behöver ny kompetens/ägare för nästa fas." },
   { id: 7, title: "Sjukdom/utbrändhet i ägarled", text: "Tid/kraft saknas för att driva vidare." },
-  { id: 8, title: "Marknads-/regelförändringar", text: "Kräver ny ägare med andra resurser eller nätverk." }
+  { id: 8, title: "Marknads-/regelförändringar", text: "Kräver ny ägare med andra resurser eller nätverk." },
+  { id: 9, title: "Konkursbo – inkråm/rörelse", text: "Konkursförvaltare avyttrar tillgångar, inkråm eller hela bolaget från konkursbo." },
+  { id: 10, title: "Konkursbo – helt bolag", text: "Konkursförvaltare säljer hela verksamheten som going concern." }
 ]
 
 const sellerTypeOptions = [
   { value: "privatperson", label: "Privatperson som ska sälja bolag" },
   { value: "holdingbolag", label: "Holdingbolag som ska sälja bolag" },
-  { value: "maklare", label: "Mäklare som ska sälja bolag" }
+  { value: "maklare", label: "Mäklare som ska sälja bolag" },
+  { value: "konkursforvaltare", label: "Konkursförvaltare" }
 ]
 
 const stepMeta = [
