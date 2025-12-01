@@ -20,9 +20,258 @@ import {
   Download,
   AlertTriangle,
   X,
-  ChevronDown
+  ChevronDown,
+  HelpCircle
 } from 'lucide-react'
 import { INDUSTRIES } from './IndustrySelectorModal'
+
+// Help Tooltip Component
+function HelpTooltip({ content, title }: { content: string; title?: string }) {
+  const [isOpen, setIsOpen] = useState(false)
+  
+  return (
+    <div className="relative inline-flex items-center">
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          setIsOpen(!isOpen)
+        }}
+        onMouseEnter={() => setIsOpen(true)}
+        onMouseLeave={() => setIsOpen(false)}
+        className="ml-1.5 p-0.5 rounded-full text-white/40 hover:text-white/70 hover:bg-white/10 transition-all duration-200 focus:outline-none"
+        aria-label="Visa hjälp"
+      >
+        <HelpCircle className="w-4 h-4" />
+      </button>
+
+      {isOpen && (
+        <div 
+          className="absolute z-50 w-64 sm:w-72 p-4 rounded-xl border bg-gray-900/95 backdrop-blur-sm text-white border-white/20 shadow-2xl bottom-full left-1/2 -translate-x-1/2 mb-2"
+          style={{ animation: 'fadeIn 0.15s ease-out' }}
+        >
+          {title && (
+            <h4 className="font-semibold text-sm mb-1.5 text-white">{title}</h4>
+          )}
+          <p className="text-sm leading-relaxed text-white/80">{content}</p>
+          <div className="absolute w-0 h-0 border-[6px] top-full left-1/2 -translate-x-1/2 border-l-transparent border-r-transparent border-b-transparent border-t-gray-900/95" />
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Label with Help component
+function LabelWithHelp({ 
+  label, 
+  helpContent, 
+  helpTitle,
+  required = false 
+}: { 
+  label: string
+  helpContent: string
+  helpTitle?: string
+  required?: boolean 
+}) {
+  return (
+    <label className="flex items-center text-sm font-medium text-white/80 mb-2">
+      <span>{label}{required && ' *'}</span>
+      <HelpTooltip content={helpContent} title={helpTitle} />
+    </label>
+  )
+}
+
+// Help texts for all fields
+const HELP_TEXTS = {
+  // Step 1 - Bolagsöversikt
+  companyName: {
+    title: "Bolagsnamn",
+    content: "Det officiella registrerade företagsnamnet enligt Bolagsverket. Detta används för att verifiera och hämta information om ert bolag."
+  },
+  orgNumber: {
+    title: "Organisationsnummer",
+    content: "Ert 10-siffriga organisationsnummer (format: 556XXX-XXXX). Vi använder detta för att hämta offentlig bolagsinformation från Bolagsverket."
+  },
+  website: {
+    title: "Hemsida",
+    content: "Er företagshemsida hjälper potentiella köpare att snabbt få en bild av er verksamhet, produkter och varumärke."
+  },
+  industry: {
+    title: "Bransch",
+    content: "Välj den bransch som bäst beskriver er kärnverksamhet. Detta påverkar vilka värderingsmultiplar och jämförelser som används i analysen."
+  },
+  whySell: {
+    title: "Varför sälja?",
+    content: "Beskriv bakgrunden till försäljningen. Köpare vill förstå motivationen – är det pension, nya satsningar, eller strategisk avyttring? Ärliga svar skapar förtroende."
+  },
+  strategyScale: {
+    title: "Strategisk tydlighet",
+    content: "Hur väl definierad är er affärsstrategi för de kommande 3 åren? En tydlig strategi visar köpare att bolaget har riktning och att de kan bygga vidare på er plan."
+  },
+  hasPitchdeck: {
+    title: "Pitchdeck/presentation",
+    content: "Om ni redan har en investerarpresentation eller bolagspresentation kan processen gå snabbare. Om inte, hjälper vi er skapa en."
+  },
+
+  // Step 2 - Ägarberoende
+  ownerIndependent: {
+    title: "Ägaroberoende",
+    content: "Kan bolaget fungera i vardagen utan er dagliga inblandning? Hög ägarberoende är en risk för köpare och kan påverka värderingen negativt."
+  },
+  leadershipScale: {
+    title: "Ledningsstruktur",
+    content: "Finns ett formellt ledningsteam med tydliga roller och ansvar? Bolag med stark organisation värderas högre än de som är beroende av en enskild person."
+  },
+  transferPlanScale: {
+    title: "Överlämningsplan",
+    content: "Har ni en plan för hur kompetens och relationer ska överföras till nya ägare? En bra överlämning minskar risken för köparen."
+  },
+  keypersonList: {
+    title: "Nyckelpersoner",
+    content: "Lista över kritiska medarbetare, deras roller och eventuella bindningsklausuler. Köpare vill veta vilka som är avgörande för verksamheten."
+  },
+
+  // Step 3 - Intäkter
+  recurringPercent: {
+    title: "Återkommande intäkter",
+    content: "Andel av omsättningen som kommer från avtal, abonnemang eller återkommande kunder. Hög andel (>60%) ger oftast högre värdering då det indikerar stabilitet."
+  },
+  mainProductShare: {
+    title: "Huvudprodukter",
+    content: "Hur stor del av intäkterna kommer från era viktigaste produkter/tjänster? Hög koncentration kan vara en risk om marknaden förändras."
+  },
+  pricingText: {
+    title: "Prissättningsmodell",
+    content: "Beskriv hur ni prissätter era produkter/tjänster. Fast pris, abonnemang, usage-based, timdebitering? Prenumerationsmodeller värderas ofta högre."
+  },
+
+  // Step 4 - Lönsamhet
+  ebitdaStabilityScale: {
+    title: "EBITDA-stabilitet",
+    content: "EBITDA (resultat före räntor, skatt, avskrivningar) är det vanligaste måttet för värdering. Stabil eller växande EBITDA de senaste 3 åren ger bäst multipel."
+  },
+  cashflowMatchScale: {
+    title: "Kassaflöde",
+    content: "Hur väl speglar kassaflödet den redovisade lönsamheten? Stora avvikelser kan indikera kvalitetsproblem i resultatet."
+  },
+  workingCapitalScale: {
+    title: "Rörelsekapital",
+    content: "Hur mycket kapital binds i kundfordringar, lager och leverantörsskulder? Högt rörelsekapitalbehov kan påverka köpeskillingen."
+  },
+  debtComment: {
+    title: "Skuldsättning",
+    content: "Beskriv era lån, checkräkningskrediter och eventuella finansiella villkor (covenants). Skulder påverkar ofta köpeskillingen."
+  },
+
+  // Step 5 - Kundbas
+  concentrationPercent: {
+    title: "Kundkoncentration",
+    content: "Hur stor andel av intäkterna kommer från de 3-5 största kunderna? >30% på en kund anses som hög risk och kan sänka värderingen."
+  },
+  stabilityPercent: {
+    title: "Kundstabilitet",
+    content: "Andel kunder som återkommer år efter år. Hög retention (>80%) visar att ni levererar värde och att kundrelationer är stabila."
+  },
+  marketPositionText: {
+    title: "Marknadsposition",
+    content: "Beskriv er position på marknaden: Är ni marknadsledare, utmanare, nischspelare? Vilka är era främsta konkurrenter?"
+  },
+  marketGrowthScale: {
+    title: "Marknadstillväxt",
+    content: "Hur växer er marknad? En marknad med stark tillväxt (+5% årligen) ger högre värdering då det finns potential för expansion."
+  },
+
+  // Step 6 - Team & organisation
+  orgStructureScale: {
+    title: "Organisationsstruktur",
+    content: "Finns ett tydligt organisationsschema med definierade roller, ansvar och rapporteringsvägar? Tydlig struktur underlättar integration."
+  },
+  personnelDataCorrect: {
+    title: "Personaldata",
+    content: "Är information om anställda (antal, roller, anställningsvillkor) uppdaterad och korrekt? Köpare granskar detta noggrant."
+  },
+  cultureText: {
+    title: "Företagskultur",
+    content: "Beskriv er kultur och medarbetarengagemang. Hur är stämningen? Finns det tydliga värderingar som genomsyrar organisationen?"
+  },
+  growthReadyScale: {
+    title: "Tillväxtberedskap",
+    content: "Är organisationen rustad för att växa? Finns kapacitet, kompetens och processer för att skala upp verksamheten?"
+  },
+
+  // Step 7 - Processer & system
+  processDocScale: {
+    title: "Processdokumentation",
+    content: "Är era kärnprocesser (försäljning, leverans, support) dokumenterade? Dokumentation gör bolaget mindre personberoende."
+  },
+  systemLandscapeScale: {
+    title: "Systemlandskap",
+    content: "Vilka system använder ni (ERP, CRM, ekonomisystem)? Moderna, integrerade system är mer attraktiva för köpare."
+  },
+  integrationScale: {
+    title: "Systemintegration",
+    content: "Hur väl fungerar systemen tillsammans? Automatiserade flöden och integrationer minskar manuellt arbete och risker."
+  },
+  bottlenecks: {
+    title: "Flaskhalsar",
+    content: "Finns det begränsningar i kapacitet, processer eller system som hindrar tillväxt eller pressar marginaler? Identifiera dessa proaktivt."
+  },
+
+  // Step 8 - Risk & compliance
+  creditIssues: {
+    title: "Betalningsanmärkningar",
+    content: "Finns det betalningsanmärkningar, skatteskulder eller kronofogdeärenden? Dessa är allvarliga röda flaggor för köpare."
+  },
+  disputes: {
+    title: "Tvister",
+    content: "Finns pågående eller hotande rättsliga tvister, konflikter med kunder/leverantörer eller garantiärenden?"
+  },
+  policiesScale: {
+    title: "Policyer & compliance",
+    content: "Har ni dokumenterade policyer för GDPR, informationssäkerhet, AML och andra regelverk som påverkar er bransch?"
+  },
+  riskSummaryText: {
+    title: "Risksammanfattning",
+    content: "Summera de viktigaste riskerna ur en köpares perspektiv. Var ärlig – dolda risker upptäcks alltid i due diligence."
+  },
+
+  // Step 9 - Tillväxt
+  growthInitiativesText: {
+    title: "Tillväxtinitiativ",
+    content: "Vilka 2-3 viktigaste möjligheter ser ni för tillväxt? Nya produkter, marknader, partnerskap? Detta är centralt i equity story."
+  },
+  unusedCapacity: {
+    title: "Outnyttjad kapacitet",
+    content: "Finns kapacitet (lokaler, maskiner, personal) som kan utnyttjas bättre? Outnyttjad kapacitet kan ge snabb tillväxt för ny ägare."
+  },
+  scalabilityScale: {
+    title: "Skalbarhet",
+    content: "Hur enkelt kan ni öka volymen utan att kostnaderna ökar i samma takt? SaaS och tjänsteföretag har ofta god skalbarhet."
+  },
+  competitionText: {
+    title: "Konkurrensfördelar",
+    content: "Vad gör er unika? Varumärke, teknik, kundrelationer, kostnadsfördelar? Hållbara konkurrensfördelar höjer värderingen."
+  },
+
+  // Step 10 - Försäljningsberedskap
+  dataroomReadyScale: {
+    title: "Datarum",
+    content: "Hur nära är ni att ha ett komplett digitalt datarum med alla dokument en köpare behöver? (bokslut, avtal, anställningsavtal, etc.)"
+  },
+  reportingQualityScale: {
+    title: "Rapportering",
+    content: "Kvalitet på era interna rapporter – månadsbokslut, KPI:er, dashboards. Bra rapportering visar att ni har koll på verksamheten."
+  },
+  equityStoryScale: {
+    title: "Equity story",
+    content: "Har ni en tydlig berättelse om varför bolaget är attraktivt för en köpare? Vad är investeringshighlights och tillväxtpotential?"
+  },
+  timingScale: {
+    title: "Timing",
+    content: "Är timingen rätt för alla parter? Är ägarna redo, presterar bolaget bra, och är marknaden gynnsam för affärer?"
+  }
+}
 
 // Types
 export interface SanitycheckState {
@@ -422,9 +671,14 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
     setActiveStep(s => Math.max(1, s - 1))
   }
 
-  const renderScalePills = (field: keyof SanitycheckState, label: string) => (
+  const renderScalePills = (field: keyof SanitycheckState, label: string, helpKey?: keyof typeof HELP_TEXTS) => (
     <div>
-      <label className="block text-sm font-medium text-white/80 mb-3">{label}</label>
+      <div className="flex items-center mb-3">
+        <span className="text-sm font-medium text-white/80">{label}</span>
+        {helpKey && HELP_TEXTS[helpKey] && (
+          <HelpTooltip content={HELP_TEXTS[helpKey].content} title={HELP_TEXTS[helpKey].title} />
+        )}
+      </div>
       <div className="flex flex-wrap gap-2">
         {scaleOptions.map(opt => (
           <button
@@ -445,9 +699,14 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
     </div>
   )
 
-  const renderYesNo = (field: keyof SanitycheckState, label: string) => (
+  const renderYesNo = (field: keyof SanitycheckState, label: string, helpKey?: keyof typeof HELP_TEXTS) => (
     <div>
-      <label className="block text-sm font-medium text-white/80 mb-3">{label}</label>
+      <div className="flex items-center mb-3">
+        <span className="text-sm font-medium text-white/80">{label}</span>
+        {helpKey && HELP_TEXTS[helpKey] && (
+          <HelpTooltip content={HELP_TEXTS[helpKey].content} title={HELP_TEXTS[helpKey].title} />
+        )}
+      </div>
       <div className="flex gap-3">
         {["Ja", "Nej"].map(opt => (
           <button
@@ -479,7 +738,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Bolagsnamn *</label>
+                <LabelWithHelp label="Bolagsnamn" helpContent={HELP_TEXTS.companyName.content} helpTitle={HELP_TEXTS.companyName.title} required />
                 <input
                   type="text"
                   value={state.companyName}
@@ -489,7 +748,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Organisationsnummer *</label>
+                <LabelWithHelp label="Organisationsnummer" helpContent={HELP_TEXTS.orgNumber.content} helpTitle={HELP_TEXTS.orgNumber.title} required />
                 <input
                   type="text"
                   value={state.orgNumber}
@@ -499,7 +758,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Hemsida</label>
+                <LabelWithHelp label="Hemsida" helpContent={HELP_TEXTS.website.content} helpTitle={HELP_TEXTS.website.title} />
                 <input
                   type="text"
                   value={state.website}
@@ -509,7 +768,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Bransch</label>
+                <LabelWithHelp label="Bransch" helpContent={HELP_TEXTS.industry.content} helpTitle={HELP_TEXTS.industry.title} />
                 <button
                   type="button"
                   onClick={() => setShowIndustryModal(true)}
@@ -524,7 +783,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div className="border-t border-white/10 pt-6">
-              <label className="block text-sm font-medium text-white/80 mb-2">Kort om varför ni överväger att sälja *</label>
+              <LabelWithHelp label="Kort om varför ni överväger att sälja" helpContent={HELP_TEXTS.whySell.content} helpTitle={HELP_TEXTS.whySell.title} required />
               <textarea
                 value={state.whySell}
                 onChange={e => updateField("whySell", e.target.value)}
@@ -550,8 +809,8 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {renderScalePills("strategyScale", "Hur tydlig är bolagets strategi kommande 3 år? *")}
-              {renderYesNo("hasPitchdeck", "Har ni redan en bolagspresentation eller pitchdeck?")}
+              {renderScalePills("strategyScale", "Hur tydlig är bolagets strategi kommande 3 år? *", "strategyScale")}
+              {renderYesNo("hasPitchdeck", "Har ni redan en bolagspresentation eller pitchdeck?", "hasPitchdeck")}
             </div>
           </div>
         )
@@ -566,7 +825,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                {renderYesNo("ownerIndependent", "Bolaget kan fungera i vardagen utan nuvarande ägare *")}
+                {renderYesNo("ownerIndependent", "Bolaget kan fungera i vardagen utan nuvarande ägare *", "ownerIndependent")}
                 <label className="block text-sm font-medium text-white/80 mb-2 mt-4">Kommentar (valfritt)</label>
                 <textarea
                   value={state.ownerIndependentComment}
@@ -575,7 +834,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                 />
               </div>
               <div>
-                {renderScalePills("leadershipScale", "Formellt definierat ledningsteam (roller, ansvar) *")}
+                {renderScalePills("leadershipScale", "Formellt definierat ledningsteam (roller, ansvar) *", "leadershipScale")}
                 <label className="block text-sm font-medium text-white/80 mb-2 mt-4">Kommentar (valfritt)</label>
                 <textarea
                   value={state.leadershipComment}
@@ -586,8 +845,8 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {renderScalePills("transferPlanScale", "Plan för överlämning av kompetens och ansvar *")}
-              {renderYesNo("keypersonList", "Lista över nyckelpersoner (roller, ansvar) är framtagen")}
+              {renderScalePills("transferPlanScale", "Plan för överlämning av kompetens och ansvar *", "transferPlanScale")}
+              {renderYesNo("keypersonList", "Lista över nyckelpersoner (roller, ansvar) är framtagen", "keypersonList")}
             </div>
 
             <div>
@@ -611,7 +870,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Andel återkommande intäkter (%) *</label>
+                <LabelWithHelp label="Andel återkommande intäkter (%)" helpContent={HELP_TEXTS.recurringPercent.content} helpTitle={HELP_TEXTS.recurringPercent.title} required />
                 <input
                   type="number"
                   min="0"
@@ -624,7 +883,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                 <p className="text-xs text-white/50 mt-1">Andel av omsättning som är återkommande (avtal/abonnemang)</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Andel från huvudprodukter/tjänster (%) *</label>
+                <LabelWithHelp label="Andel från huvudprodukter/tjänster (%)" helpContent={HELP_TEXTS.mainProductShare.content} helpTitle={HELP_TEXTS.mainProductShare.title} required />
                 <input
                   type="number"
                   min="0"
@@ -651,7 +910,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Beskrivning av prissättningsmodell *</label>
+              <LabelWithHelp label="Beskrivning av prissättningsmodell" helpContent={HELP_TEXTS.pricingText.content} helpTitle={HELP_TEXTS.pricingText.title} required />
               <textarea
                 value={state.pricingText}
                 onChange={e => updateField("pricingText", e.target.value)}
@@ -671,14 +930,14 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
-              {renderScalePills("ebitdaStabilityScale", "Stabilitet i EBITDA de senaste 3 åren *")}
-              {renderScalePills("cashflowMatchScale", "Hur väl speglar kassaflödet lönsamheten? *")}
-              {renderScalePills("workingCapitalScale", "Rörelsekapitalnivå i förhållande till omsättning *")}
+              {renderScalePills("ebitdaStabilityScale", "Stabilitet i EBITDA de senaste 3 åren *", "ebitdaStabilityScale")}
+              {renderScalePills("cashflowMatchScale", "Hur väl speglar kassaflödet lönsamheten? *", "cashflowMatchScale")}
+              {renderScalePills("workingCapitalScale", "Rörelsekapitalnivå i förhållande till omsättning *", "workingCapitalScale")}
               {renderYesNo("financialDocs", "Bokslut, månadsrapporter och prognoser är sammanställda")}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Kommentar kring lån, skulder och eventuella covenants *</label>
+              <LabelWithHelp label="Kommentar kring lån, skulder och eventuella covenants" helpContent={HELP_TEXTS.debtComment.content} helpTitle={HELP_TEXTS.debtComment.title} required />
               <textarea
                 value={state.debtComment}
                 onChange={e => updateField("debtComment", e.target.value)}
@@ -698,7 +957,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Kundkoncentration - andel på toppkunder (%) *</label>
+                <LabelWithHelp label="Kundkoncentration - andel på toppkunder (%)" helpContent={HELP_TEXTS.concentrationPercent.content} helpTitle={HELP_TEXTS.concentrationPercent.title} required />
                 <input
                   type="number"
                   min="0"
@@ -709,7 +968,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-2">Kundstabilitet - andel återkommande kunder (%) *</label>
+                <LabelWithHelp label="Kundstabilitet - andel återkommande kunder (%)" helpContent={HELP_TEXTS.stabilityPercent.content} helpTitle={HELP_TEXTS.stabilityPercent.title} required />
                 <input
                   type="number"
                   min="0"
@@ -722,7 +981,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Beskriv er marknadsposition *</label>
+              <LabelWithHelp label="Beskriv er marknadsposition" helpContent={HELP_TEXTS.marketPositionText.content} helpTitle={HELP_TEXTS.marketPositionText.title} required />
               <textarea
                 value={state.marketPositionText}
                 onChange={e => updateField("marketPositionText", e.target.value)}
@@ -732,7 +991,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {renderScalePills("marketGrowthScale", "Marknadens tillväxttakt och framtidsutsikter *")}
+              {renderScalePills("marketGrowthScale", "Marknadens tillväxttakt och framtidsutsikter *", "marketGrowthScale")}
               <div>
                 <label className="block text-sm font-medium text-white/80 mb-2">Motivering</label>
                 <textarea
@@ -754,14 +1013,14 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
-              {renderScalePills("orgStructureScale", "Tydlig organisationsstruktur (roller, rapportering) *")}
-              {renderYesNo("personnelDataCorrect", "Personaldata (antal, roller) är uppdaterad och korrekt *")}
-              {renderScalePills("growthReadyScale", "Hur väl rustad är organisationen för att växa? *")}
+              {renderScalePills("orgStructureScale", "Tydlig organisationsstruktur (roller, rapportering) *", "orgStructureScale")}
+              {renderYesNo("personnelDataCorrect", "Personaldata (antal, roller) är uppdaterad och korrekt *", "personnelDataCorrect")}
+              {renderScalePills("growthReadyScale", "Hur väl rustad är organisationen för att växa? *", "growthReadyScale")}
               {renderYesNo("hrDocs", "Nyckelavtal (anställning, incitamentsprogram) är sammanställda")}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Hur skulle ni beskriva bolagets kultur och engagemang?</label>
+              <LabelWithHelp label="Hur skulle ni beskriva bolagets kultur och engagemang?" helpContent={HELP_TEXTS.cultureText.content} helpTitle={HELP_TEXTS.cultureText.title} />
               <textarea
                 value={state.cultureText}
                 onChange={e => updateField("cultureText", e.target.value)}
@@ -781,7 +1040,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                {renderScalePills("processDocScale", "Kärnprocesser är dokumenterade *")}
+                {renderScalePills("processDocScale", "Kärnprocesser är dokumenterade *", "processDocScale")}
                 <textarea
                   value={state.processDocComment}
                   onChange={e => updateField("processDocComment", e.target.value)}
@@ -790,7 +1049,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                 />
               </div>
               <div>
-                {renderScalePills("systemLandscapeScale", "Systemlandskap (ERP, CRM, etc.) *")}
+                {renderScalePills("systemLandscapeScale", "Systemlandskap (ERP, CRM, etc.) *", "systemLandscapeScale")}
                 <textarea
                   value={state.systemLandscapeComment}
                   onChange={e => updateField("systemLandscapeComment", e.target.value)}
@@ -798,9 +1057,9 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                   placeholder="Kommentar..."
                 />
               </div>
-              {renderScalePills("integrationScale", "Hur väl integrerade är systemen? *")}
+              {renderScalePills("integrationScale", "Hur väl integrerade är systemen? *", "integrationScale")}
               <div>
-                {renderYesNo("bottlenecks", "Finns flaskhalsar som begränsar tillväxt/marginaler? *")}
+                {renderYesNo("bottlenecks", "Finns flaskhalsar som begränsar tillväxt/marginaler? *", "bottlenecks")}
                 <textarea
                   value={state.bottlenecksComment}
                   onChange={e => updateField("bottlenecksComment", e.target.value)}
@@ -822,7 +1081,10 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-white/80 mb-3">Finns betalningsanmärkningar/skulder? *</label>
+                <div className="flex items-center mb-3">
+                  <span className="text-sm font-medium text-white/80">Finns betalningsanmärkningar/skulder? *</span>
+                  <HelpTooltip content={HELP_TEXTS.creditIssues.content} title={HELP_TEXTS.creditIssues.title} />
+                </div>
                 <div className="flex gap-3">
                   {["Ja", "Nej", "Vet ej"].map(opt => (
                     <button
@@ -840,13 +1102,13 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                   ))}
                 </div>
               </div>
-              {renderYesNo("disputes", "Finns kända tvister eller konflikter? *")}
-              {renderScalePills("policiesScale", "Dokumenterade policyer (GDPR, säkerhet, AML) *")}
+              {renderYesNo("disputes", "Finns kända tvister eller konflikter? *", "disputes")}
+              {renderScalePills("policiesScale", "Dokumenterade policyer (GDPR, säkerhet, AML) *", "policiesScale")}
               {renderYesNo("riskDocs", "Risk- eller revisionsrapporter är sammanställda")}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Sammanfattning av de viktigaste riskerna *</label>
+              <LabelWithHelp label="Sammanfattning av de viktigaste riskerna" helpContent={HELP_TEXTS.riskSummaryText.content} helpTitle={HELP_TEXTS.riskSummaryText.title} required />
               <textarea
                 value={state.riskSummaryText}
                 onChange={e => updateField("riskSummaryText", e.target.value)}
@@ -865,7 +1127,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Vilka 2-3 viktigaste tillväxtinitiativ ser ni framåt? *</label>
+              <LabelWithHelp label="Vilka 2-3 viktigaste tillväxtinitiativ ser ni framåt?" helpContent={HELP_TEXTS.growthInitiativesText.content} helpTitle={HELP_TEXTS.growthInitiativesText.title} required />
               <textarea
                 value={state.growthInitiativesText}
                 onChange={e => updateField("growthInitiativesText", e.target.value)}
@@ -875,13 +1137,13 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {renderYesNo("unusedCapacity", "Finns outnyttjad kapacitet som kan utnyttjas? *")}
-              {renderScalePills("scalabilityScale", "Hur skalbar är affärsmodellen vid ökad volym? *")}
+              {renderYesNo("unusedCapacity", "Finns outnyttjad kapacitet som kan utnyttjas? *", "unusedCapacity")}
+              {renderScalePills("scalabilityScale", "Hur skalbar är affärsmodellen vid ökad volym? *", "scalabilityScale")}
               {renderYesNo("growthDocs", "Strategidokument eller tillväxtplaner är framtagna")}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white/80 mb-2">Konkurrenssituation – vad gör er unika? *</label>
+              <LabelWithHelp label="Konkurrenssituation – vad gör er unika?" helpContent={HELP_TEXTS.competitionText.content} helpTitle={HELP_TEXTS.competitionText.title} required />
               <textarea
                 value={state.competitionText}
                 onChange={e => updateField("competitionText", e.target.value)}
@@ -900,10 +1162,10 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
-              {renderScalePills("dataroomReadyScale", "Hur nära är ni ett färdigt datarum? *")}
-              {renderScalePills("reportingQualityScale", "Kvalitet på rapportering (KPI:er, dashboards) *")}
-              {renderScalePills("equityStoryScale", "Hur tydlig är er 'equity story'? *")}
-              {renderScalePills("timingScale", "Är timing rätt för er (ägare, bolag, marknad)? *")}
+              {renderScalePills("dataroomReadyScale", "Hur nära är ni ett färdigt datarum? *", "dataroomReadyScale")}
+              {renderScalePills("reportingQualityScale", "Kvalitet på rapportering (KPI:er, dashboards) *", "reportingQualityScale")}
+              {renderScalePills("equityStoryScale", "Hur tydlig är er 'equity story'? *", "equityStoryScale")}
+              {renderScalePills("timingScale", "Är timing rätt för er (ägare, bolag, marknad)? *", "timingScale")}
             </div>
 
             <div>
