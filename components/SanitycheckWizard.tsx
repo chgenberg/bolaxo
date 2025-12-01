@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef } from 'react'
 import { 
   ArrowRight, 
   ArrowLeft,
@@ -21,9 +21,26 @@ import {
   AlertTriangle,
   X,
   ChevronDown,
-  HelpCircle
+  HelpCircle,
+  Upload,
+  Paperclip,
+  File,
+  Trash2
 } from 'lucide-react'
 import { INDUSTRIES } from './IndustrySelectorModal'
+
+// File upload types
+interface UploadedFile {
+  id: string
+  name: string
+  size: number
+  type: string
+  uploadedAt: Date
+}
+
+interface UploadedFilesState {
+  [key: string]: UploadedFile[]
+}
 
 // Help Tooltip Component
 function HelpTooltip({ content, title }: { content: string; title?: string }) {
@@ -79,6 +96,143 @@ function LabelWithHelp({
       <span>{label}{required && ' *'}</span>
       <HelpTooltip content={helpContent} title={helpTitle} />
     </label>
+  )
+}
+
+// File Upload Component
+function FileUploadZone({ 
+  fieldKey,
+  files,
+  onFilesChange,
+  accept = ".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png"
+}: { 
+  fieldKey: string
+  files: UploadedFile[]
+  onFilesChange: (key: string, files: UploadedFile[]) => void
+  accept?: string
+}) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleFileSelect = (selectedFiles: FileList | null) => {
+    if (!selectedFiles) return
+    
+    const newFiles: UploadedFile[] = Array.from(selectedFiles).map(file => ({
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      uploadedAt: new Date()
+    }))
+    
+    onFilesChange(fieldKey, [...files, ...newFiles])
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    handleFileSelect(e.dataTransfer.files)
+  }
+
+  const removeFile = (fileId: string) => {
+    onFilesChange(fieldKey, files.filter(f => f.id !== fileId))
+  }
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B'
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
+  }
+
+  const getFileIcon = (type: string) => {
+    if (type.includes('pdf')) return '📄'
+    if (type.includes('spreadsheet') || type.includes('excel') || type.includes('xlsx')) return '📊'
+    if (type.includes('presentation') || type.includes('powerpoint')) return '📽️'
+    if (type.includes('word') || type.includes('document')) return '📝'
+    if (type.includes('image')) return '🖼️'
+    return '📎'
+  }
+
+  return (
+    <div className="mt-3 animate-in slide-in-from-top-2 duration-300">
+      {/* Drop zone */}
+      <div
+        onClick={() => inputRef.current?.click()}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`
+          relative border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all duration-200
+          ${isDragging 
+            ? 'border-emerald-400 bg-emerald-400/10' 
+            : 'border-white/20 hover:border-white/40 hover:bg-white/5'
+          }
+        `}
+      >
+        <input
+          ref={inputRef}
+          type="file"
+          multiple
+          accept={accept}
+          onChange={(e) => handleFileSelect(e.target.files)}
+          className="hidden"
+        />
+        
+        <div className="flex flex-col items-center gap-2">
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+            isDragging ? 'bg-emerald-400/20' : 'bg-white/10'
+          }`}>
+            <Upload className={`w-5 h-5 ${isDragging ? 'text-emerald-400' : 'text-white/60'}`} />
+          </div>
+          <div>
+            <p className="text-sm text-white/80">
+              <span className="font-medium text-white">Klicka för att ladda upp</span> eller dra och släpp
+            </p>
+            <p className="text-xs text-white/50 mt-1">
+              PDF, Word, Excel, PowerPoint, bilder (max 10 MB)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Uploaded files list */}
+      {files.length > 0 && (
+        <div className="mt-3 space-y-2">
+          {files.map(file => (
+            <div 
+              key={file.id}
+              className="flex items-center gap-3 bg-white/5 rounded-lg px-3 py-2 group"
+            >
+              <span className="text-lg">{getFileIcon(file.type)}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-white truncate">{file.name}</p>
+                <p className="text-xs text-white/50">{formatFileSize(file.size)}</p>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  removeFile(file.id)
+                }}
+                className="p-1.5 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-400/10 transition-colors opacity-0 group-hover:opacity-100"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -556,6 +710,12 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
   const [error, setError] = useState<string | null>(null)
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false)
   const [showIndustryModal, setShowIndustryModal] = useState(false)
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesState>({})
+
+  // Handle file upload changes
+  const handleFilesChange = useCallback((key: string, files: UploadedFile[]) => {
+    setUploadedFiles(prev => ({ ...prev, [key]: files }))
+  }, [])
 
   const completionMap = useMemo(() => {
     const map: Record<number, boolean> = {}
@@ -726,6 +886,60 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
     </div>
   )
 
+  // Special version for document questions with file upload
+  const renderDocumentQuestion = (
+    field: keyof SanitycheckState, 
+    label: string, 
+    uploadLabel: string,
+    helpKey?: keyof typeof HELP_TEXTS
+  ) => (
+    <div>
+      <div className="flex items-center mb-3">
+        <span className="text-sm font-medium text-white/80">{label}</span>
+        {helpKey && HELP_TEXTS[helpKey] && (
+          <HelpTooltip content={HELP_TEXTS[helpKey].content} title={HELP_TEXTS[helpKey].title} />
+        )}
+      </div>
+      <div className="flex gap-3">
+        {["Ja", "Nej"].map(opt => (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => updateField(field, opt)}
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+              state[field] === opt
+                ? 'bg-white text-navy'
+                : 'bg-white/10 text-white/80 hover:bg-white/20'
+            }`}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+      
+      {/* Show file upload when "Ja" is selected */}
+      {state[field] === "Ja" && (
+        <div className="mt-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Paperclip className="w-4 h-4 text-emerald-400" />
+            <span className="text-sm font-medium text-emerald-400">{uploadLabel}</span>
+          </div>
+          <FileUploadZone
+            fieldKey={field}
+            files={uploadedFiles[field] || []}
+            onFilesChange={handleFilesChange}
+          />
+          {(uploadedFiles[field]?.length || 0) > 0 && (
+            <p className="text-xs text-emerald-400/70 mt-2 flex items-center gap-1">
+              <CheckCircle className="w-3 h-3" />
+              {uploadedFiles[field].length} fil(er) uppladdad(e)
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  )
+
   const renderStep = () => {
     switch (activeStep) {
       case 1:
@@ -810,7 +1024,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
 
             <div className="grid md:grid-cols-2 gap-6">
               {renderScalePills("strategyScale", "Hur tydlig är bolagets strategi kommande 3 år? *", "strategyScale")}
-              {renderYesNo("hasPitchdeck", "Har ni redan en bolagspresentation eller pitchdeck?", "hasPitchdeck")}
+              {renderDocumentQuestion("hasPitchdeck", "Har ni redan en bolagspresentation eller pitchdeck?", "Ladda upp pitchdeck/presentation", "hasPitchdeck")}
             </div>
           </div>
         )
@@ -846,7 +1060,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
 
             <div className="grid md:grid-cols-2 gap-6">
               {renderScalePills("transferPlanScale", "Plan för överlämning av kompetens och ansvar *", "transferPlanScale")}
-              {renderYesNo("keypersonList", "Lista över nyckelpersoner (roller, ansvar) är framtagen", "keypersonList")}
+              {renderDocumentQuestion("keypersonList", "Lista över nyckelpersoner (roller, ansvar) är framtagen", "Ladda upp nyckelpersonslista", "keypersonList")}
             </div>
 
             <div>
@@ -906,7 +1120,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
                   placeholder="0-100"
                 />
               </div>
-              {renderYesNo("revenueDocs", "Underlag för intäktsfördelning är framtaget")}
+              {renderDocumentQuestion("revenueDocs", "Underlag för intäktsfördelning är framtaget", "Ladda upp intäktsunderlag")}
             </div>
 
             <div>
@@ -933,7 +1147,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
               {renderScalePills("ebitdaStabilityScale", "Stabilitet i EBITDA de senaste 3 åren *", "ebitdaStabilityScale")}
               {renderScalePills("cashflowMatchScale", "Hur väl speglar kassaflödet lönsamheten? *", "cashflowMatchScale")}
               {renderScalePills("workingCapitalScale", "Rörelsekapitalnivå i förhållande till omsättning *", "workingCapitalScale")}
-              {renderYesNo("financialDocs", "Bokslut, månadsrapporter och prognoser är sammanställda")}
+              {renderDocumentQuestion("financialDocs", "Bokslut, månadsrapporter och prognoser är sammanställda", "Ladda upp finansiella dokument")}
             </div>
 
             <div>
@@ -1016,7 +1230,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
               {renderScalePills("orgStructureScale", "Tydlig organisationsstruktur (roller, rapportering) *", "orgStructureScale")}
               {renderYesNo("personnelDataCorrect", "Personaldata (antal, roller) är uppdaterad och korrekt *", "personnelDataCorrect")}
               {renderScalePills("growthReadyScale", "Hur väl rustad är organisationen för att växa? *", "growthReadyScale")}
-              {renderYesNo("hrDocs", "Nyckelavtal (anställning, incitamentsprogram) är sammanställda")}
+              {renderDocumentQuestion("hrDocs", "Nyckelavtal (anställning, incitamentsprogram) är sammanställda", "Ladda upp HR-dokument")}
             </div>
 
             <div>
@@ -1104,7 +1318,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
               </div>
               {renderYesNo("disputes", "Finns kända tvister eller konflikter? *", "disputes")}
               {renderScalePills("policiesScale", "Dokumenterade policyer (GDPR, säkerhet, AML) *", "policiesScale")}
-              {renderYesNo("riskDocs", "Risk- eller revisionsrapporter är sammanställda")}
+              {renderDocumentQuestion("riskDocs", "Risk- eller revisionsrapporter är sammanställda", "Ladda upp riskrapporter")}
             </div>
 
             <div>
@@ -1139,7 +1353,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             <div className="grid md:grid-cols-2 gap-6">
               {renderYesNo("unusedCapacity", "Finns outnyttjad kapacitet som kan utnyttjas? *", "unusedCapacity")}
               {renderScalePills("scalabilityScale", "Hur skalbar är affärsmodellen vid ökad volym? *", "scalabilityScale")}
-              {renderYesNo("growthDocs", "Strategidokument eller tillväxtplaner är framtagna")}
+              {renderDocumentQuestion("growthDocs", "Strategidokument eller tillväxtplaner är framtagna", "Ladda upp tillväxtplaner")}
             </div>
 
             <div>
@@ -1169,7 +1383,7 @@ export default function SanitycheckWizard({ onComplete }: SanitycheckWizardProps
             </div>
 
             <div>
-              {renderYesNo("saleMaterialDocs", "Övrigt material för pitchdeck/teaser är framtaget")}
+              {renderDocumentQuestion("saleMaterialDocs", "Övrigt material för pitchdeck/teaser är framtaget", "Ladda upp säljmaterial")}
             </div>
 
             {mainStepsComplete === 10 && (
