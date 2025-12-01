@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import crypto from 'crypto'
 
+// Secure document handling with encryption and access control
+
 // Encryption key - should be in env vars in production
 const ENCRYPTION_KEY = process.env.DOCUMENT_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex').slice(0, 32)
 const IV_LENGTH = 16
