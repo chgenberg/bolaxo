@@ -263,12 +263,10 @@ export async function POST(
         fileName: file.name,
         fileSize: file.size,
         mimeType: file.type,
-        fileUrl,
+        fileUrl: `${fileUrl}?iv=${iv}`, // Store IV in URL for now (in production, use separate secure storage)
         status: 'DRAFT',
         uploadedBy: userId,
-        uploadedByName: user?.name || user?.email || 'Okänd',
-        // Store encryption IV for decryption (in production, store in separate secure location)
-        metadata: { encryptionIv: iv, encryptedSize: encrypted.length }
+        uploadedByName: user?.name || user?.email || 'Okänd'
       }
     })
 
