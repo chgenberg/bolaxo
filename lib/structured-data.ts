@@ -45,10 +45,10 @@ export function StructuredData({ type, data }: StructuredDataProps) {
 export const defaultOrganizationData = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'BOLAXO',
-  alternateName: 'Bolagsportalen',
-  url: 'https://bolaxo.com',
-  logo: 'https://bolaxo.com/bolagsplatsen.png',
+  name: 'Trestor Group',
+  alternateName: 'En del av Pactior Group',
+  url: 'https://trestorgroup.se',
+  logo: 'https://trestorgroup.se/Logo/Trestor_logo.png',
   description: 'Sveriges smartaste företagsförmedling med verifierade uppgifter, NDA innan detaljer och kvalificerade köpare.',
   foundingDate: '2024',
   sameAs: [
@@ -61,8 +61,8 @@ export const defaultOrganizationData = {
     '@type': 'ContactPoint',
     contactType: 'Customer Service',
     availableLanguage: ['Swedish', 'English'],
-    email: 'kontakt@bolaxo.com',
-    url: 'https://bolaxo.com/kontakt',
+    email: 'kontakt@trestorgroup.se',
+    url: 'https://trestorgroup.se/kontakt',
   },
   areaServed: {
     '@type': 'Country',
@@ -81,14 +81,14 @@ export const defaultOrganizationData = {
 export const websiteStructuredData = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'BOLAXO',
-  url: 'https://bolaxo.com',
+  name: 'Trestor Group',
+  url: 'https://trestorgroup.se',
   description: 'Sveriges smartaste företagsförmedling - Köp och sälj företag säkert och enkelt',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://bolaxo.com/sok?q={search_term_string}',
+      urlTemplate: 'https://trestorgroup.se/sok?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -101,7 +101,7 @@ export const serviceStructuredData = {
   serviceType: 'Företagsförmedling',
   provider: {
     '@type': 'Organization',
-    name: 'BOLAXO',
+    name: 'Trestor Group',
   },
   areaServed: {
     '@type': 'Country',
@@ -161,10 +161,10 @@ export function generateArticleStructuredData(article: {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'BOLAXO',
+      name: 'Trestor Group',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bolaxo.com/bolagsplatsen.png',
+        url: 'https://trestorgroup.se/Logo/Trestor_logo.png',
       },
     },
     datePublished: article.datePublished,

@@ -18,7 +18,7 @@ interface BlogPostStructuredDataProps {
 }
 
 export function BlogPostStructuredData({ post }: BlogPostStructuredDataProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trestorgroup.se'
   
   useEffect(() => {
     const datePublished = post.date instanceof Date 

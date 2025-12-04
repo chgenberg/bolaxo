@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt'
 const prisma = new PrismaClient()
 
 async function resetAdminPassword() {
-  const email = 'admin@bolaxo.com'
+  const email = 'admin@trestorgroup.se'
   const newPassword = 'Password123!' // Minst 12 tecken krävs
 
   try {
@@ -30,14 +30,14 @@ async function resetAdminPassword() {
           passwordHash,
           verified: true,
           bankIdVerified: true,
-          companyName: 'Bolaxo Admin'
+          companyName: 'Trestor Group Admin'
         }
       })
 
       console.log(`✅ Admin user created successfully!`)
       console.log(`📧 Email: ${newUser.email}`)
       console.log(`🔑 Password: ${newPassword}`)
-      console.log(`\n🌐 Login at: https://app.bolaxo.com/admin/login`)
+      console.log(`\n🌐 Login at: https://app.trestorgroup.se/admin/login`)
       return
     }
 
@@ -66,7 +66,7 @@ async function resetAdminPassword() {
     console.log(`✅ Password updated successfully!`)
     console.log(`📧 Email: ${updatedUser.email}`)
     console.log(`🔑 New password: ${newPassword}`)
-    console.log(`\n🌐 Login at: https://app.bolaxo.com/admin/login`)
+    console.log(`\n🌐 Login at: https://app.trestorgroup.se/admin/login`)
 
   } catch (error) {
     console.error('❌ Error:', error)

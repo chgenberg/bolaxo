@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://bolaxo.com'
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://trestorgroup.se'
 
 /**
  * Generate metadata for listing pages
@@ -30,7 +30,7 @@ export async function generateListingMetadata(listingId: string): Promise<Metada
       }
     }
 
-    const title = `${listing.anonymousTitle} | Köp företag ${listing.location || listing.region || ''} | BOLAXO`
+    const title = `${listing.anonymousTitle} | Köp företag ${listing.location || listing.region || ''} | Trestor Group`
     const description = listing.description 
       ? `${listing.description.substring(0, 150)}...`
       : `Köp ${listing.anonymousTitle} i ${listing.location || listing.region || 'Sverige'}. ${listing.industry || ''} företag till salu.`
@@ -83,8 +83,8 @@ export async function generateListingMetadata(listingId: string): Promise<Metada
   } catch (error) {
     console.error('Error generating listing metadata:', error)
     return {
-      title: 'Objekt | BOLAXO',
-      description: 'Företag till salu på BOLAXO',
+      title: 'Objekt | Trestor Group',
+      description: 'Företag till salu på Trestor Group',
     }
   }
 }
@@ -105,7 +105,7 @@ export function generateBlogMetadata(post: {
     : new Date(post.date).toISOString()
 
   return {
-    title: `${post.title} | BOLAXO Blogg`,
+    title: `${post.title} | Trestor Group Blogg`,
     description: post.excerpt,
     authors: [{ name: post.author }],
     openGraph: {
@@ -142,7 +142,7 @@ export function generateCityMetadata(city: {
   type: 'buyer' | 'seller'
 }): Metadata {
   const typeLabel = city.type === 'buyer' ? 'köpa' : 'sälja'
-  const title = `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} företag i ${city.name} | BOLAXO`
+  const title = `${typeLabel.charAt(0).toUpperCase() + typeLabel.slice(1)} företag i ${city.name} | Trestor Group`
   const description = `Sök efter företag att ${typeLabel} i ${city.name}, ${city.region}. Vi hjälper dig hitta rätt match med AI-driven värdering och smart matchning.`
 
   return {

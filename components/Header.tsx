@@ -179,10 +179,18 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24 md:h-20 lg:h-16">
           {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center">
-            <span className="text-4xl md:text-3xl lg:text-2xl font-bold tracking-tight text-primary-navy">
-              BOLAXO
-            </span>
+          <Link href={`/${locale}`} className="flex items-center gap-2">
+            <img 
+              src="/Logo/Trestor_logo.png" 
+              alt="Trestor Group" 
+              className="h-10 md:h-8 lg:h-7 w-auto"
+            />
+            <div className="flex flex-col">
+              <span className="text-xl md:text-lg lg:text-base font-bold tracking-tight text-primary-navy leading-tight">
+                Trestor Group
+              </span>
+              <span className="text-[10px] md:text-[9px] text-gray-500 leading-tight">En del av Pactior Group</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -391,7 +399,13 @@ export default function Header() {
             style={{ position: 'relative', zIndex: 1 }}
           >
             <div className="flex justify-between items-center">
-              <span className="text-2xl font-bold text-primary-navy tracking-tight">BOLAXO</span>
+              <div className="flex items-center gap-2">
+                <img src="/Logo/Trestor_logo.png" alt="Trestor Group" className="h-8 w-auto" />
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold text-primary-navy tracking-tight leading-tight">Trestor Group</span>
+                  <span className="text-[9px] text-gray-500 leading-tight">En del av Pactior Group</span>
+                </div>
+              </div>
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors"

@@ -37,8 +37,8 @@ export default function HomePageContent() {
             {/* Mascot - Left side */}
             <div className="flex-shrink-0">
               <img 
-                src="/Home/maskot.png" 
-                alt="Bolaxo maskot" 
+                src="/Logo/Trestor_logo.png" 
+                alt="Trestor Group" 
                 className="w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 object-contain"
               />
             </div>
@@ -53,7 +53,7 @@ export default function HomePageContent() {
               
               {/* Intro Text */}
               <p className="text-lg md:text-xl text-gray-700 max-w-2xl mb-8 leading-relaxed">
-                Bolaxo (en del av AIFM) hjälper ägare, köpare och rådgivare genom hela resan: 
+                Trestor Group (en del av Pactior Group) hjälper ägare, köpare och rådgivare genom hela resan: 
                 från första tempmätning till annonsering och matchning. <strong>Inga success fees</strong> – bara tydliga paket.
               </p>
               
@@ -130,7 +130,7 @@ export default function HomePageContent() {
                 </div>
                 <h3 className="text-xl font-bold mb-4 text-white">Sälja via annons</h3>
                 <p className="text-white/80 leading-relaxed">
-                  Bolaxo blir annonstorget där du kan paketera och publicera din försäljning.
+                  Trestor Group blir annonstorget där du kan paketera och publicera din försäljning.
                 </p>
                 <div className="mt-6 flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
                   <span className="text-sm font-medium">Skapa annons</span>
@@ -184,10 +184,10 @@ export default function HomePageContent() {
               Trygghet & kompetens
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-white">
-              Bolaxo är en del av AIFM
+              Trestor Group är en del av Pactior Group
             </h2>
             <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto">
-              Plattformen utvecklas tillsammans med AIFM och erfarna rådgivare. 
+              Plattformen utvecklas tillsammans med Pactior Group och erfarna rådgivare. 
               Kombinationen av fintech-logik och klassisk M&A-kompetens gör processen både trygg och effektiv.
             </p>
             <div className="mt-10 flex items-center justify-center gap-8 flex-wrap">
@@ -395,7 +395,7 @@ export default function HomePageContent() {
               Jämförelse
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-navy">
-              Hur Bolaxo skiljer sig från traditionella företagsmäklare
+              Hur Trestor Group skiljer sig från traditionella företagsmäklare
             </h2>
           </div>
 
@@ -436,13 +436,13 @@ export default function HomePageContent() {
               </ul>
             </div>
             
-            {/* Med Bolaxo */}
+            {/* Med Trestor Group */}
             <div className="bg-navy text-white p-8 rounded-3xl animate-pulse-box-navy">
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-white">Med Bolaxo</h3>
+                <h3 className="text-xl font-bold text-white">Med Trestor Group</h3>
               </div>
               <ul className="space-y-6">
                 <li className="flex items-start gap-4">

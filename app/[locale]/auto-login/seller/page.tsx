@@ -10,7 +10,7 @@ export default function AutoLoginSellerPage() {
     // Auto-login as seller
     const sellerUser = {
       id: 'seller-auto-001',
-      email: 'demo-seller@bolaxo.se',
+      email: 'demo-seller@trestorgroup.se',
       name: 'Demo Säljare',
       role: 'seller',
       loginTime: new Date().toISOString()

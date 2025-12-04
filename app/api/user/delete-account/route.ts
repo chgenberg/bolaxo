@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        email: `deleted_${userId}@bolaxo.se`,
+        email: `deleted_${userId}@trestorgroup.se`,
         name: 'Raderad användare',
         phone: null,
         companyName: null,

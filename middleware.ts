@@ -80,7 +80,7 @@ export async function middleware(request: NextRequest) {
     
     if (process.env.NODE_ENV === 'production') {
       const currentHost = safeHeader(request, 'host')
-      const isBolaxoDomain = currentHost.includes('bolaxo.com')
+      const isTrestor GroupDomain = currentHost.includes('trestorgroup.se')
       response.headers.set(
         'Content-Security-Policy',
         [
@@ -91,7 +91,7 @@ export async function middleware(request: NextRequest) {
           "font-src 'self' data: https:",
           "connect-src 'self' https://api.openai.com https://api.brevo.com https://api.sendinblue.com",
           "frame-src 'self' https://player.vimeo.com https://vimeo.com",
-          `frame-ancestors 'self'${isBolaxoDomain ? ' https://bolaxo.com https://www.bolaxo.com' : ''}`,
+          `frame-ancestors 'self'${isTrestor GroupDomain ? ' https://trestorgroup.se https://www.trestorgroup.se' : ''}`,
           "base-uri 'self'",
           "form-action 'self'",
         ].join('; ')
@@ -137,7 +137,7 @@ export async function middleware(request: NextRequest) {
 
   if (process.env.NODE_ENV === 'production') {
     const currentHost = safeHeader(request, 'host')
-    const isBolaxoDomain = currentHost.includes('bolaxo.com')
+    const isTrestor GroupDomain = currentHost.includes('trestorgroup.se')
     
     response.headers.set(
       'Content-Security-Policy',
@@ -149,7 +149,7 @@ export async function middleware(request: NextRequest) {
         "font-src 'self' data: https:",
         "connect-src 'self' https://api.openai.com https://api.brevo.com https://api.sendinblue.com",
         "frame-src 'self' https://player.vimeo.com https://vimeo.com",
-        `frame-ancestors 'self'${isBolaxoDomain ? ' https://bolaxo.com https://www.bolaxo.com' : ''}`,
+        `frame-ancestors 'self'${isTrestor GroupDomain ? ' https://trestorgroup.se https://www.trestorgroup.se' : ''}`,
         "base-uri 'self'",
         "form-action 'self'",
       ].join('; ')

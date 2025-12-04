@@ -41,7 +41,7 @@ function PremiumValuationContent() {
     if (demoMode) {
       setIsDemo(true)
       setPurchaseData({
-        email: 'demo@bolaxo.se',
+        email: 'demo@trestorgroup.se',
         paymentId: 'demo-preview-' + Date.now(),
         inputData: {}
       })

@@ -23,7 +23,7 @@ async function resetAdmin() {
     }
 
     // Create new admin account
-    const newEmail = 'admin@bolaxo.com'
+    const newEmail = 'admin@trestorgroup.se'
     const password = 'Password123'
     
     console.log(`\n⏳ Skapar nytt admin-konto...`)

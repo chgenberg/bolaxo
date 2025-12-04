@@ -96,7 +96,7 @@ export default function PriserPage() {
             <div className="flex-shrink-0 order-1 md:order-2">
               <img 
                 src="/Maskots/maskot5.png" 
-                alt="Bolaxo maskot" 
+                alt="Trestor Group maskot" 
                 className="w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain"
               />
             </div>
@@ -422,7 +422,7 @@ export default function PriserPage() {
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-navy">Publicering på Bolaxo</span>
+                      <span className="font-semibold text-navy">Publicering på Trestor Group</span>
                       <p className="text-sm text-gray-600">Med synlighet för relevanta investerare och köpare.</p>
                     </div>
                   </li>

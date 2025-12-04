@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Bolaxo Admin Dashboard',
-  description: 'Administratörsportal för Bolaxo',
+  title: 'Trestor Group Admin Dashboard',
+  description: 'Administratörsportal för Trestor Group',
 }
 
 export default function AdminLayout({

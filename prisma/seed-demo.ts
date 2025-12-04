@@ -59,10 +59,10 @@ async function main() {
 
   // 1. Skapa demo-users
   const demoSeller = await prisma.user.upsert({
-    where: { email: 'demo.seller@bolaxo.se' },
+    where: { email: 'demo.seller@trestorgroup.se' },
     update: {},
     create: {
-      email: 'demo.seller@bolaxo.se',
+      email: 'demo.seller@trestorgroup.se',
       name: 'Anna Andersson',
       role: 'seller',
       verified: true,
@@ -75,10 +75,10 @@ async function main() {
   })
 
   const demoBuyer = await prisma.user.upsert({
-    where: { email: 'demo.buyer@bolaxo.se' },
+    where: { email: 'demo.buyer@trestorgroup.se' },
     update: {},
     create: {
-      email: 'demo.buyer@bolaxo.se',
+      email: 'demo.buyer@trestorgroup.se',
       name: 'Erik Johansson',
       role: 'buyer',
       verified: true,
@@ -89,10 +89,10 @@ async function main() {
   })
 
   const demoAdvisor = await prisma.user.upsert({
-    where: { email: 'advisor@bolaxo.se' },
+    where: { email: 'advisor@trestorgroup.se' },
     update: {},
     create: {
-      email: 'advisor@bolaxo.se',
+      email: 'advisor@trestorgroup.se',
       name: 'Maria Svensson',
       role: 'advisor',
       verified: true,
@@ -373,10 +373,10 @@ async function main() {
   
   for (const mockObj of mockObjects) {
     const seller = await prisma.user.upsert({
-      where: { email: `seller-${mockObj.id}@bolaxo.se` },
+      where: { email: `seller-${mockObj.id}@trestorgroup.se` },
       update: {},
       create: {
-        email: `seller-${mockObj.id}@bolaxo.se`,
+        email: `seller-${mockObj.id}@trestorgroup.se`,
         name: mockObj.companyName,
         role: 'seller',
         verified: mockObj.verified,
@@ -508,10 +508,10 @@ async function main() {
   
   // Skapa ett par test-köpare
   const testBuyer1 = await prisma.user.upsert({
-    where: { email: 'testbuyer1@bolaxo.se' },
+    where: { email: 'testbuyer1@trestorgroup.se' },
     update: {},
     create: {
-      email: 'testbuyer1@bolaxo.se',
+      email: 'testbuyer1@trestorgroup.se',
       name: 'Test Köpare 1',
       role: 'buyer',
       verified: true,
@@ -522,10 +522,10 @@ async function main() {
   })
 
   const testBuyer2 = await prisma.user.upsert({
-    where: { email: 'testbuyer2@bolaxo.se' },
+    where: { email: 'testbuyer2@trestorgroup.se' },
     update: {},
     create: {
-      email: 'testbuyer2@bolaxo.se',
+      email: 'testbuyer2@trestorgroup.se',
       name: 'Test Köpare 2',
       role: 'buyer',
       verified: true,
@@ -539,7 +539,7 @@ async function main() {
   const firstTwoListings = mockObjects.slice(0, 2)
   for (const mockObj of firstTwoListings) {
     const seller = await prisma.user.findFirst({
-      where: { email: `seller-${mockObj.id}@bolaxo.se` }
+      where: { email: `seller-${mockObj.id}@trestorgroup.se` }
     })
 
     if (seller) {
@@ -694,15 +694,15 @@ async function main() {
 
   console.log('\n✅ Seed completed!')
   console.log('\n📊 Demo accounts:')
-  console.log('   Säljare: demo.seller@bolaxo.se')
-  console.log('   Köpare:  demo.buyer@bolaxo.se')
-  console.log('   Advisor: advisor@bolaxo.se')
+  console.log('   Säljare: demo.seller@trestorgroup.se')
+  console.log('   Köpare:  demo.buyer@trestorgroup.se')
+  console.log('   Advisor: advisor@trestorgroup.se')
   console.log('\n👥 Test users for dev-login:')
   console.log(`   Test Buyer 1 ID: ${testBuyer1.id}`)
   console.log(`   Test Buyer 2 ID: ${testBuyer2.id}`)
   console.log('   (Use these IDs in /dev-login page)')
   console.log('\n🏢 Plus 20 seller accounts created for mock objects:')
-  console.log('   Format: seller-obj-XXX@bolaxo.se (same password as above)')
+  console.log('   Format: seller-obj-XXX@trestorgroup.se (same password as above)')
   console.log('\n🔗 Direct URLs för investor demo:')
   console.log('   Transaction: /transaktion/demo-transaction-001')
   console.log('   Full URL: https://bolaxo-production.up.railway.app/transaktion/demo-transaction-001')

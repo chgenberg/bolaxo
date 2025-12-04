@@ -28,7 +28,7 @@ export default function PasswordProtection({ children }: PasswordProtectionProps
     setError('')
     
     // You can change this password
-    if (password === 'BOLAXO') {
+    if (password === 'Trestor Group') {
       sessionStorage.setItem('site-authenticated', 'true')
       setIsAuthenticated(true)
     } else {
@@ -92,7 +92,7 @@ export default function PasswordProtection({ children }: PasswordProtectionProps
           
           {/* Title */}
           <h1 className="text-3xl font-bold text-center text-[#003366] mb-2">
-            Välkommen till BOLAXO
+            Välkommen till Trestor Group
           </h1>
           <p className="text-center text-gray-600 mb-6">
             Denna sida är lösenordsskyddad

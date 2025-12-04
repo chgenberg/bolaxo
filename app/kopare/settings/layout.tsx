@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Profilinställningar - BOLAXO',
+  title: 'Profilinställningar - Trestor Group',
   description: 'Uppdatera din profil och kontaktuppgifter'
 }
 

@@ -23,13 +23,19 @@ export default function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <Link href={`/${locale}`} className="inline-block mb-6">
-              <Image 
-                src="/BOLAXO_logo.png" 
-                alt="BOLAXO" 
-                width={130} 
-                height={40}
-                className="h-10 md:h-8 w-auto brightness-0 invert"
-              />
+              <div className="flex items-center gap-3">
+                <Image 
+                  src="/Logo/Trestor_logo.png" 
+                  alt="Trestor Group" 
+                  width={50} 
+                  height={50}
+                  className="h-12 md:h-10 w-auto"
+                />
+                <div className="flex flex-col">
+                  <span className="text-xl md:text-lg font-bold text-white leading-tight">Trestor Group</span>
+                  <span className="text-xs text-gray-400 leading-tight">En del av Pactior Group</span>
+                </div>
+              </div>
             </Link>
             <p className="text-gray-300 text-base md:text-sm leading-relaxed mb-6">
               {t('description')}
@@ -41,9 +47,9 @@ export default function Footer() {
                 <Phone className="w-4 h-4 flex-shrink-0" />
                 <span>+46 (0)8 123 456 78</span>
               </a>
-              <a href="mailto:kontakt@bolaxo.se" className="flex items-center gap-3 text-gray-300 hover:text-accent-pink transition-colors">
+              <a href="mailto:kontakt@trestorgroup.se" className="flex items-center gap-3 text-gray-300 hover:text-accent-pink transition-colors">
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                <span>kontakt@bolaxo.se</span>
+                <span>kontakt@trestorgroup.se</span>
               </a>
               <div className="flex items-start gap-3 text-gray-300">
                 <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
@@ -177,7 +183,7 @@ export default function Footer() {
           {/* Social Links */}
           <div className="flex items-center gap-6">
             <a 
-              href="https://facebook.com/bolaxo" 
+              href="https://facebook.com/trestorgroup" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-accent-pink transition-colors"
@@ -186,7 +192,7 @@ export default function Footer() {
               <Facebook className="w-5 h-5" />
             </a>
             <a 
-              href="https://linkedin.com/company/bolaxo" 
+              href="https://linkedin.com/company/pactior-group" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-accent-pink transition-colors"
@@ -195,7 +201,7 @@ export default function Footer() {
               <Linkedin className="w-5 h-5" />
             </a>
             <a 
-              href="https://twitter.com/bolaxo" 
+              href="https://twitter.com/trestorgroup" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-accent-pink transition-colors"
