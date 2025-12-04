@@ -6,53 +6,53 @@ import { useLocale } from 'next-intl'
 import { 
   Check, 
   ArrowRight, 
-  Sparkles, 
   Users, 
   Crown,
-  Zap,
   ChevronDown,
-  HelpCircle,
   Shield,
-  BarChart3,
   MessageSquare,
   FileText,
-  Target
+  Target,
+  Building2,
+  Briefcase,
+  Eye,
+  Lock
 } from 'lucide-react'
 
-type TabId = 'overview' | 'freemium' | 'bas' | 'premium' | 'faq'
+type TabId = 'overview' | 'gratis' | 'standard' | 'premium' | 'faq'
 
 const tabs: { id: TabId; label: string }[] = [
   { id: 'overview', label: 'Översikt' },
-  { id: 'freemium', label: 'Freemium' },
-  { id: 'bas', label: 'Bas' },
+  { id: 'gratis', label: 'Gratis (Köpare)' },
+  { id: 'standard', label: 'Standard' },
   { id: 'premium', label: 'Premium' },
   { id: 'faq', label: 'FAQ' }
 ]
 
 const faqs = [
   {
-    question: 'Kostar det något att testa Freemium?',
-    answer: 'Nej, Freemium är helt kostnadsfritt. Du kan skapa konto, göra en light-värdering och utforska kunskapsbanken utan att betala.'
+    question: 'Kostar det något för köpare?',
+    answer: 'Nej, det är helt gratis för köpare att söka, skapa investerarprofil och begära NDA för annonser.'
   },
   {
-    question: 'Kan jag börja i Freemium och uppgradera senare?',
-    answer: 'Ja. All data du fyller i i Freemium följer med när du uppgraderar till Bas eller Premium, så du slipper göra om jobbet.'
+    question: 'Vad kostar det att annonsera som säljare?',
+    answer: 'Standard-paketet kostar 2 495 kr/mån. Premium med rådgivarstöd kostar 4 995 kr/mån. Inga success fees.'
   },
   {
     question: 'Tar ni procent på köpeskillingen?',
-    answer: 'I Bas tar vi ingen procent alls – bara fast pris. I Premium kan en låg success fee förekomma, men alltid på nivåer som ligger långt under traditionella mäklarupplägg.'
+    answer: 'Nej, vi tar aldrig procent på affären. Bara fasta månadsavgifter för säljare. Köpare betalar ingenting.'
   },
   {
     question: 'Vem ser informationen jag laddar upp?',
-    answer: 'Du styr vad som visas öppet i annonsen. Mer detaljerat material ligger i datarummet och delas först när du valt att gå vidare med en intressent.'
+    answer: 'Din annons är anonym tills köparen signerat NDA. Först då får de tillgång till företagsnamn och detaljerad information i datarummet.'
   },
   {
     question: 'Hur fungerar matchningen?',
-    answer: 'Vår matchningsmotor analyserar din profil mot registrerade köpare baserat på bransch, storlek, geografi och andra preferenser. Du får notifikationer när det finns bra matchningar.'
+    answer: 'Vår matchningsmotor analyserar köpares investerarprofiler mot dina annonsparametrar. Du får notifikationer när det finns intresserade köpare.'
   },
   {
     question: 'Kan jag avbryta när som helst?',
-    answer: 'Ja, du kan när som helst pausa eller ta bort din annons. I Freemium finns ingen bindningstid alls.'
+    answer: 'Ja, du kan när som helst pausa eller ta bort din annons. Ingen bindningstid.'
   }
 ]
 
@@ -66,39 +66,23 @@ export default function PriserPage() {
       {/* Hero */}
       <section className="bg-navy text-white pt-32 pb-16">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            {/* Content - Left side */}
-            <div className="flex-1 text-center md:text-left order-2 md:order-1">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-white">
-                Välj rätt nivå för din företagsförsäljning
+          <div className="text-center">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-white">
+              Transparent prissättning
             </h1>
-              <p className="text-lg md:text-xl text-white/80 max-w-2xl">
-                Börja gratis med en light-värdering och uppgradera när du är redo att publicera annons,
-                matchas mot investerare och få personlig rådgivning.
-              </p>
-              <div className="flex flex-wrap gap-3 mt-8 justify-center md:justify-start">
-                <span className="px-4 py-2 bg-white text-navy font-semibold rounded-full text-sm">
-                  Freemium → Bas → Premium
-                </span>
-                <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
-                  Sänkt tröskel
-                </span>
-                <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
-                  Mer stöd för varje steg
-                </span>
-                <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
-                  Inga dolda procent
-                </span>
-              </div>
-            </div>
-
-            {/* Mascot - Right side */}
-            <div className="flex-shrink-0 order-1 md:order-2">
-              <img 
-                src="/Maskots/maskot5.png" 
-                alt="Trestor Group maskot" 
-                className="w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 object-contain"
-              />
+            <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
+              Gratis för köpare. Fasta månadsavgifter för säljare. Inga dolda avgifter eller success fees.
+            </p>
+            <div className="flex flex-wrap gap-3 mt-8 justify-center">
+              <span className="px-4 py-2 bg-white text-navy font-semibold rounded-full text-sm">
+                Gratis för köpare
+              </span>
+              <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
+                Inga success fees
+              </span>
+              <span className="px-4 py-2 bg-white/10 text-white/80 rounded-full text-sm">
+                Ingen bindningstid
+              </span>
             </div>
           </div>
         </div>
@@ -123,7 +107,7 @@ export default function PriserPage() {
             ))}
           </div>
         </div>
-                  </div>
+      </div>
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -132,123 +116,145 @@ export default function PriserPage() {
           <div className="space-y-12">
             {/* Pricing Cards */}
             <div className="grid md:grid-cols-3 gap-6 items-stretch">
-              {/* Freemium */}
+              {/* Gratis för köpare */}
               <div className="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-shadow flex flex-col h-full">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full uppercase tracking-wider">
-                    Steg 1 · Testa gratis
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full uppercase tracking-wider">
+                    För köpare
                   </span>
-                  </div>
-                <h3 className="text-2xl font-bold text-navy mb-2">Freemium</h3>
+                </div>
+                <h3 className="text-2xl font-bold text-navy mb-2">Gratis</h3>
                 <div className="text-3xl font-bold text-navy mb-4">0 kr</div>
                 <p className="text-gray-600 text-sm mb-6">
-                  För dig som vill testa och förstå möjligheterna utan kostnad.
+                  Helt gratis för dig som vill hitta och köpa företag.
                 </p>
                 <ul className="space-y-3 mb-8 flex-grow">
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Sanity check / light-värdering</span>
+                    <span>Obegränsad sökning bland annonser</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Kunskapsbank – vad du ska göra, steg för steg</span>
+                    <span>Skapa investerarprofil</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Skapa och spara säljprofil (ej publik)</span>
+                    <span>Begär NDA för intressanta bolag</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Se hur många köpare som matchar</span>
+                    <span>Tillgång till datarum efter NDA</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                    <span>Direktkontakt med säljare</span>
                   </li>
                 </ul>
-                <button
-                  onClick={() => setActiveTab('freemium')}
-                  className="w-full py-3 px-6 bg-white text-navy font-semibold rounded-full border-2 border-navy/20 hover:border-navy/40 transition-colors mt-auto"
+                <Link
+                  href={`/${locale}/investerarprofil`}
+                  className="w-full py-3 px-6 bg-navy text-white text-center font-semibold rounded-full hover:bg-navy/90 transition-colors mt-auto block"
                 >
-                  Utforska Freemium
-                    </button>
+                  Kom igång gratis
+                </Link>
               </div>
 
-              {/* Bas */}
+              {/* Standard */}
               <div className="bg-white rounded-2xl p-8 border-2 border-emerald-500 hover:shadow-xl transition-shadow relative flex flex-col h-full">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="px-4 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full uppercase">
-                    Rekommenderad
+                    Populärast
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full uppercase tracking-wider">
-                    Steg 2 · Rekommenderad start
-                      </span>
-                    </div>
-                <h3 className="text-2xl font-bold text-navy mb-2">Bas</h3>
-                <div className="text-3xl font-bold text-navy mb-4">Fast pris per annons</div>
+                    För säljare
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-navy mb-2">Standard</h3>
+                <div className="text-3xl font-bold text-navy mb-1">2 495 kr</div>
+                <p className="text-gray-500 text-sm mb-4">per månad</p>
                 <p className="text-gray-600 text-sm mb-6">
-                  För dig som vill göra jobbet själv – med stöd i plattformen.
+                  För dig som vill annonsera ditt företag professionellt.
                 </p>
                 <ul className="space-y-3 mb-8 flex-grow">
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Full annons-wizard & publicering</span>
+                    <span>Anonym annonsering</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Avancerad matchning mot köpare</span>
+                    <span>Smart matchning med köpare</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Datarum light & enkel dashboard</span>
+                    <span>Datarum för dokument</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-gray-700">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span>Bas-support via e-post / chatt</span>
+                    <span>NDA-hantering</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                    <span>Dashboard med statistik</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                    <span>E-post & chatt-support</span>
                   </li>
                 </ul>
-                <button
-                  onClick={() => setActiveTab('bas')}
-                  className="w-full py-3 px-6 bg-navy text-white font-semibold rounded-full hover:bg-navy/90 transition-colors mt-auto"
+                <Link
+                  href={`/${locale}/salja/skapa-annons`}
+                  className="w-full py-3 px-6 bg-navy text-white text-center font-semibold rounded-full hover:bg-navy/90 transition-colors mt-auto block"
                 >
-                  Se vad som ingår i Bas
-                </button>
+                  Skapa annons
+                </Link>
               </div>
 
               {/* Premium */}
               <div className="bg-navy text-white rounded-2xl p-8 hover:shadow-xl transition-shadow flex flex-col h-full">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="px-3 py-1 bg-white/20 text-white/90 text-xs font-semibold rounded-full uppercase tracking-wider">
-                    Steg 3 · Mest stöd
+                    För säljare
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold mb-2 text-white">Premium</h3>
-                <div className="text-3xl font-bold mb-4 text-white">Bas + rådgivare 45 min inkluderat</div>
+                <div className="text-3xl font-bold mb-1 text-white">4 995 kr</div>
+                <p className="text-white/60 text-sm mb-4">per månad</p>
                 <p className="text-white/70 text-sm mb-6">
-                  För dig som vill ha en rådgivare med i processen.
+                  Med personlig rådgivare och extra exponering.
                 </p>
                 <ul className="space-y-3 mb-8 flex-grow">
                   <li className="flex items-start gap-2 text-sm text-white/90">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span>Allt i Bas</span>
+                    <span>Allt i Standard</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-white/90">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span>Personlig rådgivare & uppstartsmöte</span>
+                    <span>Personlig rådgivare</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-white/90">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span>Finputsad annons, teaser & pitchdeck</span>
+                    <span>Granskning av annons & material</span>
                   </li>
                   <li className="flex items-start gap-2 text-sm text-white/90">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span>Premium-exponering</span>
+                    <span>Prioriterad exponering</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-white/90">
+                    <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span>Stöd vid förhandling</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-white/90">
+                    <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span>Telefonsupport</span>
                   </li>
                 </ul>
-                <button
-                  onClick={() => setActiveTab('premium')}
-                  className="w-full py-3 px-6 bg-white text-navy font-semibold rounded-full hover:bg-white/90 transition-colors mt-auto"
+                <Link
+                  href={`/${locale}/kontakt`}
+                  className="w-full py-3 px-6 bg-white text-navy text-center font-semibold rounded-full hover:bg-white/90 transition-colors mt-auto block"
                 >
-                  Utforska Premium
-                </button>
+                  Kontakta oss
+                </Link>
               </div>
             </div>
 
@@ -259,47 +265,59 @@ export default function PriserPage() {
                   <thead>
                     <tr className="bg-gray-50">
                       <th className="text-left py-4 px-6 font-semibold text-navy">Funktion</th>
-                      <th className="text-center py-4 px-6 font-semibold text-navy">Freemium</th>
-                      <th className="text-center py-4 px-6 font-semibold text-navy">Bas</th>
+                      <th className="text-center py-4 px-6 font-semibold text-navy">Gratis (Köpare)</th>
+                      <th className="text-center py-4 px-6 font-semibold text-navy">Standard</th>
                       <th className="text-center py-4 px-6 font-semibold text-navy">Premium</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     <tr>
-                      <td className="py-4 px-6 text-gray-700">Light-värdering / sanity check</td>
+                      <td className="py-4 px-6 text-gray-700">Söka bland annonser</td>
+                      <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
+                      <td className="py-4 px-6 text-center">–</td>
+                      <td className="py-4 px-6 text-center">–</td>
+                    </tr>
+                    <tr>
+                      <td className="py-4 px-6 text-gray-700">Skapa annons</td>
+                      <td className="py-4 px-6 text-center">–</td>
+                      <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
+                      <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
+                    </tr>
+                    <tr>
+                      <td className="py-4 px-6 text-gray-700">Matchning</td>
                       <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
                       <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
                       <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
                     </tr>
                     <tr>
-                      <td className="py-4 px-6 text-gray-700">Kunskapsbank</td>
-                      <td className="py-4 px-6 text-center text-sm text-gray-500">Freemium-artiklar</td>
-                      <td className="py-4 px-6 text-center text-sm text-gray-500">Full åtkomst</td>
-                      <td className="py-4 px-6 text-center text-sm text-gray-500">Full åtkomst</td>
-                    </tr>
-                    <tr>
-                      <td className="py-4 px-6 text-gray-700">Publicerad annons & matchning</td>
-                      <td className="py-4 px-6 text-center text-gray-300">–</td>
+                      <td className="py-4 px-6 text-gray-700">NDA-hantering</td>
+                      <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
                       <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
                       <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
                     </tr>
                     <tr>
-                      <td className="py-4 px-6 text-gray-700">Datarum / bilagor</td>
-                      <td className="py-4 px-6 text-center text-sm text-gray-500">Enkelt uppladdningsflöde</td>
-                      <td className="py-4 px-6 text-center text-sm text-gray-500">Datarum light</td>
-                      <td className="py-4 px-6 text-center text-sm text-gray-500">Datarum+</td>
+                      <td className="py-4 px-6 text-gray-700">Datarum</td>
+                      <td className="py-4 px-6 text-center text-sm text-gray-500">Tillgång efter NDA</td>
+                      <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
+                      <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
                     </tr>
                     <tr>
                       <td className="py-4 px-6 text-gray-700">Personlig rådgivare</td>
-                      <td className="py-4 px-6 text-center text-gray-300">–</td>
-                      <td className="py-4 px-6 text-center text-gray-300">–</td>
+                      <td className="py-4 px-6 text-center">–</td>
+                      <td className="py-4 px-6 text-center">–</td>
                       <td className="py-4 px-6 text-center">
                         <span className="px-3 py-1 bg-navy text-white text-xs font-semibold rounded-full">Ingår</span>
                       </td>
                     </tr>
                     <tr>
+                      <td className="py-4 px-6 text-gray-700">Prioriterad exponering</td>
+                      <td className="py-4 px-6 text-center">–</td>
+                      <td className="py-4 px-6 text-center">–</td>
+                      <td className="py-4 px-6 text-center"><Check className="w-5 h-5 text-emerald-500 mx-auto" /></td>
+                    </tr>
+                    <tr>
                       <td className="py-4 px-6 text-gray-700">Support</td>
-                      <td className="py-4 px-6 text-center text-sm text-gray-500">Community</td>
+                      <td className="py-4 px-6 text-center text-sm text-gray-500">E-post</td>
                       <td className="py-4 px-6 text-center text-sm text-gray-500">E-post/chatt</td>
                       <td className="py-4 px-6 text-center text-sm text-gray-500">Prioriterad + telefon</td>
                     </tr>
@@ -310,15 +328,14 @@ export default function PriserPage() {
           </div>
         )}
 
-        {/* Freemium Tab */}
-        {activeTab === 'freemium' && (
+        {/* Gratis (Köpare) Tab */}
+        {activeTab === 'gratis' && (
           <div className="space-y-8">
             <div>
-              <span className="text-sm font-semibold text-navy/60 uppercase tracking-wider">Steg 1</span>
-              <h2 className="text-3xl font-bold text-navy mt-2 mb-4">Freemium – testa utan kostnad</h2>
+              <h2 className="text-3xl font-bold text-navy mt-2 mb-4">Gratis för köpare</h2>
               <p className="text-gray-600 max-w-2xl">
-                Första steget för dig som är nyfiken på att sälja bolaget men vill känna på processen
-                och få en indikativ bild av värdet innan du går vidare.
+                Det kostar ingenting att hitta och köpa företag via Trestor Group. Skapa en investerarprofil 
+                och börja utforska annonser direkt.
               </p>
             </div>
 
@@ -328,11 +345,20 @@ export default function PriserPage() {
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3">
                     <div className="w-8 h-8 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <BarChart3 className="w-4 h-4 text-navy" />
+                      <Eye className="w-4 h-4 text-navy" />
                     </div>
                     <div>
-                      <span className="font-semibold text-navy">Sanity check / light-värdering</span>
-                      <p className="text-sm text-gray-600">Baserat på några nyckelfrågor.</p>
+                      <span className="font-semibold text-navy">Obegränsad sökning</span>
+                      <p className="text-sm text-gray-600">Sök bland alla publicerade annonser med avancerade filter.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Briefcase className="w-4 h-4 text-navy" />
+                    </div>
+                    <div>
+                      <span className="font-semibold text-navy">Investerarprofil</span>
+                      <p className="text-sm text-gray-600">Ange dina kriterier för att få relevanta matchningar.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
@@ -340,132 +366,130 @@ export default function PriserPage() {
                       <FileText className="w-4 h-4 text-navy" />
                     </div>
                     <div>
-                      <span className="font-semibold text-navy">Kunskapsbank – Freemium</span>
-                      <p className="text-sm text-gray-600">Guider om vad du ska göra i varje steg.</p>
+                      <span className="font-semibold text-navy">NDA-förfrågningar</span>
+                      <p className="text-sm text-gray-600">Begär NDA för att få tillgång till detaljerad information.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <div className="w-8 h-8 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Shield className="w-4 h-4 text-navy" />
+                      <Lock className="w-4 h-4 text-navy" />
                     </div>
                     <div>
-                      <span className="font-semibold text-navy">Skapa konto & spara säljprofil</span>
-                      <p className="text-sm text-gray-600">Ej publik, bara för dig.</p>
+                      <span className="font-semibold text-navy">Datarum-åtkomst</span>
+                      <p className="text-sm text-gray-600">Full tillgång till säljarens dokument efter signerat NDA.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <div className="w-8 h-8 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Target className="w-4 h-4 text-navy" />
+                      <MessageSquare className="w-4 h-4 text-navy" />
                     </div>
                     <div>
-                      <span className="font-semibold text-navy">Teaser om köparintresse</span>
-                      <p className="text-sm text-gray-600">Se hur många som matchar ditt case.</p>
+                      <span className="font-semibold text-navy">Direktkontakt</span>
+                      <p className="text-sm text-gray-600">Kommunicera direkt med säljare via plattformen.</p>
                     </div>
                   </li>
                 </ul>
-                <p className="text-sm text-gray-500 mt-6 p-4 bg-gray-50 rounded-xl">
-                  All data du lägger in går att återanvända när du uppgraderar till Bas eller Premium.
-                </p>
               </div>
 
               <div className="bg-white rounded-2xl p-8 border border-gray-200">
-                <h3 className="text-xl font-bold text-navy mb-6">Typiska frågor Freemium besvarar</h3>
+                <h3 className="text-xl font-bold text-navy mb-6">Så kommer du igång</h3>
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-start gap-3 text-gray-700">
-                    <span className="text-2xl">🤔</span>
-                    <span>"Är mitt bolag ens säljbart?"</span>
+                    <span className="w-8 h-8 bg-navy text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</span>
+                    <span className="pt-1">Skapa ett kostnadsfritt konto</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-700">
-                    <span className="text-2xl">💰</span>
-                    <span>"I vilken storleksordning skulle värdet kunna landa?"</span>
+                    <span className="w-8 h-8 bg-navy text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</span>
+                    <span className="pt-1">Fyll i din investerarprofil</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-700">
-                    <span className="text-2xl">➡️</span>
-                    <span>"Vad är nästa steg om jag vill gå vidare?"</span>
+                    <span className="w-8 h-8 bg-navy text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</span>
+                    <span className="pt-1">Börja söka bland annonser</span>
                   </li>
                 </ul>
                 <Link
-                  href={`/${locale}/sanitycheck`}
+                  href={`/${locale}/investerarprofil`}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-navy text-white font-semibold rounded-full hover:bg-navy/90 transition-colors"
                 >
-                  <Sparkles className="w-5 h-5" />
-                  Skapa gratis Freemium-konto
+                  <Briefcase className="w-5 h-5" />
+                  Skapa investerarprofil
                 </Link>
               </div>
             </div>
           </div>
         )}
 
-        {/* Bas Tab */}
-        {activeTab === 'bas' && (
+        {/* Standard Tab */}
+        {activeTab === 'standard' && (
           <div className="space-y-8">
             <div>
-              <span className="text-sm font-semibold text-navy/60 uppercase tracking-wider">Steg 2</span>
-              <h2 className="text-3xl font-bold text-navy mt-2 mb-4">Bas – gör det själv med plattformstöd</h2>
+              <h2 className="text-3xl font-bold text-navy mt-2 mb-4">Standard – för säljare</h2>
               <p className="text-gray-600 max-w-2xl">
-                För dig som vill publicera en professionell annons, bli matchad mot rätt köpare och
-                sköta kontakten själv – utan dyr mäklarprovision.
+                Allt du behöver för att annonsera ditt företag professionellt och nå kvalificerade köpare.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white rounded-2xl p-8 border border-gray-200">
-                <h3 className="text-xl font-bold text-navy mb-6">Det här ingår i Bas</h3>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold text-navy">Det här ingår</h3>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-navy">2 495 kr</div>
+                    <div className="text-sm text-gray-500">per månad</div>
+                  </div>
+                </div>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-navy">Full annons-wizard</span>
-                      <p className="text-sm text-gray-600">Med guidat frågebatteri och AI-stöd för rubrik & pitch.</p>
+                      <span className="font-semibold text-navy">Anonym annonsering</span>
+                      <p className="text-sm text-gray-600">Ditt företag förblir anonymt tills köparen signerat NDA.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-navy">Publicering på Trestor Group</span>
-                      <p className="text-sm text-gray-600">Med synlighet för relevanta investerare och köpare.</p>
+                      <span className="font-semibold text-navy">Smart matchning</span>
+                      <p className="text-sm text-gray-600">Automatisk matchning med relevanta köpare.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-navy">Avancerad matchning</span>
-                      <p className="text-sm text-gray-600">På fler KPI:er än bara omsättning, bransch och lönsamhet.</p>
+                      <span className="font-semibold text-navy">Datarum</span>
+                      <p className="text-sm text-gray-600">Ladda upp dokument som delas efter NDA.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-navy">Datarum light</span>
-                      <p className="text-sm text-gray-600">Med bilagor som bokslut, teaser-PDF och presentation.</p>
+                      <span className="font-semibold text-navy">NDA-hantering</span>
+                      <p className="text-sm text-gray-600">Digital signering av sekretessavtal.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <div>
                       <span className="font-semibold text-navy">Dashboard</span>
-                      <p className="text-sm text-gray-600">Med visningar, intresseanmälningar och rekommendationer.</p>
+                      <p className="text-sm text-gray-600">Statistik, visningar och hantering av intressenter.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold text-navy">Bas-support</span>
-                      <p className="text-sm text-gray-600">Via e-post / chatt under kontorstid.</p>
+                      <span className="font-semibold text-navy">Support</span>
+                      <p className="text-sm text-gray-600">E-post och chatt under kontorstid.</p>
                     </div>
                   </li>
                 </ul>
-                <p className="text-sm text-gray-500 mt-6 p-4 bg-gray-50 rounded-xl">
-                  Pris: fast pris per annons. Exakta nivåer sätts per marknad men utan procent på köpeskillingen.
-                </p>
               </div>
 
               <div className="bg-white rounded-2xl p-8 border border-gray-200">
-                <h3 className="text-xl font-bold text-navy mb-6">Bas passar dig som...</h3>
+                <h3 className="text-xl font-bold text-navy mb-6">Standard passar dig som...</h3>
                 <ul className="space-y-4 mb-8">
                   <li className="flex items-start gap-3 text-gray-700">
                     <div className="w-2 h-2 bg-navy rounded-full mt-2 flex-shrink-0"></div>
-                    <span>vill minimera kostnader men ändå jobba strukturerat.</span>
+                    <span>vill ha full kontroll över försäljningsprocessen.</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-700">
                     <div className="w-2 h-2 bg-navy rounded-full mt-2 flex-shrink-0"></div>
@@ -473,14 +497,15 @@ export default function PriserPage() {
                   </li>
                   <li className="flex items-start gap-3 text-gray-700">
                     <div className="w-2 h-2 bg-navy rounded-full mt-2 flex-shrink-0"></div>
-                    <span>vill ha kontroll över vad som visas öppet och vad som delas först efter NDA.</span>
+                    <span>vill slippa success fees och procentuella arvoden.</span>
                   </li>
                 </ul>
                 <Link
-                  href={`/${locale}/salja/start`}
+                  href={`/${locale}/salja/skapa-annons`}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-navy text-white font-semibold rounded-full hover:bg-navy/90 transition-colors"
                 >
-                  Börja med Bas
+                  <Building2 className="w-5 h-5" />
+                  Skapa annons
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
@@ -492,58 +517,62 @@ export default function PriserPage() {
         {activeTab === 'premium' && (
           <div className="space-y-8">
             <div>
-              <span className="text-sm font-semibold text-navy/60 uppercase tracking-wider">Steg 3</span>
-              <h2 className="text-3xl font-bold text-navy mt-2 mb-4">Premium – gör det tillsammans med rådgivare</h2>
+              <h2 className="text-3xl font-bold text-navy mt-2 mb-4">Premium – med rådgivarstöd</h2>
               <p className="text-gray-600 max-w-2xl">
-                För dig som vill ha en erfaren partner vid din sida genom processen – från första annonsutkast
-                till kvalificering av köpare och struktur på affären.
+                För dig som vill ha en erfaren rådgivare vid din sida genom hela processen.
               </p>
-        </div>
+            </div>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-navy text-white rounded-2xl p-8">
-                <h3 className="text-xl font-bold mb-6 text-white">Det här ingår i Premium</h3>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold text-white">Det här ingår</h3>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-white">4 995 kr</div>
+                    <div className="text-sm text-white/60">per månad</div>
+                  </div>
+                </div>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold">Allt i Bas</span>
-                      <p className="text-sm text-white/70">Annons, publicering, matchning, datarum och dashboard.</p>
+                      <span className="font-semibold">Allt i Standard</span>
+                      <p className="text-sm text-white/70">Annonsering, matchning, datarum, NDA och dashboard.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <span className="font-semibold">Personlig rådgivare</span>
-                      <p className="text-sm text-white/70">Med uppstartsmöte (ca 45 min) där ni går igenom målbild, typ av köpare och tidsplan.</p>
+                      <p className="text-sm text-white/70">Dedikerad kontaktperson genom hela processen.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold">Annons- & materialgranskning</span>
-                      <p className="text-sm text-white/70">Finputs av rubrik, pitch, teaser och eventuell pitchdeck.</p>
+                      <span className="font-semibold">Granskning av material</span>
+                      <p className="text-sm text-white/70">Professionell feedback på annons och dokument.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold">Stöd kring pris & struktur</span>
-                      <p className="text-sm text-white/70">Resonemang om prisintervall, earn-out, tillträde och kvarstående ägande.</p>
+                      <span className="font-semibold">Prioriterad exponering</span>
+                      <p className="text-sm text-white/70">Högre synlighet i sökresultat.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold">Matchning & kvalificering</span>
-                      <p className="text-sm text-white/70">Hjälp att sortera och prioritera seriösa intressenter.</p>
+                      <span className="font-semibold">Stöd vid förhandling</span>
+                      <p className="text-sm text-white/70">Råd kring pris, struktur och villkor.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-semibold">Premium-exponering</span>
-                      <p className="text-sm text-white/70">Högre synlighet och markering om kvalitetssäkrad annons.</p>
+                      <span className="font-semibold">Telefonsupport</span>
+                      <p className="text-sm text-white/70">Prioriterad support med direktnummer.</p>
                     </div>
                   </li>
                 </ul>
@@ -558,11 +587,11 @@ export default function PriserPage() {
                   </li>
                   <li className="flex items-start gap-3 text-gray-700">
                     <div className="w-2 h-2 bg-navy rounded-full mt-2 flex-shrink-0"></div>
-                    <span>har begränsat med tid och vill undvika vanliga misstag.</span>
+                    <span>har begränsat med tid och vill undvika misstag.</span>
                   </li>
                   <li className="flex items-start gap-3 text-gray-700">
                     <div className="w-2 h-2 bg-navy rounded-full mt-2 flex-shrink-0"></div>
-                    <span>värdesätter struktur och kvalificering av köpare innan ni ses.</span>
+                    <span>värdesätter professionell feedback på ditt material.</span>
                   </li>
                 </ul>
                 <Link
@@ -570,7 +599,7 @@ export default function PriserPage() {
                   className="inline-flex items-center gap-2 px-6 py-3 bg-navy text-white font-semibold rounded-full hover:bg-navy/90 transition-colors"
                 >
                   <Users className="w-5 h-5" />
-                  Prata med oss om Premium
+                  Boka ett samtal
                 </Link>
               </div>
             </div>
@@ -580,7 +609,7 @@ export default function PriserPage() {
         {/* FAQ Tab */}
         {activeTab === 'faq' && (
           <div className="space-y-8">
-            <h2 className="text-3xl font-bold text-navy">Vanliga frågor om Freemium, Bas och Premium</h2>
+            <h2 className="text-3xl font-bold text-navy">Vanliga frågor om priser</h2>
             
             <div className="space-y-4">
               {faqs.map((faq, index) => (
@@ -602,8 +631,8 @@ export default function PriserPage() {
                       {faq.answer}
                     </div>
                   )}
-              </div>
-            ))}
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -612,18 +641,26 @@ export default function PriserPage() {
       {/* Bottom CTA */}
       <section className="bg-navy text-white py-16">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Redo att komma igång?</h2>
+          <h2 className="text-3xl font-bold mb-4 text-white">Redo att komma igång?</h2>
           <p className="text-white/80 mb-8">
-            Börja med en värderingskoll utan kostnad och se hur ditt bolag står sig.
+            Köpare börjar gratis. Säljare väljer mellan Standard och Premium.
           </p>
-          <Link
-            href={`/${locale}/sanitycheck`}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-navy font-bold rounded-full hover:bg-white/90 transition-colors"
-          >
-            <Sparkles className="w-5 h-5" />
-            Starta värderingskoll utan kostnad
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href={`/${locale}/sok`}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-navy font-bold rounded-full hover:bg-white/90 transition-colors"
+            >
+              <Eye className="w-5 h-5" />
+              Sök bolag (gratis)
+            </Link>
+            <Link
+              href={`/${locale}/salja/skapa-annons`}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 text-white font-bold rounded-full hover:bg-white/20 transition-colors border border-white/20"
+            >
+              <Building2 className="w-5 h-5" />
+              Skapa annons
+            </Link>
+          </div>
         </div>
       </section>
     </div>
