@@ -183,7 +183,7 @@ export default function Header() {
             <img 
               src="/Logo/Trestor_logo.png" 
               alt="Trestor Group - En del av Pactior Group" 
-              className="h-12 md:h-10 lg:h-9 w-auto"
+              className="h-16 md:h-14 lg:h-12 w-auto"
             />
           </Link>
 
@@ -393,7 +393,7 @@ export default function Header() {
             style={{ position: 'relative', zIndex: 1 }}
           >
             <div className="flex justify-between items-center">
-              <img src="/Logo/Trestor_logo.png" alt="Trestor Group - En del av Pactior Group" className="h-10 w-auto" />
+              <img src="/Logo/Trestor_logo.png" alt="Trestor Group - En del av Pactior Group" className="h-12 w-auto" />
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-colors"
