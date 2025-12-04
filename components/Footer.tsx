@@ -62,37 +62,13 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-bold text-lg md:text-base mb-6">{t('forSellers')}</h3>
             <ul className="space-y-3">
-              <li><Link href={`/${locale}/vardering`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('freeValuation')}</Link></li>
               <li><Link href={`/${locale}/salja`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('howItWorks')}</Link></li>
-              <li><Link href={`/${locale}/salja/start`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('startSelling')}</Link></li>
+              <li><Link href={`/${locale}/saljarprofil`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Säljarprofil</Link></li>
+              <li><Link href={`/${locale}/salja/skapa-annons`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Skapa annons</Link></li>
               <li><Link href={`/${locale}/saljare`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('sellInYourCity')}</Link></li>
               <li><Link href={`/${locale}/priser`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('pricing')}</Link></li>
               <li><Link href={`/${locale}/faq`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">{t('faq')}</Link></li>
-              <li>
-                <Link
-                  href={`/${locale}/analysera`}
-                  className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors"
-                >
-                  AI-analys & web search
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/forsaljningsprocessen`}
-                  className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors"
-                >
-                  Försäljningsprocessen
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={`/${locale}/forsaljningsprocessen/exempelrapport`}
-                  className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors flex items-center gap-1"
-                >
-                  Exempelrapport (PDF)
-                  <span className="text-[10px] bg-accent-pink/20 text-accent-pink px-1.5 py-0.5 rounded">NY</span>
-                </Link>
-              </li>
+              <li><Link href={`/${locale}/kunskapsbank`} className="text-gray-300 text-base md:text-sm hover:text-accent-pink transition-colors">Kunskapsbank</Link></li>
             </ul>
           </div>
 

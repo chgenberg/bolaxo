@@ -25,14 +25,11 @@ interface NavItem {
 const getNavigation = (t: (key: string) => string): NavItem[] => {
   const baseNav: NavItem[] = [
     {
-      label: 'Översikt',
+      label: 'Marknadsplats',
       dropdown: [
         { label: 'Bolag till salu', href: '/sok' },
-        { label: 'Värderingskoll', href: '/sanitycheck' },
-        { label: 'Kunskapsbank', href: '/kunskapsbank' },
         { label: 'Prismodeller', href: '/priser' },
-        { label: 'Försäljningsprocessen', href: '/forsaljningsprocessen' },
-        { label: 'Exempelrapport', href: '/forsaljningsprocessen/exempelrapport' },
+        { label: 'Kunskapsbank', href: '/kunskapsbank' },
       ]
     },
     {
@@ -40,7 +37,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
       dropdown: [
         { label: t('footer.howItWorks'), href: '/salja' },
         { label: 'Säljarprofil', href: '/saljarprofil' },
-        { label: 'Skapa annons', href: '/salja/start' },
+        { label: 'Skapa annons', href: '/salja/skapa-annons' },
       ]
     },
     {
