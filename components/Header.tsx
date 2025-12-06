@@ -28,6 +28,8 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
       label: 'Marknadsplats',
       dropdown: [
         { label: 'Bolag till salu', href: '/sok' },
+        { label: 'Värdering', href: '/vardering' },
+        { label: 'Sanitycheck', href: '/sanitycheck' },
         { label: 'Prismodeller', href: '/priser' },
         { label: 'Kunskapsbank', href: '/kunskapsbank' },
       ]
@@ -38,6 +40,7 @@ const getNavigation = (t: (key: string) => string): NavItem[] => {
         { label: t('footer.howItWorks'), href: '/salja' },
         { label: 'Säljarprofil', href: '/saljarprofil' },
         { label: 'Skapa annons', href: '/salja/skapa-annons' },
+        { label: 'Värderingskoll', href: '/sanitycheck' },
       ]
     },
     {
